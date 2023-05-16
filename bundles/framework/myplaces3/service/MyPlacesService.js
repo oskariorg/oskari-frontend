@@ -165,6 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             }
             layer.setLocale(locale);
             layer.setOptions(options);
+            layer.setStylesFromOptions(options);
             const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
             this.sandbox.notifyAll(evt);
             if (this.sandbox.isLayerAlreadySelected(id)) {
