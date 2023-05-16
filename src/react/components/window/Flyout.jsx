@@ -42,6 +42,13 @@ const Container = styled.div`
             }
         }
     }
+
+    ${props => props.resizable && (
+        `
+            resize: both;
+            overflow: auto;
+        `
+    )}
 `;
 
 const FlyoutHeader = styled.div`
@@ -109,18 +116,25 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
     Maybe allow passing tools from caller?
     */
     const headerTheme = getHeaderTheme(theme);
-    return (<Container className={containerClass} ref={elementRef} style={{transform: `translate(${position.x}px, ${position.y}px)`}}>
-        <FlyoutHeader theme={headerTheme} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
-            <HeaderBand theme={headerTheme}/>
-            <Title className='flyout-title'>{title}</Title>
-            <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>
-                <CloseIcon onClose={onClose}/>
-            </ToolsContainer>
-        </FlyoutHeader>
-        <div>
-            {children}
-        </div>
-    </Container>)
+    return (
+        <Container
+            className={containerClass}
+            ref={elementRef}
+            style={{transform: `translate(${position.x}px, ${position.y}px)`}}
+            resizable={options.resizable}
+        >
+            <FlyoutHeader theme={headerTheme} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
+                <HeaderBand theme={headerTheme}/>
+                <Title className='flyout-title'>{title}</Title>
+                <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>
+                    <CloseIcon onClose={onClose}/>
+                </ToolsContainer>
+            </FlyoutHeader>
+            <div>
+                {children}
+            </div>
+        </Container>
+    );
 });
 
 Flyout.propTypes = {
