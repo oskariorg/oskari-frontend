@@ -13,7 +13,20 @@ Oskari.registerLocalization(
             "visibleColumns": {
                 "propertiesSelected": "valittu"
             },
-
+            "selectByPropertiesPopup": {
+                "title":"Valitse kohteita tasolta:",
+                "valueInputPlaceholder": "Arvo",
+                "filterType": {
+                    "equals": "on yhtäsuuri kuin",
+                    "like": "on likimäärin yhtäsuuri kuin",
+                    "notEquals": "on erisuuri kuin",
+                    "notLike": "on likimäärin erisuuri kuin",
+                    "greaterThan": "on suurempi kuin",
+                    "lessThan": "on pienempi kuin",
+                    "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
+                    "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
+                }
+            },
             "showSelectedFirst": "Näytä valitut ensin"
 
         }
