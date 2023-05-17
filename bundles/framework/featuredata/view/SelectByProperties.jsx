@@ -6,19 +6,19 @@ import { Message, Select, TextInput, Button, Checkbox } from 'oskari-ui';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
 
 export const FilterTypes = {
-    equals: 1,
-    like: 2,
-    notEquals: 3,
-    notLike: 4,
-    greaterThan: 5,
-    lessThan: 6,
-    greaterThanOrEqualTo: 7,
-    lessThanOrEqualTo: 8
+    equals: '=',
+    like: '~=',
+    notEquals: '≠',
+    notLike: '~≠',
+    greaterThan: '>',
+    lessThan: '<',
+    greaterThanOrEqualTo: '≥',
+    lessThanOrEqualTo: '≤'
 };
 
 export const LogicalOperators = {
-    AND: 1,
-    OR: 2
+    AND: 'AND',
+    OR: 'OR'
 };
 
 const getOptionsFromColumnNames = (columnNames) => {
@@ -130,12 +130,12 @@ const FilterRow = (props) => {
         <FlexRow>
             <StyledSelectMedium
                 options={columnOptions}
-                value={filter.field}
-                onChange={((value) => { filter.field = value; updateFilters(index, filter); })}/>
+                value={filter.attribute}
+                onChange={((value) => { filter.attribute = value; updateFilters(index, filter); })}/>
             <StyledSelectMedium
                 options={filterTypeOptions}
-                value={filter.type}
-                onChange={((value) => { filter.type = value; updateFilters(index, filter); })}/>
+                value={filter.operator}
+                onChange={((value) => { filter.operator = value; updateFilters(index, filter); })}/>
             <StyledTextInput
                 type='text'
                 placeholder={Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectByPropertiesPopup.valueInputPlaceholder')}
@@ -147,7 +147,7 @@ const FilterRow = (props) => {
                 <StyledSelectSmall
                     options={generateLogicalOperatorOptions()}
                     value={filter.logicalOperator}
-                    onChange={(value) => { filter.operator = value; updateFilters(index, filter); }}
+                    onChange={(value) => { filter.logicalOperator = value; updateFilters(index, filter); }}
                 />
             }
             { showAddRemove &&

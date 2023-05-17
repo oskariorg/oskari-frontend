@@ -1,6 +1,7 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
+import { filterFeaturesByAttribute, getFilterAlternativesAsArray } from '../../../mapping/mapmodule/util/vectorfeatures/filter';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
@@ -239,19 +240,56 @@ class FeatureDataPluginUIHandler extends StateHandler {
         const { selectByPropertiesSettings } = this.getState();
         const { filters } = selectByPropertiesSettings;
 
+        let hasErrors = false;
         filters.forEach((filter) => {
             if (!filter?.value?.length) {
+                hasErrors = true;
                 filter.error = true;
             }
         });
 
-        this.updateState({ selectByPropertiesSettings });
+        if (hasErrors) {
+            this.updateState({ selectByPropertiesSettings });
+            return;
+        }
+
+        this.selectFeaturesByProperties();
+    }
+
+    selectFeaturesByProperties () {
+        const { selectByPropertiesSettings, activeLayerId, activeLayerFeatures } = this.getState();
+        const filters = selectByPropertiesSettings.filters;
+
+        // separate the logical operators from the original filter and form a single array
+        const filterArray = [];
+        filters.forEach((filter) => {
+            filterArray.push(filter);
+            if (filters.length > 1) {
+                filterArray.push({ boolean: filter.logicalOperator });
+            }
+        });
+
+        const filteredIds = new Set();
+        const alternatives = getFilterAlternativesAsArray(filterArray);
+        alternatives.forEach(attributeFilters => {
+            let filteredList = activeLayerFeatures;
+            attributeFilters.forEach(filter => {
+                filteredList = filterFeaturesByAttribute(filteredList, filter);
+            });
+            filteredList
+                .map((feature) => feature.id)
+                .filter(id => !!id)
+                .forEach(id => filteredIds.add(id));
+        });
+
+        this.selectionService.setSelectedFeatureIds(activeLayerId, [...filteredIds]);
+        this.updateState({ selection: [...filteredIds] });
     }
 
     initEmptyFilter (columnName) {
         return {
-            field: columnName,
-            type: FilterTypes.equals,
+            attribute: columnName,
+            operator: FilterTypes.equals,
             value: '',
             error: null,
             logicalOperator: LogicalOperators.AND,
