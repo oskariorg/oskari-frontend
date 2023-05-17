@@ -66,10 +66,39 @@ const StyledSelectSmall = styled(Select)`
 const StyledTextInput = styled(TextInput)`
     margin-right: .5em;
 `;
+
 const FlexRow = styled('div')`
     display: flex;
     padding: 0 .5em .5em .5em;
 `;
+
+const ButtonsContainer = styled(FlexRow)`
+    justify-content: center;
+`;
+
+const StyledButton = styled(Button)`
+    margin: 0 .5em 0 .5em
+`;
+
+const Buttons = (props) => {
+    const { closePopup, removeFilter } = props;
+    return <ButtonsContainer>
+        <StyledButton onClick={() => { closePopup(); }}>
+            <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.cancel'}/>
+        </StyledButton>
+        <StyledButton onClick={() => { removeFilter(null, true); }}>
+            <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.clearAll'}/>
+        </StyledButton>
+        <StyledButton type='primary' onClick={() => { closePopup(); }}>
+            <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.refresh'}/>
+        </StyledButton>
+    </ButtonsContainer>;
+};
+
+Buttons.propTypes = {
+    removeFilter: PropTypes.func,
+    closePopup: PropTypes.func
+};
 
 const FilterRow = (props) => {
     const { columnOptions, filterTypeOptions, index, filter, updateFilters, addFilter, removeFilter, showFilterOperator, showAddRemove, showRemove } = props;
@@ -119,6 +148,7 @@ FilterRow.propTypes = {
     updateFilters: PropTypes.func,
     addFilter: PropTypes.func,
     removeFilter: PropTypes.func,
+    closePopup: PropTypes.func,
     showFilterOperator: PropTypes.bool,
     showAddRemove: PropTypes.bool,
     showRemove: PropTypes.bool
@@ -129,7 +159,7 @@ const Container = styled('div')`
 `;
 
 export const SelectByPropertiesPopup = (props) => {
-    const { columnNames, filters, updateFilters, addFilter, removeFilter } = props;
+    const { columnNames, filters, updateFilters, addFilter, removeFilter, closePopup } = props;
     const rows = filters.map((filter, index) => {
         return <FilterRow
             key={index}
@@ -146,7 +176,10 @@ export const SelectByPropertiesPopup = (props) => {
         />;
     });
 
-    return <Container>{ rows }</Container>;
+    return <Container>
+        { rows }
+        <Buttons closePopup={closePopup} removeFilter={removeFilter}/>
+    </Container>;
 };
 
 SelectByPropertiesPopup.propTypes = {
@@ -154,7 +187,8 @@ SelectByPropertiesPopup.propTypes = {
     filters: PropTypes.array,
     updateFilters: PropTypes.func,
     addFilter: PropTypes.func,
-    removeFilter: PropTypes.func
+    removeFilter: PropTypes.func,
+    closePopup: PropTypes.func
 };
 
 export const SelectByPropertiesFunnel = (props) => {
@@ -183,6 +217,7 @@ export const showSelectByPropertiesPopup = (state, controller) => {
         updateFilters={controller.updateFilters}
         addFilter={controller.addFilter}
         removeFilter={controller.removeFilter}
+        closePopup={controller.closePopup}
     />;
     const title = <><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.title'}/> {getActiveLayerName(activeLayerId, layers)}</>;
     const controls = showPopup(title, content, () => { controller.closePopup(); }, {});
@@ -197,6 +232,7 @@ export const showSelectByPropertiesPopup = (state, controller) => {
                     updateFilters={controller.updateFilters}
                     addFilter={controller.addFilter}
                     removeFilter={controller.removeFilter}
+                    closePopup={controller.closePopup}
                 />);
         }
     };

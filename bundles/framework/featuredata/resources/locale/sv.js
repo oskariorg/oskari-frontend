@@ -27,6 +27,11 @@ Oskari.registerLocalization(
                     "greaterThanOrEqualTo": "är större än eller lika med",
                     "lessThanOrEqualTo": "är mindre än eller lika med"
                 },
+                "buttons": {
+                    "cancel": "Avbryt",
+                    "clearAll": "Töm filter",
+                    "refresh": "Uppdatera filter"
+                }
             },
             "showSelectedFirst": "Visa de valda först"
         }

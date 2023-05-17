@@ -26,6 +26,11 @@ Oskari.registerLocalization(
                     "lessThan": "is less than",
                     "greaterThanOrEqualTo": "is greater than or equal to",
                     "lessThanOrEqualTo": "is less than or equal to"
+                },
+                "buttons": {
+                    "cancel": "Cancel",
+                    "clearAll": "Clear all",
+                    "refresh": "Refresh"
                 }
             },
             "showSelectedFirst": "Show selected first"

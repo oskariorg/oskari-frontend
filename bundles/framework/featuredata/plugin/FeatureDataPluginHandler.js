@@ -254,7 +254,27 @@ class FeatureDataPluginUIHandler extends StateHandler {
         });
     }
 
-    removeFilter (index) {
+    /**
+     *
+     * @param {*} index Index of a single filter to remove
+     * @param {*} clearAll When true and no index is provided, clear all filters.
+     * @returns void
+     */
+    removeFilter (index, clearAll) {
+        if (index) {
+            return this.removeFilterByIndex(index);
+        }
+
+        if (clearAll) {
+            const { selectByPropertiesSettings } = this.getState();
+            selectByPropertiesSettings.filters = [this.initEmptyFilter(selectByPropertiesSettings.allColumns[0])];
+            this.updateState({
+                selectByPropertiesSettings
+            });
+        }
+    }
+
+    removeFilterByIndex (index) {
         const { selectByPropertiesSettings } = this.getState();
         if (selectByPropertiesSettings && selectByPropertiesSettings.filters && selectByPropertiesSettings.allColumns) {
             selectByPropertiesSettings.filters.splice(index, 1);

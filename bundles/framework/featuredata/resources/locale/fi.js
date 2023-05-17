@@ -26,6 +26,11 @@ Oskari.registerLocalization(
                     "lessThan": "on pienempi kuin",
                     "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
                     "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
+                },
+                "buttons": {
+                    "cancel": "Peruuta",
+                    "clearAll": "Tyhjennä",
+                    "refresh": "Päivitä"
                 }
             },
             "showSelectedFirst": "Näytä valitut ensin"
