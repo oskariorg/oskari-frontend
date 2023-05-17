@@ -16,6 +16,7 @@ Oskari.registerLocalization(
             "selectByPropertiesPopup": {
                 "title":"Välj objekt från kartlager:",
                 "valueInputPlaceholder": "Värde",
+                "caseSensitive": "Filtret är skiftlägeskänsligt.",
                 "filterType": {
                     "equals": "är lika med",
                     "like": "är ungefär lika med",

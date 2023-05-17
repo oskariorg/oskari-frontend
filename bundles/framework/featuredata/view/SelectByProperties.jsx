@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { showPopup } from 'oskari-ui/components/window';
-import { Message, Select, TextInput, Button } from 'oskari-ui';
+import { Message, Select, TextInput, Button, Checkbox } from 'oskari-ui';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
 
 export const FilterTypes = {
@@ -55,46 +55,60 @@ const Funnel = styled('div')`
 
 const StyledSelectMedium = styled(Select)`
     min-width: 15em;
-    padding-left: 1em;
+    margin-right: .5em;
 `;
 
 const StyledSelectSmall = styled(Select)`
     min-width: 8em;
-    padding-left: 1em;
+    margin-right: .5em;
 `;
 
+const StyledTextInput = styled(TextInput)`
+    margin-right: .5em;
+`;
 const FlexRow = styled('div')`
     display: flex;
+    padding: 0 .5em .5em .5em;
 `;
 
 const FilterRow = (props) => {
     const { columnOptions, filterTypeOptions, index, filter, updateFilters, addFilter, removeFilter, showFilterOperator, showAddRemove, showRemove } = props;
-    return <FlexRow>
-        <StyledSelectMedium
-            options={columnOptions}
-            value={filter.field}
-            onChange={((value) => { filter.field = value; updateFilters(index, filter); })}/>
-        <StyledSelectMedium
-            options={filterTypeOptions}
-            value={filter.type}
-            onChange={((value) => { filter.type = value; updateFilters(index, filter); })}/>
-        <TextInput
-            placeholder={Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectByPropertiesPopup.valueInputPlaceholder')}
-            onBlur={(value) => { filter.value = value; updateFilters(index, filter); }}/>
-        { (showFilterOperator && !showAddRemove) &&
-            <StyledSelectSmall
-                options={generateLogicalOperatorOptions()}
-                value={filter.logicalOperator}
-                onChange={(value) => { filter.operator = value; updateFilters(index, filter); }}
-            />
-        }
-        { showAddRemove &&
-            <>
-                <Button onClick={(() => addFilter())}>PLUS</Button>
-                { showRemove && <Button onClick={(() => removeFilter(index))}>MINUS</Button> }
-            </>
-        }
-    </FlexRow>;
+    return <>
+        <FlexRow>
+            <Checkbox
+                checked={filter.caseSensitive}
+                onChange={(event) => { filter.caseSensitive = event?.target?.checked; updateFilters(index, filter); }}
+            >
+                <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey='selectByPropertiesPopup.caseSensitive'/>
+            </Checkbox>
+        </FlexRow>
+        <FlexRow>
+            <StyledSelectMedium
+                options={columnOptions}
+                value={filter.field}
+                onChange={((value) => { filter.field = value; updateFilters(index, filter); })}/>
+            <StyledSelectMedium
+                options={filterTypeOptions}
+                value={filter.type}
+                onChange={((value) => { filter.type = value; updateFilters(index, filter); })}/>
+            <StyledTextInput
+                placeholder={Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectByPropertiesPopup.valueInputPlaceholder')}
+                onBlur={(value) => { filter.value = value; updateFilters(index, filter); }}/>
+            { (showFilterOperator && !showAddRemove) &&
+                <StyledSelectSmall
+                    options={generateLogicalOperatorOptions()}
+                    value={filter.logicalOperator}
+                    onChange={(value) => { filter.operator = value; updateFilters(index, filter); }}
+                />
+            }
+            { showAddRemove &&
+                <>
+                    <Button onClick={(() => addFilter())}>PLUS</Button>
+                    { showRemove && <Button onClick={(() => removeFilter(index))}>MINUS</Button> }
+                </>
+            }
+        </FlexRow>
+    </>;
 };
 
 FilterRow.propTypes = {

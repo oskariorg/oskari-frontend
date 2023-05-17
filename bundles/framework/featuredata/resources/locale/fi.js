@@ -16,6 +16,7 @@ Oskari.registerLocalization(
             "selectByPropertiesPopup": {
                 "title":"Valitse kohteita tasolta:",
                 "valueInputPlaceholder": "Arvo",
+                "caseSensitive": "Kirjainkoko vaikuttaa valintoihin.",
                 "filterType": {
                     "equals": "on yhtäsuuri kuin",
                     "like": "on likimäärin yhtäsuuri kuin",

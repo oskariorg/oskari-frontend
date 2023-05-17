@@ -16,6 +16,7 @@ Oskari.registerLocalization(
             "selectByPropertiesPopup": {
                 "title":"Select features from layer:",
                 "valueInputPlaceholder": "Value",
+                "caseSensitive": "Filter is case-sensitive.",
                 "filterType": {
                     "equals": "equals",
                     "like": "is like",

@@ -206,7 +206,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
             field: columnName,
             type: FilterTypes.equals,
             value: '',
-            logicalOperator: LogicalOperators.AND
+            logicalOperator: LogicalOperators.AND,
+            caseSensitive: false
         };
     }
 
