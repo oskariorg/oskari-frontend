@@ -198,17 +198,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         if (settings?.allColumns && settings?.allColumns.length) {
             filters = [this.initEmptyFilter(settings.allColumns[0])];
         }
-        return settings?.allColumns ? { allColumns: settings.allColumns, filters } : null;
-    }
-
-    initEmptyFilter (columnName) {
-        return {
-            field: columnName,
-            type: FilterTypes.equals,
-            value: '',
-            logicalOperator: LogicalOperators.AND,
-            caseSensitive: false
-        };
+        return settings?.allColumns ? { allColumns: settings.allColumns, filters, errors: null } : null;
     }
 
     closeFlyout (resetLayers) {
@@ -241,7 +231,32 @@ class FeatureDataPluginUIHandler extends StateHandler {
     updateFilters (index, filter) {
         const { selectByPropertiesSettings } = this.getState();
         selectByPropertiesSettings.filters[index] = filter;
+        filter.error = null;
         this.updateState({ selectByPropertiesSettings });
+    }
+
+    applyFilters () {
+        const { selectByPropertiesSettings } = this.getState();
+        const { filters } = selectByPropertiesSettings;
+
+        filters.forEach((filter) => {
+            if (!filter?.value?.length) {
+                filter.error = true;
+            }
+        });
+
+        this.updateState({ selectByPropertiesSettings });
+    }
+
+    initEmptyFilter (columnName) {
+        return {
+            field: columnName,
+            type: FilterTypes.equals,
+            value: '',
+            error: null,
+            logicalOperator: LogicalOperators.AND,
+            caseSensitive: false
+        };
     }
 
     addFilter () {
@@ -328,7 +343,8 @@ const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
     'closePopup',
     'updateFilters',
     'addFilter',
-    'removeFilter'
+    'removeFilter',
+    'applyFilters'
 
 ]);
 

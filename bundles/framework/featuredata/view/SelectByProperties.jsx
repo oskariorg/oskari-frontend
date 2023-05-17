@@ -70,6 +70,9 @@ const StyledTextInput = styled(TextInput)`
 const FlexRow = styled('div')`
     display: flex;
     padding: 0 .5em .5em .5em;
+    input.validation-error {
+        border 1px solid red;
+    }
 `;
 
 const ButtonsContainer = styled(FlexRow)`
@@ -81,7 +84,7 @@ const StyledButton = styled(Button)`
 `;
 
 const Buttons = (props) => {
-    const { closePopup, removeFilter } = props;
+    const { closePopup, removeFilter, applyFilters, hasErrors } = props;
     return <ButtonsContainer>
         <StyledButton onClick={() => { closePopup(); }}>
             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.cancel'}/>
@@ -89,7 +92,7 @@ const Buttons = (props) => {
         <StyledButton onClick={() => { removeFilter(null, true); }}>
             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.clearAll'}/>
         </StyledButton>
-        <StyledButton type='primary' onClick={() => { closePopup(); }}>
+        <StyledButton type='primary' disabled={hasErrors} onClick={() => { applyFilters(); }}>
             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.refresh'}/>
         </StyledButton>
     </ButtonsContainer>;
@@ -97,11 +100,24 @@ const Buttons = (props) => {
 
 Buttons.propTypes = {
     removeFilter: PropTypes.func,
-    closePopup: PropTypes.func
+    closePopup: PropTypes.func,
+    applyFilters: PropTypes.func,
+    hasErrors: PropTypes.bool
 };
 
 const FilterRow = (props) => {
-    const { columnOptions, filterTypeOptions, index, filter, updateFilters, addFilter, removeFilter, showFilterOperator, showAddRemove, showRemove } = props;
+    const {
+        columnOptions,
+        filterTypeOptions,
+        index,
+        filter,
+        updateFilters,
+        addFilter,
+        removeFilter,
+        showFilterOperator,
+        showAddRemove,
+        showRemove
+    } = props;
     return <>
         <FlexRow>
             <Checkbox
@@ -121,8 +137,12 @@ const FilterRow = (props) => {
                 value={filter.type}
                 onChange={((value) => { filter.type = value; updateFilters(index, filter); })}/>
             <StyledTextInput
+                type='text'
                 placeholder={Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectByPropertiesPopup.valueInputPlaceholder')}
-                onBlur={(value) => { filter.value = value; updateFilters(index, filter); }}/>
+                onChange={(event) => { filter.value = event.target.value; }}
+                onBlur={() => { updateFilters(index, filter); }}
+                className={filter.error ? 'validation-error' : ''}
+            />
             { (showFilterOperator && !showAddRemove) &&
                 <StyledSelectSmall
                     options={generateLogicalOperatorOptions()}
@@ -159,8 +179,12 @@ const Container = styled('div')`
 `;
 
 export const SelectByPropertiesPopup = (props) => {
-    const { columnNames, filters, updateFilters, addFilter, removeFilter, closePopup } = props;
+    const { columnNames, filters, updateFilters, addFilter, removeFilter, applyFilters, closePopup } = props;
+    let hasErrors = false;
     const rows = filters.map((filter, index) => {
+        if (filter?.error) {
+            hasErrors = true;
+        }
         return <FilterRow
             key={index}
             index={index}
@@ -178,7 +202,7 @@ export const SelectByPropertiesPopup = (props) => {
 
     return <Container>
         { rows }
-        <Buttons closePopup={closePopup} removeFilter={removeFilter}/>
+        <Buttons closePopup={closePopup} removeFilter={removeFilter} applyFilters={applyFilters} hasErrors={hasErrors}/>
     </Container>;
 };
 
@@ -188,6 +212,7 @@ SelectByPropertiesPopup.propTypes = {
     updateFilters: PropTypes.func,
     addFilter: PropTypes.func,
     removeFilter: PropTypes.func,
+    applyFilters: PropTypes.func,
     closePopup: PropTypes.func
 };
 
@@ -217,6 +242,7 @@ export const showSelectByPropertiesPopup = (state, controller) => {
         updateFilters={controller.updateFilters}
         addFilter={controller.addFilter}
         removeFilter={controller.removeFilter}
+        applyFilters={controller.applyFilters}
         closePopup={controller.closePopup}
     />;
     const title = <><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.title'}/> {getActiveLayerName(activeLayerId, layers)}</>;
@@ -232,6 +258,7 @@ export const showSelectByPropertiesPopup = (state, controller) => {
                     updateFilters={controller.updateFilters}
                     addFilter={controller.addFilter}
                     removeFilter={controller.removeFilter}
+                    applyFilters={controller.applyFilters}
                     closePopup={controller.closePopup}
                 />);
         }
