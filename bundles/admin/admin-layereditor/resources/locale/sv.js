@@ -214,7 +214,8 @@ Oskari.registerLocalization(
                 "errorFetchLayerEnduserFailed": "Listan över kartlagren kan inte uppdateras, eftersom kartlagret inte returnerar någon data. Du kom väl ihåg att uppdatera rättigheterna som tillhör din användarroll?",
                 "deleteErrorGroupHasSubgroups": "Gruppen du försöker ta bort innehåller undergrupper. Ta bort undergrupperna först.",
                 "errorFetchCoverage": "Kan inte hämtas kartlagrets täckningsområde från tjänsten.",
-                "noCoverage": "Kartlagrets täckningsområde är inte begränsat."
+                "noCoverage": "Kartlagrets täckningsområde är inte begränsat.",
+                "invalidScale": "Tarkista tason mittakaavarajat."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

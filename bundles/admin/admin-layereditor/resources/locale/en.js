@@ -216,7 +216,8 @@ Oskari.registerLocalization(
                 "errorFetchLayerEnduserFailed": "Fetching layer details for the layer listing failed. Did you add 'View' permission for a role that you have?",
                 "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first.",
                 "errorFetchCoverage": "Failed to get the map layer coverage from the service.",
-                "noCoverage": "The map layer coverage isn't restricted."
+                "noCoverage": "The map layer coverage isn't restricted.",
+                "invalidScale": "Tarkista tason mittakaavarajat."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",
