@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { showPopup } from 'oskari-ui/components/window';
 import { Message, Select, TextInput, Button, Checkbox } from 'oskari-ui';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
-
+import { FilterTwoTone, MinusCircleTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 export const FilterTypes = {
     equals: '=',
     like: '~=',
@@ -152,8 +152,8 @@ const FilterRow = (props) => {
             }
             { showAddRemove &&
                 <>
-                    <Button onClick={(() => addFilter())}>PLUS</Button>
-                    { showRemove && <Button onClick={(() => removeFilter(index))}>MINUS</Button> }
+                    <Button onClick={(() => addFilter())}><PlusCircleTwoTone/></Button>
+                    { showRemove && <Button onClick={(() => removeFilter(index))}><MinusCircleTwoTone/></Button> }
                 </>
             }
         </FlexRow>
@@ -218,7 +218,7 @@ SelectByPropertiesPopup.propTypes = {
 
 export const SelectByPropertiesFunnel = (props) => {
     const { openSelectByPropertiesPopup } = props;
-    return props.active ? <Funnel className='icon-funnel' onClick={() => openSelectByPropertiesPopup()}/> : <></>;
+    return props.active ? <Funnel onClick={() => openSelectByPropertiesPopup()}><FilterTwoTone /></Funnel> : <></>;
 };
 
 SelectByPropertiesFunnel.propTypes = {
