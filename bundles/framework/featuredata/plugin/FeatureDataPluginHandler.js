@@ -376,7 +376,7 @@ const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
     'updateVisibleColumns',
     'toggleFeature',
     'openSelectByPropertiesPopup',
-    'closePopup',
+    'closeSelectByPropertiesPopup',
     'updateFilters',
     'addFilter',
     'removeFilter',
