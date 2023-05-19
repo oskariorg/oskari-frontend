@@ -95,9 +95,9 @@ const AddIcon = styled(PlusCircleOutlined)`
 `;
 
 const Buttons = (props) => {
-    const { closePopup, removeFilter, applyFilters, hasErrors } = props;
+    const { closeSelectByPropertiesPopup, removeFilter, applyFilters, hasErrors } = props;
     return <ButtonsContainer>
-        <StyledSecondaryButton type='cancel' onClick={() => { closePopup(); }} />
+        <StyledSecondaryButton type='cancel' onClick={() => { closeSelectByPropertiesPopup(); }} />
         <StyledSecondaryButton type='reset' onClick={() => { removeFilter(null, true); }}/>
         <StyledButton type='primary' disabled={hasErrors} onClick={() => { applyFilters(); }}>
             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.refresh'}/>
@@ -107,7 +107,7 @@ const Buttons = (props) => {
 
 Buttons.propTypes = {
     removeFilter: PropTypes.func,
-    closePopup: PropTypes.func,
+    closeSelectByPropertiesPopup: PropTypes.func,
     applyFilters: PropTypes.func,
     hasErrors: PropTypes.bool
 };
@@ -175,7 +175,7 @@ FilterRow.propTypes = {
     updateFilters: PropTypes.func,
     addFilter: PropTypes.func,
     removeFilter: PropTypes.func,
-    closePopup: PropTypes.func,
+    closeSelectByPropertiesPopup: PropTypes.func,
     showFilterOperator: PropTypes.bool,
     showAddRemove: PropTypes.bool,
     showRemove: PropTypes.bool
@@ -186,7 +186,7 @@ const Container = styled('div')`
 `;
 
 export const SelectByPropertiesPopup = (props) => {
-    const { columnNames, filters, updateFilters, addFilter, removeFilter, applyFilters, closePopup } = props;
+    const { columnNames, filters, updateFilters, addFilter, removeFilter, applyFilters, closeSelectByPropertiesPopup } = props;
     let hasErrors = false;
     const rows = filters.map((filter, index) => {
         if (filter?.error) {
@@ -209,7 +209,7 @@ export const SelectByPropertiesPopup = (props) => {
 
     return <Container>
         { rows }
-        <Buttons closePopup={closePopup} removeFilter={removeFilter} applyFilters={applyFilters} hasErrors={hasErrors}/>
+        <Buttons closeSelectByPropertiesPopup={closeSelectByPropertiesPopup} removeFilter={removeFilter} applyFilters={applyFilters} hasErrors={hasErrors}/>
     </Container>;
 };
 
@@ -220,7 +220,7 @@ SelectByPropertiesPopup.propTypes = {
     addFilter: PropTypes.func,
     removeFilter: PropTypes.func,
     applyFilters: PropTypes.func,
-    closePopup: PropTypes.func
+    closeSelectByPropertiesPopup: PropTypes.func
 };
 
 export const SelectByPropertiesFunnel = (props) => {
@@ -250,10 +250,10 @@ export const showSelectByPropertiesPopup = (state, controller) => {
         addFilter={controller.addFilter}
         removeFilter={controller.removeFilter}
         applyFilters={controller.applyFilters}
-        closePopup={controller.closePopup}
+        closeSelectByPropertiesPopup={controller.closeSelectByPropertiesPopup}
     />;
     const title = <><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.title'}/> {getActiveLayerName(activeLayerId, layers)}</>;
-    const controls = showPopup(title, content, () => { controller.closePopup(); }, {});
+    const controls = showPopup(title, content, () => { controller.closeSelectByPropertiesPopup(); }, {});
 
     return {
         ...controls,
@@ -266,7 +266,7 @@ export const showSelectByPropertiesPopup = (state, controller) => {
                     addFilter={controller.addFilter}
                     removeFilter={controller.removeFilter}
                     applyFilters={controller.applyFilters}
-                    closePopup={controller.closePopup}
+                    closeSelectByPropertiesPopup={controller.closeSelectByPropertiesPopup}
                 />);
         }
     };
