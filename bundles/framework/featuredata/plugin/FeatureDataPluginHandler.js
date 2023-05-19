@@ -282,7 +282,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
         });
 
         this.selectionService.setSelectedFeatureIds(activeLayerId, [...filteredIds]);
-        this.updateState({ selection: [...filteredIds] });
     }
 
     initEmptyFilter (columnName) {
