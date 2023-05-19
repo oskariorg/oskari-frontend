@@ -79,7 +79,7 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
         if (layer && !layerChecked) {
             setLayerChecked(true);
             const {minscale, maxscale} = layer;
-            if (!minscale || !maxscale || minscale === -1 || maxscale === -1) {
+            if (minscale === maxscale && minscale !== -1) {
                 Messaging.warn(<Message messageKey='messages.invalidScale' bundleKey='admin-layereditor' />);
             }
         }
