@@ -139,9 +139,9 @@ const FilterRow = (props) => {
                 onChange={((value) => { filter.operator = value; updateFilters(index, filter); })}/>
             <StyledTextInput
                 type='text'
+                value={filter.value}
                 placeholder={Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectByPropertiesPopup.valueInputPlaceholder')}
-                onChange={(event) => { filter.value = event.target.value; }}
-                onBlur={() => { updateFilters(index, filter); }}
+                onChange={(event) => { filter.value = event.target.value; updateFilters(index, filter); }}
                 className={filter.error ? 'validation-error' : ''}
             />
             { (showFilterOperator && !showAddRemove) &&
