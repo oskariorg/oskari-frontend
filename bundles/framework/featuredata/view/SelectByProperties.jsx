@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { showPopup } from 'oskari-ui/components/window';
 import { Message, Select, TextInput, Button, Checkbox } from 'oskari-ui';
-import { SecondaryButton } from 'oskari-ui/components/buttons';
+import { SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
-import { FilterTwoTone, MinusCircleTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
+import { FilterTwoTone } from '@ant-design/icons';
 export const FilterTypes = {
     equals: '=',
     like: '~=',
@@ -153,8 +153,8 @@ const FilterRow = (props) => {
             }
             { showAddRemove &&
                 <>
-                    <Button onClick={(() => addFilter())}><PlusCircleTwoTone/></Button>
-                    { showRemove && <Button onClick={(() => removeFilter(index))}><MinusCircleTwoTone/></Button> }
+                    <IconButton type='add' onClick={(() => addFilter())}/>
+                    { showRemove && <IconButton type='delete' onClick={(() => removeFilter(index))}/> }
                 </>
             }
         </FlexRow>
