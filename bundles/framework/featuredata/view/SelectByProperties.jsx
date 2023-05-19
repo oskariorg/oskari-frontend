@@ -5,7 +5,9 @@ import { showPopup } from 'oskari-ui/components/window';
 import { Message, Select, TextInput, Button, Checkbox } from 'oskari-ui';
 import { SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
-import { FilterTwoTone } from '@ant-design/icons';
+import { FilterTwoTone, PlusCircleOutlined } from '@ant-design/icons';
+import { green } from '@ant-design/colors';
+
 export const FilterTypes = {
     equals: '=',
     like: '~=',
@@ -88,6 +90,10 @@ const StyledSecondaryButton = styled(SecondaryButton)`
     margin: 0 .5em 0 .5em
 `;
 
+const AddIcon = styled(PlusCircleOutlined)`
+    color: ${green.primary}
+`;
+
 const Buttons = (props) => {
     const { closePopup, removeFilter, applyFilters, hasErrors } = props;
     return <ButtonsContainer>
@@ -153,8 +159,8 @@ const FilterRow = (props) => {
             }
             { showAddRemove &&
                 <>
-                    <IconButton type='add' onClick={(() => addFilter())}/>
-                    { showRemove && <IconButton type='delete' onClick={(() => removeFilter(index))}/> }
+                    <IconButton icon={<AddIcon />} bordered={true} onClick={(() => addFilter())}/>
+                    { showRemove && <IconButton type='delete' bordered={true} onClick={(() => removeFilter(index))}/> }
                 </>
             }
         </FlexRow>
