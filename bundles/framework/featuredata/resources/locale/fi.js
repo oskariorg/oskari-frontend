@@ -28,8 +28,6 @@ Oskari.registerLocalization(
                     "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
                 },
                 "buttons": {
-                    "cancel": "Peruuta",
-                    "clearAll": "Tyhjennä",
                     "refresh": "Päivitä"
                 }
             },

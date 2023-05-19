@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { showPopup } from 'oskari-ui/components/window';
 import { Message, Select, TextInput, Button, Checkbox } from 'oskari-ui';
+import { SecondaryButton } from 'oskari-ui/components/buttons';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
 import { FilterTwoTone, MinusCircleTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 export const FilterTypes = {
@@ -83,15 +84,15 @@ const StyledButton = styled(Button)`
     margin: 0 .5em 0 .5em
 `;
 
+const StyledSecondaryButton = styled(SecondaryButton)`
+    margin: 0 .5em 0 .5em
+`;
+
 const Buttons = (props) => {
     const { closePopup, removeFilter, applyFilters, hasErrors } = props;
     return <ButtonsContainer>
-        <StyledButton onClick={() => { closePopup(); }}>
-            <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.cancel'}/>
-        </StyledButton>
-        <StyledButton onClick={() => { removeFilter(null, true); }}>
-            <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.clearAll'}/>
-        </StyledButton>
+        <StyledSecondaryButton type='cancel' onClick={() => { closePopup(); }} />
+        <StyledSecondaryButton type='reset' onClick={() => { removeFilter(null, true); }}/>
         <StyledButton type='primary' disabled={hasErrors} onClick={() => { applyFilters(); }}>
             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.refresh'}/>
         </StyledButton>

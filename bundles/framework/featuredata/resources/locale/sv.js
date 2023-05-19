@@ -28,8 +28,6 @@ Oskari.registerLocalization(
                     "lessThanOrEqualTo": "är mindre än eller lika med"
                 },
                 "buttons": {
-                    "cancel": "Avbryt",
-                    "clearAll": "Töm filter",
                     "refresh": "Uppdatera filter"
                 }
             },
