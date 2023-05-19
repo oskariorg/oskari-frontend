@@ -61,7 +61,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
                     }
                 };
             }}
-        />;
+        />
     </>;
     return featureTable;
 };
