@@ -29,6 +29,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
         });
         this.mapModule = mapModule;
         this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
+        this.flyoutController = null;
+        this.selectByPropertiespopupController = null;
         this.addStateListener(() => this.updateFlyout());
     }
 
@@ -167,17 +169,17 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     openSelectByPropertiesPopup () {
-        if (this.popupController) {
-            this.closePopup();
+        if (this.selectByPropertiespopupController) {
+            this.closeSelectByPropertiesPopupPopup();
             return;
         }
-        this.popupController = showSelectByPropertiesPopup(this.getState(), this.getController());
+        this.selectByPropertiespopupController = showSelectByPropertiesPopup(this.getState(), this.getController());
     }
 
-    closePopup () {
-        if (this.popupController) {
-            this.popupController.close();
-            this.popupController = null;
+    closeSelectByPropertiesPopupPopup () {
+        if (this.selectByPropertiespopupController) {
+            this.selectByPropertiespopupController.close();
+            this.selectByPropertiespopupController = null;
         }
     }
 
@@ -208,10 +210,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             this.flyoutController = null;
         }
 
-        if (this.popupController) {
-            this.popupController.close();
-            this.popupController = null;
-        }
+        this.closeSelectByPropertiesPopupPopup();
 
         this.updateState({
             flyoutOpen: false,
@@ -224,8 +223,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
             this.flyoutController.update(this.getState());
         }
 
-        if (this.popupController) {
-            this.popupController.update(this.getState());
+        if (this.selectByPropertiespopupController) {
+            this.selectByPropertiespopupController.update(this.getState());
         }
     }
 
