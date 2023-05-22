@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Message, Radio, Checkbox } from 'oskari-ui';
 import { SecondaryButton } from 'oskari-ui/components/buttons';
@@ -44,29 +44,51 @@ const ColumnHeader = styled('h3')`
     padding-bottom: 0.25em;
 `;
 
+const FILETYPES = {
+    excel: 'excel',
+    csv: 'csv'
+};
+
+const SEPARATORS = {
+    semicolon: ';',
+    comma: ',',
+    tabulator: '\t'
+};
+
+const COLUMN_SELECTION = {
+    all: 'all',
+    opened: 'opened'
+};
+
 const ExportDataPopup = (props) => {
     const { closeExportDataPopup } = props;
+    const [csvSeparator, setCsvSeparator] = useState(SEPARATORS.comma);
+    const [fileType, setFileType] = useState(FILETYPES.excel);
+    const [columnSelection, setColumnSelection] = useState(COLUMN_SELECTION.all);
+    const [datasource, setDataSource] = useState(true);
+    const [metadataLink, setMetadataLink] = useState(false);
+    const [onlySelected, setOnlySelected] = useState(false);
     return <>
         <FlexTableContainer>
             <FlexRow>
                 <FlexCol>
                     <ColumnHeader><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.fileFormat.title'}/></ColumnHeader>
-                    <RadioGroup>
-                        <RadioOption>
+                    <RadioGroup value={fileType} onChange={(event) => setFileType(event.target.value)}>
+                        <RadioOption value={FILETYPES.excel}>
                             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.fileFormat.excel'}/>
                         </RadioOption>
-                        <RadioOption>
+                        <RadioOption value={FILETYPES.csv}>
                             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.fileFormat.csv'}/>
                         </RadioOption>
                     </RadioGroup>
                 </FlexCol>
                 <FlexColRight>
                     <ColumnHeader><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.columns.title'}/></ColumnHeader>
-                    <RadioGroup>
-                        <RadioOption>
+                    <RadioGroup value={columnSelection} onChange={(event) => setColumnSelection(event.target.value)}>
+                        <RadioOption value={COLUMN_SELECTION.opened}>
                             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.columns.opened'}/>
                         </RadioOption>
-                        <RadioOption>
+                        <RadioOption value={COLUMN_SELECTION.all}>
                             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.columns.all'}/>
                         </RadioOption>
                     </RadioGroup>
@@ -75,14 +97,14 @@ const ExportDataPopup = (props) => {
             <FlexRow>
                 <FlexCol>
                     <ColumnHeader><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.csvSeparator.title'}/></ColumnHeader>
-                    <RadioGroup>
-                        <RadioOption>
+                    <RadioGroup value={csvSeparator} onChange={(event) => setCsvSeparator(event.target.value)}>
+                        <RadioOption value={SEPARATORS.comma}>
                             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.csvSeparator.comma'}/>
                         </RadioOption>
-                        <RadioOption>
+                        <RadioOption value={SEPARATORS.semicolon}>
                             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.csvSeparator.semicolon'}/>
                         </RadioOption>
-                        <RadioOption>
+                        <RadioOption value={SEPARATORS.tabulator}>
                             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.csvSeparator.tabulator'}/>
                         </RadioOption>
                     </RadioGroup>
@@ -91,9 +113,15 @@ const ExportDataPopup = (props) => {
             <FlexRow>
                 <FlexCol>
                     <ColumnHeader><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.title'}/></ColumnHeader>
-                    <Checkbox><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.dataSource'}/></Checkbox>
-                    <Checkbox><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.metadataLink'}/></Checkbox>
-                    <Checkbox><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.onlySelected'}/></Checkbox>
+                    <Checkbox value={datasource} onChange={(evt) => setDataSource(evt.target.checked)}>
+                        <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.dataSource'}/>
+                    </Checkbox>
+                    <Checkbox value={metadataLink} onChange={(evt) => setMetadataLink(evt.target.checked)}>
+                        <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.metadataLink'}/>
+                    </Checkbox>
+                    <Checkbox value={onlySelected} onChange={(evt) => setOnlySelected(evt.target.checked)}>
+                        <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.onlySelected'}/>
+                    </Checkbox>
                 </FlexCol>
             </FlexRow>
             <FlexRowCentered>
