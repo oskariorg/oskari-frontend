@@ -170,13 +170,13 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     openSelectByPropertiesPopup () {
         if (this.selectByPropertiespopupController) {
-            this.closeSelectByPropertiesPopupPopup();
+            this.closeSelectByPropertiesPopup();
             return;
         }
         this.selectByPropertiespopupController = showSelectByPropertiesPopup(this.getState(), this.getController());
     }
 
-    closeSelectByPropertiesPopupPopup () {
+    closeSelectByPropertiesPopup () {
         if (this.selectByPropertiespopupController) {
             this.selectByPropertiespopupController.close();
             this.selectByPropertiespopupController = null;
@@ -210,7 +210,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             this.flyoutController = null;
         }
 
-        this.closeSelectByPropertiesPopupPopup();
+        this.closeSelectByPropertiesPopup();
 
         this.updateState({
             flyoutOpen: false,
