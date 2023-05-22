@@ -24,7 +24,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         this.sandbox = instance.getSandbox();
         this.container = null;
         this.state = {};
-        this.tabsContainer = null;
         this._localization = this.instance.getLocalization('flyout');
         this.handler = null;
     }, {
@@ -69,19 +68,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
 
         /* App specific methods */
         createUI: function () {
-            if (this.tabsContainer) {
-                return;
-            }
-            this.handler = new AdminUsersHandler(this.instance.conf.restUrl, this.instance.conf.isExternal, this.instance.conf.requirements, () => this.renderContent());
             this.renderContent();
         },
         renderContent: function () {
+            const handler = this._getHandler();
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'AdminUsers' }}>
-                    <AdminUsersFlyout state={this.handler.getState()} controller={this.handler.getController()} isExternal={this.instance.conf.isExternal} />
+                    <AdminUsersFlyout state={handler.getState()} controller={handler.getController()} isExternal={this.instance.conf.isExternal} />
                 </LocaleProvider>,
                 this.container[0]
             );
+        },
+        _getHandler: function () {
+            if (!this.handler) {
+                this.handler = new AdminUsersHandler(this.instance.conf.restUrl, this.instance.conf.isExternal, this.instance.conf.requirements, () => this.renderContent());
+            }
+            return this.handler;
         },
         /**
          * @method _getLocalization
