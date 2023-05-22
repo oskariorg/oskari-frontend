@@ -2,6 +2,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
 import { filterFeaturesByAttribute, getFilterAlternativesAsArray } from '../../../mapping/mapmodule/util/vectorfeatures/filter';
+import { showExportDataPopup } from '../view/ExportData';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
@@ -180,6 +181,21 @@ class FeatureDataPluginUIHandler extends StateHandler {
         if (this.selectByPropertiespopupController) {
             this.selectByPropertiespopupController.close();
             this.selectByPropertiespopupController = null;
+        }
+    }
+
+    openExportDataPopup () {
+        if (this.exportDataPopupController) {
+            this.closeSelectByPropertiesPopupPopup();
+            return;
+        }
+        this.exportDataPopupController = showExportDataPopup(this.getState(), this.getController());
+    }
+
+    closeExportDataPopup () {
+        if (this.exportDataPopupController) {
+            this.exportDataPopupController.close();
+            this.exportDataPopupController = null;
         }
     }
 
@@ -377,6 +393,8 @@ const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
     'toggleFeature',
     'openSelectByPropertiesPopup',
     'closeSelectByPropertiesPopup',
+    'openExportDataPopup',
+    'closeExportDataPopup',
     'updateFilters',
     'addFilter',
     'removeFilter',

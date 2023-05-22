@@ -31,6 +31,33 @@ Oskari.registerLocalization(
                     "refresh": "Päivitä"
                 }
             },
+            "exportDataPopup": {
+                "title": "Aineiston vienti",
+                "openButtonLabel": "Aineiston vienti",
+                "exportButtonLabel": "Vie",
+                "fileFormat": {
+                    "title": "Tiedostomuoto",
+                    "excel": "Excel",
+                    "csv": "CSV"
+                },
+                "columns": {
+                    "title": "Sarakkeet",
+                    "all": "Kaikki",
+                    "opened": "Avatut"
+                },
+                "csvSeparator": {
+                    "title": "Erotin CSV-tiedostossa",
+                    "comma": "pilkku",
+                    "semicolon": "Puolipiste",
+                    "tabulator": "Sarkain"
+                },
+                "additionalSettings": {
+                    "title": "Lisäasetukset",
+                    "dataSource": "Tietolähde",
+                    "metadataLink": "Linkki metatietoihin",
+                    "onlySelected": "Tuo vain valitut kohteet"
+                }
+            },
             "showSelectedFirst": "Näytä valitut ensin"
 
         }

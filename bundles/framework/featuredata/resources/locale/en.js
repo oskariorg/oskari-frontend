@@ -31,6 +31,33 @@ Oskari.registerLocalization(
                     "refresh": "Refresh"
                 }
             },
+            "exportDataPopup": {
+                "title": "Export data",
+                "openButtonLabel": "Export data",
+                "exportButtonLabel": "Export",
+                "fileFormat": {
+                    "title": "File format",
+                    "excel": "Excel",
+                    "csv": "CSV"
+                },
+                "columns": {
+                    "title": "Columns",
+                    "all": "All",
+                    "opened": "Opened"
+                },
+                "csvSeparator": {
+                    "title": "CSV-file separator",
+                    "comma": "Comma",
+                    "semicolon": "Semicolon",
+                    "tabulator": "Tabulator"
+                },
+                "additionalSettings": {
+                    "title": "Additional settings",
+                    "dataSource": "Data source",
+                    "metadataLink": "Metadata link",
+                    "onlySelected": "Export only selected features"
+                }
+            },
             "showSelectedFirst": "Show selected first"
         }
     });

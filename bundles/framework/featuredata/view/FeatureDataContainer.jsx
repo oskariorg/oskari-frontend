@@ -8,6 +8,7 @@ import { ShowSelectedItemsFirst } from './ShowSelectedItemsFirst';
 import { FEATUREDATA_DEFAULT_HIDDEN_FIELDS } from '../plugin/FeatureDataPluginHandler';
 import { TabTitle } from './TabStatusIndicator';
 import { FilterVisibleColumns } from './FilterVisibleColumns';
+import { ExportButton } from './ExportData';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
 export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
@@ -31,9 +32,14 @@ const StyledTable = styled(Table)`
 
 const SelectionsContainer = styled('div')`
     display: flex;
-    padding-bottom: 1em;
+    flex-direction: column;
 `;
 
+const SelectionRow = styled('div')`
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 1em;
+`;
 const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, controller) => {
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
@@ -42,8 +48,13 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     const dataSource = createDatasourceFromFeatures(features);
     const featureTable = <>
         <SelectionsContainer>
-            <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
-            <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
+            <SelectionRow>
+                <ExportButton onClick={() => { controller.openExportDataPopup(); }}/>
+                <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
+            </SelectionRow>
+            <SelectionRow>
+                <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+            </SelectionRow>
         </SelectionsContainer>
         <StyledTable
             columns={ columnSettings }
