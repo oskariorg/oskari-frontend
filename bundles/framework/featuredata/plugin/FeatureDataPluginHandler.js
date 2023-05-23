@@ -1,5 +1,7 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { showFeatureDataFlyout } from './FeatureDataFlyout';
+import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
+import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
+import { filterFeaturesByAttribute, getFilterAlternativesAsArray } from '../../../mapping/mapmodule/util/vectorfeatures/filter';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
@@ -19,10 +21,16 @@ class FeatureDataPluginUIHandler extends StateHandler {
             visibleColumnsSettings: {
                 allColumns: [],
                 visibleColumns: []
+            },
+            selectByPropertiesSettings: {
+                allColumns: [],
+                filters: []
             }
         });
         this.mapModule = mapModule;
         this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
+        this.flyoutController = null;
+        this.selectByPropertiespopupController = null;
         this.addStateListener(() => this.updateFlyout());
     }
 
@@ -52,6 +60,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             activeLayerFeatures: features,
             selectedFeatureIds,
             visibleColumnsSettings: this.createVisibleColumnsSettings(features),
+            selectByPropertiesSettings: this.createSelectByPropertiesSettings(features),
             sorting: this.determineSortingColumn(features)
         });
     }
@@ -79,7 +88,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
             activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
             selectedFeatureIds = activeLayerFeatures && activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
         };
-
         this.updateState({
             activeLayerId,
             layers: featureDataLayers,
@@ -137,11 +145,12 @@ class FeatureDataPluginUIHandler extends StateHandler {
             return;
         }
 
-        const { activeLayerId, activeLayerFeatures, visibleColumnsSettings } = this.getState();
+        const { activeLayerId, activeLayerFeatures, visibleColumnsSettings, selectByPropertiesSettings } = this.getState();
         const newState = {
             flyoutOpen: true,
             activeLayerFeatures,
-            visibleColumnsSettings
+            visibleColumnsSettings,
+            selectByPropertiesSettings
         };
 
         if (!activeLayerFeatures) {
@@ -152,10 +161,26 @@ class FeatureDataPluginUIHandler extends StateHandler {
             newState.sorting = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.determineSortingColumn(newActiveLayerFeatures) : null;
             newState.selectedFeatureIds = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
             newState.visibleColumnsSettings = this.createVisibleColumnsSettings(newActiveLayerFeatures);
+            newState.selectByPropertiesSettings = this.createSelectByPropertiesSettings(newActiveLayerFeatures);
         }
 
         this.updateState(newState);
         this.flyoutController = showFeatureDataFlyout(this.getState(), this.getController());
+    }
+
+    openSelectByPropertiesPopup () {
+        if (this.selectByPropertiespopupController) {
+            this.closeSelectByPropertiesPopup();
+            return;
+        }
+        this.selectByPropertiespopupController = showSelectByPropertiesPopup(this.getState(), this.getController());
+    }
+
+    closeSelectByPropertiesPopup () {
+        if (this.selectByPropertiespopupController) {
+            this.selectByPropertiespopupController.close();
+            this.selectByPropertiespopupController = null;
+        }
     }
 
     createVisibleColumnsSettings (features) {
@@ -170,18 +195,144 @@ class FeatureDataPluginUIHandler extends StateHandler {
         };
     }
 
+    createSelectByPropertiesSettings (features) {
+        const settings = this.createVisibleColumnsSettings(features);
+        let filters;
+        if (settings?.allColumns && settings?.allColumns.length) {
+            filters = [this.initEmptyFilter(settings.allColumns[0])];
+        }
+        return settings?.allColumns ? { allColumns: settings.allColumns, filters, errors: null } : null;
+    }
+
     closeFlyout (resetLayers) {
         if (this.flyoutController) {
             this.flyoutController.close();
             this.flyoutController = null;
         }
-        this.updateState({ flyoutOpen: false, layers: resetLayers ? null : this.getState().layers });
+
+        this.closeSelectByPropertiesPopup();
+
+        this.updateState({
+            flyoutOpen: false,
+            layers: resetLayers ? null : this.getState().layers
+        });
     }
 
     updateFlyout () {
         if (this.flyoutController) {
             this.flyoutController.update(this.getState());
         }
+
+        if (this.selectByPropertiespopupController) {
+            this.selectByPropertiespopupController.update(this.getState());
+        }
+    }
+
+    updateFilters (index, filter) {
+        const { selectByPropertiesSettings } = this.getState();
+        selectByPropertiesSettings.filters[index] = filter;
+        filter.error = null;
+        this.updateState({ selectByPropertiesSettings });
+    }
+
+    applyFilters () {
+        const { selectByPropertiesSettings } = this.getState();
+        const { filters } = selectByPropertiesSettings;
+
+        let hasErrors = false;
+        filters.forEach((filter) => {
+            if (!filter?.value?.length) {
+                hasErrors = true;
+                filter.error = true;
+            }
+        });
+
+        if (hasErrors) {
+            this.updateState({ selectByPropertiesSettings });
+            return;
+        }
+
+        this.selectFeaturesByProperties();
+    }
+
+    selectFeaturesByProperties () {
+        const { selectByPropertiesSettings, activeLayerId, activeLayerFeatures } = this.getState();
+        const filters = selectByPropertiesSettings.filters;
+
+        // separate the logical operators from the original filter and form a single array
+        const filterArray = [];
+        filters.forEach((filter) => {
+            filterArray.push(filter);
+            if (filters.length > 1) {
+                filterArray.push({ boolean: filter.logicalOperator });
+            }
+        });
+
+        const filteredIds = new Set();
+        const alternatives = getFilterAlternativesAsArray(filterArray);
+        alternatives.forEach(attributeFilters => {
+            let filteredList = activeLayerFeatures;
+            attributeFilters.forEach(filter => {
+                filteredList = filterFeaturesByAttribute(filteredList, filter);
+            });
+            filteredList
+                .map((feature) => feature.id)
+                .filter(id => !!id)
+                .forEach(id => filteredIds.add(id));
+        });
+
+        this.selectionService.setSelectedFeatureIds(activeLayerId, [...filteredIds]);
+    }
+
+    initEmptyFilter (columnName) {
+        return {
+            attribute: columnName,
+            operator: FilterTypes.equals,
+            value: '',
+            error: null,
+            logicalOperator: LogicalOperators.AND,
+            caseSensitive: false
+        };
+    }
+
+    addFilter () {
+        const { selectByPropertiesSettings } = this.getState();
+        if (selectByPropertiesSettings && selectByPropertiesSettings.filters && selectByPropertiesSettings.allColumns) {
+            selectByPropertiesSettings.filters.push(this.initEmptyFilter(selectByPropertiesSettings.allColumns[0]));
+        }
+        this.updateState({
+            selectByPropertiesSettings
+        });
+    }
+
+    /**
+     *
+     * @param {*} index Index of a single filter to remove
+     * @param {*} clearAll When true and no index is provided, clear all filters.
+     * @returns void
+     */
+    removeFilter (index, clearAll) {
+        if (index) {
+            return this.removeFilterByIndex(index);
+        }
+
+        if (clearAll) {
+            const { selectByPropertiesSettings } = this.getState();
+            selectByPropertiesSettings.filters = [this.initEmptyFilter(selectByPropertiesSettings.allColumns[0])];
+            this.updateState({
+                selectByPropertiesSettings
+            });
+        }
+    }
+
+    removeFilterByIndex (index) {
+        const { selectByPropertiesSettings } = this.getState();
+        if (selectByPropertiesSettings && selectByPropertiesSettings.filters && selectByPropertiesSettings.allColumns) {
+            selectByPropertiesSettings.filters.splice(index, 1);
+        }
+        this.updateState({
+            selectByPropertiesSettings
+        });
     }
 
     determineActiveLayerId (featureDataLayers) {
@@ -223,7 +374,14 @@ const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
     'updateSorting',
     'updateLoadingStatus',
     'updateVisibleColumns',
-    'toggleFeature'
+    'toggleFeature',
+    'openSelectByPropertiesPopup',
+    'closeSelectByPropertiesPopup',
+    'updateFilters',
+    'addFilter',
+    'removeFilter',
+    'applyFilters'
+
 ]);
 
 export { wrapped as FeatureDataPluginHandler };

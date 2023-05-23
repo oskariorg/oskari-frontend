@@ -61,7 +61,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
                     }
                 };
             }}
-        />;
+        />
     </>;
     return featureTable;
 };
@@ -110,7 +110,7 @@ const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSele
         const status = loadingStatus[layer.getId()];
         return {
             key: layer.getId(),
-            label: <TabTitle status={status} title={layer.getName()}/>,
+            label: <TabTitle status={status} title={layer.getName()} active={layer.getId() === layerId} openSelectByPropertiesPopup={controller.openSelectByPropertiesPopup}/>,
             children: layer.getId() === layerId
                 ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, controller)
                 : null
