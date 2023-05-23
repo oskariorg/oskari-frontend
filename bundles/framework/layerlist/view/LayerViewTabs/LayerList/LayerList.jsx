@@ -26,7 +26,8 @@ const Column = styled('div')`
 `;
 const Row = styled('div')`
     display: flex;
-    min-width: 200px;
+    flex-direction: row;
+    flex-wrap: wrap;
     ${props => props.spacing && `
         > :not(:last-child) {
             margin-right: ${props.spacing};
@@ -35,8 +36,7 @@ const Row = styled('div')`
 `;
 const ControlsRow = styled(Row)`
     > * {
-        flex-grow: 1;
-        flex-basis: 200px;
+        min-width: 200px;
     }
 `;
 
@@ -46,7 +46,6 @@ const InfoContainer = styled('div')`
 
 const Content = styled(Column)`
     max-width: 600px;
-    min-width: 500px;
 `;
 
 const UpdateInProgressIndicator = ({ show, children }) => {
