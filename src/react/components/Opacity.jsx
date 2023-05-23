@@ -73,14 +73,16 @@ export class Opacity extends React.Component {
         const { opacity } = this.state;
         return (
             <Container>
-                <StyledSlider bordered={this.props.bordered}>
-                    <Slider
-                        min={0}
-                        max={100}
-                        onChange={this.onChange}
-                        value={typeof opacity === 'number' ? opacity : 0}
-                    />
-                </StyledSlider>
+                {!this.props.inputOnly && (
+                    <StyledSlider bordered={this.props.bordered}>
+                        <Slider
+                            min={0}
+                            max={100}
+                            onChange={this.onChange}
+                            value={typeof opacity === 'number' ? opacity : 0}
+                        />
+                    </StyledSlider>
+                )}
                 <NumberInputContainer>
                     <StyledNumberInput
                         min={0}
@@ -101,5 +103,6 @@ export class Opacity extends React.Component {
 Opacity.propTypes = {
     defaultValue: PropTypes.number,
     onChange: PropTypes.func,
-    bordered: PropTypes.bool
+    bordered: PropTypes.bool,
+    inputOnly: PropTypes.bool
 };
