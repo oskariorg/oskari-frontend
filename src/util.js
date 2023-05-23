@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify';
+const MobileDetect = require('mobile-detect');
 
 /*
 * @class Oskari.util
