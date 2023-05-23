@@ -217,7 +217,8 @@ Oskari.registerLocalization(
                 "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?",
                 "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
                 "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
-                "noCoverage": "Karttatason kattavuutta ei ole rajoitettu."
+                "noCoverage": "Karttatason kattavuutta ei ole rajoitettu.",
+                "invalidScale": "Tarkista tason mittakaavarajat."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

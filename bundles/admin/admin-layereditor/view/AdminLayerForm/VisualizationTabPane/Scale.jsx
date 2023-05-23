@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Slider } from 'oskari-ui';
 import { Numeric } from '../Numeric';
-import { LocaleConsumer, Controller } from 'oskari-ui/util';
+import { LocaleConsumer, Controller, Messaging } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { getZoomLevelHelper } from '../../../../../mapping/mapmodule/util/scale';
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
@@ -60,6 +60,8 @@ const MinusIcon = styled(MinusCircleOutlined)`
 `;
 
 const Scale = ({ layer, scales = [], controller, getMessage }) => {
+    const [layerChecked, setLayerChecked] = useState(false);
+
     const locNoLimit = getMessage('fieldNoRestriction');
     const { minscale, maxscale } = normalizeScales(layer);
     const zoomLevelHelper = getZoomLevelHelper(scales);
@@ -72,6 +74,17 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
         // if max zoom is undefined the slider needs to be at the max value
         layerMaxZoom = maxZoomUnrestrictedValue;
     }
+
+    useEffect(() => {
+        if (layer && !layerChecked) {
+            setLayerChecked(true);
+            const {minscale, maxscale} = layer;
+            if (minscale === maxscale && minscale !== -1) {
+                Messaging.warn(<Message messageKey='messages.invalidScale' bundleKey='admin-layereditor' />);
+            }
+        }
+    }, [layer]);
+
     const onValueChange = ([min, max]) => {
         if (min < 0) {
             min = -1;
