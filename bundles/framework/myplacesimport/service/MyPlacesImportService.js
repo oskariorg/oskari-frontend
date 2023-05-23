@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         }
         // pass args for localization even them aren't needed for requested errorKey
         const args = {
-            maxSize: this.instance.getMaxSize(),
+            maxSize: this.instance.handler.getMaxSize(),
             extensions: extensions.join(',')
         };
         this._showError(`flyout.error.${errorKey}`, args);
