@@ -140,10 +140,15 @@ const SubGroupList = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts,
 const StyledCollapsePanel = styled(CollapsePanel)`
     > .ant-collapse-content > .ant-collapse-content-box {
         padding: 0px;
+        display: flex;
     }
     & > div:first-child {
         min-height: 22px;
-    };
+    }
+    & > .ant-collapse-header {
+        flex-direction: row;
+        flex-wrap: wrap !important;
+    }
 `;
 
 const getLayerRowModels = (layers = [], selectedLayerIds = [], controller, opts) => {

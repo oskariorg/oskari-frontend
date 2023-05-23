@@ -3,9 +3,14 @@ import { TextInput } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
 import { SearchOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
+
+const StyledInput = styled(TextInput)`
+    width: 100%;
+`;
 
 const Search = React.forwardRef(({ searchText, getMessage, controller }, ref) => {
-    return <TextInput
+    return <StyledInput
         ref={ref}
         value={searchText}
         allowClear
