@@ -1,11 +1,11 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
-    constructor (restUrl, isExternal, passwordRequirements = {}, consumer) {
+    constructor (conf, consumer) {
         super();
-        this.restUrl = restUrl;
-        this.isExternal = isExternal;
-        this.passwordRequirements = passwordRequirements;
+        this.restUrl = conf.restUrl;
+        this.isExternal = conf.isExternal;
+        this.passwordRequirements = conf.passwordRequirements || {};
         this.sandbox = Oskari.getSandbox();
         this.setState({
             activeTab: 'admin-users-tab',
