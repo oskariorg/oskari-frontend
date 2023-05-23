@@ -23,8 +23,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.container = null;
-        this.state = {};
-        this._localization = this.instance.getLocalization('flyout');
         this.handler = null;
     }, {
         /**
@@ -71,7 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             this.renderContent();
         },
         renderContent: function () {
-            const handler = this._getHandler();
+            const handler = this.getHandler();
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'AdminUsers' }}>
                     <AdminUsersFlyout state={handler.getState()} controller={handler.getController()} isExternal={this.instance.conf.isExternal} />
@@ -79,19 +77,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
                 this.container[0]
             );
         },
-        _getHandler: function () {
+        getHandler: function () {
             if (!this.handler) {
                 this.handler = new AdminUsersHandler(this.instance.conf.restUrl, this.instance.conf.isExternal, this.instance.conf.requirements, () => this.renderContent());
             }
             return this.handler;
         },
-        /**
-         * @method _getLocalization
-         */
-        _getLocalization: function (key) {
-            return this._localization[key];
-        },
-
         /**
          * @method stopPlugin
          *
@@ -106,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
          */
 
         getTitle: function () {
-            return this._getLocalization('title');
+            return this.instance.loc('flyout.title');
         },
         /**
          * @method getDescription
@@ -114,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
          * flyout
          */
         getDescription: function () {
-            return this._getLocalization('desc');
+            return this.instance.loc('flyout.desc');
         },
         /**
          * @method getOptions
@@ -125,13 +116,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         },
         /**
          * @method setState
-         * @param {Object} state
-         *     state that this component should use
          * Interface method implementation, does nothing atm
          */
-        setState: function (state) {
-            this.state = state;
-        }
+        setState: function () {}
     }, {
         /**
          * @property {String[]} protocol
