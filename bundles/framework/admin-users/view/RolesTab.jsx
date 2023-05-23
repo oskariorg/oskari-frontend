@@ -18,7 +18,6 @@ const Form = styled('div')`
 `;
 
 const AddButton = styled(PrimaryButton)`
-    width: 50px;
     margin-left: 15px;
     align-self: flex-end;
 `;
