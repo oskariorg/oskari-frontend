@@ -390,8 +390,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         const params = {
             format,
             columns,
-            delimiter,
-            export_selection: exportOnlySelected ? 'on' : 'off'
+            delimiter
         };
 
         const { layers, activeLayerId } = this.getState();
@@ -411,7 +410,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         this.sendData(payload, params.filename + extension);
     }
 
-    async sendData (payload, filename) {
+    sendData (payload, filename) {
         try {
             fetch(Oskari.urls.buildUrl(Oskari.urls.getRoute() + EXPORT_FEATUREDATA_REST_URL), {
                 method: 'POST',
