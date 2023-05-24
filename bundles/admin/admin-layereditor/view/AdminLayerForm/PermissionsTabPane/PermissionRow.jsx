@@ -15,7 +15,7 @@ export const TEXT_COLUMN_SIZE = {
 };
 
 export const PERMISSION_TYPE_COLUMN_SIZE = {
-    width: 110,
+    width: 90,
     padding: 5
 };
 

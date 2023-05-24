@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { PermissionRow, TEXT_COLUMN_SIZE, PERMISSION_TYPE_COLUMN_SIZE } from './PermissionRow';
 import { List, ListItem, Checkbox, Message, Tooltip } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
+import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
 
 const StyledListItem = styled(ListItem)`
     &:first-child > div {
@@ -26,6 +27,22 @@ const ListDiv = styled.div`
     margin-bottom: 20px;
     overflow: auto;
 `;
+
+const getPermissionTableHeader = (permission) => {
+    switch (permission.id) {
+        case 'VIEW_LAYER':
+            return <UnorderedListOutlined />
+        case 'VIEW_PUBLISHED':
+            return <EyeOutlined />
+        case 'PUBLISH':
+            return <ImportOutlined />
+        case 'DOWNLOAD':
+            return <ExportOutlined />
+        default:
+            // permissions might have server side localization as "name" that defaults to id if not given
+            return <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} bundleKey='admin-layereditor' />
+    }
+};
 
 function getHeaderPermissions (dataRows, roles) {
     // key == permission, value == set of roles having the permission
@@ -57,8 +74,7 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
     const { roles, permissionTypes } = rolesAndPermissionTypes;
 
     const localizedPermissionTypes = permissionTypes.map(permission => {
-        // permissions might have server side localization as "name" that defaults to id if not given
-        permission.localizedText = <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} />;
+        permission.localizedText = getPermissionTableHeader(permission);
         return permission;
     });
 
@@ -106,9 +122,8 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
 
         const rowKey = modelRow.isHeaderRow ? 'header' : modelRow.role.name;
         // calculate width in case there are additional permission types the background isn't colored properly without it
-        // 200 for role name column and 120/permission type (110 + 5 padding on both side)
-        const rowWidth = (TEXT_COLUMN_SIZE.width + TEXT_COLUMN_SIZE.padding) +
-            (PERMISSION_TYPE_COLUMN_SIZE.width + PERMISSION_TYPE_COLUMN_SIZE.padding * 2) * headerRow.permissionTypes.length;
+        // 195 for role name column and 90/permission type
+        const rowWidth = TEXT_COLUMN_SIZE.width + (PERMISSION_TYPE_COLUMN_SIZE.width * headerRow.permissionTypes.length);
         return (
             <StyledListItem style={{ width: rowWidth + 'px' }}>
                 <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} text={modelRow.text} checkboxes={checkboxes}/>
