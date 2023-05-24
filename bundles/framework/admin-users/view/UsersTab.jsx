@@ -17,7 +17,6 @@ const SearchContainer = styled('div')`
 `;
 
 const AddButton = styled(PrimaryButton)`
-    width: 50px;
     margin-bottom: 10px;
     align-self: flex-end;
 `;
