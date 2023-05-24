@@ -1,8 +1,8 @@
 import React from 'react';
-import { Message, TextInput, Label, Select } from 'oskari-ui';
-import { getMandatoryIcon } from 'oskari-ui/util/validators';
+import { Message, Label, Select } from 'oskari-ui';
 import { PrimaryButton, SecondaryButton, DeleteButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
+import { UserField } from './UserField';
 
 const Content = styled('div')`
     display: flex;
@@ -33,86 +33,32 @@ const LabelledField = styled('div')`
     margin-bottom: 5px;
 `;
 
-const StyledInput = styled(TextInput)`
-    width: 210px;
-`;
-
 const StyledSelect = styled(Select)`
     width: 210px;
 `;
 
-export const UserForm = ({ state, controller, isExternal }) => {
+const FIELDS = ['firstName', 'lastName', 'user', 'email'];
+const PASS_FIELDS = ['password', 'rePassword'];
+
+const getRoleOptions = (roles, systemRole) => {
+    const filtered = roles.filter(role => role.systemRole === systemRole);
+    return filtered.map(role => ({
+        label: role.name,
+        value: role.id
+    }));
+};
+
+export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
+    const { errors } = userFormState;
     return (
         <Content>
-            <LabelledField>
-                <Label><Message messageKey='flyout.adminusers.firstName' /> {getMandatoryIcon(true, state.userFormState.firstName)}</Label>
-                <StyledInput
-                    className='t_firstName'
-                    value={state.userFormState.firstName}
-                    onChange={(e) => controller.updateUserFormState('firstName', e.target.value)}
-                    status={state.userFormErrors.includes('firstName') ? 'error' : null}
-                    disabled={isExternal}
-                    autoComplete='nope'
-                />
-            </LabelledField>
-            <LabelledField>
-                <Label><Message messageKey='flyout.adminusers.lastName' /> {getMandatoryIcon(true, state.userFormState.lastName)}</Label>
-                <StyledInput
-                    className='t_lastName'
-                    value={state.userFormState.lastName}
-                    onChange={(e) => controller.updateUserFormState('lastName', e.target.value)}
-                    status={state.userFormErrors.includes('lastName') ? 'error' : null}
-                    disabled={isExternal}
-                    autoComplete='nope'
-                />
-            </LabelledField>
-            <LabelledField>
-                <Label><Message messageKey='flyout.adminusers.user' /> {getMandatoryIcon(true, state.userFormState.username)}</Label>
-                <StyledInput
-                    className='t_username'
-                    value={state.userFormState.username}
-                    onChange={(e) => controller.updateUserFormState('username', e.target.value)}
-                    status={state.userFormErrors.includes('username') ? 'error' : null}
-                    disabled={isExternal}
-                    autoComplete='nope'
-                />
-            </LabelledField>
-            <LabelledField>
-                <Label><Message messageKey='flyout.adminusers.email' /> {getMandatoryIcon(true, state.userFormState.email)}</Label>
-                <StyledInput
-                    className='t_email'
-                    value={state.userFormState.email}
-                    onChange={(e) => controller.updateUserFormState('email', e.target.value)}
-                    status={state.userFormErrors.includes('email') ? 'error' : null}
-                    disabled={isExternal}
-                    autoComplete='nope'
-                />
-            </LabelledField>
-            {!isExternal && (
-                <>
-                    <LabelledField>
-                        <Label><Message messageKey='flyout.adminusers.pass' /> {!state.editingUserId && (getMandatoryIcon(true, state.userFormState.password))}</Label>
-                        <StyledInput
-                            className='t_password'
-                            type='password'
-                            value={state.userFormState.password}
-                            onChange={(e) => controller.updateUserFormState('password', e.target.value)}
-                            status={state.userFormErrors.includes('password') ? 'error' : null}
-                            autoComplete='nope'
-                        />
-                    </LabelledField>
-                    <LabelledField>
-                        <Label><Message messageKey='flyout.adminusers.pass_retype' /> {!state.editingUserId && (getMandatoryIcon(true, state.userFormState.rePassword))}</Label>
-                        <StyledInput
-                            className='t_re_password'
-                            type='password'
-                            value={state.userFormState.rePassword}
-                            onChange={(e) => controller.updateUserFormState('rePassword', e.target.value)}
-                            status={state.userFormErrors.includes('password') ? 'error' : null}
-                            autoComplete='nope'
-                        />
-                    </LabelledField>
-                </>
+            {FIELDS.map(field =>
+                <UserField field={field} controller={controller} disabled={isExternal}
+                    value={userFormState[field]} error={errors.includes(field)}/>
+            )}
+            {!isExternal && PASS_FIELDS.map(field =>
+                <UserField field={field} controller={controller} mandatory={!editingUserId} type='password'
+                    value={userFormState[field]} error={errors.includes(field)}/>
             )}
             <LabelledField>
                 <Label><Message messageKey='flyout.adminusers.addRole' /></Label>
@@ -121,14 +67,18 @@ export const UserForm = ({ state, controller, isExternal }) => {
                     mode='multiple'
                     allowClear
                     onChange={(value) => controller.updateUserFormState('roles', value)}
-                    defaultValue={state.userFormState.roles}
-                    status={state.userFormErrors.includes('roles') ? 'error' : null}
-                    options={state.roleOptions.map(role => (
+                    defaultValue={userFormState.roles}
+                    status={userFormState.roles.length === 0 ? 'error' : null}
+                    options={[
                         {
-                            label: role.name,
-                            value: role.id
+                            label: <Message messageKey='flyout.adminroles.roles.system' />,
+                            options: getRoleOptions(roles, true)
+                        },
+                        {
+                            label: <Message messageKey='flyout.adminroles.roles.other' />,
+                            options: getRoleOptions(roles, false)
                         }
-                    ))}
+                    ]}
                 />
             </LabelledField>
             <Buttons>
@@ -137,11 +87,11 @@ export const UserForm = ({ state, controller, isExternal }) => {
                         type='save'
                         onClick={() => controller.saveUser()}
                     />
-                    {(state.editingUserId && !isExternal) && (
+                    {(!isExternal) && (
                         <DeleteButton
                             type='label'
-                            title={<Message messageKey='flyout.adminusers.confirm_delete' messageArgs={{ user: state.userFormState.username }} />}
-                            onConfirm={() => controller.deleteUser(state.editingUserId)}
+                            title={<Message messageKey='flyout.adminusers.confirm_delete' messageArgs={{ user: userFormState.user }} />}
+                            onConfirm={() => controller.deleteUser(userFormState.id)}
                         />
                     )}
                 </RightButtons>
