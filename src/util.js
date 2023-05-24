@@ -437,7 +437,7 @@ Oskari.util = (function () {
 
     util.isSmallScreen = function () {
         const rootEl = Oskari.dom.getRootEl();
-        return rootEl.clientWidth <= mobileDefs.width || rootEl.clientHeight <= mobileDefs.height;
+        return Oskari.dom.getWidth(rootEl) <= mobileDefs.width || Oskari.dom.getHeight(rootEl) <= mobileDefs.height;
     };
 
     util.isMobile = function (ignoreSize) {
@@ -453,7 +453,7 @@ Oskari.util = (function () {
      * @return String
      */
     util.sanitize = function (content) {
-        return DOMPurify.sanitize(content, {ADD_ATTR: ['target']});
+        return DOMPurify.sanitize(content, { ADD_ATTR: ['target'] });
     };
 
     const validCoordinates = function (point) {
@@ -592,8 +592,8 @@ Oskari.util = (function () {
     };
 
     util.coordinateIsDegrees = function (point) {
-        var matches1 = coordinateDMSDecode(point[0]);
-        var matches2 = coordinateDMSDecode(point[1]);
+        const matches1 = coordinateDMSDecode(point[0]);
+        const matches2 = coordinateDMSDecode(point[1]);
         return (matches1 != null && matches1.length > 0 && matches2 != null && matches2.length > 0);
     };
 
@@ -697,7 +697,7 @@ Oskari.util = (function () {
             if (a[i] !== b[i]) return false;
         }
         return true;
-    }
+    };
 
     /**
      * Sql LIKE like operator.
