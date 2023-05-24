@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput, Message, Button } from 'oskari-ui';
 import { PrimaryButton, DeleteButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
@@ -76,28 +76,39 @@ const RoleButtons = ({ role, state, controller }) => {
 };
 
 export const RolesTab = ({ state, controller }) => {
-    let roles = state.roles;
+    const [roleName, setRoleName] = useState('');
+    const [status, setStatus] = useState('');
+    const addRole = () => {
+        if (roleName.trim().length === 0) {
+            setStatus('error');
+            return;
+        }
+        setStatus('');
+        controller.addRole(roleName);
+        // TODO: clear roleName or move back to handler state
+    }
+    const { roles, editingRole } = state;
     return (
         <Content>
             <Form>
                 <span><Message messageKey='flyout.adminroles.newrole' /></span>
                 <StyledInput
-                    value={state.roleFormState.name}
-                    onChange={(e) => controller.updateRoleFormState(e.target.value)}
-                    status={state.roleFormError ? 'error' : null}
+                    value={roleName}
+                    onChange={(e) => setRoleName(e.target.value)}
+                    status={status}
                 />
                 <AddButton
                     type='add'
-                    onClick={() => controller.addRole()}
+                    onClick={() => addRole()}
                 />
             </Form>
             {roles.map(role => (
                 <RoleBlock key={role.id}>
-                    {state.editingRole && state.editingRole.id === role.id ? (
+                    {editingRole && editingRole.id === role.id ? (
                         <StyledInput
-                            value={state.editingRole.name}
-                            onChange={(e) => controller.updateEditingRole(e.target.value)}
-                            status={state.editingRoleError ? 'error' : null}
+                            value={editingRole.name}
+                            onChange={(e) => controller.updateEditingRole('name', e.target.value)}
+                            status={editingRole.status}
                         />
                     ) : (
                         <span>{role.name}</span>
