@@ -7,11 +7,12 @@ import { LayerTools } from './LayerTools';
 
 const Flex = styled('div')`
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap-reverse;
     align-items: center;
 `;
 const LayerDiv = styled(Flex)`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     clear: both;
     padding: 6px;
     min-height: 16px;
