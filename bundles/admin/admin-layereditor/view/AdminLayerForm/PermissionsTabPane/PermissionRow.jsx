@@ -34,6 +34,7 @@ const StyledPermissionDiv = styled.div`
     flex-wrap: wrap;
     justify-content: center;
     padding: ${PERMISSION_TYPE_COLUMN_SIZE.padding}px !important;
+    word-break: break-word;
 `;
 
 const Break = styled.div`

@@ -29,18 +29,19 @@ const ListDiv = styled.div`
 `;
 
 const getPermissionTableHeader = (permission) => {
+    const translation = <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} bundleKey='admin-layereditor' />;
     switch (permission.id) {
         case 'VIEW_LAYER':
-            return <UnorderedListOutlined />
+            return <Tooltip title={translation}><UnorderedListOutlined /></Tooltip>
         case 'VIEW_PUBLISHED':
-            return <EyeOutlined />
+            return <Tooltip title={translation}><EyeOutlined /></Tooltip>
         case 'PUBLISH':
-            return <ImportOutlined />
+            return <Tooltip title={translation}><ImportOutlined /></Tooltip>
         case 'DOWNLOAD':
-            return <ExportOutlined />
+            return <Tooltip title={translation}><ExportOutlined /></Tooltip>
         default:
             // permissions might have server side localization as "name" that defaults to id if not given
-            return <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} bundleKey='admin-layereditor' />
+            return translation;
     }
 };
 
