@@ -55,7 +55,8 @@ Oskari.registerLocalization(
                     "title": "Additional settings",
                     "dataSource": "Data source",
                     "metadataLink": "Metadata link",
-                    "onlySelected": "Export only selected features"
+                    "onlySelected": "Export only selected features",
+                    "layerName": "Map layer name"
                 }
             },
             "showSelectedFirst": "Show selected first"

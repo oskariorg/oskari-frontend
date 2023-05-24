@@ -2,7 +2,8 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
 import { filterFeaturesByAttribute, getFilterAlternativesAsArray } from '../../../mapping/mapmodule/util/vectorfeatures/filter';
-import { showExportDataPopup } from '../view/ExportData';
+import { COLUMN_SELECTION, showExportDataPopup } from '../view/ExportData';
+import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
@@ -378,6 +379,72 @@ class FeatureDataPluginUIHandler extends StateHandler {
         const { visibleColumns } = visibleColumnsSettings;
         return !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns?.includes(key);
     }
+
+    async sendExportDataForm (data) {
+        const { format, columns, delimiter, exportOnlySelected, exportDataSource, exportMetadataLink } = data;
+        const params = {
+            format,
+            columns,
+            delimiter,
+            export_selection: exportOnlySelected ? 'on' : 'off'
+        };
+
+        const { layers, activeLayerId } = this.getState();
+        const layer = layers?.find(layer => layer.getId() === activeLayerId);
+        if (exportDataSource) {
+            params.dataSource = this.getDataSourceFromActiveLayer(layer);
+        }
+
+        if (exportMetadataLink) {
+            params.metadataLink = layer.getMetadataIdentifier();
+        }
+
+        params.fileName = layer.getName();
+        params.data = this.gatherExportData(exportOnlySelected, columns === COLUMN_SELECTION.opened);
+        params.additionalInfo = this.gatherAdditionalInfo(exportDataSource, exportMetadataLink, params.dataSource, params.metadataLink, layer);
+    }
+
+    getDataSourceFromActiveLayer (layer) {
+        return layer && layer.getSource && typeof layer.getSource === 'function' && layer.getSource() ? layer.getSource() : layer.getOrganizationName();
+    }
+
+    gatherExportData (onlySelectedFeatures, onlySelectedColumns) {
+        const { visibleColumnsSettings, activeLayerFeatures, selectedFeatureIds } = this.getState();
+        const columns = onlySelectedColumns ? visibleColumnsSettings.visibleColumns : visibleColumnsSettings.allColumns;
+        const featureValues = activeLayerFeatures
+            .filter(feature => onlySelectedFeatures ? selectedFeatureIds.includes(feature.id) : true)
+            .map(feature => {
+                return columns.map(column => { return feature?.properties[column]; });
+            });
+        return [].concat([columns]).concat(featureValues);
+    }
+
+    gatherAdditionalInfo (exportDataSource, exportMetadaLink, dataSource, metadata, layer) {
+        const additionalInfo = [];
+
+        if (exportDataSource) {
+            additionalInfo.push({
+                type: 'datasource',
+                name: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'exportDataPopup.additionalSettings.dataSource'),
+                value: dataSource
+            });
+        }
+
+        additionalInfo.push({
+            type: 'layerName',
+            name: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'exportDataPopup.additionalSettings.layerName'),
+            value: layer.getName()
+        });
+
+        if (exportDataSource) {
+            additionalInfo.push({
+                type: 'metadata',
+                name: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'exportDataPopup.additionalSettings.metadataLink'),
+                value: metadata
+            });
+        }
+        return additionalInfo;
+    }
 }
 
 const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
@@ -395,6 +462,7 @@ const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
     'closeSelectByPropertiesPopup',
     'openExportDataPopup',
     'closeExportDataPopup',
+    'sendExportDataForm',
     'updateFilters',
     'addFilter',
     'removeFilter',

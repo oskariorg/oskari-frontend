@@ -55,7 +55,8 @@ Oskari.registerLocalization(
                     "title": "Ytterligare inställningar",
                     "dataSource": "Datakälla",
                     "metadataLink": "Metadata länk",
-                    "onlySelected": "Exportera utvald objekter"
+                    "onlySelected": "Exportera utvald objekter",
+                    "layerName": "Kartlagrets namn"
                 }
             },
             "showSelectedFirst": "Visa de valda först"

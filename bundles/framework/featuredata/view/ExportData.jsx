@@ -5,6 +5,7 @@ import { SecondaryButton } from 'oskari-ui/components/buttons';
 import { showPopup } from 'oskari-ui/components/window';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
 import styled from 'styled-components';
+
 const FlexRow = styled('div')`
     display: flex;
     flex-direction: row;
@@ -45,35 +46,40 @@ const ColumnHeader = styled('h3')`
 `;
 
 const FILETYPES = {
-    excel: 'excel',
-    csv: 'csv'
+    excel: 'XLSX',
+    csv: 'CSV'
 };
 
 const SEPARATORS = {
     semicolon: ';',
     comma: ',',
-    tabulator: '\t'
+    tabulator: 'tab'
 };
 
-const COLUMN_SELECTION = {
+export const COLUMN_SELECTION = {
     all: 'all',
-    opened: 'opened'
+    opened: 'visible'
 };
 
+const PARAM_NAMES = {
+    format: 'format',
+    columns: 'columns',
+    delimiter: 'delimiter'
+};
 const ExportDataPopup = (props) => {
-    const { closeExportDataPopup } = props;
-    const [csvSeparator, setCsvSeparator] = useState(SEPARATORS.comma);
-    const [fileType, setFileType] = useState(FILETYPES.excel);
-    const [columnSelection, setColumnSelection] = useState(COLUMN_SELECTION.all);
-    const [datasource, setDataSource] = useState(true);
-    const [metadataLink, setMetadataLink] = useState(false);
-    const [onlySelected, setOnlySelected] = useState(false);
+    const { closeExportDataPopup, sendExportDataForm } = props;
+    const [delimiter, setDelimiter] = useState(SEPARATORS.comma);
+    const [format, setFormat] = useState(FILETYPES.excel);
+    const [columns, setColumns] = useState(COLUMN_SELECTION.opened);
+    const [exportDataSource, setExportDataSource] = useState(true);
+    const [exportMetadataLink, setExportMetadataLink] = useState(false);
+    const [exportOnlySelected, setExportOnlySelected] = useState(false);
     return <>
         <FlexTableContainer>
             <FlexRow>
                 <FlexCol>
                     <ColumnHeader><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.fileFormat.title'}/></ColumnHeader>
-                    <RadioGroup value={fileType} onChange={(event) => setFileType(event.target.value)}>
+                    <RadioGroup name={PARAM_NAMES.format} value={format} onChange={(event) => setFormat(event.target.value)}>
                         <RadioOption value={FILETYPES.excel}>
                             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.fileFormat.excel'}/>
                         </RadioOption>
@@ -84,7 +90,7 @@ const ExportDataPopup = (props) => {
                 </FlexCol>
                 <FlexColRight>
                     <ColumnHeader><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.columns.title'}/></ColumnHeader>
-                    <RadioGroup value={columnSelection} onChange={(event) => setColumnSelection(event.target.value)}>
+                    <RadioGroup name={PARAM_NAMES.columns} value={columns} onChange={(event) => setColumns(event.target.value)}>
                         <RadioOption value={COLUMN_SELECTION.opened}>
                             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.columns.opened'}/>
                         </RadioOption>
@@ -97,7 +103,7 @@ const ExportDataPopup = (props) => {
             <FlexRow>
                 <FlexCol>
                     <ColumnHeader><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.csvSeparator.title'}/></ColumnHeader>
-                    <RadioGroup value={csvSeparator} onChange={(event) => setCsvSeparator(event.target.value)}>
+                    <RadioGroup name={PARAM_NAMES.delimiter} disabled={format === FILETYPES.excel} value={delimiter} onChange={(event) => setDelimiter(event.target.value)}>
                         <RadioOption value={SEPARATORS.comma}>
                             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.csvSeparator.comma'}/>
                         </RadioOption>
@@ -113,33 +119,44 @@ const ExportDataPopup = (props) => {
             <FlexRow>
                 <FlexCol>
                     <ColumnHeader><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.title'}/></ColumnHeader>
-                    <Checkbox value={datasource} onChange={(evt) => setDataSource(evt.target.checked)}>
+                    <Checkbox checked={exportDataSource} onChange={(evt) => setExportDataSource(evt.target.checked) }>
                         <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.dataSource'}/>
                     </Checkbox>
-                    <Checkbox value={metadataLink} onChange={(evt) => setMetadataLink(evt.target.checked)}>
+                    <Checkbox checked={exportMetadataLink} onChange={(evt) => setExportMetadataLink(evt.target.checked)}>
                         <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.metadataLink'}/>
                     </Checkbox>
-                    <Checkbox value={onlySelected} onChange={(evt) => setOnlySelected(evt.target.checked)}>
+                    <Checkbox checked={exportOnlySelected} onChange={(evt) => setExportOnlySelected(evt.target.checked)}>
                         <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.onlySelected'}/>
                     </Checkbox>
                 </FlexCol>
             </FlexRow>
             <FlexRowCentered>
                 <SecondaryButton type='cancel' onClick={closeExportDataPopup}/>
-                <Button type='primary'><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.exportButtonLabel'}/></Button>
+                <Button type='primary' onClick={() => {
+                    const formState = {
+                        delimiter,
+                        format,
+                        columns,
+                        exportDataSource,
+                        exportMetadataLink,
+                        exportOnlySelected
+                    };
+                    sendExportDataForm(formState);
+                }}><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.exportButtonLabel'}/></Button>
             </FlexRowCentered>
         </FlexTableContainer>
-
     </>;
 };
 
 ExportDataPopup.propTypes = {
-    closeExportDataPopup: PropTypes.func
+    closeExportDataPopup: PropTypes.func,
+    sendExportDataForm: PropTypes.func
 };
 
 export const showExportDataPopup = (state, controller) => {
     const content = <ExportDataPopup
         closeExportDataPopup={controller.closeExportDataPopup}
+        sendExportDataForm={controller.sendExportDataForm}
     />;
     const title = <><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.title'}/></>;
     const controls = showPopup(title, content, () => { controller.closeExportDataPopup(); }, {});
@@ -150,6 +167,7 @@ export const showExportDataPopup = (state, controller) => {
             controls.update(title,
                 <ExportDataPopup
                     closeExportDataPopup={controller.closeExportDataPopup}
+                    sendExportDataForm={controller.sendExportDataForm}
                 />);
         }
     };

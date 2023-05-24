@@ -55,7 +55,8 @@ Oskari.registerLocalization(
                     "title": "Lisäasetukset",
                     "dataSource": "Tietolähde",
                     "metadataLink": "Linkki metatietoihin",
-                    "onlySelected": "Tuo vain valitut kohteet"
+                    "onlySelected": "Tuo vain valitut kohteet",
+                    "layerName": "Karttatason nimi"
                 }
             },
             "showSelectedFirst": "Näytä valitut ensin"
