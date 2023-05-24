@@ -2,7 +2,6 @@ const jQuery = require('jquery');
 global.jQuery = jQuery;
 
 describe('isNumber function', () => {
-
     test('returns true when parameter is number', () => {
         expect.assertions(1);
         expect(Oskari.util.isNumber(1)).toEqual(true);
@@ -737,50 +736,45 @@ describe('stringLike function', () => {
 });
 
 describe('isMobile function', () => {
-
     afterEach(() => {
         document.body.innerHTML = null;
     });
 
     test('returns false when screen is not mobile', () => {
-
         expect.assertions(1);
-
         document.body.innerHTML =
-            '<div id=\"mapdiv\" style=\"height: 600px;width: 600px;\">' +
-            'Dummy div content' +
-            '</div>';
-
+            `<div id="testroot" style="height: 660px;width: 660px;">
+                Dummy div content
+            </div>`;
+        Oskari.dom.setRootEl('testroot');
         expect(Oskari.util.isMobile()).toEqual(false);
     });
 
     test('returns true when screen is mobile', () => {
-
         expect.assertions(1);
 
         document.body.innerHTML =
-            '<div id=\"mapdiv\" style=\"height: 300px;width: 300px;\">' +
-            'Dummy div content' +
-            '</div>';
+            `<div id="testroot" style="height: 300px;width: 300px;">
+                Dummy div content
+            </div>`;
 
+        Oskari.dom.setRootEl('testroot');
         expect(Oskari.util.isMobile()).toEqual(true);
     });
-    test('returns false when screen size is small but device is desktop', () => {
-
+    test('returns false when screen size is small but device is desktop/cant be detected', () => {
         expect.assertions(1);
 
         document.body.innerHTML =
-            '<div id=\"mapdiv\" style=\"height: 300px;width: 300px;\">' +
-            'Dummy div content' +
-            '</div>';
+            `<div id="testroot" style="height: 300px;width: 300px;">
+                Dummy div content
+            </div>`;
 
+        Oskari.dom.setRootEl('testroot');
         expect(Oskari.util.isMobile(true)).toEqual(false);
     });
-
 });
 
 describe('getErrorTextFromAjaxFailureObjects function', () => {
-
     const mockjqHRerrorText = 'mockjqHRerrorText';
     const mockExceptionMessage = 'exceptionmsg';
 

@@ -107,7 +107,7 @@ const createBringToTop = (element) => {
             document.body.appendChild(element);
         }
     };
-}
+};
 
 /**
  * Opens a an Oskari popup type of window.
@@ -138,7 +138,7 @@ export const showPopup = (title, content, onClose, options = {}) => {
     const key = REGISTER.registerWindow(options.id, TYPE.POPUP, createRemoveFn(element, onClose));
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
-    const opts = {...DEFAULT_POPUP_OPTIONS, ...options };
+    const opts = { ...DEFAULT_POPUP_OPTIONS, ...options };
     const render = (title, content) => {
         ReactDOM.render(
             <ThemeProvider value={options.theme}>
@@ -154,7 +154,6 @@ export const showPopup = (title, content, onClose, options = {}) => {
         bringToTop
     };
 };
-
 
 /**
  * Creates a movable container that is similar to popup and flyout but without any frames on the window.
@@ -205,7 +204,7 @@ export const showMovableContainer = (content, onClose, options = {}) => {
 };
 
 /**
- * Opens a an Oskari flyout type of window.
+ * Opens an Oskari flyout type of window.
  * Usage:
  *
  *       let popupController = null;
@@ -268,8 +267,8 @@ export const showSidePanel = (title, content, onClose, options = {}) => {
         if (nav) {
             nav.style.display = 'block';
         }
-    }
-    root.prepend(element)
+    };
+    root.prepend(element);
     const render = (title, content) => {
         if (nav) {
             nav.style.display = 'none';
@@ -282,7 +281,7 @@ export const showSidePanel = (title, content, onClose, options = {}) => {
             </ThemeProvider>,
             element
         );
-    }
+    };
     render(title, content);
     return {
         update: render,
@@ -290,12 +289,12 @@ export const showSidePanel = (title, content, onClose, options = {}) => {
     };
 };
 
-
 /**
- * 
+ * Opens a banner on top of the screen.
+ *
  * @param {ReactNode} content
- * @param {Function} onClose 
- * @param {boolean} closable 
+ * @param {Function} onClose callback that is called when the window closes
+ * @param {Object} options (optional) to override default options
  * @returns {object} that provides functions that can be used to close/update the banner
  */
 export const showBanner = (content, onClose, options = {}) => {
@@ -314,7 +313,7 @@ export const showBanner = (content, onClose, options = {}) => {
             </ThemeProvider>, element);
     };
     render(content);
-    return  {
+    return {
         update: render,
         close: removeWindow,
         bringToTop
@@ -322,7 +321,7 @@ export const showBanner = (content, onClose, options = {}) => {
 };
 
 export const getNavigationDimensions = () => {
-    let nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
+    const nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
     if (!nav) {
         return {
             top: 0,
@@ -336,11 +335,11 @@ export const getNavigationDimensions = () => {
     const values = {
         top: nav.offsetTop,
         left: nav.offsetLeft,
-        width: nav.clientWidth,
-        height: nav.clientHeight,
-        right: nav.offsetLeft + nav.clientWidth,
-        bottom: nav.offsetTop + nav.clientHeight
-    }
+        width: Oskari.dom.getWidth(nav),
+        height: Oskari.dom.getHeight(nav)
+    };
+    values.right = nav.offsetLeft + values.width;
+    values.bottom = nav.offsetTop + values.height;
     let placement = PLACEMENTS.LEFT;
     if (values.left > 0) {
         placement = PLACEMENTS.RIGHT;
