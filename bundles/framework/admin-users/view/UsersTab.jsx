@@ -51,11 +51,13 @@ const SearchText = styled('span')`
 
 export const UsersTab = ({ state, controller, isExternal }) => {
     const [filter, setFilter] = useState('');
+    const { userFormState, userPagination, users, roles } = state;
     return (
         <Content>
-            {state.addingUser || state.editingUserId ? (
+            {userFormState ? (
                 <UserForm
-                    state={state}
+                    userFormState={userFormState}
+                    roles={roles}
                     controller={controller}
                     isExternal={isExternal}
                 />
@@ -74,7 +76,7 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                             type='search'
                             onClick={() => controller.search(filter)}
                         />
-                        {state.userPagination.search && state.userPagination.search !== '' && (
+                        {userPagination.search && (
                             <SecondaryButton
                                 type='reset'
                                 onClick={() => {
@@ -92,27 +94,31 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                             <PlusOutlined />
                         </AddButton>
                     )}
-                    {state.userPagination.search && state.userPagination.search !== '' && (
-                        <SearchText><Message messageKey='flyout.adminusers.searchResults' /> ("{state.userPagination.search}"):</SearchText>
+                    {userPagination.search && (
+                        <SearchText><Message messageKey='flyout.adminusers.searchResults' /> ("{userPagination.search}"):</SearchText>
                     )}
-                    {state.users.map(user => (
-                        <UserBlock key={user.id}>
-                            <span>{user.user} ({user.firstName} {user.lastName})</span>
-                            <EditButton
-                                onClick={() => controller.setEditingUserId(user.id)}
-                            >
-                                <EditOutlined />
-                            </EditButton>
-                        </UserBlock>
-                    ))}
-                    {state.userPagination.totalCount > state.userPagination.limit && (
+                    {users.map(user => {
+                        const { firstName, lastName } = user;
+                        const details = firstName || lastName ? ` (${firstName} ${lastName})` : '';
+                        return (
+                            <UserBlock key={user.id}>
+                                <span>{user.user}{details}</span>
+                                <EditButton
+                                    onClick={() => controller.setEditingUser(user.id)}
+                                >
+                                    <EditOutlined />
+                                </EditButton>
+                            </UserBlock>
+                        )})
+                    }
+                    {userPagination.totalCount > userPagination.limit && (
                         <Footer>
                             <Pagination
-                                current={state.userPagination.page}
+                                current={userPagination.page}
                                 onChange={(page) => controller.setUserPage(page)}
                                 simple
-                                total={state.userPagination.totalCount}
-                                pageSize={state.userPagination.limit}
+                                total={userPagination.totalCount}
+                                pageSize={userPagination.limit}
                                 showSizeChanger={false}
                             />
                         </Footer>
