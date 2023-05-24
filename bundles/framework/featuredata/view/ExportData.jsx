@@ -67,7 +67,7 @@ const PARAM_NAMES = {
     delimiter: 'delimiter'
 };
 const ExportDataPopup = (props) => {
-    const { closeExportDataPopup, sendExportDataForm } = props;
+    const { selectedFeatureIds, closeExportDataPopup, sendExportDataForm } = props;
     const [delimiter, setDelimiter] = useState(SEPARATORS.comma);
     const [format, setFormat] = useState(FILETYPES.excel);
     const [columns, setColumns] = useState(COLUMN_SELECTION.opened);
@@ -125,7 +125,7 @@ const ExportDataPopup = (props) => {
                     <Checkbox checked={exportMetadataLink} onChange={(evt) => setExportMetadataLink(evt.target.checked)}>
                         <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.metadataLink'}/>
                     </Checkbox>
-                    <Checkbox checked={exportOnlySelected} onChange={(evt) => setExportOnlySelected(evt.target.checked)}>
+                    <Checkbox disabled={!selectedFeatureIds?.length > 0} checked={exportOnlySelected} onChange={(evt) => setExportOnlySelected(evt.target.checked)}>
                         <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.onlySelected'}/>
                     </Checkbox>
                 </FlexCol>
@@ -149,12 +149,15 @@ const ExportDataPopup = (props) => {
 };
 
 ExportDataPopup.propTypes = {
+    selectedFeatureIds: PropTypes.array,
     closeExportDataPopup: PropTypes.func,
     sendExportDataForm: PropTypes.func
 };
 
 export const showExportDataPopup = (state, controller) => {
+    const { selectedFeatureIds } = state;
     const content = <ExportDataPopup
+        selectedFeatureIds={selectedFeatureIds}
         closeExportDataPopup={controller.closeExportDataPopup}
         sendExportDataForm={controller.sendExportDataForm}
     />;
@@ -164,8 +167,10 @@ export const showExportDataPopup = (state, controller) => {
     return {
         ...controls,
         update: (state) => {
+            const { selectedFeatureIds } = state;
             controls.update(title,
                 <ExportDataPopup
+                    selectedFeatureIds={selectedFeatureIds}
                     closeExportDataPopup={controller.closeExportDataPopup}
                     sendExportDataForm={controller.sendExportDataForm}
                 />);

@@ -243,6 +243,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
         if (this.selectByPropertiespopupController) {
             this.selectByPropertiespopupController.update(this.getState());
         }
+
+        if (this.exportDataPopupController) {
+            this.exportDataPopupController.update(this.getState());
+        }
     }
 
     updateFilters (index, filter) {
