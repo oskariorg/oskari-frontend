@@ -42,7 +42,11 @@ Oskari.registerLocalization(
                 "newrole": "Tilllägg en roll:",
                 "confirm_delete": "Vill du säkert ta bort rollen {role}?",
                 "delete_failed": "Kunde inte tas bort.",
-                "doSave_failed": "Lagring av en ny roll misslyckades."
+                "doSave_failed": "Lagring av en ny roll misslyckades.",
+                "roles": {
+                    "system": "Roller",
+                    "other": "Roller"
+                }
             }
         },
         "save": "Lagra",

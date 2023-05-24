@@ -15,9 +15,9 @@ Oskari.registerLocalization(
                 "firstName": "Etunimi",
                 "lastName": "Sukunimi",
                 "user": "Nimimerkki",
-                "pass": "Salasana",
+                "password": "Salasana",
                 "email": "Sähköposti",
-                "pass_retype": "Salasana uudestaan",
+                "rePassword": "Salasana uudestaan",
                 "addRole": "Valitse rooli(t)",
                 "password_mismatch": "Salasanat eivät täsmää.",
                 "password_too_short": "Salasanan on oltava vähintään kahdeksan merkkiä pitkä.",
@@ -42,7 +42,11 @@ Oskari.registerLocalization(
                 "newrole": "Lisää rooli:",
                 "confirm_delete": "Haluatko varmasti poistaa roolin {role}?",
                 "delete_failed": "Käyttäjän poistaminen epäonnistui.",
-                "doSave_failed": "Roolin tallennus epäonnistui."
+                "doSave_failed": "Roolin tallennus epäonnistui.",
+                "roles": {
+                    "system": "Järjestelmäroolit",
+                    "other": "Lisäroolit"
+                }
             }
         },
         "save": "tallenna",
