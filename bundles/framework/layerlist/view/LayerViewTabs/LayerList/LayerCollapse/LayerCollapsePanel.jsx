@@ -141,6 +141,9 @@ const StyledCollapsePanel = styled(CollapsePanel)`
     > .ant-collapse-content > .ant-collapse-content-box {
         padding: 0px;
         display: flex;
+        & > .ant-list {
+            width: 100%;
+        }
     }
     & > div:first-child {
         min-height: 22px;
