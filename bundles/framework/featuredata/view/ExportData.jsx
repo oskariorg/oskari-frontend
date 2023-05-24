@@ -45,15 +45,16 @@ const ColumnHeader = styled('h3')`
     padding-bottom: 0.25em;
 `;
 
-const FILETYPES = {
-    excel: 'XLSX',
-    csv: 'CSV'
-};
 
 const SEPARATORS = {
     semicolon: ';',
     comma: ',',
     tabulator: 'tab'
+};
+
+export const FILETYPES = {
+    excel: 'XLSX',
+    csv: 'CSV'
 };
 
 export const COLUMN_SELECTION = {
@@ -67,7 +68,7 @@ const PARAM_NAMES = {
     delimiter: 'delimiter'
 };
 const ExportDataPopup = (props) => {
-    const { selectedFeatureIds, closeExportDataPopup, sendExportDataForm } = props;
+    const { selectedFeatureIds, metadataLink, closeExportDataPopup, sendExportDataForm } = props;
     const [delimiter, setDelimiter] = useState(SEPARATORS.comma);
     const [format, setFormat] = useState(FILETYPES.excel);
     const [columns, setColumns] = useState(COLUMN_SELECTION.opened);
@@ -122,7 +123,7 @@ const ExportDataPopup = (props) => {
                     <Checkbox checked={exportDataSource} onChange={(evt) => setExportDataSource(evt.target.checked) }>
                         <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.dataSource'}/>
                     </Checkbox>
-                    <Checkbox checked={exportMetadataLink} onChange={(evt) => setExportMetadataLink(evt.target.checked)}>
+                    <Checkbox disabled={!metadataLink} checked={exportMetadataLink} onChange={(evt) => setExportMetadataLink(evt.target.checked)}>
                         <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.additionalSettings.metadataLink'}/>
                     </Checkbox>
                     <Checkbox disabled={!selectedFeatureIds?.length > 0} checked={exportOnlySelected} onChange={(evt) => setExportOnlySelected(evt.target.checked)}>
@@ -149,15 +150,18 @@ const ExportDataPopup = (props) => {
 };
 
 ExportDataPopup.propTypes = {
+    metadataLink: PropTypes.string,
     selectedFeatureIds: PropTypes.array,
     closeExportDataPopup: PropTypes.func,
     sendExportDataForm: PropTypes.func
 };
 
 export const showExportDataPopup = (state, controller) => {
-    const { selectedFeatureIds } = state;
+    const { selectedFeatureIds, layers, activeLayerId } = state;
+    const activeLayer = layers?.find(layer => layer.getId() === activeLayerId);
     const content = <ExportDataPopup
         selectedFeatureIds={selectedFeatureIds}
+        metadataLink={activeLayer.getMetadataIdentifier()}
         closeExportDataPopup={controller.closeExportDataPopup}
         sendExportDataForm={controller.sendExportDataForm}
     />;
@@ -167,10 +171,12 @@ export const showExportDataPopup = (state, controller) => {
     return {
         ...controls,
         update: (state) => {
-            const { selectedFeatureIds } = state;
+            const { selectedFeatureIds, layers, activeLayerId } = state;
+            const activeLayer = layers?.find(layer => layer.getId() === activeLayerId);
             controls.update(title,
                 <ExportDataPopup
                     selectedFeatureIds={selectedFeatureIds}
+                    metadataLink={activeLayer.getMetadataIdentifier()}
                     closeExportDataPopup={controller.closeExportDataPopup}
                     sendExportDataForm={controller.sendExportDataForm}
                 />);

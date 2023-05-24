@@ -2,12 +2,13 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
 import { filterFeaturesByAttribute, getFilterAlternativesAsArray } from '../../../mapping/mapmodule/util/vectorfeatures/filter';
-import { COLUMN_SELECTION, showExportDataPopup } from '../view/ExportData';
+import { COLUMN_SELECTION, FILETYPES, showExportDataPopup } from '../view/ExportData';
 import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
 const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
+const EXPORT_FEATUREDATA_REST_URL = 'action_route=ExportTableFile';
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
         super();
@@ -384,7 +385,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         return !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns?.includes(key);
     }
 
-    async sendExportDataForm (data) {
+    sendExportDataForm (data) {
         const { format, columns, delimiter, exportOnlySelected, exportDataSource, exportMetadataLink } = data;
         const params = {
             format,
@@ -395,17 +396,51 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
         const { layers, activeLayerId } = this.getState();
         const layer = layers?.find(layer => layer.getId() === activeLayerId);
-        if (exportDataSource) {
-            params.dataSource = this.getDataSourceFromActiveLayer(layer);
-        }
 
-        if (exportMetadataLink) {
-            params.metadataLink = layer.getMetadataIdentifier();
-        }
+        params.filename = layer.getName();
+        params.data = JSON.stringify(this.gatherExportData(exportOnlySelected, columns === COLUMN_SELECTION.opened));
+        params.additionalData = JSON.stringify(
+            this.gatherAdditionalInfo(
+                exportDataSource,
+                exportMetadataLink,
+                layer));
 
-        params.fileName = layer.getName();
-        params.data = this.gatherExportData(exportOnlySelected, columns === COLUMN_SELECTION.opened);
-        params.additionalInfo = this.gatherAdditionalInfo(exportDataSource, exportMetadataLink, params.dataSource, params.metadataLink, layer);
+        const payload = new URLSearchParams();
+        Object.keys(params).forEach(key => payload.append(key, params[key]));
+        const extension = format === FILETYPES.csv ? '.csv' : '.xlsx';
+        this.sendData(payload, params.filename + extension);
+    }
+
+    async sendData (payload, filename) {
+        try {
+            fetch(Oskari.urls.buildUrl(Oskari.urls.getRoute() + EXPORT_FEATUREDATA_REST_URL), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: payload
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
+
+                return response.blob();
+            }).then(blob => {
+                if (blob != null) {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                }
+            });
+        } catch (e) {
+            // TODO: error message
+        }
     }
 
     getDataSourceFromActiveLayer (layer) {
@@ -423,14 +458,14 @@ class FeatureDataPluginUIHandler extends StateHandler {
         return [].concat([columns]).concat(featureValues);
     }
 
-    gatherAdditionalInfo (exportDataSource, exportMetadaLink, dataSource, metadata, layer) {
+    gatherAdditionalInfo (exportDataSource, exportMetadaLink, layer) {
         const additionalInfo = [];
 
         if (exportDataSource) {
             additionalInfo.push({
                 type: 'datasource',
                 name: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'exportDataPopup.additionalSettings.dataSource'),
-                value: dataSource
+                value: this.getDataSourceFromActiveLayer(layer)
             });
         }
 
@@ -440,11 +475,11 @@ class FeatureDataPluginUIHandler extends StateHandler {
             value: layer.getName()
         });
 
-        if (exportDataSource) {
+        if (exportMetadaLink) {
             additionalInfo.push({
                 type: 'metadata',
                 name: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'exportDataPopup.additionalSettings.metadataLink'),
-                value: metadata
+                value: layer.getMetadataIdentifier()
             });
         }
         return additionalInfo;
