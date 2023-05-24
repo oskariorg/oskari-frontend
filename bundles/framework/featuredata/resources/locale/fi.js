@@ -35,6 +35,7 @@ Oskari.registerLocalization(
                 "title": "Aineiston vienti",
                 "openButtonLabel": "Aineiston vienti",
                 "exportButtonLabel": "Vie",
+                "exportFailed": "Aineiston vienti epäonnistui.",
                 "fileFormat": {
                     "title": "Tiedostomuoto",
                     "excel": "Excel",

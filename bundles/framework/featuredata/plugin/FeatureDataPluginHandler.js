@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
 import { filterFeaturesByAttribute, getFilterAlternativesAsArray } from '../../../mapping/mapmodule/util/vectorfeatures/filter';
@@ -439,7 +439,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
                 }
             });
         } catch (e) {
-            // TODO: error message
+            Messaging.error(Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'featureData.exportDataPopup.exportFailed'));
         }
     }
 

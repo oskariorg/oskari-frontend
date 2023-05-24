@@ -35,6 +35,7 @@ Oskari.registerLocalization(
                 "title": "Export data",
                 "openButtonLabel": "Export data",
                 "exportButtonLabel": "Export",
+                "exportFailed": "Exporting the data failed.",
                 "fileFormat": {
                     "title": "File format",
                     "excel": "Excel",
