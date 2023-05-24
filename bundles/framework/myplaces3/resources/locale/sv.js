@@ -25,7 +25,7 @@ Oskari.registerLocalization(
             "addCategory": "Lägg till kartlagret",
             "editCategory": "Redigera kartlagret",
             "deleteCategory": "Ta bort kartlagret",
-            "deleteDefault": "Det förvalda kartlagret kan inte tas bprt-",
+            "deleteDefault": "Det förvalda kartlagret kan inte tas bort",
             "grid": {
                 "name": "Ortnamn",
                 "desc": "Ortnamnsbeskrivning",
