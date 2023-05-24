@@ -40,7 +40,7 @@ const SelectionRow = styled('div')`
     flex-direction: row;
     padding-bottom: 1em;
 `;
-const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, controller) => {
+const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, showExportButton, controller) => {
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
     };
@@ -48,13 +48,22 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     const dataSource = createDatasourceFromFeatures(features);
     const featureTable = <>
         <SelectionsContainer>
-            <SelectionRow>
-                <ExportButton onClick={() => { controller.openExportDataPopup(); }}/>
-                <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
-            </SelectionRow>
-            <SelectionRow>
-                <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
-            </SelectionRow>
+            { showExportButton && <>
+                <SelectionRow>
+                    <ExportButton onClick={() => { controller.openExportDataPopup(); }}/>
+                    <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
+                </SelectionRow>
+                <SelectionRow>
+                    <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+                </SelectionRow>
+            </>}
+
+            { !showExportButton &&
+                <SelectionRow>
+                    <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+                    <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
+                </SelectionRow>
+            }
         </SelectionsContainer>
         <StyledTable
             columns={ columnSettings }
@@ -119,11 +128,12 @@ const createDatasourceFromFeatures = (features) => {
 const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, visibleColumnsSettings, controller) => {
     const tabs = layers?.map(layer => {
         const status = loadingStatus[layer.getId()];
+        const showExportButton = layer.hasPermission('download');
         return {
             key: layer.getId(),
             label: <TabTitle status={status} title={layer.getName()} active={layer.getId() === layerId} openSelectByPropertiesPopup={controller.openSelectByPropertiesPopup}/>,
             children: layer.getId() === layerId
-                ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, controller)
+                ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, showExportButton, controller)
                 : null
         };
     }) || [];
