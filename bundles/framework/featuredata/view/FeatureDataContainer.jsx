@@ -69,7 +69,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
             columns={ columnSettings }
             size={ 'large '}
             dataSource={ dataSource }
-            pagination={{ position: ['none', 'none'] }}
+            pagination={false}
             onChange={(pagination, filters, sorter, extra) => {
                 controller.updateSorting(sorter);
             }}
