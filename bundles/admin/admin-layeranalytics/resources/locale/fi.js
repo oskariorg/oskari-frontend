@@ -25,7 +25,8 @@ Oskari.registerLocalization(
                 "removeAllDataForLayer": "Poista tason kaikki seurantatiedot",
                 "removeSingleDataForLayer": "Poista yksittäisen käyttäjän raportoimat seurantatiedot",
                 "delete": "Poista",
-                "cancel": "Peruuta"
+                "cancel": "Peruuta",
+                "filter": "Suodata"
             },
             "messages": {
                 "errorFetchingLayerAnalytics": "Tason analytiikka tietoja ei voitu hakea.",

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { LayerAnalyticsList } from './LayerAnalyticsList';
 import { LayerAnalyticsDetails } from './LayerAnalyticsDetails';
 
@@ -41,13 +41,15 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                     { !this.selectedLayerId
-                        ? <LayerAnalyticsList
-                            analyticsData={[...this.instance.getAnalyticsListData()]}
-                            isLoading={ this.instance.getLoadingState() }
-                            layerEditorCallback={ this.openLayerEditor }
-                            removeAnalyticsCallback={ (id) => this.instance.removeAnalyticsData(id) }
-                            layerDetailsCallback={ (id) => this.toggleLayerDetails(id) }
-                        />
+                        ? <ThemeProvider>
+                            <LayerAnalyticsList
+                                analyticsData={[...this.instance.getAnalyticsListData()]}
+                                isLoading={ this.instance.getLoadingState() }
+                                layerEditorCallback={ this.openLayerEditor }
+                                removeAnalyticsCallback={ (id) => this.instance.removeAnalyticsData(id) }
+                                layerDetailsCallback={ (id) => this.toggleLayerDetails(id) }
+                            />
+                        </ThemeProvider>
                         : <LayerAnalyticsDetails
                             layerData={ this.instance.getAnalyticsDetailsData() }
                             isLoading={ this.instance.getLoadingState() }
