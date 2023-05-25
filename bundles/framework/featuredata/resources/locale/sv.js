@@ -60,6 +60,42 @@ Oskari.registerLocalization(
                     "layerName": "Kartlagrets namn"
                 }
             },
-            "showSelectedFirst": "Visa de valda först"
+            "showSelectedFirst": "Visa de valda först",
+            "selectionTools": {
+                "title": "Markera objekt på kartan",
+                "instructions": " ",
+                "selectFromTop": "Välj från topplager",
+                "selectAll": "Välj från alla lagern",
+                "link": {
+                    "title": "Välj fler funktioner"
+                },
+                "button": {
+                    "cancel": "Stäng",
+                    "empty": "Ta bort valda objekt",
+                    "show": "Visa funktioner",
+                    "close": "Stäng",
+                    "edit": "Redigera"
+                },
+                "tools": {
+                    "point": {
+                        "tooltip": "Lägg en punkt på kartan."
+                    },
+                    "line": {
+                        "tooltip": "Lägg till en linje på kartan."
+                    },
+                    "polygon": {
+                        "tooltip": "Lägg till ett område på kartan."
+                    },
+                    "square": {
+                        "tooltip": "Lägg ett rektangulärt område på kartan."
+                    },
+                    "circle": {
+                        "tooltip": "Lägg ett cirkulärt område på kartan."
+                    },
+                    "select": {
+                        "tooltip": "Välj funktioner"
+                    }
+                }
+            }
         }
     });

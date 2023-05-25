@@ -7,6 +7,8 @@
  *
  */
 
+import { FEATUREDATA_BUNDLE_ID } from "./view/FeatureDataContainer";
+
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleInstance',
     function () {},
     {
@@ -28,6 +30,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
          */
         init: function () {
         },
+        getSandbox: function () {
+            return this.sandbox;
+        },
         start: function () {
             const sandboxName = (this.conf ? this.conf.sandbox : null) || 'sandbox';
             this.sandbox = Oskari.getSandbox(sandboxName);
@@ -35,6 +40,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
             this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
 
             this.createUi();
+
+            if ((this.conf && this.conf.selectionTools === true)) {
+                this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.PopupHandler', this);
+                const addBtnRequestBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
+                const btn = {
+                    iconCls: 'tool-feature-selection',
+                    tooltip: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectionTools.tools.select.tooltip'),
+                    sticky: true,
+                    callback: () => this.popupHandler.showSelectionTools()
+                };
+                this.sandbox.request(this, addBtnRequestBuilder('featuredataSelectionTools', 'selectiontools', btn));
+
+                this.selectionPlugin = this.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
+
+                if (!this.selectionPlugin) {
+                    const config = {
+                        id: this.getName()
+                    };
+                    this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.MapSelectionPlugin', config, this.sandbox);
+                    this.mapModule.registerPlugin(this.selectionPlugin);
+                    this.mapModule.startPlugin(this.selectionPlugin);
+                }
+            }
         },
         /**
          * @method createUi
