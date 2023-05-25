@@ -63,12 +63,13 @@ const PopupContent = ({ selectedTool, selectFromAll, drawTools, clearSelections,
 
 PopupContent.propTypes = {
     selectedTool: PropTypes.any,
-    selectFromAll: PropTypes.func,
-    drawTools: PropTypes.array,
+    selectFromAll: PropTypes.bool,
+    drawTools: PropTypes.object,
     clearSelections: PropTypes.func,
     setSelectFromAll: PropTypes.func,
     onClose: PropTypes.func
-}
+};
+
 export const showSelectToolPopup = (selectedTool, selectFromAll, drawTools, clearSelections, setSelectFromAll, onClose) => {
     const dimensions = getNavigationDimensions();
     let placement = PLACEMENTS.BL;
