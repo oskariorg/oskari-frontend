@@ -153,7 +153,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
             flyoutOpen: true,
             activeLayerFeatures,
             visibleColumnsSettings,
-            selectByPropertiesSettings
+            selectByPropertiesSettings,
+            sorting: activeLayerFeatures ? this.determineSortingColumn(activeLayerFeatures) : null
         };
 
         if (!activeLayerFeatures) {
@@ -371,18 +372,17 @@ class FeatureDataPluginUIHandler extends StateHandler {
         if (!features || !features.length) {
             return null;
         }
+        // this might not be set to state yet, if this is the first time flyout is opened
+        // so we're (re)creating this each time
+        const visibleColumnsSettings = this.createVisibleColumnsSettings(features);
 
         // get the first property that isn't in the default hidden fields and use that as default.
-        const defaultSortingColumn = Object.keys(features[0]?.properties).find((key) => this.columnShouldBeVisible(key));
+        const defaultSortingColumn = Object.keys(features[0]?.properties).find((key) => this.columnShouldBeVisible(key, visibleColumnsSettings));
         const sortedInfo = { order: 'ascend', columnKey: defaultSortingColumn };
         return sortedInfo;
     }
 
-    columnShouldBeVisible (key) {
-        const { visibleColumnsSettings } = this.getState();
-        if (!visibleColumnsSettings) {
-            return null;
-        }
+    columnShouldBeVisible (key, visibleColumnsSettings) {
         const { visibleColumns } = visibleColumnsSettings;
         return !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns?.includes(key);
     }
