@@ -27,7 +27,7 @@ const {
     ATTRIBUTES
 } = LayerComposingModel;
 
-export const AdditionalTabPane = ({ layer, propertyFields, controller }) => {
+export const AdditionalTabPane = ({ layer, propertyFields, metadata, controller }) => {
     const { capabilities = {}, attributes = {}} = layer;
     const isQueryable = attributes.isQueryable || capabilities.isQueryable || capabilities.queryable;
     return (
@@ -36,7 +36,7 @@ export const AdditionalTabPane = ({ layer, propertyFields, controller }) => {
                 <LayerGeneralInfo layer={layer} />
             }
             { propertyFields.includes(CAPABILITIES) &&
-                <Capabilities layer={layer} controller={controller} />
+                <Capabilities layer={layer} controller={controller} metadata={metadata} />
             }
             { propertyFields.includes(ATTRIBUTIONS) &&
                 <Attributions layer={layer} controller={controller} />
