@@ -72,8 +72,8 @@ Oskari.clazz.define(
          * @private
          */
         _toggleControl: function (drawMode, keepDrawMode = false) {
-            var key,
-                control;
+            let key;
+            let control;
             if (keepDrawMode && !drawMode) {
                 // keep previous draw mode active
             } else {
@@ -97,8 +97,8 @@ Oskari.clazz.define(
          * @method
          */
         _initImpl: function () {
-            var me = this;
-            var sb = this.getSandbox();
+            const me = this;
+            const sb = this.getSandbox();
 
             me.drawControls = {
                 point: function () {
@@ -134,11 +134,11 @@ Oskari.clazz.define(
             };
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]

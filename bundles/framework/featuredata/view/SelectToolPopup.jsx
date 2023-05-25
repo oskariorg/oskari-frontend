@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { showPopup, getNavigationDimensions, PLACEMENTS } from 'oskari-ui/components/window';
 import { ButtonContainer, PrimaryButton } from 'oskari-ui/components/buttons';
 import { Message, Button, Radio, Tooltip } from 'oskari-ui';
@@ -60,6 +61,14 @@ const PopupContent = ({ selectedTool, selectFromAll, drawTools, clearSelections,
     );
 };
 
+PopupContent.propTypes = {
+    selectedTool: PropTypes.any,
+    selectFromAll: PropTypes.func,
+    drawTools: PropTypes.array,
+    clearSelections: PropTypes.func,
+    setSelectFromAll: PropTypes.func,
+    onClose: PropTypes.func
+}
 export const showSelectToolPopup = (selectedTool, selectFromAll, drawTools, clearSelections, setSelectFromAll, onClose) => {
     const dimensions = getNavigationDimensions();
     let placement = PLACEMENTS.BL;

@@ -7,7 +7,7 @@
  *
  */
 
-import { FEATUREDATA_BUNDLE_ID } from "./view/FeatureDataContainer";
+import { FEATUREDATA_BUNDLE_ID } from './view/FeatureDataContainer';
 
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleInstance',
     function () {},
