@@ -31,6 +31,35 @@ Oskari.registerLocalization(
                     "refresh": "Refresh"
                 }
             },
+            "exportDataPopup": {
+                "title": "Export data",
+                "openButtonLabel": "Export data",
+                "exportButtonLabel": "Export",
+                "exportFailed": "Exporting the data failed.",
+                "fileFormat": {
+                    "title": "File format",
+                    "excel": "Excel",
+                    "csv": "CSV"
+                },
+                "columns": {
+                    "title": "Columns",
+                    "all": "All",
+                    "opened": "Opened"
+                },
+                "csvSeparator": {
+                    "title": "CSV-file separator",
+                    "comma": "Comma",
+                    "semicolon": "Semicolon",
+                    "tabulator": "Tabulator"
+                },
+                "additionalSettings": {
+                    "title": "Additional settings",
+                    "dataSource": "Data source",
+                    "metadataLink": "Metadata link",
+                    "onlySelected": "Export only selected features",
+                    "layerName": "Map layer name"
+                }
+            },
             "showSelectedFirst": "Show selected first"
         }
     });

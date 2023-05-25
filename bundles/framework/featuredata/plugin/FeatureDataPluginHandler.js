@@ -1,11 +1,14 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
 import { filterFeaturesByAttribute, getFilterAlternativesAsArray } from '../../../mapping/mapmodule/util/vectorfeatures/filter';
+import { COLUMN_SELECTION, FILETYPES, showExportDataPopup } from '../view/ExportData';
+import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
 const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
+const EXPORT_FEATUREDATA_ROUTE = 'ExportTableFile';
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
         super();
@@ -183,6 +186,21 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
     }
 
+    openExportDataPopup () {
+        if (this.exportDataPopupController) {
+            this.closeSelectByPropertiesPopupPopup();
+            return;
+        }
+        this.exportDataPopupController = showExportDataPopup(this.getState(), this.getController());
+    }
+
+    closeExportDataPopup () {
+        if (this.exportDataPopupController) {
+            this.exportDataPopupController.close();
+            this.exportDataPopupController = null;
+        }
+    }
+
     createVisibleColumnsSettings (features) {
         if (!features || !features.length) {
             return null;
@@ -212,6 +230,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
         this.closeSelectByPropertiesPopup();
 
+        this.closeExportDataPopup();
+
         this.updateState({
             flyoutOpen: false,
             layers: resetLayers ? null : this.getState().layers
@@ -225,6 +245,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
         if (this.selectByPropertiespopupController) {
             this.selectByPropertiespopupController.update(this.getState());
+        }
+
+        if (this.exportDataPopupController) {
+            this.exportDataPopupController.update(this.getState());
         }
     }
 
@@ -362,6 +386,105 @@ class FeatureDataPluginUIHandler extends StateHandler {
         const { visibleColumns } = visibleColumnsSettings;
         return !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns?.includes(key);
     }
+
+    sendExportDataForm (data) {
+        const { format, columns, delimiter, exportOnlySelected, exportDataSource, exportMetadataLink } = data;
+        const params = {
+            format,
+            columns,
+            delimiter
+        };
+
+        const { layers, activeLayerId } = this.getState();
+        const layer = layers?.find(layer => layer.getId() === activeLayerId);
+
+        params.filename = layer.getName();
+        params.data = JSON.stringify(this.gatherExportData(exportOnlySelected, columns === COLUMN_SELECTION.opened));
+        params.additionalData = JSON.stringify(
+            this.gatherAdditionalInfo(
+                exportDataSource,
+                exportMetadataLink,
+                layer));
+
+        const payload = new URLSearchParams();
+        Object.keys(params).forEach(key => payload.append(key, params[key]));
+        const extension = format === FILETYPES.csv ? '.csv' : '.xlsx';
+        this.sendData(payload, params.filename + extension);
+    }
+
+    sendData (payload, filename) {
+        try {
+            fetch(Oskari.urls.getRoute(EXPORT_FEATUREDATA_ROUTE), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: payload
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
+
+                return response.blob();
+            }).then(blob => {
+                if (blob != null) {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                }
+            });
+        } catch (e) {
+            Messaging.error(Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'featureData.exportDataPopup.exportFailed'));
+        }
+    }
+
+    getDataSourceFromActiveLayer (layer) {
+        return layer && layer.getSource && typeof layer.getSource === 'function' && layer.getSource() ? layer.getSource() : layer.getOrganizationName();
+    }
+
+    gatherExportData (onlySelectedFeatures, onlySelectedColumns) {
+        const { visibleColumnsSettings, activeLayerFeatures, selectedFeatureIds } = this.getState();
+        const columns = onlySelectedColumns ? visibleColumnsSettings.visibleColumns : visibleColumnsSettings.allColumns;
+        const featureValues = activeLayerFeatures
+            .filter(feature => onlySelectedFeatures ? selectedFeatureIds.includes(feature.id) : true)
+            .map(feature => {
+                return columns.map(column => { return feature?.properties[column]; });
+            });
+        return [].concat([columns]).concat(featureValues);
+    }
+
+    gatherAdditionalInfo (exportDataSource, exportMetadaLink, layer) {
+        const additionalInfo = [];
+
+        if (exportDataSource) {
+            additionalInfo.push({
+                type: 'datasource',
+                name: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'exportDataPopup.additionalSettings.dataSource'),
+                value: this.getDataSourceFromActiveLayer(layer)
+            });
+        }
+
+        additionalInfo.push({
+            type: 'layerName',
+            name: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'exportDataPopup.additionalSettings.layerName'),
+            value: layer.getName()
+        });
+
+        if (exportMetadaLink) {
+            additionalInfo.push({
+                type: 'metadata',
+                name: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'exportDataPopup.additionalSettings.metadataLink'),
+                value: layer.getMetadataIdentifier()
+            });
+        }
+        return additionalInfo;
+    }
 }
 
 const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
@@ -377,6 +500,9 @@ const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
     'toggleFeature',
     'openSelectByPropertiesPopup',
     'closeSelectByPropertiesPopup',
+    'openExportDataPopup',
+    'closeExportDataPopup',
+    'sendExportDataForm',
     'updateFilters',
     'addFilter',
     'removeFilter',
