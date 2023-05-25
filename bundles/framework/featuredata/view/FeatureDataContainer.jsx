@@ -28,6 +28,11 @@ const StyledTable = styled(Table)`
     .ant-table-selection-col, .ant-table-selection-column {
         display: none;
     }
+
+    max-height: 50vh;
+    max-width: 50vw;
+    overflow-y: auto;
+
 `;
 
 const SelectionsContainer = styled('div')`
