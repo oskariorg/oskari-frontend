@@ -8,7 +8,7 @@ import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
 const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
-const EXPORT_FEATUREDATA_REST_URL = 'action_route=ExportTableFile';
+const EXPORT_FEATUREDATA_ROUTE = 'ExportTableFile';
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
         super();
@@ -230,6 +230,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
         this.closeSelectByPropertiesPopup();
 
+        this.closeExportDataPopup();
+
         this.updateState({
             flyoutOpen: false,
             layers: resetLayers ? null : this.getState().layers
@@ -412,7 +414,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     sendData (payload, filename) {
         try {
-            fetch(Oskari.urls.buildUrl(Oskari.urls.getRoute() + EXPORT_FEATUREDATA_REST_URL), {
+            fetch(Oskari.urls.getRoute(EXPORT_FEATUREDATA_ROUTE), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
