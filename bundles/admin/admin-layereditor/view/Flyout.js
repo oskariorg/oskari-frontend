@@ -71,7 +71,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
             propertyFields,
             credentialsCollapseOpen,
             tab,
-            scales
+            scales,
+            metadata
         } = this.uiHandler.getState();
         const controller = this.uiHandler.getController();
         return (
@@ -101,6 +102,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         validationErrors={this.uiHandler.validateUserInputValues(layer)}
                         tab={tab}
                         scales={scales}
+                        metadata={metadata}
                         onDelete={() => this.uiHandler.deleteLayer()}
                         onSave={() => this.uiHandler.saveLayer()}
                         onCancel={() => {

@@ -1,18 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Button, TextAreaInput, Collapse, CollapsePanel, Link } from 'oskari-ui';
+import { Message, TextAreaInput, Collapse, CollapsePanel, Link } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Numeric } from '../Numeric';
 import { StyledFormField, SpacedLabel } from '../styled';
+import styled from 'styled-components';
 
-const UpdateNowButton = ({ controller }) => (
-    <Button onClick={() => controller.updateCapabilities()}>
-        <Message messageKey='capabilities.update' />
-    </Button>
-);
-UpdateNowButton.propTypes = {
-    controller: PropTypes.instanceOf(Controller).isRequired
-};
+const StyledNumeric = styled(Numeric)`
+    min-width: 120px;
+`;
 
 const parsedTextArea = {
     minRows: 4,
@@ -34,28 +30,27 @@ ParsedCapabilities.propTypes = {
     capabilities: PropTypes.object.isRequired
 };
 
-export const Capabilities = ({ layer, controller }) => {
+export const Capabilities = ({ layer, metadata, controller }) => {
     const { id } = layer;
     return (
         <Fragment>
-            <Numeric
-                value={layer.capabilitiesUpdateRate}
+            <StyledNumeric
+                value={layer.capabilitiesUpdateRate / 60}
                 messageKey='capabilities.updateRate'
-                infoKeys='capabilities.updateRateDesc'
+                infoKeys={metadata?.capabilitiesCron ? ['capabilities.updateRateDesc', ['capabilities.updateRateCronMsg', {"cron": metadata.capabilitiesCron}]] : 'capabilities.updateRateDesc'}
                 suffix='s'
                 allowNegative={false}
                 allowZero={false}
-                onChange={value => controller.setCapabilitiesUpdateRate(value)}>
+                onChange={value => controller.setCapabilitiesUpdateRate(value * 60)}>
                 { id &&
                     <Fragment>
-                        <UpdateNowButton controller={controller} />
                         <SpacedLabel/>
                         <Link tooltip={null} url={Oskari.urls.getRoute('GetLayerCapabilities', { id })}>
                             <Message messageKey='capabilities.show' />
                         </Link>
                     </Fragment>
                 }
-            </Numeric>
+            </StyledNumeric>
             <ParsedCapabilities capabilities = {layer.capabilities} />
         </Fragment>
     );

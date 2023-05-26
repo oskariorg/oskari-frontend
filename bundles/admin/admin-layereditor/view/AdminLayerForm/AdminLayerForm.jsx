@@ -55,7 +55,8 @@ const AdminLayerForm = ({
     rolesAndPermissionTypes,
     validators = {},
     validationErrors = [],
-    scales
+    scales,
+    metadata
 }) => {
     const isLayerTypeSupported = propertyFields.length > 0;
     // For returning to add multiple layers from service endpoint
@@ -102,6 +103,7 @@ const AdminLayerForm = ({
                         <AdditionalTabPane
                             layer={layer}
                             propertyFields={propertyFields}
+                            metadata={metadata}
                             controller={controller} />
                     )
                 },
