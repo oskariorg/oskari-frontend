@@ -19,6 +19,9 @@ const StyledListItem = styled(ListItem)`
         }
     }
 `;
+const StyledIcon = styled('div')`
+    font-size: 18px;
+`;
 
 // Overflow makes additional/customized permission types available by scrolling
 // It is not ideal at least when there are both many roles and additional permission types
@@ -32,13 +35,13 @@ const getPermissionTableHeader = (permission) => {
     const translation = <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} bundleKey='admin-layereditor' />;
     switch (permission.id) {
         case 'VIEW_LAYER':
-            return <Tooltip title={translation}><UnorderedListOutlined /></Tooltip>
+            return <Tooltip title={translation}><StyledIcon><UnorderedListOutlined /></StyledIcon></Tooltip>
         case 'VIEW_PUBLISHED':
-            return <Tooltip title={translation}><EyeOutlined /></Tooltip>
+            return <Tooltip title={translation}><StyledIcon><EyeOutlined /></StyledIcon></Tooltip>
         case 'PUBLISH':
-            return <Tooltip title={translation}><ImportOutlined /></Tooltip>
+            return <Tooltip title={translation}><StyledIcon><ImportOutlined /></StyledIcon></Tooltip>
         case 'DOWNLOAD':
-            return <Tooltip title={translation}><ExportOutlined /></Tooltip>
+            return <Tooltip title={translation}><StyledIcon><ExportOutlined /></StyledIcon></Tooltip>
         default:
             // permissions might have server side localization as "name" that defaults to id if not given
             return translation;
@@ -111,7 +114,7 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
             // the actual role-based rows
             const role = modelRow.role.name;
             return (<Tooltip key={permission.id + '_' + role}
-                title={<span>{role}: {permission.localizedText}</span>}>
+                title={<Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} />}>
                 <Checkbox
                     permissionDescription={permission.localizedText}
                     permission={permission.id}
