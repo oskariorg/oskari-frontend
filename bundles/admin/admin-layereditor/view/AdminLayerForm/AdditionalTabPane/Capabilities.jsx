@@ -38,7 +38,7 @@ export const Capabilities = ({ layer, metadata, controller }) => {
                 value={layer.capabilitiesUpdateRate / 60}
                 messageKey='capabilities.updateRate'
                 infoKeys={metadata?.capabilitiesCron ? ['capabilities.updateRateDesc', ['capabilities.updateRateCronMsg', {"cron": metadata.capabilitiesCron}]] : 'capabilities.updateRateDesc'}
-                suffix='s'
+                suffix='min'
                 allowNegative={false}
                 allowZero={false}
                 onChange={value => controller.setCapabilitiesUpdateRate(value * 60)}>
