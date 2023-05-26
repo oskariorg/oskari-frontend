@@ -37,6 +37,8 @@ const Row = styled('div')`
 const ControlsRow = styled(Row)`
     > * {
         min-width: 200px;
+        margin-top: 10px;
+        margin-bottom: 5px;
     }
 `;
 
