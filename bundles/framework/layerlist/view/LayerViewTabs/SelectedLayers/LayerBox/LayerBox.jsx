@@ -14,6 +14,9 @@ const Container = styled.div`
 `;
 const Content = styled.div`
     padding: 10px;
+    display: flex;
+    flex-direction: row;
+
 `;
 const StyledBox = styled.div`
     min-height: 100px;
@@ -37,11 +40,6 @@ const PublishableCol = styled(ColAutoRight)`
 const VisibilityIcon = styled('div')`
     margin-right: 15px;
     margin-left: 10px;
-`;
-const CloseButton = styled('div')`
-    position: absolute;
-    right: 0;
-    margin-right: 20px;
 `;
 const DragContainer = styled('div')`
     margin-top: 10px;
@@ -81,42 +79,40 @@ const LayerBox = ({ layer, index, controller }) => {
                         <Col>
                             <StyledBox>
                                 <Content>
-                                    <Row>
-                                        <VisibilityIcon>
+                                    <VisibilityIcon>
+                                        <ColAuto>
+                                            {visible ? <Tooltip title={<Message messageKey='layer.hide' />}><EyeOpen onClick={handleToggleVisibility} /></Tooltip>
+                                                : <Tooltip title={<Message messageKey='layer.show' />}><EyeShut onClick={handleToggleVisibility} /></Tooltip>}
+                                        </ColAuto>
+                                    </VisibilityIcon>
+                                    <Col>
+                                        <Row>
                                             <ColAuto>
-                                                {visible ? <Tooltip title={<Message messageKey='layer.hide' />}><EyeOpen onClick={handleToggleVisibility} /></Tooltip>
-                                                    : <Tooltip title={<Message messageKey='layer.show' />}><EyeShut onClick={handleToggleVisibility} /></Tooltip>}
+                                                {getName()}
                                             </ColAuto>
-                                        </VisibilityIcon>
-                                        <Col>
-                                            <Row>
-                                                <ColAuto>
-                                                    {getName()}
-                                                </ColAuto>
-                                            </Row>
-                                            <Row>
-                                                <ColAuto>
-                                                    {organizationName}
-                                                </ColAuto>
-                                                <PublishableCol>
-                                                    {publishable &&
-                                                        <Fragment>
-                                                            <CheckOutlined style={{ color: '#01ca79' }} />
-                                                            <Publishable>
-                                                                <Message messageKey={'layer.publishable'} />
-                                                            </Publishable>
-                                                        </Fragment>
-                                                    }
-                                                </PublishableCol>
-                                            </Row>
-                                        </Col>
-                                        <CloseButton>
-                                            <CloseOutlined
-                                                onClick={handleRemoveLayer}
-                                                style={{ fontSize: '12px' }}
-                                            />
-                                        </CloseButton>
-                                    </Row>
+                                        </Row>
+                                        <Row>
+                                            <ColAuto>
+                                                {organizationName}
+                                            </ColAuto>
+                                            <PublishableCol>
+                                                {publishable &&
+                                                    <Fragment>
+                                                        <CheckOutlined style={{ color: '#01ca79' }} />
+                                                        <Publishable>
+                                                            <Message messageKey={'layer.publishable'} />
+                                                        </Publishable>
+                                                    </Fragment>
+                                                }
+                                            </PublishableCol>
+                                        </Row>
+                                    </Col>
+                                    <ColAutoRight>
+                                        <CloseOutlined
+                                            onClick={handleRemoveLayer}
+                                            style={{ fontSize: '12px' }}
+                                        />
+                                    </ColAutoRight>
                                 </Content>
                                 <Footer layer={layer} controller={controller}/>
                             </StyledBox>
