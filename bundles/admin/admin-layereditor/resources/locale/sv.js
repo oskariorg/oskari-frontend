@@ -99,7 +99,7 @@ Oskari.registerLocalization(
                 "update": "Hämta nu",
                 "updateRate": "Capabilities uppdateringsfrekvens",
                 "updateRateDesc": "Uppdateringsfrekvens i minuter.",
-                "updateRateCronMsg": "Päivitys-skripti on asetettu ajettavaksi: '', voit muuttaa päivitystiheyttä oskari-ext.propertiesin 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' arvolla.",
+                "updateRateCronMsg": "Päivitys ajastettu cronilla: {cron}, voit muuttaa päivitystiheyttä oskari-ext.propertiesin 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' arvolla.",
                 "updatedSuccesfully": "Uppdatering lyckades.",
                 "updateFailed": "Uppdatering misslyckades.",
                 "updateFailedWithReason": "Uppdatering misslyckades: {reason}",

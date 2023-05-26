@@ -37,7 +37,7 @@ export const Capabilities = ({ layer, metadata, controller }) => {
             <StyledNumeric
                 value={layer.capabilitiesUpdateRate / 60}
                 messageKey='capabilities.updateRate'
-                infoKeys={metadata?.capabilitiesCron ? ['capabilities.updateRateDesc', 'capabilities.updateRateCronMsg'] : 'capabilities.updateRateDesc'}
+                infoKeys={metadata?.capabilitiesCron ? ['capabilities.updateRateDesc', ['capabilities.updateRateCronMsg', {"cron": metadata.capabilitiesCron}]] : 'capabilities.updateRateDesc'}
                 suffix='s'
                 allowNegative={false}
                 allowZero={false}
