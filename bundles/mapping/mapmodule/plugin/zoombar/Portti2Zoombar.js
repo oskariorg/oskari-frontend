@@ -32,165 +32,56 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._defaultLocation = 'top right';
         this._index = 30;
         this._name = 'Portti2Zoombar';
-        this._slider = null;
         this._suppressEvents = false;
-        this.inMobileMode = false;
-
-        this._desktopStyles = {
-            plus: {
-                css: {}
-            },
-            minus: {
-                css: {}
-            }
-        };
     }, {
         /**
          * @private @method _createControlElement
          * Draws the zoombar on the screen.
          *
-         *
          * @return {jQuery}
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            var el = jQuery(
-                '<div class="oskariui mapplugin pzbDiv zoombar"></div>'
-            );
-
-            return el;
+            return jQuery('<div class="oskariui mapplugin pzbDiv zoombar"></div>');
         },
 
         /**
          * @public  @method _refresh
          * Called after a configuration change.
-         *
-         *
          */
         refresh: function () {
-            var me = this;
-            var conf = me.getConfig();
-            // Change the style if in the conf
-            if (conf && conf.toolStyle) {
-                me.changeToolStyle(conf.toolStyle, me.getElement());
-            } else {
-                var toolStyle = me.getToolStyleFromMapModule();
-                if (!toolStyle) {
-                    toolStyle = 'rounded-dark';
-                }
-                if (toolStyle !== null && toolStyle !== undefined) {
-                    me.changeToolStyle(toolStyle, me.getElement());
-                }
-            }
-            me._setZoombarValue(me.getMapModule().getMapZoom());
-        },
-
-        /**
-         * @private @method _setZoombarValue
-         * Sets the zoombar slider value
-         *
-         * @param {Number} value new Zoombar value
-         *
-         */
-        _setZoombarValue: function (value) {
-            var me = this;
-
-            const div = this.getElement();
-
-            if (!div) {
+            const el = this.getElement();
+            if (!el) {
                 return;
             }
 
-            let toolStyle;
-            const conf = me.getConfig();
-            if (conf && conf.toolStyle) {
-                me.changeToolStyle(conf.toolStyle, me.getElement());
-            } else {
-                toolStyle = me.getToolStyleFromMapModule();
-                if (!toolStyle) {
-                    toolStyle = 'rounded-dark';
-                }
-                if (toolStyle !== null && toolStyle !== undefined) {
-                    me.changeToolStyle(toolStyle, me.getElement());
-                }
-            }
-
-            me._suppressEvents = true;
-            this.renderButton(toolStyle, div);
-            me._suppressEvents = false;
+            ReactDOM.render(
+                <ZoomSlider
+                    changeZoom={(value) => this.getMapModule().setZoomLevel(value)}
+                    zoom={this.getMapModule().getMapZoom()}
+                    maxZoom={this.getMapModule().getMaxZoomLevel()}
+                    isMobile={Oskari.util.isMobile()}
+                />,
+                el[0]
+            );
         },
 
         /**
          * @method _createEventHandlers
          * Create eventhandlers.
          *
-         *
          * @return {Object.<string, Function>} EventHandlers
          */
         _createEventHandlers: function () {
             var me = this;
             return {
-                AfterMapMoveEvent: function (event) {
-                    me._setZoombarValue(event.getZoom());
+                AfterMapMoveEvent: function () {
+                    me.refresh();
                 }
             };
         },
-
-        _setLayerToolsEditModeImpl: function () {
-            if (this._slider) {
-                this._slider.slider(
-                    'option',
-                    'disabled',
-                    this.inLayerToolsEditMode()
-                );
-            }
-        },
-
-        setZoomLevel: function (value) {
-            this.getMapModule().setZoomLevel(value);
-        },
-
-        /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         *
-         * @param {Object} styleId
-         * @param {jQuery} div
-         *
-         */
-        changeToolStyle: function (style, div) {
-            // FIXME move under _setStyle or smthn...
-            div = div || this.getElement();
-
-            if (!div) {
-                return;
-            }
-
-            this.renderButton(style, div);
-        },
-        renderButton: function (style, element) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
-            }
-            if (!element) return;
-
-            ReactDOM.render(
-                <ZoomSlider
-                    changeZoom={(value) => this.setZoomLevel(value)}
-                    zoom={this.getMapModule().getMapZoom()}
-                    maxZoom={this.getMapModule().getMaxZoomLevel()}
-                    isMobile={this.inMobileMode}
-                />,
-                el[0]
-            );
-        },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
-            if (this._slider) {
-                this._slider.remove();
-                delete this._slider;
-            }
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -206,10 +97,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             var me = this;
             this.teardownUI();
 
-            this.inMobileMode = mapInMobileMode;
-
             me._element = me._createControlElement();
-            me.refresh();
+            this.refresh();
             this.addToPluginContainer(me._element);
         },
         /**

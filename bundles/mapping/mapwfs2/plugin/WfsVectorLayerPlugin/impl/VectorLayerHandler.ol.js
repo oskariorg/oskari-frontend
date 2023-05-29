@@ -169,6 +169,16 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                 },
                 url: Oskari.urls.getRoute('GetWFSFeatures'),
                 success: (resp) => {
+                    resp?.features?.forEach(feature => {
+                        if (feature?.properties?.geometry) {
+                            // Openlayers will override feature.geometry with properties.geometry if both are present
+                            // https://github.com/openlayers/openlayers/blob/v7.1.0/src/ol/format/GeoJSON.js#L125-L133
+                            // https://github.com/openlayers/openlayers/blob/v7.1.0/src/ol/Feature.js#L260
+                            // https://github.com/openlayers/openlayers/blob/v7.1.0/src/ol/Object.js#L229
+                            // so we must remove it before passing the GeoJSON to OL
+                            delete feature.properties.geometry;
+                        }
+                    });
                     const features = source.getFormat().readFeatures(resp);
                     features.forEach(ftr => ftr.set(WFS_ID_KEY, ftr.getId()));
                     source.addFeatures(features);

@@ -13,7 +13,7 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         super(conf);
         this._clazz = 'Oskari.mapframework.bundle.timeseries.TimeSeriesRangeControlPlugin';
         this._name = 'TimeSeriesRangeControlPlugin';
-        this._defaultLocation = conf.location || 'top left';
+        this._defaultLocation = 'top left';
         this._log = Oskari.log(this._name);
         this._toolOpen = false;
         this._element = null;
@@ -26,6 +26,9 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
     }
 
     hasUI () {
+        return true;
+    }
+    isShouldStopForPublisher () {
         // prevent publisher to stop this plugin and start it again when leaving the publisher
         return false;
     }

@@ -9,6 +9,14 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.11.0
+
+###  [mod] AddMapLayerRequest
+
+The layer is no longer added to map synchronously. Additional metadata is loaded from the server when a layer is added to map so sending additional requests directly after sending `AddMapLayerRequest` might not work as they did before.
+
+Introduced a second parameter for the request called `options`. This is used to restore vector layer styles on embedded maps for guest users in a way the user that published the map sees them on the publisher functionality. It can also be used to trigger `MapModulePlugin.MapMoveByLayerContentRequest` after the layer has been added to map (workaround for asynchronous operation).
+
 ## 2.10.0
 
 ### [rem] MapResizeEnabledRequest

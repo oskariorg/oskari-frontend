@@ -22,6 +22,7 @@ const StyledButton = styled(Button)`
     ${(props) => props.rounding && `border-radius: ${props.rounding};`}
     border-radius: ${props => props.rounding};
     color: ${props => props.$active ? props.hover : props.iconcolor};
+    fill: ${props => props.$active ? props.hover : props.iconcolor};
     path {
         fill: ${props => props.$active ? props.hover : props.iconcolor};
     }

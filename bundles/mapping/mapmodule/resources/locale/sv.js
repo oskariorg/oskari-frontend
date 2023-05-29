@@ -19,14 +19,9 @@ Oskari.registerLocalization(
             "zoomLvl-11": "",
             "zoomLvl-12": ""
         },
-        "unsupportedProjHeader": "Obs.",
-        "unsupportedProj": "Vissa kartlager i denna kartvy kan inte visas med den aktuella kartprojektionen.",
-        "unsupported-layer": "Denna kartlager kan inte visas.",
-        "unsupported-layer-projection": "Denna kartlager kan inte visas med den valda kartprojektionen.",
         "styles": {
             "defaultTitle": "Standard stil"
         },
-        "mapLayerUnavailable": `Kartlagret \"{name}"\ kan inte visas.`,
         "plugin": {
             "LogoPlugin": {
                 "terms": "Användarvillkor",
@@ -46,6 +41,7 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Kartlager",
                 "chooseDefaultBaseLayer": "Välj bakgrundskarta",
+                "headingBaseLayer": "Bakgrundskarta",
                 "chooseOtherLayers": "Välj andra kartlager",
                 "style": "Stil"
             },
@@ -57,10 +53,20 @@ Oskari.registerLocalization(
                 "noresults": "Inga resultat hittades. Vänligen avgränsa din sökning.",
                 "searchResultCount": "Din sökning gav {count} resultat.",
                 "searchMoreResults": "Sökordet gav flera träffar än kunde visas ({count}). Specificera sökordet för bättre resultat.",
+                "autocompleteInfo": "Motsvarande sökvillkor",
                 "column_name": "Namn",
                 "column_region": "Region",
                 "column_village": "Kommun",
-                "column_type": "Typ"
+                "column_type": "Typ",
+                "options": {
+                    "title": "Search options",
+                    "description": "Refine search criteria by choosing data sources"
+                },
+                "resultBox": {
+                    "close": "Stäng",
+                    "title": "Sökresultat",
+                    "alternatives": "Den här platsen har följande alternativa namn:"
+                }
             },
             "GetInfoPlugin": {
                 "title": "Objektuppgifter",
@@ -124,6 +130,12 @@ Oskari.registerLocalization(
         "layerVisibility": {
             "notInScale": "\"{name}\" kartlagrets objekter kan inte visas i denna skala. Välj en lämplig skalnivå.",
             "notInGeometry": "Kartlagret \"{name}\" har inga objekter i detta område. Gå till en annan vy på kartan."
+        },
+        "layerUnsupported": {
+            "common": "Denna kartlager kan inte visas.",
+            "srs": "Denna kartlager kan inte visas med den aktuella kartprojektionen.",
+            "dimension": "Vissa kartlager i denna kartvy kan inte visas med {dimension}.",
+            "mapLayerUnavailable": 'Kartlagret "{name}" kan inte visas.'
         },
         "guidedTour": {
             "help1": {

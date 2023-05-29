@@ -311,7 +311,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             const rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
             const rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
             const rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
-
+            const isGuest = !Oskari.user().isLoggedIn();
             const layersNotAvailable = [];
             selectedLayers.forEach(layer => {
                 const oskariLayer = sandbox.findMapLayerFromAllAvailable(layer.id);
@@ -323,8 +323,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 if (layer.style) {
                     oskariLayer.selectStyle(layer.style);
                 }
-
-                sandbox.request(mapModuleName, rbAdd(layer.id, true));
+                const options = {};
+                if (isGuest) {
+                    // for logged in users styles will be populated based on the logged in user
+                    // for guest users looking at embedded map these will hold references to the
+                    // styles the user that published the map had for the layer
+                    options.userStyles = layer.userStyles;
+                }
+                sandbox.request(mapModuleName, rbAdd(layer.id, options));
                 sandbox.request(mapModuleName, rbVisible(layer.id, !layer.hidden));
                 if (layer.opacity || layer.opacity === 0) {
                     sandbox.request(mapModuleName, rbOpacity(layer.id, layer.opacity));
@@ -352,17 +358,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 });
             });
         },
+        // TODO: maybe style.getName() could return '' if name === '!default!', so we get rid of this
+        _getCurrentStyleName: function (layer) {
+            // check if we have a style selected and doesn't have THE magic string
+            const currentStyle = typeof layer.getCurrentStyle === 'function' ? layer.getCurrentStyle() : null;
+            const styleName = currentStyle ? currentStyle.getName() : '';
+            if (styleName === '!default!') {
+                return '';
+            }
+            return styleName;
+        },
         /**
          * @method getState
          * Returns bundle state as JSON. State is bundle specific, check the
          * bundle documentation for details.
          *
-         *
          * @return {Object}
          */
         getState: function () {
             // get applications current state
-            const map = this.getSandbox().getMap();
+            const sandbox = this.getSandbox();
+            const map = sandbox.getMap();
             const state = {
                 north: map.getY(),
                 east: map.getX(),
@@ -371,25 +387,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 selectedLayers: [],
                 ...this.getMapModule().getState()
             };
+            const styleService = sandbox.getService('Oskari.mapframework.userstyle.service.UserStyleService');
+            const getUserStylesForLayer = (layerId) => styleService && styleService.getStylesByLayer(layerId).map(s => s.id);
             state.selectedLayers = map.getLayers().map(layer => {
                 const json = {
                     id: layer.getId(),
                     opacity: layer.getOpacity()
                 };
+                const style = this._getCurrentStyleName(layer);
+                if (style) {
+                    json.style = style;
+                }
+                const userStyles = getUserStylesForLayer(json.id);
+                if (userStyles && userStyles.length) {
+                    // attach references to styles the user has for the layer
+                    // this will enable guest users for embedded map to see the styles
+                    // the user had when publishing the map
+                    json.userStyles = userStyles;
+                }
                 if (!layer.isVisible()) {
                     json.hidden = true;
-                }
-                // check if we have a style selected and doesn't have THE magic string
-                if (typeof layer.getCurrentStyle !== 'function') {
-                    return json;
-                }
-                const currentStyle = layer.getCurrentStyle();
-                if (!currentStyle) {
-                    return json;
-                }
-                const styleName = currentStyle.getName();
-                if (styleName && styleName !== '!default!') {
-                    json.style = styleName;
                 }
                 return json;
             });
@@ -406,33 +423,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * @return {String} layers separated with ',' and layer values separated with '+'
          */
         getStateParameters: function (optimized = false) {
-            const state = this.getState();
+            const map = this.getSandbox().getMap();
             const params = {
                 ...this._getConfiguredLinkParams(),
-                zoomLevel: state.zoom,
-                coord: state.east + '_' + state.north
+                zoomLevel: map.getZoom(),
+                coord: map.getX() + '_' + map.getY()
             };
             // add maplayers
-            params.mapLayers = state.selectedLayers
-                .map(layer => {
-                    if (layer.hidden) {
-                        return null;
-                    }
-                    if (optimized) {
-                        if (layer.opacity === 0) {
-                            // leave out layers that are not visible
-                            return null;
-                        }
-                        // also leave out layers that are not inside zoom-limits, are outside of extent
-                        //  or are otherwise not shown to user
-                        if (!this.getMapModule().isLayerVisible(layer.id)) {
-                            return null;
-                        }
-                    }
-                    return layer.id + '+' + layer.opacity + '+' + (layer.style || '');
-                })
-                // filter out hidden == undefined from map-function
-                .filter(layer => !!layer)
+            params.mapLayers = map.getLayers()
+                .filter(layer => optimized ? layer.isVisibleOnMap() : layer.isVisible())
+                .map(layer => layer.getId() + '+' + layer.getOpacity() + '+' + this._getCurrentStyleName(layer))
                 // separate with comma
                 .join(',');
 

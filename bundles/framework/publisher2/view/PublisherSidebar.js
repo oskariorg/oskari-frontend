@@ -1,6 +1,6 @@
+import { mergeValues } from '../util/util';
 import { Messaging } from 'oskari-ui/util';
 
-const hasSizeUpdateFn = panel => typeof panel.updateMapSize === 'function';
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
  * Renders the publishers "publish mode" sidebar view where the user can make
@@ -39,18 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         };
 
         me.templateButtonsDiv = jQuery('<div class="buttons"></div>');
-        me.templateHelp = jQuery('<div class="help icon-info"></div>');
-        me.templateData = jQuery(
-            '<div class="data ">' +
-            '  <input class="show-grid" type="checkbox"/>' +
-            '  <label class="show-grid-label"></label>' + '<br />' +
-            '  <input class="allow-classification" type="checkbox"/>' +
-            '  <label class="allow-classification-label"></label>' +
-            '</div>');
-
         me.normalMapPlugins = [];
-        // additional bundles (=not map plugins) that were stopped when entering publisher
-        me.stoppedBundles = [];
 
         me.loc = localization;
         me.accordion = null;
@@ -69,106 +58,103 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * rendered to
          */
         render: function (container) {
-            var me = this,
-                content = me.template.clone();
-            me.mainPanel = content;
+            const content = this.template.clone();
+            this.mainPanel = content;
 
-            me.progressSpinner.insertTo(content);
+            this.progressSpinner.insertTo(content);
             // prepend makes the sidebar go on the left side of the map
             // we could use getNavigationDimensions() and check placement from it to append OR prepend,
             // but it does work with the navigation even on the right hand side being hidden,
             //  a new panel appearing on the left hand side and the map moves accordingly
             container.prepend(content);
-            var contentDiv = content.find('div.content'),
-                accordion = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Accordion'
-                );
-            me.accordion = accordion;
+            const accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+            this.accordion = accordion;
 
             // setup title based on new/edit
-            var sidebarTitle = content.find('div.header h3');
+            const sidebarTitle = content.find('div.header h3');
 
-            if (me.data.uuid) {
-                sidebarTitle.append(me.loc.titleEdit);
+            if (this.data.uuid) {
+                sidebarTitle.text(this.loc.titleEdit);
             } else {
-                sidebarTitle.append(me.loc.title);
+                sidebarTitle.text(this.loc.title);
             }
             // bind close from header (X)
-            container.find('div.header div.icon-close').on(
-                'click',
-                function () {
-                    me.cancel();
-                }
-            );
+            container
+                .find('div.header div.icon-close')
+                .on('click', () => this.cancel());
 
             // -- create panels --
-            var genericInfoPanel = me._createGeneralInfoPanel();
+            const genericInfoPanel = this._createGeneralInfoPanel();
             genericInfoPanel.getPanel().addClass('t_generalInfo');
-            me.panels.push(genericInfoPanel);
+            this.panels.push(genericInfoPanel);
             accordion.addPanel(genericInfoPanel.getPanel());
 
-            var publisherTools = me._createToolGroupings(accordion);
+            const publisherTools = this._createToolGroupings(accordion);
 
-            var mapPreviewPanel = me._createMapPreviewPanel(publisherTools.tools);
+            var mapPreviewPanel = this._createMapPreviewPanel(publisherTools.tools);
             mapPreviewPanel.getPanel().addClass('t_size');
-            me.panels.push(mapPreviewPanel);
+            this.panels.push(mapPreviewPanel);
             accordion.addPanel(mapPreviewPanel.getPanel());
 
-            var mapLayersPanel = me._createMapLayersPanel();
+            // Separate handling for RPC and layers group from other tools
+            // layers panel is added before other tools
+            // RPC panel is added after other tools
+            const rpcTools = publisherTools.groups.rpc;
+            const layerTools = publisherTools.groups.layers;
+            // clear rpc/layers groups from others for looping/group so they are not listed twice
+            delete publisherTools.groups.rpc;
+            delete publisherTools.groups.layers;
+
+            const mapLayersPanel = this._createMapLayersPanel(layerTools);
             mapLayersPanel.getPanel().addClass('t_layers');
-            me.panels.push(mapLayersPanel);
+            this.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
 
             // create panel for each tool group
             Object.keys(publisherTools.groups).forEach(group => {
                 const tools = publisherTools.groups[group];
                 const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
-                    group, tools, me.instance, me.loc
+                    group, tools, this.instance, this.loc
                 );
-                toolPanel.init(me.data);
-                me.panels.push(toolPanel);
-                const panel = toolPanel.getPanel();
-                panel.addClass('t_tools');
-                panel.addClass('t_' + group);
-                accordion.addPanel(panel);
+                const hasToolsToShow = toolPanel.init(this.data);
+                this.panels.push(toolPanel);
+                if (hasToolsToShow) {
+                    const panel = toolPanel.getPanel();
+                    panel.addClass('t_tools');
+                    panel.addClass('t_' + group);
+                    accordion.addPanel(panel);
+                }
             });
-            var toolLayoutPanel = me._createToolLayoutPanel(publisherTools.tools);
+            // add RPC panel if there are tools for it
+            if (rpcTools) {
+                const rpcPanel = this._createRpcPanel(rpcTools);
+                rpcPanel.getPanel().addClass('t_rpc');
+                // add rpc panel after the other tools
+                this.panels.push(rpcPanel);
+                accordion.addPanel(rpcPanel.getPanel());
+            }
+            const toolLayoutPanel = this._createToolLayoutPanel(publisherTools.tools);
             toolLayoutPanel.getPanel().addClass('t_toollayout');
-            me.panels.push(toolLayoutPanel);
+            this.panels.push(toolLayoutPanel);
             accordion.addPanel(toolLayoutPanel.getPanel());
 
-            var layoutPanel = me._createLayoutPanel();
+            const layoutPanel = this._createLayoutPanel();
             layoutPanel.getPanel().addClass('t_style');
-            me.panels.push(layoutPanel);
+            this.panels.push(layoutPanel);
             accordion.addPanel(layoutPanel.getPanel());
 
             // -- render to UI and setup buttons --
+            const contentDiv = content.find('div.content');
             accordion.insertTo(contentDiv);
-            contentDiv.append(me._getButtons());
+            contentDiv.append(this._getButtons());
 
             // disable keyboard map moving whenever a text-input is focused element
-            var inputs = me.mainPanel.find('input[type=text]');
-            inputs.on('focus', function () {
-                me.instance.sandbox.postRequestByName(
-                    'DisableMapKeyboardMovementRequest'
-                );
-            });
-            inputs.on('blur', function () {
-                me.instance.sandbox.postRequestByName(
-                    'EnableMapKeyboardMovementRequest'
-                );
-            });
+            const inputs = this.mainPanel.find('input[type=text]');
+            const sandbox = this.instance.getSandbox();
+            inputs.on('focus', () => sandbox.postRequestByName('DisableMapKeyboardMovementRequest'));
+            inputs.on('blur', () => sandbox.postRequestByName('EnableMapKeyboardMovementRequest'));
         },
 
-        /**
-        * Handles panels update map size changes
-        * @method @private _handleMapSizeChange
-        */
-        _handleMapSizeChange: function () {
-            this.panels
-                .filter(hasSizeUpdateFn)
-                .forEach(panel => panel.updateMapSize());
-        },
         /**
          * @private @method _createGeneralInfoPanel
          * Creates the Location panel of publisher
@@ -183,7 +169,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             // initialize form (restore data when editing)
             form.init(me.data);
-
             // open generic info by default
             form.getPanel().open();
             return form;
@@ -202,26 +187,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function (value) {});
-
+            form.init(me.data);
             return form;
         },
-
-        /**
-         * @private @method _createMapLayersPanel
-         * Creates the Maplayers panel of publisher
-         */
-        _createMapLayersPanel: function () {
-            var me = this,
-                sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
-                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
-                    sandbox, mapModule, me.loc, me.instance
-                );
-
-            // initialize form (restore data when editing)
-            form.init(me.data, function (value) {});
-
+        _createMapLayersPanel: function (tools) {
+            const sandbox = this.instance.getSandbox();
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers', tools, sandbox, mapModule, this.loc, this.instance);
+            form.init(this.data);
             return form;
         },
         /**
@@ -238,8 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function (value) {});
-
+            form.init(me.data);
             return form;
         },
         /**
@@ -255,22 +227,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function (value) {});
+            form.init(me.data);
 
             return form;
         },
-        /**
-        * Get panel/tool handlers
-        * @method getHandlers
-        * @public
-        */
-        getHandlers: function () {
-            var me = this;
-            return {
-                'MapSizeChanged': function () {
-                    me._handleMapSizeChange();
-                }
-            };
+        _createRpcPanel: function (tools) {
+            const sandbox = this.instance.getSandbox();
+            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
+                tools, sandbox, this.loc, this.instance
+            );
+            form.init(this.data);
+            return form;
         },
 
         /**
@@ -283,27 +250,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * and {Oskari.mapframework.publisher.tool.Tool[]} tools not displayed in panel
          */
         _createToolGroupings: function () {
-            var me = this;
-            var sandbox = this.instance.getSandbox();
-            var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var definedTools = Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool');
-            var grouping = {};
-            var allTools = [];
+            const sandbox = this.instance.getSandbox();
+            const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            const definedTools = [...Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool'), ...Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool')];
+            const grouping = {};
+            const allTools = [];
             // group tools per tool-group
             definedTools.forEach(toolname => {
-                var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
-                if (tool.isDisplayed(me.data) === true && tool.isShownInToolsPanel()) {
-                    var group = tool.getGroup();
-                    if (!grouping[group]) {
-                        grouping[group] = [];
-                    }
-                    me._addToolConfig(tool);
-                    grouping[group].push(tool);
+                const tool = Oskari.clazz.create(toolname, sandbox, mapmodule, this.loc);
+                var group = tool.getGroup();
+                if (!grouping[group]) {
+                    grouping[group] = [];
                 }
-
-                if (tool.isDisplayed(me.data) === true) {
-                    allTools.push(tool);
-                }
+                this._addToolConfig(tool);
+                grouping[group].push(tool);
+                allTools.push(tool);
             });
             return {
                 groups: grouping,
@@ -323,41 +284,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         * @private
         */
         gatherSelections: function () {
-            var me = this,
-                sandbox = this.instance.getSandbox(),
-                selections = {
-                    configuration: {
+            const sandbox = this.instance.getSandbox();
+            let errors = [];
 
+            const mapFullState = sandbox.getStatefulComponents().mapfull.getState();
+            let selections = {
+                configuration: {
+                    mapfull: {
+                        state: mapFullState
                     }
-                },
-                errors = [];
-
-            var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
-            selections.configuration.mapfull = {
-                state: mapFullState
+                }
             };
 
-            jQuery.each(me.panels, function (index, panel) {
-                if (panel.validate && typeof panel.validate === 'function') {
+            this.panels.forEach((panel) => {
+                if (typeof panel.validate === 'function') {
                     errors = errors.concat(panel.validate());
                 }
-
-                jQuery.extend(true, selections, panel.getValues());
+                selections = mergeValues(selections, panel.getValues());
             });
 
             if (errors.length > 0) {
-                me._showValidationErrorMessage(errors);
+                this._showValidationErrorMessage(errors);
                 return null;
             }
             return selections;
         },
 
         /**
-         * @private @method _editToolLayoutOff
-         *
-         *
+         * @private @method _stopEditorPanels
          */
-        _editToolLayoutOff: function () {
+        _stopEditorPanels: function () {
             this.panels.forEach(function (panel) {
                 if (typeof panel.stop === 'function') {
                     panel.stop();
@@ -379,58 +335,54 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * @return {jQuery} container with buttons
          */
         _getButtons: function () {
-            var me = this,
-                buttonCont = me.templateButtonsDiv.clone(),
-                cancelBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.CancelButton'
-                );
-
+            const me = this;
+            const buttonCont = me.templateButtonsDiv.clone();
+            // cancel
+            const cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             cancelBtn.setHandler(function () {
                 me.cancel();
             });
             cancelBtn.insertTo(buttonCont);
-
-            var saveBtn = Oskari.clazz.create(
-                'Oskari.userinterface.component.buttons.SaveButton'
-            );
-
-            if (me.data.uuid) {
-                var save = function () {
-                    var selections = me.gatherSelections();
-                    if (selections) {
-                        me._editToolLayoutOff();
-                        me._publishMap(selections);
-                    }
-                };
-                saveBtn.setTitle(me.loc.buttons.saveNew);
-                saveBtn.setHandler(function () {
-                    me.data.uuid = null;
-                    delete me.data.uuid;
-                    save();
-                });
-                saveBtn.insertTo(buttonCont);
-
-                var replaceBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Button'
-                );
-                replaceBtn.setTitle(me.loc.buttons.replace);
-                replaceBtn.addClass('primary');
-                replaceBtn.setHandler(function () {
-                    me._showReplaceConfirm(save);
-                });
-                replaceBtn.insertTo(buttonCont);
-            } else {
+            // save
+            const saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+            if (!me.data.uuid) {
+                // only save when not editing
                 saveBtn.setTitle(me.loc.buttons.save);
                 saveBtn.setHandler(function () {
-                    var selections = me.gatherSelections();
+                    const selections = me.gatherSelections();
                     if (selections) {
-                        me._editToolLayoutOff();
+                        me._stopEditorPanels();
                         me._publishMap(selections);
                     }
                 });
                 saveBtn.insertTo(buttonCont);
+                return buttonCont;
             }
+            // buttons when editing
+            const save = function () {
+                const selections = me.gatherSelections();
+                if (selections) {
+                    me._stopEditorPanels();
+                    me._publishMap(selections);
+                }
+            };
+            saveBtn.setTitle(me.loc.buttons.saveNew);
+            saveBtn.setHandler(function () {
+                // clear the id to save this as a new embedded map
+                me.data.uuid = null;
+                delete me.data.uuid;
+                save();
+            });
+            saveBtn.insertTo(buttonCont);
 
+            // replace
+            const replaceBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            replaceBtn.setTitle(me.loc.buttons.replace);
+            replaceBtn.addClass('primary');
+            replaceBtn.setHandler(function () {
+                me._showReplaceConfirm(save);
+            });
+            replaceBtn.insertTo(buttonCont);
             return buttonCont;
         },
         /**
@@ -481,7 +433,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                             sandbox.createURL(response.url)
                         );
 
-                        me._editToolLayoutOff();
+                        me._stopEditorPanels();
                         sandbox.notifyAll(event);
                     } else {
                         errorHandler();
@@ -504,15 +456,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             if (isEnabled) {
                 this._enablePreview();
             } else {
-                this._editToolLayoutOff();
+                this._stopEditorPanels();
                 this._disablePreview();
             }
-            var sb = this.instance.sandbox;
-            var publisherTools = this._createToolGroupings();
-            publisherTools.tools.forEach(function (tool) {
-                var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(tool);
-                sb.notifyAll(event);
-            });
         },
 
         /**
@@ -525,7 +471,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const sandbox = this.instance.sandbox;
             const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             Object.values(mapModule.getPluginInstances())
-                .filter(plugin => plugin.hasUI && plugin.hasUI())
+                .filter(plugin => plugin.isShouldStopForPublisher && plugin.isShouldStopForPublisher())
                 .forEach(plugin => {
                     try {
                         plugin.stopPlugin(sandbox);
@@ -546,20 +492,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _disablePreview: function () {
             const sandbox = this.instance.sandbox;
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-
-            // Remove plugins added during publishing session
-            Object.values(mapModule.getPluginInstances())
-                .filter(plugin => plugin.hasUI && plugin.hasUI())
-                .forEach(plugin => {
-                    try {
-                        plugin.stopPlugin(sandbox);
-                        mapModule.unregisterPlugin(plugin);
-                    } catch (err) {
-                        Oskari.log('Publisher').error('Disable preview', err);
-                        Messaging.error(this.loc.error.disablePreview);
-                    }
-                });
-
             // resume normal plugins
             this.normalMapPlugins.forEach(plugin => {
                 mapModule.registerPlugin(plugin);
@@ -579,20 +511,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * @param {Object[]} errors validation error objects to show
          *
          */
-        _showValidationErrorMessage: function (errors) {
-            var dialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Popup'
-                ),
-                okBtn = dialog.createCloseButton(this.loc.buttons.ok),
-                content = jQuery('<ul></ul>'),
-                i,
-                row;
-
-            for (i = 0; i < errors.length; i += 1) {
-                row = jQuery('<li></li>');
-                row.append(errors[i].error);
-                content.append(row);
-            }
+        _showValidationErrorMessage: function (errors = []) {
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const okBtn = dialog.createCloseButton(this.loc.buttons.ok);
+            const content = jQuery('<ul></ul>');
+            errors.map(err => {
+                const row = jQuery('<li></li>');
+                row.append(err.error);
+                return row;
+            }).forEach(row => content.append(row));
             dialog.makeModal();
             dialog.show(this.loc.error.title, content, [okBtn]);
         },
@@ -604,19 +531,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          *
          */
         _showReplaceConfirm: function (continueCallback) {
-            var dialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Popup'
-                ),
-                okBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Button'
-                );
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(this.loc.buttons.replace);
             okBtn.addClass('primary');
             okBtn.setHandler(function () {
                 dialog.close();
                 continueCallback();
             });
-            var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
+            const cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
             dialog.show(
                 this.loc.confirm.replace.title,
                 this.loc.confirm.replace.msg,

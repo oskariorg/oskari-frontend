@@ -14,10 +14,16 @@ Oskari.registerLocalization({
             yes: 'Ja',
             no: 'Nej',
             next: 'Nästa',
-            previous: 'Föregående'
+            previous: 'Föregående',
+            print: 'Få utskrift',
+            search: 'Sök',
+            reset: 'Återställa',
+            copy: 'Kopiera till klippbordet'
         },
         messages: {
-            confirmDelete: 'Vill du säkert ta bort?'
+            confirm: 'Är du säker på att du vill fortsätta?',
+            confirmDelete: 'Vill du säkert ta bort?',
+            copied: 'Kopieras'
         },
         error: {
             generic: 'Something went wrong'

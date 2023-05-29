@@ -17,7 +17,7 @@ const Container = styled('div')`
     left: 50%;
     transform: translateX(-50%);
     min-width: 950px;
-    @media only screen and (max-width: 1025px) {
+    @media only screen and (max-width: 950px) {
         min-width: 0;
         width: 100%
     }
@@ -30,7 +30,7 @@ const Content = styled('div')`
     margin-right: auto;
     width: 100%;
     display: flex;
-    @media only screen and (max-width: 1025px) {
+    @media only screen and (max-width: 950px) {
         flex-direction: column;
     }
 `;

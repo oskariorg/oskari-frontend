@@ -2,36 +2,25 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
 }, {
     index: 1,
     group: 'data',
-    allowedLocations: [],
-    allowedSiblings: [],
     id: 'diagram',
 
     init: function (data) {
-        var enabled = data &&
-            Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
-            data.configuration.statsgrid.conf.diagram === true;
-        this.setEnabled(enabled);
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.diagram === true);
     },
-    getTool: function (stateData) {
-        var me = this;
-        if (!me.__tool) {
-            me.__tool = {
-                id: 'Oskari.statistics.statsgrid.TogglePlugin',
-                title: 'displayDiagram',
-                config: {
-                    diagram: true
-                }
-            };
-        }
-        return me.__tool;
+    getTool: function () {
+        return {
+            id: 'Oskari.statistics.statsgrid.TogglePlugin',
+            title: 'displayDiagram',
+            config: {
+                diagram: true
+            },
+            hasNoPlugin: true
+        };
     },
-    setEnabled: function (enabled) {
-        var me = this;
-        var changed = me.state.enabled !== enabled;
-        me.state.enabled = enabled;
-
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (!stats || !changed) {
+    _setEnabledImpl: function (enabled) {
+        var stats = this.getStatsgridBundle();
+        if (!stats) {
             return;
         }
         if (enabled) {
@@ -43,8 +32,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
     getValues: function () {
         return this.getConfiguration({ diagram: this.isEnabled() });
     },
-    stop: function () {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+    _stopImpl: function () {
+        var stats = this.getStatsgridBundle();
         if (stats) {
             stats.togglePlugin.removeTool(this.id);
         }

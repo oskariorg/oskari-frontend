@@ -35,7 +35,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
             'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons'
         ],
 
-        groupedSiblings: true,
         /**
         * Initialize tool
         * Override
@@ -89,25 +88,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
         */
         getName: function () {
 
-        },
-        /**
-        * Is displayed in mode.
-        * @method isDisplayedInMode
-        * @public
-        *
-        * @param {String} mode the checked mode
-        *
-        * @returns {Boolean} is displayed in wanted mode
-        */
-        isDisplayedInMode: function (mode) {
-            var me = this;
-            var supportedModes = [];
-
-            supportedModes = jQuery.grep(me.__supportedModes, function (modename) {
-                return modename === mode;
-            });
-
-            return supportedModes > 0;
         },
         /**
         * Is displayed.

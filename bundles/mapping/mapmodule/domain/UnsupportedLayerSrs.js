@@ -5,7 +5,7 @@ export class UnsupportedLayerSrs extends UnsupportedLayerReason {
         super('srs', severity);
         const map = Oskari.getSandbox().getMap();
         this.setLayerCheckFunction(layer => layer.isSupportedSrs(map.getSrsName()) ? true : this);
-        this.setDescription(Oskari.getMsg('MapModule', 'unsupported-layer-projection'));
+        this.setDescription(Oskari.getMsg('MapModule', 'layerUnsupported.srs'));
     }
 }
 

@@ -13,20 +13,15 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         var me = this;
         me._config = config || {};
         me._eventHandlers = {};
-        me._isInLayerToolsEditMode = false;
         me._loc = {};
-        me._map = null;
         me._mapModule = null;
         me._name = 'AbstractPlugin' + Math.floor(Math.random() * (1632960) + 46656).toString(36);
         me._pluginName = me._name;
         me._requestHandlers = {};
         me._sandbox = null;
-        me._fixedLocation = false;
     }, {
         /**
          * @public @method getName
-         *
-         *
          * @return {string} the name for the component
          */
         getName: function () {
@@ -34,21 +29,40 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         },
 
         /**
+         * @public @method setMapModule
+         * Sets reference to map module where this plugin is used.
+         * This allows the plugin to work with the map module and it's map implementation and gets localization from the map module
+         *
+         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map module
+         */
+        setMapModule: function (mapModule) {
+            if (!mapModule) {
+                // clear references
+                // FIXME: this seems to cause troubles in plugins and they are not prepared to handle this...
+                // this._mapModule = null;
+                // this._pluginName = this._name;
+                return;
+            }
+            this._mapModule = mapModule;
+            this._pluginName = mapModule.getName() + this._name;
+            if (!this._loc || Object.keys(this._loc).length === 0) {
+                // don't blindly overwrite if localization already has some content
+                this._loc = mapModule.getLocalization('plugin', true)[this._name] || {};
+            }
+        },
+
+        /**
          * @public @method getMap
-         *
-         *
-         * @return {OpenLayers.Map} reference to map implementation
+         * Returns reference to actual map library impl (for example OpenLayers ol.Map)
+         * @return {ol.Map} reference to map implementation
          */
         getMap: function () {
-            return this._map;
+            return this.getMapModule().getMap();
         },
 
         /**
          * @public @method getMapModule
-         *
-         *
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference
-         * to map module
+         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map module
          */
         getMapModule: function () {
             // Throw a fit if mapmodule is not set, it'd probably break things.
@@ -58,42 +72,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             return this._mapModule;
         },
 
-        /**
-         * @public @method setMapModule
-         * Setter for MapModule, checks that map module reference is truthy
-         * before assigning.
-         *
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference
-         * to map module
-         *
-         */
-        setMapModule: function (mapModule) {
-            if (mapModule) {
-                this._mapModule = mapModule;
-                this._map = mapModule.getMap();
-                this._pluginName = mapModule.getName() + this._name;
-                if (!this._loc || Object.keys(this._loc).length === 0) {
-                    // don't blindly overwrite if localization already has some content
-                    this._loc = mapModule.getLocalization('plugin', true)[this._name] || {};
-                }
-            }
-        },
         getMsg: function (path, args) {
             return this.getMapModule().getPluginMsg(this._name, path, args);
         },
         /**
-         * Returns path to image resources
-         * @param fileName
-         * @return {String}
-         */
-        getImagePath: function (fileName) {
-            return this.getMapModule().getImageUrl(fileName);
-        },
-
-        /**
          * @public @method getSandbox
-         *
-         *
          * @return {Object}
          * Sandbox
          */
@@ -105,8 +88,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * @public @method init
          * Initializes plugin by calling _initImpl, which is overwritten by the
          * implementation when needed.
-         *
-         *
          */
         init: function () {
             try {
@@ -123,8 +104,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * Interface method for the module protocol
          * Registers plugin by calling _registerImpl, which is overwritten by
          * the implementation when needed.
-         *
-         *
          */
         register: function () {
             return this._registerImpl();
@@ -137,8 +116,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * Interface method for the module protocol
          * Unregisters plugin by calling _registerImpl, which is overwritten by
          * the implementation when needed.
-         *
-         *
          */
         unregister: function () {
             return this._unregisterImpl();
@@ -149,23 +126,15 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         /**
          * @public @method createEventHandlers
          *
-         *
          * @return {Object} EventHandlers
          */
         createEventHandlers: function () {
-            var me = this,
-                eventHandlers = me._createEventHandlers();
-
-            eventHandlers.LayerToolsEditModeEvent = function (event) {
-                me._setLayerToolsEditMode(event.isInMode());
-            };
-            return eventHandlers;
+            return this._createEventHandlers();
         },
 
         /**
          * @method _createEventHandlers
          * Create eventhandlers. Implement if need be.
-         *
          *
          * @return {Object} EventHandlers
          */
@@ -180,10 +149,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * @return {Object} RequestHandlers
          */
         createRequestHandlers: function () {
-            var me = this,
-                requestHandlers = me._createRequestHandlers();
-
-            return requestHandlers;
+            return this._createRequestHandlers();
         },
 
         /**
@@ -197,52 +163,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             return {};
         },
 
-        inLayerToolsEditMode: function () {
-            return this._isInLayerToolsEditMode;
-        },
-        isFixedLocation: function () {
-            return this._fixedLocation;
-        },
-
-        _setLayerToolsEditMode: function (isInEditMode) {
-            this._isInLayerToolsEditMode = isInEditMode;
-            this._setLayerToolsEditModeImpl();
-            if (this.isFixedLocation()) {
-                this.handleDragDisabled();
-            }
-        },
-
-        /**
-         * @method _setLayerToolsEditModeImpl
-         * Called after layerToolsEditMode is set, implement if needed.
-         *
-         *
-         */
-        _setLayerToolsEditModeImpl: function () {},
-
-        /**
-         * @method handleDragDisabled
-         * Disable draggable inLayerToolsEditMode if plugin's location is fixed (publisher edit own tools layout)
-         */
-        handleDragDisabled: function (isInEditMode) {
-            const elem = this.getElement();
-            if (!elem) {
-                return;
-            }
-            const draggable = elem.hasClass('ui-draggable');
-            if (this.inLayerToolsEditMode()) {
-                elem.addClass('plugin-drag-disabled');
-                if (draggable) {
-                    elem.draggable('disable');
-                }
-            } else {
-                elem.removeClass('plugin-drag-disabled');
-                if (draggable) {
-                    elem.draggable('enable');
-                }
-            }
-        },
-
         /**
          * @public @method startPlugin
          * mapmodule.Plugin protocol method.
@@ -250,38 +170,34 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * and displays it.
          *
          * @param {Oskari.Sandbox} sandbox
-         *
          */
         startPlugin: function (sandbox) {
-            var me = this;
+            this._sandbox = sandbox;
+            sandbox.register(this);
+            this._eventHandlers = this.createEventHandlers();
+            this._requestHandlers = this.createRequestHandlers();
 
-            me._sandbox = sandbox;
-            sandbox.register(me);
-            me._eventHandlers = me.createEventHandlers();
-            me._requestHandlers = me.createRequestHandlers();
+            Object.keys(this._eventHandlers)
+                .forEach(eventName => sandbox.registerForEventByName(this, eventName));
 
-            Object.keys(me._eventHandlers).forEach(function (key) {
-                sandbox.registerForEventByName(me, key);
-            });
+            Object.keys(this._requestHandlers)
+                .forEach(requestName => sandbox.requestHandler(requestName, this._requestHandlers[requestName]));
 
-            Object.keys(me._requestHandlers).forEach(function (key) {
-                sandbox.requestHandler(key, me._requestHandlers[key]);
-            });
-
-            var waitingForToolbar = false;
+            let waitingForToolbar = false;
             try {
-                waitingForToolbar = me._startPluginImpl(sandbox);
+                waitingForToolbar = this._startPluginImpl(sandbox);
             } catch (e) {
-                Oskari.log('AbstractMapModulePlugin').error('Error starting plugin impl ' + me.getName());
+                Oskari.log('AbstractMapModulePlugin').error('Error starting plugin impl ' + this.getName());
             }
-            // Make sure plugin's edit mode is set correctly
-            // (we might already be in edit mode)
-            me._setLayerToolsEditMode(
-                me.getMapModule().isInLayerToolsEditMode()
-            );
             return waitingForToolbar;
         },
 
+        /**
+         * @public @method _startPluginImpl
+         * Impl should override this to construct the plugin UI and display it.
+         *
+         * @param {Oskari.Sandbox} sandbox
+         */
         _startPluginImpl: function (sandbox) { },
 
         /**
@@ -292,37 +208,40 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * @param {Oskari.Sandbox} sandbox
          */
         stopPlugin: function (sandbox) {
-            var me = this;
-
             try {
-                me._stopPluginImpl(sandbox);
+                this._stopPluginImpl(sandbox);
             } catch (e) {
-                Oskari.log('AbstractMapModulePlugin').error('Error stopping plugin impl ' + me.getName());
+                Oskari.log('AbstractMapModulePlugin').error('Error stopping plugin impl ' + this.getName());
             }
 
-            Object.keys(me._eventHandlers).forEach(function (key) {
-                sandbox.unregisterFromEventByName(me, key);
-            });
+            Object.keys(this._eventHandlers)
+                .forEach(eventName => sandbox.unregisterFromEventByName(this, eventName));
 
-            Object.keys(me._requestHandlers).forEach(function (key) {
-                sandbox.requestHandler(key, null);
-            });
+            Object.keys(this._requestHandlers)
+                .forEach(requestName => sandbox.requestHandler(requestName, null));
 
-            sandbox.unregister(me);
-            me._sandbox = null;
+            sandbox.unregister(this);
+            this._sandbox = null;
         },
 
+        /**
+         * @public @method _stopPluginImpl
+         * Impl should override this to teardown the plugin UI and shutdown the plugin for removal.
+         *
+         * @param {Oskari.Sandbox} sandbox
+         */
         _stopPluginImpl: function (sandbox) {},
 
         /**
          * @public @method start
-         * Start plugin as module by calling _registerImpl, which is overwritten
+         * Start plugin as module by calling _startImpl, which is overwritten
          * by the implementation when needed.
          *
          * @param {Oskari.Sandbox} sandbox
          *
          */
         start: function (sandbox) {
+            // TODO: do we need these? or could we just use startPlugin()?
             return this._startImpl(sandbox);
         },
 
@@ -330,13 +249,14 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
 
         /**
          * @public @method stop
-         * Stop plugin as module by calling _registerImpl, which is overwritten
+         * Stop plugin as module by calling _stopImpl, which is overwritten
          * by the implementation when needed.
          *
          * @param {Oskari.Sandbox} sandbox
          *
          */
         stop: function (sandbox) {
+            // TODO: do we need these? or could we just use stopPlugin()?
             return this._stopImpl(sandbox);
         },
 
@@ -389,8 +309,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         /**
          * @public  @method _refresh
          * Called after a configuration change. Implement if needed.
-         *
-         *
          */
         refresh: function () {},
 
@@ -398,13 +316,19 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * @public @method hasUI
          * Override if need be.
          *
-         *
          * @return {Boolean} false
          */
         hasUI: function () {
             return false;
         },
-
+        isShouldStopForPublisher: function () {
+            return this.hasUI();
+        },
+        // Note! This is only called by mapmodule when it LayerToolsEditModeEvent is received/publisher enters drag mode
+        // This provides a hook for plugins to close their popups etc
+        resetUI: function () {
+            // map module should call this when for example publisher goes to dragging mode
+        },
         /**
          * @public @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or
@@ -414,15 +338,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          *
          */
         onEvent: function (event) {
-            var me = this,
-                handler = me._eventHandlers[event.getName()];
-
+            const handler = this._eventHandlers[event.getName()];
             if (handler) {
-                return handler.apply(me, [event]);
+                return handler.apply(this, [event]);
             } else {
-                me.getSandbox().printWarn(
-                    'No handler found for registered event', event.getName()
-                );
+                Oskari.log(this.getName())
+                    .warn('No handler found for registered event', event.getName());
             }
         }
     }, {

@@ -5,14 +5,16 @@ const unsupportedIn2D = ['tiles3d'];
 export class UnsupportedLayerType extends UnsupportedLayerReason {
     constructor (severity) {
         super('dimension', severity);
-        const map = Oskari.getSandbox().getMap();
+        const mapSupports3D = Oskari.getSandbox().getMap().getSupports3D();
         this.setLayerCheckFunction(layer => {
-            if (isLayerSupported(layer, map.getSupports3D())) {
+            if (isLayerSupported(layer, mapSupports3D)) {
                 return true;
             }
             // not supported -> Return an instance of UnsupportedLayerReason
             return this;
         });
+        const dimension = mapSupports3D ? '3D' : '2D';
+        this.setDescription(Oskari.getMsg('MapModule', 'layerUnsupported.dimension', { dimension }));
     }
 }
 

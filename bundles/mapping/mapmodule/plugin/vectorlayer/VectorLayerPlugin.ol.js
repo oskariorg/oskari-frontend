@@ -13,6 +13,7 @@ import { LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '..
 import { filterOptionalStyle } from '../../oskariStyle/filter';
 import { applyOpacityToStyle } from '../../oskariStyle/generator.ol';
 import { getZoomLevelHelper, getScalesFromOptions } from '../../util/scale';
+import { interpolateLab } from 'd3';
 
 import './vectorlayer';
 import './request/AddFeaturesToMapRequest';
@@ -69,6 +70,7 @@ Oskari.clazz.define(
         this._log = Oskari.log('VectorLayerPlugin');
         this._styleCache = {};
         this._animatingFeatures = {};
+        this._name = 'VectorLayerPlugin';
     }, {
         __name: 'Oskari.mapframework.mapmodule.VectorLayerPlugin',
         /**
@@ -959,7 +961,7 @@ Oskari.clazz.define(
                     return;
                 }
                 const olStyles = feature.getStyle();
-                olStyles[0].getFill().setColor(d3.interpolateLab(oldColor, newColor)(elapsedRatio));
+                olStyles[0].getFill().setColor(interpolateLab(oldColor, newColor)(elapsedRatio));
                 feature.setStyle(olStyles);
             }
             // Start animation
@@ -1014,7 +1016,7 @@ Oskari.clazz.define(
                 return;
             }
             var vectorLayer = this._olLayers[layer.getId()];
-            this._map.removeLayer(vectorLayer);
+            this.getMap().removeLayer(vectorLayer);
             delete this._olLayers[layer.getId()];
         },
         /**

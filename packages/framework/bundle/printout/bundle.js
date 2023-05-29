@@ -23,25 +23,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundle", functi
 
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout/jquery.imagesLoaded.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/printout/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout/Flyout.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout/Tile.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/printout/service/PrintService.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout/view/StartView.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout/view/BasicPrintout.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/printout/request/PrintMapRequest.js"
@@ -54,12 +39,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundle", functi
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/printout/event/PrintWithoutUIEvent.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout/event/PrintCanceledEvent.js"
-        }, {
-            "type": "text/css",
-            "src": "../../../../bundles/framework/printout/resources/scss/style.scss"
         }],
 
         "locales": [{

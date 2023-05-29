@@ -303,10 +303,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "type": "text/javascript",
                 "src": "../../../../libraries/jquery/plugins/jquery-placeholder/jquery.placeholder.js"
             }, {
-                "type": "text/javascript",
-                "expose": "d3",
-                "src": "../../../../libraries/d3/d3.min.js"
-            }, {
                 // NOTE! EXTERNAL LIBRARY!
                 "type" : "text/javascript",
                 "src" : "../../../../libraries/spectrum/spectrum-min.js"

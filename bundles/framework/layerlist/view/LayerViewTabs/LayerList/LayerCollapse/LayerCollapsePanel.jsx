@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse, CollapsePanel, List, ListItem, Tooltip } from 'oskari-ui';
+import { Collapse, CollapsePanel, List, ListItem } from 'oskari-ui';
 import { Controller, ErrorBoundary } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import { LayerCountBadge } from './LayerCountBadge';
@@ -79,11 +79,10 @@ const StyledListItem = styled(({ even, ...rest }) => <ListItem {...rest}/>)`
     display: block !important;
 `;
 
-const renderLayer = ({ model, selected, controller }, index) => {
-    const itemProps = { model, selected, controller };
+const renderLayer = (itemProps, index) => {
     return (
-        <StyledListItem key={model.getId()} even={index % 2 === 0}>
-            <Layer  {...itemProps} />
+        <StyledListItem key={itemProps.id} even={index % 2 === 0}>
+            <Layer {...itemProps} />
         </StyledListItem>
     );
 };
@@ -97,6 +96,9 @@ const LayerList = ({ layers }) => {
     return (
         <List bordered={false} dataSource={layers} renderItem={renderLayer} />
     );
+};
+LayerList.propTypes = {
+    layers: PropTypes.array.isRequired
 };
 /* ----- /Layer list ------ */
 
@@ -138,26 +140,35 @@ const SubGroupList = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts,
 const StyledCollapsePanel = styled(CollapsePanel)`
     > .ant-collapse-content > .ant-collapse-content-box {
         padding: 0px;
+        display: flex;
+        & > .ant-list {
+            width: 100%;
+        }
     }
     & > div:first-child {
         min-height: 22px;
-    };
+    }
+    & > .ant-collapse-header {
+        flex-direction: row;
+        flex-wrap: wrap !important;
+    }
 `;
 
-const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
+const getLayerRowModels = (layers = [], selectedLayerIds = [], controller, opts) => {
     return layers.map(oskariLayer => {
         return {
             id: oskariLayer.getId(),
             model: oskariLayer,
             selected: selectedLayerIds.includes(oskariLayer.getId()),
-            controller
+            controller,
+            opts
         };
     });
 };
 
 const LayerCollapsePanel = (props) => {
     const { group, selectedLayerIds, openGroupTitles, opts, controller, ...propsNeededForPanel } = props;
-    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
+    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
     // set group switch active if all layers in group are selected
     const allLayersOnMap = layerRows.every(layer => selectedLayerIds.includes(layer.id));
     // Note! Not rendering layerlist/subgroups when the panel is closed is a trade-off for performance

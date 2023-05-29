@@ -1,8 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { showMovableContainer, PLACEMENTS } from 'oskari-ui/components/window';
 import { LocaleProvider } from 'oskari-ui/util';
 import { Classification } from '../components/classification/Classification';
 import { showHistogramPopup } from '../components/manualClassification/HistogramForm';
+import { getPopupOptions } from '../../../mapping/mapmodule/plugin/pluginPopupHelper';
 import '../resources/scss/classificationplugin.scss';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
@@ -18,77 +19,83 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me._locale = Oskari.getMsg.bind(null, 'StatsGrid');
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._index = 9;
-        this._defaultLocation = me._config.legendLocation || 'right bottom';
-        me._fixedLocation = true;
+        this._defaultLocation = 'right bottom';
         me._name = 'ClassificationPlugin';
-        me.element = null;
-        me._templates = {
-            main: jQuery('<div class="mapplugin statsgrid-classification-plugin"></div>')
-        };
-        // for publisher dragndrop to work needs to have at least:
-        // -  mapplugin-class in parent template
-        // - _setLayerToolsEditModeImpl()
-        // - publisher tool needs to implement getPlugin()
-        // publisher tool writes location to statsgrid.conf.legendLocation since this is not only a plugin
-        //  for this reason we need to call setLocation() manually as location is not in the default path "config.location.classes"
-        // me.setLocation(config.legendLocation || me._defaultLocation);
 
         me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
         Oskari.makeObservable(this);
 
-        this.node = null;
         this._overflowedOffset = null;
         this._previousIsEdit = false;
         this.indicatorData = {};
         this._bindToEvents();
         this.service.getStateService().initClassificationPluginState(this._config, this._instance.isEmbedded());
         this.histogramControls = null;
+
+        this.containerController = null;
     }, {
-        _createControlElement: function () {
-            if (this.element !== null) {
-                return this.element;
-            }
-            this.element = this._templates.main.clone();
-            this.element.css('z-index', 15001);
-            return this.element;
+        // buildUI() is the starting point
+        buildUI: function () {
+            this.render();
+            this.trigger('show');
         },
-        rendered: function (isEdit) {
-            // check if edit classification state is changed
-            if (isEdit !== this._previousIsEdit) {
-                if (isEdit) {
-                    this._overflowCheck(true);
-                } else {
-                    this._restoreOverflow();
-                }
-                this._previousIsEdit = isEdit;
+        // this is used to stop this/remove from screen
+        stopPlugin: function () {
+            if (this.containerController) {
+                this.containerController.close();
+                this.containerController = null;
             }
-            this._overflowCheck();
+            this.trigger('hide');
+        },
+        isVisible: function () {
+            return !!this.containerController;
+        },
+        toggleUI: function () {
+            this.containerController ? this.stopPlugin() : this.buildUI();
+            return !!this.containerController;
         },
         render: function () {
-            if (!this.node) {
+            const { error, ...state } = this.service.getStateService().getStateForClassification();
+            if (error) {
                 return;
             }
-            const { error, ...state } = this.service.getStateService().getStateForClassification();
-            if (error) return;
             const { data, status, uniqueCount, minMax } = this.getIndicatorData(state);
-            if (status === 'PENDING') return;
+            if (status === 'PENDING') {
+                return;
+            }
             const editOptions = this.getEditOptions(state, uniqueCount, minMax);
             const classifiedDataset = this.classifyDataset(state, data, uniqueCount);
             // Histogram doesn't need to be updated on every events but props are gathered here
             // and histogram is updated only if it's opened, so update here for now
             this.updateHistogram(state, classifiedDataset, data, editOptions);
-
-            ReactDOM.render((
+            const ui = (
                 <LocaleProvider value={{ bundleKey: this._instance.getName() }}>
                     <Classification
                         { ...state }
                         editOptions = {editOptions}
                         classifiedDataset = {classifiedDataset}
                         startHistogramView = {() => this.startHistogramView(state, classifiedDataset, data, editOptions)}
-                        onRenderChange = {this.rendered.bind(this)}
+                        onRenderChange = {() => { /* no-op */ }}
                     />
-                </LocaleProvider>
-            ), this.node);
+                </LocaleProvider>);
+            if (this.containerController) {
+                this.containerController.update(ui);
+                return;
+            }
+            this.containerController = showMovableContainer(ui, () => this.stopPlugin(), this.__getContainerOpts());
+        },
+        // Use togglePlugin location when available, otherwise default to bottom right
+        __getContainerOpts: function () {
+            let opts = {
+                placement: PLACEMENTS.BR
+            };
+            if (this._instance.togglePlugin) {
+                opts = getPopupOptions(this._instance.togglePlugin);
+            }
+            return {
+                ...opts,
+                id: 'statsgrid_classification'
+            };
         },
         getIndicatorData: function (state) {
             const { activeIndicator, regionset: activeRegionset } = state;
@@ -144,7 +151,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
 
             // if dataset has negative and positive values it can be divided, base !== 0 has to be given in metadata
-            const dividable = minMax.min < 0 && minMax.max > 0;
+            const dividable = minMax && minMax.min < 0 && minMax.max > 0;
             if (typeof base !== 'number' && !dividable) {
                 // disable option if base isn't given in metadata or dataset isn't dividable
                 disabled.push('div');
@@ -191,96 +198,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
             this.histogramControls.update(state, classifiedDataset, data, editOptions);
         },
-        redrawUI: function () {
-            // No need to redraw because mobile & desktop is same
-            return false;
-        },
-        toggleUI: function () {
-            this.element ? this.teardownUI() : this.buildUI();
-            return !!this.element;
-        },
-        teardownUI: function () {
-            var element = this.getElement();
-            if (this.node) {
-                ReactDOM.unmountComponentAtNode(this.node);
-                this.node = null;
-            }
-            if (element) {
-                this.removeFromPluginContainer(element);
-                this.element = null;
-            }
-            this.trigger('hide');
-        },
-        buildUI: function () {
-            if (!this.element) {
-                this.addToPluginContainer(this._createControlElement());
-                this._makeDraggable();
-                this.node = this.element.get(0);
-                this.render();
-            }
-            this.trigger('show');
-        },
-        _makeDraggable: function () {
-            this.getElement().draggable({
-                handle: '.classification-header,.classification-legend'
-            });
-        },
-        getElement: function () {
-            return this.element;
-        },
-        stopPlugin: function () {
-            this.teardownUI();
-        },
-        _overflowCheck: function (storeOverflow) {
-            var pluginEl = this.getElement();
-            if (!pluginEl) {
-                return;
-            }
-            if (pluginEl.css('position') === 'absolute') {
-                const { top, left } = pluginEl.offset();
-                const bottom = top + pluginEl.height();
-                const wHeight = jQuery(window).height();
-                let offsetToWindowBottom = wHeight - bottom - 10; // add margin 10
-                if (this._defaultLocation.includes('bottom')) {
-                    const pluginContainer = jQuery('.mapplugins.bottom.right');
-                    const containerHeight = pluginContainer.outerHeight();
-                    const offsetToContainer = pluginEl.position().left + pluginEl.outerWidth() + 10;
-                    if (offsetToContainer > 0) {
-                        offsetToWindowBottom = offsetToWindowBottom - containerHeight + 10; // remove margin 10
-                    }
-                    // prevent to flow over top when map size is changed
-                    if (top < 0) {
-                        pluginEl.css('top', containerHeight - wHeight + 'px');
-                    }
-                    // prevent to flow over left when map size is changed
-                    if (left < 0) {
-                        const wWidth = jQuery(window).width();
-                        const containerWidth = pluginContainer.outerWidth();
-                        pluginEl.css('left', containerWidth - wWidth + 'px');
-                    }
-                }
-                if (offsetToWindowBottom < 0) {
-                    if (storeOverflow === true) {
-                        this._overflowedOffset = offsetToWindowBottom;
-                    }
-                    pluginEl.css('top', pluginEl.position().top + offsetToWindowBottom + 'px');
-                }
-            }
-        },
-        _restoreOverflow: function () {
-            var pluginEl = this.getElement();
-            if (this._overflowedOffset === null || !pluginEl) {
-                return;
-            }
-            pluginEl.css('top', pluginEl.position().top - this._overflowedOffset + 'px');
-            this._overflowedOffset = null;
-        },
-        hasUI: function () {
-            // Plugin has ui element but returns false, because
-            // otherwise publisher would stop this plugin and start it again when leaving the publisher,
-            // instance updates visibility
-            return false;
-        },
         _bindToEvents: function () {
             // if indicator is removed/added - recalculate the source 1/2 etc links
             this.service.on('StatsGrid.IndicatorEvent', () => this.render());
@@ -303,7 +220,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('StatsGrid.DatasourceEvent', () => this.render());
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

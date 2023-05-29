@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const MeasureArea = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.46 27.37">
+    <svg width="1em" height="1em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.46 27.37">
         <g>
             <rect width="6.26" height="6.26"/>
             <polygon points="26.18 0 26.18 3.48 24.93 3.48 24.93 0 22.31 0 22.31 1.84 21.06 1.84 21.06 0 18.43 0 18.43 3.48 17.18 3.48 17.18 0 14.55 0 14.55 1.84 13.3 1.84 13.3 0 10.68 0 10.68 3.48 9.43 3.48 9.43 0 7.6 0 7.6 6.26 26.21 6.26 26.21 9.76 27.46 9.76 27.46 0 26.18 0"/>

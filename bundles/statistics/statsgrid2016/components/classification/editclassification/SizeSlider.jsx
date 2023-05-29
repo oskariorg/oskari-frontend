@@ -9,7 +9,9 @@ const SLIDER_PROPS = {
     max: 120,
     step: 5,
     range: true,
-    tipFormatter: val => `${val}px`,
+    tooltip: {
+        formatter: val => `${val}px`
+    },
     marks: {
         10: {
             style: { transform: 'translateX(-20%)' },

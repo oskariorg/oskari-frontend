@@ -25,7 +25,7 @@ Oskari.clazz.define(
             toolHeatmap.setName('heatmap');
             toolHeatmap.setTitle(locLabel);
             toolHeatmap.setTooltip(locLabel);
-            toolHeatmap.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [layer.getId()]));
+            toolHeatmap.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [{ layerId: layer.getId() }]));
             layer.addTool(toolHeatmap);
         }
     });

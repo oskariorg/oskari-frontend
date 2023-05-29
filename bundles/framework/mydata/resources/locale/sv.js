@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Mina uppgifter",
         "desc": "Mina uppgifter",
-        "notLoggedIn": "Mina uppgifter innehåller din användarprofil och alla dina sparade funktioner, kartvyer, inbäddade kartor, indikatorer, analys och dataset.  <a href='/web/sv/login'>Logga in</a>.",
+        "notLoggedIn": "Mina uppgifter innehåller din användarprofil och alla dina sparade funktioner, kartvyer, inbäddade kartor, indikatorer, analys och dataset.",
         "notLoggedInText": "Logga in.",
         "register": "Registrera dig",
         "projectionError": {
@@ -92,9 +92,7 @@ Oskari.registerLocalization(
                     "updateDate": "Uppdaterad"
                 },
                 "published": {
-                    "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats.",
-                    "copy": "Kopiera till klippbordet",
-                    "copied": "Kopieras"
+                    "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats."
                 },
                 "popup": {
                     "edit": "Byt namn på kartan",

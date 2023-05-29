@@ -8,7 +8,7 @@ import { createDefaultStyle } from 'ol/style/Style';
 
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
 import { stylefunction as mapboxStyleFunction } from 'ol-mapbox-style';
-import { LAYER_ID, LAYER_TYPE, FEATURE_QUERY_ERRORS } from '../../domain/constants';
+import { LAYER_ID, LAYER_TYPE, FEATURE_QUERY_ERRORS, VECTOR_STYLE } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
 import { getFeatureAsGeojson } from '../../util/vectorfeatures/jsonHelper';
 import { getMVTFeaturesInExtent } from '../../util/vectorfeatures/mvtHelper';
@@ -40,10 +40,10 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
             const composingModel = new LayerComposingModel([
                 LayerComposingModel.ATTRIBUTIONS,
                 LayerComposingModel.CREDENTIALS,
-                LayerComposingModel.EXTERNAL_STYLES_JSON,
+                LayerComposingModel.EXTERNAL_VECTOR_STYLES,
                 LayerComposingModel.HOVER,
                 LayerComposingModel.SRS,
-                LayerComposingModel.STYLES_JSON,
+                LayerComposingModel.VECTOR_STYLES,
                 LayerComposingModel.TILE_GRID,
                 LayerComposingModel.URL,
                 LayerComposingModel.DECLUTTER
@@ -105,10 +105,11 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
     _getLayerCurrentStyleFunction (layer) {
         const olLayers = this.getOLMapLayers(layer.getId());
         const style = layer.getCurrentStyle();
-        if (style.isExternalStyle() && olLayers.length !== 0) {
-            const externalStyleDef = style.getExternalDef() || {};
-            const sourceLayerIds = externalStyleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
-            return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds);
+        if (style.getType() === VECTOR_STYLE.MAPBOX && olLayers.length !== 0) {
+            const styleDef = style.getFeatureStyle();
+            const sourceLayerIds = styleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
+            const resolutions = [...this.getMapModule().getResolutionArray()];
+            return mapboxStyleFunction(olLayers[0], styleDef, sourceLayerIds, resolutions);
         }
         return style.hasDefinitions() ? this.mapModule.getStyleForLayer(layer) : this._createDefaultStyle();
     }

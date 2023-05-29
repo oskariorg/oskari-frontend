@@ -20,12 +20,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
     * @returns {Object} tool description
     */
         getTool: function () {
-            var coordinatetool = this.__sandbox.findRegisteredModuleInstance('coordinatetool') || null;
             return {
                 id: 'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
                 title: 'CoordinateToolPlugin',
                 config: {
-                    instance: coordinatetool
+                    ...(this.state.pluginConfig || {})
                 }
             };
         },
@@ -42,10 +41,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
             if (!data || !data.configuration[me.bundleName]) {
                 return;
             }
-            me.setEnabled(true);
             var conf = data.configuration[me.bundleName].conf || {};
+            this.storePluginConf(conf);
             me.projectionTrasformationIsCheckedInModifyMode = !!conf.supportedProjections;
             me.noUiIsCheckedInModifyMode = !!conf.noUI;
+            me.setEnabled(true);
         },
         /**
     * Get values.
@@ -56,41 +56,39 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
     */
         getValues: function () {
             var me = this;
-            if (me.state.enabled) {
-                var pluginConfig = this.getPlugin().getConfig();
-                pluginConfig.instance = null;
-                delete pluginConfig.instance;
-
-                if (me.toolConfig) {
-                    for (var configName in me.toolConfig) {
-                        pluginConfig[configName] = me.toolConfig[configName];
-                        // Not save supportedProjections if is not checked
-                        if (configName === 'supportedProjections' && !me.supportedProjections) {
-                            pluginConfig[configName] = null;
-                            delete pluginConfig[configName];
-                        }
-                        // Not save noUI if is not checked
-                        if (configName === 'noUI' && !me.noUI) {
-                            pluginConfig[configName] = null;
-                            delete pluginConfig[configName];
-                        }
-                    }
-                }
-
-                if (me.noUI) {
-                    pluginConfig.noUI = me.noUI;
-                }
-                var json = {
-                    configuration: {}
-                };
-                json.configuration[me.bundleName] = {
-                    conf: pluginConfig,
-                    state: {}
-                };
-                return json;
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+
+            const pluginConfig = this.getPlugin().getConfig();
+
+            if (me.toolConfig) {
+                for (var configName in me.toolConfig) {
+                    pluginConfig[configName] = me.toolConfig[configName];
+                    // Not save supportedProjections if is not checked
+                    if (configName === 'supportedProjections' && !me.supportedProjections) {
+                        pluginConfig[configName] = null;
+                        delete pluginConfig[configName];
+                    }
+                    // Not save noUI if is not checked
+                    if (configName === 'noUI' && !me.noUI) {
+                        pluginConfig[configName] = null;
+                        delete pluginConfig[configName];
+                    }
+                }
+            }
+
+            if (me.noUI) {
+                pluginConfig.noUI = me.noUI;
+            }
+            var json = {
+                configuration: {}
+            };
+            json.configuration[me.bundleName] = {
+                conf: pluginConfig,
+                state: {}
+            };
+            return json;
         },
         /**
      * Get extra options.

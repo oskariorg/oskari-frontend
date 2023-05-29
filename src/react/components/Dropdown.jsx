@@ -6,16 +6,18 @@ import 'antd/es/menu/style/index.js';
 
 export const Dropdown = ({ children, items, placement, click = true }) => {
     const menu = (
-        <Menu>
-            {items.map(item => (
-                <Menu.Item key={item.title}>
-                    <a onClick={item.action}>{item.title}</a>
-                </Menu.Item>
+        <Menu
+            items={items.map(item => (
+                {
+                    key: item.title,
+                    label: item.title,
+                    onClick: item.action
+                }
             ))}
-        </Menu>
+        />
     );
     return (
-        <AntDropdown overlay={menu} placement={placement} trigger={click ? ['click'] : ['hover']}>
+        <AntDropdown dropdownRender={() => menu} placement={placement} trigger={click ? ['click'] : ['hover']}>
             {children}
         </AntDropdown>
     );

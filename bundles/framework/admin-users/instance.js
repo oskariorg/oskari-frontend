@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
-        this._localization = null;
+        this.loc = Oskari.getMsg.bind(null, this.getName());
     }, {
         /**
          * @static
@@ -46,25 +46,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
             return this.sandbox;
         },
         /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for current language.
-         * If key-parameter is not given, returns the whole localization data.
-         *
-         * @param {String} key (optional) if given, returns the value for key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
-            if (key) {
-                return this._localization[key];
-            }
-            return this._localization;
-        },
-        /**
          * @method start
          * implements BundleInstance protocol start methdod
          */
@@ -72,40 +53,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
             if (this.started) {
                 return;
             }
+            this.started = true;
 
-            var me = this,
-                conf = me.conf,
-                sandboxName = conf ? conf.sandbox : 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName),
-                p;
+            const sandboxName = this.conf?.sandbox || 'sandbox';
+            const sandbox = Oskari.getSandbox(sandboxName);
+            sandbox.register(this);
+            this.sandbox = sandbox;
 
-            me.started = true;
-            me.sandbox = sandbox;
-
-            this._localization = Oskari.getLocalization(this.getName());
-
-            sandbox.register(me);
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
-                }
-            }
-
-            me.getRoles(function () {
-                // Let's extend UI after we have the role data
-                var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
-                sandbox.request(me, request);
-            }, function () {
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    btn = dialog.createCloseButton('Ok'),
-                    request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
-                sandbox.request(me, request);
-
-                btn.addClass('primary');
-                dialog.show(me._localization.failed_to_get_roles_title, me._localization.failed_to_get_roles_message, [btn]);
-            });
-
-            // sandbox.registerAsStateful(this.mediator.bundleId, this);
+            const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
+            sandbox.request(this, request);
         },
         /**
          * @method init
@@ -126,81 +82,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
-        onEvent: function (event) {
-            if (this.plugins['Oskari.userinterface.Flyout']) {
-                this.plugins['Oskari.userinterface.Flyout'].onEvent(event);
-            }
-
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-
-            handler.apply(this, [event]);
-        },
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            /**
-             * @method userinterface.ExtensionUpdatedEvent
-             * Fetch users when flyout is opened
-             */
-            'userinterface.ExtensionUpdatedEvent': function (event) {
-                var me = this,
-                    doOpen = event.getViewState() !== 'close',
-                    p;
-                if (event.getExtension().getName() !== me.getName()) {
-                    // not me -> do nothing
-                    return;
-                }
-                if (doOpen) {
-                    this.plugins['Oskari.userinterface.Flyout'].createUI();
-                    // flyouts eventHandlers are registered
-                    for (p in this.plugins['Oskari.userinterface.Flyout'].getEventHandlers()) {
-                        if (!this.eventHandlers[p]) {
-                            this.sandbox.registerForEventByName(this, p);
-                        }
-                    }
-                }
-            },
-
-            RoleChangedEvent: function (event) {
-                var i;
-                if (event.getOperation() === 'add') {
-                    this.storedRoles.push(event.getRole());
-                }
-                if (event.getOperation() === 'remove') {
-                    for (i = 0; i < this.storedRoles.length; i += 1) {
-                        if ((this.storedRoles[i].id + '') === (event.getRole().id + '')) {
-                            this.storedRoles.splice(i, 1);
-                            break;
-                        }
-                    }
-                }
-            }
-        },
+        onEvent: function (event) {},
 
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var sandbox = this.sandbox,
-                p,
-                request;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
+            const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
+            this.sandbox.request(this, request);
 
-            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
-
-            sandbox.request(this, request);
-
-            // this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
         },
@@ -238,41 +129,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('title');
+            return this.loc('title');
         },
         /**
          * @method getDescription
          * @return {String} localized text for the description of the component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
-        },
-        /**
-         * Role list
-         * @method getRoles
-         *
-         * @param {Function} callback success callback
-         * @param {Function} errCallback error callback
-         */
-        getRoles: function (callback, errCallback) {
-            var me = this;
-
-            jQuery.ajax({
-                type: 'GET',
-                url: Oskari.urls.getRoute('ManageRoles'),
-                lang: Oskari.getLang(),
-                timestamp: new Date().getTime(),
-                error: function () {
-                    me.storedRoles = [];
-                    errCallback();
-                },
-                success: function (result) {
-                    me.storedRoles = result.rolelist || [];
-                    callback();
-                }
-            });
+            return this.loc('desc');
         }
-
     }, {
         /**
          * @property {String[]} protocol

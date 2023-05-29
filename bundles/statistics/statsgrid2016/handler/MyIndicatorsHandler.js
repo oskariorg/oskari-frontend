@@ -70,7 +70,7 @@ class IndicatorsHandler extends StateHandler {
                         loading: false
                     });
                 } else {
-                    Messaging.success(this.loc('tab.popup.deletetitle'), this.loc('tab.popup.deleteSuccess'));
+                    Messaging.success(this.loc('tab.popup.deleteSuccess'));
                     this.refreshIndicatorsList();
                     // Delete fires StatsGrid.DatasourceEvent -> indicator list will be refreshed if delete is successful.
                 }

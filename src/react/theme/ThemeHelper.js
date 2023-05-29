@@ -1,18 +1,18 @@
 
-import { EFFECT, DEFAULT_COLORS } from './constants';
-
+import { EFFECT, DEFAULT_COLORS, DEFAULT_FONT } from './constants';
 
 export const getHeaderTheme = (theme) => {
     const bgColor = theme.color?.header?.bg || theme.color?.primary || DEFAULT_COLORS.HEADER_BG;
     const headerTextColor = getTextColor(bgColor);
+    const accentColor = theme.color?.accent || DEFAULT_COLORS.ACCENT;
     const funcs = {
         getBgColor: () => bgColor,
-        getAccentColor: () => theme.color.accent,
-        getBgBorderColor: () => getColorEffect(theme.color.accent, -10),
-        getBgBorderBottomColor: () => getColorEffect(theme.color.accent, 20),
+        getAccentColor: () => accentColor,
+        getBgBorderColor: () => getColorEffect(accentColor, -10),
+        getBgBorderBottomColor: () => getColorEffect(accentColor, 20),
         getTextColor: () => theme.color?.header?.text || headerTextColor,
         getToolColor: () => theme.color?.header?.icon || funcs.getTextColor(),
-        getToolHoverColor: () => theme.color?.accent
+        getToolHoverColor: () => accentColor
     };
     return funcs;
 };
@@ -47,11 +47,10 @@ export const getTextColor = (bgColor) => {
     };
     return '#000000';
 };
+
 export const getFontClass = (theme) => {
-    if (theme.font) {
-        return 'oskari-theme-font-' + theme.font;
-    }
-    return '';
+    let fontClassSuffix = theme.font || DEFAULT_FONT;
+    return 'oskari-theme-font-' + fontClassSuffix;
 }
 
 /* ------------------------------------------------------------------------------ */

@@ -10,25 +10,13 @@ const EDIT_ICON_STYLE = {
     fontSize: '16px'
 };
 
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`;
-
 const NameField = styled('div')`
     display: flex;
     flex-direction: row;
     align-items: center;
 `;
 
-export const MyPlacesList = ({data = [], loading, controller }) => {
-
+export const MyPlacesList = ({ data = [], loading, controller }) => {
     const columnSettings = [
         {
             align: 'left',
@@ -101,7 +89,7 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
     ];
 
     return (
-        <StyledTable
+        <Table
             loading={loading}
             columns={columnSettings}
             dataSource={data.map(item => ({
@@ -114,8 +102,8 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
             }))}
             pagination={false}
         />
-    )
-}
+    );
+};
 
 MyPlacesList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),

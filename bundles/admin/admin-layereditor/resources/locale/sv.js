@@ -121,13 +121,29 @@ Oskari.registerLocalization(
                     "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten"
                 },
                 "vector": {
-                    "addStyle": "Tillsätt stil",
                     "name": "Stilnamn",
                     "selectDefault": "Välj förvalt stil",
                     "deleteStyle": "Ta bort stilen",
+                    "edit": {
+                        "editor": "Redigera",
+                        "json": "Redigera JSON"
+                    },
+                    "add": {
+                        "editor": "Tillsätt stil",
+                        "json": "Tillsätt JSON",
+                        "mapbox": "Tillsätt Mapbox JSON",
+                        "cesium": "Tillsätt Cesium JSON"
+                    } ,
                     "validation": {
                         "name": "Fyll i namnet på stilen",
-                        "noStyles": "Inga sparade stilar"
+                        "noStyles": "Inga sparade stilar",
+                        "json": "Stildefinitioner JSON-syntaxen är ogiltig."
+                    },
+                    "json": {
+                        "featureStyle": "Stildefinitioner (JSON)",
+                        "optionalStyles": "",
+                        "cesium": "Stildefinitioner av 3D Tiles/Cesium (JSON)",
+                        "mapbox": "Stildefinitioner av Mapbox (JSON)"
                     }
                 }
             },
@@ -172,8 +188,6 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Obligatorisk information saknas:",
-                "styles": "Stildefinitioner JSON-syntaxen är ogiltig.",
-                "externalStyles": "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
                 "hover": "Hover JSON-syntaxen är ogiltig.",
                 "attributes": "Attribut JSON-syntaxen är ogiltig.",
                 "attributions": "Tillskrivningar JSON-syntaxen är ogiltig.",
@@ -200,11 +214,9 @@ Oskari.registerLocalization(
                 "errorFetchLayerEnduserFailed": "Listan över kartlagren kan inte uppdateras, eftersom kartlagret inte returnerar någon data. Du kom väl ihåg att uppdatera rättigheterna som tillhör din användarroll?",
                 "deleteErrorGroupHasSubgroups": "Gruppen du försöker ta bort innehåller undergrupper. Ta bort undergrupperna först.",
                 "errorFetchCoverage": "Kan inte hämtas kartlagrets täckningsområde från tjänsten.",
-                "noCoverage": "Kartlagrets täckningsområde är inte begränsat."
+                "noCoverage": "Kartlagrets täckningsområde är inte begränsat.",
+                "invalidScale": "Tarkista tason mittakaavarajat."
             },
-            "stylesJSON": "Stildefinitioner (JSON)",
-            "externalStylesJSON": "Stildefinitioner av tredjeparts (JSON)",
-            "externalStyleFormats": "Stödda format: 3D Tiles, Mapbox",
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",

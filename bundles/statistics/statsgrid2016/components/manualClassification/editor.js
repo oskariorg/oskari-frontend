@@ -3,6 +3,7 @@ import { edgeLines } from './edgeLines';
 import { inputGuide } from './inputGuide';
 import { updateBandBlocks } from './updateBandBlocks';
 import { updateDragHandles } from './updateDragHandles';
+import * as d3 from 'd3';
 
 const width = 500;
 const height = 303;
@@ -17,7 +18,7 @@ const histoHeight = 200;
  * @param {String[]} colorSet colors corresponding to classes
  * @param {Function} changeCallback function that is called with updated bounds, when user makes changes
  */
-export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, activeId, changeCallback, fractionDigits) {
+export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, activeId, fractionDigits, base, changeCallback, disabled) {
     const svg = d3.select(el)
         .append('svg')
         .attr('width', width)
@@ -39,7 +40,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
     const x = d3.scaleLinear()
         .domain([manualBounds[0], manualBounds[manualBounds.length - 1]])
         .clamp(true)
-        .range([margin, width - margin]);
+        .range([margin * 2, width - margin]); // double left margin to get more space for tick labels
 
     // HISTOGRAM CLIP PATH
     histogram(histoClip, histoData, x, y, height);
@@ -51,21 +52,23 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         selected = handlesData[activeId];
     }
     const isSelected = d => d.id === selected.id;
+    const isBase = d => typeof base !== 'undefined' && base === d.value;
     const notify = () => {
         const index = handlesData.findIndex(d => d === selected);
         changeCallback(handlesData.map((d) => d.value), index);
     };
 
     const dragBehavior = d3.drag()
-        .subject((d) => {
-            return { x: x(d.value), y: d3.event.y };
+        .subject((event, d) => {
+            return { x: x(d.value), y: event.y };
         })
-        .on('start', (d) => {
+        .on('start', (event, d) => {
             selected = d;
             update();
         })
-        .on('drag', (d) => {
-            var newX = d3.event.x;
+        .on('drag', (event, d) => {
+            if (disabled) return null;
+            const newX = event.x;
             d.value = x.invert(newX);
             selected = d;
             update();
@@ -73,7 +76,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         .on('end', notify);
 
     // BOUNDS EDGES
-    edgeLines(boundsLines, handlesData, x, histoHeight);
+    edgeLines(boundsLines, handlesData, x, y, histoHeight);
 
     // VALUE INPUT INIT & INTERACTION
 
@@ -95,6 +98,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         .classed('input-area', true)
         .append('input')
         .attr('type', 'text')
+        .attr('disabled', disabled ? true : null)
         .on('input', () => {
             const value = valueInput.property('value');
             const validated = parseValidateInput(value);
@@ -112,7 +116,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
 
     function update (skipInput) {
         updateBandBlocks(histoGroup, handlesData, x, colorSet, histoHeight);
-        updateDragHandles(dragHandles, handlesData, x, dragBehavior, isSelected, histoHeight);
+        updateDragHandles(dragHandles, handlesData, x, dragBehavior, isSelected, isBase, histoHeight);
 
         if (skipInput) {
             return;

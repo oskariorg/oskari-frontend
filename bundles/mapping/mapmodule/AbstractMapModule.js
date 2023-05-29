@@ -34,7 +34,7 @@ import './plugin/scalebar/ScaleBarPlugin.ol';
 import './plugin/markers/MarkersPlugin.ol';
 
 // layer plugins
-import { AbstractVectorLayerPlugin } from './AbstractVectorLayerPlugin';
+import { AbstractVectorLayerPlugin } from './plugin/AbstractVectorLayerPlugin';
 import './plugin/wmslayer/WmsLayerPlugin.ol';
 import './plugin/vectorlayer/VectorLayerPlugin.ol';
 import './plugin/vectortilelayer/VectorTileLayerPlugin';
@@ -100,6 +100,11 @@ import './event/UserLocationEvent';
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
 import { monitorResize, unmonitorResize } from 'oskari-ui/components/window';
+import { getSortedPlugins, resetPluginsWithUI, refreshPluginsWithUI } from './util/PluginHelper';
+import { getDefaultMapTheme, setFont } from './util/MapThemeHelper';
+import { addCrosshair, isCrosshairActive, removeCrosshair } from './util/Crosshair';
+import { generatePluginContainers } from './util/PluginContainerHelper';
+
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
@@ -222,14 +227,6 @@ Oskari.clazz.define(
         this._cursorStyle = '';
 
         this.isDrawing = false;
-
-        this.templates = {
-            'crosshair': jQuery(
-                '<div class="oskari-crosshair">' +
-                    '<div class="oskari-crosshair-vertical-bar"></div>' +
-                    '<div class="oskari-crosshair-horizontal-bar"></div>' +
-                '</div>')
-        };
         // adds on/off/trigger functions for internal eventing
         Oskari.makeObservable(this);
     }, {
@@ -304,7 +301,7 @@ Oskari.clazz.define(
 
             me._map = me.createMap();
 
-            if (me._options.crosshair) {
+            if (me._options?.crosshair) {
                 me.toggleCrosshair(true);
             }
 
@@ -313,7 +310,7 @@ Oskari.clazz.define(
             me._calculateScalesImpl(me._mapResolutions);
 
             // TODO remove this whenever we're ready to add the containers when needed
-            this._addMapControlPluginContainers();
+            generatePluginContainers(this.getMapEl());
             return me._initImpl(me._sandbox, me._options, me._map);
         },
         /**
@@ -347,7 +344,7 @@ Oskari.clazz.define(
             this.log.debug('Starting ' + this.getName());
 
             // listen to application started event and trigger a forced update on any remaining lazy plugins and register RPC functions.
-            Oskari.on('app.start', function (details) {
+            Oskari.on('app.start', function () {
                 // force update on lazy plugins
                 // this means tell plugins to render UI with the means available
                 // if toolbar for example isn't present, most plugins should display "desktop-ui" instead of using the "mobile-ui" toolbar
@@ -383,7 +380,7 @@ Oskari.clazz.define(
                 startUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StartUserLocationTrackingRequestHandler', sandbox, this),
                 stopUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StopUserLocationTrackingRequestHandler', sandbox, this),
                 registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this),
-                mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), this._mapLayerService),
+                mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), this._mapLayerService, this._loc),
                 mapTourRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapTourRequestHandler', sandbox, this),
                 setTimeRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.SetTimeRequestHandler', this)
             };
@@ -457,6 +454,12 @@ Oskari.clazz.define(
             },
             'LayerToolsEditModeEvent': function (event) {
                 this._isInLayerToolsEditMode = event.isInMode();
+                // Disable feature hover when tools are being dragged
+                this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(!this._isInLayerToolsEditMode);
+                if (this._isInLayerToolsEditMode) {
+                    // when entering edit/drag mode -> allow plugins to close popups etc reset their UIs
+                    resetPluginsWithUI(this.getPluginInstances());
+                }
             },
             AfterRearrangeSelectedMapLayerEvent: function (event) {
                 this.afterRearrangeSelectedMapLayerEvent(event);
@@ -470,8 +473,7 @@ Oskari.clazz.define(
             'RPCUIEvent': function (event) {
                 var me = this;
                 if (event.getBundleId() === 'mapmodule.crosshair') {
-                    var show = (me.getMapEl().find('div.oskari-crosshair').length === 0);
-                    me.toggleCrosshair(show);
+                    me.toggleCrosshair(isCrosshairActive(this.getMapDOMEl()));
                 }
             }
         },
@@ -631,16 +633,6 @@ Oskari.clazz.define(
          */
         getMap: function () {
             return this._map;
-        },
-        /**
-         * @method getImageUrl
-         * @param fileName name of image file
-         * Returns path to image asset from mapmodule bundle resources
-         * NOTE: Webpack build creates a "context module" that includes all the images found under ./resources/images/
-         * @return {String}
-         */
-        getImageUrl: function (fileName) {
-            return require('./resources/images/' + fileName);
         },
         /**
          * Get map max extent.
@@ -1227,13 +1219,13 @@ Oskari.clazz.define(
             var state = {
                 plugins: {}
             };
-            var pluginName;
-
-            for (pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
-                    state.plugins[pluginName] = this._pluginInstances[pluginName].getState();
+            const instances = this.getPluginInstances();
+            Object.keys(instances).forEach(pluginName => {
+                const plugin = instances[pluginName];
+                if (typeof plugin?.getState === 'function') {
+                    state.plugins[pluginName] = plugin.getState();
                 }
-            }
+            });
             return state;
         },
         /**
@@ -1242,15 +1234,12 @@ Oskari.clazz.define(
          * @return {String} link parameters for map state
          */
         getStateParameters: function () {
-            var params = '';
-            var pluginName;
-
-            for (pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getStateParameters) {
-                    params = params + this._pluginInstances[pluginName].getStateParameters();
+            return Object.values(this.getPluginInstances()).map(plugin => {
+                if (typeof plugin?.getStateParameters === 'function') {
+                    return plugin.getStateParameters();
                 }
-            }
-            return params;
+                return '';
+            }).join('');
         },
         /**
          * Sets state for mapmodule including plugins that have setState() function
@@ -1259,13 +1248,13 @@ Oskari.clazz.define(
          * @param {Object} properties for each pluginName
          */
         setState: function (state) {
-            var pluginName;
-
-            for (pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName) && state[pluginName] && this._pluginInstances[pluginName].setState) {
-                    this._pluginInstances[pluginName].setState(state[pluginName]);
+            const instances = this.getPluginInstances();
+            Object.keys(instances).forEach(pluginName => {
+                const plugin = instances[pluginName];
+                if (typeof plugin?.setState === 'function') {
+                    plugin.setState(state[pluginName]);
                 }
-            }
+            });
         },
         /**
          * @method notifyStartMove
@@ -1314,78 +1303,19 @@ Oskari.clazz.define(
             return this._isInMobileMode;
         },
 
-        _handleMapSizeChanges: function (newSize, pluginName) {
-            var me = this;
-            var modeChanged = false;
-            if (Oskari.util.isMobile()) {
-                modeChanged = me.getMobileMode() !== true;
-                me.setMobileMode(true);
-            } else {
-                modeChanged = me.getMobileMode() !== false;
-                me.setMobileMode(false);
-            }
-
+        _handleMapSizeChanges: function () {
+            const isMobile = Oskari.util.isMobile();
+            const modeChanged = this.getMobileMode() !== isMobile;
+            this.setMobileMode(isMobile);
             if (modeChanged) {
-                me.redrawPluginUIs(modeChanged);
+                // previously called redrawUI() -> now calls refresh()
+                refreshPluginsWithUI(this.getPluginInstances());
             }
-        },
-        /**
-         * @method redrawPluginUIs
-         * Called when map size changes, mode changes or when late comer plugins (coordinatetool, featuredata) enter the mobile toolbar.
-         * Basically just redraws the whole toolbar with the tools in correct order.
-         *
-         * @param {boolean} modeChanged whether there was a transition between mobile <> desktop
-         *
-         */
-        redrawPluginUIs: function (modeChanged) {
-            const sortedList = this._getSortedPlugins() || [];
-            const isInMobileMode = this.getMobileMode();
-            sortedList.forEach((plugin = {}) => {
-                if (typeof plugin.redrawUI === 'function') {
-                    plugin.redrawUI(isInMobileMode, modeChanged);
-                }
-            });
-        },
-        /**
-         * Get a sorted list of plugins. This is used to control order of elements in the UI.
-         * Functionality shouldn't assume order.
-         * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin[]} index ordered list of registered plugins
-         */
-        _getSortedPlugins: function () {
-            const plugins = Object.values(this._pluginInstances);
-            const getIndex = (plugin) => {
-                if (typeof plugin.getIndex === 'function') {
-                    return plugin.getIndex();
-                }
-                // index not defined, start after ones that have indexes
-                // This is just for the UI order, functionality shouldn't assume order
-                return 99999999999;
-            };
-            plugins.sort((a, b) => getIndex(a) - getIndex(b));
-            return plugins;
         },
 
         /* ---------------- /MAP MOBILE MODE ------------------- */
 
         /* ---------------- THEME ------------------- */
-        getTheme: function () {
-            var me = this;
-            var toolStyle = me.getToolStyle();
-            if (toolStyle === null || toolStyle.indexOf('-dark') > 0 || toolStyle === 'default') {
-                return 'dark';
-            } else {
-                return 'light';
-            }
-        },
-
-        getReverseTheme: function () {
-            var me = this;
-            if (me.getTheme() === 'light') {
-                return 'dark';
-            } else {
-                return 'light';
-            }
-        },
         __cachedTheme: null,
         getMapTheme: function () {
             if (this.__cachedTheme) {
@@ -1395,7 +1325,7 @@ Oskari.clazz.define(
             // take "global" theme as base and override anything specified for map
             let mapTheme = {
                 ...appTheme,
-                ...this.__injectThemeByToolStyle(this.getToolStyle()),
+                ...getDefaultMapTheme(),
                 ...map
             };
 
@@ -1410,110 +1340,10 @@ Oskari.clazz.define(
             };
             this.__cachedTheme = theme;
             // set font class for map module/map controls. Windows/popups will get it through theme
-            const prefix = 'oskari-theme-font-';
-            const newFontClass = prefix + (theme.font || 'arial');
-            // on unit tests the mapEl might be undefined
-            const classlist = this.getMapEl()[0]?.classList;
-            if (classlist) {
-                classlist.forEach(clazz => {
-                    if (clazz !== newFontClass && clazz.startsWith(prefix)) {
-                        classlist.remove(clazz);
-                    }
-                });
-                classlist.add(newFontClass);
-            }
-            Object.values(this._pluginInstances)
-                .filter((plugin = {}) => {
-                    if (typeof plugin.hasUI === 'function') {
-                        return plugin.hasUI();
-                    }
-                    return false;
-                })
-                .forEach((plugin) => {
-                    if (typeof plugin.changeToolStyle === 'function') {
-                        plugin.changeToolStyle();
-                    }
-                });
-        },
-        // generates base style for map
-        __injectThemeByToolStyle: function (toolStyle) {
-            // Note! these should be configurable on publisher BUT we might want to use some injected theme for "wellkonwn toolstyles"
-            const mapTheme = {
-                // For buttons on map
-                navigation: {
-                    roundness: 0,
-                    opacity: 0.8,
-                    color: {
-                        // #141414 -> rgb(20,20,20)
-                        // #3c3c3c -> rgb(60,60,60)
-                        primary: '#141414',
-                        accent: '#ffd400',
-                        text: '#ffffff'
-                    }
-                },
-                // /For buttons on map ^
-                // --------------
-                // For popup headers opened by map:
-                color: {
-                    header: {
-                        bg: '#3c3c3c'
-                    }
-                    // accent should be inherited from global theme accent if not configured
-                    // accent: '#ffd400'
-                }
-                // /For popup headers opened by map ^
-            };
-            const style = toolStyle || 'rounded-dark';
-            const [shape, theme] = style.split('-');
-            if (shape === 'rounded') {
-                mapTheme.navigation.roundness = 100;
-            } else if (shape === '3d') {
-                mapTheme.navigation.roundness = 20;
-                // themehelper calculates gradients when this is set
-                mapTheme.navigation.effect = '3D';
-            }
-
-            if (theme === 'light') {
-                // buttons
-                mapTheme.navigation.color.primary = '#ffffff';
-                mapTheme.navigation.color.text = '#000000';
-                // popup
-                mapTheme.color.header.bg = '#ffffff';
-            }
-
-            return mapTheme;
+            setFont(this.getMapDOMEl(), theme.font);
+            refreshPluginsWithUI(this.getPluginInstances());
         },
 
-        getThemeColours: function (theme) {
-            var me = this;
-            // Check at the is konowed theme
-            if (theme && theme !== 'light' && theme !== 'dark') {
-                theme = 'dark';
-            }
-            var wantedTheme = theme || me.getTheme();
-
-            var darkTheme = {
-                textColour: '#ffffff',
-                backgroundColour: '#3c3c3c',
-                activeColour: '#E6E6E6',
-                activeTextColour: '#000000',
-                hoverColour: '#E6E6E6'
-            };
-
-            var lightTheme = {
-                textColour: '#000000',
-                backgroundColour: '#ffffff',
-                activeColour: '#3c3c3c',
-                activeTextColour: '#ffffff',
-                hoverColour: '#3c3c3c'
-            };
-
-            if (wantedTheme === 'dark') {
-                return darkTheme;
-            } else {
-                return lightTheme;
-            }
-        },
         getCursorStyle: function () {
             return this._cursorStyle;
         },
@@ -1529,13 +1359,10 @@ Oskari.clazz.define(
          * toggles the crosshair marking the center of the map
          */
         toggleCrosshair: function (show) {
-            var crosshair = null;
-            var mapEl = this.getMapEl();
-
-            mapEl.find('div.oskari-crosshair').remove();
             if (show) {
-                crosshair = this.templates.crosshair.clone();
-                mapEl.append(crosshair);
+                addCrosshair(this.getMapDOMEl());
+            } else {
+                removeCrosshair(this.getMapDOMEl());
             }
         },
 
@@ -1642,11 +1469,7 @@ Oskari.clazz.define(
          * @return {Boolean} true if a plugin with given name is registered to the map
          */
         isPluginActivated: function (pluginName) {
-            var plugin = this.getPluginInstances(pluginName);
-            if (plugin) {
-                return true;
-            }
-            return false;
+            return !!this.getPluginInstances(pluginName);
         },
         /**
          * @method registerPlugin
@@ -1662,7 +1485,7 @@ Oskari.clazz.define(
                 '[' + this.getName() + ']' + ' Registering ' + pluginName
             );
             plugin.register();
-            if (this._pluginInstances[pluginName]) {
+            if (this.getPluginInstances(pluginName)) {
                 this.log.warn(
                     '[' + this.getName() + ']' + ' Overwriting plugin with same name ' + pluginName
                 );
@@ -1737,7 +1560,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin
          */
         stopPlugin: function (plugin) {
-            this.log.debug('[' + this.getName() + ']' + ' Starting ' + plugin.getName());
+            this.log.debug('[' + this.getName() + ']' + ' Stopping ' + plugin.getName());
             plugin.stopPlugin(this.getSandbox());
         },
         /**
@@ -1746,7 +1569,7 @@ Oskari.clazz.define(
          * calling its startPlugin() method.
          */
         startPlugins: function () {
-            const sortedList = this._getSortedPlugins() || [];
+            const sortedList = getSortedPlugins(this.getPluginInstances());
             sortedList.forEach((plugin = {}) => {
                 if (typeof plugin.startPlugin === 'function') {
                     this.startPlugin(plugin);
@@ -1759,11 +1582,7 @@ Oskari.clazz.define(
          * calling its stopPlugin() method.
          */
         stopPlugins: function () {
-            for (var pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName)) {
-                    this.stopPlugin(this._pluginInstances[pluginName]);
-                }
-            }
+            Object.values(this.getPluginInstances()).forEach((plugin) => this.stopPlugin(plugin));
         },
 
         /* --------------- /PLUGINS ------------------------ */
@@ -2174,47 +1993,6 @@ Oskari.clazz.define(
 
         /* --------------- PLUGIN CONTAINERS ------------------------ */
         /**
-         * Removes all the css classes which respond to given regex from all elements
-         * and adds the given class to them.
-         *
-         * @method changeCssClasses
-         * @param {String} classToAdd the css class to add to all elements.
-         * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
-         * @param {Array[jQuery]} elements The elements where the classes should be changed.
-         */
-        changeCssClasses: function (classToAdd, removeClassRegex, elements) {
-            // TODO: deprecate this, make some error message appear or smthng
-
-            var i,
-                j,
-                el;
-
-            var removeClasses = function (el) {
-                el.removeClass(function (index, classes) {
-                    var removeThese = '';
-                    var classNames = classes.split(' ');
-
-                    // Check if there are any old font classes.
-                    for (j = 0; j < classNames.length; j += 1) {
-                        if (removeClassRegex.test(classNames[j])) {
-                            removeThese += classNames[j] + ' ';
-                        }
-                    }
-
-                    // Return the class names to be removed.
-                    return removeThese;
-                });
-            };
-
-            for (i = 0; i < elements.length; i += 1) {
-                el = elements[i];
-                removeClasses(el);
-
-                // Add the new font as a CSS class.
-                el.addClass(classToAdd);
-            }
-        },
-        /**
          * Sets the style to be used on plugins and asks all the active plugins that support changing style to change their style accordingly.
          *
          * @method changeToolStyle
@@ -2263,93 +2041,11 @@ Oskari.clazz.define(
             this.log.deprecated('getToolColourScheme');
             return null;
         },
-        _getContainerWithClasses: function (containerClasses) {
-            var containerDiv = jQuery(
-                '<div class="mapplugins">' +
-                    '  <div class="mappluginsContainer">' +
-                    '    <div class="mappluginsContent"></div>' +
-                    '  </div>' +
-                    '</div>'
-            );
-
-            containerDiv.addClass(containerClasses);
-            containerDiv.attr('data-location', containerClasses);
-            return containerDiv;
-        },
-
-        _getContainerClasses: function () {
-            return [
-                'bottom center',
-                'center top',
-                'center right',
-                'center left',
-                'bottom right',
-                'bottom left',
-                'right top',
-                'left top'
-            ];
-        },
-
-        /**
-         * Adds containers for map control plugins
-         */
-        _addMapControlPluginContainers: function () {
-            var containerClasses = this._getContainerClasses();
-            var mapDiv = this.getMapEl();
-
-            for (var i = 0; i < containerClasses.length; i += 1) {
-                mapDiv.append(
-                    this._getContainerWithClasses(containerClasses[i])
-                );
-            }
-        },
 
         _getMapControlPluginContainer: function (containerClasses) {
-            var splitClasses = (containerClasses + '').split(' ');
-            var selector = '.mapplugins.' + splitClasses.join('.');
-            var containerDiv;
-            var mapDiv = this.getMapEl();
-
-            containerDiv = mapDiv.find(selector);
-            if (!containerDiv.length) {
-                var containersClasses = this._getContainerClasses(),
-                    currentClasses,
-                    previousFound = null,
-                    current,
-                    classesMatch,
-                    i,
-                    j;
-
-                for (i = 0; i < containersClasses.length; i += 1) {
-                    currentClasses = containersClasses[i].split(' ');
-                    current = mapDiv.find('.mapplugins.' + currentClasses.join('.'));
-                    if (current.length) {
-                        // container was found in DOM
-                        previousFound = current;
-                    } else {
-                        // container not in DOM, see if it's the one we're supposed to add
-                        classesMatch = true;
-                        for (j = 0; j < currentClasses.length; j += 1) {
-                            if (jQuery.inArray(currentClasses[j], splitClasses) < 0) {
-                                classesMatch = false;
-                                break;
-                            }
-                        }
-                        if (classesMatch) {
-                            // It's the one we're supposed to add
-                            containerDiv = this._getContainerWithClasses(
-                                currentClasses
-                            );
-                            if (previousFound !== null && previousFound.length) {
-                                previousFound.after(containerDiv);
-                            } else {
-                                mapDiv.prepend(containerDiv);
-                            }
-                        }
-                    }
-                }
-            }
-            return containerDiv;
+            const splitClasses = (containerClasses + '').split(' ');
+            const selector = '.mapplugins.' + splitClasses.join('.');
+            return this.getMapEl().find(selector);
         },
 
         /**
@@ -2362,12 +2058,11 @@ Oskari.clazz.define(
 
         setMapControlPlugin: function (element, containerClasses, position) {
             // Get the container
-            var container = this._getMapControlPluginContainer(containerClasses);
-            var content = container.find('.mappluginsContainer .mappluginsContent');
+            const container = this._getMapControlPluginContainer(containerClasses);
+            const content = container.find('.mappluginsContainer .mappluginsContent');
             // bottom corner container?
-            var inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses);
-            var precedingPlugin = null;
-            var curr;
+            const inverted = (containerClasses + '').includes('bottom');
+            let precedingPlugin = null;
 
             if (!element) {
                 throw new Error('Element is non-existent.');
@@ -2389,7 +2084,7 @@ Oskari.clazz.define(
             // Get container's children, iterate through them
             if (position !== null && position !== undefined) {
                 content.find('.mapplugin').each(function () {
-                    curr = jQuery(this);
+                    const curr = jQuery(this);
                     // if plugin's slot isn't bigger (or smaller for bottom corners) than ours, store it to precedingPlugin
                     if ((!inverted && parseInt(curr.attr('data-position')) <= position) ||
                         (inverted && parseInt(curr.attr('data-position')) > position)) {
@@ -2415,10 +2110,9 @@ Oskari.clazz.define(
          * @method removeMapControlPlugin
          * Removes a map control plugin instance from the map DOM
          * @param  {Object} element Control container (jQuery)
-         * @param  {Boolean} keepContainerVisible Keep container visible even if there's no children left.
          * @param {Boolean} detachOnly true to detach and preserve event handlers, false to remove element
          */
-        removeMapControlPlugin: function (element, keepContainerVisible, detachOnly) {
+        removeMapControlPlugin: function (element, detachOnly) {
             var container = element.parents('.mapplugins');
             var content = element.parents('.mappluginsContent');
             // TODO take this into use in all UI plugins so we can hide unused containers...
@@ -2427,7 +2121,7 @@ Oskari.clazz.define(
             } else {
                 element.remove();
             }
-            if (!keepContainerVisible && content.children().length === 0) {
+            if (!this.isInLayerToolsEditMode() && content.children().length === 0) {
                 container.css('display', 'none');
             }
         },
@@ -2443,38 +2137,22 @@ Oskari.clazz.define(
          * @return {OpenLayers.Layer[]}
          */
         getOLMapLayers: function (layerId) {
-            var me = this;
-            var sandbox = me._sandbox;
+            var sandbox = this.getSandbox();
             var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 // not found
                 return null;
             }
-            var lps = this.getLayerPlugins(),
-                p,
-                layersPlugin,
-                layerList,
-                results = [];
-            // let the actual layerplugins find the layer since the name depends on
-            // type
-            for (p in lps) {
-                if (lps.hasOwnProperty(p)) {
-                    layersPlugin = lps[p];
-                    if (!layersPlugin) {
-                        me.log.warn(
-                            'LayerPlugins has no entry for "' + p + '"'
-                        );
+            // let the actual layerplugins find the layer since the impl depends on type
+            return Object.values(this.getLayerPlugins())
+                .map(plugin => {
+                    if (!plugin || typeof plugin.getOLMapLayers !== 'function') {
+                        // can there be null plugins?
+                        return [];
                     }
-                    // find the actual openlayers layers (can be many)
-                    layerList = layersPlugin ? layersPlugin.getOLMapLayers(layer) : null;
-                    if (layerList) {
-                        // if found -> add to results
-                        // otherwise continue looping
-                        results = results.concat(layerList);
-                    }
-                }
-            }
-            return results;
+                    return plugin.getOLMapLayers(layer) || [];
+                })
+                .flatMap(layers => layers);
         },
         /**
          * Adds the layer to the map through the correct plugin for the layer's type.
@@ -2486,34 +2164,29 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         afterMapLayerAddEvent: function (event) {
-            var layer = event.getMapLayer();
-            var keepLayersOrder = true;
-            var isBaseMap = false;
-            var layerPlugins = this.getLayerPlugins();
-            var layerFunctions = [];
-            var sandbox = this.getSandbox();
-            var publisherService = sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
-            var isPublisherActive = publisherService && publisherService.getIsActive();
+            const layer = event.getMapLayer();
+            const keepLayersOrder = true;
+            const isBaseMap = false;
+            const layerPlugins = this.getLayerPlugins();
 
-            if (!sandbox.getMap().isLayerSupported(layer) && !isPublisherActive) {
-                this._mapLayerService.showUnsupportedPopup();
+            const supportedByPlugins = Object.values(layerPlugins)
+                .filter(plugin => plugin.isLayerSupported && plugin.isLayerSupported(layer));
+            if (supportedByPlugins.length !== 1) {
+                // TODO: should we handle somehow if 0 or > 1 plugins
             }
-            const isSupported = (plugin, layer) => typeof plugin.isLayerSupported === 'function' && plugin.isLayerSupported(layer);
-
-            Object.values(layerPlugins).forEach((plugin) => {
-                // true if either plugin doesn't have the function or says the layer is supported.
-                if (isSupported(plugin, layer) && typeof plugin.addMapLayerToMap === 'function') {
-                    var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
-                    if (typeof layerFunction === 'function') {
-                        layerFunctions.push(layerFunction);
-                    }
+            supportedByPlugins.forEach(plugin => plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap));
+        },
+        handleDescribeLayer: function (layer, info) {
+            const layersPlugin = this.getPluginInstances('LayersPlugin');
+            if (layersPlugin) {
+                layersPlugin.handleDescribeLayer(layer, info);
+            }
+            Object.values(this.getLayerPlugins()).forEach(plugin => {
+                if (typeof plugin.handleDescribeLayer === 'function') {
+                    plugin.handleDescribeLayer(layer, info);
                 }
             });
-
-            // Execute each layer function
-            layerFunctions.forEach((func) => func.apply());
         },
-
         /**
          * @method afterRearrangeSelectedMapLayerEvent
          * @private

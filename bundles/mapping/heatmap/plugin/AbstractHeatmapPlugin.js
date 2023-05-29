@@ -5,9 +5,9 @@
 Oskari.clazz.define(
     'Oskari.mapframework.heatmap.AbstractHeatmapPlugin',
     function () {
-        var me = this;
-        me._clazz = 'Oskari.mapframework.heatmap.HeatmapLayerPlugin';
-        me._name = 'HeatmapLayerPlugin';
+        this._clazz = 'Oskari.mapframework.heatmap.HeatmapLayerPlugin';
+        // layer plugins use two underscores for name while others use one...
+        this.__name = 'HeatmapLayerPlugin';
     }, {
         getLayerTypeSelector: function () {
             return 'HEATMAP';
@@ -175,5 +175,4 @@ Oskari.clazz.define(
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin']
-
     });

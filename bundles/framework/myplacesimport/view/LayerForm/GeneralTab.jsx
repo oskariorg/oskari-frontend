@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, LabeledInput } from 'oskari-ui';
+import { Message, LabeledInput, TextInput } from 'oskari-ui';
 import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { FileInput } from 'oskari-ui/components/FileInput';
@@ -16,6 +16,9 @@ const Description = styled.div`
 `;
 const PaddingTop = styled.div`
     padding-top: 10px;
+`;
+const ProjectionInput = styled(TextInput)`
+    margin-bottom: 10px;
 `;
 
 const renderImport = (file, maxSize, unzippedMaxSize, updateFile) => {
@@ -50,7 +53,7 @@ export const GeneralTab = LocaleConsumer(({
             { isImport && renderImport(file, maxSize, unzippedMaxSize, updateFile) }
             <PaddingTop/>
             { showSrs &&
-                <Input placeholder={getMessage('flyout.layer.srs')} value={sourceSrs} onChange={e => updateSrs(e.target.value)}/> }
+                <ProjectionInput placeholder={getMessage('flyout.layer.srs')} value={sourceSrs} onChange={e => updateSrs(e.target.value)}/> }
             <LocalizationComponent
                 value={locale}
                 languages={languages}

@@ -346,6 +346,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 var visibleCells = (indicators.length > me._maxCols) ? me._maxCols : indicators.length;
                 var cellWidth = 70 / visibleCells;
                 content.css('width', cellWidth + '%');
+                content.css('min-width', '110px');
                 content.append(tableHeader);
             });
         });

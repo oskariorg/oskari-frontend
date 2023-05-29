@@ -5,8 +5,8 @@ import { VisualizationTabPane } from './VisualizationTabPane';
 import { AdditionalTabPane } from './AdditionalTabPane';
 import { PermissionsTabPane } from './PermissionsTabPane';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { Button, Tabs, TabPane, Message, Tooltip } from 'oskari-ui';
-import { DeleteButton } from 'oskari-ui/components/buttons';
+import { Button, Tabs, Message, Tooltip } from 'oskari-ui';
+import { DeleteButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { StyledRoot, StyledButton } from './styled';
 import { Mandatory, MandatoryIcon } from './Mandatory';
 
@@ -66,57 +66,79 @@ const AdminLayerForm = ({
         validPermissions = permissionValidator(layer);
     }
     return (<StyledRoot>
-        <Tabs activeKey={tab} onChange={tabKey => controller.setTab(tabKey)}>
-            <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
-                <GeneralTabPane
-                    layer={layer}
-                    propertyFields={propertyFields}
-                    controller={controller}
-                    dataProviders={dataProviders}
-                    mapLayerGroups={mapLayerGroups}
-                    versions={versions}
-                    validators={validators} />
-            </TabPane>
-            <TabPane key='visualization' tab={<Message messageKey='visualizationTabTitle'/>}>
-                <VisualizationTabPane
-                    layer={layer}
-                    scales={scales}
-                    propertyFields={propertyFields}
-                    controller={controller}/>
-            </TabPane>
-            <TabPane key='additional' tab={<Message messageKey='additionalTabTitle'/>}>
-                <AdditionalTabPane
-                    layer={layer}
-                    propertyFields={propertyFields}
-                    controller={controller} />
-            </TabPane>
-            <TabPane key='permissions' tab={<Mandatory isValid={validPermissions}><Message messageKey='permissionsTabTitle'/>&nbsp;<MandatoryIcon /></Mandatory>}>
-                <PermissionsTabPane
-                    rolesAndPermissionTypes={rolesAndPermissionTypes}
-                    permissions={layer.role_permissions}
-                    controller={controller}/>
-            </TabPane>
-        </Tabs>
-        { isLayerTypeSupported && <MemoedSaveButton isNew={!!layer.isNew} onSave={onSave} validationErrors={validationErrors} /> }
-        { !layer.isNew &&
-            <React.Fragment>
-                <DeleteButton
-                    type='label'
-                    title={<Message messageKey='messages.confirmDeleteLayer'/>}
-                    onConfirm={() => onDelete()}
-                />
-                { hasCapabilitiesSupport &&
-                    <StyledButton onClick={() => controller.addNewFromSameService() }>
-                        <Message messageKey='addNewFromSameService'/>
-                    </StyledButton>
+        <Tabs
+            activeKey={tab}
+            onChange={tabKey => controller.setTab(tabKey)}
+            items={[
+                {
+                    key: 'general',
+                    label: <Message messageKey='generalTabTitle'/>,
+                    children: (
+                        <GeneralTabPane
+                            layer={layer}
+                            propertyFields={propertyFields}
+                            controller={controller}
+                            dataProviders={dataProviders}
+                            mapLayerGroups={mapLayerGroups}
+                            versions={versions}
+                            validators={validators} />
+                    )
+                },
+                {
+                    key: 'visualization',
+                    label: <Message messageKey='visualizationTabTitle'/>,
+                    children: (
+                        <VisualizationTabPane
+                            layer={layer}
+                            scales={scales}
+                            propertyFields={propertyFields}
+                            controller={controller}/>
+                    )
+                },
+                {
+                    key: 'additional',
+                    label: <Message messageKey='additionalTabTitle'/>,
+                    children: (
+                        <AdditionalTabPane
+                            layer={layer}
+                            propertyFields={propertyFields}
+                            controller={controller} />
+                    )
+                },
+                {
+                    key: 'permissions',
+                    label: <Mandatory isValid={validPermissions}><Message messageKey='permissionsTabTitle'/>&nbsp;<MandatoryIcon /></Mandatory>,
+                    children: (
+                        <PermissionsTabPane
+                            rolesAndPermissionTypes={rolesAndPermissionTypes}
+                            permissions={layer.role_permissions}
+                            controller={controller}/>
+                    )
                 }
-            </React.Fragment>
-        }
-        { onCancel &&
-            <Button onClick={() => onCancel()}>
-                <Message messageKey='close'/>
-            </Button>
-        }
+            ]}
+        />
+        <ButtonContainer>
+            { isLayerTypeSupported && <MemoedSaveButton isNew={!!layer.isNew} onSave={onSave} validationErrors={validationErrors} /> }
+            { !layer.isNew &&
+                <React.Fragment>
+                    <DeleteButton
+                        type='label'
+                        title={<Message messageKey='messages.confirmDeleteLayer'/>}
+                        onConfirm={() => onDelete()}
+                    />
+                    { hasCapabilitiesSupport &&
+                        <StyledButton onClick={() => controller.addNewFromSameService() }>
+                            <Message messageKey='addNewFromSameService'/>
+                        </StyledButton>
+                    }
+                </React.Fragment>
+            }
+            { onCancel &&
+                <Button onClick={() => onCancel()}>
+                    <Message messageKey='close'/>
+                </Button>
+            }
+        </ButtonContainer>
     </StyledRoot>);
 };
 

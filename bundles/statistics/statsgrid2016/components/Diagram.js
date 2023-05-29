@@ -222,6 +222,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             width: '180px',
             marginLeft: '10px'
         });
+        dropdown.addClass('sort-options');
 
         select.adjustChosen();
 

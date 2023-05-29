@@ -2,77 +2,63 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
 }, {
     index: 1,
     group: 'data',
-    allowedLocations: ['bottom right'],
-    lefthanded: 'bottom right',
-    righthanded: 'bottom right',
 
-    allowedSiblings: [
-        'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
-    ],
-    init: function (pdata) {
-        if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
-            this.setEnabled(true);
-        } else {
-            this.setEnabled(false);
-        }
+    init: function (data) {
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.allowClassification !== false);
     },
     // required for dragndrop in publisher - also plugin needs to
     getPlugin: function () {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        var stats = this.getStatsgridBundle();
         return stats.classificationPlugin;
     },
-    getTool: function (pdata) {
-        if (!this.__tool) {
-            this.__tool = {
-                id: 'Oskari.statistics.statsgrid.ClassificationPlugin',
-                title: 'allowClassification',
-                config: {
-                    allowClassification: false
-                }
-            };
-        }
-        return this.__tool;
+    getTool: function () {
+        return {
+            id: 'Oskari.statistics.statsgrid.ClassificationPlugin',
+            title: 'allowClassification',
+            config: {
+                allowClassification: false
+            },
+            hasNoPlugin: true
+        };
     },
-    setEnabled: function (enabled) {
-        if (typeof enabled !== 'boolean') {
-            enabled = false;
-        }
-
-        this.state.enabled = enabled;
+    _setEnabledImpl: function (enabled) {
         const service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
         if (service) {
             service.getStateService().updateClassificationPluginState('editEnabled', enabled);
         }
     },
+
     getValues: function () {
-        const allowClassification = this.isEnabled();
-        const legendLocation = 'bottom right';
-        if (this._isStatsActive()) {
-            return {
-                configuration: {
-                    statsgrid: {
-                        conf: { allowClassification, legendLocation },
-                        state: this.__sandbox.getStatefulComponents().statsgrid.getState()
-                    }
-                }
-            };
+        if (!this._isStatsActive()) {
+            return null;
         }
-        return {};
+        var stats = this.getStatsgridBundle();
+        const { location } = stats?.togglePlugin?.getConfig() || {};
+        return {
+            configuration: {
+                statsgrid: {
+                    conf: {
+                        allowClassification: this.isEnabled(),
+                        location: location || {
+                            classes: 'bottom right'
+                        }
+                    },
+                    state: this.__sandbox.getStatefulComponents().statsgrid.getState()
+                }
+            }
+        };
     },
     /**
     * Stop tool.
     * @method stop
     * @public
     */
-    stop: function () {
+    _stopImpl: function () {
         const service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
         if (service) {
             service.getStateService().resetClassificationPluginState('editEnabled');
         }
-        // HACK: remove when publisher doesn't delete all draggables
-        setTimeout(() => this.getPlugin()._makeDraggable(), 500);
     }
 }, {
     'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],

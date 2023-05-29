@@ -1,5 +1,9 @@
+//import 'antd/dist/antd.css';
+import 'antd/dist/antd.less';
+
 export { Alert } from './components/Alert';
 export { Badge } from './components/Badge';
+export { ThemedBadge } from './components/ThemedBadge';
 export { Button } from './components/Button';
 export { Checkbox } from './components/Checkbox';
 export { Collapse, Panel as CollapsePanel } from './components/Collapse';
@@ -18,9 +22,9 @@ export { Select, Option } from './components/Select';
 export { Slider } from './components/Slider';
 export { Space } from './components/Space';
 export { Spin } from './components/Spin';
-export { Step, Steps } from './components/Steps';
+export { Steps } from './components/Steps';
 export { Switch } from './components/Switch';
-export { Tabs, TabPane } from './components/Tabs';
+export { Tabs } from './components/Tabs';
 export { Tag } from './components/Tag';
 export { TextAreaInput } from './components/TextAreaInput';
 export { TextInput } from './components/TextInput';
@@ -31,6 +35,8 @@ export { Tooltip } from './components/Tooltip';
 export { LabeledInput } from './components/LabeledInput';
 export { Pagination } from './components/Pagination';
 export { Link } from './components/Link';
+export { Card } from './components/Card';
+export { CopyField } from './components/CopyField';
 // TODO: consider moving these out of index.js so we don't pack them in for embedded maps
 // or in components that are used on embedded maps we could import the components directly and NOT use this index file for imports
 export { UrlInput } from './components/UrlInput';

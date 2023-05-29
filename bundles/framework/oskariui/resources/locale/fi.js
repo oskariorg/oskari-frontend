@@ -14,10 +14,16 @@ Oskari.registerLocalization({
             yes: 'Kyllä',
             no: 'Ei',
             next: 'Seuraava',
-            previous: 'Edellinen'
+            previous: 'Edellinen',
+            print: 'Tulosta',
+            search: 'Etsi',
+            reset: 'Tyhjennä',
+            copy: 'Kopioi leikepöydälle'
         },
         messages: {
-            confirmDelete: 'Haluatko varmasti poistaa?'
+            confirm: 'Haluatko varmasti jatkaa?',
+            confirmDelete: 'Haluatko varmasti poistaa?',
+            copied: 'Kopioitu'
         },
         error: {
             generic: 'Tapahtui odottamaton virhe'

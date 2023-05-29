@@ -27,7 +27,7 @@ export const PlayButton = ({ initial }) => {
         setStatus(!status);
     };
     return (
-        <svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 40 40' onClick={changeState}>
+        <svg width="3em" height="3em" xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 40 40' onClick={changeState}>
             <path d={d}>
                 <animate ref={animateRef} from={from} to={to} attributeName='d' fill='freeze' dur={dur} calcMode='spline' keySplines='0.19 1 0.22 1'/>
             </path>

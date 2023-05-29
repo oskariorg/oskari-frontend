@@ -31,7 +31,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._showMetadata = !!this.getConfig().showMetadata;
         me._layers = [];
         me._baseLayers = [];
-        me.inMobileMode = false;
     }, {
         _toggleToolState: function () {
             if (this.popupControls) {
@@ -58,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 (layerId, style) => this._selectStyle(layerId, style),
                 this.getLocation()
             );
-            this.renderButton(null, null);
+            this.refresh();
         },
         _updateLayerSelectionPopup: function () {
             if (!this.popupControls) {
@@ -78,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             this.popupControls = null;
             const div = this.getElement();
             if (!div) return;
-            this.renderButton(null, null);
+            this.refresh();
         },
         /**
          * @private @method _initImpl
@@ -89,10 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this;
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage(), true).plugin.LayerSelectionPlugin;
             me.templates.main = jQuery(
-                '<div class="mapplugin layerselection">' +
-                '  <div class="header">' +
-                '  </div>' +
-                '</div>');
+                '<div class="mapplugin layerselection"></div>');
             this.updateLayers();
         },
         /**
@@ -157,13 +153,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.layerContent.find('div.layers-content').css('max-height', (0.75 * size.height) + 'px');
             }
         },
-        _setLayerToolsEditModeImpl: function () {
-            if (!this.getElement()) {
-                return;
-            }
-            if (this.inLayerToolsEditMode()) {
-                this.popupCleanup();
-            }
+        resetUI: function () {
+            this.popupCleanup();
         },
 
         /**
@@ -182,6 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 ...this.getConfig(),
                 isStyleSelectable: !!isSelectable
             });
+            this._updateLayerSelectionPopup();
         },
         /**
          * @method setShowMetadata
@@ -192,6 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 ...this.getConfig(),
                 showMetadata: !!showMetadata
             });
+            this._updateLayerSelectionPopup();
         },
         /**
          * @method getStyleSelectable
@@ -354,75 +347,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
 
             this.teardownUI();
-
-            this.inMobileMode = mapInMobileMode;
-
             this._element = this._createControlElement();
-            this.changeToolStyle(null, this._element);
             this.refresh();
             this.addToPluginContainer(this._element);
         },
 
         refresh: function () {
-            const me = this;
-            const conf = me.getConfig();
-            const element = me.getElement();
-            this._updateLayerSelectionPopup();
-            if (!conf) {
+            let el = this.getElement();
+            if (!el) {
                 return;
             }
-            if (conf.toolStyle) {
-                me.changeToolStyle(conf.toolStyle, element);
-            } else {
-                // not found -> use the style config obtained from the mapmodule.
-                var toolStyle = me.getToolStyleFromMapModule();
-                if (toolStyle !== null && toolStyle !== undefined) {
-                    me.changeToolStyle(toolStyle, me.getElement());
-                }
-            }
-        },
-
-        /**
-         * Changes the tool style of the plugin
-         *
-         * @method changeToolStyle
-         * @param {String} styleName
-         * @param {jQuery} div
-         */
-        changeToolStyle: function (styleName, div) {
-            div = div || this.getElement();
-            if (!div) {
-                return;
-            }
-
-            var header = div.find('div.header');
-
-            this.renderButton(styleName, header);
-
-            this._setLayerToolsEditMode(
-                this.getMapModule().isInLayerToolsEditMode()
-            );
-        },
-
-        renderButton: function (style, element) {
-            let el = element;
-            if (!element) {
-                const div = this.getElement();
-                if (!div) return;
-                el = div.find('div.header');
-            };
-            if (!el) return;
 
             ReactDOM.render(
                 <MapModuleButton
                     className='t_layerselect'
                     icon={<LayersIcon />}
                     title={this._loc.title}
-                    onClick={(e) => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this._togglePopup();
-                        }
-                    }}
+                    onClick={(e) => this._togglePopup()}
                     iconActive={this.popupControls ? true : false}
                     position={this.getLocation()}
                 />,

@@ -19,14 +19,9 @@ Oskari.registerLocalization(
             "zoomLvl-11": "",
             "zoomLvl-12": ""
         },
-        "unsupportedProjHeader": "Huom.",
-        "unsupportedProj": "Joitain karttatasoja ei voida näyttää tässä karttaprojektiossa.",
-        "unsupported-layer": "Karttatasoa ei voida näyttää.",
-        "unsupported-layer-projection": "Karttatasoa ei voida näyttää tässä karttaprojektiossa.",
         "styles": {
             "defaultTitle" : "Oletustyyli"
         },
-        "mapLayerUnavailable": `Karttatasoa \"{name}"\ ei voida näyttää.`,
         "plugin": {
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
@@ -46,6 +41,7 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Karttatasot",
                 "chooseDefaultBaseLayer": "Valitse taustakartta",
+                "headingBaseLayer": "Taustakartta",
                 "chooseOtherLayers": "Valitse muut karttatasot",
                 "style": "Tyyli"
             },
@@ -57,10 +53,26 @@ Oskari.registerLocalization(
                 "noresults": "Antamallasi hakusanalla ei löytynyt yhtään kohdetta.",
                 "searchResultCount": "Hakusanalla löytyi {count, plural, one {# hakutulos} other {# hakutulosta}}.",
                 "searchMoreResults": "Haulla löytyi enemmän tuloksia kuin näytetään ({count}). Tarkenna hakusanaa rajataksesi tulosta.",
+                "autocompleteInfo": "Vastaavia hakuehdotuksia",
                 "column_name": "Nimi",
                 "column_region": "Alue",
                 "column_village": "Kunta",
-                "column_type": "Tyyppi"
+                "column_type": "Tyyppi",
+
+                "selectResult": "Näytä tulos kartalla",
+                "deselectResult": "Poista tulos kartalta",
+                "selectResultAll": "Näytä kaikki kartalla",
+                "deselectResultAll": "Poista kaikki kartalta",
+
+                "options": {
+                    "title": "Hakuvalinnat",
+                    "description": "Tarkenna hakuehtoja valitsemalla tietolähteet"
+                },
+                "resultBox": {
+                    "close": "Sulje",
+                    "title": "Hakutulokset",
+                    "alternatives": "Tällä paikalla on seuraavia vaihtoehtoisia nimiä:"
+                }
             },
             "GetInfoPlugin": {
                 "title": "Kohdetiedot",
@@ -122,6 +134,12 @@ Oskari.registerLocalization(
         "layerVisibility": {
             "notInScale": "Karttatason \"{name}\" kohteet eivät näy tässä mittakaavassa. Siirry soveltuvalle mittakaavatasolle.",
             "notInGeometry": "Karttatasolla \"{name}\" ei ole kohteita tällä alueella. Siirry kohteeseen kartalla."
+        },
+        "layerUnsupported": {
+            "common": "Karttatasoa ei voida näyttää.",
+            "srs": "Karttatasoa ei voida näyttää tässä karttaprojektiossa.",
+            "dimension": "Karttatasoa ei voida näyttää {dimension}-karttanäkymässä.",
+            "unavailable": 'Karttatasoa "{name}" ei voida näyttää.'
         },
         "guidedTour": {
             "help1": {

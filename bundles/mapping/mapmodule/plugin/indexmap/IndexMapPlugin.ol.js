@@ -36,6 +36,11 @@ Oskari.clazz.define(
         me._baseLayerId = null;
     },
     {
+        _startPluginImpl: function () {
+            this._element = this._createControlElement();
+            this.refresh();
+            this.addToPluginContainer(this._element);
+        },
         _stopPluginImpl: function () {
             this._removeIndexMap();
             this.teardownUI();
@@ -49,17 +54,14 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             /* overview map */
-            var me = this,
-                conf = me.getConfig(),
-                el;
+            const conf = this.getConfig() || {};
+            let el;
 
             if (conf.containerId) {
                 el = jQuery('#' + conf.containerId);
             } else {
                 el = jQuery('<div class="mapplugin indexmap"></div>');
             }
-
-            this.changeToolStyle(undefined, el);
 
             return el;
         },
@@ -134,11 +136,8 @@ Oskari.clazz.define(
                 this._removeIndexMap();
             }
         },
-        changeToolStyle: function (style, element) {
-            this.renderButton(style, element);
-        },
-        renderButton: function (style, element) {
-            let el = element || this.getElement();
+        refresh: function () {
+            let el = this.getElement();
             if (!el) {
                 return;
             }
@@ -155,11 +154,7 @@ Oskari.clazz.define(
                 <div className={`indexmapToggle ${styleName}`}>
                     <MapModuleButton
                         className='t_indexmap'
-                        onClick={() => {
-                            if (!this.inLayerToolsEditMode()) {
-                                this._handleClick();
-                            }
-                        }}
+                        onClick={() => this._handleClick()}
                         size='48px'
                         icon={<div className='icon' />}
                     />
@@ -167,20 +162,11 @@ Oskari.clazz.define(
                 el[0]
             );
         },
-        _setLayerToolsEditModeImpl: function () {
-            const el = this.getElement();
-            if (!el) {
-                return;
-            }
-
-            if (this.inLayerToolsEditMode()) {
-                // close map
-                if (this._indexMap) {
-                    this._removeIndexMap();
-                }
+        resetUI: function () {
+            if (this._indexMap) {
+                this._removeIndexMap();
             }
         }
-
     },
     {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

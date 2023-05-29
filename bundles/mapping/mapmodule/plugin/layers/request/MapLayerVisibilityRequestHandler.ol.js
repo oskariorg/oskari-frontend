@@ -24,8 +24,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var layerId = request.getMapLayerId();
-            var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            const layerId = request.getMapLayerId();
+            const layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 this.tryVectorLayers(layerId, request.getVisible());
                 // no need to notify other components if it was a vector layer
@@ -42,8 +42,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             this.layersPlugin.handleMapLayerVisibility(layer, true);
         },
         tryVectorLayers: function (id, blnVisible) {
-            var module = this.layersPlugin.getMapModule();
-            var plugin = module.getLayerPlugins('vectorlayer');
+            const module = this.layersPlugin.getMapModule();
+            const plugin = module.getLayerPlugins('vectorlayer');
             if (!plugin || typeof plugin.setVisibleByLayerId !== 'function') {
                 return;
             }

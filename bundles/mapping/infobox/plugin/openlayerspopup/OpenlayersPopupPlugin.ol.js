@@ -231,8 +231,6 @@ Oskari.clazz.define(
                 popup.onClose(function () {
                     me.close(id);
                 });
-                // clear the ugly backgroundcolor from the popup content
-                jQuery(popup.dialog).css('background-color', 'inherit');
             } else {
                 popupType = 'desktop';
                 popupElement.html(popupContentHtml);

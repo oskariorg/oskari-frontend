@@ -10,6 +10,9 @@ const Flex = styled('div')`
     align-items: center;
 `;
 const LayerDiv = styled(Flex)`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     clear: both;
     padding: 6px;
     min-height: 16px;
@@ -45,7 +48,7 @@ const onToolClick = tool => {
     }
 };
 
-const Layer = ({ model, selected, controller }) => {
+const Layer = ({ model, selected, opts, controller }) => {
     return (
         <LayerDiv className="t_layer" data-id={model.getId()}>
             <CustomTools className="custom-tools">
@@ -69,7 +72,7 @@ const Layer = ({ model, selected, controller }) => {
                     <div>{model.getName()}</div>
                 </Label>
             </Body>
-            <LayerTools model={model} controller={controller}/>
+            <LayerTools model={model} controller={controller} opts={opts}/>
         </LayerDiv>
     );
 };
@@ -77,6 +80,7 @@ const Layer = ({ model, selected, controller }) => {
 Layer.propTypes = {
     model: PropTypes.any.isRequired,
     selected: PropTypes.bool.isRequired,
+    opts: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 

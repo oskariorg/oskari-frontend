@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         }
         // pass args for localization even them aren't needed for requested errorKey
         const args = {
-            maxSize: this.instance.getMaxSize(),
+            maxSize: this.instance.handler.getMaxSize(),
             extensions: extensions.join(',')
         };
         this._showError(`flyout.error.${errorKey}`, args);
@@ -207,8 +207,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         }
         layer.setLocale(locale);
         layer.setOptions(options);
+        layer.setStylesFromOptions(options);
         const sandbox = this.instance.getSandbox();
-        var evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
+        const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
         sandbox.notifyAll(evt);
         this.notifyUpdate();
         if (sandbox.isLayerAlreadySelected(id)) {
@@ -222,9 +223,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             const sandbox = this.instance.getSandbox();
             const layerId = mapLayer.getId();
             // Request the layer to be added to the map.
-            sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
+            sandbox.postRequestByName('AddMapLayerRequest', [layerId, {
+                zoomContent: true
+            }]);
             // Request to move and zoom map to layer's content
-            sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, true]);
+            // sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, true]);
             this.notifyUpdate();
         };
         const { warning } = layerJson;

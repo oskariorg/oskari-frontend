@@ -71,6 +71,11 @@ const Approximation = styled('span')`
     font-size: 14px;
 `;
 
+const formatLeadingZero = (number) => {
+    if (parseFloat(number) < 10) return `0${number}`;
+    return number;
+}
+
 const PopupContent = ({ state, controller, preciseTransform, supportedProjections, crsText, decimalSeparator, showReverseGeoCodeCheckbox }) => {
     let latLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lat'} />;
     let lonLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lon'} />;
@@ -84,6 +89,8 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
     if (controller.allowDegrees() && state?.lonField && state?.latField) {
         dec = Oskari.util.coordinateDegreesToMetric([state.lonField, state.latField], 20);
         degmin = controller.formatDegrees(dec[0], dec[1], 'min');
+        degmin.minutesX = formatLeadingZero(degmin.minutesX);
+        degmin.minutesY = formatLeadingZero(degmin.minutesY);
     }
 
     const content = (
@@ -172,15 +179,15 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
             {state.emergencyInfo && (
                 <EmergencyInfo>
                     <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.emergencyCallLabel' />
-                    {` ${state.emergencyInfo.degreesY}° `}{` ${state.emergencyInfo.minutesY}\' `}
+                    {` ${state.emergencyInfo.degreesY}° `}{` ${formatLeadingZero(state.emergencyInfo.minutesY)}\' `}
                     <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.emergencyCallLabelAnd' />
-                    {` ${state.emergencyInfo.degreesX}° `}{` ${state.emergencyInfo.minutesX}\'`}
+                    {` ${state.emergencyInfo.degreesX}° `}{` ${formatLeadingZero(state.emergencyInfo.minutesX)}\'`}
                 </EmergencyInfo>
             )}
             <ButtonContainer>
                 <Button
                     type='default'
-                    disabled={state.showMouseCoordinates}
+                    disabled={state.showMouseCoordinates || controller.isMapCentered()}
                     onClick={() => controller.centerMap()}
                     className='t_center'
                 >

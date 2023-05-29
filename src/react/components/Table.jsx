@@ -20,13 +20,17 @@ const StyledToolsContainer = styled('div')`
 `;
 
 // AntD defines overflow-wrap: break word for tr td
-//  but for some reason we still need word-break so long texts in the table don't break layout
+// but for some reason we still need word-break so long texts in the table don't break layout
+// For narrow columns sorter icon might get stuck to label -> add margin for column sorter
 const StyledTable = styled(AntTable)`
     tr td {
         word-break: break-word;
     }
     a {
         cursor: pointer;
+    }
+    .ant-table-column-sorter {
+        margin: 0 0 0 5px;
     }
 `;
 
@@ -40,14 +44,14 @@ export const getSorterFor = key => (a, b) => Oskari.util.naturalSort(a[key], b[k
  * - https://github.com/ant-design/ant-design/blob/master/components/locale/fi_FI.tsx
  * - https://github.com/ant-design/ant-design/pull/33372
  */
-export const Table = ({ ...other }) => {
+export const Table = ({ size = 'small', ...other }) => {
     const locale = {
         triggerDesc: getMsg('table.sort.desc'), // 'Click to sort descending',
         triggerAsc: getMsg('table.sort.asc'), //'Click to sort ascending',
         cancelSort: getMsg('table.sort.cancel'), // 'Click to cancel sorting',
         emptyText: getMsg('table.emptyText') // Show when table is empty
     };
-    return (<StyledTable locale={locale} {...other} />);
+    return (<StyledTable locale={locale} size={size} {...other} />);
 };
 
 export const ToolsContainer = ({ children }) => {

@@ -1,4 +1,8 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(duration);
+dayjs.extend(customParseFormat);
 
 /**
  * @class Oskari.mapframework.bundle.timeseries.WMSAnimator
@@ -56,13 +60,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
         getTimes: function () {
             var times = this._layer.getAttributes().times;
             if (!Array.isArray(times)) {
-                var interval = moment.duration(times.interval);
-                var end = moment(times.end);
-                var t = moment(times.start);
+                var interval = dayjs.duration(times.interval);
+                var end = dayjs(times.end);
+                var t = dayjs(times.start);
                 times = [t.toISOString()];
-                while (t.add(interval) < end) {
-                    times.push(t.toISOString());
-                }
+                do {
+                    if (t < end) {
+                        t = t.add(interval);
+                        times.push(t.toISOString());
+                    }
+                } while (t < end);
                 times.push(end.toISOString());
             }
             return times;
@@ -74,8 +81,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
          */
         getYearRange: function () {
             const times = this._layer.getAttributes().times;
-            const start = moment(times[0]).year();
-            const end = moment(times[times.length - 1]).year();
+            const start = dayjs(times[0]).year();
+            const end = dayjs(times[times.length - 1]).year();
             return [start, end];
         },
         init: function () { },
@@ -151,7 +158,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
          * @param {Function} callback is called when loading is ready or 5000 ms timeout reached
          */
         _bufferImages: function (urls, nextTime, callback) {
-            /* eslint-disable node/no-callback-literal */
+            /* eslint-disable n/no-callback-literal */
             var imgCount = urls.length;
             if (imgCount === 0) {
                 callback(true);

@@ -11,23 +11,11 @@ const BUNDLE_NAME = 'PersonalData';
 const EDIT_ICON_STYLE = {
     fontSize: '14px'
 };
-
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`
-
 const ButtonContainer = styled.div`
     margin: 10px 0 10px 0;
     display: flex;
     justify-content: flex-end;
-`
+`;
 
 export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, setDefault, saveCurrent }) => {
     const columnSettings = [
@@ -39,7 +27,7 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
             render: (title, item) => {
                 return (
                     <Checkbox checked={item.isDefault} onChange={() => setDefault(item)} />
-                )
+                );
             }
         },
         {
@@ -51,7 +39,7 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
             render: (title, item) => {
                 return (
                     <a onClick={() => openView(item)}>{title}</a>
-                )
+                );
             }
         },
         {
@@ -76,7 +64,7 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
                             onConfirm={() => handleDelete(item)}
                         />
                     </ToolsContainer>
-                )
+                );
             }
         }
     ];
@@ -88,7 +76,7 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
                     <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.button.saveCurrent' />
                 </Button>
             </ButtonContainer>
-            <StyledTable
+            <Table
                 columns={columnSettings}
                 dataSource={data.map(item => ({
                     key: item.id,
@@ -97,8 +85,8 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
                 pagination={false}
             />
         </>
-    )
-}
+    );
+};
 
 MyViewsList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
@@ -107,4 +95,4 @@ MyViewsList.propTypes = {
     openView: PropTypes.func.isRequired,
     setDefault: PropTypes.func.isRequired,
     saveCurrent: PropTypes.func.isRequired
-}
+};

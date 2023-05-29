@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
-import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from './util';
+import { createDraggable, getPositionForCentering, createDocumentSizeHandler, createDraggableSizeHandler } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
 import { ICON_SIZE } from './constants';
 import { ThemeConsumer } from '../../util/contexts';
@@ -46,6 +46,7 @@ const PopupHeader = styled.h3`
     background-color: ${props => props.theme.getBgColor()};
     color:  ${props => props.theme.getTextColor()};
     padding: 8px 10px;
+    margin: 0px;
     display: flex;
     cursor: ${props => props.isDraggable ? 'grab' : undefined}
 `;
@@ -53,9 +54,9 @@ const PopupTitle = styled.span`
     margin-right: auto;
     width: 100%;
 `;
-// Note! max-height isn't recalculated when window size changes :(
+// Note! use vh with max-height so it can handle window size changes
 const PopupBody = styled.div`
-    max-height: ${window.innerHeight - 100}px;
+    max-height: 90vh;
     overflow: auto;
 `;
 const ToolsContainer = styled.div`
@@ -99,26 +100,16 @@ export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop,
         headerProps.onMouseDown = () => headerFuncs.forEach(fn => fn());
         headerProps.onTouchStart = () => headerFuncs.forEach(fn => fn());
     }
-    const bodyResizeHandler = (newSize, prevSize) => {
-        const windowIsNowBigger = prevSize.width < newSize.width || prevSize.height < newSize.height;
-        const popupNoLongerOnScreen = position.x > newSize.width || position.y > newSize.height;
-        if (elementRef.current && (windowIsNowBigger || popupNoLongerOnScreen)) {
-            // Note! The class is added in createDraggable()
-            // but we might not be able to remove it there after recentering on window size change
-            // remove it if window is now bigger
-            elementRef.current.classList.remove(OUTOFSCREEN_CLASSNAME);
-        }
-        if (popupNoLongerOnScreen) {
-            // console.log('Popup relocating! Window size changed from', prevSize, 'to', newSize);
-            setPosition({
-                ...position,
-                centered: false
-            });
-        }
-    };
-    const handleUnmounting = () => unmonitorResize(bodyResizeHandler);
+
+    const bodyResizeHandler = createDocumentSizeHandler(elementRef, position, setPosition);
+    const popupResizeHandler = createDraggableSizeHandler(elementRef, position, setPosition);
+    const handleUnmounting = () => {
+        unmonitorResize(popupResizeHandler);
+        unmonitorResize(bodyResizeHandler);
+    }
     useEffect(() => {
         monitorResize(document.body, bodyResizeHandler);
+        monitorResize(elementRef.current, popupResizeHandler);
         if (position.centered) {
             return handleUnmounting;
         }

@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "A: Användare",
             "adminusers": {
-                "title": "A: Användare",
+                "title": "Användare",
                 "firstName": "Förnamn",
                 "lastName": "Efternamn",
                 "user": "Användarsnamn",
@@ -21,6 +21,11 @@ Oskari.registerLocalization(
                 "addRole": "Välj rol(ler)",
                 "password_mismatch": "Lösenord är inte lika.",
                 "password_too_short": "Lösenord måste ha minst åtta märke.",
+                "passwordRequirements": {
+                    "title": "Lösenordskrav: ",
+                    "length": "Minsta längd:  {length}",
+                    "case": "Måste innehålla små och STORA bokstäver"
+                },
                 "form_invalid": "Information fattas från några fält.",
                 "field_required": "Fältet \"{fieldName}\" är obligatorisk.",
                 "confirm_delete": "Vill du säkert ta bort användaren {user}?",
@@ -29,10 +34,11 @@ Oskari.registerLocalization(
                 "save_failed": "Lagring misslyckades.",
                 "save_failed_message": "Detta användarnamn är redan reserverat. Försök med ett annat.",
                 "noMatch": "Inga sökresultat.",
-                "selectRole": "Välj en roll."
+                "selectRole": "Välj en roll.",
+                "searchResults": "Sökresultat"
             },
             "adminroles": {
-                "title": "A: Roller",
+                "title": "Roller",
                 "newrole": "Tilllägg en roll:",
                 "confirm_delete": "Vill du säkert ta bort rollen {role}?",
                 "delete_failed": "Kunde inte tas bort.",

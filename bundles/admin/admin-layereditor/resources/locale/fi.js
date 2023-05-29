@@ -123,14 +123,30 @@ Oskari.registerLocalization(
                     "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite."
                 },
                 "vector": {
-                    "addStyle": "Lisää tyyli",
                     "newStyleName": "Uusi tyyli",
                     "name": "Tyylin nimi",
                     "selectDefault": "Valitse oletustyyli",
                     "deleteStyle": "Poista tyyli",
+                    "edit": {
+                        "editor": "Muokkaa editorilla",
+                        "json": "Muokkaa JSON"
+                    },
+                    "add": {
+                        "editor": "Lisää editorilla",
+                        "json": "Lisää JSON",
+                        "mapbox": "Lisää Mapbox JSON",
+                        "cesium": "Lisää Cesium JSON"
+                    },
                     "validation": {
                         "name": "Täytä nimi tyylille",
-                        "noStyles": "Ei tallennettuja tyylejä"
+                        "noStyles": "Ei tallennettuja tyylejä",
+                        "json": "Tyylimääritysten JSON-syntaksi on virheellinen."
+                    },
+                    "json": {
+                        "featureStyle": "Tyylimääritykset (JSON)",
+                        "optionalStyles": "Tyylittely ominaisuustietojen mukaan (JSON)",
+                        "cesium": "3D Tiles/Cesium tyylimääritykset (JSON)",
+                        "mapbox": "Mapbox tyylimääritykset (JSON)"
                     }
                 }
             },
@@ -175,8 +191,6 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Pakollisia tietoja puuttuu:",
-                "styles": "Tyylimääritysten JSON-syntaksi on virheellinen.",
-                "externalStyles": "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
                 "hover": "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
                 "attributes": "Attribuutit kentän JSON-syntaksi on virheellinen.",
                 "attributions": "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
@@ -203,11 +217,9 @@ Oskari.registerLocalization(
                 "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?",
                 "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
                 "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
-                "noCoverage": "Karttatason kattavuutta ei ole rajoitettu."
+                "noCoverage": "Karttatason kattavuutta ei ole rajoitettu.",
+                "invalidScale": "Tarkista tason mittakaavarajat."
             },
-            "stylesJSON": "Tyylimääritykset (JSON)",
-            "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
-            "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",

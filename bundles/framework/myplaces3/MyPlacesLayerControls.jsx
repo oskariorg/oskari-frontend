@@ -1,48 +1,38 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Tooltip } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import styled from 'styled-components';
 import { Select, Button, Popover, Option } from 'oskari-ui';
-import { SecondaryButton, ButtonContainer, DeleteButton } from 'oskari-ui/components/buttons';
-import { EditOutlined, PlusCircleOutlined, ExportOutlined } from '@ant-design/icons';
+import { SecondaryButton, ButtonContainer, DeleteButton, IconButton } from 'oskari-ui/components/buttons';
+import { PlusCircleOutlined, ExportOutlined } from '@ant-design/icons';
 import { green } from '@ant-design/colors';
-import { DeleteIcon } from 'oskari-ui/components/icons';
 
 const AddIcon = styled(PlusCircleOutlined)`
     color: ${green.primary}
 `;
-
 const StyledControls = styled('div')`
     display: flex;
     width: 100%;
     margin-bottom: 15px;
     align-items: center;
 `;
-
 const StyledSelect = styled(Select)`
     margin-left: 10px;
     width: 240px;
 `;
-
 const StyledActions = styled('div')`
     display: flex;
     button {
         margin-left: 5px;
     }
 `;
-
-const IconButton = styled(Button)`
-    cursor: pointer;
-    font-size: 16px;
-`;
-
 const MarginLeft = styled.span`
     margin-left: 5px;
 `;
-
 const Content = styled('div')`
     max-width: 500px;
 `;
+
 const getDefaultCategoryId = categories => categories.find(cat => cat.isDefault).categoryId;
 const DeletePlaces = ({
     categories,
@@ -93,10 +83,16 @@ const DeletePlaces = ({
         </Content>
     );
     return (
-        <Popover trigger="click" placement="bottom" visible={visible} content={content} >
-            <Tooltip title={<Message messageKey={deleteTooltip}/>}>
-                <IconButton disabled={isDefault} className='t_delete' onClick={() => setVisible(true)}><DeleteIcon/></IconButton>
-            </Tooltip>
+        <Popover trigger="click" placement="bottom" open={visible} content={content} >
+            <IconButton
+                bordered={true}
+                type='delete'
+                title={<Message messageKey={deleteTooltip}/>}
+                disabled={isDefault}
+                className='t_delete'
+                onClick={() => setVisible(true)}
+                iconSize={16}
+            />
         </Popover>
     );
 };
@@ -124,17 +120,31 @@ export const MyPlacesLayerControls = (props) => {
                     ))}
                 </StyledSelect>
                 <StyledActions className='t_layer'>
-                    <Tooltip title={<Message messageKey='tab.addCategory' />}>
-                        <IconButton className='t_add' onClick={() => controller.openLayerDialog()}><AddIcon /></IconButton>
-                    </Tooltip>
+                    <IconButton
+                        bordered={true}
+                        icon={<AddIcon />}
+                        title={<Message messageKey='tab.addCategory' />}
+                        className='t_add'
+                        onClick={() => controller.openLayerDialog()}
+                    />
                     {selectedCategoryId && (
                         <React.Fragment>
-                            <Tooltip title={<Message messageKey='tab.editCategory' />}>
-                                <IconButton className='t_edit' onClick={() => controller.editCategory(selectedCategoryId)}><EditOutlined/></IconButton>
-                            </Tooltip>
-                            <Tooltip title={<Message messageKey='tab.export.tooltip' />}>
-                                <IconButton className='t_export' onClick={() => controller.exportCategory(selectedCategoryId)}><ExportOutlined/></IconButton>
-                            </Tooltip>
+                            <IconButton
+                                bordered={true}
+                                type='edit'
+                                title={<Message messageKey='tab.editCategory' />}
+                                className='t_edit'
+                                onClick={() => controller.editCategory(selectedCategoryId)}
+                                iconSize={16}
+                            />
+                            <IconButton
+                                bordered={true}
+                                icon={<ExportOutlined/>}
+                                title={<Message messageKey='tab.export.tooltip' />}
+                                className='t_export'
+                                onClick={() => controller.exportCategory(selectedCategoryId)}
+                                iconSize={16}
+                            />
                             { !hasPlaces && <DeleteButton type='button' disabled={isDefault}
                                 tooltip={<Message messageKey={deleteTooltip}/>}
                                 title={<Message messageKey='tab.confirm.deleteCategory' messageArgs={{ name }}/>}

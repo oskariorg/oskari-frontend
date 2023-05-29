@@ -14,11 +14,10 @@ Oskari.clazz.define(className,
         this._toolOpen = false;
         this._index = 80;
         this._log = Oskari.log(shortName);
-        this._mountPoint = jQuery('<div class="camera-controls-3d"><div></div></div>');
+        this._template = jQuery('<div class="mapplugin camera-controls-3d"><div></div></div>');
         // plugin index 25. Insert after panbuttons.
         this._index = 25;
-        this.inMobileMode = false;
-        this.handler = new CameraControls3dHandler(state => this._render(null, null));
+        this.handler = new CameraControls3dHandler(state => this._render(state));
     }, {
         getName: function () {
             return shortName;
@@ -33,15 +32,13 @@ Oskari.clazz.define(className,
         isRotating: function () {
             return this.handler.getActiveMapMoveMethod() === 'rotate';
         },
-        /**
-         * Handle plugin UI and change it when desktop / mobile mode
-         * @method  @public redrawUI
-         * @param  {Boolean} mapInMobileMode is map in mobile mode
-         */
-        redrawUI: function (mapInMobileMode, forced) {
-            this.teardownUI();
-            this.inMobileMode = mapInMobileMode;
-            return this._createUI();
+        _startPluginImpl: function () {
+            this.setElement(this._createControlElement());
+            this.addToPluginContainer(this.getElement());
+            this.refresh();
+        },
+        _createControlElement: function () {
+            return this._template.clone();
         },
         teardownUI: function () {
             if (!this.getElement()) {
@@ -51,77 +48,30 @@ Oskari.clazz.define(className,
             this.getElement().detach();
             this._element = undefined;
         },
-        /**
-         * Get jQuery element.
-         * @method @public getElement
-         */
-        getElement: function () {
-            return this._element;
-        },
         stopPlugin: function () {
             this.teardownUI();
         },
-        /**
-         * Changes the tool style of the plugin
-         *
-         * @method changeToolStyle
-         * @param {Object} style
-         * @param {jQuery} div
-         */
-        changeToolStyle: function (style, el) {
-            const div = el || this.getElement();
-            if (!div) {
+        refresh: function () {
+            this._render();
+        },
+        _render (state = this.handler.getState()) {
+            let el = this.getElement();
+            if (!el) {
                 return;
-            }
-
-            this._render(style, div);
-
-            this._setLayerToolsEditMode(
-                this.getMapModule().isInLayerToolsEditMode()
-            );
-        },
-        _createUI: function () {
-            this._element = this._mountPoint.clone();
-            this.addToPluginContainer(this._element);
-            this._element.addClass('mapplugin');
-            this._render(null, null);
-        },
-        _render (style, element, state = this.handler.getState()) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
-            }
-            if (!el) return;
-
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
             }
 
             const { activeMapMoveMethod } = state;
             const ui = (
                 <LocaleProvider value={{ bundleKey: 'CameraControls3d' }}>
                     <CameraControls3d
-                        mapInMobileMode={this.inMobileMode}
+                        mapInMobileMode={Oskari.util.isMobile()}
                         activeMapMoveMethod={activeMapMoveMethod}
                         controller={this.handler.getController()}
-                        styleName={styleName || 'rounded-dark'}
                         location={this.getLocation()}
                     />
                 </LocaleProvider>
             );
             ReactDOM.render(ui, el[0]);
-        },
-        /**
-         * @public @method getIndex
-         * Returns the plugin's preferred position in the container
-         *
-         *
-         * @return {Number} Plugin's preferred position in container
-         */
-        getIndex: function () {
-            // i.e. position
-            return this._index;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

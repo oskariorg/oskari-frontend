@@ -2,49 +2,41 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationToggleTool
 }, {
     index: 1,
     group: 'data',
-    allowedLocations: [],
-    allowedSiblings: [],
     id: 'classification',
 
     init: function (data) {
-        var enabled = data &&
-            Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
-            data.configuration.statsgrid.conf.classification === true;
-        this.setEnabled(enabled);
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.classification === true);
     },
     getTool: function () {
-        var me = this;
-        if (!me.__tool) {
-            me.__tool = {
-                id: 'Oskari.statistics.statsgrid.TogglePlugin',
-                title: 'allowHidingClassification',
-                config: {
-                    classification: true
-                }
-            };
-        }
-        return me.__tool;
+        return {
+            id: 'Oskari.statistics.statsgrid.TogglePlugin',
+            title: 'allowHidingClassification',
+            config: {
+                classification: true
+            },
+            hasNoPlugin: true
+        };
     },
-    setEnabled: function (enabled) {
-        var me = this;
-        var changed = me.state.enabled !== enabled;
-        me.state.enabled = enabled;
-
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (!stats || !changed) {
+    _setEnabledImpl: function (enabled) {
+        var stats = this.getStatsgridBundle();
+        if (!stats) {
             return;
         }
         if (enabled) {
             stats.addMapPluginToggleTool(this.id);
         } else {
             stats.togglePlugin.removeTool(this.id);
+            // if we have hidden classification and then remove the option to hide/show it
+            // -> update visibility to show it
+            stats.updateClassficationViewVisibility();
         }
     },
     getValues: function () {
         return this.getConfiguration({ classification: this.isEnabled() });
     },
-    stop: function () {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+    _stopImpl: function () {
+        var stats = this.getStatsgridBundle();
         if (stats) {
             stats.togglePlugin.removeTool(this.id);
             stats.updateClassficationViewVisibility();

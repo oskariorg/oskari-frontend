@@ -8,7 +8,7 @@ import { Opacity } from 'oskari-ui';
 const OPACITY_EVENT_FIRING_DELAY = 100;
 
 const Container = styled('div')`
-    width: 200px;
+    width: ${props => props.$isMobile ? '85px' : '200px'};
 `;
 
 export const OpacitySlider = ({ value, onChange }) => {
@@ -26,10 +26,11 @@ export const OpacitySlider = ({ value, onChange }) => {
     useEffect(() => {
         setSliderValue(value);
     }, [value]);
+    const isMobile = Oskari.util.isMobile();
     return (
         <InputGroup compact>
-            <Container>
-                <Opacity bordered defaultValue={sliderValue} onChange={instantValueChange} />
+            <Container $isMobile={isMobile}>
+                <Opacity bordered defaultValue={sliderValue} onChange={instantValueChange} inputOnly={isMobile} />
             </Container>
         </InputGroup>
     );

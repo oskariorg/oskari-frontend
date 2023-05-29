@@ -33,6 +33,14 @@ Oskari.clazz.define(
         _initImpl: function () {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
         },
+        /**
+         * While this plugin DOES have a UI we don't want publisher stopping it on startup so
+         * we are returning false to stay on screen for the duration of publisher.
+         * @returns false
+         */
+        isShouldStopForPublisher: function () {
+            return false;
+        },
         getService: function () {
             if (!this._service) {
                 this._service = Oskari.clazz.create('Oskari.map.DataProviderInfoService', this.getSandbox());
@@ -127,23 +135,9 @@ Oskari.clazz.define(
             };
         },
 
-        /**
-         * @method _setLayerToolsEditModeImpl
-         * Called after layerToolsEditMode is set.
-         *
-         *
-         */
-        _setLayerToolsEditModeImpl: function () {
-            var me = this;
-            // TODO document why this is done...
-            if (!me.inLayerToolsEditMode() && me.getElement()) {
-                me.setLocation(
-                    me.getElement().parents('.mapplugins').attr(
-                        'data-location'
-                    )
-                );
-            } else if (me._popupControls) {
-                me.clearPopup();
+        resetUI: function () {
+            if (this._popupControls) {
+                this.clearPopup();
             }
         },
 
@@ -175,29 +169,21 @@ Oskari.clazz.define(
             this.removeFromPluginContainer(this.getElement());
         },
 
-        _createServiceLink: function (el) {
-            var me = this,
-                element = el || me.getElement(),
-                mapUrl = me.__getMapUrl(),
-                linkParams;
-            if (!element) {
-                return;
-            }
-
+        _createServiceLink: function () {
             const logoUrl = Oskari.urls.getRoute('Logo');
-
-            var options = {
+            const { geoportalLink = true } = this.getConfig();
+            const options = {
                 id: 'logo',
                 src: logoUrl,
-                callback: function (event) {
-                    if (!me.inLayerToolsEditMode()) {
-                        linkParams = me.getSandbox().generateMapLinkParameters({});
+                callback: () => {
+                    if (geoportalLink) {
+                        const mapUrl = this.__getMapUrl();
+                        const linkParams = this.getSandbox().generateMapLinkParameters({});
                         window.open(mapUrl + linkParams, '_blank');
                     }
                 }
             };
-
-            me._extendService.addLabel('', options);
+            this._extendService.addLabel('', options);
         },
 
         /**
@@ -222,9 +208,7 @@ Oskari.clazz.define(
                 id: 'terms',
                 callback: function (evt) {
                     evt.preventDefault();
-                    if (!me.inLayerToolsEditMode()) {
-                        window.open(termsUrl, '_blank');
-                    }
+                    window.open(termsUrl, '_blank');
                 }
             };
 
@@ -242,9 +226,9 @@ Oskari.clazz.define(
             var options = {
                 id: 'data-sources',
                 callback: function (e) {
-                    if (!me.inLayerToolsEditMode() && !me._popupControls) {
-                        me._openDataSourcesDialog(e.target);
-                    } else if (me._popupControls) {
+                    if (!me._popupControls) {
+                        me._openDataSourcesDialog();
+                    } else {
                         me.clearPopup();
                     }
                 }

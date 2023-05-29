@@ -519,21 +519,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             // TODO: notify if layer not found?
         },
-        showUnsupportedPopup: function () {
-            if (this.popupCoolOff) {
-                return;
-            }
-            var popup = this._popupService.createPopup();
-
-            var buttons = [popup.createCloseButton('OK')];
-            const dimension = this.getSandbox().getMap().getSupports3D() ? '3D' : '2D';
-            popup.show(this.loc('unsupportedProjHeader'), this.loc('unsupportedProj', { dimension }).replace(/[\n]/g, '<br>'), buttons);
-
-            this.popupCoolOff = true;
-            setTimeout(function () {
-                this.popupCoolOff = false;
-            }.bind(this), 500);
-        },
 
         /**
          * @method loadAllLayerGroupsAjax
@@ -788,7 +773,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @private
          */
         _loadLayersRecursive: function (layers, callbackSuccess) {
-            var me = this;
+            const me = this;
             // check if recursion should end
             if (layers.length === 0) {
                 me._allLayersAjaxLoaded = true;
@@ -798,8 +783,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
             // remove the first one for recursion
-            var json = layers.shift();
-            var mapLayer = me.createMapLayer(json);
+            const json = layers.shift();
+            const mapLayer = me.createMapLayer(json);
             // unsupported maplayer type returns null so check for it
             if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
                 me.addLayer(mapLayer, true);
@@ -814,6 +799,37 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     me._loadLayersRecursive(layers, callbackSuccess);
                 }, 0);
             }
+        },
+        /**
+        * Fetches layer additional info from server if required
+        * @param {AbstractLayer} layer layer to get WKT for
+        * @param {Function} callback gets the describe info as parameter or undefined if it's not available
+        * @returns callback is used for return value
+        */
+        getDescribeLayer: function (layer, opts, callback) {
+            // gather a list of possible user generated styles to load for layer
+            const userStyles = [
+                layer.getCurrentStyle().getName(),
+                ...(opts.userStyles || [])]
+                .join(',');
+            const url = Oskari.urls.getRoute('DescribeLayer', {
+                id: layer.getId(),
+                styleId: userStyles,
+                lang: Oskari.getLang(),
+                srs: this.getSandbox().getMap().getSrsName()
+            });
+
+            fetch(url).then(response => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            }).then(json => {
+                callback(json);
+            }).catch(error => {
+                Oskari.log('DescribeLayer download').warn(error);
+                callback();
+            });
         },
 
         /**

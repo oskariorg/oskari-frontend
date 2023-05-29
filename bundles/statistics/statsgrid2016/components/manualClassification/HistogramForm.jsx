@@ -27,16 +27,17 @@ const Form = ({
 }) => {
     const ref = useRef();
     const [activeBound, setActiveBound] = useState();
+    const { editEnabled } = state?.pluginState;
     useEffect(() => {
         // editor appends content to ref element, clear content
         ref.current.innerHTML = '';
         if (error) {
             return;
         }
-        manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, onBoundChange, fractionDigits);
-    });
+        manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, fractionDigits, base, onBoundChange, !editEnabled);
+    }, [editEnabled]);
     const { activeIndicator: { classification }, seriesStats, controller } = state;
-    const { method, fractionDigits } = classification;
+    const { method, fractionDigits, base } = classification;
     const { methods } = editOptions;
     const { groups = [], bounds, error } = classifiedDataset;
 
@@ -44,7 +45,13 @@ const Form = ({
     const dataAsList = Object.values(seriesStats ? seriesStats.serie : data);
     const onMethodChange = method => controller.updateClassification('method', method);
     const onBoundChange = (manualBounds, index) => {
-        setActiveBound(index);
+        if (index !== activeBound) {
+            setActiveBound(index);
+        }
+        if (bounds[index] === manualBounds[index]) {
+            // nothing to update
+            return;
+        }
         const updated = { manualBounds };
         if (method !== 'manual') {
             updated.method = 'manual';
@@ -57,6 +64,7 @@ const Form = ({
             <StyledSelect
                 className='t_option-method'
                 value = {method}
+                disabled={!editEnabled}
                 onChange={value => onMethodChange(value)}>
                 {methods.map(({ label, ...rest }, i) => (
                     <Option key={`option-${i}`} {...rest}>

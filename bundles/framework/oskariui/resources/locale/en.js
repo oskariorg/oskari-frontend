@@ -14,10 +14,16 @@ Oskari.registerLocalization({
             yes: 'Yes',
             no: 'No',
             next: 'Next',
-            previous: 'Previous'
+            previous: 'Previous',
+            print: 'Print',
+            search: 'Search',
+            reset: 'Reset',
+            copy: 'Copy to clipboard'
         },
         messages: {
-            confirmDelete: 'Are you sure you wish to delete?'
+            confirm: 'Are you sure you want to continue?',
+            confirmDelete: 'Are you sure you wish to delete?',
+            copied: 'Copied'
         },
         error: {
             generic: 'Something went wrong'

@@ -15,7 +15,15 @@ const Container = styled.div`
     background: #fafafa;
     min-width: 300px;
     border: 1px solid rgba(0, 0, 0, 0.2);
+    max-width: 100vw;
+    max-height: 100vh;
 
+    @media only screen and (max-width: 950px) {
+        min-width: 0;
+        width: 100vw;
+        height: 100vh;
+        transform: none !important;
+    }
 
     &.outofviewport {
         border: 1px solid rgba(255, 0, 0, 0.5);
@@ -34,6 +42,13 @@ const Container = styled.div`
             }
         }
     }
+
+    ${props => props.resizable && (
+        `
+            resize: both;
+            overflow: auto;
+        `
+    )}
 `;
 
 const FlyoutHeader = styled.div`
@@ -62,6 +77,7 @@ const Title = styled.h3`
     display: inline-block;
     font-size: 16px;
     line-height: 20px;
+    color: ${props => props.theme.getTextColor()};
 `;
 const ToolsContainer = styled.div`
     float: right;
@@ -101,18 +117,25 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
     Maybe allow passing tools from caller?
     */
     const headerTheme = getHeaderTheme(theme);
-    return (<Container className={containerClass} ref={elementRef} style={{transform: `translate(${position.x}px, ${position.y}px)`}}>
-        <FlyoutHeader theme={headerTheme} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
-            <HeaderBand theme={headerTheme}/>
-            <Title className='flyout-title'>{title}</Title>
-            <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>
-                <CloseIcon onClose={onClose}/>
-            </ToolsContainer>
-        </FlyoutHeader>
-        <div>
-            {children}
-        </div>
-    </Container>)
+    return (
+        <Container
+            className={containerClass}
+            ref={elementRef}
+            style={{transform: `translate(${position.x}px, ${position.y}px)`}}
+            resizable={options.resizable}
+        >
+            <FlyoutHeader theme={headerTheme} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
+                <HeaderBand theme={headerTheme}/>
+                <Title className='flyout-title' theme={headerTheme}>{title}</Title>
+                <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>
+                    <CloseIcon onClose={onClose}/>
+                </ToolsContainer>
+            </FlyoutHeader>
+            <div>
+                {children}
+            </div>
+        </Container>
+    );
 });
 
 Flyout.propTypes = {

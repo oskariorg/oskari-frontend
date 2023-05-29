@@ -9,6 +9,16 @@ import jQuery from 'jquery';
 global.MobileDetect = require('mobile-detect');
 global.jQuery = jQuery;
 
+if (typeof global.ResizeObserver === 'undefined') {
+    // We need to mock ResizeObserver and make it available globally for Jest tests
+    class ResizeObserver {
+        observe () {}
+        unobserve () {}
+        disconnect () {}
+    };
+    global.ResizeObserver = ResizeObserver;
+}
+
 // for jQuery.outerHTML() from import 'oskari-frontend/src/polyfills';
 jQuery.fn.outerHTML = function (arg) {
     var ret;

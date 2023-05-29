@@ -79,8 +79,6 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Välj lager för nya funktioner",
                 "LayerSelectionPlugin": "Kartlagermeny",
                 "CoordinateToolPlugin": "Koordinatverktyg",
-                "FeedbackServiceTool": "Responsverktyg (Open311)",
-                "MetadataSearchTool": "Möjlig användning av metadatasökningar programmatiskt",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
                 "CrosshairTool": "Visa kartans mittpunkt",
@@ -110,8 +108,10 @@ Oskari.registerLocalization(
                 "layerselection": {
                     "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                     "selectAsBaselayer": "Välj bakgrundskartlager",
-                    "allowStyleChange": "Tillåta stiländring",
-                    "showMetadata": "Visa länkar för metadata"
+                    "allowStyleChange": "Tillåt val av visningsstil",
+                    "showMetadata": "Visa länkar för metadata",
+                    "noMultipleStyles": "Endast en visningsstil är tillgänglig för valda kartlager.",
+                    "noMetadata": "Metadatalänkar är inte tillgängliga på valda kartlager"
                 },
                 "mylocation": {
                     "modes": {
@@ -131,8 +131,7 @@ Oskari.registerLocalization(
             "toollayout": {
                 "label": "Verktygsplacering",
                 "tooltip": "Välj placering för det verktyg som ska visas på kartan.",
-                "lefthanded": "Vänsterhänt",
-                "righthanded": "Högerhänt",
+                "swapUI": "Byt sida",
                 "userlayout": "Anpassad layout",
                 "usereditmode": "Starta redigering",
                 "usereditmodeoff": "Sluta redigering"
@@ -149,6 +148,10 @@ Oskari.registerLocalization(
             },
             "layout": {
                 "label": "Grafisk layout",
+                "title": {
+                    "popup": "Popupfönster",
+                    "buttons": "Knappar"
+                },
                 "fields": {
                     "colours": {
                         "label": "Färgschema",
@@ -171,7 +174,7 @@ Oskari.registerLocalization(
                         }
                     },
                     "fonts": {
-                        "label": "Typsnitt"
+                        "label": "Välj font"
                     },
                     "toolStyles": {
                         "rounded-dark": "Avrundad (mörk)",
@@ -181,14 +184,15 @@ Oskari.registerLocalization(
                         "3d-dark": "3D (mörk)",
                         "3d-light": "3D (ljus)"
                     },
-                    "popupHeaderColor": "Pop-upin otsikon taustaväri",
-                    "buttonBackgroundColor": "Painikkeiden taustaväri",
-                    "buttonTextColor": "Ikonien väri",
-                    "buttonAccentColor": "Ikonien tehosteväri",
-                    "buttonRounding": "Painikkeiden pyöristys",
-                    "effect": "Efekti",
+                    "popupHeaderColor": "Rubrikens bakgrundsfärg",
+                    "popupHeaderTextColor": "Rubrikens färg",
+                    "buttonBackgroundColor": "Bakgrundsfärg",
+                    "buttonTextColor": "Ikonernas färg",
+                    "buttonAccentColor": "Ikonernas effektfärg",
+                    "buttonRounding": "Knapparnas avrundning",
+                    "effect": "Effekt",
                     "3d": "3D",
-                    "presets": "Valmiit tyylimääritykset"
+                    "presets": "Färdiga stilkonfigurationer"
                 },
                 "popup": {
                     "title": "Välj färgschema",
@@ -230,6 +234,19 @@ Oskari.registerLocalization(
                 "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn.",
                 "promote": "Vill du också visa flygbilder?"
             },
+            "rpc": {
+                "label": "Programmatisk användning (RPC API)",
+                "info": "Med RPC gränssnittet kan du utnyttja publicerad kartor. Mer information https://oskari.org/documentation/features/rpc/"
+            },
+            "mapLayers": {
+                "label": "Kartlager",
+                "otherLayers": "Andra kartlager",
+                "selectLayers": "Välj kartlager",
+                "layersDisplay": "Kartlagrens visualisering",
+                "baseLayers": "Bakgrundskartor",
+                "noBaseLayers": "Inga bakgrundskartor valda",
+                "noLayers": "Inga kartlager valda"
+            },
             "preview": "Den inbäddade kartans förhandsgranskningsvy",
             "location": "Läge och skalnivå.",
             "zoomlevel": "Skalnivå",
@@ -261,7 +278,6 @@ Oskari.registerLocalization(
             "denied_tooltip": "Kartdataproducenterna har inte gett publiceringstillstånd till dessa material i andra webbtjänster eller denna kartlager kan inte visas med den valda kartprojektionen. Kontrollera rätten att publicera i menyn \"Valda Kartlager\" innan du börjar skapa kartan.",
             "myPlacesDisclaimer": "Obs! Du publicerar ditt eget kartlager.",
             "noRights": "inget tillstånd",
-            "unsupportedProjection": "ostödd kartprojektion",
             "buttons": {
                 "continue": "Fortsätt",
                 "continueAndAccept": "Godkänn användningsvillkor och fortsätt",
