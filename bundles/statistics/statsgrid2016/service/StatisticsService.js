@@ -2,8 +2,9 @@
  * @class Oskari.statistics.statsgrid.StatisticsService
  */
 (function (Oskari) {
-    var _log = Oskari.log('StatsGrid.StatisticsService');
-    var _cacheHelper = null;
+    /* eslint-disable n/no-callback-literal */
+    const _log = Oskari.log('StatsGrid.StatisticsService');
+    let _cacheHelper = null;
 
     Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, locale) {
         this.sandbox = sandbox;
@@ -11,7 +12,7 @@
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', this.cache, this);
         this.series = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesService', sandbox);
-        this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox, this.series);
+        this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox, this);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
         this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
@@ -28,6 +29,8 @@
 
         // Make series service listen for changes
         this.series.bindToEvents(this);
+
+        this.log = Oskari.log(this.getQName());
     }, {
         __name: 'StatsGrid.StatisticsService',
         __qname: 'Oskari.statistics.statsgrid.StatisticsService',
@@ -48,8 +51,8 @@
             return this._mapModes;
         },
         hasMapMode: function (mode) {
-            var me = this;
-            var hasMode = false;
+            const me = this;
+            let hasMode = false;
             me._mapModes.forEach(function (mapmode) {
                 if (mapmode === mode) {
                     hasMode = true;
@@ -96,7 +99,7 @@
                 // log error message
                 return;
             }
-            var me = this;
+            const me = this;
             if (Array.isArray(ds)) {
                 // if(typeof ds === 'array') -> loop and add all
                 ds.forEach(function (item) {
@@ -114,9 +117,9 @@
             });
         },
         getUILabels: function (ind, callback) {
-            var selectionValues = this.locale('panels.newSearch.selectionValues');
+            const selectionValues = this.locale('panels.newSearch.selectionValues');
             if (typeof callback !== 'function') {
-                // log error message
+                this.log.warn('Requested UI labels without callback function');
                 return;
             }
             const { datasource, indicator, selections, series } = ind;
@@ -167,6 +170,9 @@
                 });
             });
         },
+        getDatasources: function () {
+            return this.datasources.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+        },
         /**
          * Returns datasource {id, name, type} as object.
          * If id omitted returns all datasources as array.
@@ -178,7 +184,7 @@
             if (!id) {
                 return this.datasources;
             }
-            var found = null;
+            let found = null;
             this.datasources.forEach(function (ds) {
                 if ('' + ds.id === '' + id) {
                     found = ds;
@@ -191,7 +197,7 @@
                 // log error message
                 return;
             }
-            var me = this;
+            const me = this;
             if (Array.isArray(regionset)) {
                 // if(typeof regionset === 'array') -> loop and add all
                 regionset.forEach(function (item) {
@@ -213,17 +219,17 @@
          * Based on maplayers of type STATS.
          */
         getRegionsets: function (includeOnlyIds) {
-            var list = this.regionsets || [];
+            const list = this.regionsets || [];
             if (!list || list.length === 0) {
                 return [];
             }
-            var singleValue = typeof includeOnlyIds === 'number' || typeof includeOnlyIds === 'string';
+            const singleValue = typeof includeOnlyIds === 'number' || typeof includeOnlyIds === 'string';
             if (singleValue) {
                 // wrap to an array
                 includeOnlyIds = [includeOnlyIds];
             }
             if (Array.isArray(includeOnlyIds)) {
-                var result = list.filter(function (reg) {
+                const result = list.filter(function (reg) {
                     return includeOnlyIds.indexOf(reg.id) !== -1;
                 });
                 if (singleValue) {
@@ -241,16 +247,16 @@
          */
         getRegions: function (regionset, callback) {
             if (typeof callback !== 'function') {
-                // log error message
+                this.log.warn('Requested regions without callback function');
                 return;
             }
             if (!regionset) {
-                // log error message
+                this.log.warn('Requested regions without regionset');
                 callback('Regionset missing');
                 return;
             }
-            var me = this;
-            var cacheKey = _cacheHelper.getRegionsKey(regionset);
+            const me = this;
+            const cacheKey = _cacheHelper.getRegionsKey(regionset);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -270,7 +276,7 @@
                 },
                 url: Oskari.urls.getRoute('GetRegions'),
                 success: function (pResp) {
-                    var onlyWithNames = pResp.regions.filter(function (region) {
+                    const onlyWithNames = pResp.regions.filter(function (region) {
                         return !!region.name;
                     });
                     me.cache.respondToQueue(cacheKey, null, onlyWithNames);
@@ -295,7 +301,7 @@
                 callback('Datasource missing');
                 return;
             }
-            var cacheKey = _cacheHelper.getIndicatorListKey(ds);
+            const cacheKey = _cacheHelper.getIndicatorListKey(ds);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -305,8 +311,8 @@
                 return;
             }
 
-            var me = this;
-            var updateIncompleteIndicatorList = function (previousList) {
+            const me = this;
+            const updateIncompleteIndicatorList = function (previousList) {
                 _log.info('Indicator listing was not complete. Refreshing in 10 seconds');
                 setTimeout(function () {
                     me.cache.remove(cacheKey);
@@ -323,7 +329,7 @@
                             return;
                         }
                         // send out event about new indicators
-                        var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                        const eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
                         me.sandbox.notifyAll(eventBuilder(ds));
                     });
                 }, 10000);
@@ -366,8 +372,8 @@
                 callback('Datasource or indicator missing');
                 return;
             }
-            var me = this;
-            var cacheKey = _cacheHelper.getIndicatorMetadataKey(ds, indicator);
+            const me = this;
+            const cacheKey = _cacheHelper.getIndicatorMetadataKey(ds, indicator);
             if (this.cache.tryCachedVersion(cacheKey, callback)) {
                 // found a cached response
                 return;
@@ -417,19 +423,19 @@
                 callback('Requested dataset is out of range');
                 return;
             }
-            var me = this;
-            var data = {
+            const me = this;
+            const data = {
                 datasource: ds,
                 indicator: indicator,
                 regionset: regionset,
                 selectors: JSON.stringify(params || {})
             };
 
-            var cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
+            const cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
             _log.debug('Getting data with key', cacheKey);
 
             function fractionInit (err, data) {
-                var hash = me.state.getHash(ds, indicator, params, series);
+                const hash = me.state.getHash(ds, indicator, params, series);
                 if (!err) {
                     me._setInitialFractions(hash, data);
                 }
@@ -462,7 +468,7 @@
                         }
                         // filter out data for regions that are not part of the regionset since some adapters return additional data!
                         // any additional data will result in broken classification
-                        var filteredResponse = {};
+                        const filteredResponse = {};
                         regions.forEach(function (reg) {
                             filteredResponse[reg.id] = pResp[reg.id];
                         });
@@ -482,30 +488,30 @@
          * @param {Object} data indicator data
          */
         _setInitialFractions: function (indicatorHash, data) {
-            var ind = this.state.getIndicator(indicatorHash);
+            const ind = this.state.getIndicator(indicatorHash);
             if (!ind) {
                 return;
             }
             if (typeof ind.classification.fractionDigits !== 'number') {
-                var allInts = Object.keys(data).every(function (key) {
+                const allInts = Object.keys(data).every(function (key) {
                     return data[key] % 1 === 0;
                 });
                 ind.classification.fractionDigits = allInts ? 0 : 1;
             }
         },
         getSelectedIndicatorsRegions: function () {
-            var me = this;
-            var indicators = me.getStateService().getIndicators();
-            var regionsets = [];
-            var addRegions = function (regions) {
-                for (var i = 0; i < regions.length; i++) {
+            const me = this;
+            const indicators = me.getStateService().getIndicators();
+            const regionsets = [];
+            const addRegions = function (regions) {
+                for (let i = 0; i < regions.length; i++) {
                     if (jQuery.inArray(regions[i], regionsets) === -1) {
                         regionsets.push(regions[i]);
                     }
                 }
             };
-            for (var i = 0; i < indicators.length; i++) {
-                var ind = indicators[i];
+            for (let i = 0; i < indicators.length; i++) {
+                const ind = indicators[i];
                 me.getIndicatorMetadata(ind.datasource, ind.indicator, function (err, indicator) {
                     if (!err) {
                         addRegions(indicator.regionsets);
@@ -516,17 +522,17 @@
         },
         // FIXME: getIndicatorData returns error if dataset contains serie which is outside of current selection
         getCurrentDataset: function (callback) {
-            var me = this;
+            const me = this;
             if (typeof callback !== 'function') {
                 return;
             }
-            var setId = this.getStateService().getRegionset();
+            const setId = this.getStateService().getRegionset();
             if (!setId) {
                 callback('No regionset selected');
                 return;
             }
-            var regionset = this.getRegionsets(setId);
-            var response = {
+            const regionset = this.getRegionsets(setId);
+            const response = {
                 regionset: {
                     id: setId,
                     name: regionset.name
@@ -534,7 +540,7 @@
                 indicators: [],
                 data: []
             };
-            var indicators = this.getStateService().getIndicators();
+            const indicators = this.getStateService().getIndicators();
             this.getRegions(setId, function (err, regions) {
                 if (err) {
                     callback(err, response);
@@ -554,9 +560,9 @@
                     return;
                 }
                 // figure out ui names and data for indicators
-                var count = 0;
-                var errors = 0;
-                var done = function () {
+                let count = 0;
+                let errors = 0;
+                const done = function () {
                     if (errors) {
                         callback('Error populating indicators', response);
                         return;
@@ -564,7 +570,7 @@
                     callback(null, response);
                 };
                 indicators.forEach(function (ind) {
-                    var metadata = {
+                    const metadata = {
                         datasource: {
                             id: ind.datasource,
                             name: me.getDatasource(ind.datasource).name
@@ -606,7 +612,7 @@
             });
         },
         saveIndicator: function (datasrc, data, callback) {
-            var me = this;
+            const me = this;
             if (typeof callback !== 'function') {
                 return;
             }
@@ -618,13 +624,13 @@
                 callback('Data missing');
                 return;
             }
-            var responseHandler = function (err, indicatorId) {
+            const responseHandler = function (err, indicatorId) {
                 if (err) {
                     callback(err);
                     return;
                 }
                 // send out event about new/updated indicators
-                var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                const eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
                 me.sandbox.notifyAll(eventBuilder(datasrc));
                 callback(null, {
                     ds: datasrc,
@@ -634,7 +640,7 @@
 
             if (!Oskari.user().isLoggedIn()) {
                 // successfully saved for guest user
-                var indicatorId = data.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
+                const indicatorId = data.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
                 _cacheHelper.updateIndicatorInCache(datasrc, indicatorId, data, function (err) {
                     responseHandler(err, indicatorId);
                 });
@@ -667,7 +673,7 @@
             });
         },
         saveIndicatorData: function (datasrc, indicatorId, selectors, data, callback) {
-            var me = this;
+            const me = this;
             if (typeof callback !== 'function') {
                 return;
             }
@@ -687,8 +693,8 @@
                 callback('Data missing');
                 return;
             }
-            var regionset = selectors.regionset;
-            var actualSelectors = {};
+            const regionset = selectors.regionset;
+            const actualSelectors = {};
             Object.keys(selectors).forEach(function (selectorId) {
                 if (selectorId !== 'regionset') {
                     // filter out regionset
@@ -729,14 +735,21 @@
          * selectors and regionset are optional -> will only delete dataset from indicator if given
          */
         deleteIndicator: function (datasrc, indicatorId, selectors, regionset, callback) {
+            const stateService = this.getStateService();
+            // remove indicators from state before deleting indicator data
+            stateService.getIndicators()
+                .filter(ind => ind.datasource === datasrc && ind.indicator === indicatorId)
+                .forEach(ind => {
+                    stateService.removeIndicator(ind.datasource, ind.indicator, ind.selections, ind.series);
+                });
             if (!Oskari.user().isLoggedIn()) {
                 // just flush cache
                 _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                 callback();
                 return;
             }
-            var me = this;
-            var data = {
+            const me = this;
+            const data = {
                 datasource: datasrc,
                 id: indicatorId
             };
@@ -755,7 +768,7 @@
                     _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                     if (!selectors) {
                         // if selectors/regionset is missing -> trigger a DatasourceEvent as the indicator listing changes
-                        var eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+                        const eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
                         me.sandbox.notifyAll(eventBuilder(datasrc));
                     }
                     callback();
@@ -771,13 +784,13 @@
          * @param datasource datasource
          */
         getUnsupportedRegionsets: function (ds) {
-            var all = this.regionsets.slice(0);
-            var supported = this.datasources.find(function (e) {
+            const all = this.regionsets.slice(0);
+            const supported = this.datasources.find(function (e) {
                 return e.id === Number(ds);
             });
             if (supported) {
                 supported.regionsets.forEach(function (index) {
-                    for (var i = 0; i < all.length; i++) {
+                    for (let i = 0; i < all.length; i++) {
                         if (all[i].id === index) {
                             all.splice(i, 1);
                         }
@@ -796,9 +809,9 @@
                 return;
             }
 
-            var unsupportedDatasources = [];
+            const unsupportedDatasources = [];
             this.datasources.forEach(function (ds) {
-                var supported = regionsets.some(function (iter) {
+                const supported = regionsets.some(function (iter) {
                     return ds.regionsets.indexOf(Number(iter)) !== -1;
                 });
                 if (!supported) {
@@ -808,6 +821,6 @@
             return unsupportedDatasources;
         }
     }, {
-        'protocol': ['Oskari.mapframework.service.Service']
+        protocol: ['Oskari.mapframework.service.Service']
     });
 }(Oskari));

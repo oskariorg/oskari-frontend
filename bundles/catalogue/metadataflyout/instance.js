@@ -202,9 +202,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             // add tools for feature data layers
             var service = this.getLayerService();
             var layers = service.getAllLayers();
-            _.each(layers, function (layer) {
-                me._addTool(layer, true);
-            });
+            layers.forEach(layer => this._addTool(layer, true));
             // update all layers at once since we suppressed individual events
             var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             me.sandbox.notifyAll(event);

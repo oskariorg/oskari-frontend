@@ -4,6 +4,10 @@ import olLayerTile from 'ol/layer/Tile';
 import olLayerImage from 'ol/layer/Image';
 import olLayerVector from 'ol/layer/Vector';
 import olLayerVectorTile from 'ol/layer/VectorTile';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { MapModuleButton } from '../../MapModuleButton';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin
@@ -30,9 +34,13 @@ Oskari.clazz.define(
         me._name = 'IndexMapPlugin';
         me._indexMap = null;
         me._baseLayerId = null;
-        me._indElement = null;
     },
     {
+        _startPluginImpl: function () {
+            this._element = this._createControlElement();
+            this.refresh();
+            this.addToPluginContainer(this._element);
+        },
         _stopPluginImpl: function () {
             this._removeIndexMap();
             this.teardownUI();
@@ -46,36 +54,16 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             /* overview map */
-            var me = this,
-                conf = me.getConfig(),
-                el;
+            const conf = this.getConfig() || {};
+            let el;
 
             if (conf.containerId) {
                 el = jQuery('#' + conf.containerId);
             } else {
                 el = jQuery('<div class="mapplugin indexmap"></div>');
             }
-            // Ol indexmap target
-            me._indElement = jQuery('<div class="mapplugin ol_indexmap"></div>');
-            el.append(me._indElement);
 
-            var toggleButton = jQuery('<div class="indexmapToggle"><div class="icon"></div></div>');
-            // button has to be added separately so the element order is correct...
-            el.append(toggleButton);
-            var toolStyle = this.getToolStyleFromMapModule();
-            this.changeToolStyle(toolStyle, el);
-
-            // add toggle functionality to button
-            me._bindIcon(toggleButton);
-            this._createIndexMap();
             return el;
-        },
-
-        _bindIcon: function (icon) {
-            icon.off('click');
-            icon.on('click', () => {
-                this._handleClick();
-            });
         },
         /**
          * @method _getOverviewLayers
@@ -112,12 +100,21 @@ Oskari.clazz.define(
             this._baseLayerId = layerId;
             return result;
         },
-        _createIndexMap: function (collapsed = true) {
+        _createIndexMap: function (collapsed = false) {
             if (this._indexMap) return;
+            const el = this.getElement();
+            if (!el) return;
+            const indElement = jQuery('<div class="mapplugin ol_indexmap"></div>');
+            const location = this.getLocation();
+            if (location.includes('top')) {
+                el.append(indElement);
+            } else {
+                el.prepend(indElement);
+            }
             const olMap = this.getMap();
             const projection = olMap.getView().getProjection();
             this._indexMap = new olControlOverviewMap({
-                target: this._indElement[0],
+                target: indElement[0],
                 layers: this._getOverviewLayers(),
                 collapsed,
                 view: new olView({ projection })
@@ -127,62 +124,49 @@ Oskari.clazz.define(
         _removeIndexMap: function () {
             if (!this._indexMap) return;
             this.getMap().removeControl(this._indexMap);
+            const el = this.getElement();
+            el.find('.ol_indexmap').remove();
             this._baseLayerId = null;
             this._indexMap = null;
         },
         _handleClick: function () {
             if (!this._indexMap) {
                 this._createIndexMap(false);
-                return;
-            }
-            if (this._indexMap.getCollapsed()) {
-                const baseLayer = this.getMapModule().getBaseLayer();
-                if (!baseLayer || this._baseLayerId === baseLayer.getId()) {
-                    this._indexMap.setCollapsed(false);
-                    return;
-                }
-                // base layer changed, create new index map
+            } else {
                 this._removeIndexMap();
-                this._createIndexMap(false);
-            } else {
-                this._indexMap.setCollapsed(true);
             }
         },
-        changeToolStyle: function (style, div) {
-            var el = div || this.getElement();
-
+        refresh: function () {
+            let el = this.getElement();
             if (!el) {
                 return;
             }
-            el = el.find('.indexmapToggle');
-
-            el.removeClass((index, className) => {
-                let matchedClasses = className.match(/(^|\s)toolstyle-\S+/g);
-                return (matchedClasses || []).join('');
-            });
-
-            el.addClass('toolstyle-' + (style || 'default'));
-        },
-        _setLayerToolsEditModeImpl: function () {
-            const el = this.getElement();
-            if (!el) {
-                return;
+            const theme = this.getMapModule().getMapTheme();
+            const helper = getNavigationTheme(theme);
+            const isDark = Oskari.util.isDarkColor(helper.getPrimary());
+            // the icon is switched based on styleName -> passed to classes -> see scss
+            let styleName = 'bg-dark';
+            if (!isDark) {
+                styleName = 'bg-light';
             }
-            var icon = el.find('.indexmapToggle');
 
-            if (this.inLayerToolsEditMode()) {
-                // close map
-                if (this._indexMap) {
-                    this._indexMap.setCollapsed(true);
-                }
-                // disable icon
-                icon.off('click');
-            } else {
-                // enable icon
-                this._bindIcon(icon);
+            ReactDOM.render(
+                <div className={`indexmapToggle ${styleName}`}>
+                    <MapModuleButton
+                        className='t_indexmap'
+                        onClick={() => this._handleClick()}
+                        size='48px'
+                        icon={<div className='icon' />}
+                    />
+                </div>,
+                el[0]
+            );
+        },
+        resetUI: function () {
+            if (this._indexMap) {
+                this._removeIndexMap();
             }
         }
-
     },
     {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

@@ -1,5 +1,8 @@
-import { processFeatureProperties } from '../util/props';
+import { Cluster as olCluster } from 'ol/source';
+import { filterFeaturesByAttribute, filterFeaturesByGeometry } from '../../../../mapmodule/util/vectorfeatures/filter';
+import { getFeatureAsGeojson } from '../../../../mapmodule/util/vectorfeatures/jsonHelper';
 import { getZoomLevelHelper } from '../../../../mapmodule/util/scale';
+import { SelectionHelper } from './SelectionHelper';
 
 const LOADING_STATUS_VALUE = {
     COMPLETE: 'complete',
@@ -18,6 +21,7 @@ export class AbstractLayerHandler {
 
         this.loadingTimers = new Map();
         this.timerDelayInMillis = 60000;
+        this.selectionHelper = new SelectionHelper(layerPlugin);
     }
 
     /**
@@ -38,7 +42,8 @@ export class AbstractLayerHandler {
         return {
             AfterChangeMapLayerStyleEvent: event => this._updateLayerStyle(event.getMapLayer()),
             AfterChangeMapLayerOpacityEvent: event => this._updateLayerOpacity(event.getMapLayer()),
-            MapLayerVisibilityChangedEvent: event => this._updateLayerStyle(event.getMapLayer())
+            MapLayerVisibilityChangedEvent: event => this._updateLayerStyle(event.getMapLayer()),
+            WFSFeaturesSelectedEvent: event => this._updateSelection(event.getMapLayer(), event.getWfsFeatureIds())
         };
     }
 
@@ -61,22 +66,29 @@ export class AbstractLayerHandler {
     refreshLayer (layer) {
         this._log.debug('TODO: refreshLayer() not implemented on LayerHandler');
     }
-
-    getLayerFeaturePropertiesInViewport (layerId) {
-        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
-        const source = this._getLayerSource(layerId);
-        const features = this._getFeaturePropsInExtent(source, [left, bottom, right, top]);
-        return features.map(f => processFeatureProperties(f));
+    getFeaturesWithFilter (layerId, geojson = {}) {
+        const features = this._getFeaturesInViewport(layerId);
+        if (!features.length) {
+            return [];
+        }
+        let geojsonFeatures = features.map(feat => getFeatureAsGeojson(feat));
+        if (geojson && geojson.geometry) {
+            geojsonFeatures = filterFeaturesByGeometry(geojsonFeatures, geojson.geometry);
+        }
+        if (geojson && geojson.properties) {
+            geojsonFeatures = filterFeaturesByAttribute(geojsonFeatures, geojson.properties);
+        }
+        return geojsonFeatures;
     }
 
-    _getFeaturePropsInExtent (source, extent) {
-        if (typeof source.getFeaturePropsInExtent === 'function') {
-            return source.getFeaturePropsInExtent(extent);
+    _getFeaturesInViewport (layerId) {
+        const source = this._getLayerSource(layerId);
+        if (!source) {
+            return [];
         }
-        if (typeof source.getFeaturesInExtent === 'function') {
-            return source.getFeaturesInExtent(extent).map(ftr => ftr.getProperties());
-        }
-        return [];
+        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
+        const extent = [left, bottom, right, top];
+        return source.getFeaturesInExtent(extent) || [];
     }
 
     /**
@@ -85,10 +97,17 @@ export class AbstractLayerHandler {
      * @return {ol/source/VectorTile}
      */
     _getLayerSource (layer) {
-        const olLayers = this.plugin.getOLMapLayers(layer);
-        if (olLayers && olLayers.length > 0) {
-            return olLayers[0].getSource();
+        const olLayers = this.plugin.getOLMapLayers(layer) || [];
+        const mainLayer = olLayers.length ? olLayers[0] : null;
+        if (!mainLayer) {
+            return;
         }
+        let source = mainLayer.getSource();
+        if (source instanceof olCluster) {
+            // Get wrapped vector source
+            source = source.getSource();
+        }
+        return source;
     }
 
     /**
@@ -100,6 +119,14 @@ export class AbstractLayerHandler {
             return;
         }
         this.plugin.updateLayerStyle(layer);
+        this.selectionHelper.updateSelectionStyles(layer);
+    }
+
+    _updateSelection (layer, featureIds) {
+        if (!this.layerIds.includes(layer.getId())) {
+            return;
+        }
+        this.selectionHelper.updateSelection(layer, featureIds);
     }
 
     /**

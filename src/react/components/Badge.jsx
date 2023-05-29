@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Badge as AntBadge } from 'antd';
 import 'antd/es/badge/style/index.js';
 
-export const Badge = ({ count, inversed }) => {
+export const Badge = ({ count, inversed, ...rest }) => {
     const style = {
         backgroundColor: inversed ? '#333' : '#999',
         color: '#fff',
@@ -12,7 +12,7 @@ export const Badge = ({ count, inversed }) => {
         whiteSpace: 'nowrap',
         textShadow: '0 -1px 0 rgba(0,0,0,.25)'
     };
-    return <AntBadge count={count} style={style} overflowCount={999} showZero={true}/>;
+    return <AntBadge count={count} style={style} overflowCount={999} showZero={true} {...rest} />;
 };
 Badge.propTypes = {
     count: PropTypes.oneOfType([

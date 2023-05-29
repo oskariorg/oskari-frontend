@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Lisa kaardi pealkiri"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Lisa Paikkatietokkuna logo väljatrükile",
-                    "tooltip": "Vajadusel saab Paikkatietokkuna logo peita"
-                },
                 "pageScale": {
                     "label": "Lisa kaardile mõõtkava",
                     "tooltip": "Soovi korral lisa trükisele mõõtkava."

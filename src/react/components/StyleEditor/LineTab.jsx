@@ -1,55 +1,51 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ColorPicker, Message } from 'oskari-ui';
-import { SvgRadioButton, Preview, SizeControl, constants } from './index';
-import { Form, Row, Col } from 'antd';
+import { ColorPicker } from '../ColorPicker';
+import { Message } from '../Message';
+import { SvgRadioButton, SizeControl, constants, PreviewCol } from './index';
+import { Row, Col } from 'antd';
+import { FormItem } from '../Form';
 
-export const LineTab = (props) => {
+export const LineTab = ({ oskariStyle, showPreview }) => {
     return (
         <React.Fragment>
             <Row>
-                <Col span={ 10 }>
-                    <Form.Item
+                <Col span={ 16 }>
+                    <FormItem
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.color'
                         label={ <Message messageKey='StyleEditor.stroke.color' /> }
                     >
                         <ColorPicker />
-                    </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='stroke.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                    </Form.Item>
+                    </FormItem>
                 </Col>
+                { showPreview && <PreviewCol oskariStyle={ oskariStyle } format='line' /> }
             </Row>
 
             <Row>
-                <Form.Item
+                <FormItem
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.lineDash'
                     label={ <Message messageKey='StyleEditor.stroke.lineDash' /> }
                 >
                     <SvgRadioButton options={ constants.LINE_STYLES.lineDash } />
-                </Form.Item>
+                </FormItem>
 
-                <Form.Item
+                <FormItem
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.lineCap'
                     label={ <Message messageKey='StyleEditor.stroke.lineCap' /> }
                 >
                     <SvgRadioButton options={ constants.LINE_STYLES.linecaps } />
-                </Form.Item>
+                </FormItem>
 
-                <Form.Item
+                <FormItem
                     { ...constants.ANTD_FORMLAYOUT }
-                    name='stroke.area.lineJoin'
-                    label={ <Message messageKey='StyleEditor.stroke.area.lineJoin' /> }
+                    name='stroke.lineJoin'
+                    label={ <Message messageKey='StyleEditor.stroke.lineJoin' /> }
                 >
                     <SvgRadioButton options={ constants.LINE_STYLES.corners } />
-                </Form.Item>
+                </FormItem>
             </Row>
 
             <Row>
@@ -59,16 +55,11 @@ export const LineTab = (props) => {
                     localeKey={ 'StyleEditor.stroke.width' }
                 />
             </Row>
-
-            <Preview
-                oskariStyle={ props.oskariStyle }
-                format={ 'line' }
-            />
-
         </React.Fragment>
     );
 };
 
 LineTab.propTypes = {
-    oskariStyle: PropTypes.object.isRequired
+    oskariStyle: PropTypes.object.isRequired,
+    showPreview: PropTypes.bool
 };

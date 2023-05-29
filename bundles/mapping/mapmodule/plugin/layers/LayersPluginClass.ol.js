@@ -1,8 +1,18 @@
+import { Messaging } from 'oskari-ui/util';
+
+import './request/MapLayerVisibilityRequest';
+import './request/MapLayerVisibilityRequestHandler.ol';
+import './event/MapLayerVisibilityChangedEvent';
+
+import './request/MapMoveByLayerContentRequest';
+import './request/MapMoveByLayerContentRequestHandler';
+
 import olFormatWKT from 'ol/format/WKT';
 
 const WKT_READER = new olFormatWKT();
 const AbstractMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin');
-const LAYER_WKT_STATUS = {};
+const SUPPORTED_DELAY = 2000;
+const VISIBILITY_DELAY = 750;
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin
@@ -21,60 +31,67 @@ export class LayersPlugin extends AbstractMapModulePlugin {
         this._name = 'LayersPlugin';
 
         this._supportedFormats = {};
-        // visibility checks are cpu intensive so only make them when the map has
-        // stopped moving
-        // after map move stopped -> activate a timer that will
-        // do the check after _visibilityPollingInterval milliseconds
-        this._visibilityPollingInterval = 750;
         this._visibilityCheckOrder = 0;
         this._previousTimer = null;
+        this._supportedTimer = null;
     }
-    _createEventHandlers () {
-        var me = this;
 
+    _createEventHandlers () {
         return {
-            MapMoveStartEvent: function () {
-            // clear out any previous visibility check when user starts to move
-            // map
+            MapMoveStartEvent: () => {
+            // clear out any previous visibility check when user starts to move map
             // not always sent f.ex. when moving with keyboard so do this in
             // AfterMapMoveEvent also
-                me._visibilityCheckOrder += 1;
-                if (me._previousTimer) {
-                    clearTimeout(me._previousTimer);
-                    me._previousTimer = null;
+                this._visibilityCheckOrder += 1;
+                if (this._previousTimer) {
+                    clearTimeout(this._previousTimer);
+                    this._previousTimer = null;
                 }
             },
-            AfterMapMoveEvent: function () {
-                me._scheduleVisiblityCheck();
+            AfterMapMoveEvent: () => {
+                // visibility checks are cpu intensive so only make them when the map has stopped moving
+                this._scheduleVisiblityCheck();
             },
-            AfterMapLayerAddEvent: function (event) {
-            // parse geom if available
-                me._parseGeometryForLayer(event.getMapLayer());
-                me._scheduleVisiblityCheck();
+            AfterMapLayerAddEvent: (event) => {
+                this._afterMapLayerAddEvent(event);
+            },
+            MapLayerEvent: (event) => {
+                if (event.getOperation() !== 'add') {
+                    return;
+                }
+                this._scheduleSupportedCheck();
             }
         };
     }
 
     _createRequestHandlers () {
-        var me = this;
-        var sandbox = me.getSandbox();
-
+        const sandbox = this.getSandbox();
         return {
             'MapModulePlugin.MapLayerVisibilityRequest': Oskari.clazz.create(
                 'Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequestHandler',
                 sandbox,
-                me
+                this
             ),
             'MapModulePlugin.MapMoveByLayerContentRequest': Oskari.clazz.create(
                 'Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayerContentRequestHandler',
                 sandbox,
-                me
+                this
             )
         };
     }
 
+    _afterMapLayerAddEvent (event) {
+        const { unsupported } = event.getMapLayer().getVisibilityInfo();
+        if (unsupported) {
+            Messaging.warn({
+                content: unsupported.getDescription(),
+                duration: 5
+            });
+        }
+    }
+
     /**
-     * @method _parseGeometryForLayer
+     * @method handleDescribeLayer
      * @private
      *
      * If layer.getGeometry() is empty, tries to parse layer.getGeometryWKT()
@@ -85,72 +102,21 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      *            layer layer for which to parse geometry
      *
      */
-    _parseGeometryForLayer (layer) {
-        // parse geometry if available
-        const layerId = layer.getId();
-        if (LAYER_WKT_STATUS[layerId] === true) {
-            // already loading or loaded/handled
-            return;
-        }
-        // set a flag to notify the layer WKT is loading/loaded/handled and we don't need to try again
-        LAYER_WKT_STATUS[layerId] = true;
-        if (typeof layer.getGeometry !== 'function') {
-            // layer type doesn't support this
-            return;
-        }
-        if (layer.getGeometry().length > 0) {
-            // already parsed, no need to parse again
-            return;
-        }
-        this.__getLayerCoverageWKT(layer, coverageWKT => {
-            if (!coverageWKT) {
-                return;
-            }
-            const geometry = WKT_READER.readGeometry(coverageWKT);
+    handleDescribeLayer (layer, info) {
+        const { coverage } = info;
+        // already parsed
+        const hasGeometry = layer.getGeometry().length > 0;
+        if (!hasGeometry && coverage) {
+            const geometry = WKT_READER.readGeometry(coverage);
             if (geometry) {
-                layer.setGeometryWKT(coverageWKT);
+                layer.setGeometryWKT(coverage);
                 layer.setGeometry([geometry]);
             }
-        });
-    }
-    /**
-     * Fetches WKT from server if required
-     * @param {AbstractLayer} layer layer to get WKT for
-     * @param {Function} callback gets the wkt as parameter or undefined if it's not available
-     * @returns callback is used for return value
-     */
-    __getLayerCoverageWKT (layer, callback) {
-        if (typeof layer.getGeometryWKT === 'function' && layer.getGeometryWKT()) {
-            // we didn't load it but the layer has WKT present -> use it.
-            // userlayers, analysis etc might do this
-            callback(layer.getGeometryWKT());
-            return;
         }
-        const layerId = layer.getId();
-        if (isNaN(layerId)) {
-            // only layers that have numeric ids can have reasonable coverage WKT response for DescribeLayer
-            callback();
-            return;
-        }
-        const url = Oskari.urls.getRoute('DescribeLayer', {
-            id: layerId,
-            lang: Oskari.getLang(),
-            srs: this.getMapModule().getProjection()
-        });
-
-        fetch(url).then(response => {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-            return response.json();
-        }).then(json => {
-            callback(json.coverage);
-        }).catch(error => {
-            // reset flag to try again later
-            LAYER_WKT_STATUS[layerId] = false;
-            Oskari.log('WKT download').warn(error);
-            callback();
-        });
+        // set visibility info
+        const inScale = this._isInScale(layer);
+        const geometryMatch = this.isInGeometry(layer);
+        layer.updateVisibilityInfo({ inScale, geometryMatch });
     }
 
     /**
@@ -164,22 +130,15 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      * @return {Boolean} true if geometry is visible or cant determine if it isnt
      */
     isInGeometry (layer) {
-        var geometries = layer.getGeometry();
-        if (!geometries) {
-            return true;
-        }
-
+        const geometries = layer.getGeometry() || [];
         if (geometries.length === 0) {
             return true;
         }
-
-        var viewBounds = this.getMapModule().getCurrentExtent();
-        var olExtent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
-        if (geometries[0].intersectsExtent(olExtent)) {
-            return true;
-        }
-        return false;
+        const viewBounds = this.getMapModule().getCurrentExtent();
+        const olExtent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
+        return geometries[0].intersectsExtent(olExtent);
     }
+
     /**
      * @method getGeometryCenter
      *
@@ -200,6 +159,7 @@ export class LayersPlugin extends AbstractMapModulePlugin {
         //
         }
     }
+
     /**
      * @method getGeometryBounds
      *
@@ -215,6 +175,7 @@ export class LayersPlugin extends AbstractMapModulePlugin {
             top: extent[3]
         };
     }
+
     /**
      * @method _scheduleVisiblityCheck
      * @private
@@ -222,7 +183,7 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      * calls  _checkLayersVisibility()
      */
     _scheduleVisiblityCheck () {
-        var me = this;
+        const me = this;
         if (this._previousTimer) {
             clearTimeout(this._previousTimer);
             this._previousTimer = null;
@@ -230,8 +191,30 @@ export class LayersPlugin extends AbstractMapModulePlugin {
         this._visibilityCheckOrder++;
         this._previousTimer = setTimeout(function () {
             me._checkLayersVisibility(me._visibilityCheckOrder);
-        }, this._visibilityPollingInterval);
+        }, VISIBILITY_DELAY);
     }
+
+    _scheduleSupportedCheck () {
+        if (this._supportedTimer) {
+            clearTimeout(this._supportedTimer);
+            this._supportedTimer = null;
+        }
+        this._supportedTimer = setTimeout(() => {
+            this._checkSupportedLayers();
+        }, SUPPORTED_DELAY);
+    }
+
+    _checkSupportedLayers () {
+        const sb = this.getSandbox();
+        const layers = sb.getService('Oskari.mapframework.service.MapLayerService').getAllLayers();
+        const map = sb.getMap();
+
+        layers.forEach(layer => {
+            const unsupported = map.getMostSevereUnsupportedLayerReason(layer);
+            layer.updateVisibilityInfo({ unsupported });
+        });
+    }
+
     /**
      * @method _checkLayersVisibility
      * @private
@@ -245,17 +228,14 @@ export class LayersPlugin extends AbstractMapModulePlugin {
         if (orderNumber !== this._visibilityCheckOrder) {
             return;
         }
-        var layers = this._sandbox.findAllSelectedMapLayers();
-        var i;
-        var layer;
-        for (i = 0; i < layers.length; ++i) {
-            layer = layers[i];
+        this._sandbox.findAllSelectedMapLayers().forEach(layer => {
             if (layer.isVisible()) {
                 this.handleMapLayerVisibility(layer);
             }
-        }
+        });
         this._visibilityCheckScheduled = false;
     }
+
     /**
      * @method _isInScale
      * @private
@@ -266,9 +246,18 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      * @return {Boolean} true maplayer is visible in current zoomlevel
      */
     _isInScale (layer) {
-        var scale = this.getMapModule().getMapScale();
+        const scale = this.getMapModule().getMapScale();
         return layer.isInScale(scale);
     }
+
+    _isLayerImplVisible (olLayer) {
+        return olLayer.getVisible();
+    }
+
+    _setLayerImplVisible (olLayer, visible) {
+        olLayer.setVisible(visible);
+    }
+
     /**
      * @method handleMapLayerVisibility
      * Checks layer's visibility (visible, inScale, inGeometry) and sets ol layers' visibilities.
@@ -279,48 +268,28 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      * @param {Boolean} isRequest if MapLayerVisibilityRequest, then trigger always change because layer's visibility has changed
     */
     handleMapLayerVisibility (layer, isRequest) {
-        var scaleOk = layer.isVisible();
-        var geometryMatch = layer.isVisible();
-        var triggerChange = (isRequest === true);
-        // if layer is visible check actual values
-        if (layer.isVisible()) {
-            scaleOk = this._isInScale(layer);
-            geometryMatch = this.isInGeometry(layer);
-        }
-        // setup openlayers visibility
-        // NOTE: DO NOT CHANGE visibility in internal layer object (it will
-        // change in UI also)
-        // this is for optimization purposes
-        var mapLayers = this.getMapModule().getOLMapLayers(layer.getId());
-        if (!mapLayers || !mapLayers.length) {
-            if (triggerChange) {
-                this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
+        const visible = layer.isVisible();
+        let triggerChange = isRequest === true;
+
+        // check actual values only for visible layer
+        const inScale = visible ? this._isInScale(layer) : false;
+        const geometryMatch = visible ? this.isInGeometry(layer) : false;
+
+        // setup maplayers visibility (optimization purposes)
+        // NOTE: DO NOT CHANGE layer's visibility here
+        const olLayers = this.getMapModule().getOLMapLayers(layer.getId()) || [];
+        const shouldBeVisible = visible && inScale && geometryMatch;
+        olLayers.forEach(ol => {
+            if (this._isLayerImplVisible(ol) !== shouldBeVisible) {
+                this._setLayerImplVisible(ol, shouldBeVisible);
+                triggerChange = true;
             }
-            return;
-        }
-        if (scaleOk && geometryMatch && layer.isVisible()) {
-        // show non-baselayer if in scale, in geometry and layer visible
-            mapLayers.forEach(function (mapLayer) {
-                if (!mapLayer.getVisible()) {
-                    mapLayer.setVisible(true);
-                    triggerChange = true;
-                }
-            });
-        } else {
-        // otherwise hide non-baselayer
-            mapLayers.forEach(function (mapLayer) {
-                if (mapLayer.getVisible()) {
-                    mapLayer.setVisible(false);
-                    triggerChange = true;
-                }
-            });
-        }
+        });
+
         if (triggerChange) {
-            this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
+            layer.updateVisibilityInfo({ inScale, geometryMatch });
+            const event = Oskari.eventBuilder('MapLayerVisibilityChangedEvent')(layer, inScale, geometryMatch);
+            this._sandbox.notifyAll(event);
         }
-    }
-    notifyLayerVisibilityChanged (layer, inScale, geometryMatch) {
-        var event = Oskari.eventBuilder('MapLayerVisibilityChangedEvent')(layer, inScale, geometryMatch);
-        this._sandbox.notifyAll(event);
     }
 }

@@ -31,4 +31,5 @@ export const DefaultStyle = styled(Checkbox)`
 
 export const StyleSelect = styled(Select)`
     flex: 1;
+    min-width: 300px;
 `;

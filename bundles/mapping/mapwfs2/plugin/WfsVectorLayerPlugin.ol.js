@@ -1,18 +1,17 @@
 import { VectorLayerHandler } from './WfsVectorLayerPlugin/impl/VectorLayerHandler.ol';
 import { MvtLayerHandler } from './WfsVectorLayerPlugin/impl/MvtLayerHandler.ol';
 import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
-import { styleGenerator, DEFAULT_STYLES } from './WfsVectorLayerPlugin/util/style';
+import { DEFAULT_STYLES, styleGenerator } from './WfsVectorLayerPlugin/util/style';
 
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
-
-const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
+const AbstractVectorLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractVectorLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const WFSLayerService = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 
-export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
+export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
     constructor (config) {
-        super();
+        super(config);
         this._config = config;
         this.__name = 'WfsVectorLayerPlugin';
         this._clazz = 'Oskari.wfs.WfsVectorLayerPlugin';
@@ -45,9 +44,11 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         this.layertypes.add(layertype);
         this.getMapModule().setLayerPlugin(layertype, this);
+        this.getMapModule().registerDefaultFeatureStyle(layertype, DEFAULT_STYLES.style);
         this.mapLayerService.registerLayerModel(layertype, modelClass);
         this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
         this.vectorFeatureService.registerLayerType(layertype, this);
+        this.vectorFeatureService.registerDefaultStyles(layertype, DEFAULT_STYLES);
         this._registerEventHandlers(eventHandlers);
     }
 
@@ -87,7 +88,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             LayerComposingModel.CREDENTIALS,
             LayerComposingModel.HOVER,
             LayerComposingModel.SRS,
-            LayerComposingModel.STYLES_JSON,
+            LayerComposingModel.VECTOR_STYLES,
             LayerComposingModel.URL,
             LayerComposingModel.VERSION,
             LayerComposingModel.WFS_RENDER_MODE
@@ -98,6 +99,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
         this.vectorFeatureService.registerDefaultStyles(this.layertype, DEFAULT_STYLES);
+        this.getMapModule().registerDefaultFeatureStyle(this.layertype, DEFAULT_STYLES.style);
         sandbox.registerService(this.WFSLayerService);
     }
 
@@ -151,29 +153,77 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     }
 
     /**
-     * @method getPropertiesForIntersectingGeom
-     * To get feature properties as a list. Returns features that intersect with given geometry.
-     *
-     * @param {String | Object} geoJsonGeom GeoJson format geometry object. Note: NOT feature, but feature's geometry
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @return {Array} features' properties as a list
+     * @method updateLayerParams
+     * Force updating features on layer
      */
-    getPropertiesForIntersectingGeom (geoJsonGeom, layer) {
+    updateLayerParams (layer, forced, params) {
         const handler = this._getLayerHandler(layer);
-        if (!handler) {
-            return;
+        if (handler) {
+            handler.refreshLayer(layer);
         }
-        const olLayer = this.getOLMapLayers(layer)[0];
-        return handler.getPropertiesForIntersectingGeom(geoJsonGeom, olLayer);
     }
 
     getLayerFeaturePropertiesInViewport (layerId) {
-        const handler = this._getLayerHandler(layerId);
-        if (handler) {
-            return handler.getLayerFeaturePropertiesInViewport(layerId);
-        }
+        const result = this.getFeatures(null, {
+            layers: [layerId]
+        });
+        const { features = [] } = result[layerId];
+        return features.map(f => f.properties);
     }
 
+    /**
+     * Override in actual plugins to returns features.
+     *
+     * Returns features that are currently on map filtered by given geometry and/or properties
+     * {
+     *   "[layer id]": {
+     *      accuracy: 'extent',
+     *      runtime: true,
+     *      features: [{ geometry: {...}, properties: {...}}, ...]
+     *   },
+     *   ...
+     * }
+     * Runtime flag is true for features pushed with AddFeaturesToMapRequest etc and false/missing for features from WFS/OGC API sources.
+     * For features that are queried from MVT-tiles we might not be able to get the whole geometry and since it's not accurate they will
+     *  only get the extent of the feature. This is marked with accuracy: 'extent' and it might not even be the whole extent if the
+     *  feature continues on unloaded tiles.
+     * @param {Object} geojson an object with geometry and/or properties as filter for features. Geometry defaults to current viewport.
+     * @param {Object} opts additional options to narrow feature collection
+     * @returns {Object} an object with layer ids as keys with an object value with key "features" for the features on that layer and optional runtime-flag
+     */
+    getFeatures (geojson = {}, opts = {}) {
+        let { layers } = opts;
+        if (!layers || !layers.length) {
+            layers = this.getSandbox().getMap().getLayers().map(l => l.getId());
+        }
+        const result = {};
+        layers.forEach(layerId => {
+            const layer = this.getSandbox().getMap().getSelectedLayer(layerId);
+            if (!this.isLayerSupported(layer)) {
+                return;
+            }
+            const err = this.detectErrorOnFeatureQuery(layer);
+            if (err) {
+                result[layerId] = {
+                    error: err,
+                    features: []
+                };
+                return;
+            }
+
+            const handler = this._getLayerHandler(layerId);
+            if (!handler) {
+                return;
+            }
+            const features = handler.getFeaturesWithFilter(layerId, geojson);
+            if (features) {
+                result[layerId] = {
+                    features
+                };
+            }
+        });
+        return result;
+    }
     /**
      * @method addMapLayerToMap Adds wfs layer to map
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
@@ -198,7 +248,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             if (layer.isVisible() && !lyr.get(LAYER_HOVER)) {
                 // Only set style if visible as it's an expensive operation
                 // assumes style will be set on MapLayerVisibilityChangedEvent when layer is made visible
-                lyr.setStyle(this.getCurrentStyleFunction(layer, handler));
+                lyr.setStyle(this.getCurrentOlStyle(layer));
             }
             this.getMapModule().addLayer(lyr, !keepLayerOnTop);
         });
@@ -255,19 +305,13 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     }
 
     /**
-     * @method getCurrentStyleFunction
+     * @method getCurrentOlStyle
      * Returns OL style corresponding to layer currently selected style
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @return {ol/style/Style}
+     * @return {ol/style/Style | StyleLike}
      */
-    getCurrentStyleFunction (layer, handler = this._getLayerHandler(layer)) {
-        if (!handler) {
-            return;
-        }
-        const factory = this.mapModule.getGeomTypedStyles.bind(this.mapModule);
-        const styleFunction = styleGenerator(factory, layer);
-        const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
-        return handler.getStyleFunction(layer, styleFunction, selectedIds);
+    getCurrentOlStyle (layer) {
+        return styleGenerator(this.mapModule, layer);
     }
 
     /**
@@ -282,7 +326,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!olLayers || olLayers.length === 0) {
             return;
         }
-        const style = this.getCurrentStyleFunction(layer);
+        const style = this.getCurrentOlStyle(layer);
         olLayers.forEach(lyr => {
             if (lyr.get(LAYER_HOVER)) {
                 // don't add style for hover layer

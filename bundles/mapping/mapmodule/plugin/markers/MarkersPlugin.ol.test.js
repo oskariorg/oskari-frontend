@@ -4,6 +4,7 @@ import './MarkersPlugin.ol';
 // mapmodule
 import '../../mapmodule.ol';
 import '../../resources/locale/en.js';
+import { DEFAULT_DATA } from './constants';
 
 // for mapmodule
 // defaults from mapfull
@@ -25,9 +26,6 @@ sandbox.registerService(layerService);
 
 const mapModule = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', 'Test');
 
-// override impl that uses require() as it doesn't work out-of-the-box with Jest
-mapModule.getImageUrl = () => '/testing';
-
 Oskari.setMarkers(getMarkers());
 sandbox.register(mapModule);
 mapModule.registerPlugin(plugin);
@@ -38,16 +36,40 @@ afterAll(() => {
     mapModule.stop();
 });
 
+const getImageStyle = id => plugin.getMarkersLayer().getSource().getFeatureById(id).getStyle()[0].getImage();
+const getTextOnMap = id => plugin.getMarkersLayer().getSource().getFeatureById(id).getStyle()[0].getText().getText();
+
 const markers = [{
     x: 1,
     y: 1
 }, {
     x: 100,
     y: 200
+}, {
+    x: 3,
+    y: 3,
+    color: '#ff0000',
+    shape: 3,
+    size: 3,
+    msg: 'test?'
+}, {
+    x: 4,
+    y: 4,
+    shape: 'image_url',
+    size: 40,
+    transient: true,
+    offsetX: 12,
+    offsetY: 8
+}, {
+    x: 4,
+    y: 4,
+    shape: 'image_url',
+    size: 9,
+    transient: true,
+    offsetX: 12,
+    offsetY: 8
 }];
-// addMapMarker(markerData, id, suppressEvent)
-// getStateParameters()
-// changeMapMarkerVisibility(visible, markerId)
+
 describe('MarkersPlugin', () => {
     describe('getStateParameters', () => {
         test('without markers', () => {
@@ -85,6 +107,94 @@ describe('MarkersPlugin', () => {
             plugin.changeMapMarkerVisibility(true, 'my marker');
             // looks like marker order is changed when toggling visibility. Probably not a problem but something to note
             expect(plugin.getStateParameters()).toEqual('&markers=2|1|ffde00|1_1|___2|1|ffde00|100_200|');
+            // hide all
+            expect(plugin.getMarkersLayer().getVisible()).toBe(true);
+            plugin.changeMapMarkerVisibility(false);
+            expect(plugin.getStateParameters()).toEqual('');
+            expect(plugin.getMarkersLayer().getVisible()).toBe(false);
+        });
+        afterAll(() => {
+            // remove markers to normalize state for other tests
+            plugin.removeMarkers();
+            plugin.changeMapMarkerVisibility(true);
+        });
+    });
+    describe('getSanitizedMarker', () => {
+        test('without markers', () => {
+            expect(plugin.getState().markers.length).toEqual(0);
+        });
+        test('sanitized data', () => {
+            const marker = markers[2];
+            plugin.addMapMarker(marker);
+            const markerData = plugin.getState().markers[0];
+            Object.keys(marker).forEach(key => {
+                let value = marker[key];
+                if (key === 'color') {
+                    // sanitize removes #
+                    value = value.substring(1);
+                }
+                expect(markerData[key]).toEqual(value);
+            });
+        });
+        test('default data', () => {
+            plugin.addMapMarker(markers[1]);
+            const markerData = plugin.getState().markers[1];
+            Object.keys(DEFAULT_DATA).forEach(key => {
+                expect(markerData[key]).toEqual(DEFAULT_DATA[key]);
+            });
+        });
+        test('setState', () => {
+            const state = plugin.getState();
+            plugin.removeMarkers();
+            expect(plugin.getStateParameters()).toEqual('');
+            plugin.setState(state);
+            expect(plugin.getStateParameters()).toEqual('&markers=3|3|ff0000|3_3|test%3F___2|1|ffde00|100_200|');
+        });
+        test('transient', () => {
+            expect(plugin.getState().markers.length).toEqual(2);
+            plugin.addMapMarker(markers[3]);
+            expect(plugin.getState().markers.length).toEqual(2);
+        });
+
+        afterAll(() => {
+            // remove markers to normalize state for other tests
+            plugin.removeMarkers();
+        });
+    });
+    describe('rendered style', () => {
+        test('oskari marker', () => {
+            const id = 'marker1';
+            const marker = markers[2];
+            plugin.addMapMarker(marker, id);
+            expect(getTextOnMap(id)).toEqual(marker.msg);
+            const style = getImageStyle(id);
+            const sizePx = mapModule.getPixelForSize(marker.size);
+            expect(style.getSize()).toEqual([sizePx, sizePx]);
+        });
+        test('external', () => {
+            const id = 'marker2';
+            const marker = markers[3];
+            plugin.addMapMarker(marker, id);
+            const style = getImageStyle(id);
+            const { size, offsetX, offsetY, shape } = marker;
+            expect(style.getSrc()).toEqual(shape);
+            // looks like getter returns top-left anchor even it is set and stored as bottom-left
+            expect(style.getAnchor()).toEqual([offsetX, size - offsetY]);
+            expect(style.getSize()).toEqual([size, size]);
+        });
+        test('external with lower than expected size (workaround backwards compatibility)', () => {
+            const id = 'marker2workaround';
+            const marker = markers[4];
+            plugin.addMapMarker(marker, id);
+            const style = getImageStyle(id);
+            const { size, offsetX, offsetY, shape } = marker;
+            // size is 9 here, but with external graphic values under 10 are multiplied -> should result in 130 actual size
+            expect(size).toEqual(9);
+            expect(style.getSrc()).toEqual(shape);
+            const expectedSize = 130;
+            expect(style.getSize()).toEqual([expectedSize, expectedSize]);
+            // looks like getter returns top-left anchor even it is set and stored as bottom-left
+            expect(style.getAnchor()).toEqual([offsetX, expectedSize - offsetY]);
         });
         afterAll(() => {
             // remove markers to normalize state for other tests

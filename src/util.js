@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify';
+const MobileDetect = require('mobile-detect');
 
 /*
 * @class Oskari.util
@@ -7,8 +8,15 @@ import DOMPurify from 'dompurify';
 *
 */
 Oskari.util = (function () {
-    var log = Oskari.log('Oskari.util');
-    var util = {};
+    const log = Oskari.log('Oskari.util');
+    const util = {};
+
+    // break points for "mobile mode"
+    const mobileDefs = {
+        width: 650,
+        height: 650
+    };
+    const isMobileDevice = !!(new MobileDetect(window.navigator.userAgent).mobile());
 
     /**
     * Checks at if value has leading zeros.
@@ -157,8 +165,8 @@ Oskari.util = (function () {
     * @param {Object} value checked value
     */
     util.decimals = function (value) {
-        var val,
-            maxDecimals = 0;
+        let val;
+        let maxDecimals = 0;
 
         if (!value || value === null || value === '' || (isNaN(value) && typeof value !== 'object')) {
             return null;
@@ -189,17 +197,20 @@ Oskari.util = (function () {
      */
     util.hexToRgb = function (hex) {
         // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
         hex = hex.replace(shorthandRegex, function (m, r, g, b) {
             return r + r + g + g + b + b;
         });
 
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        if (!result) {
+            return null;
+        }
+        return {
             r: parseInt(result[1], 16),
             g: parseInt(result[2], 16),
             b: parseInt(result[3], 16)
-        } : null;
+        };
     };
 
     /**
@@ -391,7 +402,7 @@ Oskari.util = (function () {
     };
 
     util.getColorBrightness = function (color) {
-        var r, g, b, brightness;
+        let r, g, b;
 
         if (color.match(/^rgb/)) {
             color = color.match(/rgba?\(([^)]+)\)/)[1];
@@ -399,17 +410,17 @@ Oskari.util = (function () {
             r = color[0];
             g = color[1];
             b = color[2];
-        } else if (color[0] == '#' && color.length == 7) {
+        } else if (color[0] === '#' && color.length === 7) {
             r = parseInt(color.slice(1, 3), 16);
             g = parseInt(color.slice(3, 5), 16);
             b = parseInt(color.slice(5, 7), 16);
-        } else if (color[0] == '#' && color.length == 4) {
+        } else if (color[0] === '#' && color.length === 4) {
             r = parseInt(color[1] + color[1], 16);
             g = parseInt(color[2] + color[2], 16);
             b = parseInt(color[3] + color[3], 16);
         }
 
-        brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
 
         if (brightness < 125) {
             return 'dark';
@@ -424,30 +435,16 @@ Oskari.util = (function () {
         return this.getColorBrightness(color) === 'light';
     };
 
+    util.isSmallScreen = function () {
+        const rootEl = Oskari.dom.getRootEl();
+        return Oskari.dom.getWidth(rootEl) <= mobileDefs.width || Oskari.dom.getHeight(rootEl) <= mobileDefs.height;
+    };
+
     util.isMobile = function (ignoreSize) {
-        var md = new MobileDetect(window.navigator.userAgent);
         if (ignoreSize === true) {
-            return !!md.mobile();
+            return isMobileDevice;
         }
-        var mobileDefs = {
-            width: 500,
-            height: 400
-        };
-
-        var mapdiv = jQuery('#mapdiv');
-        var size = {
-            height: mapdiv.height(),
-            width: mapdiv.width()
-        };
-
-        var isSizeMobile = false;
-        if (size.width <= mobileDefs.width || size.height <= mobileDefs.height) {
-            isSizeMobile = true;
-        }
-
-        var isMobile = (md.mobile() !== null) ? true : isSizeMobile;
-
-        return isMobile;
+        return isMobileDevice || util.isSmallScreen();
     };
     /**
      *
@@ -456,10 +453,10 @@ Oskari.util = (function () {
      * @return String
      */
     util.sanitize = function (content) {
-        return DOMPurify.sanitize(content, {ADD_ATTR: ['target']});
+        return DOMPurify.sanitize(content, { ADD_ATTR: ['target'] });
     };
 
-    var validCoordinates = function (point) {
+    const validCoordinates = function (point) {
         if (!point && typeof point !== 'object' && isNaN(point.length) && point.length !== 2) {
             return false;
         } else {
@@ -467,14 +464,14 @@ Oskari.util = (function () {
         }
     };
 
-    var coordChars = {
+    const coordChars = {
         CHAR_DEG: '\u00B0',
         CHAR_MIN: '\u0027',
         CHAR_SEC: '\u0022',
         CHAR_SEP: '\u0020'
     };
 
-    var coordinateDMSDecode = function (value) {
+    const coordinateDMSDecode = function (value) {
         if (typeof value === 'number') {
             value = '' + value;
         }
@@ -482,7 +479,7 @@ Oskari.util = (function () {
         // also convert comma to dot
         value = value.replace(',', '.');
 
-        var patterns = {
+        const patterns = {
             'DDMMSS.s': '(-?\\d+)[' + coordChars.CHAR_DEG + 'd]\\s*' + // DD
                             '(-?\\d+)' + coordChars.CHAR_MIN + '\\s*' + // MM
                             '(-?\\d+(?:\\.\\d+)?)' + coordChars.CHAR_SEC, // SS.s
@@ -493,7 +490,7 @@ Oskari.util = (function () {
             'DD.ddddd': '(\\d+(?:\\.\\d+)?)[' + coordChars.CHAR_DEG + 'd]\\s*' // DD.ddd
         };
 
-        for (var key in patterns) {
+        for (let key in patterns) {
             if (patterns.hasOwnProperty(key) && value.match(new RegExp(patterns[key]))) {
                 log.debug('Coordinate match to pattern ' + key);
                 return value.match(new RegExp(patterns[key]));
@@ -505,7 +502,7 @@ Oskari.util = (function () {
     };
 
     util.coordinateMetricToDegrees = function (point, decimals) {
-        var roundToDecimals = decimals || 0;
+        let roundToDecimals = decimals || 0;
         if (roundToDecimals > 20) {
             roundToDecimals = 20;
         }
@@ -547,7 +544,7 @@ Oskari.util = (function () {
     };
 
     util.coordinateDegreesToMetric = function (point, decimals) {
-        var roundToDecimals = decimals || 0;
+        let roundToDecimals = decimals || 0;
         if (roundToDecimals > 20) {
             roundToDecimals = 20;
         }
@@ -595,8 +592,8 @@ Oskari.util = (function () {
     };
 
     util.coordinateIsDegrees = function (point) {
-        var matches1 = coordinateDMSDecode(point[0]);
-        var matches2 = coordinateDMSDecode(point[1]);
+        const matches1 = coordinateDMSDecode(point[0]);
+        const matches2 = coordinateDMSDecode(point[1]);
         return (matches1 != null && matches1.length > 0 && matches2 != null && matches2.length > 0);
     };
 
@@ -609,8 +606,8 @@ Oskari.util = (function () {
      * @return {String} value for the parameter or null if not found
      */
     util.getRequestParam = function (name, defaultValue) {
-        var query = location.search.substr(1);
-        var result = util.getRequestParameters(query);
+        const query = location.search.substring(1);
+        const result = util.getRequestParameters(query);
         return result[name] || defaultValue;
     };
 
@@ -626,7 +623,7 @@ Oskari.util = (function () {
             params[item[0]] = decodeURIComponent(item[1]);
         });
         return params;
-    }
+    };
     /**
      * Returns true if first param is a number with value between start-stop parameters
      * @param  {Number}  num   [description]
@@ -668,9 +665,9 @@ Oskari.util = (function () {
             array.splice(to, 0, array.splice(from, 1)[0]);
         } else {
             // works better when we are not moving things very far
-            var target = array[from];
-            var inc = (to - from) / Math.abs(to - from);
-            var current = from;
+            const target = array[from];
+            const inc = (to - from) / Math.abs(to - from);
+            let current = from;
             for (; current !== to; current += inc) {
                 array[current] = array[current + inc];
             }
@@ -682,7 +679,7 @@ Oskari.util = (function () {
     /**
      * Checks if two arrays have equal primitive values and order.
      * Shallow test.
-     * 
+     *
      * @return {Boolean} true if the arrays are equal
      */
     util.arraysEqual = function (a, b) {
@@ -700,7 +697,7 @@ Oskari.util = (function () {
             if (a[i] !== b[i]) return false;
         }
         return true;
-    }
+    };
 
     /**
      * Sql LIKE like operator.
@@ -716,7 +713,7 @@ Oskari.util = (function () {
             .replace(/%|\*/g, '.*')
             .replace(/_/g, '.')}$`);
         return likeRegExp.test(value.toString());
-    }
+    };
     /**
     * Function to get errorText from objects received in jQuery.ajax request failure.
     *
@@ -724,7 +721,7 @@ Oskari.util = (function () {
     * @param {String} errorThrown exception object
     */
     util.getErrorTextFromAjaxFailureObjects = (jqXHR, errorThrown) => {
-        var error = errorThrown.message || errorThrown;
+        let error = errorThrown.message || errorThrown;
         try {
             const err = JSON.parse(jqXHR.responseText).error;
             if (err !== null && err !== undefined) {
@@ -732,7 +729,7 @@ Oskari.util = (function () {
             }
         } catch (ignore) {}
         return error;
-    }
+    };
     /**
     * Function to validate network domain.
     * Implemented by modifying function introduced in https://miguelmota.com/bytes/validate-domain-regex/
@@ -741,12 +738,12 @@ Oskari.util = (function () {
     * @return {Boolean} true if domain is valid, false otherwise.
     */
     util.isValidDomain = (domain) => {
-       if (!domain) {
-           return false;
-       }
-       const re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
-       return re.test(domain);
-    }
+        if (!domain) {
+            return false;
+        }
+        const re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
+        return re.test(domain);
+    };
     /**
     * Function to copy text to clipboard
     *
@@ -757,20 +754,52 @@ Oskari.util = (function () {
         if (typeof text !== 'string') {
             return;
         }
-        var input = document.createElement('input');
+        const input = document.createElement('input');
         document.body.appendChild(input);
         input.value = text;
         input.select();
         document.execCommand('copy');
         document.body.removeChild(input);
         if (el) {
-            const cls = 'oskari-copy-effect'
+            const cls = 'oskari-copy-effect';
             el.addClass(cls);
             setTimeout(() => {
                 el.removeClass(cls);
             }, 500);
         }
-    }
+    };
+
+    /**
+     * Format timestamp to more readable date
+     * @param {String} text
+     * @param {Object} options optional { time, date }
+     * @param {Array || String} locales optional
+     * @returns {String}
+     */
+    util.formatDate = (text, options, locales) => {
+        if (!text) {
+            return '';
+        }
+        const dateTime = new Date(text);
+        if (isNaN(dateTime.getMilliseconds())) {
+            return '';
+        }
+        const { date = {}, time = {}} = options || {};
+        if (!locales) {
+            // default to locale by selected language
+            // en -> en_US -> en-US
+            locales = Oskari.getSupportedLocales()
+                .filter(loc => loc.includes(Oskari.getLang()))
+                .map(loc => loc.replace('_', '-'));
+        }
+        const defaults = {
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        const localeDate = dateTime.toLocaleDateString(locales, date);
+        const localeTime = dateTime.toLocaleTimeString(locales, {...defaults, ...time});
+        return `${localeDate} ${localeTime}`;
+    };
 
     return util;
 }());

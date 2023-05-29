@@ -6,26 +6,12 @@ import { tile as tileStrategyFactory } from 'ol/loadingstrategy';
 import { createXYZ } from 'ol/tilegrid';
 
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
-import { applyOpacity, clusterStyleFunc } from '../util/style';
 import { RequestCounter } from './RequestCounter';
 
 import olPoint from 'ol/geom/Point';
-import olLineString from 'ol/geom/LineString';
-import olLinearRing from 'ol/geom/LinearRing';
-import olPolygon from 'ol/geom/Polygon';
 import olMultiPoint from 'ol/geom/MultiPoint';
-import olMultiLineString from 'ol/geom/MultiLineString';
-import olMultiPolygon from 'ol/geom/MultiPolygon';
-import olGeometryCollection from 'ol/geom/GeometryCollection';
-
-import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
-import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
-import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 
 import { LAYER_CLUSTER, WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
-const reader = new GeoJSONReader();
-const olParser = new OL3Parser();
-olParser.inject(olPoint, olLineString, olLinearRing, olPolygon, olMultiPoint, olMultiLineString, olMultiPolygon, olGeometryCollection);
 
 const MAP_MOVE_THROTTLE_MS = 2000;
 const OPACITY_THROTTLE_MS = 1500;
@@ -49,57 +35,6 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                 this._loadFeaturesForAllLayers(), MAP_MOVE_THROTTLE_MS);
         }
         return handlers;
-    }
-
-    getStyleFunction (layer, styleFunction, selectedIds) {
-        const clustering = this._isClusteringSupported() && typeof layer.getClusteringDistance() !== 'undefined';
-        return (feature, resolution) => {
-            // Cluster layer feature
-            if (feature.get('features')) {
-                if (feature.get('features').length > 1) {
-                    const isSelected = !!feature.get('features').find(cur => selectedIds.has(cur.get(WFS_ID_KEY)));
-                    return clusterStyleFunc(feature, isSelected);
-                } else {
-                    // Only single point in cluster. Use it in styling.
-                    feature = feature.get('features')[0];
-                }
-            } else if (clustering) {
-                // Vector layer feature, hide single points
-                const geomType = feature.getGeometry().getType();
-                if (geomType === 'Point' ||
-                    (geomType === 'MultiPoint' && feature.getGeometry().getPoints().length === 1)) {
-                    return null;
-                }
-            }
-            const isSelected = selectedIds.has(feature.get(WFS_ID_KEY));
-            const style = styleFunction(feature, resolution, isSelected);
-            if (!this.plugin.getMapModule().getSupports3D()) {
-                return style;
-            }
-            return applyOpacity(style, layer.getOpacity());
-        };
-    }
-
-    getPropertiesForIntersectingGeom (geometry, layer) {
-        if (!geometry || !layer) {
-            return;
-        }
-        const featuresById = new Map();
-        const geomFilter = reader.read(geometry);
-        const envelope = geomFilter.getEnvelopeInternal();
-        const extentFilter = [envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()];
-        let source = layer.getSource();
-        if (source instanceof olCluster) {
-            // Get wrapped vector source
-            source = source.getSource();
-        }
-        source.forEachFeatureInExtent(extentFilter, ftr => {
-            const geom = olParser.read(ftr.getGeometry());
-            if (RelateOp.relate(geomFilter, geom).isIntersects()) {
-                featuresById.set(ftr.get(WFS_ID_KEY), ftr.getProperties());
-            }
-        });
-        return Array.from(featuresById.values());
     }
 
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
@@ -198,7 +133,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      * Like so:
      * Set breakpoint on "const tileGrid = createXYZ({ ... });"
      * Call this._createDebugLayer(source)
-     * @param {FeatureExposingMVTSource} source layer source
+     * @param {ol.source.TileDebug} source layer source
      */
     _createDebugLayer (tileGrid) {
         this.plugin.getMapModule().getMap().addLayer(new olLayerTile({
@@ -234,6 +169,16 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                 },
                 url: Oskari.urls.getRoute('GetWFSFeatures'),
                 success: (resp) => {
+                    resp?.features?.forEach(feature => {
+                        if (feature?.properties?.geometry) {
+                            // Openlayers will override feature.geometry with properties.geometry if both are present
+                            // https://github.com/openlayers/openlayers/blob/v7.1.0/src/ol/format/GeoJSON.js#L125-L133
+                            // https://github.com/openlayers/openlayers/blob/v7.1.0/src/ol/Feature.js#L260
+                            // https://github.com/openlayers/openlayers/blob/v7.1.0/src/ol/Object.js#L229
+                            // so we must remove it before passing the GeoJSON to OL
+                            delete feature.properties.geometry;
+                        }
+                    });
                     const features = source.getFormat().readFeatures(resp);
                     features.forEach(ftr => ftr.set(WFS_ID_KEY, ftr.getId()));
                     source.addFeatures(features);

@@ -1,3 +1,4 @@
+import { Messaging } from 'oskari-ui/util';
 /**
  * @class Oskari.statistics.statsgrid.ErrorService
  */
@@ -9,7 +10,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ErrorService',
      */
     function (sandbox) {
         this.sandbox = sandbox;
-        this.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     }, {
         __name: 'StatsGrid.ErrorService',
         __qname: 'Oskari.statistics.statsgrid.ErrorService',
@@ -20,15 +20,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ErrorService',
         getName: function () {
             return this.__name;
         },
-        show: function (title, message) {
-            var me = this;
-            me.close();
-            me.popup.show(title, message);
-            me.popup.fadeout(5000);
+        show: function (title, content, duration = 5) {
+            // all components uses 'Error' as title, doesn't make sense to use it with Messaging API
+            Messaging.warn({ content, duration });
         },
-        close: function () {
-            var me = this;
-            me.popup.close(true);
+        warn: function (message) {
+            Messaging.warn({ content: message });
+        },
+        error: function (message) {
+            Messaging.error({ content: message });
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

@@ -7,9 +7,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
      * @method create called automatically on construction
      * @static
      */
-    function (sandbox, seriesService) {
+    function (sandbox, service) {
         this.sandbox = sandbox;
-        this.seriesService = seriesService;
+        this.service = service;
         this.indicators = [];
         this.regionset = null;
         this.activeIndicator = null;
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             classification: {
                 count: 5,
                 method: 'jenks',
-                name: 'Blues',
+                color: 'Blues',
                 type: 'seq',
                 mode: 'discontinuous',
                 reverseColors: false,
@@ -91,28 +91,56 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 indicator.classification.transparency = transparency;
             }
         },
+        getStateForRender: function () {
+            const activeIndicator = this.getActiveIndicator();
+            const regionset = this.getRegionset();
+            if (!activeIndicator || !regionset) {
+                return { error: 'noActive' };
+            }
+            // TODO: maybe create labels on addIndicataor
+            const indicators = [];
+            this.getIndicators().forEach(ind => {
+                const { hash } = ind;
+                this.service.getUILabels(ind, label => indicators.push({ hash, title: label.full }));
+            });
+            return {
+                activeIndicator,
+                regionset,
+                indicators,
+                seriesStats: this.service.getSeriesService().getSeriesStats(activeIndicator.hash)
+            };
+        },
+        getStateForClassification: function () {
+            return {
+                ...this.getStateForRender(),
+                pluginState: this.getClassificationPluginState(),
+                controller: this.getClassificationController()
+            };
+        },
 
         getClassificationController: function () {
             const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
             return {
                 setActiveIndicator: hash => this.setActiveIndicator(hash),
                 updateClassification: (key, value) => {
-                    const indicator = this.getActiveIndicator();
-                    if (indicator) {
-                        indicator.classification[key] = value;
+                    const { classification } = this.getActiveIndicator() || {};
+                    if (classification) {
+                        classification[key] = value;
+                        this.validateClassification(classification);
                         if (eventBuilder) {
-                            this.sandbox.notifyAll(eventBuilder(indicator.classification, { [key]: value }));
+                            this.sandbox.notifyAll(eventBuilder(classification, { [key]: value }));
                         }
                     }
                 },
                 updateClassificationObj: obj => {
-                    const indicator = this.getActiveIndicator();
-                    if (indicator) {
+                    const { classification } = this.getActiveIndicator() || {};
+                    if (classification) {
                         Object.keys(obj).forEach(key => {
-                            indicator.classification[key] = obj[key];
+                            classification[key] = obj[key];
                         });
+                        this.validateClassification(classification);
                         if (eventBuilder) {
-                            this.sandbox.notifyAll(eventBuilder(indicator.classification, obj));
+                            this.sandbox.notifyAll(eventBuilder(classification, obj));
                         }
                     }
                 }
@@ -127,16 +155,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.regionset = null;
             this.indicators = [];
             this.activeRegion = null;
+            this.lastSelectedClassification = {};
             const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
             this.sandbox.notifyAll(eventBuilder(true));
         },
-        setState: function (state = {}) {
-            const { regionset, indicators = [], active: activeHash, activeRegion } = state;
+        setState: function (state) {
+            const { regionset, indicators = [], active: activeHash, activeRegion } = state || {};
             this.regionset = regionset;
             this.activeRegion = activeRegion;
             // map to keep stored states work properly
             this.indicators = indicators.map(ind => {
                 const hash = ind.hash || this.getHash(ind.ds, ind.id, ind.selections, ind.series);
+                if (ind.classification) {
+                    this.validateClassification(ind.classification);
+                }
                 return {
                     datasource: Number(ind.ds),
                     indicator: ind.id,
@@ -155,7 +187,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                     this.lastSelectedClassification = classification;
                 }
                 if (series) {
-                    this.seriesService.setValues(series.values, selections[series.id]);
+                    this.service.getSeriesService().setValues(series.values, selections[series.id]);
                 }
             }
             this.activeIndicator = active || null;
@@ -245,12 +277,50 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * Gets getClassificationOpts
          * @param  {String} indicatorHash indicator hash
          */
-        getClassificationOpts: function (indicatorHash) {
-            var indicator = this.getIndicator(indicatorHash) || {};
+        getClassificationOpts: function (indicatorHash, opts = {}) {
+            const indicator = this.getIndicator(indicatorHash) || {};
             const lastSelected = { ...this.lastSelectedClassification };
             delete lastSelected.manualBounds;
             delete lastSelected.fractionDigits;
-            return jQuery.extend({}, this._defaults.classification, lastSelected, indicator.classification || {});
+            delete lastSelected.base;
+
+            const metadataClassification = {};
+            // Note! Assumes that the metadata has been loaded when selecting the indicator from the list to get a sync response
+            // don't try this at home...
+            this.service.getIndicatorMetadata(indicator.datasource || opts.ds, indicator.indicator || opts.id, (err, data = {}) => {
+                if (err) {
+                    // unable to get metadata, ignored since this only enhances the classification and is not required
+                    return;
+                }
+                const metadata = data.metadata || {};
+                if (typeof metadata.isRatio === 'boolean') {
+                    metadataClassification.mapStyle = metadata.isRatio ? 'choropleth' : 'points';
+                }
+                if (typeof metadata.decimalCount === 'number') {
+                    metadataClassification.fractionDigits = metadata.decimalCount;
+                }
+                if (typeof metadata.base === 'number') {
+                    // if there is a base value the data is divided at base value
+                    // TODO: other stuff based on this
+                    metadataClassification.base = metadata.base;
+                    metadataClassification.type = 'div';
+                }
+            });
+            const result = jQuery.extend({}, this._defaults.classification, lastSelected, metadataClassification);
+            this.validateClassification(result);
+            return result;
+        },
+        validateClassification: function (classification) {
+            const colorService = this.service.getColorService();
+            if (!colorService.validateColor(classification)) {
+                classification.color = colorService.getDefaultColor(classification);
+            }
+            const { max } = classification.mapStyle === 'points'
+                ? this.service.getClassificationService().getRangeForPoints()
+                : colorService.getRangeForColor(classification.color);
+            if (classification.count > max) {
+                classification.count = max;
+            }
         },
         /**
          * Returns an wanted indicator.
@@ -384,7 +454,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 hash: this.getHash(datasrc, indicator, selections, series)
             };
             // init classification values if not given
-            ind.classification = classification || this.getClassificationOpts(ind.hash);
+            ind.classification = classification || this.getClassificationOpts(ind.hash, {
+                ds: datasrc,
+                id: indicator
+            });
             var found = false;
             this.indicators.forEach(function (existing) {
                 if (existing.hash === ind.hash) {
@@ -396,8 +469,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
 
             if (series) {
-                this.seriesService.setValues(series.values);
-                ind.selections[series.id] = this.seriesService.getValue();
+                const seriesService = this.service.getSeriesService();
+                seriesService.setValues(series.values);
+                ind.selections[series.id] = seriesService.getValue();
                 // Discontinuos mode is problematic for series data,
                 // because each class has to get at least one hit -> set distinct mode.
                 ind.classification.mode = 'distinct';
@@ -441,7 +515,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, series, true));
             } else {
                 // if no indicators then reset state
-                // last indicator removal should act like all indicators or layer was removed
+                // last indicator removal should act like all indicators was removed
                 this.resetState();
             }
 

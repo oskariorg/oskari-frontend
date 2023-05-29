@@ -1,11 +1,22 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyoutManager, locale) {
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { PluginHandler } from '../handler/PluginHandler';
+import { ThematicControls } from './ThematicControls';
+import { UnorderedListOutlined, TableOutlined, BarChartOutlined, ClockCircleOutlined } from '@ant-design/icons';
+
+Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyoutManager, location) {
     var me = this;
     this.flyoutManager = flyoutManager;
-    this.locale = locale;
     this.element = null;
     this._clazz = 'Oskari.statistics.statsgrid.TogglePlugin';
     this._index = 4;
     this._defaultLocation = 'bottom right';
+    this._config = {
+        location: {
+            classes: location || this._defaultLocation
+        }
+    };
+    this._name = 'statsgrid.TogglePlugin';
 
     this.flyoutManager.on('show', function (tool) {
         me.toggleTool(tool, true);
@@ -13,67 +24,65 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
     this.flyoutManager.on('hide', function (tool) {
         me.toggleTool(tool, false);
     });
-    this._fixedLocation = true;
+    this.handler = new PluginHandler(() => this.refresh());
 }, {
-    _setLayerToolsEditModeImpl: function () {
-        if (!this.element) {
-            return;
-        }
-        const tools = this.element.find('div');
-        if (this.inLayerToolsEditMode()) {
-            tools.addClass('tool-drag-disabled');
-        } else {
-            tools.removeClass('tool-drag-disabled');
-        }
-    },
     getElement: function () {
         return this.element;
     },
-    toggleTool: function (tool, shown) {
-        var toolElement = this.getToolElement(tool);
+    hasUI: function () {
+        return true;
+    },
+    refresh: function () {
+        const el = this.getElement();
+        if (!el) {
+            return;
+        }
 
-        if (!toolElement) {
-            return;
-        }
-        if (!shown) {
-            toolElement.removeClass('active');
-            return;
-        }
-        toolElement.addClass('active');
+        ReactDOM.render(
+            <ThematicControls
+                tools={this.handler.getState().plugins}
+            />,
+            el[0]
+        );
+    },
+    toggleTool: function (tool, shown) {
+        this.handler.getController().toggleTool(tool, shown);
     },
     addTool: function (toolId, clickCb) {
-        var me = this;
+        const clickHandler = typeof clickCb === 'function' ? clickCb : () => this.flyoutManager.toggle(toolId);
+        let tool = {
+            name: toolId,
+            clickHandler,
+            active: false
+        };
+
+        switch (toolId) {
+        case 'series':
+            tool.icon = <ClockCircleOutlined />;
+            break;
+        case 'table':
+            tool.icon = <TableOutlined />;
+            break;
+        case 'classification':
+            tool.icon = <UnorderedListOutlined />;
+            break;
+        case 'diagram':
+            tool.icon = <BarChartOutlined />;
+            break;
+        default:
+            tool.icon = <TableOutlined />;
+            break;
+        }
+
+        this.handler.getController().addTool(tool);
 
         if (!this.element) {
             this.redrawUI();
         }
-
-        var toolElement = jQuery('<div class=' + toolId + '></div>');
-        var onClick = typeof clickCb === 'function' ? clickCb : () => me.flyoutManager.toggle(toolId);
-        const clickHandler = () => {
-            if (!this.inLayerToolsEditMode()) {
-                onClick();
-            }
-        };
-        toolElement.on('click', clickHandler);
-        if (this.inLayerToolsEditMode()) {
-            toolElement.addClass('tool-drag-disabled');
-        }
-
-        this.element.append(toolElement);
     },
     removeTool: function (toolId) {
-        var toolElement = this.getToolElement(toolId);
-        if (toolElement) {
-            toolElement.remove();
-        }
+        this.handler.getController().removeTool(toolId);
         this.flyoutManager.hide(toolId);
-    },
-    getToolElement: function (toolId) {
-        if (!this.element) {
-            return;
-        }
-        return this.element.find('.' + toolId);
     },
     /**
      * Creates UI for coordinate display and places it on the maps

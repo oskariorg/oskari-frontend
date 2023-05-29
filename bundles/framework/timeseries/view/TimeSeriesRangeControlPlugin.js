@@ -25,6 +25,14 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         this._updateCurrentViewportBbox();
     }
 
+    hasUI () {
+        return true;
+    }
+    isShouldStopForPublisher () {
+        // prevent publisher to stop this plugin and start it again when leaving the publisher
+        return false;
+    }
+
     getControlState () {
         const { value } = this.stateHandler.getState();
         let time;

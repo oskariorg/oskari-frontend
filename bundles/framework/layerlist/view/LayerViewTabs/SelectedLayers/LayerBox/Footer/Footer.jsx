@@ -11,23 +11,30 @@ import { Row, ColAuto, ColAutoRight } from '../Grid';
 
 const GrayRow = styled(Row)`
     background-color: #f3f3f3;
-    padding-left: 60px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: ${props => props.$isMobile ? '10px' : '60px'};
     justify-content: flex-start;
     ${ColAuto}, ${ColAutoRight} {
         display: flex;
         align-items: center;
         padding-left: 0;
+        :first-child {
+            margin-right: 10px;
+        }
         :nth-last-child(2) {
             padding-right: 0;
+            padding-left: 10px;
         }
         > :not(:last-child) {
-            margin-right: 5px;
+            margin-right: 10px;
         }
     }
 `;
 
-const getVisibilityInfoProps = ({ layer, visibilityInfo, controller }) => {
-    const { unsupported, visible, inScale, geometryMatch } = visibilityInfo;
+const getVisibilityInfoProps = ({ layer, controller }) => {
+    const { unsupported, visible, inScale, geometryMatch } = layer.getVisibilityInfo();
     if (!visible) {
         return {
             messageKey: 'layer.hidden'
@@ -48,13 +55,13 @@ const getVisibilityInfoProps = ({ layer, visibilityInfo, controller }) => {
     }
 };
 
-export const Footer = ({ layer, controller, visibilityInfo }) => {
+export const Footer = ({ layer, controller }) => {
     const tools = layer.getTools();
     const opacity = layer.getOpacity();
     const layerType = layer.getLayerType();
-    const visibilityInfoProps = getVisibilityInfoProps({ layer, controller, visibilityInfo });
+    const visibilityInfoProps = getVisibilityInfoProps({ layer, controller });
     return (
-        <GrayRow>
+        <GrayRow $isMobile={Oskari.util.isMobile()}>
             <ColAuto>
                 <LayerIcon type={layerType} hasTimeseries={layer.hasTimeseries()} />
             </ColAuto>
@@ -88,6 +95,5 @@ export const Footer = ({ layer, controller, visibilityInfo }) => {
 
 Footer.propTypes = {
     layer: PropTypes.object.isRequired,
-    visibilityInfo: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

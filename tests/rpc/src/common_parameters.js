@@ -7,7 +7,7 @@ var mapUrl = 'http://demo.oskari.org/?lang=en&uuid=8016f9be-131b-44ab-bcee-50556
 document.getElementById('map').src = mapUrl;
 // sets domain (localhost is allowed)
 var iFrameDomain = mapUrl.substring(0, mapUrl.indexOf('?'));
-// init connection 
+// init connection
 var iFrame = document.getElementById('map');
 window.channel = OskariRPC.connect(
     iFrame,
@@ -356,7 +356,8 @@ var supportedEvents = [
   "InfoboxActionEvent",
   "InfoBox.InfoBoxEvent",
   "RPCUIEvent",
-  "map.rotated"
+  "map.rotated",
+  "DataForMapLocationEvent"
 ];
 
 var supportedFunctions = [
@@ -404,5 +405,7 @@ var supportedRequests = [
   "DrawTools.StartDrawingRequest",
   "DrawTools.StopDrawingRequest",
   "MapModulePlugin.ZoomToFeaturesRequest",
-  "MapModulePlugin.MapLayerUpdateRequest"
+  "MapModulePlugin.MapLayerUpdateRequest",
+  "ChangeMapLayerStyleRequest",
+  "RearrangeSelectedMapLayerRequest"
 ];

@@ -5,11 +5,20 @@ import { Steps, Step } from 'oskari-ui';
 const defaultProps = {};
 storiesOf('Steps', module)
     .add('Step 1', () => (
-        <Steps {...defaultProps}>
-            <Step title="Layer type" />
-            <Step title="URL" />
-            <Step title="Details" />
-        </Steps>
+        <Steps
+            {...defaultProps}
+            items={[
+                {
+                    title: "Layer type"
+                },
+                {
+                    title: "URL"
+                },
+                {
+                    title: "Details"
+                }
+            ]}
+        />
     ))
     .add('Step 2', () => {
         const storyProps = {
@@ -17,10 +26,19 @@ storiesOf('Steps', module)
             current: 1
         };
         return (
-            <Steps {...storyProps}>
-                <Step title="Layer type" />
-                <Step title="URL" />
-                <Step title="Details" />
-            </Steps>
+            <Steps
+                {...storyProps}
+                items={[
+                    {
+                        title: "Layer type"
+                    },
+                    {
+                        title: "URL"
+                    },
+                    {
+                        title: "Details"
+                    }
+                ]}
+            />
         );
     });

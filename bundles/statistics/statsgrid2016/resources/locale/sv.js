@@ -104,8 +104,20 @@ Oskari.registerLocalization({
         },
         'classify': {
             'classify': 'Klassificering',
-            'classifymethod': 'Klassificeringsmetod',
-            'classes': 'Klassfördelning',
+            'labels': {
+                'method': 'Klassificeringsmetod',
+                'count': 'Klassfördelning',
+                'mode': 'Klassgränser',
+                'mapStyle': 'Kartans stil',
+                'type': 'Fördelning',
+                'reverseColors': 'Kasta om färgerna',
+                'color': 'Färg',
+                'colorset': 'Färg',
+                'pointSize': 'Punktens storlek',
+                'transparency': 'Opacitet',
+                'showValues': 'Visa värden',
+                'fractionDigits': 'Decimaltal'
+            },
             'methods': {
                 'jenks': 'Naturliga brytpunkter',
                 'quantile': 'Kvantiler',
@@ -118,7 +130,6 @@ Oskari.registerLocalization({
             'nanError': 'Det givna värdet är ej ett tal. Rätta till värdet och försök igen. Använd punkt som decimaltecken.',
             'infoTitle': 'Klassificering för hand',
             'info': 'Ange klassgränserna som tal avgränsade med kommatecken. Använd punkt som decimaltecken. Till exempel genom att mata in "0, 10.5, 24, 30.2, 57, 73.1" skapas fem klasser med värden mellan "0-10,5", "10,5-24", "24-30,2", "30,2-57" och "57-73,1". Indikatorvärden, som är mindre än den lägsta klassgränsen (0 i exemplet) eller större än den högsta klassgränsen (73,1), visas inte på kartan. Klassgränserna bör vara mellan det minsta och största värdet.',
-            'mode': 'Klassgränser',
             'modes': {
                 'distinct': 'Kontinuerlig',
                 'discontinuous': 'Diskontinuerlig'
@@ -129,29 +140,19 @@ Oskari.registerLocalization({
                 'close': 'Stägn klassificeringseditoraren'
             },
             'classifyFieldsTitle': 'Klassificeringsvärden',
-            'map': {
-                'mapStyle': 'Kartans stil',
+            'mapStyles': {
                 'choropleth': 'Koropletkarta',
-                'points': 'Karta med punktsymboler',
-                'pointSize': 'Punktens storlek',
+                'points': 'Karta med punktsymboler'
+            },
+            'pointSizes': {
                 'min': 'Minimum',
                 'max': 'Maximum',
-                'color': 'Färg',
-                'transparency': 'Opacitet',
-                'showValues': 'Visa värden',
-                'fractionDigits': 'Decimaltal'
+            },
+            'types': {
+                'seq': 'Kvantitativ',
+                'qual': 'Kvalitativ',
+                'div': 'Uppdelad'
             }
-        },
-        'colorset': {
-            'button': 'Färg',
-            'flipButton': 'Kasta om färgerna',
-            'themeselection': 'Välj klassernas färger',
-            'setselection': 'Fördelning',
-            'seq': 'Kvantitativ',
-            'qual': 'Kvalitativ',
-            'div': 'Uppdelad',
-            'info2': 'Välj färgsättning genom att klicka på den önskade färggruppen.',
-            'cancel': 'Avbryt'
         },
         'errors': {
             'title': 'Fel',
@@ -165,9 +166,11 @@ Oskari.registerLocalization({
             'datasetSave': 'Ett fel uppstod vid sparning av data.',
             'datasetDelete': 'Ett fel uppstod vid radering av data.',
             'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.',
+            'myIndicatorNameInput': 'Namnfält kan inte vara tom.',
             'myIndicatorYearInput': 'Årsfält kan inte vara tom.',
             'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.',
             'myIndicatorDatasource': 'Datakällan är tom.',
+            'myIndicatorInvalidData': 'Datamängder har ogiltiga värden.',
             'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.',
             'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}',
             'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}'
@@ -225,7 +228,10 @@ Oskari.registerLocalization({
             'grid': {
                 'name': 'Namn',
                 'edit': 'Redigera',
-                'delete': 'Ta bort'
+                'delete': 'Ta bort',
+                'actions': 'Handlingar',
+                'createDate': 'Skapad',
+                'updateDate': 'Uppdaterad',
             },
             'popup': {
                 'deletetitle': 'Ta bort indikatorn',
@@ -282,7 +288,9 @@ Oskari.registerLocalization({
         'metadataPopup': {
             'open': 'Visa {indicators, plural, one {indikator beskrivning} other {indikator beskrivningar}}',
             'title': '{indicators, plural, one {Indikator beskrivning} other {Indikator beskrivningar}}',
-            'noMetadata': 'Tjänsten returnerade ingen beskrivning för {indicators, plural, one {indikatorn} other {indikatorer}}.'
+            'noMetadata': 'Tjänsten returnerade ingen beskrivning för {indicators, plural, one {indikatorn} other {indikatorer}}.',
+            'updated': 'Senast uppdaterad',
+            'nextUpdate': 'Nästa uppdatering'
         },
         'sumo': {
             'placeholder': 'Välj här',

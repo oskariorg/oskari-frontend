@@ -3,9 +3,7 @@ import styled from 'styled-components';
 export const Row = styled.div`
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-around;
-    padding: 10px;
-    flex-wrap: wrap;
+    justify-content: space-between;
 `;
 
 export const Col = styled.div`
@@ -13,8 +11,6 @@ export const Col = styled.div`
     flex-grow: 1;
     max-width: 100%;
     position: relative;
-    padding-right: 10px;
-    padding-left: 10px;
 `;
 
 export const ColAuto = styled.div`
@@ -22,8 +18,6 @@ export const ColAuto = styled.div`
     width: auto;
     max-width: 100%;
     position: relative;
-    padding-right: 10px;
-    padding-left: 10px;
 `;
 
 export const ColAutoRight = styled.div`
@@ -31,7 +25,6 @@ export const ColAutoRight = styled.div`
     width: auto;
     max-width: 100%;
     position: relative;
-    padding-right: 10px;
-    padding-left: 10px;
     margin-left: auto;
+    margin-right: 5px;
 `;

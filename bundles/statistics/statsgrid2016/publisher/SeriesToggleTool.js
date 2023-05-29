@@ -2,36 +2,25 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
 }, {
     index: 1,
     group: 'data',
-    allowedLocations: [],
-    allowedSiblings: [],
     id: 'series',
 
     init: function (data) {
-        var enabled = data &&
-            Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
-            data.configuration.statsgrid.conf.series === true;
-        this.setEnabled(enabled);
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.series === true);
     },
-    getTool: function (stateData) {
-        var me = this;
-        if (!me.__tool) {
-            me.__tool = {
-                id: 'Oskari.statistics.statsgrid.TogglePlugin',
-                title: 'allowHidingSeriesControl',
-                config: {
-                    series: true
-                }
-            };
-        }
-        return me.__tool;
+    getTool: function () {
+        return {
+            id: 'Oskari.statistics.statsgrid.TogglePlugin',
+            title: 'allowHidingSeriesControl',
+            config: {
+                series: true
+            },
+            hasNoPlugin: true
+        };
     },
-    setEnabled: function (enabled) {
-        var me = this;
-        var changed = me.state.enabled !== enabled;
-        me.state.enabled = enabled;
-
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (!stats || !changed) {
+    _setEnabledImpl: function (enabled) {
+        var stats = this.getStatsgridBundle();
+        if (!stats) {
             return;
         }
         if (enabled) {
@@ -41,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
         }
     },
     isDisplayed: function (data) {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        var stats = this.getStatsgridBundle();
         if (!stats) {
             return false;
         }
@@ -52,8 +41,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
     getValues: function () {
         return this.getConfiguration({ series: this.isEnabled() });
     },
-    stop: function () {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+    _stopImpl: function () {
+        var stats = this.getStatsgridBundle();
         if (stats) {
             stats.togglePlugin.removeTool(this.id);
         }

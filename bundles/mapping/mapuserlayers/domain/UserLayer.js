@@ -1,3 +1,4 @@
+import { getValueFromLocale } from '../../mapmodule/util/UserDataHelper';
 /**
  * @class Oskari.mapframework.bundle.myplacesimport.domain.UserLayer
  *
@@ -10,9 +11,7 @@ export class UserLayer extends WFSLayer {
         super(...arguments);
         this._layerType = 'USERLAYER';
         this._metaType = 'USERLAYER';
-        this.description = undefined;
-        this.source = undefined;
-        this.renderingElement = undefined;
+        this._locale = {};
     }
 
     /**
@@ -22,34 +21,25 @@ export class UserLayer extends WFSLayer {
         return false;
     }
 
-    setDescription (desc) {
-        this.description = desc;
+    getName (lang) {
+        return getValueFromLocale(this.getLocale(), 'name', lang);
+    }
+
+    getLocale () {
+        return this._locale;
+    }
+
+    setLocale (locale) {
+        this._locale = locale;
     }
 
     getDescription () {
-        if (this.description) {
-            return Oskari.util.sanitize(this.description);
-        }
-        return this.description;
-    }
-
-    setSource (source) {
-        this.source = source;
+        return getValueFromLocale(this.getLocale(), 'desc');
     }
 
     getSource () {
-        if (this.source) {
-            return Oskari.util.sanitize(this.source);
-        }
-        return this.source;
-    }
-
-    setRenderingElement (element) {
-        this.renderingElement = element;
-    }
-
-    getRenderingElement () {
-        return this.renderingElement;
+        const source = getValueFromLocale(this.getLocale(), 'source');
+        return Oskari.util.sanitize(source);
     }
 
     /**

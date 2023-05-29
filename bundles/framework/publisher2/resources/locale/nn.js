@@ -196,7 +196,8 @@ Oskari.registerLocalization(
                 "saveFailed": "Embedda' kart kunne ikke lagrast",
                 "nameIllegalCharacters": "Kartnamn inneheld ugyldige teikn. Ver grei og korriger og prøv om att.",
                 "domainIllegalCharacters": "Namn på nettstad inneheld ugyldige teikn. Skriv nettstad utan http og www. Tillatne teikn er bokstavane a-z samt å, ä og ö, tal og bindestrekar."
-            }
+            },
+            "noUI": "Skjul brukargrensesnitt (bruk RPC grensesnitt)"
         },
         "NotLoggedView": {
             "text": "Du kan opprette 'embedda' kart etter at du har logga inn",

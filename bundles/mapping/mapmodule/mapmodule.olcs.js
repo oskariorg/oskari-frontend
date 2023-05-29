@@ -8,12 +8,13 @@ import { defaults as olControlDefaults } from 'ol/control';
 import * as Cesium from 'cesium/Source/Cesium';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
-import { LAYER_ID } from './domain/constants';
-import moment from 'moment';
+import { LAYER_ID, VECTOR_STYLE } from './domain/constants';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import 'olcs/olcs.css';
 
 import './event/TimeChangedEvent';
-
+dayjs.extend(customParseFormat);
 // OL-cesium expects to find this global
 window.Cesium = Cesium;
 
@@ -73,7 +74,7 @@ class MapModuleOlCesium extends MapModuleOl {
 
         var map = new OLMap({
             keyboardEventTarget: document,
-            target: this.getMapElementId(),
+            target: this.getMapDOMEl(),
             controls: controls,
             interactions: me._olInteractionDefaults,
             moveTolerance: 2
@@ -368,8 +369,8 @@ class MapModuleOlCesium extends MapModuleOl {
     getTimeParams () {
         const time = this.getTime();
         return {
-            date: moment(time).format('D/M'),
-            time: moment(time).format('H:mm'),
+            date: dayjs(time).format('D/M'),
+            time: dayjs(time).format('H:mm'),
             year: time.getFullYear()
         };
     }
@@ -449,25 +450,14 @@ class MapModuleOlCesium extends MapModuleOl {
      * @param {String|Number|Cesium.Cesium3DTileset|ol.layer} layer id in Oskari or the layer implementation
      */
     isLayerVisible (layer) {
-        if (typeof layer === 'undefined') {
-            return false;
-        }
-        if (layer instanceof Cesium.Cesium3DTileset) {
-            // probably passed the layer impl directly
-            return layer.show || false;
-        }
         if (Array.isArray(layer)) {
-            // getOLMapLayers() returns an array -> check that atleast one of them is visible
-            // group layers can have multiple layers with only some visible
             return layer.some(l => this.isLayerVisible(l));
         }
-        if (typeof layer === 'object') {
-            // probably passed the ol layer impl directly
-            return super.isLayerVisible(layer);
+        if (layer instanceof Cesium.Cesium3DTileset) {
+            this.log.deprecated('isLayerVisible', 'Use layer.isVisibleOnMap() instead');
+            return layer.show || false;
         }
-        // layer is probably id
-        const layerImpl = this.getOLMapLayers(layer);
-        return this.isLayerVisible(layerImpl);
+        super.isLayerVisible(layer);
     }
     /**
      * @param {Object} layerImpl ol/layer/Layer or Cesium.Cesium3DTileset, olcs specific!
@@ -775,10 +765,15 @@ class MapModuleOlCesium extends MapModuleOl {
             const cameraHeight = this._zoomToAltitude(zoom);
             const duration = options.duration ? options.duration : 3000;
             const animationDuration = duration / 1000;
-            const camera = options.heading && options.roll && options.pitch
-                ? { heading: options.heading,
+
+            let camera;
+            if (options.heading && options.roll && options.pitch) {
+                camera = {
+                    heading: options.heading,
                     roll: options.roll,
-                    pitch: options.pitch } : undefined;
+                    pitch: options.pitch
+                };
+            }
             const complete = () => this.notifyMoveEnd();
             // 3d map now only supports one animation so ignore the parameter, and just fly
             this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera, complete);
@@ -875,11 +870,17 @@ class MapModuleOlCesium extends MapModuleOl {
         const cameraHeight = this._zoomToAltitude(zoom);
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
         // check for 3d map options
-        const cameraOptions = options.camera;
-        const camera = cameraOptions
-            ? { heading: Cesium.Math.toRadians(cameraOptions.heading),
-                roll: Cesium.Math.toRadians(cameraOptions.roll),
-                pitch: Cesium.Math.toRadians(cameraOptions.pitch) } : undefined;
+        const getCameraOpts = (opts, defaultOpts) => {
+            if (!opts) {
+                return defaultOpts;
+            }
+            return {
+                heading: Cesium.Math.toRadians(opts.heading),
+                roll: Cesium.Math.toRadians(opts.roll),
+                pitch: Cesium.Math.toRadians(opts.pitch)
+            };
+        };
+        const camera = getCameraOpts(options.camera);
         let index = 0;
         let delay = 0;
         let status = { steps: coordinates.length, step: 0 };
@@ -889,10 +890,7 @@ class MapModuleOlCesium extends MapModuleOl {
             if (index < coordinates.length) {
                 const location = coords[index];
                 const locOptions = coordinates[index];
-                const cameraValues = locOptions.camera
-                    ? { heading: Cesium.Math.toRadians(locOptions.camera.heading),
-                        roll: Cesium.Math.toRadians(locOptions.camera.roll),
-                        pitch: Cesium.Math.toRadians(locOptions.camera.pitch) } : camera;
+                const cameraValues = getCameraOpts(locOptions.camera, camera);
                 const heightValue = locOptions.zoom ? this._zoomToAltitude(locOptions.zoom) : cameraHeight;
                 const locationDuration = locOptions.duration ? locOptions.duration / 1000 : animationDuration;
                 status = { ...status, step: index + 1 };
@@ -968,40 +966,43 @@ class MapModuleOlCesium extends MapModuleOl {
      * @return {Cesium.Cesium3DTileStyle} style Cesium specific!
      */
     get3DStyle (style, opacity = 1) {
-        const oskariStyle = style.getFeatureStyle();
-        const extStyle = style.getExternalDef() || {};
+        if (opacity > 1) {
+            opacity = opacity / 100.0;
+        }
+        let cesiumStyle;
+        if (style.getType() === VECTOR_STYLE.OSKARI) {
+            cesiumStyle = this.oskariStyleToCesium(style.getFeatureStyle());
+        } else {
+            cesiumStyle = style.getFeatureStyle();
+            if (cesiumStyle.color) {
+                // modify color by setting the layer opacity
+                cesiumStyle.color = this._getColorExpressionsWithOpacity(cesiumStyle.color, opacity);
+            } else {
+                // Set light brown default color
+                cesiumStyle.color = `color('${TILESET_DEFAULT_COLOR}', ${opacity})`;
+            }
+        }
+        return new Cesium.Cesium3DTileStyle(cesiumStyle);
+    }
 
+    oskariStyleToCesium (featureStyle, opacity) {
+        // TODO: should we support whole oskari style ??
         const cesiumStyle = {};
         // Set light brown default color;
         let color = TILESET_DEFAULT_COLOR;
-        if (Oskari.util.keyExists(oskariStyle, 'fill.color')) {
-            color = oskariStyle.fill.color;
+        if (Oskari.util.keyExists(featureStyle, 'fill.color')) {
+            color = featureStyle.fill.color;
             if (color.indexOf('rgb(') > -1) {
                 // else check at if color is rgb
                 color = '#' + Oskari.util.rgbToHex(color);
             }
         }
-
-        if (opacity > 1) {
-            opacity = opacity / 100.0;
-        }
         cesiumStyle.color = `color('${color}', ${opacity})`;
 
-        if (Oskari.util.keyExists(oskariStyle, 'image.sizePx')) {
-            cesiumStyle.pointSize = `${oskariStyle.image.sizePx}`;
+        if (Oskari.util.keyExists(featureStyle, 'image.sizePx')) {
+            cesiumStyle.pointSize = `${featureStyle.image.sizePx}`;
         }
-
-        // override and extend with external styles
-        Object.keys(extStyle).forEach(key => {
-            let styleProp = extStyle[key];
-            if (key === 'color') {
-                // make a copy and modify it by setting the opacity
-                styleProp = this._getColorExpressionsWithOpacity(styleProp, opacity);
-            }
-            cesiumStyle[key] = styleProp;
-        });
-
-        return new Cesium.Cesium3DTileStyle(cesiumStyle);
+        return cesiumStyle;
     }
 
     /**

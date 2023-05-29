@@ -1,197 +1,130 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withContext } from 'oskari-ui/util';
-import { Select } from './Select';
-import { Slider } from './Slider';
-import { Checkbox } from './Checkbox';
+import styled from 'styled-components';
+import { LabeledSelect } from './LabeledSelect';
+import { SizeSlider } from './SizeSlider';
 import { Color } from './Color';
-import { ManualClassification } from '../../manualClassification/ManualClassification';
-import './editclassification.scss';
+import { Checkbox, Message, Slider } from 'oskari-ui';
+import { EditTwoTone } from '@ant-design/icons';
 
-const getLocalizedOptions = (options, locObj, disabledOptions) => {
-    if (!Array.isArray(options)) {
-        return [];
+// remove mark dots (.ant-slider-dot)
+const Container = styled.div`
+    background-color: #fafafa;
+    padding: 6px 12px;
+    .ant-slider-dot {
+        display: none;
     }
-    return options.map(option => {
-        const obj = {
-            value: option
-        };
-        if (locObj[option]) {
-            obj.text = locObj[option];
+`;
+
+const MethodContainer = styled.div`
+    padding-top: 5px;
+    padding-bottom: 10px;
+`;
+const EditIcon = styled(EditTwoTone)`
+    float: right;
+`;
+
+// Overrride -50% translateX
+const TRANSPARENCY = {
+    min: 0,
+    max: 100,
+    step: 10,
+    tooltip: {
+        formatter: val => `${val}%`
+    },
+    marks: {
+        0: {
+            style: { transform: 'translateX(-20%)' },
+            label: '0%'
+        },
+        100: {
+            style: { transform: 'translateX(-80%)' },
+            label: '100%'
         }
-        if (Array.isArray(disabledOptions) && disabledOptions.includes(option)) {
-            obj.disabled = true;
-        }
-        return obj;
-    });
-};
-const getTransparencyOptions = transparency => {
-    var options = [];
-    for (var i = 100; i >= 30; i -= 10) {
-        options.push({
-            value: i,
-            text: i + ' %'
-        });
     }
-    options.push({
-        value: transparency,
-        text: transparency + ' %',
-        hidden: true
-    });
-    return options;
 };
 
-const getValidCountRange = classifications => {
-    const validOptions = classifications.validOptions;
-    const range = classifications.countRange;
-    if (validOptions && validOptions.maxCount) {
-        return range.map(count => {
-            let disabled = false;
-            if (count > validOptions.maxCount) {
-                disabled = true;
-            }
-            return {
-                value: count,
-                disabled: disabled
-            };
-        });
-    }
-    return range;
-};
-const getDisabledOptions = props => {
-    const disabled = {};
-    // Discontinous mode causes trouble with manually set bounds. Causes error if some class gets no hits.
-    // Disabling it for data series
-    if (props.indicators.active.series) {
-        disabled.mode = ['discontinuous'];
-    }
-    return disabled;
-};
-
-const getDisabledClassificationMethods = valueCount => {
-    return valueCount < 3 ? ['jenks'] : [];
-};
-
-const handleSelectChange = (controller, properties, value) => {
-    if (properties.valueType === 'int') {
-        value = parseInt(value);
-    }
-    controller.updateClassification(properties.id, value);
-};
-
-const handleCheckboxChange = (controller, id, isSelected) => {
-    controller.updateClassification(id, isSelected);
-};
-
-const EditClassification = props => {
-    const { indicators, controller, loc, editEnabled, manualView, indicatorData } = props;
-    const { methods, values, modes, colors, types, mapStyles } = props.classifications;
-    const disabledOptions = getDisabledOptions(props);
+export const EditClassification = ({
+    options,
+    controller,
+    editEnabled,
+    startHistogramView,
+    values
+}) => {
+    const handleChange = (id, value) => controller.updateClassification(id, value);
     const disabled = !editEnabled;
-    const valueCount = Object.values(indicatorData.data).filter(d => d !== undefined).length;
-
     return (
-        <div className="classification-edit">
-            <div className="classification-options">
-                <Select value = {values.mapStyle} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
-                    options = {getLocalizedOptions(mapStyles, loc('classify.map'))}
-                    properties = {{
-                        id: 'mapStyle',
-                        class: 'classification-map-style',
-                        label: loc('classify.map.mapStyle')
-                    }}/>
+        <Container className="t_classification-edit">
+            <LabeledSelect
+                name = 'mapStyle'
+                value = {values.mapStyle}
+                disabled = {disabled}
+                handleChange = {handleChange}
+                options = {options.mapStyles}
+            />
+            <MethodContainer>
+                <Message messageKey={`classify.labels.method`}/>
+                <span>: &nbsp;</span>
+                <Message messageKey={`classify.methods.${values.method}`}/>
+                <EditIcon disabled = {disabled} className='t_button-method' onClick={() => startHistogramView()}/>
+            </MethodContainer>
+            <LabeledSelect
+                name = 'count'
+                value = {values.count}
+                disabled = {disabled}
+                handleChange = {handleChange}
+                options = {options.counts}
+            />
+            <LabeledSelect
+                name = 'mode'
+                value = {values.mode}
+                disabled = {disabled}
+                handleChange = {handleChange}
+                options = {options.modes}
+            />
 
-                <Select value = {values.method} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
-                    options = {getLocalizedOptions(methods, loc('classify.methods'), getDisabledClassificationMethods(valueCount))}
-                    properties = {{
-                        id: 'method',
-                        class: 'classification-method',
-                        label: loc('classify.classifymethod')
-                    }}/>
+            {values.mapStyle === 'points' &&
+                <SizeSlider values={values} controller={controller} disabled={disabled} />
+            }
 
-                {values.method === 'manual' &&
-                    <ManualClassification disabled = {disabled} manualView = {manualView}
-                        indicators={indicators} indicatorData = {indicatorData} controller= {controller}/>
-                }
+            <Checkbox
+                checked = {values.showValues}
+                disabled = {disabled}
+                onChange = {e => handleChange('showValues', e.target.checked)}
+            >
+                <Message messageKey='classify.labels.showValues'/>
+            </Checkbox>
 
-                <Select value = {values.count} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
-                    options = {getValidCountRange(props.classifications)}
-                    properties = {{
-                        id: 'count',
-                        class: 'classification-count',
-                        label: loc('classify.classes'),
-                        valueType: 'int'
-                    }}/>
+            <Color values = {values} disabled = {disabled} colorsets = {options.colorsets} controller = {controller}/>
 
-                <Select value = {values.mode} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
-                    options = {getLocalizedOptions(modes, loc('classify.modes'), disabledOptions.mode)}
-                    properties = {{
-                        id: 'mode',
-                        class: 'classification-mode',
-                        label: loc('classify.mode')
-                    }}/>
-
-                {values.mapStyle !== 'choropleth' &&
-                    <Slider key="point-size" values = {values} disabled = {disabled} controller = {controller}/>
-                }
-
-                <Checkbox key="showValues" value = {values.showValues} disabled = {disabled}
-                    handleChange = {(id, isSelected) => handleCheckboxChange(controller, id, isSelected)}
-                    properties = {{
-                        id: 'showValues',
-                        class: 'show-values',
-                        label: loc('classify.map.showValues')
-                    }}/>
-
-                <Color values = {values} disabled = {disabled} colors = {colors} controller = {controller}/>
-
-                <Select key="transparency" value = {values.transparency} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
-                    options = {getTransparencyOptions(values.transparency)}
-                    properties = {{
-                        id: 'transparency',
-                        class: 'classification-transparency',
-                        label: loc('classify.map.transparency'),
-                        valueType: 'int'
-                    }}/>
-
-                {values.mapStyle !== 'points' &&
-                    <Select key="type" value = {values.type} disabled = {disabled}
-                        handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
-                        options = {getLocalizedOptions(types, loc('colorset'))}
-                        properties = {{
-                            id: 'type',
-                            class: 'classification-type',
-                            label: loc('colorset.setselection')
-                        }}/>
-                }
-
-                <Select key="fractionDigits" value = {values.fractionDigits} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
-                    options = {[0, 1, 2, 3, 4, 5]}
-                    properties = {{
-                        id: 'fractionDigits',
-                        class: 'decimal-place',
-                        label: loc('classify.map.fractionDigits'),
-                        valueType: 'int'
-                    }}/>
-            </div>
-        </div>
+            <Message messageKey='classify.labels.transparency'/>
+            <Slider
+                value = {values.transparency}
+                disabled = {disabled}
+                onChange = {value => handleChange('transparency', value)}
+                { ...TRANSPARENCY }
+            />
+            <LabeledSelect
+                name = 'type'
+                value = {values.type}
+                disabled = {disabled}
+                handleChange = {handleChange}
+                options = {options.types}
+            />
+            <LabeledSelect
+                name = 'fractionDigits'
+                value = {values.fractionDigits}
+                disabled = {disabled}
+                handleChange = {handleChange}
+                options = {options.fractionDigits}
+            />
+        </Container>
     );
 };
 EditClassification.propTypes = {
-    indicators: PropTypes.object.isRequired,
-    indicatorData: PropTypes.object.isRequired,
+    options: PropTypes.object.isRequired,
     editEnabled: PropTypes.bool.isRequired,
-    classifications: PropTypes.object.isRequired,
-    controller: PropTypes.object.isRequired,
-    manualView: PropTypes.object,
-    loc: PropTypes.func.isRequired
+    values: PropTypes.object.isRequired,
+    startHistogramView: PropTypes.func.isRequired,
+    controller: PropTypes.object.isRequired
 };
-
-const contextWrapped = withContext(EditClassification);
-export { contextWrapped as EditClassification };

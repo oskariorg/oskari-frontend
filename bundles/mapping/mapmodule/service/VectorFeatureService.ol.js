@@ -27,7 +27,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler(mapmodule);
-            this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
+            this._hoverEnabled = true;
             this._registerEventHandlers();
         }
 
@@ -40,6 +40,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this._sandbox.registerForEventByName(this, 'MapClickedEvent');
             this._sandbox.registerForEventByName(this, 'MapLayerVisibilityChangedEvent');
             this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerOpacityEvent');
+            this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerStyleEvent');
+            this._sandbox.registerForEventByName(this, 'AfterMapLayerRemoveEvent');
         }
 
         /**
@@ -192,11 +194,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         _getTopmostFeatureAndLayer (event) {
             const pixel = [event.getPageX(), event.getPageY()];
             const featureHitCb = (feature, layer) => ({ feature, layer });
-            let ftrAndLyr;
             try {
-                ftrAndLyr = this._map.forEachFeatureAtPixel(pixel, featureHitCb, {
+                return this._map.forEachFeatureAtPixel(pixel, featureHitCb, {
                     layerFilter: layer => this._onlyRegisteredTypesFilter(layer)
-                });
+                }) || {};
             } catch (ex) {
                 if (ex.message === `Cannot read property 'forEachFeatureAtCoordinate' of undefined`) {
                     this._log.debug('Could not find features at hover location. Omitted ol renderer error:\n', ex);
@@ -204,7 +205,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                     throw ex;
                 }
             }
-            return ftrAndLyr || {};
+            return {};
         }
 
         /**
@@ -221,13 +222,15 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             if (this._sandbox.getMap().isMoving()) {
                 return;
             }
-            this.hoverHandler.onMapHover(event);
-            this._throttledHoverFeature(event);
+
+            if (this._hoverEnabled) {
+                this.hoverHandler.onMapHover(event);
+                this._hoverFeature(event);
+            }
         }
 
         _hoverFeature (event) {
             let { feature, layer } = this._getTopmostFeatureAndLayer(event);
-
             if (feature && layer) {
                 if (feature && feature.get('features')) {
                     // Cluster source
@@ -329,6 +332,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             }
         }
 
+        setHoverEnabled (bln) {
+            this._hoverEnabled = !!bln;
+        }
+
         /**
          * @public @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or
@@ -349,10 +356,13 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 break;
             case 'AfterChangeMapLayerOpacityEvent':
                 this.hoverHandler.updateHoverLayer(event.getMapLayer()); break;
+            case 'AfterChangeMapLayerStyleEvent':
+                this.hoverHandler.updateLayerStyle(event.getMapLayer()); break;
+            case 'AfterMapLayerRemoveEvent':
+                this.hoverHandler.removeLayer(event.getMapLayer()); break;
             }
         }
-    }
-    , {
+    }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static

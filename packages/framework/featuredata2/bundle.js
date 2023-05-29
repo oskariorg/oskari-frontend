@@ -47,16 +47,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundle",
             "src": "../../../bundles/framework/featuredata2/plugin/MapSelectionPlugin.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../bundles/framework/featuredata2/event/FinishedDrawingEvent.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../bundles/framework/featuredata2/event/WFSSetFilter.js"
         },{
             "type": "text/javascript",
             "src": "../../../bundles/framework/featuredata2/event/WFSSetPropertyFilter.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../bundles/framework/featuredata2/event/AddedFeatureEvent.js"
         }, {
             "type": "text/javascript",
             "src": "../../../bundles/framework/featuredata2/Flyout.js"

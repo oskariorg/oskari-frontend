@@ -10,16 +10,18 @@
     background-clip: padding-box;
 }
 
-.mapplugin.coordinates {
+div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.coordinates {
     background: #fafafa;
     border: 1px solid #e6e6e6;
     @include border-radius(2px);
     box-sizing: border-box;
     font-size: 11px;
     line-height: 15px;
-    margin-bottom: 10px !important; // Damned mapmodule css has this set as 0 with a high-specificity selector...
+    margin-bottom: 10px;
     padding: 2px 5px 0;
     text-align: left;
+    display: block;
+    min-width: 90px;
 
     > div > div {
         display: inline-block;

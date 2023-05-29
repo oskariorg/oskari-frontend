@@ -5,9 +5,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
     this.sb = instance.getSandbox();
     this.loc = instance.getLocalization();
     this.uiElement = null;
-    var service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-    this._indicatorSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', service);
-    this._diagram = Oskari.clazz.create('Oskari.statistics.statsgrid.Diagram', service, this.loc);
+    this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this._indicatorSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', this.service);
+    this._diagram = Oskari.clazz.create('Oskari.statistics.statsgrid.Diagram', this.service, this.loc);
     var me = this;
     this.on('show', function () {
         if (!me.getUiElement()) {
@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
         const diagramSize = me.calculateDiagramSize(size);
         me._diagram.resizeUI(diagramSize);
     });
+    this.events();
 }, {
     _template: {
         container: jQuery('<div class="stats-diagram-holder">' +
@@ -51,6 +52,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
         const diagramSize = this.calculateDiagramSize();
         this._diagram.render(el.find('.chart'), diagramSize);
         this.setUiElement(el);
+        this.setSortingDisabled();
     },
     /**
      * @method calculateDiagramSize
@@ -71,6 +73,49 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
         const controls = el.find('.chart-controls').outerHeight() || 73;
         const toolbar = el.find('.oskari-flyouttoolbar').outerHeight() || 57;
         return height - controls - toolbar;
+    },
+    setSortingDisabled: function () {
+        const indicator = this.service.getStateService().getActiveIndicator();
+        if (!this.getUiElement()) return;
+        const el = this.getUiElement().find('.sort-options');
+        if (!indicator) {
+            if (el) {
+                el.css('pointer-events', 'none');
+                el.css('cursor', 'not-allowed');
+            }
+        } else {
+            if (el) {
+                el.css('pointer-events', 'auto');
+                el.css('cursor', 'auto');
+            }
+        }
+    },
+    events: function () {
+        const me = this;
+        this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
+            if (event.getCurrent()) {
+                me.setSortingDisabled();
+            }
+        });
+        this.service.on('StatsGrid.IndicatorEvent', function (event) {
+            if (event.isRemoved() && !me.hasIndicators()) {
+                me.setSortingDisabled();
+            }
+        });
+        this.service.on('StatsGrid.RegionsetChangedEvent', function () {
+            me.setSortingDisabled();
+        });
+        this.service.on('StatsGrid.ParameterChangedEvent', function () {
+            me.setSortingDisabled();
+        });
+        this.service.on('StatsGrid.StateChangedEvent', function (event) {
+            if (event.isReset()) {
+                me.setSortingDisabled();
+            }
+        });
+        this.service.on('StatsGrid.ClassificationChangedEvent', function () {
+            me.setSortingDisabled();
+        });
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']

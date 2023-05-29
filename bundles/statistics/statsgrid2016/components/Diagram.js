@@ -222,6 +222,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             width: '180px',
             marginLeft: '10px'
         });
+        dropdown.addClass('sort-options');
 
         select.adjustChosen();
 
@@ -243,12 +244,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
         data.forEach(function (entry) {
             numericData[entry.id] = entry.value;
         });
-        var stateService = this.service.getStateService();
-        var activeIndicator = stateService.getActiveIndicator();
-        var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
-        var classification = me.service.getClassificationService().getClassification(numericData, classificationOpts);
-        var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
-        return classification.maxBounds && colors ? { bounds: classification.maxBounds, values: colors } : { bounds: [], values: ['#555', '#555'] };
+        const activeIndicator = this.service.getStateService().getActiveIndicator();
+        const { groups, bounds, error } = me.service.getClassificationService().getClassification(numericData, activeIndicator.classification);
+        if (error) {
+            return ['#555'];
+        }
+        return {
+            bounds: bounds.slice(1, bounds.length - 1),
+            values: groups.map(group => group.color)
+        };
     },
     events: function () {
         var me = this;

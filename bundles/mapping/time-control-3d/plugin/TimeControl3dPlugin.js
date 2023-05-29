@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 import { LocaleProvider } from 'oskari-ui/util';
-import { TimeControl3d, TimeControl3dHandler, TimeControl3dButton } from '../view';
+import { TimeControl3d, TimeControl3dHandler } from '../view';
+import { ControlIcon } from '../view/icons';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin');
 /**
@@ -10,6 +13,7 @@ const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.B
 class TimeControl3dPlugin extends BasicMapModulePlugin {
     constructor (config) {
         super(config);
+        this._conf = config || {};
         this._clazz = 'Oskari.mapping.time-control-3d.TimeControl3dPlugin';
         this._name = 'TimeControl3dPlugin';
         this._defaultLocation = 'top right';
@@ -22,7 +26,6 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         this._popupContent = null;
         this._popup = null;
         this._mountPoint = jQuery('<div class="mapplugin time-control-3d"><div></div></div>');
-        this._mobileMountPoint = jQuery('<div class="tool mobile-time-control-3d"></div>');
         this._popupTemplate = jQuery('<div></div>');
 
         const sandbox = Oskari.getSandbox();
@@ -40,20 +43,11 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
     setOpen (bln) {
         this._toolOpen = bln;
-        this._renderControlElement();
+        this.refresh();
     }
-    _setLayerToolsEditModeImpl () {
-        const el = this.getElement();
-        if (!el) {
-            return;
-        }
-        if (this.inLayerToolsEditMode()) {
-            if (this.isOpen()) {
-                this._toggleToolState();
-            }
-            el.off('click');
-        } else {
-            this._bindIcon(el);
+    resetUI () {
+        if (this.isOpen()) {
+            this._toggleToolState();
         }
     }
     /**
@@ -65,9 +59,13 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
 
     redrawUI (mapInMobileMode, forced) {
-        this._isMobile = mapInMobileMode;
-        this.teardownUI();
-        return this._createUI(forced);
+        if (this.getElement()) {
+            this.teardownUI();
+        } else {
+            this._createUI(forced);
+        }
+
+        this.refresh();
     }
 
     _createEventHandlers () {
@@ -109,64 +107,14 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
 
     _createUI (forced) {
         let el;
-        if (this._isMobile) {
-            el = this._createMobileControlElement();
-            if (this._addToMobileToolBar(el, forced)) {
-                return true;
-            };
-        } else {
-            el = this._createControlElement();
-            this.addToPluginContainer(el);
-        }
-        this._renderControlElement();
+        el = this._createControlElement();
+        this.addToPluginContainer(el);
+        this.refresh();
     }
     _createControlElement () {
         const el = this._mountPoint.clone();
-        el.attr('title', this.loc('tooltip'));
-        this._bindIcon(el);
         this._element = el;
         return el;
-    }
-    _createMobileControlElement () {
-        const el = this._mobileMountPoint.clone();
-        this._bindIcon(el);
-        this._element = el;
-        return el;
-    }
-    _bindIcon (el) {
-        el.off('click');
-        el.on('click', event => {
-            this._toggleToolState();
-            event.stopPropagation();
-        });
-    }
-    _renderControlElement () {
-        const el = this.getElement();
-        if (!el) return;
-
-        ReactDOM.render(
-            <TimeControl3dButton
-                isMobile={this._isMobile}
-                controlIsActive={this.isOpen()}
-            />, el.get(0));
-    }
-
-    _addToMobileToolBar (el, forced) {
-        // TODO: create mapmodule method and tools service for svg based mobile tools
-        const toolbar = jQuery('.toolbar_' + this.getMapModule().getMobileToolbar());
-        const toolrow = toolbar.find('.toolrow');
-        if (toolrow.length) {
-            toolrow.append(el);
-            return false;
-        }
-        // there's no other tools added, add toolrow
-        if (forced) {
-            const row = jQuery('<div class="toolrow"></div>');
-            row.append(el);
-            toolbar.append(row);
-            return false;
-        }
-        return true; // waiting for toolbar
     }
 
     _toggleToolState () {
@@ -177,8 +125,25 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             popup.close(true);
         }
     }
+    refresh () {
+        const el = this.getElement();
+        if (!el) {
+            return;
+        }
 
-    render () {
+        ReactDOM.render(
+            <MapModuleButton
+                className='t_timecontrol'
+                title={this.loc('tooltip')}
+                icon={<ControlIcon isMobile={this._isMobile} controlIsActive={this.isOpen()} />}
+                onClick={() => this._toggleToolState()}
+                iconActive={this.isOpen()}
+            />,
+            el.get(0)
+        );
+    }
+
+    renderPopup () {
         const popupContent = this._popupTemplate.clone();
         ReactDOM.render(
             <LocaleProvider value={{ bundleKey: 'TimeControl3d' }}>
@@ -198,26 +163,32 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         const popupService = this.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
         this._popup = popupService.createPopup();
-        this.render();
+        this.renderPopup();
 
         // create close icon
         this._popup.createCloseIcon();
         this._popup.onClose(function () {
             me.unmountReactPopup();
             me.setOpen(false);
+            me.refresh();
         });
 
-        const themeColours = mapmodule.getThemeColours();
+        const theme = mapmodule.getMapTheme();
+        // TODO: Should use getHeaderTheme() to be consistent with other popups, but it doesn't look as good.
+        const helper = getNavigationTheme(theme);
         this._popup.makeDraggable();
         this._popup.addClass('time-control-3d');
 
         this._popup.show(popupTitle, this._popupContent);
         const elem = this.getElement();
 
-        const popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+        const isDark = Oskari.util.isDarkColor(helper.getPrimary());
+        const popupCloseIcon = (isDark) ? 'icon-close-white' : undefined;
         this._popup.setColourScheme({
-            'bgColour': themeColours.backgroundColour,
-            'titleColour': themeColours.textColour,
+            'bgColour': helper.getPrimary(),
+            'bodyBgColour': helper.getPrimary(),
+            'titleColour': helper.getTextColor(),
+            'opacity': 0.8,
             'iconCls': popupCloseIcon
         });
         let popupLocation = this.getLocation().includes('left') ? 'right' : 'left';
@@ -226,6 +197,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         }
         this._popup.moveTo(elem, popupLocation, true);
         this.setOpen(true);
+        this.refresh();
     }
 }
 

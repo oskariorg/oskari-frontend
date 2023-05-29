@@ -6,7 +6,6 @@ class LayersPluginOlcs extends LayersPlugin {
      * @param {Cesium.Cesium3DTileset | olLayer} layer
      */
     _isLayerImplVisible (layer) {
-        // NOTE! mapmodule has isLayerVisible() that is the same thing but uses layer id as param
         // OL version doesn't have this method at all
         if (layer instanceof Cesium.Cesium3DTileset) {
             return layer.show;
@@ -14,6 +13,7 @@ class LayersPluginOlcs extends LayersPlugin {
             return layer.getVisible();
         }
     }
+
     /**
      * @method _setLayerImplVisible Sets layer visibility on map.
      * @param {Cesium.Cesium3DTileset | olLayer} layer
@@ -26,46 +26,12 @@ class LayersPluginOlcs extends LayersPlugin {
             return layer.setVisible(visible);
         }
     }
-    /**
-     * @method handleMapLayerVisibility
-     * Checks layer's visibility (visible, inScale, inGeometry) and sets ol layers' visibilities.
-     * notifies bundles about visibility changes by sending MapLayerVisibilityChangedEvent.
-     * @param {Oskari.mapframework.domain.AbstractMapLayer} layer layer to check against
-     * @param {Boolean} isRequest if MapLayerVisibilityRequest, then trigger always change because layer's visibility has changed
-     */
-    handleMapLayerVisibility (layer, isRequest) {
-        let scaleOk = layer.isVisible();
-        let geometryMatch = layer.isVisible();
-        let triggerChange = (isRequest === true);
-        // if layer is visible check actual values
-        if (layer.isVisible()) {
-            scaleOk = this._isInScale(layer);
-            geometryMatch = this.isInGeometry(layer);
-        }
-        const mapLayers = this.getMapModule().getOLMapLayers(layer.getId());
-        if (!mapLayers || !mapLayers.length) {
-            if (triggerChange) {
-                this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
-            }
-            return;
-        }
-        const visibility = scaleOk && geometryMatch && layer.isVisible();
-        mapLayers.forEach(mapLayer => {
-            if (visibility !== this._isLayerImplVisible(mapLayer)) {
-                this._setLayerImplVisible(mapLayer, visibility);
-                triggerChange = true;
-            }
-        });
-        if (triggerChange) {
-            this.notifyLayerVisibilityChanged(layer, scaleOk, geometryMatch);
-        }
-    }
 }
 
 Oskari.clazz.defineES('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
     LayersPluginOlcs,
     {
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]

@@ -10,6 +10,7 @@ const Filter = ({ filters, activeFilterId, controller }) => {
             <Select
                 onChange={controller.setActiveFilterId}
                 value={activeFilterId}
+                className="t_filter"
             >
                 {
                     filters.map(({ id, text, tooltip }) => (

@@ -149,7 +149,7 @@ Oskari.clazz.define(
             if (allowedEvents === null || allowedEvents === undefined) {
                 allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
                     'RouteResultEvent', 'FeedbackResultEvent', 'SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', 'FeatureEvent', 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
-                    'RPCUIEvent', 'map.rotated', 'MapTourEvent', 'TimeChangedEvent'];
+                    'RPCUIEvent', 'map.rotated', 'MapTourEvent', 'TimeChangedEvent', 'DataForMapLocationEvent', 'MetadataSearchResultEvent', 'StateChangedEvent'];
             }
 
             if (allowedRequests === null || allowedRequests === undefined) {
@@ -181,9 +181,21 @@ Oskari.clazz.define(
                     'MapModulePlugin.MapLayerUpdateRequest',
                     'rotate.map',
                     'StartUserLocationTrackingRequest',
-                    'StopUserLocationTrackingRequest'
+                    'StopUserLocationTrackingRequest',
+                    'ChangeMapLayerStyleRequest',
+                    'RearrangeSelectedMapLayerRequest',
+                    'MetadataSearchRequest'
                 ];
             }
+
+            if (Array.isArray(conf.addEvents)) {
+                allowedEvents.push(...conf.addEvents);
+            }
+
+            if (Array.isArray(conf.addRequests)) {
+                allowedRequests.push(...conf.addRequests);
+            }
+
             // try to get event/request builder for each of these to see that they really are supported!!
             me.__setupAvailableEvents(allowedEvents);
             me.__setupAvailableRequests(allowedRequests);

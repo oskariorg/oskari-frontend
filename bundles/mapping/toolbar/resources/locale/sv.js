@@ -7,7 +7,6 @@ Oskari.registerLocalization(
             "link": {
                 "tooltip": "Länk",
                 "ok": "OK",
-                "copy": "Kopiera länken till klippbordet",
                 "title": "Gör en länk till kartvyn",
                 "cannot": "Denna kartvy kan inte länkas till. Skapa en ny kartvy och försök igen.",
                 "addMarker": "Visa kartans mittmarkör",

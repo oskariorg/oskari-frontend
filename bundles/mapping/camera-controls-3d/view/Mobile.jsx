@@ -1,32 +1,56 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Controller } from 'oskari-ui/util';
 import { MoveMapIcon, RotateMapIcon, UpIcon, DownIcon } from './Icons';
+import { MapModuleButton } from '../../mapmodule/MapModuleButton';
+import { ToolbarButtonItem } from 'oskari-ui/components/buttons';
+import { VideoCameraOutlined } from '@ant-design/icons';
 const mapMoveMethodMove = 'move';
 const mapMoveMethodRotate = 'rotate';
 
-const MobileContainer = styled.div`
-    margin-top: 5px;
-    margin-right: 5px;
-`;
+const buildToolbarItems = (controller, activeMapMoveMethod) => {
+    return [
+        <ToolbarButtonItem
+            key='t_map_move'
+            className='t_map_move'
+            icon={<MoveMapIcon />}
+            onClick={() => controller.setActiveMapMoveMethod(mapMoveMethodMove)}
+            iconActive={activeMapMoveMethod === mapMoveMethodMove}
+        />,
+        <ToolbarButtonItem
+            key='t_map_rotate'
+            className='t_map_rotate'
+            icon={<RotateMapIcon />}
+            onClick={() => controller.setActiveMapMoveMethod(mapMoveMethodRotate)}
+            iconActive={activeMapMoveMethod === mapMoveMethodRotate}
+        />,
+        <ToolbarButtonItem
+            key='t_map_up'
+            className='t_map_up'
+            icon={<UpIcon />}
+            onClick={() => controller.changeCameraAltitude(true)}
+            disabled={activeMapMoveMethod === mapMoveMethodRotate}
+        />,
+        <ToolbarButtonItem
+            key='t_map_down'
+            className='t_map_down'
+            icon={<DownIcon />}
+            onClick={() => controller.changeCameraAltitude(false)}
+            disabled={activeMapMoveMethod === mapMoveMethodRotate}
+        />
+    ];
+};
 
-export const Mobile = ({ activeMapMoveMethod, controller }) => {
-    const mapInMobileMode = true;
-
+export const Mobile = ({ activeMapMoveMethod, controller, location = 'top left' }) => {
     return (
-        <MobileContainer>
-            <MoveMapIcon mapInMobileMode={mapInMobileMode}
-                clickHandler={() => controller.setActiveMapMoveMethod(mapMoveMethodMove)}
-                controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>
-            <RotateMapIcon mapInMobileMode={mapInMobileMode}
-                clickHandler={() => controller.setActiveMapMoveMethod(mapMoveMethodRotate)}
-                controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>
-            <UpIcon mapInMobileMode={mapInMobileMode}
-                clickHandler={() => controller.changeCameraAltitude(true)}/>
-            <DownIcon mapInMobileMode={mapInMobileMode}
-                clickHandler={() => controller.changeCameraAltitude(false)}/>
-        </MobileContainer>
+        <MapModuleButton
+            icon={<VideoCameraOutlined />}
+            withToolbar
+            className='t_mobile_camera_tools'
+            position={location}
+        >
+            {buildToolbarItems(controller, activeMapMoveMethod)}
+        </MapModuleButton>
     );
 };
 

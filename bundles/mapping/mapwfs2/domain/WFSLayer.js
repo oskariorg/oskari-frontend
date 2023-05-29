@@ -1,12 +1,11 @@
+import { AbstractVectorLayer } from '../../mapmodule/domain/AbstractVectorLayer';
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer
  *
  * MapLayer of type WFS
  */
 
-const VectorTileLayer = Oskari.clazz.get('Oskari.mapframework.mapmodule.VectorTileLayer');
-
-export class WFSLayer extends VectorTileLayer {
+export class WFSLayer extends AbstractVectorLayer {
     constructor () {
         super(...arguments);
         /* Layer Type */
@@ -25,10 +24,6 @@ export class WFSLayer extends VectorTileLayer {
 
     isFilterSupported () {
         return true;
-    }
-
-    getLegendImage () {
-        return null;
     }
 
     isSupportedSrs () {
@@ -194,24 +189,6 @@ export class WFSLayer extends VectorTileLayer {
             wps.no_data = noDataValue;
         }
         return wps;
-    }
-
-    /**
-     * To get distance between features when clustering kicks in.
-     *  @method getClusteringDistance
-     *  @return {Number} Distance between features in pixels
-     */
-    getClusteringDistance () {
-        return this._options.clusteringDistance;
-    }
-
-    /**
-     * To setup clustering. Sets the minimum distance between features before clustering kicks in.
-     *  @method setClusteringDistance
-     *  @return {Number} Distance between features in pixels
-     */
-    setClusteringDistance (distance) {
-        this._options.clusteringDistance = distance;
     }
 }
 

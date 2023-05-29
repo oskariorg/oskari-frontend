@@ -9,11 +9,185 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.11.0
+
+###  [mod] AddMapLayerRequest
+
+The layer is no longer added to map synchronously. Additional metadata is loaded from the server when a layer is added to map so sending additional requests directly after sending `AddMapLayerRequest` might not work as they did before.
+
+Introduced a second parameter for the request called `options`. This is used to restore vector layer styles on embedded maps for guest users in a way the user that published the map sees them on the publisher functionality. It can also be used to trigger `MapModulePlugin.MapMoveByLayerContentRequest` after the layer has been added to map (workaround for asynchronous operation).
+
+## 2.10.0
+
+### [rem] MapResizeEnabledRequest
+
+Removed request that was not used or needed anymore. The request could be used for stopping mapmodule from auto-scaling its size when the element size changed, but the current implementation works in a similar way that you can set size of the map element to be different than the container it is in. This does the same thing.
+
+### [rem] MapSizeUpdateRequest
+
+Removed request that was not used or needed anymore now that mapmodule listens to the element size. The request was NOT used to set a new size like the name suggests, but to notify mapmodule about size change like it was an event. This should have been an event instead, but it's no longer required.
+
+### [rem] MapWindowFullScreenRequest
+
+Removed request that was not needed anymore now that mapmodule listens to the element size. The request was NOT used to set a new size for map like the name suggests, but to notify mapmodule about size change like it was an event. This should have been an event instead, but it's no longer required.
+
+## 2.9.0
+
+### [mod] [rpc] [breaking] MapModulePlugin.AddMarkerRequest
+
+For built-in symbols everything stays the same.
+
+For external graphic symbols in markers the size of the marker is:
+- when below 10 is calculated as size * 10 + 40 for actual size (while hack'ish this is for backwards compatibility reasons)
+- 10 + values are now considered as a pixel value (as documented on the API page)
+
+### [mod] [rpc] DrawTools.StartDrawingRequest
+
+Enabled modifying a geometry with a limited shape for `Circle`, `Box` and `Square`. Previously modifying a polygon shape was always done in a way that resulted in losing the original shape (new points could be added and individual points could be moved to skew the geometry). The previous method for editing is still available when using the shape `Polygon` to be used for editing.
+
+Added an option to use a validation limit for length of a line and area of a polygon.
+The `limits` can be set with options:
+```javascript
+{
+    ...,
+    limits: {
+        area: `number in m2 limiting area size`,
+        length: `number in meters limiting line length`
+    }
+}
+```
+Changed to show self intersection warning for Polygons as in API documentation. Previously warning was shown only with showMeasureOnMap option.
+
+### [mod] [rpc] DrawingEvent
+Added valid property for GeoJson features. Used with `DrawTools.StartDrawingRequest` limits option.
+
+## 2.8.0
+
+### [add] [rpc] StateChangedEvent
+
+Event is sent when a massive application state change occurs like user clicks on the "reset map to default".
+This allows RPC-based apps to detect such occurance and re-add for example markers that they need after such reset.
+
+## 2.7.0 [mod] [rpc] [breaking] MapModulePlugin.AddMarkerRequest
+
+The size value is now considered as a pixel value instead of abstracted WHEN using external graphic for marker symbol.
+For built-in symbols everything stays the same.
+
+## 2.6.0
+
+### [add] [rpc] MetadataSearchRequest
+
+Added new MetadataSearchRequest. This allows applications to do metadatasearch programmatically.
+
+Find metadata for `tie` search.
+```javascript
+const sb = Oskari.getSandbox();
+sb.postRequestByName('MetadataSearchRequest', [{ search: 'tie' }]);
+```
+
+### [add] [rpc] MetadataSearchResultEvent
+
+Added new MetadataSearchResultEvent. This allows applications to get metadata search results.
+
+Event returns following Object:
+```javascript
+{
+  "success": true,
+  "results": [{
+        "identification":{
+          "date":"2021-05-18",
+          "code":"publication"
+        },
+        "natureofthetarget":"dataset",
+        "bbox":{
+            "top":70.09229553,
+            "left":19.08317359,
+            "bottom":59.45414258,
+            "right":31.58672881
+        },
+        "organization":"Väylävirasto",
+        "name":"Sillat (Taitorakennerekisteri)",
+        "rank":-1,
+        "id":"cbfed29a-d47f-4b83-a9d0-e96c9a713a88",
+        "region":"",
+        "geom":"POLYGON ((51857.07752019336 6617351.758085947, 106162.23019201797 6611247.60914618, 160521.75747694494 6605934.9725185605, 214927.9837369584 6601413.041426821, 269373.3028919406 6597681.12401024, 323850.167285723 6594738.6457116045, 378351.0765369692 6592585.151240729, 432868.5663778016 6591220.306118018, 487395.1974830585 6590643.897801558, 541923.5442930857 6590855.836400321, 596446.1838329614 6591856.154975107, 650955.6845310468 6593645.009427913, 705444.5950397715 6596222.67797946, 759905.4330615391 6599589.560233721, 752439.279058465 6707120.567722377, 744900.8507702629 6814657.30555671, 737292.2963510042 6922199.658602795, 729615.7848563935 7029747.505094043, 721873.5056238836 7137300.716763376, 714067.6676445415 7244859.158983923, 706200.4989268251 7352422.690918106, 698274.2458524778 7459991.165674924, 690291.1725247321 7567564.430475263, 682253.5601090218 7675142.326825145, 674163.706166442 7782724.690696563, 637684.9819106762 7780262.600948358, 601176.4170921873 7778377.065625957, 564645.9381468832 7777068.247270706, 528101.4635005761 7776336.258280902, 491550.9064510594 7776181.161365283, 455002.17806454666 7776602.969796763, 418463.190078363 7777601.647466223, 381941.8578017532 7779177.108736253, 345446.1030066919 7781329.218095038, 308983.8568005678 7784057.789610645, 272563.0624726217 7787362.586186218, 236191.67830600997 7791243.318616742, 199877.68034737493 7795699.644448195, 185922.51974644407 7688636.614841255, 172055.50590313738 7581562.838070868, 158280.5546451786 7474477.904805448, 144601.5589337572 7367381.417439794, 131022.38783961348 7260272.990545034, 117546.88551808393 7153152.251308996, 104178.87018318352 7046018.839966641, 90922.13308078656 6938872.410219978, 77780.43746099574 6831712.629646971, 64757.51754980773 6724539.1800989425, 51857.07752019336 6617351.758085947))",
+        "channelId":"METADATA_CATALOGUE_CHANNEL"}
+    ]
+}
+```
+
+
+### [add] [rpc] RearrangeSelectedMapLayerRequest
+
+Allowed request for rpc use and also added request documentation.
+
+```javascript
+const layerId = 1;
+const position = 0;
+channel.postRequest('RearrangeSelectedMapLayerRequest', [layerId, position]);
+```
+
+### [add] [rpc] ChangeMapLayerStyleRequest
+
+Allowed request for rpc use.
+
+```javascript
+const layerId = 1;
+const newStyleName = 'new_awesome_style';
+channel.postRequest('ChangeMapLayerStyleRequest', [layerId, newStyleName]);
+```
+
+### [add] [rpc] DataForMapLocationEvent
+
+Added new DataForMapLocationEvent. This allows applications to get programmatic access to the content that is normally shown on the map in an `infobox` popup when the user clicks the map (GFI/wfs feature clicks).
+
+Event returns following Object:
+```javascript
+{
+  content: "<table><tr><td>test</td></tr></table>", // or json object
+  x: 423424,
+  y: 6652055,
+  layerId: 1,
+  type: "text" // or json or geojson
+}
+```
+
+### [mod] [rpc] getAllLayers
+
+The RPC `getAllLayers()` function now includes new properties: `config` and `metadataIdentifier`.
+
+The `config` (layer `attributes` `data` block) object includes optional configuration like localized names for vector feature properties etc.
+
+The `metadataIdentifier` string shows layers metadata identifier. If layer haven't metadata identifier, layer object not contains `metadataIdentifier` properties.
+
+
+```javascript
+{
+    id: layerId,
+    opacity: layerOpacity,
+    visible: layerVisibility,
+    name : layerName,
+    minZoom: minZoomLevel,
+    maxZoom: maxZoomLevel,
+    config: layerAttributesDataBlock,
+    metadataIdentifier: metadataIdentifier
+}
+```
+
+### [mod] [rpc] SearchRequest and SearchResultEvent
+
+SearchRequest can now take an optional second parameter that is sent to the server side implementation. As the server side implementation are handled by different "channels" depending on the Oskari instance and implementation these options might or might not be handled. However the same options are returned on the SearchResultEvent enabling tracking which event is a response to which request making the functionality more versatile whether any extra flags are supported by the server instance or not. A common handling has been implemented for the key `limit` in the options to request more or less results than the instance default. Contact your Oskari instance administrator for options that are used by the server side on given instance.
+
 ## 2.5.0
 
 ### [add] userstyle
 
 Added initial bundle documentation. Userstyle functionality has been moved from wfsvector to own bundle.
+
+### [mod] MapModulePlugin.MapLayerUpdateRequest
+
+Added documentation for the request. The request itself has been available from 1.x already but the it wasn't documented.
+Since 2.5 it can also be used to force reload of features from a service on a vector/WFS-layer.
 
 ## 2.4.0
 
@@ -107,7 +281,7 @@ Object with optional parameters for options as default for all locations.
 Added fourth parameter "options".
 ```javascript
 { srsName, animation }
-``` 
+```
 `srsName`: The projection in which the given coordinates are
 `animation`: Animation to use on map move. Possible values: `fly`, `pan`.
 

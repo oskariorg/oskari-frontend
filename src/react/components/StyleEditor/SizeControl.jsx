@@ -1,28 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message } from 'oskari-ui';
-import { Form, InputNumber } from 'antd';
+import { Message, NumberInput } from 'oskari-ui';
 import { ANTD_FORMLAYOUT } from './constants';
+import { FormItem } from '../Form';
 
-const sizeFormatter = (number) => Math.abs(number); 
-
+const sizeFormatter = (number) => Math.abs(number);
 
 export const SizeControl = (props) => {
     return (
-        <Form.Item
+        <FormItem
             name={ props.name }
             label={
                 <Message messageKey={ props.localeKey }/>
             }
             { ...ANTD_FORMLAYOUT }
         >
-            <InputNumber
+            <NumberInput
                 min={ 1 }
                 max={ 5 }
                 formatter={ sizeFormatter }
                 parser={ sizeFormatter }
             />
-        </Form.Item>
+        </FormItem>
     );
 };
 

@@ -3,6 +3,7 @@ import { edgeLines } from './edgeLines';
 import { inputGuide } from './inputGuide';
 import { updateBandBlocks } from './updateBandBlocks';
 import { updateDragHandles } from './updateDragHandles';
+import * as d3 from 'd3';
 
 const width = 500;
 const height = 303;
@@ -17,7 +18,7 @@ const histoHeight = 200;
  * @param {String[]} colorSet colors corresponding to classes
  * @param {Function} changeCallback function that is called with updated bounds, when user makes changes
  */
-export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, changeCallback) {
+export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, activeId, fractionDigits, base, changeCallback, disabled) {
     const svg = d3.select(el)
         .append('svg')
         .attr('width', width)
@@ -39,38 +40,43 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
     const x = d3.scaleLinear()
         .domain([manualBounds[0], manualBounds[manualBounds.length - 1]])
         .clamp(true)
-        .range([margin, width - margin]);
+        .range([margin * 2, width - margin]); // double left margin to get more space for tick labels
 
     // HISTOGRAM CLIP PATH
     histogram(histoClip, histoData, x, y, height);
 
     const handlesData = manualBounds.map((d, i) => ({ value: d, id: i }));
 
-    let selectedId = handlesData[1].id;
-    const isSelected = d => d.id === selectedId;
-
+    let selected = handlesData[1];
+    if (activeId && activeId > 0 && activeId < manualBounds.length - 1) {
+        selected = handlesData[activeId];
+    }
+    const isSelected = d => d.id === selected.id;
+    const isBase = d => typeof base !== 'undefined' && base === d.value;
     const notify = () => {
-        changeCallback(handlesData.map((d) => d.value));
+        const index = handlesData.findIndex(d => d === selected);
+        changeCallback(handlesData.map((d) => d.value), index);
     };
 
     const dragBehavior = d3.drag()
-        .subject((d) => {
-            return { x: x(d.value), y: d3.event.y };
+        .subject((event, d) => {
+            return { x: x(d.value), y: event.y };
         })
-        .on('start', (d) => {
-            selectedId = d.id;
+        .on('start', (event, d) => {
+            selected = d;
             update();
         })
-        .on('drag', (d) => {
-            var newX = d3.event.x;
+        .on('drag', (event, d) => {
+            if (disabled) return null;
+            const newX = event.x;
             d.value = x.invert(newX);
-            selectedId = d.id;
+            selected = d;
             update();
         })
         .on('end', notify);
 
     // BOUNDS EDGES
-    edgeLines(boundsLines, handlesData, x, histoHeight);
+    edgeLines(boundsLines, handlesData, x, y, histoHeight);
 
     // VALUE INPUT INIT & INTERACTION
 
@@ -80,10 +86,10 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
             return null;
         }
         if (parsed < x.domain()[0]) {
-            return x.domain()[0];
+            return null;
         }
         if (parsed > x.domain()[1]) {
-            return x.domain()[1];
+            return null;
         }
         return parsed;
     };
@@ -92,6 +98,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         .classed('input-area', true)
         .append('input')
         .attr('type', 'text')
+        .attr('disabled', disabled ? true : null)
         .on('input', () => {
             const value = valueInput.property('value');
             const validated = parseValidateInput(value);
@@ -99,28 +106,29 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
             if (validated === null) {
                 return;
             }
-            handlesData.find(isSelected).value = validated;
+            selected.value = validated;
             update(true);
-            notify();
         })
         .on('blur', () => {
             update();
+            notify();
         });
 
     function update (skipInput) {
         updateBandBlocks(histoGroup, handlesData, x, colorSet, histoHeight);
-        updateDragHandles(dragHandles, handlesData, x, dragBehavior, isSelected, histoHeight);
+        updateDragHandles(dragHandles, handlesData, x, dragBehavior, isSelected, isBase, histoHeight);
 
         if (skipInput) {
             return;
         }
 
         // VALUE INPUT
-        const selectedvalue = handlesData.find(isSelected).value;
-        valueInput.property('value', selectedvalue).classed('fail', false);
+        const { value } = selected;
+        const fixed = typeof value === 'number' ? value.toFixed(fractionDigits) : value;
+        valueInput.property('value', fixed).classed('fail', false);
 
         // VALUE INPUT GUIDE BOX
-        inputGuide(guide, x, 50, histoHeight + 50, x(selectedvalue));
+        inputGuide(guide, x, 50, histoHeight + 50, x(value));
     }
     update();
 }

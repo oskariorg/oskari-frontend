@@ -1,9 +1,29 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
+import { MapModuleButton } from '../../MapModuleButton';
+import styled from 'styled-components';
+
+import './request/ToggleFullScreenControlRequest';
+
+// Icon is too small with defaults (18x18px)
+const StyledButton = styled(MapModuleButton)`
+> span {
+    font-size: 22px;
+    max-height: 22px;
+    max-width: 22px;
+    > svg {
+        max-height: 22px;
+        max-width: 22px;
+    }
+}
+`;
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin
  * Displays a full screen toggle button on the map.
  */
-Oskari.clazz.define(
-    'Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin',
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin',
     /**
      * @static @method create called automatically on construction
      *
@@ -18,6 +38,10 @@ Oskari.clazz.define(
         me._element = null;
         me.state = {};
         me._sandbox = null;
+        this._isVisible = true;
+        me._templates = {
+            plugin: jQuery('<div class="mapplugin fullscreen"></div>')
+        };
     },
     {
         /**
@@ -27,32 +51,54 @@ Oskari.clazz.define(
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            var me = this,
-                el = jQuery(
-                    '<div class="mapplugin fullscreenDiv">' +
-                    '<img class="fullscreenDivImg" src="' + me.getImagePath('hide-navigation.png') + '"></img>' +
-                    '</div>'
-                );
-            el.find('.fullscreenDivImg').on('click', function (event) {
-                event.preventDefault();
-                if (me.state.fullscreen) {
-                    me._showNavigation();
-                } else {
-                    me._hideNavigation();
-                }
-            });
-            return el;
+            return this._templates.plugin.clone();
         },
         /**
          * @method _startPluginImpl
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
          */
-        _startPluginImpl: function (sandbox) {
-            var me = this;
-            me.setEnabled(me._enabled);
-            return me.setVisible(me._visible);
+        _startPluginImpl: function () {
+            this.setElement(this._createControlElement());
+            this.addToPluginContainer(this.getElement());
+            this.refresh();
+        },
+
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
+         */
+        redrawUI: function (mapInMobileMode, forced) {
+            this.refresh();
+        },
+        /**
+         * @public @method refresh
+         */
+        refresh: function () {
+            const el = this.getElement();
+            if (!el) {
+                return;
+            }
+            const isFullscreen = !!this.state.fullscreen;
+            ReactDOM.render(
+                <StyledButton
+                    className='t_fullscreen'
+                    visible={this.isVisible()}
+                    icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+                    iconActive={isFullscreen}
+                    onClick={() => {
+                        this.setState({
+                            fullscreen: !isFullscreen
+                        });
+                    }}
+                    position={this.getLocation()}
+                />
+                ,
+                el[0]
+            );
+        },
+        teardownUI: function () {
+            this.removeFromPluginContainer(this.getElement());
         },
         /**
          * @method _stopPluginImpl
@@ -61,7 +107,7 @@ Oskari.clazz.define(
          *          reference to application sandbox
          */
         _stopPluginImpl: function (sandbox) {
-            this.removeFromPluginContainer(this.getElement());
+            this.teardownUI();
         },
 
         /**
@@ -71,57 +117,43 @@ Oskari.clazz.define(
          */
         createRequestHandlers: function () {
             return {
-                'MapModulePlugin.ToggleFullScreenControlRequest':
-                    Oskari.clazz.create(
-                        'Oskari.mapframework.bundle.mapmodule.request.ToggleFullScreenControlRequestHandler',
-                        this
-                    )
+                'MapModulePlugin.ToggleFullScreenControlRequest': this
             };
+        },
+        /**
+         * Handler for MapModulePlugin.ToggleFullScreenControlRequest
+         *
+         * Oskari.getSandbox().postRequestByName('MapModulePlugin.ToggleFullScreenControlRequest', [true/false]);
+         *
+         * @param {Oskari.mapframework.core.Core} core
+         *      Reference to the application core (reference sandbox core.getSandbox())
+         * @param {Oskari.mapframework.bundle.mapmodule.request.ToggleFullScreenControlRequest} request
+         *      Request to handle
+         */
+        handleRequest: function (core, request) {
+            this._isVisible = request.isVisible();
+            this.refresh();
+        },
+        isVisible: function () {
+            return this._isVisible;
         },
         setState: function (state) {
-            var me = this;
-            me.state = state || {};
-
-            if (me.state.fullscreen) {
-                me._hideNavigation();
+            this.state = state || {};
+            if (this.state.fullscreen) {
+                this._hideNavigation();
             } else {
-                me._showNavigation();
+                this._showNavigation();
             }
+            this.refresh();
         },
         getState: function () {
-            var me = this;
-            return me.state;
+            return this.state;
         },
         _showNavigation: function () {
-            var me = this;
-            if (!me._element) {
-                return;
-            }
-            me._element.find('.fullscreenDivImg').attr('src', me.getImagePath('hide-navigation.png'));
-            me.state = {
-                fullscreen: false
-            };
-
-            me.getMapModule().getMapEl().parents('#contentMap').removeClass('oskari-map-window-fullscreen');
-            if (!me._sandbox.hasHandler('MapFull.MapWindowFullScreenRequest')) {
-                return;
-            }
-            me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
+            Oskari.dom.getMapContainerEl().classList.remove('oskari-map-window-fullscreen');
         },
         _hideNavigation: function () {
-            var me = this;
-            if (!me._element) {
-                return;
-            }
-            me._element.find('.fullscreenDivImg').attr('src', me.getImagePath('show-navigation.png'));
-            me.state = {
-                fullscreen: true
-            };
-            me.getMapModule().getMapEl().parents('#contentMap').addClass('oskari-map-window-fullscreen');
-            if (!me._sandbox.hasHandler('MapFull.MapWindowFullScreenRequest')) {
-                return;
-            }
-            me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
+            Oskari.dom.getMapContainerEl().classList.add('oskari-map-window-fullscreen');
         }
     },
     {

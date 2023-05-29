@@ -28,9 +28,7 @@ Oskari.clazz.define('Oskari.map.LogoPluginService',
             return this.__name;
         },
         getLabels: function () {
-            var currentLabels = this.labels;
-            this.labels = [];
-            return currentLabels;
+            return this.labels;
         },
         /**
    * @method addLabel
@@ -41,7 +39,9 @@ Oskari.clazz.define('Oskari.map.LogoPluginService',
             if (typeof title === 'undefined') {
                 return;
             }
-            this.labels.push({ title: title, options: options || {} });
+            if (this.labels.findIndex(label => label.title === title) < 0) {
+                this.labels.push({ title: title, options: options || {} });
+            }
             this.trigger('change');
         }
     }, {

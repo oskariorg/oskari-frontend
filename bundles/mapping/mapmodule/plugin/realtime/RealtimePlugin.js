@@ -1,3 +1,4 @@
+import './event/RefreshLayerEvent';
 /**
  * Interface/protocol definition for map plugins
  *
@@ -64,23 +65,19 @@ Oskari.clazz.define(
                     }
                 },
                 MapLayerEvent: function (event) {
-                    var op = event.getOperation(),
-                        layer = this.getSandbox().findMapLayerFromSelectedMapLayers(
-                            event.getLayerId()
-                        );
-
-                    if (op === 'update' && layer && layer.isRealtime() && this._isNotIgnored(layer)) {
+                    if (event.getOperation() !== 'update') {
+                        return;
+                    }
+                    const layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId());
+                    if (layer && layer.isRealtime() && this._isNotIgnored(layer)) {
                         this._resetInterval(layer);
                     }
                 },
                 MapLayerVisibilityChangedEvent: function (event) {
-                    var layer = event.getMapLayer(),
-                        isVisible = layer.isVisible(),
-                        inScale = event.isInScale(),
-                        inViewPort = event.isGeometryMatch(),
-                        clearOnly = (!isVisible || !inScale || !inViewPort);
+                    const layer = event.getMapLayer();
 
                     if (layer.isRealtime() && this._isNotIgnored(layer)) {
+                        const clearOnly = !layer.isVisible() || !event.isInScale() || !event.isGeometryMatch();
                         this._resetInterval(layer, clearOnly);
                     }
                 },

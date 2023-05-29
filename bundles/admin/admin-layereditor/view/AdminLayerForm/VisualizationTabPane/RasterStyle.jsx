@@ -1,10 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, TextInput } from 'oskari-ui';
+import { Message, TextInput, Link } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
-import { Link } from './Link';
-import { StyledFormField, Border, InlineBlock } from './styled';
+import { StyledFormField, Border } from './styled';
 import { RasterStyleSelect } from './RasterStyle/RasterStyleSelect';
 import { ServiceLegend } from './RasterStyle/ServiceLegend';
 import { legendsWithoutStyle, GLOBAL_LEGEND } from './RasterStyle/helper';
@@ -25,21 +24,20 @@ const additionalLegendsToStyles = (styles, legends, globalTitle) => {
 const RasterStyle = ({ layer, controller, getMessage }) => {
     const { options = {}, capabilities = {}, style: defaultName } = layer;
     const { styles = [] } = capabilities;
-    const { legends = {} } = options;
+    const { legends = {} } = options; // overriding legend urls
+
     // Used to generate style-objects for styles that have been removed from the service
     // so we can show the override legends urls that we have saved for the layer
     // and notify admin that such styles don't exist any more on the service
     const additionalLegends = additionalLegendsToStyles(styles, legends, getMessage('styles.raster.legendImage'));
     const styleOptions = [...styles, ...additionalLegends];
-
     const firstOption = styleOptions.length > 0 ? styleOptions[0].name : '';
     const [selected, setSelected] = useState(defaultName || firstOption);
 
-    const style = styles.find(s => s.name === selected);
-    const name = style ? style.name : GLOBAL_LEGEND;
-    const styleLegend = style ? style.legend : '';
     // user/layer gets legend in following order: named override, global override, defined in service/capabilities/style
-    const legendUrl = legends[name] || legends[GLOBAL_LEGEND] || '';
+    const { name: nameForLegendUrl = GLOBAL_LEGEND } = styleOptions.find(s => s.name === selected) || {};
+    const { legend: serviceLegendUrl = '' } = styles.find(s => s.name === selected) || {};
+    const legendUrl = legends[nameForLegendUrl] || '';
 
     return (
         <Fragment>
@@ -55,20 +53,16 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
                         controller = {controller}>
                     </RasterStyleSelect>
                     <StyledFormField>
-                        <ServiceLegend url = {styleLegend} />
+                        <ServiceLegend url = {serviceLegendUrl} />
                     </StyledFormField>
                     <StyledFormField>
                         <Fragment>
                             <Message messageKey='styles.raster.overriddenLegend' />
                             <InfoTooltip messageKeys='styles.raster.overrideTooltip' />
-                            { legendUrl &&
-                                <InlineBlock>
-                                    <Link url = {legendUrl} />
-                                </InlineBlock>
-                            }
+                            { legendUrl && <Link url = {legendUrl} /> }
                             <TextInput
                                 value = {legendUrl}
-                                onChange={evt => controller.setLegendUrl(name, evt.target.value)}
+                                onChange={evt => controller.setLegendUrl(nameForLegendUrl, evt.target.value)}
                                 allowClear = {true}
                             />
                         </Fragment>

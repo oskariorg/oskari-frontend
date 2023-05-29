@@ -1,3 +1,9 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Message } from 'oskari-ui';
+import { ThemeProvider } from 'oskari-ui/util';
+import { FeatureDataButton } from './FeatureDataButton';
+
 /**
  * @class Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin
  * Provides WFS grid link on top of map
@@ -9,86 +15,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
      * @param {Object} config
      *      JSON config with params needed to run the plugin
      */
-    function (config) {
+    function () {
         var me = this;
         me._clazz = 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin';
         me._defaultLocation = 'top right';
-        me._instance = config.instance;
         me._index = 100;
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
         me._flyoutOpen = undefined;
-
-        me._mobileDefs = {
-            buttons: {
-                'mobile-featuredata': {
-                    iconCls: 'mobile-info-marker',
-                    tooltip: '',
-                    sticky: true,
-                    toggleChangeIcon: true,
-                    show: true,
-                    callback: function () {
-                        if (me._flyoutOpen) {
-                            var sandbox = me.getSandbox();
-                            sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
-                            var el = jQuery(me.getMapModule().getMobileDiv()).find('.mobile-info-marker');
-                            var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                            sandbox.request(me, toolbarRequest);
-                            me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-featuredata'].iconCls);
-                            me._flyoutOpen = undefined;
-                            var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
-                            jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
-                        } else {
-                            // kill open popups
-                            me.getSandbox().getService('Oskari.userinterface.component.PopupService').closeAllPopups(false);
-
-                            me._openFeatureDataFlyout();
-                            me._flyoutOpen = true;
-                        }
-                    }
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
     }, {
+        getInstance: function () {
+            // we only need instance here since the flyout is operated by the instance
+            // TODO: we should move the flyout related code to this plugin
+            if (!this._instance) {
+                if (!this.sandbox) {
+                    // wacky stuff we do since sandbox might be provided
+                    // by mapmodule or not depending if the plugin has been started etc
+                    this.sandbox = this.getSandbox();
+                }
+                if (!this.sandbox) {
+                    // just get a ref to sandbox since we really need it here to get the instance (see TODO above)
+                    this.sandbox = Oskari.getSandbox();
+                }
+                this._instance = this.sandbox.findRegisteredModuleInstance('FeatureData2');
+            }
+            return this._instance;
+        },
+        _startPluginImpl: function () {
+            this.setElement(this._createControlElement());
+            this.addToPluginContainer(this.getElement());
+            this.refresh();
+        },
         /**
          * @method _createControlElement
          * @private
-         * Creates UI for coordinate display and places it on the maps
-         * div where this plugin registered.
+         * Creates container for UI for feature data plugin
          */
         _createControlElement: function () {
-            var me = this,
-                el = jQuery('<div class="mapplugin featuredataplugin">' +
-                    '<a href="JavaScript: void(0);"></a>' +
-                    '</div>');
-            var link = el.find('a');
-            me._loc = Oskari.getLocalization('FeatureData2', Oskari.getLang() || Oskari.getDefaultLanguage(), true);
-            link.html(me._loc.title);
-            me._bindLinkClick(el);
-            el.on('mousedown', function (event) {
-                event.stopPropagation();
-            });
-
-            return el;
-        },
-        /**
-         * @method _hasFeaturedataLayers
-         * @private
-         * Check whether there are layers with featuredata present -> determine the control element's visibility
-         */
-        _hasFeaturedataLayers: function () {
-            var me = this,
-                sandbox = me.getMapModule().getSandbox(),
-                layers = sandbox.findAllSelectedMapLayers(),
-                i;
-            // see if there's any wfs layers, show element if so
-            for (i = 0; i < layers.length; i++) {
-                if (layers[i].hasFeatureData()) {
-                    return true;
-                }
-            }
-            return false;
+            return jQuery('<div class="mapplugin featuredataplugin"></div>');
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -97,33 +61,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            var isMobile = mapInMobileMode || Oskari.util.isMobile();
-            var me = this;
-            var mobileDefs = this.getMobileDefs();
-
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
-            this.teardownUI();
-
-            if (!toolbarNotReady && isMobile) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-                me._element = me._createControlElement();
-                this.addToPluginContainer(me._element);
-                this.refresh();
-            }
+            this.refresh();
         },
 
         teardownUI: function () {
             // remove old element
             this.removeFromPluginContainer(this.getElement());
-            this._instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            const instance = this.getInstance();
+            instance.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [instance, 'close']);
         },
 
         /**
@@ -138,105 +83,78 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             return this._mapStatusChanged;
         },
 
-        _bindLinkClick: function (link) {
-            var me = this,
-                element = me.getElement(),
-                linkElement = link || (element ? element.find('a') : null),
-                sandbox = me.getSandbox();
-
-            if (!linkElement) {
-                return;
-            }
-
-            linkElement.on('click', function () {
-                if (me.inLayerToolsEditMode()) {
-                    return;
-                }
-                if (!me._flyoutOpen) {
-                    if (me._mapStatusChanged) {
-                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
-                        var eventBuilder = Oskari.eventBuilder('WFSRefreshManualLoadLayersEvent');
-                        if (eventBuilder) {
-                            sandbox.notifyAll(event);
-                        }
-                        me._mapStatusChanged = false;
-                    } else {
-                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
-                    }
-                    me._flyoutOpen = true;
-                } else {
-                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
-                    me._flyoutOpen = undefined;
-                }
-                return false;
-            });
-        },
-
         handleCloseFlyout: function () {
-            var me = this,
-                el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-featuredata');
-
-            if (!me._flyoutOpen) {
+            if (!this._flyoutOpen) {
                 return;
             }
-            me._flyoutOpen = undefined;
-            var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
+            this._flyoutOpen = undefined;
+            var flyout = this.getInstance().plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
-            me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-featuredata'].iconCls);
+            this.refresh();
         },
         /**
          * @method refresh
          * Updates the plugins interface (hides if no featuredata layer selected)
          */
         refresh: function () {
-            var me = this;
-            var conf = me._config || {};
-
-            me.setVisible(me._hasFeaturedataLayers());
-
-            // Change the style if in the conf
-            if (conf.toolStyle) {
-                me.changeToolStyle(conf.toolStyle, me.getElement());
-            } else {
-                var toolStyle = me.getToolStyleFromMapModule();
-                me.changeToolStyle(toolStyle, me.getElement());
-            }
+            this.renderButton();
         },
-        /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         *
-         * @param {Object} style
-         * @param {jQuery} div
-         */
-        changeToolStyle: function (style, div) {
-            var me = this,
-                el = div || me.getElement();
-
+        showLoadingIndicator: function (blnLoad) {
+            this.renderButton(!!blnLoad);
+        },
+        renderButton: function (loading = false) {
+            const el = this.getElement();
             if (!el) {
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style || 'default');
-
-            var classList = el.attr('class').split(/\s+/);
-            for (var c = 0; c < classList.length; c++) {
-                var className = classList[c];
-                if (className.indexOf('toolstyle-') > -1) {
-                    el.removeClass(className);
-                }
-            }
-            el.addClass(styleClass);
+            ReactDOM.render(
+                <ThemeProvider value={this.getMapModule().getMapTheme()}>
+                    <FeatureDataButton
+                        visible={this._hasFeaturedataLayers()}
+                        icon={<Message messageKey='title' bundleKey='FeatureData2'/>}
+                        onClick={() => this.openFlyout()}
+                        active={this._flyoutOpen}
+                        loading={loading}
+                        position={this.getLocation()}
+                    />
+                </ThemeProvider>,
+                el[0]
+            );
         },
-        showLoadingIndicator: function (blnLoad) {
-            if (!this.getElement()) {
-                return;
+        resetUI: function () {
+            if (this._flyoutOpen) {
+                // actually closes flyout when it's open...
+                this.openFlyout();
             }
-            if (blnLoad) {
-                this.getElement().addClass('loading');
+        },
+        /**
+         * @method _hasFeaturedataLayers
+         * @private
+         * Check whether there are layers with featuredata present -> determine the control element's visibility
+         */
+        _hasFeaturedataLayers: function () {
+            // see if there's any wfs layers, show element if so
+            return this.getSandbox()
+                .findAllSelectedMapLayers()
+                .filter(layer => layer.isVisibleOnMap())
+                .some(layer => layer.hasFeatureData && layer.hasFeatureData());
+        },
+        openFlyout: function () {
+            const sandbox = this.getSandbox();
+            if (!this._flyoutOpen) {
+                if (this._mapStatusChanged) {
+                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'detach']);
+                    this._mapStatusChanged = false;
+                } else {
+                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'detach']);
+                }
+                this._flyoutOpen = true;
             } else {
-                this.getElement().removeClass('loading');
+                sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'close']);
+                this._flyoutOpen = undefined;
             }
+            this.refresh();
         },
         showErrorIndicator: function (blnLoad) {
             if (!this.getElement()) {
@@ -255,27 +173,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                  * @method AfterMapMoveEvent
                  * Shows map center coordinates after map move
                  */
-                AfterMapMoveEvent: function (event) {
+                AfterMapMoveEvent: function () {
+                    this.refresh();
+                },
+                /**
+                 * @method AfterMapLayerAddEvent
+                 * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
+                 *
+                 * Calls flyouts layerAdded() method
+                 */
+                'AfterMapLayerAddEvent': function (event) {
+                    if (event.getMapLayer().hasFeatureData()) {
+                        this.refresh();
+                    }
+                },
+                'AfterMapLayerRemoveEvent': function (event) {
+                    if (event.getMapLayer().hasFeatureData()) {
+                        this.refresh();
+                    }
+                },
+                MapLayerVisibilityChangedEvent: function () {
                     this.refresh();
                 }
             };
-        },
-
-        _openFeatureDataFlyout: function () {
-            this._instance.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'detach']);
-            // set style to mobile flyout
-            var flyout = this._instance.plugins['Oskari.userinterface.Flyout'];
-            jQuery(flyout.container.parentElement.parentElement).addClass('mobile');
-            var mapModule = this._instance.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                mobileDiv = mapModule.getMobileDiv(),
-                top = jQuery(mobileDiv).offset().top,
-                height = jQuery(mobileDiv).outerHeight(true),
-                flyoutTop = parseInt(top) + parseInt(height);
-
-            flyout.container.parentElement.parentElement.style.top = flyoutTop + 'px';
-        },
-        _stopPluginImpl: function (sandbox) {
-            this.teardownUI();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

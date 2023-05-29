@@ -59,10 +59,7 @@ Setting disableExport to true will remove Export button from the feature data gr
   <td> AfterMapLayerRemoveEvent </td><td> Tab panel presenting the layer is removed from the flyout.</td>
 </tr>
 <tr>
-  <td> WFSPropertiesEvent </td><td> Grid data is updated if the flyout is open. Data is only updated for the layer whose tab is currently selected.</td>
-</tr>
-<tr>
-  <td> WFSFeatureEvent </td><td> Grid data is updated if the flyout is open. Data is only updated for the layer whose tab is currently selected.</td>
+  <td> AfterMapMoveEvent </td><td> Grid data is updated if the flyout is open. Data is only updated for the layer whose tab is currently selected.</td>
 </tr>
 <tr>
   <td> WFSFeaturesSelectedEvent </td><td> Highlights the feature on the grid.</td>

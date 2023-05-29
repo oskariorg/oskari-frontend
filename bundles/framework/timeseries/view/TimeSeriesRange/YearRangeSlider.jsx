@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { StyledRangeSlider } from './styled';
+import { TimeSeriesSlider } from 'oskari-ui/components/TimeSeries/TimeSeriesSlider';
+import { ThemeProvider } from 'oskari-ui/util';
 
 export const YearRangeSlider = (props) => {
-    const { start, end, dataYears, isMobile } = props;
+    const { start, end, dataYears, isMobile, onChange, value, range } = props;
     const marks = {
         [start]: start,
         [end]: end
@@ -23,15 +24,20 @@ export const YearRangeSlider = (props) => {
     // data years are also marks on the range slider but they are represented
     // as small circles on the timeline (via css styling)
     dataYears.filter((year) => !marks[year]).forEach((year) => (marks[year] = ''));
+    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
     return (
-        <StyledRangeSlider
-            {...props}
-            tooltipVisible
-            getTooltipPopupContainer={(triggerNode) => triggerNode.parentElement}
-            marks={marks}
-            min={start}
-            max={end}
-        />
+        <ThemeProvider value={mapModule.getMapTheme()}>
+            <TimeSeriesSlider
+                range={range}
+                min={start}
+                max={end}
+                dataPoints={dataYears}
+                markers={Object.keys(marks).filter(mark => marks[mark] !== '').map(mark => Number.parseInt(mark, 10))}
+                onChange={onChange}
+                value={value}
+                width={isMobile ? 234 : 524}
+            />
+        </ThemeProvider>
     );
 };
 

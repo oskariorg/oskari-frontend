@@ -1,5 +1,5 @@
 import { SelectList } from './SelectList';
-import { MetadataPopup } from './MetadataPopup';
+import { prepareData, showMedataPopup } from './description/MetadataPopup';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (instance, sandbox) {
     this.instance = instance;
@@ -8,25 +8,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance.getLocalization(), this.instance.getSandbox());
     this.element = null;
-    this.metadataPopup = new MetadataPopup();
+    this.popupControls = null;
+    this.popupCleanup = () => {
+        this.popupControls = null;
+    };
     this.selectClassRef = [];
+    this.indSelect = null;
+    this.dsSelect = null;
     Oskari.makeObservable(this);
 }, {
     __templates: {
-        main: _.template('<div class="statsgrid-ds-selections"></div>'),
-        selections: _.template('<div class="statsgrid-indicator-selections"></div>'),
-        select: _.template('<div class="selection">' +
-            '<div class="title">${name}</div>' +
-            '<div class=${clazz}>' +
-            '</div>' +
-            '</div>'),
-        headerWithTooltip: _.template('<div class="selection tooltip">' +
-            '<div class="title">${title}</div>' +
-            '<div class="tooltip">${tooltip1}</div>' +
-            '<div class="tooltip">${tooltip2}</div>' +
-            '</div>'),
-        option: _.template('<option value="${id}">${name}</option>'),
-        link: _.template('<a href="javascript:void(0);"></a>')
+        main: () => '<div class="statsgrid-ds-selections"></div>',
+        selections: () => '<div class="statsgrid-indicator-selections"></div>',
+        select: ({ name, clazz }) => `<div class="selection">
+                <div class="title">${name}</div>
+                <div class=${clazz}></div>
+            </div>`,
+        headerWithTooltip: ({ title, tooltip1, tooltip2 }) => `<div class="selection tooltip">
+                <div class="title">${title}</div>
+                <div class="tooltip">${tooltip1}</div>
+                <div class="tooltip">${tooltip2}</div>
+            </div>`,
+        option: ({ id, name }) => `<option value="${id}">${name}</option>`,
+        link: () => '<a href="javascript:void(0);"></a>'
     },
     /** **** PRIVATE METHODS ******/
 
@@ -145,7 +149,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         regionsetFilterElement.append(regionFilterDropdown);
         regionFilterSelect.update();
 
-        var datasources = this.service.getDatasource();
+        var datasources = this.service.getDatasources();
         var sources = [];
         datasources.forEach(function (ds) {
             var dataObj = {
@@ -162,6 +166,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             search: false
         };
         var dsSelect = new SelectList();
+        this.dsSelect = dsSelect;
         var dropdown = dsSelect.create(sources, options);
         dropdown.css({ width: '100%' });
         dsSelector.append(dropdown);
@@ -177,6 +182,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             allowOverflow: true
         };
         var indicSelect = new SelectList();
+        this.indSelect = indicSelect;
         var indicDropdown = indicSelect.create(null, indicOptions);
         indicDropdown.css({ width: '100%' });
         indicatorSelector.append(indicDropdown);
@@ -184,7 +190,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var indicDescriptionLink = jQuery(this.__templates.link());
         main.append(indicDescriptionLink);
         indicDescriptionLink.on('click', function () {
-            me.metadataPopup.show(dsSelect.getValue(), indicSelect.getValue());
+            prepareData(me.service, dsSelect.getValue(), indicSelect.getValue(), (result) => {
+                if (me.popupControls) {
+                    me.popupControls.update(result);
+                } else {
+                    me.popupControls = showMedataPopup(result, me.popupCleanup);
+                }
+            });
         });
 
         // Refine data label and tooltips
@@ -267,8 +279,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                     formFlyout.showForm(dsSelect.getValue(), indId[0]);
                 });
                 indicDescriptionLink.html(locale('metadataPopup.open', { indicators: indId.length }));
-                if (me.metadataPopup.isVisible()) {
-                    me.metadataPopup.show(dsSelect.getValue(), indId);
+                if (me.popupControls) {
+                    // description popup is currently on screen -> update content
+                    prepareData(me.service, dsSelect.getValue(), indId, (result) => {
+                        me.popupControls.update(result);
+                    });
                 }
             }
             // this will show the params or clean them depending if values exist
@@ -343,6 +358,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         }
 
         return this._params.getValues();
+    },
+    setIndicatorData: function (datasourceId, indicatorId) {
+        this._params.indicatorSelected(`${datasourceId}`, [indicatorId], [], false);
+        this.dsSelect.setValue(datasourceId);
+        this.indSelect.setValue(indicatorId);
     },
     getIndicatorSelector: function () {
         var el = this.getElement();

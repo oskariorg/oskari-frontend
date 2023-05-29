@@ -1,3 +1,5 @@
+import './VectorTileLayer';
+
 import olSourceVectorTile from 'ol/source/VectorTile';
 import olLayerVectorTile from 'ol/layer/VectorTile';
 import olFormatMVT from 'ol/format/MVT';
@@ -5,19 +7,21 @@ import TileGrid from 'ol/tilegrid/TileGrid';
 import { createDefaultStyle } from 'ol/style/Style';
 
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
-import { styleGenerator } from './styleGenerator';
-import mapboxStyleFunction from 'ol-mapbox-style/dist/stylefunction';
-import { LAYER_ID, LAYER_TYPE } from '../../domain/constants';
+import { stylefunction as mapboxStyleFunction } from 'ol-mapbox-style';
+import { LAYER_ID, LAYER_TYPE, FEATURE_QUERY_ERRORS, VECTOR_STYLE } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
+import { getFeatureAsGeojson } from '../../util/vectorfeatures/jsonHelper';
+import { getMVTFeaturesInExtent } from '../../util/vectorfeatures/mvtHelper';
+import { filterFeaturesByAttribute, filterFeaturesByGeometry } from '../../util/vectorfeatures/filter';
 
-const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
+const AbstractVectorLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractVectorLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 /**
  * @class Oskari.mapframework.mapmodule.VectorTileLayerPlugin
  * Provides functionality to draw vector tile layers on the map
  */
-class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
+class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
     constructor (config) {
         super(config);
         this.__name = 'VectorTileLayerPlugin';
@@ -36,12 +40,13 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             const composingModel = new LayerComposingModel([
                 LayerComposingModel.ATTRIBUTIONS,
                 LayerComposingModel.CREDENTIALS,
-                LayerComposingModel.EXTERNAL_STYLES_JSON,
+                LayerComposingModel.EXTERNAL_VECTOR_STYLES,
                 LayerComposingModel.HOVER,
                 LayerComposingModel.SRS,
-                LayerComposingModel.STYLES_JSON,
+                LayerComposingModel.VECTOR_STYLES,
                 LayerComposingModel.TILE_GRID,
-                LayerComposingModel.URL
+                LayerComposingModel.URL,
+                LayerComposingModel.DECLUTTER
             ], null, [LayerComposingModel.NAME]); // common field name is not used in vectortilelayers so it is skipped on LayerComposingModel
 
             mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass(), composingModel);
@@ -100,13 +105,13 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
     _getLayerCurrentStyleFunction (layer) {
         const olLayers = this.getOLMapLayers(layer.getId());
         const style = layer.getCurrentStyle();
-        if (style.isExternalStyle() && olLayers.length !== 0) {
-            const externalStyleDef = style.getExternalDef() || {};
-            const sourceLayerIds = externalStyleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
-            return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds);
+        if (style.getType() === VECTOR_STYLE.MAPBOX && olLayers.length !== 0) {
+            const styleDef = style.getFeatureStyle();
+            const sourceLayerIds = styleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
+            const resolutions = [...this.getMapModule().getResolutionArray()];
+            return mapboxStyleFunction(olLayers[0], styleDef, sourceLayerIds, resolutions);
         }
-        const factory = this.mapModule.getStyle.bind(this.mapModule);
-        return style.hasDefinitions() ? styleGenerator(factory, style) : this._createDefaultStyle();
+        return style.hasDefinitions() ? this.mapModule.getStyleForLayer(layer) : this._createDefaultStyle();
     }
 
     /**
@@ -163,6 +168,73 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         const params = layer.getParams();
         return Object.keys(params)
             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
+    }
+
+    /**
+     * Override in actual plugins to returns features.
+     *
+     * Returns features that are currently on map filtered by given geometry and/or properties
+     * {
+     *   "[layer id]": {
+            accuracy: 'extent',
+     *      features: [{ geometry: {...}, properties: {...}}, ...]
+     *   },
+     *   ...
+     * }
+     * For features that are queried from MVT-tiles we might not be able to get the whole geometry and since it's not accurate they will
+     *  only get the extent of the feature. This is marked with accuracy: 'extent' and it might not even be the whole extent if the
+     *  feature continues on unloaded tiles.
+     * @param {Object} geojson an object with geometry and/or properties as filter for features. Geometry defaults to current viewport.
+     * @param {Object} opts additional options to narrow feature collection
+     * @returns {Object} an object with layer ids as keys with an object value with key "features" for the features on that layer and optional runtime-flag
+     */
+    getFeatures (geojson = {}, opts = {}) {
+        // console.log('getting features from ', this.getName());
+        const { left, bottom, right, top } = this.getSandbox().getMap().getBbox();
+        const extent = [left, bottom, right, top];
+        let { layers } = opts;
+        if (!layers || !layers.length) {
+            layers = this.getSandbox().getMap().getLayers().map(l => l.getId());
+        }
+        const result = {};
+        layers.forEach(layerId => {
+            const layer = this.getSandbox().getMap().getSelectedLayer(layerId);
+            if (!this.isLayerSupported(layer)) {
+                return;
+            }
+            const err = this.detectErrorOnFeatureQuery(layer);
+            if (err) {
+                result[layerId] = {
+                    error: err,
+                    features: []
+                };
+                return;
+            }
+            const layerImpls = this.getOLMapLayers(layerId);
+            if (!layerImpls || !layerImpls.length) {
+                result[layerId] = {
+                    error: FEATURE_QUERY_ERRORS.NOT_FOUND,
+                    features: []
+                };
+                return;
+            }
+            const features = getMVTFeaturesInExtent(layerImpls[0].getSource(), extent);
+            if (!features) {
+                return;
+            }
+            let geojsonFeatures = features.map(feat => getFeatureAsGeojson(feat));
+            if (geojson.geometry) {
+                geojsonFeatures = filterFeaturesByGeometry(geojsonFeatures, geojson.geometry);
+            }
+            if (geojson.properties) {
+                geojsonFeatures = filterFeaturesByAttribute(geojsonFeatures, geojson.properties);
+            }
+            result[layerId] = {
+                accuracy: 'extent',
+                features: geojsonFeatures
+            };
+        });
+        return result;
     }
 
     /**

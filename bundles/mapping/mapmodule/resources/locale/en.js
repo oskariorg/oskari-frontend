@@ -19,10 +19,6 @@ Oskari.registerLocalization(
             "zoomLvl-11": "",
             "zoomLvl-12": ""
         },
-        "unsupportedProjHeader": "Notice",
-        "unsupportedProj": "Some layers added to this map view cannot be shown with the current map projection.",
-        "unsupported-layer": "Map Layer cannot be shown.",
-        "unsupported-layer-projection": "Map layer cannot be shown in selected map projection.",
         "styles": {
             "defaultTitle": "Default style"
         },
@@ -45,6 +41,7 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Map layers",
                 "chooseDefaultBaseLayer": "Select background map",
+                "headingBaseLayer": "Background map",
                 "chooseOtherLayers": "Select other map layers",
                 "style": "Style"
             },
@@ -56,10 +53,25 @@ Oskari.registerLocalization(
                 "noresults": "No results could be found. Please check your search term and try again.",
                 "searchResultCount": "Your search returned {count, plural, one {# result} other {# results}}.",
                 "searchMoreResults": "Search returned more results than are shown ({count}). Please refine you search term.",
+                "autocompleteInfo": "Similar search ideas",
                 "column_name": "Name",
                 "column_region": "Region",
                 "column_village": "Municipality",
-                "column_type": "Type"
+                "column_type": "Type",
+
+                "selectResult": "Show result on map",
+                "deselectResult": "Remove result from map",
+                "selectResultAll": "Show all results on map",
+                "deselectResultAll": "Remove all results from map",
+                "options": {
+                    "title": "Search options",
+                    "description": "Refine search criteria by choosing data sources"
+                },
+                "resultBox": {
+                    "close": "Close",
+                    "title": "Search Results",
+                    "alternatives": "This location has the following alternative place names:"
+                }
             },
             "GetInfoPlugin": {
                 "title": "Feature Data",
@@ -83,46 +95,29 @@ Oskari.registerLocalization(
                 }
             },
             "MarkersPlugin": {
-                "buttons": {
-                    "add": "Map marker",
-                    "clear": "Delete all markers"
-                },
+                "title": "Map Marker",
+                "tooltip": "Add map marker",
                 "form": {
-                    "title": "Map Marker Style",
-                    "tooltip": "Define a style for map markers.",
-                    "symbol": {
-                        "label": "Icon"
-                    },
-                    "size": {
-                        "label": "Size"
-                    },
-                    "color": {
-                        "label": "Colour",
-                        "labelOr": "or",
-                        "labelCustom": "Custom colour (RGB 0-255)"
-                    },
-                    "preview": {
-                        "label": "Preview"
-                    },
+                    "style": "Map Marker Style",
                     "message": {
-                        "label": "Text on map",
+                        "label": "Text visible on map",
                         "hint": "Name or description"
                     }
                 },
                 "dialog": {
-                    "title": "Map Marker",
                     "message": "Select a new location for your map marker by clicking the map.",
-                    "error": {
-                        "title": "Error for getting location!",
-                        "timeout": "Getting a location takes longer than excepted...",
-                        "denied": "The site has blocked location. Please enable location and try again",
-                        "noLocation": "Failed to determine location",
-                        "close": "Close"
-                    }
+                    "clear": "Delete all markers"
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Center map to your location"
+                "tooltip": "Center map to your location",
+                "error": {
+                    "title": "Error for getting location!",
+                    "timeout": "Getting a location takes longer than excepted...",
+                    "denied": "The site has blocked location. Please enable location and try again",
+                    "noLocation": "Failed to determine location",
+                    "close": "Close"
+                }
             },
             "PanButtonsPlugin": {
                 "center" : {
@@ -136,6 +131,16 @@ Oskari.registerLocalization(
                     "tooltip": "Show only 3D-datasets"
                 }
             }
+        },
+        "layerVisibility": {
+            "notInScale": "The map layer \"{name}\" has no visible features in this zoom level. Move to a suitable map level.",
+            "notInGeometry": "The map layer \"{name}\" has no features in this area. Move to a better location on map."
+        },
+        "layerUnsupported": {
+            "common": "Map Layer cannot be shown.",
+            "srs": "Map layer cannot be shown with the current map projection.",
+            "dimension": "Map layer cannot be shown with {dimension} map view.",
+            "unavailable": 'Map layer "{name}" cannot be shown.'
         },
         "guidedTour": {
             "help1": {

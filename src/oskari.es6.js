@@ -6,6 +6,7 @@
 import Sequence from './counter.es6.js';
 import Logger from './logger.es6.js';
 import pkg from '../package.json';
+import { DOMHelper } from './oskari.dom.js';
 
 let _markers = [];
 
@@ -24,9 +25,9 @@ function encodeParams(params) {
         return '';
     }
     return Object.keys(params)
+        .filter(k => params[k] != null && typeof params[k] !== 'undefined')
         .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
         .join('&');
-    
 }
 
 function appendQueryToURL(url, query) {
@@ -53,6 +54,8 @@ const Oskari = {
     getMarkers () {
         return _markers;
     },
+    // from oskari.dom
+    dom: DOMHelper,
     getDefaultMarker () {
         return (_markers.length >= 3) ? _markers[2] : _markers[0];
     },
@@ -115,6 +118,15 @@ const Oskari = {
                     return appendQueryToURL(url, 'action_route=' + route);
                 }
                 return url;
+            },
+            /**
+             * Builds an URL by attaching optional parameters to base url
+             * @param {String} url complete baseUrl that might already have querystring
+             * @param {*} optionalParams parameters that should be attached to baseUrl
+             * @returns base url with optional params included as querystring
+             */
+            buildUrl: function (url, optionalParams) {
+                return appendQueryToURL(url, encodeParams(optionalParams));
             }
     }
 };

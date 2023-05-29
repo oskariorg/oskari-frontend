@@ -1,4 +1,5 @@
 import { isInScale as utilIsInScale } from '../util/scale';
+import { DESCRIBE_LAYER } from './constants';
 
 /**
  * @class Oskari.mapframework.domain.AbstractLayer
@@ -54,9 +55,6 @@ Oskari.clazz.define(
         /* Min scale for layer */
         me._minScale = null;
 
-        /* is layer visible */
-        me._visible = null;
-
         /* opacity from 0 to 100 */
         me._opacity = 100;
 
@@ -67,6 +65,7 @@ Oskari.clazz.define(
         me._isLinkedLayer = null;
 
         me._organizationName = null;
+        me._dataproviderId = null;
         me._dataUrl = null;
 
         /*
@@ -135,7 +134,13 @@ Oskari.clazz.define(
 
         me._orderNumber = 1000000;
 
-        me._unsupportedReason = null;
+        me._visibilityInfo = {
+            visible: true, // {Boolean} visible/hidden by the user
+            inScale: true, // {Boolean} map viewport scale (zoom) is in the layer's scale range
+            geometryMatch: true, // {Boolean} map viewport overlaps defined coverage/geometry
+            unsupported: null // {UnsupportedLayerReason} most severe reason if unsupported
+        };
+        this._describeLayerStatus = DESCRIBE_LAYER.UNDEFINED;
     }, {
         /**
          * @method setId
@@ -251,6 +256,20 @@ Oskari.clazz.define(
          */
         getDataUrl: function () {
             return this._dataUrl;
+        },
+        /**
+         * Dataprovider id (matching organization name)
+         * @param {Number} id
+         */
+        setDataProviderId: function (id) {
+            this._dataproviderId = id;
+        },
+        /**
+         * Dataprovider id (matching organization name)
+         * @param {Number} id
+         */
+        getDataProviderId: function () {
+            return this._dataproviderId;
         },
         /**
          * @method setOrganizationName
@@ -488,14 +507,14 @@ Oskari.clazz.define(
          * @return {Boolean} true if this is should be shown
          */
         isVisible: function () {
-            return this._visible === true;
+            return this._visibilityInfo.visible === true;
         },
         /**
          * @method setVisible
          * @param {Boolean} visible true if this is should be shown
          */
         setVisible: function (visible) {
-            this._visible = visible;
+            this.updateVisibilityInfo({ visible });
         },
         /**
          * @method setOpacity
@@ -677,6 +696,9 @@ Oskari.clazz.define(
             }
             return this._styles;
         },
+        setStyles: function (styles) {
+            this._styles = styles;
+        },
         /**
          * @method selectStyle
          * @param {String} styleName
@@ -684,27 +706,26 @@ Oskari.clazz.define(
          * If style is not found, assigns an empty #Oskari.mapframework.domain.Style to #getCurrentStyle
          */
         selectStyle: function (styleName) {
-            var existingStyle = this.getStyles().find(function (existingStyle) {
-                return existingStyle.getName() === styleName;
-            });
+            const styles = this.getStyles();
+            const found = styles.find(s => s.getName() === styleName);
+            if (found) {
+                this._currentStyle = found;
+                return;
+            }
+            Oskari.log('AbstractLayer').debug('selectStyle(' + styleName + ') didn\'t match any style for layer:', this.getId());
 
-            if (existingStyle) {
-                this._currentStyle = existingStyle;
-            } else {
-                Oskari.log('AbstractLayer').debug('selectStyle(' + styleName + ') didn\'t match any style for layer:', this.getId());
-                // if layer has only one style - always use it
-                if (this.getStyles().length === 1) {
-                    this._currentStyle = this.getStyles()[0];
-                    Oskari.log('AbstractLayer').debug('selectStyle() defaulting to only available style for layer:', this.getId());
-                }
+            // if layer has styles - select first
+            if (styles.length) {
+                this._currentStyle = styles[0];
+                Oskari.log('AbstractLayer').debug('selectStyle() defaulting to first available style for layer:', this.getId());
+                return;
             }
 
-            // didn't match anything select the first one
-            if (!this._currentStyle) {
-                // Style not found, use an empty one!
-                this._currentStyle = this._createEmptyStyle();
-                Oskari.log('AbstractLayer').debug('selectStyle() created an empty style for layer:', this.getId());
-            }
+            // Style not found, add new style with default definitions and select it!
+            const style = this._createEmptyStyle();
+            this.addStyle(style);
+            this._currentStyle = style;
+            Oskari.log('AbstractLayer').debug('selectStyle() created an empty style for layer:', this.getId());
         },
         /**
          * Creates an empty style
@@ -1239,7 +1260,35 @@ Oskari.clazz.define(
          */
         isFilterSupported: function () {
             return false;
+        },
+        getGeometryType: function () {
+            return null;
+        },
+        getVisibilityInfo: function () {
+            return this._visibilityInfo;
+        },
+        setVisibilityInfo: function (info) {
+            this._visibilityInfo = info;
+        },
+        updateVisibilityInfo: function (updated) {
+            this._visibilityInfo = { ...this._visibilityInfo, ...updated };
+        },
+        isVisibleOnMap: function () {
+            const { unsupported, ...booleans } = this.getVisibilityInfo();
+            return this.getOpacity() !== 0 && !unsupported &&
+                Object.values(booleans).every(b => b === true);
+        },
+        getDescribeLayerStatus: function () {
+            return this._describeLayerStatus;
+        },
+        setDescribeLayerStatus: function (status) {
+            this._describeLayerStatus = status;
+        },
+        requiresDescribeLayer: function () {
+            return false;
+        },
+        handleDescribeLayer: function (info) {
+            // to override in AbstarctVectorLayer
         }
-
     }
 );

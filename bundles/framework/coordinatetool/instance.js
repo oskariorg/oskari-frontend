@@ -1,3 +1,5 @@
+import React from 'react';
+import { Message } from 'oskari-ui';
 /**
  * @class Oskari.mapframework.bundle.coordinatetool.CoordinateToolBundleInstance
  *
@@ -88,19 +90,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
             me.setSandbox(sandbox);
-            this.coordinateToolService = this.createService(sandbox, conf);
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var locale = Oskari.getMsg.bind(null, 'coordinatetool');
-            var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin', this, conf, locale, mapModule, sandbox);
+            var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin', conf, this);
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
             sandbox.register(me);
 
-            // get the plugin order straight in mobile toolbar even for the tools coming in late
-            if (Oskari.util.isMobile() && this.plugin.hasUI()) {
-                mapModule.redrawPluginUIs(true);
-            }
             this._registerForGuidedTour();
         },
         /**
@@ -110,31 +106,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
         isOpen: function () {
             var me = this;
             return (me.plugin) ? me.plugin.isOpen() : false;
-        },
-        /**
-         * Creates the coordinate tool service and registers it to the sandbox.
-         *
-         * @method createService
-         * @param  {Oskari.Sandbox} sandbox
-         * @param  {}  configuration   conf.reverseGeocodingIds is in use
-         * @return {Oskari.mapframework.bundle.coordinatetool.CoordinateToolService}
-         */
-        createService: function (sandbox, conf) {
-            var coordinateToolService = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.coordinatetool.CoordinateToolService',
-                this, conf || {}
-            );
-            sandbox.registerService(coordinateToolService);
-            return coordinateToolService;
-        },
-        /**
-         * Returns the coordinate tool service.
-         *
-         * @method getService
-         * @return {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService}
-         */
-        getService: function () {
-            return this.coordinateToolService;
         },
         /**
          * @public @method showMessage
@@ -177,9 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
                 return this.getLocalization().guidedTour.title;
             },
             getContent: function () {
-                var content = jQuery('<div></div>');
-                content.append(this.getLocalization().guidedTour.message);
-                return content;
+                return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getPositionRef: function () {
                 return jQuery('.coordinatetool');
@@ -188,26 +157,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             getLinks: function () {
                 var me = this;
                 var loc = this.getLocalization().guidedTour;
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.on('click',
-                    function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', this.__name]);
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.on('click',
-                    function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', this.__name]);
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                closeLink.show();
-                openLink.hide();
-                return [openLink, closeLink];
+                return [
+                    {
+                        title: loc.openLink,
+                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', this.__name]),
+                        visible: false
+                    },
+                    {
+                        title: loc.closeLink,
+                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', this.__name]),
+                        visible: true
+                    }
+                ];
             }
         },
         /**

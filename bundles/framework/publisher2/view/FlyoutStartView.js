@@ -1,5 +1,3 @@
-import { UnsupportedLayerSrs } from '../../../mapping/mapmodule/domain/UnsupportedLayerSrs';
-
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.StartView
  *
@@ -118,7 +116,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             var layers = [];
             var deniedLayers = [];
             me.instance.sandbox.findAllSelectedMapLayers().forEach(function (layer) {
-                if (!me.service.hasPublishRight(layer) || !me.instance.sandbox.getMap().isLayerSupported(layer)) {
+                const { unsupported } = layer.getVisibilityInfo();
+                if (!me.service.hasPublishRight(layer) || unsupported) {
                     deniedLayers.push(layer);
                 } else {
                     layers.push(layer);
@@ -172,13 +171,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
          *      list of layers to render
          * @return {jQuery} DOM element with layer listing
          */
-        _getRenderedLayerList: function (list) {
+        _getRenderedLayerList: function (list = []) {
             var layerList = this.templateLayerList.clone();
             var listElement = layerList.find('ul');
             var listItemTemplate = this.templateListItem;
-            var map = this.instance.sandbox.getMap();
 
-            (list || []).forEach((layer) => {
+            list.forEach((layer) => {
                 var item = listItemTemplate.clone();
                 var txt = layer.getName();
                 var reasons = [];
@@ -189,11 +187,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                 if (!this.service.hasPublishRight(layer)) {
                     reasons.push(this.loc.noRights);
                 }
-                if (!map.isLayerSupported(layer)) {
-                    reasons = reasons.concat(map.getUnsupportedLayerReasons(layer).map(
-                        cur => cur instanceof UnsupportedLayerSrs
-                            ? this.loc.unsupportedProjection : cur.getDescription().replace(/\./g, '')
-                    ));
+                const { unsupported } = layer.getVisibilityInfo();
+                if (unsupported) {
+                    reasons.push(unsupported.getDescription());
                 }
                 if (reasons.length) {
                     txt += ' (' + reasons.join(', ') + ')';

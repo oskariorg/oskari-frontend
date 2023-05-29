@@ -1,9 +1,11 @@
-import { LAYER_TYPE, LAYER_HOVER, WFS_ID_KEY, FTR_PROPERTY_ID, LAYER_ID, WFS_TYPE, VECTOR_TYPE } from '../domain/constants';
-import { getStyleForGeometry } from '../../mapwfs2/plugin/WfsVectorLayerPlugin/util/style'; // TODO
+import { LAYER_TYPE, LAYER_HOVER, WFS_ID_KEY, FTR_PROPERTY_ID, LAYER_ID, VECTOR_TILE_TYPE, VECTOR_TYPE } from '../domain/constants';
+import { getStylesForGeometry } from '../oskariStyle/generator.ol';
 import olOverlay from 'ol/Overlay';
 import olLayerVector from 'ol/layer/Vector';
 import olLayerVectorTile from 'ol/layer/VectorTile';
 import { Vector as olSourceVector } from 'ol/source';
+
+const STROKE_ADDITION = 2;
 
 export class HoverHandler {
     constructor (mapmodule) {
@@ -26,7 +28,6 @@ export class HoverHandler {
         this._styleFactory = this._mapmodule.getGeomTypedStyles.bind(this._mapmodule);
         const olLayer = new olLayerVector({ source: new olSourceVector() });
         olLayer.set(LAYER_HOVER, true, true);
-        olLayer.setZIndex(1); // TODO: how to handle layer ordering
         this._mapmodule.addLayer(olLayer);
         this._hoverLayer = olLayer;
     }
@@ -52,28 +53,25 @@ export class HoverHandler {
         const layerId = olLayer.get(LAYER_ID);
         this.updateTooltipContent(layerId, feature);
 
-        // Vectorhandler updates vector layers' feature styles but tooltip is handled by hoverhandler
-        if (layerType === VECTOR_TYPE) {
-            return;
-        }
         const layerChanged = this._state.layerId !== layerId;
         this._state = {
             feature,
             layerId
         };
+        // Vectorhandler updates vector layers' feature styles but tooltip is handled by hoverhandler
+        if (layerType === VECTOR_TYPE) {
+            return;
+        }
         // Try first if layer has stored vectorlayer
         const vtLayer = this._vectorTileLayers[layerId];
         if (vtLayer) {
-            const idProp = WFS_TYPE === layerType ? WFS_ID_KEY : FTR_PROPERTY_ID;
+            const idProp = this._getIdProperty(layerType);
             this._state.renderFeatureId = feature.get(idProp);
             vtLayer.changed();
             return;
         }
         if (layerChanged) {
-            const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-            this._hoverLayer.setOpacity(layer.getOpacity() / 100);
-            this._hoverLayer.setStyle(this.getCachedStyle(layerId));
-            this._hoverLayer.changed();
+            this.onLayerChange(layerId);
         }
         this._hoverLayer.getSource().addFeature(feature);
     }
@@ -94,6 +92,24 @@ export class HoverHandler {
         this._hoverLayer.setOpacity(layer.getOpacity() / 100);
     }
 
+    onLayerChange (layerId) {
+        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+        if (!layer) {
+            // this happens when reseting the map state while a feature is being hovered on
+            return;
+        }
+        const mapmodule = this._mapmodule;
+        const hoverLayer = this._hoverLayer;
+        const olLayers = mapmodule.getOLMapLayers(layerId);
+        // assumes that first layer is main layer and others are straight over main layer
+        const topLayer = olLayers[olLayers.length - 1];
+        const index = mapmodule.getLayerIndex(topLayer);
+        mapmodule.setLayerIndex(hoverLayer, index + 1);
+        hoverLayer.setOpacity(layer.getOpacity() / 100);
+        hoverLayer.setStyle(this.getCachedStyle(layerId));
+        hoverLayer.changed();
+    }
+
     // VectorTile uses lightweight and read-only RenderFeature
     // create copy with same source and hover style
     createVectorTileLayer (layer, source) {
@@ -102,7 +118,6 @@ export class HoverHandler {
         olLayer.setVisible(layer.isVisible());
         olLayer.set(LAYER_HOVER, true, true);
         olLayer.setStyle(this._styleGenerator(layer, true));
-        olLayer.setZIndex(1);
         this._vectorTileLayers[layer.getId()] = olLayer;
         this.setTooltipContent(layer);
         return olLayer;
@@ -112,12 +127,37 @@ export class HoverHandler {
         this._styleCache[layer.getId()] = this._styleGenerator(layer);
     }
 
+    removeLayer (layer) {
+        const layerId = layer.getId();
+        if (this._state.layerId === layerId) {
+            this.clearHover(true);
+        }
+        delete this._styleCache[layerId];
+        delete this._vectorTileLayers[layerId];
+    }
+
+    updateLayerStyle (layer) {
+        const layerId = layer.getId();
+        if (this._state.layerId === layerId) {
+            this.clearHover(true);
+        }
+        this.setTooltipContent(layer);
+        const vectorTileLayer = this._vectorTileLayers[layerId];
+        if (vectorTileLayer) {
+            vectorTileLayer.setStyle(this._styleGenerator(layer, true));
+            return;
+        }
+        if (this._styleCache[layerId]) {
+            this._styleCache[layerId] = this._styleGenerator(layer);
+        }
+    }
+
     getCachedStyle (layerId) {
         return this._styleCache[layerId]; // || defaultStyle;
     }
 
     setTooltipContent (layer) {
-        const options = layer.getHoverOptions();
+        const options = typeof layer.getHoverOptions === 'function' ? layer.getHoverOptions() : {};
         if (!options || !Array.isArray(options.content)) {
             return;
         }
@@ -132,14 +172,13 @@ export class HoverHandler {
 
     _styleGenerator (layer, isVectorTile) {
         const { featureStyle: layerHoverDef } = layer.getHoverOptions() || {};
-        const { featureStyle: defaultFeatureStyle, hover: defaultHoverDef } = this._defaultStyles[layer.getLayerType()] || {};
+        const { hover: defaultHoverDef } = this._defaultStyles[layer.getLayerType()] || {};
         let hoverDef = layerHoverDef || defaultHoverDef;
         if (!hoverDef) {
             return null;
         }
         if (hoverDef.inherit === true) {
-            const featureStyle = layer.getCurrentStyle().getFeatureStyle();
-            hoverDef = jQuery.extend(true, {}, defaultFeatureStyle, featureStyle, hoverDef);
+            hoverDef = this._getInheritedStyle(layer, hoverDef);
         }
         // TODO: if layer contains only one geometry type return olStyle (hoverDef) instead of function
         const olStyles = this._styleFactory(hoverDef);
@@ -148,19 +187,32 @@ export class HoverHandler {
             const idProp = this._getIdProperty(layerType);
             return feature => {
                 if (this._state.renderFeatureId === feature.get(idProp)) {
-                    return getStyleForGeometry(feature.getType(), olStyles);
+                    return getStylesForGeometry(feature.getType(), olStyles);
                 }
             };
         }
         return feature => {
-            return getStyleForGeometry(feature.getGeometry(), olStyles);
+            return getStylesForGeometry(feature.getGeometry(), olStyles);
         };
     }
 
-    _clearState () {
+    _getInheritedStyle (layer, hoverDef) {
+        const { featureStyle: defaultFeatureStyle } = this._defaultStyles[layer.getLayerType()] || {};
+        const featureStyle = layer.getCurrentStyle().getFeatureStyle();
+        const base = jQuery.extend(true, {}, defaultFeatureStyle, featureStyle);
+        if (Oskari.util.keyExists(base, 'stroke.width')) {
+            base.stroke.width = base.stroke.width + STROKE_ADDITION;
+        }
+        if (Oskari.util.keyExists(base, 'stroke.area.width')) {
+            base.stroke.area.width = base.stroke.area.width + STROKE_ADDITION;
+        }
+        return jQuery.extend(true, {}, base, hoverDef);
+    }
+
+    _clearState (clearLayerId) {
         const layerId = this._state.layerId;
-        // remove others than layerId from state
-        this._state = { layerId };
+        // store layerId to avoid unnecessary style updates
+        this._state = clearLayerId ? {} : { layerId };
         if (layerId) {
             const vtLayer = this._vectorTileLayers[layerId];
             if (vtLayer) {
@@ -171,8 +223,8 @@ export class HoverHandler {
         }
     }
 
-    clearHover () {
-        this._clearState();
+    clearHover (clearLayerId) {
+        this._clearState(clearLayerId);
         this._clearTooltip();
     }
 
@@ -186,7 +238,9 @@ export class HoverHandler {
     }
 
     _getIdProperty (layerType) {
-        return WFS_TYPE === layerType ? WFS_ID_KEY : FTR_PROPERTY_ID;
+        // WFS layer plugin handles additional layer types which uses '_oid' key but layer type isn't wfs
+        // It's clearer to check layers which uses 'id' key
+        return layerType === VECTOR_TILE_TYPE || layerType === VECTOR_TYPE ? FTR_PROPERTY_ID : WFS_ID_KEY;
     }
 
     /**

@@ -4,12 +4,8 @@ import styled from 'styled-components';
 import { WarningIcon } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerIcon } from '../../../LayerIcon';
-
-const SpriteIcon = styled('div')`
-    width: 16px;
-    height: 16px;
-    background-repeat: no-repeat;
-`;
+import { MetadataIcon } from 'oskari-ui/components/icons';
+import { BACKEND_STATUS_AVAILABLE } from '../../../../../constants';
 
 const Tools = styled('div')`
     display: flex;
@@ -50,32 +46,29 @@ const getStatusColor = (status) => {
     }
 };
 
-const LayerTools = ({ model, controller }) => {
-    const infoIcon = {
-        classes: ['layer-info']
-    };
-    if (model.getMetadataIdentifier() || hasSubLayerMetadata(model)) {
-        infoIcon.classes.push('icon-info');
-    }
-    const map = Oskari.getSandbox().getMap();
-    const reasons = !map.isLayerSupported(model) ? map.getUnsupportedLayerReasons(model) : undefined;
-    const reason = reasons ? map.getMostSevereUnsupportedLayerReason(reasons) : undefined;
-    const backendStatus = getBackendStatus(model);
+const LayerTools = ({ model, controller, opts }) => {
+    const backendAvailable = opts[BACKEND_STATUS_AVAILABLE];
+    const { unsupported } = model.getVisibilityInfo();
+    const backendStatus = backendAvailable ? getBackendStatus(model) : {};
     const statusOnClick =
-        backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
+        backendAvailable && backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
 
     return (
         <Tools className="layer-tools">
-            {reason && <WarningIcon tooltip={reason.getDescription()} />}
+            {unsupported && <WarningIcon tooltip={unsupported.getDescription()} />}
             <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
-            <SpriteIcon className={infoIcon.classes.join(' ')} onClick={() => controller.showLayerMetadata(model)} />
+            <MetadataIcon
+                metadataId={model.getMetadataIdentifier()}
+                style={{ marginBottom: '1px', marginLeft: '5px' }}
+            />
         </Tools>
     );
 };
 
 LayerTools.propTypes = {
     model: PropTypes.object.isRequired,
-    controller: PropTypes.instanceOf(Controller).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired,
+    opts: PropTypes.object.isRequired
 };
 
 const LayerStatus = ({ backendStatus, model, onClick }) => {

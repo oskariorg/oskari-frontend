@@ -28,34 +28,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
          * @return {jQuery} element
          */
         _createControlElement: function () {
-            var el = jQuery('<div class="mapplugin scalebar"></div>');
+            const container = jQuery('<div class="mapplugin scalebar"></div>');
+            const el = jQuery('<div></div>');
+            container.append(el);
             // initialize control, pass container
             this._scalebar = new olControlScaleLine({
                 target: el[0]
             });
 
             this.getMap().addControl(this._scalebar);
-            return el;
+            return container;
         }
 
-        /**
-         * @method _createEventHandlers
-         * Create eventhandlers.
-         *
-         *
-         * @return {Object.<string, Function>} EventHandlers
-         */
-        /*
-        _createEventHandlers: function () {
-            return {
-                'AfterMapMoveEvent': function (event) {
-                    if (this._scalebar) {
-                        this._scalebar.render(event);
-                    }
-                }
-            };
-        }
-        */
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

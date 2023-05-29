@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /*
          * Layer filters
          */
-        const rasterLayerTypes = ['wmts', 'bingmaps', 'arcgis', 'wms', 'arcgis93'];
+        const rasterLayerTypes = ['wmts', 'bingmaps', 'arcgis', 'wms', 'arcgis93', 'vectortile'];
         this.layerFilters = {
             featuredata: function (layer) {
                 return layer.hasFeatureData();
@@ -159,7 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     if (group.id === -1) {
                         return;
                     }
-                    var groupConf = me.getAllLayerGroups(group.id);
+                    var groupConf = me.findLayerGroupById(group.id);
                     if (!groupConf) {
                         return;
                     }
@@ -335,8 +335,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setDescription(newLayerConf.subtitle);
             }
 
-            if (newLayerConf.orgName) {
-                layer.setOrganizationName(newLayerConf.orgName);
+            if (newLayerConf.dataproviderId) {
+                layer.setDataProviderId(newLayerConf.dataproviderId);
+                const provider = this.getDataProviderById(newLayerConf.dataproviderId);
+                if (provider) {
+                    layer.setOrganizationName(provider.name || '');
+                } else {
+                    layer.setOrganizationName(newLayerConf.orgName || '');
+                }
             }
 
             if (newLayerConf.realtime) {
@@ -408,7 +414,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // group of -1 is "ungrouped"
                 return;
             }
-            const group = this.getAllLayerGroups(groupId);
+            const group = this.findLayerGroupById(groupId);
             if (!group) {
                 return;
             }
@@ -443,7 +449,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // group of -1 is "ungrouped"
                 return;
             }
-            const group = this.getAllLayerGroups(groupId);
+            const group = this.findLayerGroupById(groupId);
             if (!group) {
                 return;
             }
@@ -468,86 +474,28 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Boolean}          deleteLayers deleteLayers
          */
         deleteLayerGroup: function (id, parentId, deleteLayers) {
-            var me = this;
-            var editable = me.getAllLayerGroups(parentId);
-
-            var getGroupIndexInArray = function (arr) {
-                var founded = -1;
-                for (var i = 0; i < arr.length; i++) {
-                    var group = arr[i];
-                    if (group.id === id) {
-                        founded = i;
-                        break;
-                    }
+            let groupsList = this.getAllLayerGroups();
+            if (parentId) {
+                const parentGroup = this.findLayerGroupById(parentId);
+                if (parentGroup) {
+                    groupsList = parentGroup.getGroups();
                 }
-                return founded;
-            };
-
-            var groupIndex = getGroupIndexInArray(editable.groups || editable);
-            if (groupIndex >= 0 && editable.groups) {
-                editable.groups.splice(groupIndex, 1);
-            } else {
-                editable.splice(groupIndex, 1);
             }
+            const allLayers = this.getAllLayers();
+            const isLayerInGroup = (layer) => layer.getGroups().filter(g => g.id === id).length > 0;
+            const layersInDeletedGroup = allLayers.filter(isLayerInGroup).map(l => l.getId());
+
             if (deleteLayers) {
-                // Remove layers
-                const deletedLayerIds = this._loadedLayersList.filter(l => l._groups.filter(g => g.id === id).length > 0).map(l => l.getId());
-                this._loadedLayersList = this._loadedLayersList.filter(l => !deletedLayerIds.includes(l._id));
-            } else if (typeof deleteLayers !== 'undefined' && !deleteLayers) {
-                // Clear group from needed layers.
-                this.getAllLayers().filter(l => l._groups.filter(g => g.id === id).length > 0).map(l => {
-                    const groups = [...l._groups];
-                    const index = groups.findIndex(g => g.id === id);
-                    if (index !== -1) {
-                        groups.splice(index, 1);
-                        l._groups = groups;
-                    }
-                });
+                layersInDeletedGroup.forEach(layerId => this.removeLayer(layerId));
+            } else {
+                layersInDeletedGroup.forEach(layerId => this.removeLayerFromGroup(id, layerId, true));
+            }
+
+            const groupIndex = groupsList.findIndex(group => group.id === id);
+            if (groupIndex >= 0) {
+                groupsList.splice(groupIndex, 1);
             }
             this.trigger('theme.update');
-        },
-        /**
-         * Updata layer groups
-         * @method updateLayerGroups
-         * @param  {Object}          data data
-         */
-        updateLayerGroups: function (data) {
-            var me = this;
-            var editable = me.getAllLayerGroups(data.id);
-            // if found then update only
-            if (editable && editable.name) {
-                editable.name = data.name;
-                editable.parentId = data.parentId;
-                editable.selectable = data.selectable;
-            } else if (data.parentId === -1) {
-                me.getAllLayerGroups().push(
-                    Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', {
-                        groups: [],
-                        id: data.id,
-                        name: data.name,
-                        layers: [],
-                        parentId: data.parentId,
-                        selectable: data.selectable
-                    })
-                );
-            } else {
-                me.getAllLayerGroups(data.parentId).groups.push(
-                    Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', {
-                        groups: [],
-                        id: data.id,
-                        name: data.name,
-                        layers: [],
-                        parentId: data.parentId,
-                        selectable: data.selectable
-                    })
-                );
-
-                me.getAllLayerGroups(data.parentId).children.push({
-                    type: 'group',
-                    id: data.id,
-                    order: 100000000
-                });
-            }
         },
 
         /**
@@ -570,21 +518,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this.getSandbox().notifyAll(evt);
             }
             // TODO: notify if layer not found?
-        },
-        showUnsupportedPopup: function () {
-            if (this.popupCoolOff) {
-                return;
-            }
-            var popup = this._popupService.createPopup();
-
-            var buttons = [popup.createCloseButton('OK')];
-            const dimension = this.getSandbox().getMap().getSupports3D() ? '3D' : '2D';
-            popup.show(this.loc('unsupportedProjHeader'), this.loc('unsupportedProj', { dimension }).replace(/[\n]/g, '<br>'), buttons);
-
-            this.popupCoolOff = true;
-            setTimeout(function () {
-                this.popupCoolOff = false;
-            }.bind(this), 500);
         },
 
         /**
@@ -658,6 +591,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         updateGroupRecursively: function (group, newGroup) {
             if (group.id === newGroup.id) {
                 group.setName(newGroup.getName());
+                group.setDescription(group.getDescription());
                 return group;
             }
             if (group.groups.length !== 0) {
@@ -680,6 +614,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             const index = this._layerGroups.findIndex(g => g.getId() === group.getId());
             if (index !== -1) {
                 this._layerGroups[index].setName(group.getName());
+                this._layerGroups[index].setDescription(group.getDescription());
             } else {
                 let temp = [];
                 for (var g of this._layerGroups) {
@@ -689,9 +624,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this._layerGroups = temp;
             }
             // Update group to needed layers. Groups under layer only contains group name with current localization
-            const lang = Oskari.getLang();
             this.getAllLayers().filter(l =>
-                l._groups.filter(g => g.id === group.id).map(g => (g.name = group.name[lang])));
+                l._groups.filter(g => g.id === group.id).map(g => {
+                    g.name = group.getName();
+                    return g;
+                }));
             this.trigger('theme.update');
         },
 
@@ -705,9 +642,30 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (index !== -1) {
                 this._dataProviders[index] = dataProvider;
             }
-            // Update dataProvider to needed layers.
-            this.getAllLayers().filter(l => l.admin && l.admin.organizationId === dataProvider.id).map(l => (l._organizationName = dataProvider.name));
+            // Update dataProvider to layers.
+            this.getAllLayers()
+                .filter(l => l.getDataProviderId() === dataProvider.id)
+                .forEach(l => l.setOrganizationName(dataProvider.name));
             this.trigger('dataProvider.update');
+        },
+        setDataProviders: function (dataProviders) {
+            this._dataProviders = dataProviders;
+            this.trigger('dataProvider.update');
+        },
+
+        getDataProviderById: function (id) {
+            const index = this._dataProviders.findIndex(g => g.id === id);
+            if (index === -1) {
+                return null;
+            }
+            // return a copy
+            return {
+                ...this._dataProviders[index]
+            };
+        },
+
+        getDataProviders: function () {
+            return this._dataProviders;
         },
         /**
          * @method deleteDataProvider
@@ -725,18 +683,17 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (deleteLayers) {
                 // Remove layers
                 const layers = this._loadedLayersList.filter(l => {
-                    if (!l.admin) {
-                        return true;
-                    }
-                    return l.admin.organizationId !== dataProvider.id;
+                    return l.getDataProviderId() !== dataProvider.id;
                 });
                 this._loadedLayersList = layers;
             } else {
                 // Clear data provider from needed layers.
-                this.getAllLayers().filter(l => l.admin && l.admin.organizationId === dataProvider.id).map(l => {
-                    l._organizationName = '';
-                    delete l.admin.organizationId;
-                });
+                this.getAllLayers()
+                    .filter(l => l.getDataProviderId() === dataProvider.id)
+                    .forEach(l => {
+                        l.setDataProviderId(null);
+                        l.setOrganizationName('');
+                    });
             }
             this.trigger('dataProvider.update');
         },
@@ -763,6 +720,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 .map(group => Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
             this._layerGroups.push(...groupModels);
 
+            const providers = Object.keys(pResp.providers).map(id => {
+                return {
+                    id: Number(id),
+                    name: pResp.providers[id].name,
+                    desc: pResp.providers[id].desc
+                };
+            });
+            this.setDataProviders([...this.getDataProviders(), ...providers]);
+
             const flatLayerGroups = [];
             const gatherFlatGroups = (groups = []) => {
                 groups.forEach((group) => {
@@ -785,7 +751,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         .forEach((layer) => {
                             layer.getGroups().push({
                                 id: group.getId(),
-                                name: Oskari.getLocalized(group.getName())
+                                name: group.getName(),
+                                description: group.getDescription()
                             });
                         });
                 });
@@ -806,7 +773,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @private
          */
         _loadLayersRecursive: function (layers, callbackSuccess) {
-            var me = this;
+            const me = this;
             // check if recursion should end
             if (layers.length === 0) {
                 me._allLayersAjaxLoaded = true;
@@ -816,8 +783,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
             // remove the first one for recursion
-            var json = layers.shift();
-            var mapLayer = me.createMapLayer(json);
+            const json = layers.shift();
+            const mapLayer = me.createMapLayer(json);
             // unsupported maplayer type returns null so check for it
             if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
                 me.addLayer(mapLayer, true);
@@ -832,6 +799,37 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     me._loadLayersRecursive(layers, callbackSuccess);
                 }, 0);
             }
+        },
+        /**
+        * Fetches layer additional info from server if required
+        * @param {AbstractLayer} layer layer to get WKT for
+        * @param {Function} callback gets the describe info as parameter or undefined if it's not available
+        * @returns callback is used for return value
+        */
+        getDescribeLayer: function (layer, opts, callback) {
+            // gather a list of possible user generated styles to load for layer
+            const userStyles = [
+                layer.getCurrentStyle().getName(),
+                ...(opts.userStyles || [])]
+                .join(',');
+            const url = Oskari.urls.getRoute('DescribeLayer', {
+                id: layer.getId(),
+                styleId: userStyles,
+                lang: Oskari.getLang(),
+                srs: this.getSandbox().getMap().getSrsName()
+            });
+
+            fetch(url).then(response => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            }).then(json => {
+                callback(json);
+            }).catch(error => {
+                Oskari.log('DescribeLayer download').warn(error);
+                callback();
+            });
         },
 
         /**
@@ -852,44 +850,41 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         /**
-         * @method getLayerGroup
-         * Returns a group that matches given id
-         * @param {String|Integer} id if defined and not equal -1 return only wanted group
-         * @param {String|Integer} id if defined and not equal -1 return only wanted group
-         * @return {Oskari.clazz.define.getGroups}
-         */
-        getLayerGroup: function (group, id) {
-            if (group.id + '' === id + '') {
-                return group;
-            }
-            if (group.groups) {
-                for (let g of group.groups) {
-                    let foundGroup = this.getLayerGroup(g, id);
-                    if (foundGroup) {
-                        return foundGroup;
-                    }
-                }
-            }
-            return null;
-        },
-
-        /**
          * @method getAllLayerGroups
          * Returns an array of layer groups added to the service
-         * @param {String|Integer} id if defined and not equal -1 return only wanted group
+         * @param {String|Integer} id if defined return only requested group (deprecated - use findLayerGroupById() instead)
          * @return {Oskari.clazz.define.getGroups[]}
          */
         getAllLayerGroups: function (id) {
-            var layerGroups = null;
-            if (id && id !== -1) {
-                for (let group of this._layerGroups) {
-                    layerGroups = this.getLayerGroup(group, id);
-                    if (layerGroups) {
-                        break;
-                    }
-                }
+            if (typeof id !== 'undefined' && id !== null) {
+                return this.findLayerGroupById(id);
             }
-            return (id && id !== -1) ? layerGroups : this._layerGroups;
+            return this._layerGroups;
+        },
+        /**
+         * @method findLayerGroupById
+         * Returns the requested group matching the id or null if not found.
+         * @param {String|Integer} id id for requested group
+         * @param {Oskari.mapframework.domain.MaplayerGroup[]} array of groups to search from (optional, defaults to all groups). Recurses to subgroups
+         * @return {Oskari.clazz.define.getGroups[]}
+         */
+        findLayerGroupById: function (id, groupsToSearchFrom) {
+            if (!groupsToSearchFrom) {
+                return this.findLayerGroupById(id, this.getAllLayerGroups());
+            }
+            let requestedGroup = null;
+            groupsToSearchFrom.forEach(group => {
+                if (group.getId() + '' === id + '') {
+                    requestedGroup = group;
+                }
+                if (requestedGroup) {
+                    // already found it
+                    return;
+                }
+                // keep searching - result may be null so we might need to dig deeper still
+                requestedGroup = this.findLayerGroupById(id, group.getGroups());
+            });
+            return requestedGroup;
         },
 
         /**
@@ -1176,9 +1171,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // Set additional data
-            if (mapLayer && mapLayerJson.admin !== null && mapLayerJson.admin !== undefined) {
-                mapLayer.admin = mapLayerJson.admin;
-            }
             if (mapLayer && mapLayerJson.names !== null && mapLayerJson.names !== undefined) {
                 mapLayer.names = mapLayerJson.names;
             }
@@ -1223,10 +1215,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             baseLayer.setMetadataIdentifier(baseMapJson.metadataUuid);
 
-            if (baseMapJson.orgName) {
-                baseLayer.setOrganizationName(baseMapJson.orgName);
+            // for grouping by dataprovider
+            baseLayer.setDataProviderId(baseMapJson.dataproviderId);
+            const provider = this.getDataProviderById(baseMapJson.dataproviderId);
+            if (provider) {
+                baseLayer.setOrganizationName(provider.name || '');
             } else {
-                baseLayer.setOrganizationName('');
+                baseLayer.setOrganizationName(baseMapJson.orgName || '');
             }
 
             baseLayer.setDescription(baseMapJson.info);
@@ -1245,11 +1240,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     // Notice that we are adding layers to baselayers sublayers array
                     const subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
                     subLayer.setParentId(baseMapJson.id);
-
-                    // if (baseMapJson.subLayer[i].admin) {
-                    subLayer.admin = baseMapJson.subLayer[i].admin || {};
-                    // }
-
                     baseLayer.getSubLayers().push(subLayer);
                 }
             }
@@ -1310,7 +1300,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // Oskari.log(this.getName()).warn("Trying to create mapLayer without JSON data");
                 return null;
             }
-            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
+            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params);
             if (!layer) {
                 Oskari.log(this.getName()).warn('Unknown layer type: ' + mapLayerJson.type);
                 return null;
@@ -1361,11 +1351,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setBackendStatus(mapLayerJson.backendStatus);
             }
 
-            // for grouping: organisation and inspire
-            if (mapLayerJson.orgName) {
-                layer.setOrganizationName(mapLayerJson.orgName);
+            // for grouping by dataprovider
+            layer.setDataProviderId(mapLayerJson.dataproviderId);
+            const provider = this.getDataProviderById(mapLayerJson.dataproviderId);
+            if (provider) {
+                layer.setOrganizationName(provider.name || '');
             } else {
-                layer.setOrganizationName('');
+                layer.setOrganizationName(mapLayerJson.orgName || '');
             }
 
             layer.setVisible(true);
@@ -1378,6 +1370,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // optional attributes
             if (mapLayerJson.attributes) {
                 layer.setAttributes(mapLayerJson.attributes);
+            }
+            // optional options
+            if (mapLayerJson.options) {
+                layer.setOptions(mapLayerJson.options);
             }
 
             // permissions
@@ -1411,6 +1407,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             layer.setOrderNumber(mapLayerJson.orderNumber);
 
+            if (mapLayerJson.styles) {
+                this.populateStyles(layer, mapLayerJson.styles);
+            }
+            // styles have to be populated by this or builder/layer impl before selecting
+            layer.selectStyle(mapLayerJson.style);
+
             return layer;
         },
         parseUrls: function (commaSeparatedUrlList) {
@@ -1432,84 +1434,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _populateWmsMapLayerAdditionalData: function (layer, jsonLayer) {
             layer.setGfiContent(jsonLayer.gfiContent);
-            return this.populateStyles(layer, jsonLayer);
         },
         /**
          * @method populateStyles
-         *
-         * Parses styles attribute from JSON and adds them as a
-         * Oskari.mapframework.domain.Style to the layer Object.
-         * If no styles attribute is present, adds an empty
-         * dummy style and sets that as current style.
-         *
          * @param {Oskari.mapframework.domain.AbstractLayer} layerModel
-         * @param {Object} jsonLayer JSON presentation for the maplayer
-         * @param {Oskari.mapframework.domain.Style} defaultStyle
-         * @return {Oskari.mapframework.domain.AbstractLayer} returns the same layer object with populated styles for convenience
+         * @param {Array} styles
          */
-        populateStyles: function (layer, jsonLayer, defaultStyle) {
-            var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style'),
-                i,
-                styleJson,
-                blnMultipleStyles,
-                style;
-
-            if (jsonLayer.styles) {
-                // has styles
-                for (i = 0; i < jsonLayer.styles.length; i++) {
-                    styleJson = jsonLayer.styles;
-                    // TODO: can be removed if impl now returns
-                    // an array always so loop works properly
-                    blnMultipleStyles = !(isNaN(i));
-                    if (blnMultipleStyles) {
-                        styleJson = jsonLayer.styles[i];
-                    }
-                    // setup backwards compatibility for WMTS layer style
-                    if (styleJson.identifier) {
-                        //   use identifier as name and title if not set explicitly
-                        if (!styleJson.name) {
-                            styleJson.name = styleJson.identifier;
-                        }
-                        if (!styleJson.title) {
-                            styleJson.title = styleJson.identifier;
-                        }
-                        // use isDefault styles identifier as default style if not set
-                        if (styleJson.isDefault && !jsonLayer.style) {
-                            jsonLayer.style = styleJson.identifier;
-                        }
-                    }
-                    // /WMTS style backwards compatibility end
-
-                    style = styleBuilder();
-                    style.setName(styleJson.name);
-                    style.setTitle(styleJson.title);
-                    style.setLegend(styleJson.legend);
-                    layer.addStyle(style);
-
-                    // only add the style once if not an array
-                    if (!blnMultipleStyles) {
-                        break;
-                    }
-                }
-
-                // set the default style
-                layer.selectStyle(jsonLayer.style);
+        populateStyles: function (layer, styles) {
+            if (!Array.isArray(styles)) {
+                return;
             }
-            if (defaultStyle) {
-                layer.addStyle(defaultStyle);
-                layer.selectStyle(defaultStyle.getName());
-            }
-            if (layer.getLayerType() === 'wfs') {
-                // style none -> not rendered in transport
-                var locNoneStyle = layer.localization['none-style'];
-                var noneStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-                noneStyle.setName('oskari_none');
-                noneStyle.setTitle(locNoneStyle);
-                noneStyle.setLegend('');
-                layer.addStyle(noneStyle);
-            }
-
-            return layer;
+            const styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
+            styles.forEach(({ name, title, legend }) => {
+                const style = styleBuilder();
+                style.setName(name);
+                style.setTitle(title);
+                style.setLegend(legend);
+                layer.addStyle(style);
+            });
         },
         /**
          * @method checkForDuplicateId
@@ -1616,15 +1558,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             });
             // return true if all layers were found
             return !missingLayer;
-        },
-
-        setDataProviders: function (dataProviders) {
-            this._dataProviders = dataProviders;
-            this.trigger('dataProvider.update');
-        },
-
-        getDataProviders: function () {
-            return this._dataProviders;
         }
     }, {
         /**

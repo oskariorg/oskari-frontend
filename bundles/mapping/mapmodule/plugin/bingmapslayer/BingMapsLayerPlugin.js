@@ -1,3 +1,5 @@
+import './BingMapsLayer';
+
 import olSourceBingMaps from 'ol/source/BingMaps';
 import olLayerTile from 'ol/layer/Tile';
 import { BingMapsLayerModelBuilder } from './BingMapsLayerModelBuilder';

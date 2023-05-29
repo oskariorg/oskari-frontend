@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.OpenAddLayerDi
  * @param {Oskari.mapframework.bundle.myplaces3.MyPlacesBundleInstance} instance
  *          reference to my places bundle instance
  */
+
     function (sandbox, instance) {
         this.sandbox = sandbox;
         this.instance = instance;
@@ -24,9 +25,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.OpenAddLayerDi
          *      request to handle
          */
         handleRequest: function (core, request) {
-            if (this.instance) {
-                this.instance.openAddLayerDialog(request.getOriginator(), request.getSide());
+            const handler = this.instance.getMyPlacesHandler();
+            if (!handler) {
+                return;
             }
+            handler.openLayerDialog();
         }
     }, {
     /**

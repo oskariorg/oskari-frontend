@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
         return 'GetIndicatorMetadata_' + datasrc + '_' + indicatorId;
     },
     getIndicatorDataKey: function (datasrc, indicatorId, selectors, regionset) {
-        var serialized = '';
+        let serialized = '';
         if (typeof selectors === 'object') {
             serialized = '_' + Object.keys(selectors).sort().map(function (key) {
                 return key + '=' + JSON.stringify(selectors[key]);
@@ -32,12 +32,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
      * @param {String} indicatorId id for indicator. Note! For new indicators on guest users it's generated
      */
     updateIndicatorInCache: function (datasrc, indicatorId, data, callback) {
-        var me = this;
-        var updateMetadataCache = function () {
+        const me = this;
+        const updateMetadataCache = function () {
             // only inject when guest user, otherwise flush from cache
-            var metadataCacheKey = me.getIndicatorMetadataKey(datasrc, indicatorId);
+            const metadataCacheKey = me.getIndicatorMetadataKey(datasrc, indicatorId);
             // flush/update indicator metadata from cache
-            var metadata = me.cache.get(metadataCacheKey) || me.__getCachedMetadataSkeleton(indicatorId);
+            const metadata = me.cache.get(metadataCacheKey) || me.__getCachedMetadataSkeleton(indicatorId);
             // update indicator fields
             metadata.name[Oskari.getLang()] = data.name;
             metadata.description[Oskari.getLang()] = data.description;
@@ -53,10 +53,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
                     callback(err);
                     return;
                 }
-                var existingIndicator = response.indicators.find(function (ind) {
+                const existingIndicator = response.indicators.find(function (ind) {
                     return '' + ind.id === '' + data.id;
                 });
                 if (!existingIndicator) {
+                    /* eslint-disable n/no-callback-literal */
                     callback('Tried saving an indicator with id, but id didn\'t match existing indicator');
                     return;
                 }
@@ -67,8 +68,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
             });
         } else {
             // new indicator
-            var indicatorListCacheKey = me.getIndicatorListKey(datasrc);
-            var cachedListResponse = me.cache.get(indicatorListCacheKey) || {
+            const indicatorListCacheKey = me.getIndicatorListKey(datasrc);
+            const cachedListResponse = me.cache.get(indicatorListCacheKey) || {
                 complete: true,
                 indicators: []
             };
@@ -83,17 +84,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
         }
     },
     updateIndicatorDataCache: function (datasrc, indicatorId, selectors, regionset, data, callback) {
-        var me = this;
+        const me = this;
         this.service.getIndicatorList(datasrc, function (err, response) {
             // find the indicator that's being edited
             if (err) {
                 callback(err);
                 return;
             }
-            var existingIndicator = response.indicators.find(function (ind) {
+            const existingIndicator = response.indicators.find(function (ind) {
                 return '' + ind.id === '' + indicatorId;
             });
             if (!existingIndicator) {
+                /* eslint-disable n/no-callback-literal */
                 callback('Tried saving dataset for an indicator, but id didn\'t match existing indicator');
                 return;
             }
@@ -104,14 +106,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
             }
 
             // only inject when guest user, otherwise flush from cache
-            var metadataCacheKey = me.getIndicatorMetadataKey(datasrc, indicatorId);
+            const metadataCacheKey = me.getIndicatorMetadataKey(datasrc, indicatorId);
             // flush/update indicator metadata from cache
-            var metadata = me.cache.get(metadataCacheKey) || me.__getCachedMetadataSkeleton(indicatorId);
+            const metadata = me.cache.get(metadataCacheKey) || me.__getCachedMetadataSkeleton(indicatorId);
             // update regionsets
             metadata.regionsets = existingIndicator.regionsets;
             Object.keys(selectors).forEach(function (selectorId) {
-                var selectorValue = selectors[selectorId];
-                var existingSelector = metadata.selectors.find(function (item) {
+                const selectorValue = selectors[selectorId];
+                const existingSelector = metadata.selectors.find(function (item) {
                     return item.id === selectorId;
                 });
                 if (!existingSelector) {
@@ -120,13 +122,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
                         id: selectorId,
                         name: selectorId,
                         allowedValues: [{
-                            'name': selectorValue,
-                            'id': selectorValue
+                            name: selectorValue,
+                            id: selectorValue
                         }]
                     });
                 } else {
                     // there's an existing one, check if the value we are adding is new or not
-                    var existingValue = existingSelector.allowedValues.find(function (item) {
+                    const existingValue = existingSelector.allowedValues.find(function (item) {
                         if (typeof item !== 'object') {
                             // allowed value might be a simple value instead of an object
                             return '' + item === '' + selectorValue;
@@ -136,15 +138,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
                     if (!existingValue) {
                         // only need to modify the values if it's a new value for the selector
                         existingSelector.allowedValues.push({
-                            'name': selectorValue,
-                            'id': selectorValue
+                            name: selectorValue,
+                            id: selectorValue
                         });
                     }
                 }
             });
             me.cache.put(metadataCacheKey, metadata);
 
-            var dataCacheKey = me.getIndicatorDataKey(datasrc, indicatorId, selectors, regionset);
+            const dataCacheKey = me.getIndicatorDataKey(datasrc, indicatorId, selectors, regionset);
             me.cache.put(dataCacheKey, data);
 
             callback();
@@ -152,27 +154,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
     },
     __getCachedMetadataSkeleton: function (indicatorId) {
         return {
-            'public': true,
-            'id': indicatorId,
-            'name': {},
-            'description': {},
-            'source': {},
-            'regionsets': [],
-            'selectors': []
+            public: true,
+            id: indicatorId,
+            name: {},
+            description: {},
+            source: {},
+            regionsets: [],
+            selectors: []
         };
     },
     clearCacheOnDelete: function (datasrc, indicatorId, selectors, regionset) {
-        var metadataCacheKey = this.getIndicatorMetadataKey(datasrc, indicatorId);
+        const metadataCacheKey = this.getIndicatorMetadataKey(datasrc, indicatorId);
         if (!selectors && !regionset) {
             // removed the whole indicator: flush indicator from cache
             this.cache.flushKeysStartingWith(this.getIndicatorDataKeyPrefix(datasrc, indicatorId));
-            var indicatorListCacheKey = this.getIndicatorListKey(datasrc);
-            var cachedListResponse = this.cache.get(indicatorListCacheKey) || {
+            const indicatorListCacheKey = this.getIndicatorListKey(datasrc);
+            const cachedListResponse = this.cache.get(indicatorListCacheKey) || {
                 complete: true,
                 indicators: []
             };
             // only inject when guest user, otherwise flush from cache
-            var listIndex = cachedListResponse.indicators.findIndex(function (ind) {
+            const listIndex = cachedListResponse.indicators.findIndex(function (ind) {
                 return ind.id === indicatorId;
             });
             if (listIndex !== -1) {
@@ -185,6 +187,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
             // for guests this will show some erronous info, but it's a beast to track which
             //  year/regionsets actually have data and can be removed
             this.cache.remove(metadataCacheKey);
+            this.cache.remove(this.getIndicatorListKey(datasrc));
+            this.cache.remove(this.getIndicatorDataKey(datasrc, indicatorId, selectors, regionset));
         }
     }
 });

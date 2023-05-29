@@ -48,7 +48,11 @@ Oskari.registerLocalization(
                 'moveToScale': 'Gå till en lämplig skalnivå',
                 'moveToContentArea': 'Flytta till en lämplig plats',
                 'publishable': 'Får publiceras',
-                'hidden': 'Kartlagret är tillfälligt dolt.'
+                'hidden': 'Kartlagret är tillfälligt dolt.',
+                'hide': 'Dölja kartlaget',
+                'show': 'Visa kartlaget',
+                'drag': 'Dra-och-släpp kartlagret upp/ner på listan. Kartlagren längst upp visas ovanpå de nedanstående på kartan.',
+                'hiddenNotification': 'Du har gömt detta kartlager. Vill du återställa synligheten, gå till Kartlager-menyn.'
             },
             'backendStatus': {
                 'OK': 'Kartlagret är tillgängligt just nu.',
@@ -63,12 +67,14 @@ Oskari.registerLocalization(
                 'wmts': 'Kartlager i rasterformat',
                 'arcgis93': 'Kartlager i rasterformat',
                 'arcgis': 'Kartlager i rasterformat',
+                'vectortile': 'Kartlager i rasterformat',
+                'bingmaps': 'Kartlager i rasterformat',
                 'wfs': 'Kartlager i vektorformat',
-                'vectortile': 'Kartlager i vektorformat',
-                'userlayer': '',
-                'myplaces': '',
-                'analysislayer': '',
-                'tiles3d': ''
+                'vector': 'Kartlager i vektorformat',
+                'userlayer': 'Eget dataset',
+                'myplaces': 'Mitt kartlager',
+                'analysislayer': 'Min analys',
+                'tiles3d': '3D kartlager'
             },
             'guidedTour': {
                 'title': 'Kartlager',

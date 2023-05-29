@@ -1,10 +1,10 @@
 # SearchResultEvent [rpc]
 
-Notifies that search result has been got.
+Notifies that a search has been performed and the result is accessible through the event.
 
 ## Description
 
-Used to notify that the ``SearchRequest`` has received a reply from search.
+Used to notify that the ``SearchRequest`` has received a reply from server side search.
 
 ## Parameters
 
@@ -23,6 +23,9 @@ Used to notify that the ``SearchRequest`` has received a reply from search.
 <tr>
   <td> \* result</td><td> Object </td><td> search result</td><td> </td>
 </tr>
+<tr>
+  <td> options </td><td> Object </td><td> options sent in search request </td><td> </td>
+</tr>
 </table>
 
 ## Event methods
@@ -39,14 +42,18 @@ Returns search result as JSON
 ### getRequestParameters()
 Returns request parameters as JSON
 
+### getOptions()
+Returns optional flags sent in SearchRequest for this search
+
 ### getParams()
 Returns event parameters as an object:
 <pre class="event-code-block">
 <code>
 {
-    success: this._success,
-    result: this._result,
-    requestParameters: this._requestParameters
+    success: getSuccess(),
+    result: getResult(),
+    requestParameters: getRequestParameters(),
+    options: getOptions()
 };
 </code>
 </pre>
@@ -81,10 +88,10 @@ Event occurs after a search request.
         "id": 1,
         "rank": 30,
         "lon": "383183.648",
-        "village": "Hausj‰rvi",
+        "village": "Hausj√§rvi",
         "name": "Vantaa",
         "zoomScale": 11300,
-        "type": "Kyl‰, kaupunginosa tai kulmakunta",
+        "type": "Kyl√§, kaupunginosa tai kulmakunta",
         "lat": "6733424.84"
       },
       {
@@ -101,7 +108,7 @@ Event occurs after a search request.
         "id": 3,
         "rank": 50,
         "lon": "383746.169",
-        "village": "Nurmij‰rvi",
+        "village": "Nurmij√§rvi",
         "name": "Vantaa",
         "zoomScale": 2800,
         "type": "Talo",
@@ -109,7 +116,8 @@ Event occurs after a search request.
       }
     ]
   },
-  "requestParameters": "Vantaa"
+  "requestParameters": "Vantaa",
+  "options": {}
 }
 </code>
 </pre>

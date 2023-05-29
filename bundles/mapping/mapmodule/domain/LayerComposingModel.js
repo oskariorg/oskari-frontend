@@ -7,7 +7,7 @@ const PROPERTY_FIELDS = [
     'CESIUM_ION',
     'CLUSTERING_DISTANCE',
     'CREDENTIALS',
-    'EXTERNAL_STYLES_JSON',
+    'EXTERNAL_VECTOR_STYLES',
     'GFI_CONTENT',
     'GFI_TYPE',
     'GFI_XSLT',
@@ -22,15 +22,16 @@ const PROPERTY_FIELDS = [
     'SINGLE_TILE',
     'REFRESH_RATE',
     'SCALE',
+    'COVERAGE',
     'SELECTED_TIME',
     'SRS',
-    'STYLE',
-    'STYLES_JSON',
+    'VECTOR_STYLES',
     'TILE_GRID',
     'TIMES',
     'URL',
     'VERSION',
-    'WFS_RENDER_MODE'
+    'WFS_RENDER_MODE',
+    'DECLUTTER'
 ];
 
 // Common fields are enforced on composing model.
@@ -42,7 +43,8 @@ const COMMON_PROPERTY_FIELDS = [
     'NAME',
     'OPACITY',
     'ORGANIZATION_NAME',
-    'SCALE'
+    'SCALE',
+    'COVERAGE'
 ];
 
 const ALL_VERSIONS = 'all';

@@ -1,77 +1,105 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withContext, handleBinder } from 'oskari-ui/util';
+import styled from 'styled-components';
 import { EditClassification } from './editclassification/EditClassification';
 import { Legend } from './Legend';
 import { Header } from './Header';
-import './classification.scss';
 
-class Classification extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            isEdit: false
-        };
-        handleBinder(this);
+const Container = styled.div`
+    background-color: #FFFFFF;
+    width: 300px;
+    border: 1px solid rgba(0,0,0,0.2);
+    pointer-events: auto;
+    text-align: left;
+
+    &.transparent-classification {
+        background-color: transparent;
+        border: 1px solid transparent;
+        .classification-header {
+            border: 1px solid black;
+            border-radius: 2px;
+            background-color: #FFFFFF;
+            padding: 0px;
+        }
+        .classification-legend span {
+            color: #FFFFFF;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+        }
     }
-    componentDidUpdate () {
-        this.props.onRenderChange(this.state.isEdit);
-    }
-    componentDidMount () {
-        this.props.onRenderChange(false);
-    }
-    handleToggleClassification () {
-        this.setState(oldState => ({ isEdit: !oldState.isEdit }));
-    }
-    getContentWrapperStyle () {
+`;
+
+const LegendContainer = styled.div`
+    margin-bottom: 6px;
+    cursor: grab;
+`;
+
+export const Classification = ({
+    activeIndicator,
+    indicators,
+    editOptions,
+    pluginState,
+    classifiedDataset,
+    startHistogramView,
+    onRenderChange,
+    controller
+}) => {
+    const [isEdit, setEdit] = useState(false);
+    const { classification, hash } = activeIndicator;
+    const { transparent, editEnabled } = pluginState;
+
+    useEffect(() => {
+        onRenderChange(isEdit);
+    });
+
+    const toggleEdit = () => setEdit(!isEdit);
+    const getContentWrapperStyle = () => {
         const docHeight = document.documentElement.offsetHeight;
         return {
             maxHeight: docHeight - 50 + 'px', // header + border,
             overflowY: 'auto'
         };
-    }
+    };
 
-    render () {
-        const { classifications, pluginState } = this.props;
-        const isEdit = this.state.isEdit;
-        let containerClass = pluginState.transparent ? 'statsgrid-classification-container transparent-classification' : 'statsgrid-classification-container';
-
-        return (
-            <div className={containerClass}>
-                <Header active = {this.props.indicators.active} isEdit = {isEdit}
-                    handleClick = {this.handleToggleClassification}
-                    indicators = {this.props.indicators.selected}
-                    controller = {this.props.controller}/>
-                <div className="classification-content-wrapper" style={this.getContentWrapperStyle()}>
-                    {isEdit &&
-                        <EditClassification classifications = {classifications}
-                            indicators = {this.props.indicators}
-                            editEnabled = {pluginState.editEnabled}
-                            controller = {this.props.controller}
-                            indicatorData = {this.props.indicatorData}
-                            manualView = {this.props.manualView}/>
-                    }
-                    <Legend legendProps = {this.props.legendProps}
-                        indicatorData = {this.props.indicatorData}
-                        transparency = {classifications.values.transparency}
-                        controller = {this.props.controller}/>
-                </div>
+    return (
+        <Container className={transparent && !isEdit ? 'transparent-classification' : ''}>
+            <Header
+                selected = {hash}
+                isEdit = {isEdit}
+                toggleEdit = {toggleEdit}
+                indicators = {indicators}
+                onChange = {controller.setActiveIndicator}/>
+            <div style={getContentWrapperStyle()}>
+                {isEdit &&
+                    <EditClassification
+                        options = {editOptions}
+                        values = {classification}
+                        editEnabled = {editEnabled}
+                        controller = {controller}
+                        startHistogramView = {startHistogramView}/>
+                }
+                <LegendContainer className = "classification-legend">
+                    <Legend
+                        classifiedDataset = {classifiedDataset}
+                        mapStyle = {classification.mapStyle}
+                        transparency = {classification.transparency}
+                    />
+                </LegendContainer>
             </div>
-        );
-    }
-}
-
-Classification.propTypes = {
-    indicators: PropTypes.object.isRequired,
-    indicatorData: PropTypes.object.isRequired,
-    classifications: PropTypes.object.isRequired,
-    pluginState: PropTypes.object.isRequired,
-    legendProps: PropTypes.object.isRequired,
-    manualView: PropTypes.object,
-    onRenderChange: PropTypes.func.isRequired,
-    controller: PropTypes.object.isRequired,
-    loc: PropTypes.func.isRequired
+        </Container>
+    );
 };
 
-const cls = withContext(Classification);
-export { cls as Classification };
+Classification.propTypes = {
+    activeIndicator: PropTypes.object.isRequired,
+    indicators: PropTypes.array.isRequired,
+    editOptions: PropTypes.object.isRequired,
+    pluginState: PropTypes.object.isRequired,
+    classifiedDataset: PropTypes.object.isRequired,
+    startHistogramView: PropTypes.func.isRequired,
+    onRenderChange: PropTypes.func.isRequired,
+    controller: PropTypes.object.isRequired
+};

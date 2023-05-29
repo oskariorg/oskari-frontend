@@ -14,14 +14,9 @@ Oskari.clazz.define('Oskari.mapping.drawtools.request.StartDrawingRequest',
      * @method create called automatically on construction
      * @static
      *
-     * @param {String} id drawing id as given in StartDrawingRequest
-     * @param {String|Object} shape [dot|line|circle|box|polygon] or geojson object to set for editing
-     * @param {Object} options options like
-     *                         - buffer [0 to disable dragging a buffer or 1-n for fixed buffer]
-     *                         - styles
-     *                         - clear drawing after finished
-     *                         - show area/line length on map for drawing
-     *                         - show text next to the drawing(?)
+     * @param {String} id
+     * @param {String} shape
+     * @param {Object} options
      */
     function (id, shape, options) {
         this._id = id;
@@ -39,30 +34,23 @@ Oskari.clazz.define('Oskari.mapping.drawtools.request.StartDrawingRequest',
         },
         /**
          * @method getId
-         * @return {String} Id for the feature that is being drawn,
-         *                     this will be referenced by the event that will be
-         *                     triggered when drawing is finished.
+         * @return {String} Id
          */
         getId: function () {
             return this._id;
         },
         /**
          * @method getShape
-         * @return {String|Object} [dot|line|circle|box|polygon] or geojson object to set for editing
+         * @return {String}
          */
         getShape: function () {
             return this._shape;
         },
         /**
          * @method getOptions
-         * @param {String} key optional key for options
-         * @return {Object} if key is given returns the key value from options,
-         *                     otherwise returns the whole options
+         * @return {Object} options
          */
-        getOptions: function (key) {
-            if (key) {
-                return this._options[key];
-            }
+        getOptions: function () {
             return this._options;
         }
     }, {

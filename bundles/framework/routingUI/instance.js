@@ -1,4 +1,6 @@
-import 'moment';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 /**
  * @class Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstance
@@ -242,7 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
             }
             titleDiv.html('<h4>' + title + '</h4>');
 
-            _.forEach(plan.itineraries, function (itinerary, index) {
+            plan.itineraries.forEach(function (itinerary, index) {
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                 var panelTitle = loc.routeInstructions.route + ' ' + (index + 1);
                 panel.setTitle(panelTitle);
@@ -321,7 +323,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
      * @return {String} date formatted string
      */
         _formatDate: function (dateMilliseconds) {
-            var momentString = moment('' + dateMilliseconds, 'x').format('DD.MM.YYYY HH:mm:ss');
+            var momentString = dayjs('' + dateMilliseconds, 'x').format('DD.MM.YYYY HH:mm:ss');
             return momentString;
         },
 

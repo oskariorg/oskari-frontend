@@ -1,4 +1,3 @@
-import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME } from '../../mapmodule/domain/VectorStyle';
 /*
  * @class Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder
  * JSON-parsing for wfs layer
@@ -45,7 +44,7 @@ Oskari.clazz.define(
             toolOwnStyle.setTitle(locOwnStyle);
             toolOwnStyle.setIconCls('show-own-style-tool');
             toolOwnStyle.setTooltip(locOwnStyle);
-            toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [layer.getId(), false]));
+            toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [{ layerId: layer.getId() }]));
             layer.addTool(toolOwnStyle);
         },
         /**
@@ -62,27 +61,7 @@ Oskari.clazz.define(
                     this._pendingUserStyleTools.push(layer);
                 }
             }
-
-            // Read options object for styles and hover options
-            const options = mapLayerJson.options || {};
-            const { styles = {} } = options;
-            Object.keys(styles).forEach(styleId => {
-                const style = new VectorStyle(styleId, null, 'normal', styles[styleId]);
-                layer.addStyle(style);
-            });
-            // Remove styles from options to be sure that VectorStyle is used
-            delete options.styles;
-            if (layer.getStyles().length === 0) {
-                // ensure we have at least one style so:
-                // - things don't break as easily in other parts of the app
-                // - end-user can switch back to "default" when adding a runtime style of their own
-                // add default style
-                layer.addStyle(createDefaultStyle());
-            }
             layer.setHoverOptions(mapLayerJson.options.hover);
-
-            // Set current Style
-            layer.selectStyle(mapLayerJson.style || DEFAULT_STYLE_NAME);
             this.parseLayerAttributes(layer);
         },
         parseLayerAttributes: function (layer) {

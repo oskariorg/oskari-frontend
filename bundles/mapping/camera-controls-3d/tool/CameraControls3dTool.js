@@ -2,18 +2,8 @@ Oskari.clazz.define('Oskari.mapping.cameracontrols3d.CameraControls3dTool',
     function () {
     }, {
         index: 3,
-        allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings: [
-            'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-            'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
-            'Oskari.mapping.time-control-3d.TimeControl3dPlugin',
-            'Oskari.mapping.maprotator.MapRotatorPlugin'
-        ],
 
         groupedSiblings: true,
 

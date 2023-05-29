@@ -3,9 +3,22 @@ import { Message, Tooltip, Spin } from 'oskari-ui';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Header, IconButton } from './styled';
+import styled from 'styled-components';
 
-const getHeaderContent = (title, loading = false, error = false) => {
+export const TooltipContent = styled.div`
+    p:not(:first-child) {
+        padding-top: 1em;
+    }
+`;
+export const Paragraph = styled('p')``;
+
+const getHeaderContent = (title, loading = false, error = false, value) => {
     let content = title;
+    if (value) {
+        if (!Array.isArray(value)) {
+            content = `${title} (${value})`;
+        }
+    }
     if (loading) {
         content = (
             <span>
@@ -20,22 +33,32 @@ const getHeaderContent = (title, loading = false, error = false) => {
     return content;
 };
 
-export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false }) => {
+const getTooltipContent = (mode, modeIcon) => {
+    return (
+        <TooltipContent>
+            <Message messageKey="rangeControl.helpGeneric" LabelComponent={Paragraph} />
+            <Message messageKey={`rangeControl.helpMsg_${mode}`} LabelComponent={Paragraph}> {modeIcon}</Message>
+        </TooltipContent>
+    );
+}
+
+export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false, value}) => {
     const helpMessage = <Message messageKey="rangeControl.helpMessage" />;
     const switchButtonMessageKey = mode === 'year' ? 'rangeControl.switchToRange' : 'rangeControl.switchToYear';
     const switchButtonMessage = <Message messageKey={switchButtonMessageKey} />;
+    const modeIcon = mode === 'year' ? <LoginOutlined /> : <LogoutOutlined />;
     return (
         <Header className="timeseries-range-drag-handle">
-            {getHeaderContent(title, loading, error)}
+            {getHeaderContent(title, loading, error, value)}
             <div className="header-mid-spacer"></div>
-            <Tooltip title={helpMessage}>
+            <Tooltip title={getTooltipContent(mode, modeIcon)}>
                 <IconButton type="text" size="large">
                     <QuestionCircleOutlined />
                 </IconButton>
             </Tooltip>
             <Tooltip title={switchButtonMessage}>
                 <IconButton type="text" size="large" onClick={() => toggleMode()}>
-                    {mode === 'year' ? <LoginOutlined /> : <LogoutOutlined />}
+                    {modeIcon}
                 </IconButton>
             </Tooltip>
         </Header>

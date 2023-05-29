@@ -40,7 +40,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
     }
     setLayer (layer) {
         if (!layer) {
-            this.uiHandler.resetLayer();
+            this.uiHandler.resetForm();
         } else {
             this.uiHandler.fetchLayer(layer.getId());
         }
@@ -110,11 +110,13 @@ export class LayerEditorFlyout extends ExtraFlyout {
             </LocaleProvider>
         );
     }
+
     cleanUp () {
         const el = this.getElement();
         if (!el) {
             return;
         }
         ReactDOM.unmountComponentAtNode(el.get(0));
+        this.uiHandler.resetMap();
     }
 }

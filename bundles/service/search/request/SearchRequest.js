@@ -10,10 +10,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchRequest',
      * @method create called automatically on construction
      * @static
      *
-     * @params {Object}
+     * @param {String} query search qyery
+     * @param {Object} options optional flags for server
      */
-    function (params) {
-        this._searchparams = params;
+    function (query, options) {
+        this._query = query;
+        this._options = options;
     }, {
         /** @static @property __name request name */
         __name: 'SearchRequest',
@@ -26,10 +28,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchRequest',
         },
         /**
          * @method getSearchParams
-         * @return {Object} parameters given for search
+         * @return {String} query given for search
          */
         getSearchParams: function () {
-            return this._searchparams;
+            return this._query;
+        },
+        /**
+         * @method getSearchParams
+         * @return {Object} parameters given for search
+         */
+        getOptions: function () {
+            return this._options || {};
         }
     }, {
         /**

@@ -20,16 +20,17 @@ import * as olGeom from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
-import { getOlStyle } from './oskariStyle/generator.ol';
+import { getOlStyles, getOlStyleForLayer, setDefaultStyle } from './oskariStyle/generator.ol';
+import { STYLE_TYPE } from './oskariStyle/constants';
 import { LAYER_ID } from '../mapmodule/domain/constants';
+import { VectorFeatureSelectionService } from './service/VectorFeatureSelectionService';
 import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
 // import code so it's usable via Oskari global
 import './AbstractMapModule';
-import './plugin/AbstractMapModulePlugin';
 import './plugin/BasicMapModulePlugin';
-import './AbstractMapLayerPlugin';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
+const INTERNAL_LAYER_Z_INDEX = 1;
 
 if (!window.proj4) {
     window.proj4 = proj4;
@@ -74,8 +75,12 @@ export class MapModule extends AbstractMapModule {
         });
 
         var map = new olMap({
+            // Chrome on Android crashes at times when for example:
+            // - pinchzooming the map out so a WFS-layer scale limit is hit midpinch (layer is hidden while pinching) AND only when the map is in an iframe (not directly on the page)
+            // Setting pixelRatio:1 seems to fix this ^ See for example https://github.com/openlayers/openlayers/issues/11465
+            pixelRatio: 1,
             keyboardEventTarget: document,
-            target: this.getMapElementId(),
+            target: this.getMapDOMEl(),
             controls: controls,
             interactions: this._initInteractions(),
             moveTolerance: 2
@@ -242,6 +247,12 @@ export class MapModule extends AbstractMapModule {
             ftrService = Oskari.clazz.create('Oskari.mapframework.service.VectorFeatureService', sandbox, this);
             sandbox.registerService(ftrService);
         }
+
+        let selectionService = sandbox.getService(VectorFeatureSelectionService.QNAME);
+        if (!selectionService) {
+            selectionService = new VectorFeatureSelectionService(sandbox);
+            sandbox.registerService(selectionService);
+        }
         this.requestHandlers.vectorLayerRequestHandler = Oskari.clazz.create(
             'Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequestHandler',
             sandbox,
@@ -279,25 +290,41 @@ export class MapModule extends AbstractMapModule {
     /**
      * @override @method getStyle
      * @param styleDef Oskari style definition
-     * @param geomType One of 'line', 'dot', 'area' | optional
+     * @param styleType One of 'line', 'point', 'area' | optional
      * @param requestedStyle layer's or feature's style definition (not overrided with defaults)
-     * @return {ol/style/Style}
+     * @return {ol/style/StyleLike}
      **/
-    getStyle (styleDef, geomType, requestedStyle) {
-        return getOlStyle(this, styleDef, geomType, requestedStyle);
+    getStyle (styleDef, styleType, requestedStyle) {
+        return getOlStyles(this, styleDef, styleType, requestedStyle);
     }
 
     getGeomTypedStyles (styleDef) {
-        const styles = {
-            area: this.getStyle(styleDef, 'area'),
-            line: this.getStyle(styleDef, 'line'),
-            dot: this.getStyle(styleDef, 'dot')
-        };
+        const styles = {};
+        styles[STYLE_TYPE.AREA] = this.getStyle(styleDef, STYLE_TYPE.AREA);
+        styles[STYLE_TYPE.LINE] = this.getStyle(styleDef, STYLE_TYPE.LINE);
+        styles[STYLE_TYPE.POINT] = this.getStyle(styleDef, STYLE_TYPE.POINT);
         if (styleDef.text) {
-            styles.labelProperty = styleDef.text.labelProperty;
+            styles.label = {
+                property: styleDef.text.labelProperty,
+                text: styleDef.text.labelText
+            };
         }
         return styles;
     };
+
+    /**
+     * @method getStyleForLayer
+     * @param layer Oskari layer
+     * @param extendedDef Oskari style definition which overrides layer's featureStyle
+     * @return {ol/style/StyleLike}
+     **/
+    getStyleForLayer (layer, extendedDef) {
+        return getOlStyleForLayer(this, layer, extendedDef);
+    };
+
+    registerDefaultFeatureStyle (layerType, styleDef) {
+        setDefaultStyle(layerType, styleDef);
+    }
 
     getDefaultMarkerSize () {
         return this._defaultMarker.size;
@@ -314,6 +341,7 @@ export class MapModule extends AbstractMapModule {
         const hits = [];
         const addHit = (ftr, layer) => {
             hits.push({
+                feature: ftr,
                 featureProperties: ftr.getProperties(),
                 layerId: layer.get(LAYER_ID)
             });
@@ -376,6 +404,7 @@ export class MapModule extends AbstractMapModule {
 
         if (this.isLoading()) {
             if (numOfTries < 0) {
+                /* eslint-disable n/no-callback-literal */
                 callback('');
                 return;
             }
@@ -410,23 +439,26 @@ export class MapModule extends AbstractMapModule {
             me.getMap().renderSync();
         } catch (err) {
             me.log.warn('Error in screenshot map render sync: ' + err);
+            /* eslint-disable n/no-callback-literal */
             callback('');
         }
     }
 
-    getMeasurementResult (geometry) {
+    getMeasurementResult (geometry, format) {
         var olGeometry = this.getOLGeometryFromGeoJSON(geometry);
         var sum = 0;
         if (olGeometry.getType() === 'LineString') {
-            return this.getGeomLength(olGeometry);
+            const line = this.getGeomLength(olGeometry);
+            return format ? this.formatMeasurementResult(line, 'line') : line;
         } else if (olGeometry.getType() === 'MultiLineString') {
             var lineStrings = olGeometry.getLineStrings();
             for (var i = 0; i < lineStrings.length; i++) {
                 sum += this.getGeomLength(lineStrings[i]);
             }
-            return sum;
+            return format ? this.formatMeasurementResult(sum, 'line') : sum;
         } else if (olGeometry.getType() === 'Polygon' || olGeometry.getType() === 'MultiPolygon') {
-            return this.getGeomArea(olGeometry);
+            const area = this.getGeomArea(olGeometry);
+            return format ? this.formatMeasurementResult(area, 'area') : area;
         }
     }
 
@@ -442,11 +474,11 @@ export class MapModule extends AbstractMapModule {
      * https://openlayers.org/en/latest/apidoc/module-ol_sphere.html
      */
     getGeomArea (geometry) {
-        if (!geometry || (geometry.getType() !== 'Polygon' && geometry.getType() !== 'MultiPolygon')) {
-            return 0;
+        if (geometry instanceof olGeom.Geometry) {
+            const projection = this.getMap().getView().getProjection();
+            return olSphere.getArea(geometry, { projection });
         }
-        var sourceProj = this.getMap().getView().getProjection();
-        return olSphere.getArea(geometry, { projection: sourceProj });
+        return 0;
     }
 
     /**
@@ -461,11 +493,11 @@ export class MapModule extends AbstractMapModule {
      * https://openlayers.org/en/latest/apidoc/module-ol_sphere.html
      */
     getGeomLength (geometry) {
-        if (!geometry || geometry.getType() !== 'LineString') {
-            return 0;
+        if (geometry instanceof olGeom.Geometry) {
+            const projection = this.getMap().getView().getProjection();
+            return olSphere.getLength(geometry, { projection });
         }
-        var sourceProj = this.getMap().getView().getProjection();
-        return olSphere.getLength(geometry, { projection: sourceProj });
+        return 0;
     }
 
     /**
@@ -478,17 +510,17 @@ export class MapModule extends AbstractMapModule {
      *
      * @param  {number} measurement
      * @param  {String} drawMode
+     * @param  {Number} fixedDigits (optional)
      * @return {String}
      *
      */
-    // TODO: move to util
-    formatMeasurementResult (measurement, drawMode) {
-        var result,
-            unit,
-            decimals;
+    formatMeasurementResult (measurement, drawMode, fixedDigits) {
         if (typeof measurement !== 'number') {
             return;
         }
+        let result;
+        let unit;
+        let decimals;
         const zoomedForAccuracy = this.getResolution() < 1;
 
         if (drawMode === 'area') {
@@ -496,34 +528,35 @@ export class MapModule extends AbstractMapModule {
             if (measurement >= 1000000) {
                 result = measurement / 1000000; // (Math.round(measurement) / 1000000);
                 decimals = 3;
-                unit = ' km²';
+                unit = 'km²';
             } else if (measurement < 10000) {
                 result = measurement;// (Math.round(100 * measurement) / 100);
                 decimals = zoomedForAccuracy ? 1 : 0;
-                unit = ' m²';
+                unit = 'm²';
             } else {
                 result = measurement / 10000; // (Math.round(100 * measurement) / 100);
                 decimals = 2;
-                unit = ' ha';
+                unit = 'ha';
             }
         } else if (drawMode === 'line') {
             // 1 000 m === 1 km
             if (measurement >= 1000) {
                 result = measurement / 1000; // (Math.round(measurement) / 1000);
                 decimals = 3;
-                unit = ' km';
+                unit = 'km';
             } else {
                 result = measurement; // (Math.round(100 * measurement) / 100);
                 decimals = zoomedForAccuracy ? 1 : 0;
-                unit = ' m';
+                unit = 'm';
             }
         } else {
             return '';
         }
-        return result.toFixed(decimals).replace(
+        const digits = fixedDigits !== undefined ? fixedDigits : decimals;
+        return result.toFixed(digits).replace(
             '.',
             Oskari.getDecimalSeparator()
-        ) + unit;
+        ) + ' ' + unit;
     }
 
     /**
@@ -736,6 +769,7 @@ export class MapModule extends AbstractMapModule {
             if (!isNaN(zoom)) {
                 view.setZoom(zoom);
             }
+            /* eslint-disable n/no-callback-literal */
             callback(true);
             break;
         }
@@ -943,8 +977,10 @@ export class MapModule extends AbstractMapModule {
      * Orders layers by Z-indexes.
      */
     orderLayersByZIndex () {
+        // getZIndex returns undefined if z indez isn't set even default is 0.
+        const layerZ = l => l.getZIndex() || 0;
         this.getMap().getLayers().getArray().sort(function (a, b) {
-            return a.getZIndex() - b.getZIndex();
+            return layerZ(a) - layerZ(b);
         });
     }
 
@@ -1098,7 +1134,7 @@ export class MapModule extends AbstractMapModule {
 ------------------------------------------------------------------> */
 
     /**
-     * @param {ol/layer/Layer} layer ol3 specific!
+     * @param {ol/layer/Layer} layer ol specific!
      * @param {Boolean} toBottom if false or missing adds the layer to the top, if true adds it to the bottom of the layer stack
      */
     addLayer (layerImpl, toBottom) {
@@ -1110,6 +1146,20 @@ export class MapModule extends AbstractMapModule {
         if (toBottom === true) {
             this.setLayerIndex(layerImpl, 0);
         }
+        this.orderLayersByZIndex();
+    }
+
+    /**
+     * Adds overlay layer to map. These layers aren't listed in selected layers and are always above those.
+     * @method addOverlayLayer
+     * @param {ol/layer/Layer} layer ol specific!
+     */
+    addOverlayLayer (layerImpl) {
+        if (!layerImpl) {
+            return;
+        }
+        layerImpl.setZIndex(INTERNAL_LAYER_Z_INDEX);
+        this.getMap().addLayer(layerImpl);
     }
 
     /**
@@ -1136,25 +1186,25 @@ export class MapModule extends AbstractMapModule {
         var list = map.getLayers();
         list.remove(layer);
         list.push(layer);
+        this.orderLayersByZIndex();
     }
 
     /**
      * @param {ol/layer/Layer} layer ol3 specific!
      */
     setLayerIndex (layerImpl, index) {
-        var layerColl = this.getMap().getLayers();
-        var layerIndex = this.getLayerIndex(layerImpl);
+        const layerColl = this.getMap().getLayers();
+        const layerIndex = this.getLayerIndex(layerImpl);
 
         /* find */
         /* remove */
         /* insert at */
 
         if (index === layerIndex) {
-
-        } else if (index === layerColl.getLength()) {
+            // nothing to do here
+        } else if (index >= layerColl.getLength() - 1) {
             /* to top */
-            layerColl.removeAt(layerIndex);
-            layerColl.insertAt(index, layerImpl);
+            this.bringToTop(layerImpl);
         } else if (layerIndex < index) {
             /* must adjust change */
             layerColl.removeAt(layerIndex);
@@ -1181,21 +1231,24 @@ export class MapModule extends AbstractMapModule {
     }
 
     isLayerVisible (layer) {
-        if (typeof layer === 'undefined') {
-            return false;
-        }
+        this.log.deprecated('isLayerVisible', 'Use layer.isVisibleOnMap() instead');
+
         if (Array.isArray(layer)) {
-            // getOLMapLayers() returns an array -> check that atleast one of them is visible
-            // group layers can have multiple layers with only some visible
-            return layer.some(l => this.isLayerVisible(l));
+            // passed [layerImpl] directly -> check that atleast one of them is visible
+            return layer.some(l => typeof l.getVisible === 'function' && l.getVisible());
         }
         if (typeof layer === 'object') {
-            // probably passed the layer impl directly
-            return layer.getVisible();
+            if (typeof layer.getVisible === 'function') {
+                // probably passed the layer impl directly
+                return layer.getVisible();
+            } else if (typeof layer.isVisibleOnMap === 'function') {
+                // probably passed the oskari layer directly
+                return layer.isVisibleOnMap();
+            }
         }
         // layer is probably id
-        const layerImpl = this.getOLMapLayers(layer);
-        return this.isLayerVisible(layerImpl);
+        const oskariLayer = this._sandbox.findMapLayerFromSelectedMapLayers(layer);
+        return oskariLayer ? oskariLayer.isVisibleOnMap() : false;
     }
 
     /**

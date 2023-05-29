@@ -17,14 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         this.__name = 'mapfull';
         this.sandbox = null;
         this.mapmodule = null;
-        /**
-         * @property {String} mapDivId
-         * ID of the DOM element the map will be rendered to
-         * Configurable through conf.mapElement
-         */
-        this.mapDivId = 'mapdiv';
-        this.contentMapDivId = 'contentMap';
-        this.resizeTimer = null;
         this._initialStateInit = true;
     }, {
         getName: function () {
@@ -54,70 +46,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         },
 
         /**
-         * @method  @public adjustMapSize adjust map size
-         */
-        adjustMapSize: function () {
-            if (this.resizeEnabled === false) {
-                // do not resize map if resizeEnabled is false
-                return;
-            }
-            const contentMap = jQuery('#' + this.contentMapDivId);
-            const dataContent = jQuery('.oskariui-left');
-            const dataContentHasContent = dataContent.length && !dataContent.is(':empty');
-            const dataContentWidth = dataContent.width();
-            const mapContainer = contentMap.find('.oskariui-center');
-            const mapDiv = jQuery('#' + this.mapDivId);
-            const windowHeight = jQuery(window).height();
-            const sidebar = jQuery('#sidebar:visible');
-            let mapHeight = windowHeight;
-            let mapWidth = contentMap.width();
-            let maxMapWidth = jQuery(window).width() - sidebar.width();
-
-            contentMap.height(windowHeight);
-
-            // adjust map size of there is a toolbar above the map
-            const toolbar = contentMap.find('#menutoolbar:visible');
-            if (toolbar.length > 0) {
-                mapHeight -= toolbar.height();
-            }
-            dataContent.height(mapHeight);
-            mapDiv.height(mapHeight);
-
-            if (!dataContentHasContent) {
-                dataContent.addClass('oskari-closed');
-            } else if (dataContent.is(':visible') && dataContentWidth) {
-                mapWidth -= dataContentWidth;
-            }
-
-            if (contentMap.hasClass('oskari-map-window-fullscreen')) {
-                const mapTools = jQuery('#maptools:visible');
-                maxMapWidth += mapTools.width();
-                maxMapWidth += sidebar.width();
-                const position = sidebar.position();
-                if (position && position.left) {
-                    maxMapWidth += position.left;
-                }
-            }
-
-            if (mapWidth > maxMapWidth) {
-                mapWidth = maxMapWidth;
-            }
-
-            mapContainer.width(mapWidth);
-
-            // notify map module that size has changed
-            this.updateSize();
-        },
-
-        /**
          * @private @method _createUi
          * Creates the map module and rendes it to DOM element that has the id
          * specified by #mapDivId. Sets the size of the element if specified in
          * config or if isn't specified, sets the height of the element to window height
          * and starts listening to window resizing.
          * Initializes and registers map module plugins if specified in bundles config.
-         *
-         *
          */
         _createUi: function () {
             const me = this;
@@ -126,34 +60,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'Main',
                 me.conf.imageLocation,
                 me.conf.mapOptions,
-                me.mapDivId
+                Oskari.dom.getMapImplEl()
             );
 
             me.mapmodule = module;
             me.getSandbox().register(module);
-            // TODO true path can prolly be removed, we can just set the size on the iframe/container and let the map fill the available space
-            if (me.conf.size) {
-                // contentMap holds the total width and height of the document
-                jQuery('#' + me.contentMapDivId)
-                    .width(me.conf.size.width)
-                    .height(me.conf.size.height);
-                // TODO check if we need to set mapDiv size at all here...
-                jQuery('#' + me.mapDivId).height(me.conf.size.height);
-            }
-
-            // react to window resize with timer so app stays responsive
-            jQuery(window).on('resize', function () {
-                clearTimeout(me.resizeTimer);
-                me.resizeTimer = setTimeout(
-                    function () {
-                        me.adjustMapSize();
-                    },
-                    100
-                );
-            });
-
-            me.adjustMapSize();
-
             // startup plugins
             if (me.conf.plugins) {
                 const plugins = this.conf.plugins;
@@ -201,14 +112,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             this._handleProjectionDefs(conf.projectionDefs);
             this.sandbox = sandbox;
 
-            // take map div ID from config if available
-            if (conf.mapElement) {
-                this.mapDivId = conf.mapElement;
-            }
-            if (conf.mapContainer) {
-                this.contentMapDivId = conf.mapContainer;
-            }
-
             // create services & enhancements
             var services = this._createServices(conf);
             services.forEach(function (service) {
@@ -236,17 +139,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             this._initialStateInit = true;
             this.setState(this.state, skipLocation);
             this._initialStateInit = false;
-
-            // create request handlers
-            const requestHandlers = {
-                'MapFull.MapResizeEnabledRequest': 'Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler',
-                'MapFull.MapWindowFullScreenRequest': 'Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler',
-                'MapFull.MapSizeUpdateRequest': 'Oskari.mapframework.bundle.mapfull.request.MapSizeUpdateRequestHandler'
-            };
-            Object.keys(requestHandlers).forEach(requestName => {
-                const handler = Oskari.clazz.create(requestHandlers[requestName], this);
-                sandbox.requestHandler(requestName, handler);
-            });
         },
         /**
          * Used to detect if we should use the center coordinate from state on initial render or
@@ -419,7 +311,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             const rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
             const rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
             const rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
-
+            const isGuest = !Oskari.user().isLoggedIn();
             const layersNotAvailable = [];
             selectedLayers.forEach(layer => {
                 const oskariLayer = sandbox.findMapLayerFromAllAvailable(layer.id);
@@ -431,8 +323,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 if (layer.style) {
                     oskariLayer.selectStyle(layer.style);
                 }
-
-                sandbox.request(mapModuleName, rbAdd(layer.id, true));
+                const options = {};
+                if (isGuest) {
+                    // for logged in users styles will be populated based on the logged in user
+                    // for guest users looking at embedded map these will hold references to the
+                    // styles the user that published the map had for the layer
+                    options.userStyles = layer.userStyles;
+                }
+                sandbox.request(mapModuleName, rbAdd(layer.id, options));
                 sandbox.request(mapModuleName, rbVisible(layer.id, !layer.hidden));
                 if (layer.opacity || layer.opacity === 0) {
                     sandbox.request(mapModuleName, rbOpacity(layer.id, layer.opacity));
@@ -460,17 +358,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 });
             });
         },
+        // TODO: maybe style.getName() could return '' if name === '!default!', so we get rid of this
+        _getCurrentStyleName: function (layer) {
+            // check if we have a style selected and doesn't have THE magic string
+            const currentStyle = typeof layer.getCurrentStyle === 'function' ? layer.getCurrentStyle() : null;
+            const styleName = currentStyle ? currentStyle.getName() : '';
+            if (styleName === '!default!') {
+                return '';
+            }
+            return styleName;
+        },
         /**
          * @method getState
          * Returns bundle state as JSON. State is bundle specific, check the
          * bundle documentation for details.
          *
-         *
          * @return {Object}
          */
         getState: function () {
             // get applications current state
-            const map = this.getSandbox().getMap();
+            const sandbox = this.getSandbox();
+            const map = sandbox.getMap();
             const state = {
                 north: map.getY(),
                 east: map.getX(),
@@ -479,25 +387,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 selectedLayers: [],
                 ...this.getMapModule().getState()
             };
+            const styleService = sandbox.getService('Oskari.mapframework.userstyle.service.UserStyleService');
+            const getUserStylesForLayer = (layerId) => styleService && styleService.getStylesByLayer(layerId).map(s => s.id);
             state.selectedLayers = map.getLayers().map(layer => {
                 const json = {
                     id: layer.getId(),
                     opacity: layer.getOpacity()
                 };
+                const style = this._getCurrentStyleName(layer);
+                if (style) {
+                    json.style = style;
+                }
+                const userStyles = getUserStylesForLayer(json.id);
+                if (userStyles && userStyles.length) {
+                    // attach references to styles the user has for the layer
+                    // this will enable guest users for embedded map to see the styles
+                    // the user had when publishing the map
+                    json.userStyles = userStyles;
+                }
                 if (!layer.isVisible()) {
                     json.hidden = true;
-                }
-                // check if we have a style selected and doesn't have THE magic string
-                if (typeof layer.getCurrentStyle !== 'function') {
-                    return json;
-                }
-                const currentStyle = layer.getCurrentStyle();
-                if (!currentStyle) {
-                    return json;
-                }
-                const styleName = currentStyle.getName();
-                if (styleName && styleName !== '!default!') {
-                    json.style = styleName;
                 }
                 return json;
             });
@@ -514,33 +423,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * @return {String} layers separated with ',' and layer values separated with '+'
          */
         getStateParameters: function (optimized = false) {
-            const state = this.getState();
+            const map = this.getSandbox().getMap();
             const params = {
                 ...this._getConfiguredLinkParams(),
-                zoomLevel: state.zoom,
-                coord: state.east + '_' + state.north
+                zoomLevel: map.getZoom(),
+                coord: map.getX() + '_' + map.getY()
             };
             // add maplayers
-            params.mapLayers = state.selectedLayers
-                .map(layer => {
-                    if (layer.hidden) {
-                        return;
-                    }
-                    if (optimized) {
-                        if (layer.opacity === 0) {
-                            // leave out layers that are not visible
-                            return;
-                        }
-                        // also leave out layers that are not inside zoom-limits, are outside of extent
-                        //  or are otherwise not shown to user
-                        if (!this.getMapModule().isLayerVisible(layer.id)) {
-                            return;
-                        }
-                    }
-                    return layer.id + '+' + layer.opacity + '+' + (layer.style || '');
-                })
-                // filter out hidden == undefined from map-function
-                .filter(layer => typeof layer !== 'undefined')
+            params.mapLayers = map.getLayers()
+                .filter(layer => optimized ? layer.isVisibleOnMap() : layer.isVisible())
+                .map(layer => layer.getId() + '+' + layer.getOpacity() + '+' + this._getCurrentStyleName(layer))
                 // separate with comma
                 .join(',');
 
@@ -552,58 +444,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 return {};
             }
             return this.conf.link || {};
-        },
-
-        /**
-         * @method toggleFullScreen
-         * Toggles normal/full screen view of the map window.
-         *
-         *
-         */
-        toggleFullScreen: function () {
-            this.adjustMapSize();
-        },
-
-        /**
-         * @public @method updateSize
-         * Tells the map module that it should update/refresh its size.
-         *
-         * @param {Boolean} fullUpdate
-         * Whether we only tell the map implementation to update its size or if
-         * we update the container size as well.
-         *
-         */
-        updateSize: function (fullUpdate) {
-            if (fullUpdate) {
-                this.adjustMapSize();
-            } else {
-                this.getMapModule().updateSize();
-            }
-        },
-
-        /**
-         * @public @method getMapEl
-         * Get jQuery map element
-         *
-         *
-         * @return {jQuery} jQuery map element
-         */
-        getMapEl: function () {
-            var mapDiv = this.getMapElDom();
-            if (!mapDiv) {
-                LOG.warn('mapDiv not found with id ' + this.mapDivId);
-            }
-            return jQuery(mapDiv);
-        },
-
-        /**
-         * @public @method getMapElDom
-         * Get DOM map element
-         *
-         * @return {Element} Map element
-         */
-        getMapElDom: function () {
-            return document.getElementById(this.mapDivId);
         }
     }, {
         /**

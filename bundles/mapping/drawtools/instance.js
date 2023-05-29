@@ -1,26 +1,21 @@
+import './plugin/DrawPlugin.ol';
+import './request/StartDrawingRequest';
+import './request/StopDrawingRequest';
+import './event/DrawingEvent';
 /**
  * @class Oskari.mapping.drawtools.DrawToolsBundleInstance
  *
  * Main component and starting point for the "drawtools" functionality.
- * Provides functionality for other bundles (my places/analysis/measuretools)
- * for drawing on the map.
+ * Provides functionality for other bundles for drawing on the map.
  *
- * Drawing can be started with a request (DrawTools.StartDrawingRequest).
- * The request specifies:
- *  - an id for the drawing (like 'myplaces')
- *  - type of shape to be drawn or a geojson that should be opened for editing
- *  - options that might include buffer (for dot/line), style, etc
- *  Drawing can be forced to complete/canceled with DrawTools.StopDrawingRequest.
- *  Other components are notified that a drawing has been completed by DrawingEvent.
- *  The event includes:
- *   - id for the drawing
- *   - the geometry as geojson
- *   - possible additional info like area size/line length
+ * Drawing can be started with a DrawTools.StartDrawingRequest.
  *
- * Bundle config can be used to define draw style. Requests can also specify
- * styles in the same format to be used instead of the default for that specific drawing.
+ * Drawing can be forced to complete/canceled with DrawTools.StopDrawingRequest.
+ * Other components are notified that a drawing has been completed by DrawingEvent.
  *
- * See Oskari.mapframework.bundle.infobox.InfoBoxBundle for bundle definition.
+ * Bundle config can be used to define default style.
+ * Requests can specify draw, modify and/or invalid styles to override default style used for drawing.
+ *
  */
 Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
 
@@ -50,19 +45,14 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
             return this.__name;
         },
         /**
-     * @method setSandbox
-     * @param {Oskari.Sandbox} sandbox
-     * Sets the sandbox reference to this component
-     */
-        setSandbox: function (sbx) {
-            this.sandbox = sbx;
-        },
-        /**
      * @method getSandbox
      * @return {Oskari.Sandbox}
      */
         getSandbox: function () {
             return this.sandbox;
+        },
+        getPlugin: function () {
+            return this.drawPlugin;
         },
         /**
      * @method update
@@ -74,22 +64,29 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @method start
      * implements BundleInstance protocol start methdod
      */
-        start: function () {
-            var me = this;
-            // Should this not come as a param?
-            var sandbox = Oskari.getSandbox();
-            sandbox.register(me);
-            me.setSandbox(sandbox);
+        start: function (sandbox) {
+            this.sandbox = sandbox;
+
+            sandbox.register(this);
+
+            // initialize drawPlugin
+            this.drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin');
 
             // register plugin for map (drawing for my places)
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            // Note! this.mapModule is used and injected in Jest-test
+            const mapModule = this.mapModule || sandbox.findRegisteredModuleInstance('MainMapModule');
             mapModule.registerPlugin(this.drawPlugin);
             mapModule.startPlugin(this.drawPlugin);
 
-            var conf = this.conf || {};
+            const { style } = this.conf || {};
             // TODO: is there need for multiple styles? style.default, style.edit?
-            if (conf.style) {
-                this.drawPlugin.setDefaultStyle(conf.style);
+            if (style) {
+                // safety check, if conf is used for setting draw, modify and/or intersect styles intead of one default base style.
+                if (['draw', 'modify', 'intersect', 'invalid'].some(type => style[type])) {
+                    this.drawPlugin.setStyles(style);
+                } else {
+                    this.drawPlugin.setDefaultStyle(style);
+                }
             }
 
             // handleRequest is being called for these
@@ -100,11 +97,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @method init
      * implements Module protocol init method - initializes request handlers
      */
-        init: function () {
-        // initialize drawPlugin
-            this.drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin');
-            return null;
-        },
+        init: function () {},
         /**
      *
      * @param {Oskari.mapframework.core.Core} core

@@ -200,7 +200,8 @@ Oskari.registerLocalization(
                 "saveFailed": "Ekki tókst að vista ívafna kortið.",
                 "nameIllegalCharacters": "Kortanafnið inniheldur ógilda stafi (t.d. html-merki). Vinsamlegast leiðréttu nafnið og reyndu aftur.",
                 "domainIllegalCharacters": "Veffangið inniheldur ógilda stafi. Skrifaðu veffang án forskeyta eða undirsíðu. T.d.: heimasida.is. Það má nota stafi frá A-Ö, tölustafi (0-9) og sérstaka stafi (-, _, ., !, ~, *, ' and ()). Vinsamlegast leiðréttu veffangið og reyndu aftur."
-            }
+            },
+            "noUI": "Fela notendaviðmót (Nota RPC viðmót)"
         },
         "NotLoggedView": {
             "text": "Þér er velkomið að gefa út ívafið kort á heimasíðunni þinni. Vinsamlegast byrjaðu á að skrá þig inn eða nýskrá þig.",

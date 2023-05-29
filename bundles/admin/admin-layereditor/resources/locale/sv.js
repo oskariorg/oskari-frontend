@@ -33,25 +33,8 @@ Oskari.registerLocalization(
                     "tileGrid": "Rutmatris"
                 },
                 "locale": {
-                    "generic": {
-                        "name": "Namn på {0}",
-                        "subtitle": "Beskrivning på {0}"
-                    },
-                    "en": {
-                        "lang": "Engelska",
-                        "name": "Namn på engelska",
-                        "subtitle": "Beskrivning på engelska"
-                    },
-                    "fi": {
-                        "lang": "Finska",
-                        "name": "Namn på finska",
-                        "subtitle": "Beskrivning på finska"
-                    },
-                    "sv": {
-                        "lang": "Svenska",
-                        "name": "Namn på svenska",
-                        "subtitle": "Beskrivning på svenska"
-                    }
+                    "name": "Namn",
+                    "description": "Beskrivning"
                 },
                 "opacity": "Opacitet",
                 "params": {
@@ -61,6 +44,8 @@ Oskari.registerLocalization(
                 "realtime": "Realtidslager",
                 "refreshRate": "Uppdateringsfrekvens (i sekunder)",
                 "scale": "Skala",
+                "coverage":"Visa kartlagrets täckningsområde på kartan",
+                "declutter": "Rita objektnamn separat (declutter).",
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",
                 "role_permissions": "Rättigheter",
@@ -136,13 +121,29 @@ Oskari.registerLocalization(
                     "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten"
                 },
                 "vector": {
-                    "addStyle": "Tillsätt stil",
                     "name": "Stilnamn",
                     "selectDefault": "Välj förvalt stil",
                     "deleteStyle": "Ta bort stilen",
+                    "edit": {
+                        "editor": "Redigera",
+                        "json": "Redigera JSON"
+                    },
+                    "add": {
+                        "editor": "Tillsätt stil",
+                        "json": "Tillsätt JSON",
+                        "mapbox": "Tillsätt Mapbox JSON",
+                        "cesium": "Tillsätt Cesium JSON"
+                    } ,
                     "validation": {
                         "name": "Fyll i namnet på stilen",
-                        "noStyles": "Inga sparade stilar"
+                        "noStyles": "Inga sparade stilar",
+                        "json": "Stildefinitioner JSON-syntaxen är ogiltig."
+                    },
+                    "json": {
+                        "featureStyle": "Stildefinitioner (JSON)",
+                        "optionalStyles": "",
+                        "cesium": "Stildefinitioner av 3D Tiles/Cesium (JSON)",
+                        "mapbox": "Stildefinitioner av Mapbox (JSON)"
                     }
                 }
             },
@@ -187,8 +188,6 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Obligatorisk information saknas:",
-                "styles": "Stildefinitioner JSON-syntaxen är ogiltig.",
-                "externalStyles": "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
                 "hover": "Hover JSON-syntaxen är ogiltig.",
                 "attributes": "Attribut JSON-syntaxen är ogiltig.",
                 "attributions": "Tillskrivningar JSON-syntaxen är ogiltig.",
@@ -213,12 +212,11 @@ Oskari.registerLocalization(
                 "updateCapabilitiesFail": "Gränssnittet returnerar ingen data. Kartlagrets adress, typ eller version kan vara felaktig eller gränssnittstjänsten är för tilfället ur funktion.",
                 "errorFetchLayerFailed": "Kartlagret returnerar ingen data. Kartlagret existerar möjligen inte längre eller du har inte rättigheter att använda det.",
                 "errorFetchLayerEnduserFailed": "Listan över kartlagren kan inte uppdateras, eftersom kartlagret inte returnerar någon data. Du kom väl ihåg att uppdatera rättigheterna som tillhör din användarroll?",
-                "deleteErrorGroupHasSubgroups": "Gruppen du försöker ta bort innehåller undergrupper. Ta bort undergrupperna först."
+                "deleteErrorGroupHasSubgroups": "Gruppen du försöker ta bort innehåller undergrupper. Ta bort undergrupperna först.",
+                "errorFetchCoverage": "Kan inte hämtas kartlagrets täckningsområde från tjänsten.",
+                "noCoverage": "Kartlagrets täckningsområde är inte begränsat.",
+                "invalidScale": "Tarkista tason mittakaavarajat."
             },
-            "otherLanguages": "Andra språk",
-            "stylesJSON": "Stildefinitioner (JSON)",
-            "externalStylesJSON": "Stildefinitioner av tredjeparts (JSON)",
-            "externalStyleFormats": "Stödda format: 3D Tiles, Mapbox",
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",

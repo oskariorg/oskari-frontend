@@ -4,20 +4,50 @@ import PropTypes from 'prop-types';
 import { Slider } from './Slider';
 import { NumberInput } from './NumberInput';
 
-const StyledRoot = styled('div')`
-    width: 500px;
-`;
-
 const StyledSlider = styled('div')`
-    width: 350px;
+    width: 100%;
+    padding: 0 10px 0 5px;
     float: left;
-    margin-left: 10px;
-    margin-right: 10px;
+    .ant-slider-track {
+        background-color: #0091ff;
+    }
+    .ant-slider-handle {
+        border: #0091ff solid 2px;
+        margin-top: -6px;
+    }
+    &:hover .ant-slider-track {
+        background-color: #003fc3 !important;
+    }
+    &:hover .ant-slider-handle {
+        border: #003fc3 solid 2px !important;
+    }
+    ${props => props.bordered && (
+        `
+            border-radius: 4px 0 0 4px;
+            border: 1px solid #d9d9d9;
+        `
+    )}
 `;
 
-const StyledNumberInput = styled('div')`
-    width: 120px;
-    float: left;
+const Container = styled('div')`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+`;
+
+const NumberInputContainer = styled('div')`
+    display: flex;
+    flex-direction: row;
+`;
+
+const NumberSuffix = styled('span')`
+    margin: 0;
+    padding-top: 5px;
+`;
+
+const StyledNumberInput = styled(NumberInput)`
+    width: 65px;
+    margin: 0 5px 0 -1px;
 `;
 
 const StyledClear = styled('br')`
@@ -42,30 +72,37 @@ export class Opacity extends React.Component {
     render () {
         const { opacity } = this.state;
         return (
-            <StyledRoot>
-                <StyledSlider>
-                    <Slider
-                        min={0}
-                        max={100}
-                        onChange={this.onChange}
-                        value={typeof opacity === 'number' ? opacity : 0}
-                    />
-                </StyledSlider>
-                <StyledNumberInput>
-                    <NumberInput
+            <Container>
+                {!this.props.inputOnly && (
+                    <StyledSlider bordered={this.props.bordered}>
+                        <Slider
+                            min={0}
+                            max={100}
+                            onChange={this.onChange}
+                            value={typeof opacity === 'number' ? opacity : 0}
+                        />
+                    </StyledSlider>
+                )}
+                <NumberInputContainer>
+                    <StyledNumberInput
                         min={0}
                         max={100}
                         value={opacity}
                         onChange={this.onChange}
-                    /> %
-                </StyledNumberInput>
+                    />
+                    <NumberSuffix>
+                        %
+                    </NumberSuffix>
+                </NumberInputContainer>
                 <StyledClear />
-            </StyledRoot>
+            </Container>
         );
     }
 }
 
 Opacity.propTypes = {
     defaultValue: PropTypes.number,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    bordered: PropTypes.bool,
+    inputOnly: PropTypes.bool
 };

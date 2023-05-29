@@ -4,7 +4,6 @@ Oskari.registerLocalization(
     "key": "MyPlacesImport",
     "value": {
         "title": "Importation de jeux de données",
-        "desc": "Vous pouvez importer votre propres jeux de données en fichier au format shp, gpx ou mif/mid sous forme de fichier zip ou bien au format de fichier kmz (kml compressé).",
         "tool": {
             "tooltip": "Importer votre propre jeu de données"
         },
@@ -12,51 +11,34 @@ Oskari.registerLocalization(
             "title": "Importation de jeux de données",
             "description": "Vous pouvez importer votre propres jeux de données en fichier au format shp, gpx ou mif/mid sous forme de fichier zip ou bien au format de fichier kmz (kml compressé). Vous pouvez importer des fichiers contenant au maximum 5000 entités.",
             "help": "Sélectionnez un fichier de votre ordinateur ou entrez un lien vers le fichier qui contient votre jeu de données. Le fichier peut être en format shp, zip ou kml/kmz. Vous pouvez créer des fichiers zip à partir de fichiers de formes en comprimant les fichiers avec les suffixes shp, shx, dbf et prj au même fichier zip. \r\nDe plus, on peut comprimer les fichiers kml/kmz de cartes Google de la même façon.\r\nLes données Mif/mid doivent être conformes au SRC cartographique actuel - voir le SRC actuel dans la barre de zoom",
-            "actions": {
-                "cancel": "Annuler",
-                "next": "Suivant",
-                "close": "Fermer",
-                "submit": "Envoyer"
-            },
+            "success": "L’importation du jeu de données s’est déroulée avec succès. Vous pouvez trouver la couche cartographique dans le menu « Mes données ».",
             "layer": {
-                "title": "Enregistrer les informations relatives au jeu de données :",
                 "name": "Nom",
                 "desc": "Description",
                 "source": "Source des données",
                 "style": "Définitions du style de jeu de données :"
             },
             "validations": {
-                "error": {
-                    "title": "Erreur",
-                    "message": "Le fichier n’a pas été sélectionné et la couche cartographique est manquante."
-                }
-            },
-            "finish": {
-                "success": {
-                    "title": "L’importation du jeu de données s’est déroulée avec succès.",
-                    "message": "Vous pouvez trouver la couche cartographique dans le menu « Mes données »."
-                },
-                "failure": {
-                    "title": "L’importation du jeu de données a échoué. Veuillez réessayer plus tard."
-                }
+                "name": "La nom est manquant.",
+                "file": "Le fichier n’a pas été sélectionné."
             },
             "error": {
                 "title": "Impossible d'importer le jeu de données.",
-                "unknown_projection": "Données de projection inconnues dans le fichier d'importation d'origine. Veuillez vous assurer que tous les fichiers soient dans le système de référence des coordonnées des cartes ou vous assurer que les fichiers contiennent les renseignements nécessaires à la transformation.",
-                "invalid_file": "Impossible de trouver un fichier d'importation valide dans le fichier zip. Veuillez vérifier que le format du fichier est pris en charge et qu'il s'agit d'un fichier comprimé.",
-                "unable_to_store_data": "Il est impossible de stocker les données de l'utilisateur ou il n'y a pas de fonctionnalité dans les données d'entrée.",
-                "short_file_prefix": "Impossible d'obtenir le jeu de fichiers d'importation - le préfixe est trop court",
-                "file_over_size": "Le fichier sélectionné est trop volumineux. Il doit être d'un maximum de {maxSize, number} Mo.",
-                "no_features": "Impossible de trouver les fonctionnalités dans les données d'entrée",
-                "malformed": "Veuillez vous assurer que les noms de fichier sont du bon format (pas d'alphabet scandinave).",
-                "kml": "Impossible de créer de jeu de données à partir du fichier KML.",
-                "shp": "Impossible de créer de jeu de données à partir du fichier de formes.",
-                "mif": "Impossible de créer de jeu de données à partir du fichier MIF.",
-                "gpx": "Impossible de créer de jeu de données à partir du fichier GPX.",
                 "timeout": "Impossible de terminer l'importation du jeu de données en raison d'une erreur de temporisation.",
                 "abort": "L'importation du jeu de données a été interrompue.",
-                "parsererror": "Impossible de traiter le jeu de données.",
-                "generic": "L'importation du jeu de données a échoué."
+                "generic": "L'importation du jeu de données a échoué.",
+
+                // Parser errors
+                "parser_error": "Impossible de traiter le jeu de données.",
+                // Doesn't have different localization for shp, use same to both
+                "noSrs": "Données de projection inconnues dans le fichier d'importation d'origine. Veuillez vous assurer que tous les fichiers soient dans le système de référence des coordonnées des cartes ou vous assurer que les fichiers contiennent les renseignements nécessaires à la transformation.",
+                "shpNoSrs": "Données de projection inconnues dans le fichier d'importation d'origine. Veuillez vous assurer que tous les fichiers soient dans le système de référence des coordonnées des cartes ou vous assurer que les fichiers contiennent les renseignements nécessaires à la transformation.",
+
+                // Error codes from backend
+                "no_main_file": "Impossible de trouver un fichier d'importation valide dans le fichier zip. Veuillez vérifier que le format du fichier est pris en charge et qu'il s'agit d'un fichier comprimé.",
+                "unable_to_store_data": "Il est impossible de stocker les données de l'utilisateur ou il n'y a pas de fonctionnalité dans les données d'entrée.",
+                "file_over_size": "Le fichier sélectionné est trop volumineux. Il doit être d'un maximum de {maxSize, number} Mo.",
+                "no_features": "Impossible de trouver les fonctionnalités dans les données d'entrée"
             },
             "warning": {
                 "features_skipped": "Attention! Pendant l'importation, {count, plural, one {# fonctionnalité} other {# fonctionnalités}} ont été refusées en raison de coordonnées ou de géométrie manquantes."

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AnnouncementsHandler, AnnouncementsCollapse } from './view/';
+import { FlyoutContent } from './view/';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
@@ -18,8 +18,8 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
      */
     function (instance) {
         this.instance = instance;
-        this.announcementsHandler = new AnnouncementsHandler(this.instance);
-        this.announcementsHandler.addStateListener(() => this.render());
+        this.sandbox = instance.getSandbox();
+        this.announcementsHandler = null;
         this.container = null;
     }, {
         /**
@@ -33,30 +33,38 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el, flyout, width, height) {
+        setEl: function (el, flyout) {
             this.container = el[0];
+            if (!jQuery(this.container).hasClass('announcements')) {
+                jQuery(this.container).addClass('announcements');
+            }
+            if (!flyout.hasClass('announcements')) {
+                flyout.addClass('announcements');
+            }
         },
 
         /**
-         * Interface method implementation, does nothing atm
-         * @method startPlugin
-         */
-        startPlugin: function () {
-            this.render();
+        * Cretes AnnouncementsHandler with given service
+        * @method createAnnouncementsHandler
+        */
+        initHandler: function (handler) {
+            this.announcementsHandler = handler;
+            this.announcementsHandler.addStateListener((state) => this.render(state));
         },
+
         /**
          * @method render
          * Renders React content
          */
-        render: function () {
+        render: function (state) {
             if (!this.container) {
                 return;
             }
-
             const content = (
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
-                    <AnnouncementsCollapse
-                        {...this.announcementsHandler.getState()}
+                    <FlyoutContent
+                        { ...state }
+                        toolController = {this.announcementsHandler.getToolController()}
                         controller={this.announcementsHandler.getController()}
                     />
                 </LocaleProvider>
@@ -64,5 +72,5 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
             ReactDOM.render(content, this.container);
         }
     }, {
-        'extend': ['Oskari.userinterface.extension.DefaultFlyout']
+        extend: ['Oskari.userinterface.extension.DefaultFlyout']
     });

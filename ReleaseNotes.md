@@ -1,5 +1,559 @@
 # Release Notes
 
+## 2.10.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/40?closed=1
+
+### Base HTML structure improvements
+
+A set of new helper functions have been added for referencing "base elements" on the page and add CSS classes for styling these elements.
+All of this is about:
+- ground work for an upcoming UI improvement
+- making it easier to document things
+- documenting the base elements to make it easier to customize
+- cleaning of the base HTML (unnecessary elements have been removed from the base HTML on the sample-server-extension)
+
+| Prev. selector | JS-getter                        | New selector for styling   | Role                       |
+|----------------|----------------------------------|----------------------------|----------------------------|
+| `body`         | `Oskari.dom.getRootEl()`         | `.oskari-root-el`          | Everything Oskari generates goes under here |
+| `#contentMap`  | `Oskari.dom.getMapContainerEl()` | `.oskari-map-container-el` | Container for the Oskari map |
+| `#mapdiv`      | `Oskari.dom.getMapImplEl()`      | `.oskari-map-impl-el`      | Container for map engine/impl (inside "contentMap") |
+
+The root element now defaults to element with id `oskari` or the `body` tag when not available.
+The `oskari` id can be used when the elements need to be controlled more tightly to work with other content on the page and Oskari should not take control of the page fully.
+Using the custom root element means that the size of the root element need to be set/controlled as well (is NOT handled by Oskari though we might introduce min-size in the future).
+If the whole page is controlled by Oskari the size is set to cover the whole browser window by assuming the root is the body tag.
+
+The elements with ids `contentMap` and `mapdiv` are created under the root element if they are not present.
+The new CSS classes are attached automatically and have styling attached to them.
+The old id's have been kept for compatibility reasons and are no longer used by code under `oskari-frontend`.
+The JS getters should be used for referencing the elements (instead of the old id's) and CSS classes for styling.
+A helper `Oskari.dom.isEmbedded()` was also added for detecting if the app is an embedded map as some tools use this information.
+
+For now the navigation bar that holds toolbar and tile/menu items of Oskari is assumed to be a `<nav>` element directly under the root element.
+The map elements are appended after it by default, but having for example the `#contentMap` element on the page before the `nav` controls which side of the map the navigation is.
+The Oskari flyouts now use this information to determine initial the Flyout location instead of hard coded values.
+The navigation element creation and content is planned to be moved to code as well as there are future requirements for making the navigation element more dynamic.
+
+For more details see: https://github.com/oskariorg/oskari-frontend/pull/2042
+
+This change makes the map size handling much simpler:
+- `.oskari-map-container-el` defines maximum size that the map can have
+- `.oskari-map-impl-el` defines the size of the map itself (can be smaller than `.oskari-map-container-el` but not bigger. Used for example to preview publisher size setting)
+- `mapmodule` bundle now monitors its own element size for changes without external notifications required
+- `MapSizeChangedEvent` is still sent when the map size changes so other parts of the code base can react to size changes
+- This makes the following requests unnecessary and they have been removed from the code base: `MapFull.MapResizeEnabledRequest`, `MapFull.MapSizeUpdateRequest`, `MapFull.MapWindowFullScreenRequest`
+
+### Theme
+
+[ThemeHelper](https://github.com/oskariorg/oskari-frontend/blob/2.10.0/src/react/theme/ThemeHelper.js) now has a function for easily getting theme selections that can be used for navigational elements like the buttons on the map: `ThemeHelper.getNavigationTheme({...theme})` in a similar way that  `ThemeHelper.getHeaderTheme({...theme})` was previously used for windowing elements. The helper is still work-in-progress and comments about it are welcome. The idea is to provide getters that can try several settings from the theme JSON before returning a value for given theme variable. This way we can offer specific choices for theme setting but also provide fallbacks so a simple theme JSON could be given instead of giving a setting for every little detail in the theme.
+
+Theme now also injects global style overrides to enable jQuery-based windowing elements have theming support and add initial theming support for the main navigation menu. See details in: https://github.com/oskariorg/oskari-frontend/pull/2100 This is similar to what Oskari-based applications do to override the default colors.
+
+### Map theme
+
+Handling for a new subobject named "map" was added to the theme enabling the map controls to use similar theme structure as the rest of Oskari application but individual toggles that can be adjusted just for the map. An example would be a case where the buttons on the map and the popups they open need to have a different color scheme as the rest of the geoportal. This was the case before theming support where the default UI on Oskari had yellow colored flyouts/popups, but similar components opened by buttons on the map had dark headers instead.
+
+The way the "map" theme works is it can have the same structure as a normal theme JSON, but the mapmodule generates a theme for itself by combining the geoportal theme and overriding it with keys from the map subobject. As an example:
+```
+{
+    color: {
+        primary: 'yellow',
+        accent: 'red'
+    },
+    map: {
+        color: {
+            primary: 'gray'
+        }
+    }
+}
+```
+The mapmodule uses its own ThemeProvider context for its components. The map components would (in the example above) get a theme where the primary color is gray while non-map components would see the primary color as yellow. Both types of components would see the accent color as 'red' as it's not overridden under the map key. The mapmodule has `set/getMapTheme()` methods and it listens to changes on the geoportal theme to update the theme for map components.
+
+Some of these are listed in https://github.com/oskariorg/oskari-frontend/pull/2069 and this will be documented in more detail in oskari.org.
+
+### Publisher functionality
+
+Enabled by the new theme support the publisher functionality now includes an initial theme editor for the embedded maps. This allows the end user to select for example colors that affect the controls on the map and the popups they open. The visual options that were previously offered have been changed to preset values for the new theme editor so they can be used as a starting point for more customized theme.
+
+The tool placement/dragging mode in publisher now shows handles for tools as a visual reminder that tools can be dragged. Most restraints for plugin placement have been removed so they can be moved more freely.
+
+### Draw tools
+
+The drawtools bundle has been rewritten to make it easier to read and maintain. When requesting buffered features for drawing, they are now generated for all features in a multi feature collection. An issue has been fixed on perimeter/outer ring length measurements for polygons. The measurement tooltips no longer block clicks on the map so it's easier to edit measurements. Updated StopDrawingRequest documentation to match implementation.
+
+### Map controls
+
+All of the map controls (buttons on top of map etc) that are included in `oskari-frontend` have been rewritten as React-based components. They can now be styled using theme variables and have icons changed to SVG enabling hovering and more flexible styling options. The popups they open are theme-aware as well and some of the controls gained new functionalities:
+
+- Search can now be minimized to a smaller icon when clicked on the map
+- The previous pan buttons tool now only shows the reset button by default but it can be configured (using publisher UI) to show the arrows when required
+- **The concept of "mobile mode" with the toolbar on top of the map has been removed**
+- Tools now modify their own UI to fit a smaller screen more properly. As an example the zoombar hides its slider and makes its buttons bigger.
+
+To make it easier to migrate any customized plugins to the new plugin structure the deprecated methods in `BasicMapModulePlugin.js` have been kept as no-op functions with logging to tell developers they should migrate a plugin that uses them:
+- getMobileDefs()
+- removeToolbarButtons()
+- addToolbarButtons()
+
+For details see: https://github.com/oskariorg/oskari-frontend/pull/2082
+
+Also documentation about customization for some common cases can be found in:
+- https://oskari.org/documentation/customize/logo
+- https://oskari.org/documentation/customize/indexmap
+
+### Build scripts
+
+Parameters can now be passed on command line in another way (https://github.com/oskariorg/oskari-frontend/pull/2064)
+Both of these work with version 2.10: 
+```
+npm run build -- --env.appdef=applications
+npm run build --appdef=applications
+```
+Build script now allows generating builds to non-default domain with parameter: `--env.domain=https://cdn.domain.org`.
+
+### New React components
+
+- `MapButton` under `oskari-ui` for generic button on the map
+- `MapModuleButton` under `mapmodule` uses MapButton and adds theme handling
+- `SidePanel` under `oskari-ui` is currently used for printout options panel (publisher and others will be migrated to this in future release)
+- `Tooltip` component should now clear from the screen properly when the element they are attached to is not shown
+
+### Other improvements
+
+- VectorTileLayerPlugin now receives the actual map resolutions array instead of using OpenLayers defaults. This might affect styling of vector tile layers: https://github.com/oskariorg/oskari-frontend/pull/2115
+- Thematic map now allows classification with 2 values if method is not `jenks` and histogram view has been improved
+- Fixed issues with layer list in embedded map: layers are now listed in correct/reversed order and style select is no longer shown if there is only one style to select from
+- Added bundle documentation for `mydata`
+- Fixed a visual issue with infobox title
+- Fixed an issue with opacity setting and vector layer features in 3D
+- My places now checks polygon feature validity so users can't save a self-intersecting polygon
+- Fixed an issue with userlayer import: input for providing missing projection information is now shown when required
+- Printout options panel has been rewritten with React
+- Added a workaround for OpenLayers issue with features having a property named `geometry`: https://github.com/oskariorg/oskari-frontend/pull/2110
+- Metadata search (`metadatacatalogue`) bundle can now function without the `search` bundle being present in the application. It now creates its own tile/menu item if it can't inject itself into the normal search UI.
+- Library updates:
+    - OpenLayers 7.1.0 -> 7.2.2
+    - moment.js 2.29.1 -> 2.29.4 
+
+
+## 2.9.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/41?closed=1
+
+- Fixed an issue with GFI functionality on 3D-map module
+- Fixed an issue with "Add map layer" button in publisher functionality
+- Fixed an issue with removed layers in layer analytics listing for admin
+- Fixed a visual issue in background layer selection plugin for map
+- Improved metadata search form
+- Improved user location tracking visualization so it can't hide itself as well on problematic parts of the background map
+
+## 2.9.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/39?closed=1
+
+### Draw tools
+
+Added an option for draw tools to use a validation limit for length of a line and area of a polygon.
+The limits can be set with `StartDrawingRequest` options:
+
+```
+{
+    ...,
+    limits: {
+        area: `number in m2 limiting area size`,
+        length: `number in meters limiting line length`
+    }
+} 
+```
+
+Enabled modifying a geometry with a limited shape for `Circle`, `Box` and `Square`. Previously modifying a polygon shape was always done in a way that resulted in losing the original shape (new points could be added and individual points could be moved to skew the geometry). The previous method for editing is still available when using the shape `Polygon` to be used for editing.
+
+Fixed issues with intersection checks and measurements results when editing a feature.
+
+### Guided tour
+
+Guided tour implementation has been migrated from jQuery to React. This might affect custom/app-specific bundles that add content to the Guided tour.
+
+Text content should work like before/without changes but any custom actions that for example open a functionality etc needs to be migrated. You can see the changes required for bundles on this PR: https://github.com/oskariorg/oskari-frontend/pull/1927/files
+
+### Admin layer-editor
+
+Admin now has an option to visualize the layer coverage area (when available) on the map in the layer admin visualization tab. This is helpful for debugging issues where layer contents are not shown properly due to coverage area issues.
+
+Vector tile layers now have an option to enable "declutter" which draws labels separately from features. This has some performance implications but can be used to fix an issue where labels are clipped at tile edges.
+
+### Swipe tool
+
+Hover on vector features is now disabled when the "swipe" tool is active. This prevents an issue where features that are not shown due to swipe could be hovered on, bringing them visible.
+
+GFI/vector object data is no longer queried for clicks on "hidden" side of the swipe tool for the layer that is not shown due to swipe.
+
+### Layer selection tool on embedded maps
+
+The layer list implementation for embedded maps has been rewritten with React.
+
+The default UI option is now the rounded dark one with an icon (like most of the other tools) instead of the textual button on the map.
+
+### Publisher
+
+- First steps has been taken on publisher for jQuery -> React migration
+- Layer selection tool now allows showing metadata links for layers (option in publisher)
+- Fixed an error where map size was not always properly reset from preview size to full size when exiting the publisher
+- Fixed an issue where the mobile toolbar was not shown properly when tools were added with the map size preview set to small
+
+### Other fixes
+
+- Marker size backward compatibility fix: https://github.com/oskariorg/oskari-frontend/pull/1947
+- Improved support to show diverging statistical data with choropleth visualization
+- Searching/filtering layers with text has been improved
+- Replaced lot of custom Delete-button impls with the generic on under oskari-ui
+- Fixed a visual issue where some icons on buttons were clipped from the bottom when using Safari as browser
+- The frontend no longer expects WMTS-layers to have resource urls
+- An error notification is now displayed to user if there is a technical problem showing a WMTS-layer (tile matrix can't be parsed etc)
+- Added a notification when user adds a layer to map that was previously hidden (a very specific scenario where user adds a layer, hides it, removes it from map and adds it to map again)
+- Fixed an issue with the table-component where large continuous content on a cell (like my places feature with a long name without any spaces etc) could push the rest of table columns "off screen"
+- Restored proper data provider "groups" for user generated content (my places, userlayers etc)
+- Fixed an issue where removing a personal default view on geoportal could reload the page with an unexpected system default (like a 3d geoportal instead of the default 2d)
+- Vector tile layers are now listed under "raster layers" filter since they behave more like raster than vector layers from end-user perspective (previously they were not listed under any layer type filters)
+
+### Library updates
+
+- OpenLayers 6.13 -> 7.1 (NOTE! OpenLayers 7.0 dropped support for Internet Explorer)
+- geostats 1.8.0 -> 2.0.0
+- Unused libraries that were stored under oskari-frontend/libraries have been removed: jstree, clipper
+
+## 2.8.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/37?closed=1
+
+### Announcement functionality improvements
+
+- Announcements can now be localized by the admin
+- Announcement description content is now edited with a rich text editor instead of a plain text area
+- Admin can now select 3 types of announcements: title only, with description, with external link
+- Admin can select hour for the announcement date range (previously only dates)
+- Admin UI has been integrated to the end-user UI similar to map layer admin
+- Announcements that are not shown as popups are now shown with a new banner UI-component (previously user needed to browse the listing to see if there's anything new)
+- Announcements are now shown in Oskari-style popups instead of AntD-modals so they look more consistent compared to other UI-elements
+- Admin can now preview announcements
+
+### Map layers
+
+- Data providers are now handled in a similar way as layer groups and are available in `Oskari.mapframework.service.MapLayerService`
+- Data providers/layer groups can now have descriptions (improved admin UI and added tooltips for end-users)
+- Improved error handling in layerlist bundle
+- Implementation changed for how features are highlighted as hover effect (https://github.com/oskariorg/oskari-frontend/pull/1799)
+- Hover style is now inherited from feature style instead of defaulting to a hard-coded one
+
+### User generated data listings
+
+- New bundle `mydata` is a drop-in replacement for `personaldata` as a React-based rewrite (the "My data" functionality)
+- If your app pushed customized content to `personaldata` you will need to migrate to the new API but `personaldata` is still available (but is deprecated and will be removed in a future release)
+- Added created/updated fields for user generated items
+- User views and user account tabs can now be hidden by config. Also my indicators is no longer shown if the datasource for my indicators is not used by the instance.
+- API changed! Instead of using `PersonalData.AddTabRequest` you now use a service provided by the `mydata` bundle:
+
+```
+    const myDataService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+    myDataService.addTab('userlayers', this.loc('tab.title'), UserLayersTab, new UserLayersHandler(this));
+```
+
+Where:
+- `userlayers` is the id for the tab
+- `this.loc('tab.title')` is the label for the tab that is shown to end-users
+- `UserLayersTab` is a React-component that handles state and controller props
+- `new UserLayersHandler(this)` is a class extending StateHandler from `oskari-ui/util` that will provide the state and controller props for the previous parameter
+
+See example: https://github.com/oskariorg/oskari-frontend/blob/12dba2584287985026eec3e7eb3a453a855d1d04/bundles/framework/myplacesimport/instance.js#L144-L160
+
+### Thematic maps
+
+- Classification UI has been refactored
+- Metadata handling for indicators has been improved
+- Reset state now clears thematic maps properly
+- Improvements in data parsing for adding user generated indicators
+- Removing data from user generated indicator now updates UI choices for that indicator
+- My indicators tab in My data: indicator name now opens thematic maps so user can more easily add the indicator on the map.
+
+### Usability
+
+- Some clickable elements have been changed to buttons in DOM and cursors are changed for draggable windows, clickable buttons/icons.
+- Major state change in application (like reset/useState for whole app) now triggers `UIChangeEvent` (for cleanup before state is changed) and a new event `StateChangedEvent` after state has been changed. This can be used by RPC-applications to detect state reset by built-in buttons: https://github.com/oskariorg/oskari-frontend/pull/1874
+
+### Bug fixes
+
+- `layeranalytics` data is no longer duplicated on UI when reopening the flyout
+- Duplicated id-parameter on proxied WMS-urls has been removed
+- GFI is no longer queried for layers with opacity 0
+- Fixed an issue where editing a measurement feature could result in multiple measurement result windows for a single geometry
+
+### Theming
+
+Initial theming support for React-based UI-components like Flyout/Popup/Banner (Note! Most flyouts are still jQuery-based).
+Also affects the "selected layers badge" for layer count and tool hover-color in `mydata`.
+This is still very much work-in-progress and subject to change as we fine-tune what can be customized by theming etc.
+We would also appreciate any input and feedback for this.
+
+For testing you can add this kind of snippet in your apps main.js or run this in the browser dev-console:
+```
+Oskari.app.getTheming().setTheme({
+    color: {
+        icon: '#FFFFFF',
+        accent: '#0c3c62',
+        primary: '#009fe3'
+    }
+});
+```
+
+At this point most of the structure can be omitted (using default values instead) and reseting to default can be done by calling `setTheme()`.
+The goal is to make the theme serializable as JSON so it could be saved to DB/given through RPC etc.
+But to make it easier to use in code there's a helper that is currently located in `oskari-ui/theme/ThemeHelper`
+that can for example generate a sensible header text color based on the primary color etc.
+
+An example for making React-components "theme-aware": https://github.com/oskariorg/oskari-frontend/pull/1886
+
+### New components to be used in apps (under `oskari-ui`)
+
+- `TextEditor` (draft.js based rich text editor)
+- `PrimaryButton`/`SecondaryButton` that include localization for common buttons
+- `DeleteButton` (includes confirmation popup/reduces boilerplate in actual code)
+- `IconButton` for replacing clickable divs that hold an icon with button
+- `Link` for showing links in a consistent way across the UI
+- `Pagination`
+- icons: `InfoIcon`, `MetadataIcon` from `oskari-ui/components/icons`
+
+### Improvements to components
+- New `showBanner()` has been added next to `showPopup()` and `showFlyout()` in `oskari-ui/components/window`.
+- These React-based window-instances are now "managed" so they can be closed externally.
+- React-based windows are now closed automatically when `UIChangeEvent` is triggered.
+- React popup now handles long titles properly
+- React popup now recognizes positional flags instead of always opening centered on screen: https://github.com/oskariorg/oskari-frontend/pull/1836
+- `ErrorBoundary` can now include debug info controlled by the developer
+- `LocalizationComponent` is now much easier to use and required less boilerplate code
+- Added a bunch of CSS-selector classes for Selenium testing (prefixed by `t_`) that are always added when using the common components.
+- `GenericForm`, `DateRange`, `ColorPicker`, `Modal` are no longer direct exports of `oskari-ui` to reduce amount of referenced code/optimize min.js. When needed import them with `oskari-ui/components/ColorPicker` etc.
+
+## 2.7.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/38?closed=1
+
+- Fixed an issue where `MarkerClickEvent` events were not triggered properly
+- Updated `AddMarkerRequest` documentation to match current functionality (size for external graphics is now handled as pixels)
+- Fixed an issue where empty GFI results were shown on map clicks
+
+## 2.7.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/36?closed=1
+
+Layer analytics functionality:
+- two new bundles: `layeranalytics` and `admin-layeranalytics`
+- the `layeranalytics` is used to gather anonymized data about map layer usage and errors end-users experience with map layers
+- the admin functionality can be used to analyze the gathered data to see what layers are used the most and what layers have the most problems
+- the admin is shown statistics to detect if the layers are fully non-operational/broken by misconfiguration/service changes or if there's some edge cases that could be corrected by limiting the coverage area of the layer or imposing scale-limits etc to improve the end-user experience
+- For more details:
+  - https://oskari.org/api/bundles#/2.7.0/framework/layeranalytics
+  - https://oskari.org/api/bundles#/2.7.0/admin/admin-layeranalytics
+  - https://github.com/oskariorg/oskari-frontend/pull/1759
+
+Statistical maps classification improvements:
+- classification UI has been mostly rewritten
+- new classification options for diverging data
+- legend is now more readable
+- external metadata handling for indicators has been refined
+
+Improvements to style editor for vector features:
+- area fill patterns tuned (preview is now consistent with map presentation/map presentation updated as well)
+- the new editor is now used for markers, my places, userlayers and runtime styling for vector layers (and analysis layers on contrib repository)
+- Note! VisualizationForm (jQuery-component) is no longer included in frontend build by default. It has been replaced by the new React-based style editor. If you need the jQuery version you can still import it on your own application (example https://github.com/oskariorg/oskari-frontend-contrib/pull/73), but it will be removed on a future release.
+
+RPC improvements:
+- now allows appsetup to expose more events/requests through RPC API
+- existing conf designed to restrict. New config allows including defaults + appsetup specific additions (https://github.com/oskariorg/oskari-frontend/pull/1750)
+- fixed an issue where feature style declaring stroke width 0 (to hide a border of an area etc) resulted in an error
+
+Layerlisting improvements:
+- layer count badge now includes layers from subgroups
+- handling of long layer/dataprovider names improved
+- opacity field controls no longer hide the %-character
+
+Others changes/fixes:
+- localized names are now supported for `myplaces` and `userlayer` layers
+- `myplaces` layer edit form now has consistent styling with other Oskari popups
+- Search UI width is now limited so having longer description text flows/looks better.
+- Layer changes at runtime are now reflected on object data tab names and data provider popup
+- Layer capabilities structure changed on server and frontend code was changed to accommodate
+- Timeseries player-UI is no longer duplicated after using the publisher tool
+- Editing an embedded map with GFI query tool disactivated no longer results in the tool becoming activated on the embedded map
+- Option to hide service logo from PDF printouts have been removed
+
+Progress for jQuery to React migration:
+- Import userlayers form
+- My data 
+    - Embedded maps listing
+    - Saved views listing
+    - Account information
+- LocalizationComponent improved
+- FileInput added as new component
+- Improved the API for React-based flyouts/popups
+
+Updated libs:
+- OpenLayers 6.6.1 -> 6.13.0
+- ol-mapbox-style 6.4.1 -> 7.1.1
+- Cesium 1.84.0 -> 1.91.0
+- ESLint 7.1.0 -> 8.9.0 (and various ESLint plugins)
+- dompurify 2.3.1 -> 2.3.6
+- intl-messageformat 9.9.1 -> 9.11.4
+- styled-components 5.3.1 -> 5.3.3
+
+## 2.6.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/34?closed=1
+
+### Map module
+
+- New function: getVectorFeatures() that returns the vector features currently in the map viewport. Takes parameters like geometry and properties to filter the features. Code that shows feature properties in an object data table etc have been refactored to use this function instead. More details: https://github.com/oskariorg/oskari-frontend/pull/1696
+- New event: DataForMapLocationEvent. The event is used to notify with the result of a map click that is used for rendering the "GetFeatureInfo" style result for the user. Now it's possible to render the result on the embedding page (requires GFI to be enabled on the embedded map).
+- GetFeatureInfoPlugin can now be configured to NOT show the GFI-result. This makes the plugin only trigger the DataForMapLocationEvent and let external code to generate the UI for GFI responses for the user.
+
+### RPC/embedded maps
+
+- The map modules getVectorFeatures() function is available through RPC making it possible to get a list of vector features from WFS/OGC API layers on an embedded map.
+- New option for GFI-tool on publisher to enable GFI without showing the results automatically on the map. Allowing the embedding page to render the result by listening to DataForMapLocationEvent.
+- New request: MetadataSearchRequest to query service metadata through RPC. The result is returned with a new event: MetadataSearchResultEvent. More details: https://github.com/oskariorg/oskari-frontend/pull/1717
+- getAllLayers() function now also returns the data block from layer attributes. This can include localized names for fields etc. It also includes metadataIdentifier if the layer has one.
+- Enabled more requests to be used via RPC API: RearrangeSelectedMapLayerRequest and ChangeMapLayerStyleRequest.
+- Enabled sending options for `SearchRequest`. See https://github.com/oskariorg/oskari-frontend/pull/1688 for details.
+- The `showMeasureOnMap` flag now works on `StartDrawingRequest` when modifying features.
+
+### Improved metadata support for statistical maps
+
+- The UI for showing metadata was refactored from jQuery to React. Also it's now draggable.
+- The UI now shows dates for last and next update for the data if the information is available for given indicator.
+- The style for how data of an indicator should be visualized on the map/classification can now be configured in the metadata (color scheme and choropleth/points style) instead of always defaulting to choropleth.
+
+### Other fixes
+
+- Enabled measurement results for features drawn by users when the draw type is "Box".
+- Improvements for the vector feature style editor.
+- The default search UI for geoportals has been rewritten using React  (previously jQuery implementation).
+- Fixed an issue where WMS layer style was not sent in GFI requests resulting in responses for default style instead of the one user was seeing.
+- Most of the restrictions was removed from search UI: https://github.com/oskariorg/oskari-frontend/pull/1705
+- GFI layerformatters are now available for WFS layers (previously only WMS) for customizing GFI display
+- Fixed an issue where generated layer groups (like for user generated content) were not always shown in layerlisting depending on what bundles the app was using.
+- Fixed an error preventing map layer legend functionality from being shown on the embedded map: https://github.com/oskariorg/oskari-docs/issues/252
+- Fixed an issue where dashed lines were not triggering click/hover events on the gaps of the line.
+- `printout.PrintMapRequest` works again -> allows opening the printout UI when the functionality is part of the app.
+- Fix for global legend when a layer has no styles.
+- Removed unused events/dead code: https://github.com/oskariorg/oskari-frontend/pull/1690
+- Improvements on the vector feature label handling.
+- Fixed an issue regarding layer opacity in URL/links to the map.
+- Lodash usage reduced (in order to remove it at some point)
+- Added a publisher tool for admins to select instance announcements to be shown on a single embedded map (the one they are publishing/editing with publisher).
+- Added initial implementation for showing React-based popups and flyouts:
+https://github.com/oskariorg/oskari-frontend/pull/1680
+- A generic ErrorBoundary component for React was added for oskari-ui/util: https://github.com/oskariorg/oskari-frontend/pull/1713
+- The layer admin functionality for timeseries layers now cleans up unnecessary config when admin switches the UI options. Previously the "range" UI option could leave the layer in misconfigured state: https://github.com/oskariorg/oskari-docs/issues/260.
+- Other smaller fixes
+
+## 2.5.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/35?closed=1
+
+- Fixed an issue with my places features where new layers didn't show features on map if the layer style was not modified
+- Fixed an issue with my places features where the label on map was not shown on the map
+- Fixed an issue where hover style for vector features was not properly updated after modifying the layer style
+- Fixed an issue which prevented style changes in the editor for Area-shaped features on Firefox
+- Fixed an issue with admin-layereditor when administering WMS-T layer with start, end and interval as time dimension
+- Fixed an issue with admin-layereditor when a style was no longer available for a WMS-layer but the layer had a legend configured for the missing style
+
+## 2.5.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/33?closed=1
+
+### Improvements to visual vector style editor
+- Added "empty fill" option for area/polygon type geometries.
+- Added "butt" option for line-ending options.
+- Added pre-defined color selection for easier color picking.
+- Area and stroke/line type geometries now have their own controls for line joins. Previously the settings was shared when editing with the React-based visual style editor.
+- The new editor is now available for end-users on myplaces layer styling (in addition to layer admin functionality).
+
+### Style handling for vector layers
+Various changes to style handling implementation like:
+- Hover styling implementation changed to improve performance and clarify code.
+- Vector features styles definitions are now available through `AbstractLayer.getStyles()/getCurrentStyle()` with `style.getFeatureStyle()` instead of separate `AbstractLayer.getCurrentStyleDef()`.
+- Moved end-user UI implementation for vector layer styling to new bundle `userstyle` instead of being built-in to "wfs-support for map" (`mapwfs2` bundle). This enables smaller filesize for embedded maps since the UI is not available to end-users on embedded maps. To keep current functionality you should link `userstyle` bundle import to your geoportal apps: https://github.com/oskariorg/sample-application/pull/17/files
+
+### Selected vector features
+New service was added for tracking feature selection. Usage:
+```
+const service = Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureSelectionService');
+// add a feature to current selection
+service.addSelectedFeature(layerId, featureId);
+// set feature selection for layer replacing current selection
+service.setSelectedFeatureIds(layerId, [featureId1, ...featureIdN]);
+// remove a feature from current selection
+service.removeSelection(layerId, featureId);
+// remove all selections from layer
+service.removeSelection(layerId);
+// remove all selections from all layers
+service.removeSelection();
+// toggle feature selection in current selection (if already selected -> unselect, otherwise mark as selected)
+service.toggleFeatureSelection(layerId, featureId);
+
+// get a list of ids for features that are selected
+const selectedFeatureIds = service.getSelectedFeatureIdsByLayer (layerId);
+```
+Changes to selection trigger `WFSFeaturesSelectedEvent` like it did before and bundles can react to it like before.
+
+### Performance improvements
+- Layer coverage data is no longer part of the layer listing. It is fetched separately when a layer is added to the map. This reduces the file size of layer listing by ~75% and improves performance.
+- WMTS-layers tile matrix metadata is now provided by the server in JSON-based format and the full capabilities XML is no longer required to be loaded to the frontend. This reduces the amount of data clients need to load and optimizes startup-time and performance.
+
+### Layer admin improvements
+- When adding layers from service the layers are now sorted alphabetically in addition to being grouped by "type". Where type is "existing" (already registered as layer), "problematic" (might have problems with layer/projection not supported), "available" (these are the ones you probably are most interested in adding).
+- Fixed an issue with selecting default style when style name was very long (input was pushed out of view of the user).
+
+### Other improvements
+- `MapModulePlugin.MapLayerUpdateRequest` can now be used to force vector layers to refetch the features from service (after for example editing a feature). Previously it was mostly usable for WMS-layers.
+- Map legends functionality for end-users on geoportal was rewritten with React (embedded maps version still uses jQuery)
+- Fixed GetFeatureInfo displaying for XSLT formatted responses.
+- Fixed a visual issue on Firefox with layerlisting.
+- `layerlist` bundle now closes its flyout on `UIChangeEvent` (when publisher etc functionality is opened by the user).
+- Modal-component in oskariui now has styling to keep the window on browser viewport and scroll the modal-window content instead of having a page scrollbar for large contents.
+- WMTS-layers can now be forced to use the wrapX boolean toggle for OpenLayers by having `{ wrapX: true }` in the layer options.
+- Changed when data is being sanitized for layers. Layer name is no longer sanitized in AbstractLayer.setName(). The UI components showing the name now sanitize the value instead. This might affect application specific extensions to functionalities that rely on the name being sanitized. For jQuery-based UIs this means that you need to call `Oskari.util.sanitize(layer.getName())` or use `jQuery.text(name)` instead of `jQuery.append(name)`. For React-based UI this means that you no longer need to use `dangerouslySetInnerHTML` to show the layer name properly but can use it as is.
+
+### Library updates
+
+- @ant-design/icons 4.2.1 -> 4.6.3
+- @storybook/react 5.3.18 -> 6.3.7
+- antd 4.8.5 -> 4.16.13
+- cesium 1.77 -> 1.84
+- dompurify 2.0.10 -> 2.3.1
+- intl-messageformat 2.1.0 -> 9.9.1 (now loaded with npm instead of having a copy under libraries)
+- Jest 26.0.1 -> 27.0.6
+- jQuery 3.5.1 -> 3.6.0
+- lodash 4.17.19 -> 4.17.21
+- node-sass 4.14.1 -> 6.0.1
+- moment 2.24.0 -> 2.29.1
+- OpenLayers 6.4.3 -> 6.6.1
+- ol-mapbox-style 6.3.1 -> 6.4.1
+- olcs 2.12 -> 2.13
+- React 16.13 -> 16.14
+- Styled-components 5.0.1 -> 5.3.1
+
+Also tested a migration to Webpack 5, but there's some compatibility issues with Cesium and Webpack 5 that prevented the update for now. Also the testing library enzyme doesn't support React 17 yet so couldn't update React further for now.
+
 ## 2.4.0
 
 For a full list of changes see:

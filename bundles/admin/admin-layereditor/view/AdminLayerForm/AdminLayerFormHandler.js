@@ -4,9 +4,11 @@ import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
 import { getWarningsForStyles } from './VisualizationTabPane/RasterStyle/helper';
+import { TIME_SERIES_UI } from './VisualizationTabPane/TimeSeries';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
+const COVERAGE_LAYER = 'AdminLayerEditorCoverage';
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-layereditor' />;
 
@@ -197,16 +199,32 @@ class UIHandler extends StateHandler {
 
     setTimeSeriesUI (ui) {
         const layer = { ...this.getState().layer };
-        const timeseries = { ...layer.options.timeseries, ui };
-        layer.options.timeseries = timeseries;
+        const options = layer.options || {};
+        layer.options = options;
+        if (TIME_SERIES_UI.PLAYER === ui) {
+            // default UI -> remove additional timeseries config
+            delete options.timeseries;
+        } else {
+            // range or none options needs additional timeseries config
+            const timeseries = { ...options.timeseries, ui };
+            layer.options.timeseries = timeseries;
+
+            // show no UI for timeseries -> remove timeseries metadata config
+            if (TIME_SERIES_UI.NONE === ui) {
+                delete timeseries.metadata;
+            }
+        }
         this.updateState({ layer });
     }
 
     setTimeSeriesMetadataLayer (layerId) {
         const layer = { ...this.getState().layer };
-        const timeseries = { ...layer.options.timeseries };
+        const options = layer.options || {};
+        layer.options = options;
+        const timeseries = { ...options.timeseries };
         const metadata = { ...timeseries.metadata, layer: layerId };
         if (layerId === '') {
+            delete metadata.layer;
             delete metadata.attribute;
             delete metadata.layerAttributes;
             timeseries.metadata = metadata;
@@ -349,14 +367,6 @@ class UIHandler extends StateHandler {
         this.setOptions(options);
     }
 
-    setStyleJSON (json) {
-        this.updateOptionsJsonProperty(json, 'tempStylesJSON', 'styles');
-    }
-
-    setExternalStyleJSON (json) {
-        this.updateOptionsJsonProperty(json, 'tempExternalStylesJSON', 'externalStyles');
-    }
-
     setHoverJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempHoverJSON', 'hover');
     }
@@ -469,7 +479,8 @@ class UIHandler extends StateHandler {
         this.updateState({ tab });
     }
 
-    resetLayer () {
+    resetForm () {
+        this.resetMap();
         const typesAndRoles = this.getAdminMetadata();
         this.updateState({
             layer: this.layerHelper.createEmpty(typesAndRoles.roles),
@@ -478,6 +489,24 @@ class UIHandler extends StateHandler {
             propertyFields: [],
             tab: DEFAULT_TAB
         });
+    }
+
+    resetLayer (keepCapabilities) {
+        this.resetMap();
+        const typesAndRoles = this.getAdminMetadata();
+        const newState = {
+            layer: this.layerHelper.createEmpty(typesAndRoles.roles),
+            versions: [],
+            propertyFields: []
+        };
+        if (!keepCapabilities) {
+            newState.capabilities = {};
+        }
+        this.updateState(newState);
+    }
+
+    resetMap () {
+        this.clearLayerCoverage();
     }
 
     ajaxStarted () {
@@ -536,9 +565,10 @@ class UIHandler extends StateHandler {
     fetchLayer (id, keepCapabilities = false) {
         if (!id) {
             // adding new layer
-            this.resetLayer();
+            this.resetForm();
             return;
         }
+        this.resetLayer(keepCapabilities);
         this.ajaxStarted();
         fetch(Oskari.urls.getRoute('LayerAdmin', { id }), {
             method: 'GET',
@@ -548,7 +578,7 @@ class UIHandler extends StateHandler {
         }).then(response => {
             this.ajaxFinished();
             if (!response.ok) {
-                Messaging.error(getMessage('messages.errorFetchLayerFailed'));
+                throw new Error(response.statusText);
             }
             return response.json();
         }).then(json => {
@@ -577,6 +607,9 @@ class UIHandler extends StateHandler {
             }
             this.updateState(newState);
             this.validateCapabilities();
+        }).catch(error => {
+            Messaging.error(getMessage('messages.errorFetchLayerFailed'));
+            this.log.error(error);
         });
     }
 
@@ -824,8 +857,6 @@ class UIHandler extends StateHandler {
             }
         });
 
-        this.validateJsonValue(layer.tempStylesJSON, 'validation.styles', validationErrors);
-        this.validateJsonValue(layer.tempExternalStylesJSON, 'validation.externalStyles', validationErrors);
         this.validateJsonValue(layer.tempHoverJSON, 'validation.hover', validationErrors);
         this.validateJsonValue(layer.tempAttributesJSON, 'validation.attributes', validationErrors);
         this.validateJsonValue(layer.tempAttributionsJSON, 'validation.attributions', validationErrors);
@@ -884,7 +915,7 @@ class UIHandler extends StateHandler {
         }).then(response => {
             if (response.ok) {
                 // TODO: handle this somehow/close the flyout?
-                this.resetLayer();
+                this.resetForm();
                 this.mapLayerService.removeLayer(layer.id);
             } else {
                 Messaging.error(getMessage('messages.errorRemoveLayer'));
@@ -1023,7 +1054,7 @@ class UIHandler extends StateHandler {
                 const currentLayer = this.getState().layer;
                 this.layerHelper.initPermissionsForLayer(currentLayer, data.roles);
                 this.updateState({
-                    currentLayer,
+                    layer: currentLayer,
                     loading: this.isLoading(),
                     metadata: data
                 });
@@ -1071,26 +1102,45 @@ class UIHandler extends StateHandler {
         this.updateState({ layer });
     }
 
-    saveStyleToLayer (style, styleLabel, styleId) {
+    saveVectorStyleToLayer (style, isEdit) {
         const layer = this.getState().layer;
-        const currentStyles = layer.options.styles || null;
-        const layerStyleId = styleId || 's_' + new Date().getTime();
-
-        layer.options.styles = {
-            ...currentStyles,
-            [layerStyleId]: {
-                title: styleLabel,
-                featureStyle: style
-            }
-        };
-
-        this.updateState({ layer: layer });
+        if (!Array.isArray(layer.vectorStyles)) {
+            layer.vectorStyles = [];
+        }
+        let status;
+        if (isEdit) {
+            status = 'UPDATED';
+            layer.vectorStyles = layer.vectorStyles.map(s => s.id !== style.id ? s : style);
+        } else {
+            status = 'NEW';
+            layer.vectorStyles.push(style);
+        }
+        this._updateVectorStyleStatus(layer, style.id, status);
+        this.updateState({ layer });
     }
 
-    removeStyleFromLayer (styleId) {
+    removeVectorStyleFromLayer (id) {
         const layer = this.getState().layer;
-        delete layer.options.styles[styleId];
-        this.updateState({ layer: layer });
+        if (layer.vectorStyleStatus?.[id] === 'NEW') {
+            // remove unsaved and deleted style from listing
+            layer.vectorStyles = layer.vectorStyles.filter(s => s.id !== id);
+        } else {
+            // mark to be deleted
+            this._updateVectorStyleStatus(layer, id, 'DELETED');
+        }
+        this.updateState({ layer });
+    }
+
+    _updateVectorStyleStatus (layer, id, status) {
+        if (!layer.vectorStyleStatus) {
+            layer.vectorStyleStatus = {};
+        }
+        const oldStatus = layer.vectorStyleStatus[id];
+        if (oldStatus === 'NEW') {
+            // don't update status for unsaved styles
+            return;
+        }
+        layer.vectorStyleStatus[id] = status;
     }
 
     showLayerMetadata (uuid) {
@@ -1098,19 +1148,55 @@ class UIHandler extends StateHandler {
             { uuid }
         ]);
     }
+
+    clearLayerCoverage () {
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, COVERAGE_LAYER]);
+    }
+
+    showLayerCoverage (id) {
+        const srs = Oskari.getSandbox().getMap().getSrsName();
+        fetch(Oskari.urls.getRoute('DescribeLayer', { id, srs }), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(({ coverage }) => {
+                if (!coverage) {
+                    Messaging.info(getMessage('messages.noCoverage'));
+                    this.clearLayerCoverage();
+                    return;
+                }
+                const opts = {
+                    centerTo: true,
+                    clearPrevious: true,
+                    layerId: COVERAGE_LAYER
+                };
+                Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverage, opts]);
+            }).catch((error) => {
+                Messaging.error(getMessage('messages.errorFetchCoverage'));
+                this.log.error(`Failed to get layer coverage for id: ${id}`, error);
+                this.clearLayerCoverage();
+            });
+    }
+
+    toggleDeclutter (checked) {
+        const layer = this.getState().layer;
+        layer.options.declutter = checked;
+        this.updateState({ layer: layer });
+    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
     'addNewFromSameService',
     'layerSelected',
-    'removeStyleFromLayer',
-    'saveStyleToLayer',
+    'removeVectorStyleFromLayer',
+    'saveVectorStyleToLayer',
     'setAttributes',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
     'setClusteringDistance',
     'setDataProviderId',
-    'setExternalStyleJSON',
     'setForcedSRS',
     'setGfiContent',
     'setGfiType',
@@ -1138,7 +1224,6 @@ const wrapped = controllerMixin(UIHandler, [
     'setRenderMode',
     'setSelectedTime',
     'setStyle',
-    'setStyleJSON',
     'setTileGridJSON',
     'setType',
     'setUsername',
@@ -1148,6 +1233,9 @@ const wrapped = controllerMixin(UIHandler, [
     'togglePermission',
     'updateCapabilities',
     'versionSelected',
-    'showLayerMetadata'
+    'showLayerMetadata',
+    'clearLayerCoverage',
+    'showLayerCoverage',
+    'toggleDeclutter'
 ]);
 export { wrapped as AdminLayerFormHandler };

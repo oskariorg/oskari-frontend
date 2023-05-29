@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         /* @property container the DIV element */
         this.container = null;
         this.options = options || {};
-        Oskari.makeObservable(this);
         this._baseZIndex = 20000;
         this._init();
         Oskari.makeObservable(this);
@@ -38,10 +37,11 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 '       <div class="oskari-flyoutcontent"></div>' +
                 '   </div>' +
                 '</div>'),
-            sideTool: _.template('<div class="sidetool">' +
-                '   <div class="icon icon-arrow-white-right"></div>' +
-                '   <label class="verticalsidelabel">${ label }</label>' +
-                '</div>'),
+            sideTool: ({ label }) =>
+                `<div class="sidetool">
+                    <div class="icon icon-arrow-white-right"></div>
+                    <label class="verticalsidelabel">${Oskari.util.sanitize(label)}</label>
+                </div>`,
             toolage: jQuery('<div class="oskari-flyouttool-help"></div>' +
                 '<div class="oskari-flyouttool-attach"></div>' +
                 '<div class="oskari-flyouttool-detach"></div>' +
@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 
             if (!me._popup) {
                 if (!me.options.container) {
-                    jQuery('body').append(popup);
+                    jQuery(Oskari.dom.getRootEl()).append(popup);
                 } else {
                     me.options.container.append(popup);
                 }

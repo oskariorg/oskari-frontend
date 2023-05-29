@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel, List, ListItem } from 'oskari-ui';
-import { Controller } from 'oskari-ui/util';
+import { Controller, ErrorBoundary } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import { LayerCountBadge } from './LayerCountBadge';
 import { AllLayersSwitch } from './AllLayersSwitch';
 import { GroupToolRow } from './GroupToolRow';
 import { LAYER_GROUP_TOGGLE_LIMIT } from '../../../../constants';
 import styled from 'styled-components';
+import { InfoIcon } from 'oskari-ui/components/icons';
 
 /* ----- Group tools ------------- */
 const StyledCollapsePanelTools = styled.div`
@@ -15,6 +16,7 @@ const StyledCollapsePanelTools = styled.div`
     justify-content: flex-end;
     align-items: center;
 `;
+
 // Memoed based on layerCount, allLayersOnMap and group.unfilteredLayerCount
 const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts = {}, controller}) => {
     const toggleLayersOnMap = (addLayers) => {
@@ -31,6 +33,13 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
     const showAllLayersToggle = opts[LAYER_GROUP_TOGGLE_LIMIT] !== 0 && !toggleLimitExceeded && !filtered;
     return (
         <StyledCollapsePanelTools>
+            {group.description && (
+                <InfoIcon
+                    title={group.description}
+                    size={20}
+                    style={{ marginRight: '5px', marginTop: '3px' }}
+                />
+            )}
             <LayerCountBadge
                 layerCount={layerCount}
                 unfilteredLayerCount={group.unfilteredLayerCount} />
@@ -43,6 +52,12 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
         </StyledCollapsePanelTools>
     );
 }, (prevProps, nextProps) => {
+    if (prevProps.group.name !== nextProps.group.name) {
+        return false;
+    }
+    if (prevProps.group.description !== nextProps.group.description) {
+        return false;
+    }
     const propsToCheck = ['allLayersOnMap', 'layerCount'];
     const changed = propsToCheck.some(prop => prevProps[prop] !== nextProps[prop]);
     if (changed) {
@@ -64,11 +79,10 @@ const StyledListItem = styled(({ even, ...rest }) => <ListItem {...rest}/>)`
     display: block !important;
 `;
 
-const renderLayer = ({ model, selected, controller }, index) => {
-    const itemProps = { model, selected, controller };
+const renderLayer = (itemProps, index) => {
     return (
-        <StyledListItem key={model.getId()} even={index % 2 === 0}>
-            <Layer  {...itemProps} />
+        <StyledListItem key={itemProps.id} even={index % 2 === 0}>
+            <Layer {...itemProps} />
         </StyledListItem>
     );
 };
@@ -82,6 +96,9 @@ const LayerList = ({ layers }) => {
     return (
         <List bordered={false} dataSource={layers} renderItem={renderLayer} />
     );
+};
+LayerList.propTypes = {
+    layers: PropTypes.array.isRequired
 };
 /* ----- /Layer list ------ */
 
@@ -123,26 +140,35 @@ const SubGroupList = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts,
 const StyledCollapsePanel = styled(CollapsePanel)`
     > .ant-collapse-content > .ant-collapse-content-box {
         padding: 0px;
+        display: flex;
+        & > .ant-list {
+            width: 100%;
+        }
     }
     & > div:first-child {
         min-height: 22px;
-    };
+    }
+    & > .ant-collapse-header {
+        flex-direction: row;
+        flex-wrap: wrap !important;
+    }
 `;
 
-const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
+const getLayerRowModels = (layers = [], selectedLayerIds = [], controller, opts) => {
     return layers.map(oskariLayer => {
         return {
             id: oskariLayer.getId(),
             model: oskariLayer,
             selected: selectedLayerIds.includes(oskariLayer.getId()),
-            controller
+            controller,
+            opts
         };
     });
 };
 
 const LayerCollapsePanel = (props) => {
     const { group, selectedLayerIds, openGroupTitles, opts, controller, ...propsNeededForPanel } = props;
-    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
+    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
     // set group switch active if all layers in group are selected
     const allLayersOnMap = layerRows.every(layer => selectedLayerIds.includes(layer.id));
     // Note! Not rendering layerlist/subgroups when the panel is closed is a trade-off for performance
@@ -151,33 +177,35 @@ const LayerCollapsePanel = (props) => {
     // after AntD version 4.9.0 we could disable panels without children:
     // const hasChildren = layerRows.length > 0 || group.getGroups().length > 0;
     return (
-        <StyledCollapsePanel {...propsNeededForPanel}
-            // collapsible={hasChildren ? 'header' : 'disabled'}
-            // TODO: remove gid_[id] once data-attributes work for AntD Collapse.Panels
-            className={`t_group gid_${group.getId()}`}
-            // data-attr doesn't seem to work for the panel in AntD-version 4.8.5
-            data-gid={group.getId()}
-            header={group.getTitle()}
-            extra={
-                <PanelToolContainer
-                    group={group}
-                    opts={opts}
-                    layerCount={layerRows.length}
-                    controller={controller}
-                    allLayersOnMap={allLayersOnMap} />
-            }>
-                { isPanelOpen && <React.Fragment>
-                    <SubGroupList
-                        subgroups={group.getGroups()}
-                        selectedLayerIds={selectedLayerIds}
+        <ErrorBoundary hide={true} debug={{group, selectedLayerIds}}>
+            <StyledCollapsePanel {...propsNeededForPanel}
+                // collapsible={hasChildren ? 'header' : 'disabled'}
+                // TODO: remove gid_[id] once data-attributes work for AntD Collapse.Panels
+                className={`t_group gid_${group.getId()}`}
+                // data-attr doesn't seem to work for the panel in AntD-version 4.8.5
+                data-gid={group.getId()}
+                header={group.getTitle()}
+                extra={
+                    <PanelToolContainer
+                        group={group}
                         opts={opts}
-                        openGroupTitles={openGroupTitles}
+                        layerCount={group.getLayerCount()}
                         controller={controller}
-                        { ...propsNeededForPanel } />
-                    <LayerList
-                        layers={layerRows} />
-                </React.Fragment>}
-        </StyledCollapsePanel>
+                        allLayersOnMap={allLayersOnMap} />
+                }>
+                    { isPanelOpen && <React.Fragment>
+                        <SubGroupList
+                            subgroups={group.getGroups()}
+                            selectedLayerIds={selectedLayerIds}
+                            opts={opts}
+                            openGroupTitles={openGroupTitles}
+                            controller={controller}
+                            { ...propsNeededForPanel } />
+                        <LayerList
+                            layers={layerRows} />
+                    </React.Fragment>}
+            </StyledCollapsePanel>
+        </ErrorBoundary>
     );
 };
 

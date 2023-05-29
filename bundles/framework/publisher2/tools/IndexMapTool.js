@@ -1,69 +1,37 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
-    function () {
-    }, {
-        index: 1,
-        allowedLocations: ['bottom left', 'bottom right'],
-        lefthanded: 'bottom right',
-        righthanded: 'bottom left',
-        allowedSiblings: [
-            'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
-            'Oskari.statistics.statsgrid.ClassificationPlugin',
-            'Oskari.statistics.statsgrid.TogglePlugin'
-        ],
+import { AbstractPublisherTool } from './AbstractPublisherTool';
 
-        groupedSiblings: false,
-
-        /**
-        * Get tool object.
-        * @method getTool
-        *
-        * @returns {Object} tool description
-        */
-        getTool: function () {
-            return {
-                id: 'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
-                title: 'IndexMapPlugin',
-                config: {}
-            };
-        },
-
-        /**
-        * Is displayed.
-        * @method isDisplayed
-        * @public
-        *
-        * @returns {Boolean} is tool displayed
-        */
-        isDisplayed: function () {
-            return !Oskari.getSandbox().getMap().getSupports3D();
-        },
-
-        /**
-        * Get values.
-        * @method getValues
-        * @public
-        *
-        * @returns {Object} tool value object
-        */
-        getValues: function () {
-            var me = this;
-
-            if (me.state.enabled) {
-                return {
-                    configuration: {
-                        mapfull: {
-                            conf: {
-                                plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                            }
-                        }
-                    }
-                };
-            } else {
-                return null;
-            }
+class IndexMapTool extends AbstractPublisherTool {
+    getTool () {
+        return {
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
+            title: 'IndexMapPlugin',
+            config: this.state.pluginConfig || {}
+        };
+    }
+    isDisplayed () {
+        // not shown on 3d maps
+        return !Oskari.getSandbox().getMap().getSupports3D();
+    }
+    getValues () {
+        if (!this.isEnabled()) {
+            return null;
         }
-    }, {
-        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        return {
+            configuration: {
+                mapfull: {
+                    conf: {
+                        plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                    }
+                }
+            }
+        };
+    }
+}
+
+// Attach protocol to make this discoverable by Oskari publisher
+Oskari.clazz.defineES('Oskari.publisher.IndexMapTool',
+    IndexMapTool,
+    {
         'protocol': ['Oskari.mapframework.publisher.Tool']
-    });
+    }
+);

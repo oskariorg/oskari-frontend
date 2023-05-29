@@ -1,125 +1,77 @@
 import { Style } from './style';
-
+import { VECTOR_STYLE } from './constants';
 export const DEFAULT_STYLE_NAME = 'default';
+export const RUNTIME_PREFIX = 's_';
 
-export const createDefaultStyle = () => {
-    return new VectorStyle(DEFAULT_STYLE_NAME, Oskari.getMsg('MapModule', 'styles.defaultTitle'));
+export const createDefaultStyle = (name) => {
+    const style = {
+        id: name || DEFAULT_STYLE_NAME,
+        type: VECTOR_STYLE.OSKARI
+    };
+    return new VectorStyle(style);
+};
+
+// constructor like function for layer options styles (oskari styles only)
+export const parseStylesFromOptions = (options) => {
+    const { styles = {} } = options || {};
+    return Object.keys(styles).map(id => {
+        const { title, ...style } = styles[id];
+        return new VectorStyle({ id, type: VECTOR_STYLE.OSKARI, style, name: title });
+    });
 };
 
 export class VectorStyle extends Style {
-    constructor (name, title, type = 'normal', styleDef) {
+    constructor ({ id, name: title, style, type }) {
+        const name = id.toString();
         super(name, title);
-        this._type = type; // normal, user, external
-        this._featureStyle = {};
-        this._optionalStyles = [];
-        this._externalDef = null;
-        this.parseStyleDef(styleDef);
+        this._type = type;
+        this._styleDef = style || {};
     }
 
+    /* override */
     getLegend () {
         return null;
+    }
+
+    /* override */
+    getTitle () {
+        const title = super.getTitle();
+        if (!title || title === DEFAULT_STYLE_NAME) {
+            return Oskari.getMsg('MapModule', 'styles.defaultTitle');
+        }
+        return title;
     }
 
     getType () {
         return this._type;
     }
 
-    isUserStyle () {
-        return this.getType() === 'user';
-    }
-
-    isExternalStyle () {
-        return this.getType() === 'external';
-    }
-
     isRuntimeStyle () {
-        return this.isUserStyle();
+        const name = this.getName() || '';
+        return name.startsWith(RUNTIME_PREFIX);
     }
 
     hasDefinitions () {
         return Object.keys(this.getFeatureStyle()).length > 0 ||
-            this.getOptionalStyles().length > 0 ||
-            !!this.getExternalDef();
-    }
-
-    parseStyleDef (styleDef) {
-        if (!styleDef) {
-            return;
-        }
-        if (this.isExternalStyle()) {
-            this.setExternalDef({ ...styleDef });
-            return;
-        }
-        // Parse Oskari style to fetureStyle and optionalStyles
-        let { featureStyle = {}, optionalStyles = [], title } = styleDef;
-        // Bypass possible layer definitions
-        Object.keys(styleDef).forEach(key => {
-            const val = styleDef[key];
-            if (val.hasOwnProperty('featureStyle')) {
-                featureStyle = val.featureStyle;
-            }
-            if (val.hasOwnProperty('optionalStyles')) {
-                optionalStyles = val.optionalStyles;
-            }
-            if (val.hasOwnProperty('title')) {
-                title = val.title;
-            }
-            // 3D-layers have not required featureStyle it since there hasn't been hover styles implemented yet
-            //  - backwards compatibility == featureStyle is NOT REQUIRED as part of the style
-            //  - consistency == style definitions ARE STORED/USED to/from featureStyle so we can use the visual style editor for WFS and 3D
-            switch (key) {
-            case 'fill':
-                featureStyle.fill = val;
-                break;
-            case 'stroke':
-                featureStyle.stroke = val;
-                break;
-            case 'image':
-                featureStyle.image = val;
-                break;
-            case 'text':
-                featureStyle.text = val;
-                break;
-            }
-        });
-
-        this.setFeatureStyle({ ...featureStyle });
-        this.setOptionalStyles([...optionalStyles]);
-
-        if (title) {
-            this.setTitle(title);
-        }
-        if (!this.getTitle()) {
-            const name = this.getName();
-            if (name === DEFAULT_STYLE_NAME) {
-                this.setTitle(Oskari.getMsg('MapModule', 'styles.defaultTitle'));
-            } else {
-                this.setTitle(name);
-            }
-        }
+            this.getOptionalStyles().length > 0;
     }
 
     getFeatureStyle () {
-        return this._featureStyle;
-    }
-
-    setFeatureStyle (featureStyle = {}) {
-        this._featureStyle = featureStyle;
+        if (this.getType() === VECTOR_STYLE.OSKARI) {
+            return this._styleDef.featureStyle || {};
+        }
+        return this._styleDef;
     }
 
     getOptionalStyles () {
-        return this._optionalStyles;
+        if (this.getType() === VECTOR_STYLE.OSKARI) {
+            return this._styleDef.optionalStyles || [];
+        }
+        // only oskari style has optional styles
+        return [];
     }
 
-    setOptionalStyles (optionalStyles = []) {
-        this._optionalStyles = optionalStyles;
-    }
-
-    getExternalDef () {
-        return this._externalDef;
-    }
-
-    setExternalDef (styleDef) {
-        this._externalDef = styleDef;
+    setStyleDef (styleDef) {
+        this._styleDef = styleDef;
     }
 }

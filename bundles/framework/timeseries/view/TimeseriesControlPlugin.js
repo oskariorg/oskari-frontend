@@ -1,4 +1,7 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import * as d3 from 'd3';
+dayjs.extend(customParseFormat);
 
 /**
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin
@@ -45,37 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         this._uiState.currentTime = delegate.getCurrentTime();
         this._validSkipOptions = this._filterSkipOptions(this._uiState.times);
 
-        me._isMobileVisible = true;
-        me._inMobileMode = false;
         me._isStopped = false;
-
-        me._mobileDefs = {
-            buttons: {
-                'mobile-timeseries': {
-                    iconCls: 'mobile-timeseries',
-                    tooltip: '',
-                    sticky: true,
-                    toggleChangeIcon: true,
-                    show: true,
-                    selected: true,
-                    callback: function () {
-                        if (me._isMobileVisible) {
-                            me.teardownUI();
-
-                            var el = jQuery(me.getMapModule().getMobileDiv())
-                                .find('.mobile-timeseries');
-
-                            me._resetMobileIcon(el, 'mobile-timeseries');
-                        } else {
-                            me._isMobileVisible = true;
-                            me._buildUI(true);
-                            me.getSandbox().getService('Oskari.userinterface.component.PopupService').closeAllPopups(false);
-                        }
-                    }
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
     }, {
         __fullAxisYPos: 35,
         __speedOptions: [
@@ -91,6 +64,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             { key: 'week', value: 'weeks' },
             { key: 'month', value: 'months' }
         ],
+        isShouldStopForPublisher: function () {
+            // prevent publisher to stop this plugin and start it again when leaving the publisher
+            return false;
+        },
         /**
          * @method getCurrentTimeFormatted
          * return current time in timeseries in same format as shown in timeseries control
@@ -139,7 +116,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param  {String[]} times time instants in timeseries, ISO-string
          */
         _filterSkipOptions: function (times) {
-            times = times.map(function (t) { return moment(t); }); // optimization: parse time strings once
+            times = times.map(function (t) { return dayjs(t); }); // optimization: parse time strings once
             var shortestInterval = Number.MAX_VALUE;
             for (var i = 0; i < times.length - 1; i++) {
                 var current = times[i];
@@ -150,7 +127,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 }
             }
             return this.__skipOptions.filter(function (option) {
-                return option.value === '' || moment.duration(1, option.value).asMilliseconds() >= shortestInterval;
+                return option.value === '' || dayjs.duration(1, option.value).asMilliseconds() >= shortestInterval;
             });
         },
         /**
@@ -216,10 +193,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @return {String} time, ISO-string
          */
         _getNextTime: function (fromTime) {
-            var targetTime = moment(fromTime);
+            var targetTime = dayjs(fromTime);
             var index;
             if (this._uiState.stepInterval) {
-                targetTime.add(1, this._uiState.stepInterval);
+                targetTime = targetTime.add(1, this._uiState.stepInterval);
                 index = d3.bisectLeft(this._uiState.times, targetTime.toISOString());
             } else {
                 index = d3.bisectRight(this._uiState.times, targetTime.toISOString());
@@ -261,7 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var index1 = Math.max(d3.bisectRight(this._uiState.times, time) - 1, 0);
             var index2 = index1 + 1;
             var index;
-            if (index1 < this._uiState.times.length - 1 && Math.abs(moment(this._uiState.times[index1]).diff(time)) > Math.abs(moment(this._uiState.times[index2]).diff(time))) {
+            if (index1 < this._uiState.times.length - 1 && Math.abs(dayjs(this._uiState.times[index1]).diff(time)) > Math.abs(dayjs(this._uiState.times[index2]).diff(time))) {
                 index = index2;
             } else {
                 index = index1;
@@ -308,60 +285,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function (mapInMobileMode, forced) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var mobileDefs = this.getMobileDefs();
+        redrawUI: function () {
+            this.refresh();
+        },
 
-            me._inMobileMode = mapInMobileMode;
-
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
+        refresh: function () {
             this.teardownUI();
-
-            if (!toolbarNotReady && mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')('mobile-timeseries', 'mobileToolbar-mobile-toolbar');
-                sandbox.request(me, toolbarRequest);
-            }
-            if (!mapInMobileMode) {
-                me._buildUI(mapInMobileMode);
-            }
+            this._buildUI();
         },
         /**
          * @method _buildUI Create element and construct DOM structure
          * @private
          * @param  {Boolean} isMobile is UI in mobile mode?
          */
-        _buildUI: function (isMobile) {
-            var me = this;
-            if (me._isStopped) {
+        _buildUI: function (isMobile = Oskari.util.isMobile()) {
+            if (this._isStopped) {
                 return;
             }
-            me._element = me._createControlElement();
-            this.addToPluginContainer(me._element);
+            this.setElement(this._createControlElement());
+            this.addToPluginContainer(this.getElement());
             var aux = '<div class="timeseries-aux"></div>';
-            var times = me._uiState.times;
+            var times = this._uiState.times;
             if (isMobile) {
-                me._timelineWidth = 260;
-                me._setRange(times[0], times[times.length - 1]);
-                me._element.toggleClass('mobile', isMobile);
-                me._element.append(aux);
-                me._isMobileVisible = true;
+                this._timelineWidth = 260;
+                this._setRange(times[0], times[times.length - 1]);
+                this._element.toggleClass('mobile', isMobile);
+                this._element.append(aux);
             } else {
-                me._setWidth(me.getSandbox().getMap().getWidth(), true);
-                me._applyTopMargin(this._topMargin);
-                me._element.prepend(aux);
-                me._initMenus();
-                me._makeDraggable();
+                this._setWidth(this.getSandbox().getMap().getWidth(), true);
+                this._applyTopMargin(this._topMargin);
+                this._element.prepend(aux);
+                this._initMenus();
+                this._makeDraggable();
             }
-            me._initStepper();
-            me._updateTimelines(isMobile);
-            me._updateTimeDisplay();
+            this._initStepper();
+            this._updateTimelines(isMobile);
+            this._updateTimeDisplay();
         },
         _makeDraggable: function () {
             this._element.prepend('<div class="timeseries-handle oskari-flyoutheading"></div>');
@@ -514,31 +473,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @return {Function} time formatting function
          */
         _getTickFormatter: function () {
-            var locale;
-            var formatterFunction;
+            let locale;
+            let formatterFunction;
             if (this._d3TimeDef) {
                 locale = d3.timeFormatLocale(this._d3TimeDef);
                 formatterFunction = locale.format.bind(locale);
             } else {
                 formatterFunction = d3.timeFormat.bind(d3);
             }
-            var formatMillisecond = formatterFunction('.%L'),
-                formatSecond = formatterFunction(':%S'),
-                formatMinute = formatterFunction(locale ? '%H:%M' : '%I:%M'),
-                formatHour = formatterFunction(locale ? '%H:%M' : '%I %p'),
-                formatDay = formatterFunction(locale ? '%d.%m.' : '%d %b'),
-                formatMonth = formatterFunction('%b'),
-                formatYear = formatterFunction('%Y');
-
+            const getFormatter = (date) => {
+                // try to format date sensibly based on accuracy
+                if (d3.timeSecond(date) < date) {
+                    // milliseconds
+                    return formatterFunction('.%L');
+                } else if (d3.timeMinute(date) < date) {
+                    // seconds
+                    return formatterFunction(':%S');
+                } else if (d3.timeHour(date) < date) {
+                    // minutes
+                    return formatterFunction(locale ? '%H:%M' : '%I:%M');
+                } else if (d3.timeDay(date) < date) {
+                    // hours
+                    return formatterFunction(locale ? '%H:%M' : '%I %p');
+                } else if (d3.timeMonth(date) < date) {
+                    // days
+                    return formatterFunction(locale ? '%d.%m.' : '%d %b');
+                } else if (d3.timeYear(date) < date) {
+                    // months
+                    return formatterFunction('%b');
+                }
+                // default to years
+                return formatterFunction('%Y');
+            };
             return function multiFormat (date) {
-                var textEl = d3.select(this);
-                return (d3.timeSecond(date) < date ? formatMillisecond
-                    : d3.timeMinute(date) < date ? formatSecond
-                        : d3.timeHour(date) < date ? formatMinute
-                            : d3.timeDay(date) < date ? formatHour
-                                : d3.timeMonth(date) < date ? formatDay
-                                    : d3.timeYear(date) < date ? formatMonth
-                                        : (textEl.classed('bold', true), formatYear))(date);
+                const textEl = d3.select(this);
+                textEl.classed('bold', true);
+                const formatFn = getFormatter(date);
+                return formatFn(date);
             };
         },
         /**
@@ -621,16 +592,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .attr('height', 50)
                 .on('click', null) // remove old event handlers
                 .on('click', function (e) {
-                    var newX = d3.mouse(this)[0];
+                    var newX = d3.pointer(e)[0];
                     timeFromMouse(newX);
                 });
 
             var dragBehavior = d3.drag()
-                .subject(function (d) {
-                    return { x: scaleSubset(new Date(me._uiState.currentTime)), y: d3.event.y };
+                .subject(function (e) {
+                    return { x: scaleSubset(new Date(me._uiState.currentTime)), y: e.y };
                 })
-                .on('drag', function () {
-                    var newX = d3.event.x;
+                .on('drag', function (e) {
+                    var newX = e.x;
                     timeFromMouse(newX);
                 });
 
@@ -653,8 +624,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 updateFullAxisControls();
             }
 
-            function brushed () {
-                var selection = d3.event.selection;
+            function brushed (e) {
+                var selection = e.selection;
                 var inverted = selection.map(function (e) { return scaleFull.invert(e).toISOString(); });
                 scaleSubset.domain(inverted.map(function (t) { return new Date(me._getClosestTime(t)); }));
                 svg.select('.subset-axis').call(axisSubset);
@@ -676,7 +647,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @private
          */
         teardownUI: function () {
-            this._isMobileVisible = false;
             this.removeFromPluginContainer(this.getElement());
         },
         /**

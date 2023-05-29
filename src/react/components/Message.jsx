@@ -38,10 +38,10 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
 
     let message = messageKey;
 
-    if (typeof getMessage === 'function') {
-        message = getMessage(messageKey, messageArgs);
-    } else {
+    if (bundleKey) {
         message = getMessageUsingOskariGlobal(bundleKey, messageKey, messageArgs);
+    } else if (typeof getMessage === 'function') {
+        message = getMessage(messageKey, messageArgs);
     }
 
     // If we didn't find localization AND we have default value -> use it
@@ -56,8 +56,7 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
     return (
         <LabelComponent 
             onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
-                { message }
-                { children }
+                { message } { children }
         </LabelComponent>
     );
 };

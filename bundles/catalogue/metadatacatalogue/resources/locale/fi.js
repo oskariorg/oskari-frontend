@@ -35,8 +35,13 @@ Oskari.registerLocalization(
         "service-other": "Muu palvelu",
         "service-transformation": "Muunnospalvelu",
         "service-view": "Katselupalvelu",
+        "service-OGC:WMS": "WMS-palvelu",
+        "service-OGC:WFS": "WFS-palvelu",
         "Language": "Metatiedon kieli",
         "ResourceLanguage": "Resurssin kieli",
+        "fin": "suomi",
+        "eng": "englanti",
+        "swe": "ruotsi",
         "modifySearch": "Muokkaa hakuehtoja",
         "showSearch": "Näytä kaikki hakutulokset",
         "showDatasets": "Näytä vain aineistot",
@@ -68,6 +73,9 @@ Oskari.registerLocalization(
             "creation": "luonti",
             "publication": "julkaisu",
             "revision": "päivitys"
+        },
+        "tool": {
+            "label": "Mahdollista metadatahakujen ohjelmallinen käyttö",
         }
     }
 });

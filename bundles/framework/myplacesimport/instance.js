@@ -1,104 +1,68 @@
+import { UserLayersTab } from './UserLayersTab';
+import { UserLayersHandler } from './handler/UserLayersHandler';
+import { TOOL, BUNDLE_NAME } from './constants';
+
 /**
  * @class Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundleInstance
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundleInstance', function () {
-    // these will be used for this.conf if nothing else is specified (handled by DefaultExtension)
-    this.defaultConf = {
-        name: 'MyPlacesImport',
-        sandbox: 'sandbox',
-        stateful: false,
-        flyoutClazz: 'Oskari.mapframework.bundle.myplacesimport.Flyout'
-    };
-    this.buttonGroup = 'myplaces';
-    this.toolName = 'import';
-    this.tool = {
-        iconCls: 'upload-material',
-        sticky: false
-    };
     this.importService = undefined;
     this.mapLayerService = null;
     this.tab = undefined;
-    this.layerType = 'userlayer';
+    this.loc = Oskari.getMsg.bind(null, BUNDLE_NAME);
 }, {
+    __name: BUNDLE_NAME,
+
     /**
      * Registers itself to the sandbox, creates the tab and the service
      * and adds the flyout.
      *
      * @method start
      */
-    start: function () {
-        var me = this;
-        var conf = this.getConfiguration() || {};
-        var sandbox = Oskari.getSandbox(conf.sandbox);
-
-        this.sandbox = sandbox;
-        sandbox.register(this);
-
-        // stateful
-        if (conf && conf.stateful === true) {
-            sandbox.registerAsStateful(this.mediator.bundleId, this);
-        }
-        var isGuest = !Oskari.user().isLoggedIn();
-
-        if (isGuest) {
-            // guest user, only show disabled button
-            this.tool.disabled = true;
-        } else {
+    _startImpl: function () {
+        if (Oskari.user().isLoggedIn()) {
             // logged in user, create UI
-            this.tab = this.addTab(sandbox);
-            this.importService = this.createService(sandbox);
-            this.importService.init();
-            this.importService.getUserLayers(function () {
-                me.getTab().refresh();
-            });
-
-            sandbox.request(this, Oskari.requestBuilder('userinterface.AddExtensionRequest')(this));
+            this.createService();
+            this.getService().getUserLayers();
+            this.handler = new UserLayersHandler(this);
+            this.addTab();
+            this.requestHandlers = {
+                showUserLayerDialogRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.request.ShowUserLayerDialogRequestHandler', this)
+            };
+            Oskari.getSandbox().requestHandler('MyPlacesImport.ShowUserLayerDialogRequest', this.requestHandlers.showUserLayerDialogRequestHandler);
         }
-
-        this.registerTool(isGuest);
+        this.registerTool();
     },
     /**
      * Requests the tool to be added to the toolbar.
      *
      * @method registerTool
      */
-    registerTool: function (isGuest) {
-        var me = this;
-        var loc = this.getLocalization();
-        var sandbox = this.getSandbox();
-        var reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
-        this.tool.callback = function () {
-            if (!isGuest) {
+    registerTool: function () {
+        const sandbox = this.getSandbox();
+        const reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
+        const loggedIn = Oskari.user().isLoggedIn();
+        const toolBtn = {
+            iconCls: TOOL.ICON,
+            disabled: !loggedIn,
+            tooltip: this.loc('tool.tooltip')
+        };
+        toolBtn.callback = () => {
+            if (loggedIn) {
                 // toolbar requires a callback so we need to check guest flag
                 // inside callback instead of not giving any callback
-                me.startTool();
+                this.handler.showLayerDialog({});
             }
         };
-        this.tool.tooltip = loc.tool.tooltip;
-
         if (reqBuilder) {
-            sandbox.request(this, reqBuilder(this.toolName, this.buttonGroup, this.tool));
+            sandbox.request(this, reqBuilder(TOOL.NAME, TOOL.GROUP, toolBtn));
         }
     },
-    /**
-     * Opens the flyout when the tool gets clicked.
-     *
-     * @method startTool
-     */
-    startTool: function () {
-        var sandbox = this.getSandbox();
-        var reqBuilder = Oskari.requestBuilder('userinterface.UpdateExtensionRequest');
-        var toolbarReqBuilder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
-
-        if (reqBuilder) {
-            // open the flyout
-            sandbox.request(this, reqBuilder(this, 'attach', this.getName()));
+    getSandbox: function () {
+        if (!this.sandbox) {
+            this.sandbox = Oskari.getSandbox(this.conf.sandbox);
         }
-
-        if (toolbarReqBuilder) {
-            // ask toolbar to select the default tool
-            sandbox.request(this, toolbarReqBuilder());
-        }
+        return this.sandbox;
     },
     getMapLayerService: function () {
         if (!this.mapLayerService) {
@@ -106,49 +70,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
         }
         return this.mapLayerService;
     },
-    /**
-     * Adds the user layer to the map layer service and to the map.
-     *
-     * @method addUserLayer
-     * @param {JSON} layerJson
-     */
-    addUserLayer: function (layerJson) {
-        if (!layerJson) {
-            return;
+    showLayerDialog: function (id) {
+        const layer = this.getMapLayerService().findMapLayer(id);
+        if (layer) {
+            this.handler.showLayerDialog({
+                id,
+                locale: layer.getLocale(),
+                style: layer.getCurrentStyle().getFeatureStyle()
+            });
         }
-
-        var me = this;
-        var sandbox = this.getSandbox();
-
-        this.getService().addLayerToService(layerJson, false, function (mapLayer) {
-            // refresh the tab
-            me.getTab().refresh();
-            // Request the layer to be added to the map.
-            var reqBuilder = Oskari.requestBuilder('AddMapLayerRequest');
-            if (reqBuilder) {
-                sandbox.request(me, reqBuilder(mapLayer.getId()));
-            }
-            // Request to move and zoom map to layer's content
-            var mapMoveByContentReqBuilder = Oskari.requestBuilder('MapModulePlugin.MapMoveByLayerContentRequest');
-            if (mapMoveByContentReqBuilder) {
-                sandbox.request(me, mapMoveByContentReqBuilder(mapLayer.getId(), true));
-            }
-        });
     },
     /**
      * Creates the import service and registers it to the sandbox.
      *
      * @method createService
-     * @param  {Oskari.Sandbox} sandbox
      * @return {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService}
      */
-    createService: function (sandbox) {
-        var importService = Oskari.clazz.create(
+    createService: function () {
+        const sandbox = this.getSandbox();
+        const importService = Oskari.clazz.create(
             'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
             this
         );
         sandbox.registerService(importService);
-        return importService;
+        importService.init();
+        this.importService = importService;
     },
     /**
      * Returns the import service.
@@ -163,26 +109,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
      * Creates the user layers tab and adds it to the personaldata bundle.
      *
      * @method addTab
-     * @param {Oskari.Sandbox} sandbox
-     * @return {Oskari.mapframework.bundle.myplacesimport.UserLayersTab}
      */
-    addTab: function (sandbox) {
-        var loc = this.getLocalization();
-        var userLayersTab = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.UserLayersTab', this);
-        var addTabReqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
+    addTab: function (appStarted) {
+        const sandbox = Oskari.getSandbox();
+        const myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+
+        const reqName = 'PersonalData.AddTabRequest';
+        if (myDataService) {
+            myDataService.addTab('userlayers', this.loc('tab.title'), UserLayersTab, this.handler);
+        } else if (sandbox.hasHandler(reqName)) {
+            // fallback to old personaldata tabs
+            this.addTabToPersonalData();
+        } else if (!appStarted) {
+            // Wait for the application to load all bundles and try again
+            Oskari.on('app.start', () => {
+                this.addTab(true);
+            });
+        }
+    },
+    addTabToPersonalData: function () {
+        const userLayersTab = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.PersonalDataUserLayersTab', this);
+        const addTabReqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
 
         if (addTabReqBuilder) {
-            sandbox.request(this, addTabReqBuilder(loc.tab.title, userLayersTab.getContent(), false, 'userlayers'));
+            this.getSandbox().request(this, addTabReqBuilder(this.loc('tab.title'), userLayersTab.getContent(), false, 'userlayers'));
         }
-        return userLayersTab;
+        this.tab = userLayersTab;
+        this.getService().on('update', () => {
+            this.getTab().refresh();
+        });
     },
     /**
      * @method getTab
-     * @return {Oskari.mapframework.bundle.myplacesimport.UserLayersTab}
+     * @return {Oskari.mapframework.bundle.myplacesimport.PersonalDataUserLayersTab}
      */
     getTab: function () {
         return this.tab;
     }
 }, {
-    'extend': ['Oskari.userinterface.extension.DefaultExtension']
+    extend: ['Oskari.BasicBundle'],
+    protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });

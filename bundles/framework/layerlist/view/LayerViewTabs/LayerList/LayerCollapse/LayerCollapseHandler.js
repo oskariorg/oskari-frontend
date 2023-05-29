@@ -2,6 +2,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { groupLayers } from './util';
 import { FILTER_ALL_LAYERS } from '..';
 import { GROUPING_PRESET, GROUPING_DATAPROVIDER } from '../preset';
+import { Messaging } from 'oskari-ui/util';
 
 const ANIMATION_TIMEOUT = 400;
 const LAYER_REFRESH_THROTTLE = 2000;
@@ -15,7 +16,8 @@ const getLayerGroups = (groups = []) => {
     return groups.map(group => {
         return {
             id: group.id,
-            name: Oskari.getLocalized(group.name),
+            name: group.getName(),
+            description: group.getDescription(),
             layers: group.getChildren().filter(c => c.type === 'layer') || [],
             groups: getLayerGroups(group.getGroups())
         };
@@ -23,41 +25,30 @@ const getLayerGroups = (groups = []) => {
 };
 
 const providerReducer = (accumulator, currentLayer) => {
-    // TODO: once we have id, use it
-    const org = Oskari.getLocalized(currentLayer.getOrganizationName());
-    if (!org) {
+    const id = currentLayer.getDataProviderId();
+    if (!id) {
         return accumulator;
     }
-    let orgLayers = accumulator[org] || [];
+    let dataProviderId = '' + id;
+    let orgLayers = accumulator[dataProviderId] || [];
     if (!orgLayers.length) {
-        accumulator[org] = orgLayers;
+        accumulator[dataProviderId] = orgLayers;
     }
     orgLayers.push({ id: currentLayer.getId() });
     return accumulator;
 };
 
-const getDataProviders = (fromService = [], layers = []) => {
-    // Note! fromService will be an empty array if admin-layereditor is not started on the appsetup
-    // TODO: determine map provider -> layers list mapping with reduce
-    const providerMapping = layers.reduce(providerReducer, {});
-    if (!fromService.length) {
-        return Object.keys(providerMapping).map(name => {
-            return {
-                // generate an id when we don't have the id (== when admin-layereditor is not on the appsetup)
-                // use negative number just in case to make it "non-editable"
-                id: -Oskari.seq.nextVal('dummyProviders'),
-                name,
-                layers: providerMapping[name] || [],
-                groups: []
-            };
-        });
-    }
-    return fromService.map(dataProvider => {
+const getDataProviders = (providers = [], layers = []) => {
+    // Note! providers will be an empty array before layer listing has been loaded/populated
+    // get layers by provider { providerId: [... list of layer ids for provider...]}
+    const layersByProvider = layers.reduce(providerReducer, {});
+    return providers.map(dataProvider => {
         const name = dataProvider.name;
         return {
             id: dataProvider.id,
             name,
-            layers: providerMapping[name] || [],
+            description: dataProvider.desc,
+            layers: layersByProvider['' + dataProvider.id] || [],
             groups: []
         };
     });
@@ -70,20 +61,20 @@ const getDataProviders = (fromService = [], layers = []) => {
  * @param {String} searchText input to filter by. If empty or "falsy" the groups param is returned as-is.
  * @returns Removes any groups/subgroups that don't have layers matching the searchText.
  */
-const filterGroups = (groups = [], searchText) => {
-    if (!searchText || !searchText.trim()) {
+const filterGroups = (groups = [], searchTerms = []) => {
+    if (!searchTerms.length) {
         return groups;
     }
     return groups.map(group => {
-        group.unfilteredLayerCount = group.layers.length;
-        group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
-        group.groups = filterGroups(group.groups, searchText);
-        if (!group.layers.length && !group.groups.length) {
+        group.unfilteredLayerCount = group.getLayerCount();
+        group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchTerms));
+        group.groups = filterGroups(group.groups, searchTerms);
+        if (!group.getLayerCount()) {
             // no layers and no subgroups with layers
-            return;
+            return null;
         }
         return group;
-    }).filter(group => typeof group !== 'undefined');
+    }).filter(group => !!group);
 };
 
 /* ------------- /Helpers ------ */
@@ -124,9 +115,24 @@ class ViewHandler extends StateHandler {
         this.groupingType = groupingType;
         this.updateLayerGroups();
     }
-    setFilter (activeId, searchText) {
+    setFilter (activeId, searchText = '') {
         const previousSearchText = this.filter.searchText;
-        this.filter = { activeId, searchText };
+        // Generate search terms by splitting by * and space
+        // Opening layerlist with request might send searchText as null
+        //  so we need to make sure it's string before processing it.
+        //  Nulls are not changed to function param default values, this is required even with default value.
+        const normalizedQuery = searchText || '';
+        const terms = normalizedQuery
+            .replaceAll('*', ' ')
+            .replaceAll(',', ' ')
+            .split(' ')
+            .filter(item => item !== '');
+        this.filter = {
+            activeId,
+            normalizedQuery,
+            terms
+        };
+
         this.updateLayerGroups();
 
         if (searchText !== previousSearchText) {
@@ -152,6 +158,12 @@ class ViewHandler extends StateHandler {
         if (!id || this.state.selectedLayerIds.includes(id)) {
             return;
         }
+
+        const layer = this.mapLayerService.findMapLayer(id);
+        if (layer && !layer.isVisible()) {
+            Messaging.notify(this.loc.layer.hiddenNotification);
+        }
+
         const selectedLayerIds = [...this.state.selectedLayerIds, id];
         this.updateState({ selectedLayerIds });
         // Adding a map layer can be a resource exhausting task.
@@ -197,7 +209,7 @@ class ViewHandler extends StateHandler {
     }
 
     updateLayerGroups () {
-        const { searchText, activeId: filterId } = this.filter;
+        const { terms, activeId: filterId } = this.filter;
         const isPresetFiltered = filterId !== FILTER_ALL_LAYERS;
         const layers = !isPresetFiltered ? this.mapLayerService.getAllLayers() : this.mapLayerService.getFilteredLayers(filterId);
         const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
@@ -214,7 +226,7 @@ class ViewHandler extends StateHandler {
         }
 
         const groups = groupLayers([...layers], GROUPING_METHODS[this.groupingType], tools, groupsToProcess, this.loc.grouping.noGroup, isPresetFiltered);
-        this.updateState({ groups: filterGroups(groups, searchText) });
+        this.updateState({ groups: filterGroups(groups, terms) });
     }
 
     updateOpenGroupTitles (openGroupTitles) {

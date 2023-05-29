@@ -37,7 +37,8 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
                 return;
             }
             // 20% + actual progress to make progress more visible to user
-            var width = 20 + (current / goal * 80);
+            // top out at 100% so we don't push past the container and cause scrollbars
+            var width = Math.min(20 + (current / goal * 80), 100);
             this._element.css({ width: width.toFixed(1) + '%' });
             if (width >= 100.0) {
                 this.hide(containsErrors ? 2500 : 400);

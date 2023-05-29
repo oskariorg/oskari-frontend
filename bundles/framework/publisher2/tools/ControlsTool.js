@@ -1,66 +1,83 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.ControlsTool',
-    function () {
-    }, {
-        index: 5,
-        pluginName: 'ControlsPlugin',
-        init: function (pdata) {
-            var me = this;
-            var data = pdata;
-            if (Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
-                data.configuration.mapfull.conf.plugins.forEach(function (plugin) {
-                    if (me.getTool().id === plugin.id) {
-                        var hasConfig = typeof plugin.config === 'object';
-                        // enabled if either no config OR has config with false flag
-                        me.setEnabled(!hasConfig || (hasConfig && plugin.config.keyboardControls !== false));
-                    }
-                });
+import { AbstractPublisherTool } from './AbstractPublisherTool';
+
+class ControlsTool extends AbstractPublisherTool {
+    getIndex () {
+        return 5;
+    }
+    getTool () {
+        return {
+            id: 'Oskari.mapframework.mapmodule.ControlsPlugin',
+            title: 'ControlsPlugin',
+            config: this.state.pluginConfig || {},
+            hasNoPlugin: true
+        };
+    }
+    init (data) {
+        const plugin = this.findPluginFromInitData(data);
+        if (plugin) {
+            var hasConfig = typeof plugin.config === 'object';
+            if (hasConfig) {
+                this.storePluginConf(plugin.config);
             }
-        },
-        setEnabled: function (enabled) {
-            this.state.enabled = !!enabled;
-            this.allowPanning(this.state.enabled);
-        },
-        getTool: function () {
-            return {
-                id: 'Oskari.mapframework.mapmodule.ControlsPlugin',
-                title: 'ControlsPlugin',
-                config: {}
-            };
-        },
-        getConfig: function () {
-            var config = null;
-            if (!this.state.enabled) {
-                config = {
-                    keyboardControls: false,
-                    mouseControls: false
-                };
-            }
-            return config;
-        },
-        allowPanning: function (enabled) {
-            if (!enabled) {
-                this.getSandbox().postRequestByName('DisableMapKeyboardMovementRequest', []);
-                this.getSandbox().postRequestByName('DisableMapMouseMovementRequest', []);
-            } else {
-                this.getSandbox().postRequestByName('EnableMapKeyboardMovementRequest', []);
-                this.getSandbox().postRequestByName('EnableMapMouseMovementRequest', []);
-            }
-        },
-        getValues: function () {
-            return {
-                configuration: {
-                    mapfull: {
-                        conf: {
-                            plugins: [{ id: this.getTool().id, config: this.getConfig() }]
-                        }
+            // enabled if either no config OR has config with false flag
+            this.setEnabled(!hasConfig || (hasConfig && plugin.config.keyboardControls !== false));
+        }
+    }
+    // override since we want to use the instance we currently have, not create a new one
+    setEnabled (enabled) {
+        const changed = super.setEnabled(enabled);
+        if (!changed) {
+            return;
+        }
+        this.allowPanning(!!enabled);
+    }
+    getPlugin () {
+        // always use the instance on map, not a new copy
+        return this.getMapmodule().getPluginInstances('ControlsPlugin');
+    }
+    allowPanning (enabled) {
+        if (!enabled) {
+            this.getSandbox().postRequestByName('DisableMapKeyboardMovementRequest', []);
+            this.getSandbox().postRequestByName('DisableMapMouseMovementRequest', []);
+        } else {
+            this.getSandbox().postRequestByName('EnableMapKeyboardMovementRequest', []);
+            this.getSandbox().postRequestByName('EnableMapMouseMovementRequest', []);
+        }
+    }
+    getValues () {
+        return {
+            configuration: {
+                mapfull: {
+                    conf: {
+                        plugins: [{ id: this.getTool().id, config: this.getConfig() }]
                     }
                 }
-            };
-        },
-        stop: function () {
-            this.allowPanning(true);
+            }
+        };
+    }
+    getConfig () {
+        // NOTE! returning null when isEnabled() is ON PURPOSE!
+        // Usually this is reversed
+        if (this.isEnabled()) {
+            return null;
         }
-    }, {
-        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        // In this one we want to have the plugin always present but we configure it to disable controls
+        return {
+            keyboardControls: false,
+            mouseControls: false
+        };
+    }
+    stop () {
+        super.stop();
+        // resume panning on map
+        this.allowPanning(true);
+    }
+}
+
+// Attach protocol to make this discoverable by Oskari publisher
+Oskari.clazz.defineES('Oskari.publisher.ControlsTool',
+    ControlsTool,
+    {
         'protocol': ['Oskari.mapframework.publisher.Tool']
-    });
+    }
+);

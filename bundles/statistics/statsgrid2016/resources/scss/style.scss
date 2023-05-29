@@ -7,6 +7,12 @@ $inputWidth: 94%;
 $buttonWidth: 86%;
 
 $flyoutPadding: 16px;
+.SumoSelect {
+    .select-all {
+        /* AntD global reset changes default sizing to border-box which breaks SumoSelect */
+        box-sizing: content-box !important;
+    }
+}
 
 /* ********************************************
  * These are for common code in statsgrid
@@ -584,85 +590,6 @@ div.oskari-flyout {
     }
 }
 
-/** Toggle buttons */
-.mapplugin.statsgrid-published-toggle-buttons {
-    border: 1px solid rgba(0, 0, 0, 0.2);
-
-    .map {
-        background-color: $darkColor;
-        float: left;
-        height: 36px;
-        width: 36px;
-        background-image: url('../images/map_dark.png');
-        cursor: pointer;
-        &.active {
-            background-color: $lightColor;
-            background-image: url('../images/map_light.png');
-        }
-    }
-
-    .table {
-        background-color: $darkColor;
-        float: left;
-        height: 36px;
-        width: 36px;
-        background-image: url('../images/table_dark.png');
-        cursor: pointer;
-        &.active {
-            background-color: $lightColor;
-            background-image: url('../images/table_light.png');
-        }
-    }
-    .diagram {
-        background-color: $darkColor;
-        float: left;
-        height: 36px;
-        width: 36px;
-        background-image: url("../images/tile-diagram-dark.png");
-        cursor: pointer;
-        background-repeat: no-repeat;
-        background-position: center;
-        &.active {
-            background-color: $lightColor;
-            background-image: url("../images/tile-diagram-light.png");
-            background-repeat: no-repeat;
-        }
-    }
-    .classification {
-        background-color: $darkColor;
-        float: left;
-        height: 36px;
-        width: 36px;
-        background-image: url('../images/legend-dark.png');
-        background-repeat: no-repeat;
-        background-position: center;
-        cursor: pointer;
-        &.active {
-            background-color: $lightColor;
-            background-image: url('../images/legend-light.png');
-        }
-    }
-    .series {
-        background-color: $darkColor;
-        float: left;
-        height: 36px;
-        width: 36px;
-        background-image: url('../images/timeseries-dark.png');
-        background-repeat: no-repeat;
-        background-position: center;
-        cursor: pointer;
-        &.active {
-            background-color: $lightColor;
-            background-image: url('../images/timeseries-light.png');
-        }
-    }
-
-    .clear {
-        clear: both;
-    }
-
-}
-
 
 /* ********************************************
  * Statsgrid tile styles
@@ -944,6 +871,7 @@ background-color: #888888;
 }
 .user-dataset-edit, .user-dataset-delete {
     text-align: center;
+    padding-left: 5px;
 }
 /* ********************************************
  * Indicator list

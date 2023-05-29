@@ -214,7 +214,8 @@ Oskari.registerLocalization(
                 "saveFailed": "Impossible d'enregistrer la carte embarquée.",
                 "nameIllegalCharacters": "Le nom de carte contient des caractères invalides (p. ex., balises HTML). Veuillez corriger le nom et réessayer.",
                 "domainIllegalCharacters": "L'adresse du site Web contient des caractères invalides. Saisissez une adresse URL de site Web sans préfixe ou une adresse de sous-page. Par exemple : pageaccueil.com. Les caractères valides sont les lettres (a-z, A-Z, å, ä, ö, Å, Ä, Ö), les chiffres (0-9) et les caractères spéciaux (-, _, ., !, ~, *, ' et ()). Veuillez corriger l'adresse et réessayer."
-            }
+            },
+            "noUI": "Masquer l'interface utilisateur (utiliser l'interface  RPC)"
         },
         "NotLoggedView": {
             "text": "Bienvenue à la publication de la carte embarquée sur votre site Web. Veuillez d'abord ouvrir une session ou vous inscrire.",

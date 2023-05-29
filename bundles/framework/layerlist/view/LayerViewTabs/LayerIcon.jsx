@@ -9,7 +9,7 @@ export const LayerIcon = ({ type, hasTimeseries = false, additionalTooltipKey, .
         if (hasTimeseries) {
             return <TimeSerieIcon {...rest} />;
         }
-        if (['wmts', 'wms', 'arcgis93', 'arcgis'].includes(type)) {
+        if (['wmts', 'wms', 'arcgis93', 'arcgis', 'vectortile', 'bingmaps'].includes(type)) {
             return <ImageLayerIcon {...rest} />;
         }
         if (['wfs'].includes(type)) {

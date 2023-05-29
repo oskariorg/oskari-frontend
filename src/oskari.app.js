@@ -1,5 +1,11 @@
-// So IE won't use a cached xhr result -> adds a _=timestamp param for each request...
-jQuery.ajaxSetup({ cache: false });
+import { THEMING } from './theming';
+import './global';
+
+// Tests not using global jQuery so this is not needed.
+if (typeof jQuery !== 'undefined') {
+    // So IE won't use a cached xhr result -> adds a _=timestamp param for each request...
+    jQuery.ajaxSetup({ cache: false });
+}
 
 (function (o) {
     if (!o) {
@@ -154,6 +160,9 @@ jQuery.ajaxSetup({ cache: false });
             if (typeof Oskari.user === 'function') {
                 Oskari.user(setup.env.user);
             }
+            if (setup.env.app?.theme) {
+                THEMING.setTheme(setup.env.app.theme);
+            }
 
             Oskari.urls.set(setup.env.urls);
         },
@@ -250,6 +259,9 @@ jQuery.ajaxSetup({ cache: false });
          */
         getSystemDefaultViews: function () {
             return this.appSetup.env.defaultApps || [];
+        },
+        getTheming: function () {
+            return THEMING;
         }
     };
     o.app = new App();

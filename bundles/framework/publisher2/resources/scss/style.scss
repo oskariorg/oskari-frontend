@@ -1,28 +1,3 @@
-#contentMap {
-    &.mapPublishMode {
-        > #mapdiv,
-        > div.row-fluid {
-            position: relative;
-            left: 212px;
-        }
-    }
-
-    div.basic_publisher {
-        background: #FFF;
-        position: absolute;
-        height: 100%;
-        top: 0;
-        left: 0;
-
-        /* sidebar has 3, we want to open it on top of this */
-        z-index: 2;
-        width: 382px;
-
-        div.content {
-            padding: 10px;
-        }
-    }
-}
 
 div.codesnippet {
     word-wrap: break-word;
@@ -38,6 +13,20 @@ div.notLoggedIn {
 }
 
 div.basic_publisher {
+    position: relative;
+    background: #FFF;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    /* sidebar has 3, we want to open it on top of this */
+    z-index: 2;
+    width: 382px;
+    max-width: 382px;
+
+    div.content {
+        padding: 10px;
+    }
     // Temp, change inputs to TextInput and get rid of this
     input[type=text] {
         width: 260px;
@@ -136,7 +125,11 @@ div.basic_publisher {
 
     > div.content {
         overflow: auto;
-        height: unquote("calc(100% - 108px)");
+        position: absolute;
+        top: 50px;
+        bottom: 0;
+        left: 0;
+        right: 0;
     }
 
     > div.header {
@@ -148,92 +141,6 @@ div.basic_publisher {
         }
     }
 
-    .layer.selected {
-        border: 1pt solid #c0d0e0;
-        margin: 0 5px 5px 0;
-
-        &.out-of-scale,
-        &.out-of-content,
-        &.hidden {
-            color: #909090;
-        }
-
-        div.layer-info {
-            background-color: #FFF;
-            padding: 5px;
-
-            div.layer-title {
-                display: inline;
-
-                h4 {
-                    padding: 0;
-                }
-            }
-
-            div.layer-tool-remove {
-                float: right;
-            }
-        }
-
-        div.layer-tools {
-            background-color: #f3f3f3;
-            padding: 7px;
-
-            div.layout-slider {
-                width: 140px;
-                display: inline-block;
-                margin-right: 16px;
-            }
-
-            div.left-tools {
-                display: inline-block;
-
-                div.layer-visibility {
-                    padding-right: 5px;
-                    display: inline-block;
-                }
-
-                div.layer-opacity {
-                    display: inline-block;
-                    background-image: url("../images/opacity_slider.png");
-                    background-repeat: no-repeat;
-
-                    input.opacity {
-                        padding: 1px;
-                        width: 25px;
-                    }
-                }
-            }
-
-            div.right-tools {
-                padding-top: 5px;
-                float: right;
-
-                div {
-                    float: left;
-                    margin-right: 5px;
-
-                    &.layer-rights,
-                    &.object-data {
-                        padding-top: 2px;
-                    }
-                }
-            }
-        }
-    }
-
-    ul.selectedLayersList {
-        height: 100%;
-        width: 100%;
-        overflow: auto;
-        list-style-type: none;
-        padding: 0;
-        margin: 5px 0 0;
-
-        span {
-            position: absolute;
-        }
-    }
     label.oskari-languageselect {
         clear: left;
     }
@@ -301,6 +208,10 @@ div.publisher div.startview {
     }
 }
 
+div.divmanazerpopup #publisher-colour-popup input[type=radio] {
+    margin: 8px;
+}
+
 div#publisher-colour-inputs {
     margin-bottom: 15px;
 }
@@ -339,24 +250,6 @@ div#publisher-custom-colours {
             width: 30px;
         }
     }
-}
-
-/* I don't think this is needed anymore?
-.maincontainer {
-    ul.selectedLayersList {
-        margin-left: 0px;
-        li {
-            list-style: none;
-        }
-    }
-    .block {
-        display: block;
-    }
-}
-*/
-
-#editModeBtn {
-    margin: 0;
 }
 
 #publisher-layout-colours {

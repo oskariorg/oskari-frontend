@@ -1,4 +1,16 @@
 import '../BasicMapModulePlugin';
+import './event/DataForMapLocationEvent';
+
+import './formatter/GetFeatureInfoFormatter';
+import './request/GetFeatureInfoHandler';
+import './request/GetFeatureInfoRequest';
+import './request/GetFeatureInfoActivationRequest';
+import './request/ResultHandlerRequest';
+import './request/ResultHandlerRequestHandler';
+import './request/SwipeStatusRequest';
+import './request/SwipeStatusRequestHandler';
+
+import { getGfiContent, getGfiResponseType, hasGfiData } from './GfiHelper';
 /**
  * @class Oskari.mapframework.mapmodule.GetInfoPlugin
  *
@@ -43,6 +55,10 @@ Oskari.clazz.define(
             }
         }
         this._requestedDisabled = new Set(); // ids that requested plugin to be disabled
+        this._swipeStatus = {
+            cropX: null,
+            layerId: null
+        };
     }, {
 
         /**
@@ -85,7 +101,9 @@ Oskari.clazz.define(
                 return;
             }
             // toggle controls
-            this._toggleUIControls(enabled);
+            if (!enabled) {
+                this._closeGfiInfo();
+            }
             this._enabled = enabled;
         },
 
@@ -140,9 +158,6 @@ Oskari.clazz.define(
                 },
                 'Publisher2.ColourSchemeChangedEvent': function (evt) {
                     this._handleColourSchemeChangedEvent(evt);
-                },
-                'Publisher.ColourSchemeChangedEvent': function (evt) {
-                    this._handleColourSchemeChangedEvent(evt);
                 }
             };
         },
@@ -169,14 +184,16 @@ Oskari.clazz.define(
                 'GetInfoPlugin.ResultHandlerRequest': Oskari.clazz.create(
                     'Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequestHandler',
                     this
+                ),
+                'GetInfoPlugin.SwipeStatusRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.mapmodule.getinfoplugin.request.SwipeStatusRequestHandler',
+                    this
                 )
             };
         },
 
-        _toggleUIControls: function (enabled) {
-            if (!enabled) {
-                this._closeGfiInfo();
-            }
+        resetUI: function () {
+            this._closeGfiInfo();
         },
 
         /**
@@ -222,7 +239,8 @@ Oskari.clazz.define(
                 layer.getQueryable &&
                 layer.getQueryable() &&
                 layer.isInScale(this.getSandbox().getMap().getScale()) &&
-                layer.isVisible());
+                layer.isVisible() &&
+                layer.getOpacity() !== 0);
         },
 
         /**
@@ -297,9 +315,13 @@ Oskari.clazz.define(
             const me = this;
             const dteMs = (new Date()).getTime();
             const requestedLayers = layers || me.getSandbox().findAllSelectedMapLayers();
-            const layerIds = me._buildLayerIdList(requestedLayers);
+            let layerIds = me._buildLayerIdList(requestedLayers);
             const mapVO = me.getSandbox().getMap();
             const px = me.getMapModule().getPixelFromCoordinate(lonlat);
+
+            if (this._swipeStatus.cropX && this._swipeStatus.layerId) {
+                layerIds = layerIds.filter(l => l !== this._swipeStatus.layerId || px.x < this._swipeStatus.cropX);
+            }
 
             if (layerIds.length === 0) {
                 return;
@@ -309,10 +331,14 @@ Oskari.clazz.define(
                 .filter((layer) => layerIds.includes(layer.getId()))
                 .reduce((result, layer) => {
                     const params = layer.getParams();
-                    if (typeof params !== 'object' || !Object.keys(params).length) {
+                    if (typeof params !== 'object') {
                         return result;
                     }
-                    result[layer.getId()] = params;
+
+                    result[layer.getId()] = {
+                        ...params,
+                        STYLES: layer.getCurrentStyle().getName()
+                    };
                     return result;
                 }, {});
 
@@ -385,6 +411,49 @@ Oskari.clazz.define(
             me._showGfiInfo = callback;
         },
 
+        setSwipeStatus: function (layerId, cropX) {
+            this._swipeStatus = {
+                layerId,
+                cropX
+            };
+        },
+
+        /**
+         * Sends DataForMapLocationEvent.
+         *
+         * @method _sendDataForMapLocationEvent
+         * @private
+         * @param  {Object} data
+         */
+        _sendDataForMapLocationEvent: function (data) {
+            const me = this;
+            // Loop all GFI response data and send GFIResultEvent for all features
+            data.features.forEach(feature => {
+                const content = getGfiContent(feature);
+                const type = getGfiResponseType(feature);
+                if (hasGfiData(content, type)) {
+                    // send event if layer get gfi for selected coordinates
+                    // WFS layer layerId come from data object other layers layerId come from feature object
+                    var dataForMapLocationEvent = Oskari.eventBuilder(
+                        'DataForMapLocationEvent'
+                    )(data.lonlat.lon, data.lonlat.lat, content, data.layerId || feature.layerId, type);
+                    me.getSandbox().notifyAll(dataForMapLocationEvent);
+                }
+            });
+        },
+
+        /**
+         * Toggle GFI popup visibility when selected/unselected "Hide user interface (Use RPC interface)" in publisher
+         * @method publisherHideUI
+         * @param {Boolean} hide hide UI
+         */
+        publisherHideUI: function (hide) {
+            this._config.noUI = hide;
+            if (hide === true && this.getSandbox().hasHandler('InfoBox.HideInfoBoxRequest')) {
+                var reqBuilder = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest');
+                this.getSandbox().request(this, reqBuilder(this.infoboxId));
+            }
+        },
         /**
          * Formats the given data and sends a request to show infobox.
          *
@@ -403,12 +472,20 @@ Oskari.clazz.define(
                 fragments = this._formatWFSFeaturesForInfoBox(data);
             }
 
+            this._sendDataForMapLocationEvent(data);
+
             if (fragments.length) {
                 contentData.html = this._renderFragments(fragments);
                 contentData.layerId = fragments[0].layerId;
                 content.push(contentData);
             }
-            var { colourScheme, font } = this._config || {};
+            var { colourScheme, font, noUI } = this._config || {};
+
+            // GFIPlugin.config.noUI: true means the infobox for GFI content shouldn't be shown
+            // DataForMapLocationEvent is still triggered allowing RPC apps to customize and format the data that is shown.
+            if (noUI === true) {
+                return;
+            }
 
             this._showGfiInfo(content, data, this.formatters, {
                 colourScheme: colourScheme,

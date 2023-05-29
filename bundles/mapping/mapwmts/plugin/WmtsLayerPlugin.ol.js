@@ -1,6 +1,8 @@
-import olSourceVector from 'ol/source/Vector';
-import olLayerVector from 'ol/layer/Vector';
+import olLayerTile from 'ol/layer/Tile';
+import olSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
+import { formatCapabilitiesForOpenLayers } from './CapabilitiesHelper';
 import { getZoomLevelHelper } from '../../mapmodule/util/scale';
+import { Messaging } from 'oskari-ui/util';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -11,6 +13,7 @@ const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerCo
 Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     function () {
         this._log = Oskari.log(this.getName());
+        this._capabilities = {};
     }, {
         __name: 'WmtsLayerPlugin',
         _clazz: 'Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
@@ -41,12 +44,17 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 LayerComposingModel.VERSION
             ], ['1.0.0']);
             mapLayerService.registerLayerModel(this.layertype, className, composingModel);
-            const layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
-            mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
-
-            this.service = Oskari.clazz.create('Oskari.mapframework.wmts.service.WMTSLayerService', mapLayerService, this.getSandbox());
         },
-
+        _handleDescribeLayerImpl (layer, info) {
+            const { capabilities } = info;
+            const layerId = layer.getId();
+            try {
+                this._log.debug(`Running WMTS capabilities parsing for layer id: ${layerId}`, capabilities);
+                this._capabilities[layerId] = formatCapabilitiesForOpenLayers(capabilities);
+            } catch (err) {
+                this._log.warn(`Failed to parse capabilities for WMTS layer id: ${layerId}`, capabilities);
+            }
+        },
         /**
          * @method _addMapLayerToMap
          * @private
@@ -59,51 +67,62 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             if (!this.isLayerSupported(layer)) {
                 return;
             }
-            var me = this;
-            var map = me.getMap();
-            var mapModule = me.getMapModule();
-            var wmtsHolderLayer = this._getPlaceHolderWmtsLayer(layer);
-            map.addLayer(wmtsHolderLayer);
-            this.setOLMapLayers(layer.getId(), wmtsHolderLayer);
-            this.service.getCapabilitiesForLayer(layer, function (wmtsLayer) {
-                me._log.debug('created WMTS layer ' + wmtsLayer);
-                me._registerLayerEvents(wmtsLayer, layer);
-
-                const zoomLevelHelper = getZoomLevelHelper(mapModule.getScaleArray());
-                zoomLevelHelper.setOLZoomLimits(wmtsLayer, layer.getMinScale(), layer.getMaxScale());
-
-                // Get the reserved current index for wmts layer
-                var holderLayerIndex = mapModule.getLayerIndex(wmtsHolderLayer);
-                map.removeLayer(wmtsHolderLayer);
-                wmtsLayer.setVisible(layer.isVisible());
-                if (keepLayerOnTop) {
-                    // use the index as it was when addMapLayer was called
-                    // bringing layer on top causes timing errors, because of async capabilities load
-                    map.getLayers().insertAt(holderLayerIndex, wmtsLayer);
-                } else {
-                    map.getLayers().insertAt(0, wmtsLayer);
-                }
-                me.setOLMapLayers(layer.getId(), wmtsLayer);
-                me._updateLayer(layer);
-            }, function () {
-            });
-        },
-        /**
-         * Reserves correct position for wmts layer, which will be added async later
-         * This layer is removed, when the finalized wmts layer will be added
-         * @param layer
-         * @returns {*}
-         * @private
-         */
-        _getPlaceHolderWmtsLayer: function (layer) {
-            var layerHolder = new olLayerVector({
-                source: new olSourceVector({}),
-                title: 'layer_' + layer.getId(),
-                visible: false
+            const layerId = layer.getId();
+            const caps = this._capabilities[layerId];
+            if (!caps) {
+                Messaging.warn(Oskari.getMsg('MapModule', 'layerUnsupported.unavailable', { name: layer.getName() }));
+                return;
             }
-            );
+            const mapModule = this.getMapModule();
+            const wmtsLayer = this.__createWMTSLayer(layer, caps);
+            this._log.debug('created WMTS layer ' + wmtsLayer);
+            this._registerLayerEvents(wmtsLayer, layer);
 
-            return layerHolder;
+            const zoomLevelHelper = getZoomLevelHelper(mapModule.getScaleArray());
+            zoomLevelHelper.setOLZoomLimits(wmtsLayer, layer.getMinScale(), layer.getMaxScale());
+
+            mapModule.addLayer(wmtsLayer, !keepLayerOnTop);
+            this.setOLMapLayers(layerId, wmtsLayer);
+        },
+        __getLayerConfig: function (layer) {
+            // default params and options
+            // URL is tuned serverside so we need to use the one it gives (might be proxy url)
+            return {
+                name: 'layer_' + layer.getId(),
+                style: layer.getCurrentStyle().getName(),
+                layer: layer.getLayerName(),
+                buffer: 0,
+                crossOrigin: layer.getAttributes('crossOrigin'),
+                ...layer.getOptions()
+            };
+        },
+        __createWMTSLayer: function (layer, caps) {
+            const config = this.__getLayerConfig(layer);
+            const options = optionsFromCapabilities(caps, config);
+            // if requestEncoding is set for layer -> use it since proxied are
+            //  always KVP and openlayers defaults to REST
+            options.requestEncoding = config.requestEncoding || options.requestEncoding;
+            if (!options.urls.length) {
+                // force KVP if we have no resource urls/possible misconfig
+                options.requestEncoding = 'KVP';
+            }
+            if (options.requestEncoding === 'KVP') {
+                // override url to one provided by server since the layer might be proxied
+                options.urls = [layer.getLayerUrl()];
+            }
+            // attach params to URLs (might contain apikey or other params that aren't passed on capabilities etc)
+            options.urls = options.urls.map(url => Oskari.urls.buildUrl(url, layer.getParams()));
+            // allows layer.options.wrapX to be passed to source.
+            // On OL 6.4.3 it's always false from optionsFromCapabilities()
+            // On 6.6.1 it appears to be correct and this line could be removed
+            options.wrapX = !!config.wrapX;
+            const wmtsLayer = new olLayerTile({
+                source: new olSourceWMTS(options),
+                opacity: layer.getOpacity() / 100.0,
+                transparent: true,
+                visible: layer.isVisibleOnMap()
+            });
+            return wmtsLayer;
         },
         /**
          * Adds event listeners to ol-layers
@@ -143,11 +162,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             });
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
+        extend: ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]

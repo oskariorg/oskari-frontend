@@ -6,7 +6,7 @@ const OskariConfig = require('./webpack/config.js');
 const parseParams = require('./webpack/parseParams.js');
 const { lstatSync, readdirSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
-const { DefinePlugin, NormalModuleReplacementPlugin } = require('webpack');
+const { DefinePlugin } = require('webpack');
 const CopywebpackPlugin = require('copy-webpack-plugin');
 
 const proxyPort = 8081;
@@ -14,8 +14,8 @@ const proxyPort = 8081;
 const isDirectory = source => lstatSync(source).isDirectory();
 const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
 
-// The path to the CesiumJS source code
-const cesiumSource = 'node_modules/cesium/Source';
+// The path to the CesiumJS source code (normal and dev mode)
+const cesiumSourceOptions = ['../cesium/Source', 'node_modules/cesium/Source'];
 const cesiumTarget = 'cesium';
 
 module.exports = (env, argv) => {
@@ -31,18 +31,16 @@ module.exports = (env, argv) => {
         filename: '[name]/oskari.min.css'
     }));
 
-    // Replace ant design global styles with a custom solution to prevent global styles affecting the app.
-    const replacement = path.join(__dirname, 'src/react/ant-globals.less');
-    plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
-
     // Copy Cesium Assets, Widgets, and Workers to a static directory
-    plugins.push(new CopywebpackPlugin({ patterns: [
-        { from: path.join(__dirname, cesiumSource, '../Build/Cesium/Workers'), to: cesiumTarget + '/Workers' },
-        { from: path.join(__dirname, cesiumSource, 'Assets'), to: cesiumTarget + '/Assets' },
-        { from: path.join(__dirname, cesiumSource, 'Widgets'), to: cesiumTarget + '/Widgets' },
-        // copy Cesium's minified third-party scripts
-        { from: path.join(__dirname, cesiumSource, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty' }
-    ]}));
+    cesiumSourceOptions.forEach(possibleSrcPath => {
+        plugins.push(new CopywebpackPlugin([
+            { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/Workers'), to: cesiumTarget + '/Workers' },
+            { from: path.join(__dirname, possibleSrcPath, 'Assets'), to: cesiumTarget + '/Assets' },
+            { from: path.join(__dirname, possibleSrcPath, 'Widgets'), to: cesiumTarget + '/Widgets' },
+            // copy Cesium's minified third-party scripts
+            { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty' }
+        ]));
+    });
 
     // Define relative base path in Cesium for loading assets
     plugins.push(new DefinePlugin({
@@ -58,7 +56,7 @@ module.exports = (env, argv) => {
             toUrlUndefined: true
         },
         cache: {
-          type: 'filesystem'
+            type: 'filesystem'
         },
         mode: isProd ? 'production' : 'development',
         entry: entries,

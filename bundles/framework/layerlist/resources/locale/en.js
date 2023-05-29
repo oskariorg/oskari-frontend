@@ -49,7 +49,11 @@ Oskari.registerLocalization(
                 'moveToScale': 'Move to a suitable map level',
                 'moveToContentArea': 'Move to a suitable location',
                 'publishable': 'Publishable',
-                'hidden': 'The map layer is temporarily hidden.'
+                'hidden': 'The map layer is temporarily hidden.',
+                'hide': 'Hide map layer',
+                'show': 'Show map layer',
+                'drag': 'Drag the map layer up/down in the list: layers listed nearer the top are shown on the map over layers listed lower.',
+                'hiddenNotification': 'You have hidden the map layer earlier. Change the setting under "Selected layers" tab.'
             },
             'backendStatus': {
                 'OK': 'The map layer is currently available.',
@@ -64,12 +68,14 @@ Oskari.registerLocalization(
                 'wmts': 'Raster layer',
                 'arcgis93': 'Raster layer',
                 'arcgis': 'Raster layer',
+                'vectortile': 'Raster layer',
+                'bingmaps': 'Raster layer',
                 'wfs': 'Vector layer',
-                'vectortile': 'Vector layer',
-                'userlayer': '',
-                'myplaces': '',
-                'analysislayer': '',
-                'tiles3d': ''
+                'vector': 'Vector layer',
+                'userlayer': 'Own dataset',
+                'myplaces': 'My map layer',
+                'analysislayer': 'Own analysis',
+                'tiles3d': '3D layer'
             },
             'guidedTour': {
                 'title': 'Map layers',

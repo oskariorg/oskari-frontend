@@ -1,3 +1,4 @@
+import { LayerGroup } from '../../../../model/LayerGroup';
 
 const sortGroupsAlphabetically = (groups = []) => {
     if (!Array.isArray(groups)) {
@@ -6,8 +7,8 @@ const sortGroupsAlphabetically = (groups = []) => {
     const sorted = [...groups].sort((a, b) => {
         // ensure that empty groups are at the top
         // not sure if this is requested functionality or not
-        const layerCountA = a.layers.length;
-        const layerCountB = b.layers.length;
+        const layerCountA = a.getLayerCount();
+        const layerCountB = b.getLayerCount();
         if (layerCountA === 0 && layerCountB !== 0) {
             return -1;
         }
@@ -23,6 +24,14 @@ const sortGroupsAlphabetically = (groups = []) => {
     return sorted;
 };
 
+const layerSortFn = (a, b) => {
+    const delta = Oskari.util.naturalSort(a.getName(), b.getName());
+    if (delta !== 0) {
+        return delta;
+    }
+    return a.getLayerType().localeCompare(b.getLayerType());
+};
+
 /*
 const group = {
     id: -1,
@@ -33,10 +42,7 @@ const group = {
 createGroupModel(group, ...)
 */
 const createGroupModel = (group, method, allLayers, tools) => {
-    const newGroup = Oskari.clazz.create(
-        'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-        group.id, method, group.name
-    );
+    const newGroup = new LayerGroup(group.id, method, group.name, group.description);
     newGroup.setTools(tools);
     // attach layers to group
     const groupLayers = group.layers || [];
@@ -50,7 +56,7 @@ const createGroupModel = (group, method, allLayers, tools) => {
             }
             return groupLayerIds.includes(layer.getId());
         });
-        layerModels.sort((a, b) => Oskari.util.naturalSort(a.getName(), b.getName()));
+        layerModels.sort(layerSortFn);
         newGroup.setLayers(layerModels);
     }
 
@@ -79,10 +85,10 @@ const filterOutEmptyGroups = (groups = []) => {
         group.groups = filterOutEmptyGroups(group.groups);
         if (!group.layers.length && !group.groups.length) {
             // no layers and no subgroups with layers
-            return;
+            return null;
         }
         return group;
-    }).filter(group => typeof group !== 'undefined');
+    }).filter(group => !!group);
 };
 /**
  * Function to construct layer groups based on information included in layers and given grouping method.

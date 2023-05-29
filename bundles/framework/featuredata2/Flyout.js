@@ -55,8 +55,7 @@ Oskari.clazz.define(
                 this.sandbox.registerForEventByName(this, t);
             }
         }
-        this.WFSLayerService = null;
-        this.handler = new FeatureDataHandler((state, updated) => this.update(state, updated));
+        this.handler = new FeatureDataHandler(instance.getSelectionService(), (state, updated) => this.update(state, updated));
     }, {
         __templates: {
             wrapper: '<div class="gridMessageContainer" style="margin-top:30px; margin-left: 10px;"></div>'
@@ -220,6 +219,10 @@ Oskari.clazz.define(
                 this._updatePanels(layerIds);
                 return;
             }
+            if (updated === 'layerUpdate') {
+                this.updatePanelTitles();
+                return;
+            }
             if (state.isActive) {
                 this._renderFeatureData(state);
             }
@@ -244,7 +247,7 @@ Oskari.clazz.define(
 
             // this is needed to add the functionality to filter with aggregate analyse values
             // if value is true, the link to filter with aggregate analyse values is added to dialog
-            var isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable();
+            var isAggregateValueAvailable = false; // me.checkIfAggregateValuesAreAvailable();
 
             var fixedOptions = {
                 bboxSelection: true,
@@ -256,13 +259,10 @@ Oskari.clazz.define(
                 fixedOptions
             );
 
-            me.filterDialog.setUpdateButtonHandler(function (filters) {
-                // throw event to new wfs
-                var event = Oskari.eventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
-                me.instance.sandbox.notifyAll(event);
+            me.filterDialog.setUpdateButtonHandler(function (values = {}) {
+                me.instance.getFilterSelector().selectWithProperties(values.filters, layer.getId());
             });
-
-            if (me.service) {
+            if (isAggregateValueAvailable) {
                 me.aggregateAnalyseFilter = Oskari.clazz.create(
                     'Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
                     me.instance,
@@ -280,6 +280,11 @@ Oskari.clazz.define(
 
         // function gives value to addLinkToAggregateValues (true/false)
         checkIfAggregateValuesAreAvailable: function () {
+            // Force false since 99,999% of users don't have aggregate analysis saved and this only adds confusion to most people.
+            // We could enable it if we detect that user actually have these OR add error handling that tells the user the
+            //  links is not functioning before there are aggregate analysis available for the user
+            return false;
+            /*
             this.service = this.instance.sandbox.getService(
                 'Oskari.analysis.bundle.analyse.service.AnalyseService'
             );
@@ -287,6 +292,7 @@ Oskari.clazz.define(
                 return false;
             }
             return true;
+            */
         },
 
         /**
@@ -561,7 +567,7 @@ Oskari.clazz.define(
 
             // set selection handler
             grid.addSelectionListener((pGrid, dataId, isCtrlKey) => {
-                this._handleGridSelect(layer, dataId, !isCtrlKey);
+                this._handleGridSelect(layer, dataId, isCtrlKey);
             });
 
             // set popup handler for inner data
@@ -578,7 +584,7 @@ Oskari.clazz.define(
 
             grid.setColumnSelector(true);
             grid.setResizableColumns(true);
-            const { disableExport, allowLocateOnMap } = this.instance.getConfiguration();
+            const { disableExport } = this.instance.getConfiguration();
             if (!disableExport) {
                 grid.setExcelExporter(layer.hasPermission('download'));
             }
@@ -593,69 +599,7 @@ Oskari.clazz.define(
             const visibleFields = model.getFields().filter(field => !DEFAULT_HIDDEN_FIELDS.includes(field));
             visibleFields.forEach(field => grid.setNumericField(field, this._fixedDecimalCount));
             grid.setVisibleFields(visibleFields);
-            // ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!
-            if (layer.isManualRefresh() && allowLocateOnMap) {
-                this.createLocateMapColumn(grid);
-            }
             return grid;
-        },
-        createLocateMapColumn: function (grid) {
-            // custom renderer for locating feature on map
-            grid.setColumnUIName('locate_on_map', ' ');
-            grid.setColumnValueRenderer('locate_on_map', (name, data) => {
-                const div = this.templateLocateOnMap.clone();
-                const { __fid } = data;
-                div.attr('data-fid', __fid);
-
-                const iconData = Oskari.getMarkers()[this.locateOnMapIcon].data;
-                const icon = jQuery(iconData);
-                const fillColor = __fid === this.locateOnMapFID ? this.colors.locateOnMap.active : this.colors.locateOnMap.normal;
-                icon.find('path').attr('fill', fillColor);
-                icon.attr({
-                    x: 0,
-                    y: 0
-                });
-                div.html(icon.outerHTML());
-
-                div.on('click', event => {
-                    // Save clicked feature fid to check centered status
-                    this.locateOnMapFID = __fid;
-                    // TODO: reset old
-                    // jQuery('.featuredata-go-to-location').html(normalIconObj.outerHTML());
-                    // jQuery(this).html(activeIconObj.outerHTML());
-                    icon.find('path').attr('fill', this.colors.locateOnMap.active);
-
-                    // create the eventhandler for this particular fid
-                    this.instance.eventHandlers.WFSFeatureGeometriesEvent = event => {
-                        const wkts = event.getGeometries();
-                        let wkt;
-                        for (var i = 0; i < wkts.length; i++) {
-                            if (wkts[i][0] === __fid) {
-                                wkt = wkts[i][1];
-                                break;
-                            }
-                        }
-                        var viewportInfo = this.instance.mapModule.getViewPortForGeometry(wkt);
-                        if (viewportInfo) {
-                            // feature didn't fit -> zoom to bounds
-                            if (viewportInfo.bounds) {
-                                setTimeout(() => {
-                                    this.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, viewportInfo.bounds]);
-                                }, 1000);
-                            } else {
-                                // else just set center.
-                                setTimeout(() => {
-                                    this.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y]);
-                                }, 1000);
-                            }
-                        }
-                        this.instance.sandbox.unregisterFromEventByName(this.instance, 'WFSFeatureGeometriesEvent');
-                        this.instance.eventHandlers.WFSFeatureGeometriesEvent = null;
-                    };
-                    this.instance.sandbox.registerForEventByName(this.instance, 'WFSFeatureGeometriesEvent');
-                });
-                return div;
-            });
         },
         createShowSelectedFirst: function (grid) {
             const checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
@@ -675,12 +619,6 @@ Oskari.clazz.define(
             if (panel && panel.grid && this.tabsContainer.isSelected(panel)) {
                 this.flyout.find('div.tab-content').css({ opacity });
             }
-        },
-        getWFSLayerService: function () {
-            if (!this.WFSLayerService) {
-                this.WFSLayerService = this.instance.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
-            }
-            return this.WFSLayerService;
         },
         /**
          * @method _addFeatureValues
@@ -739,22 +677,18 @@ Oskari.clazz.define(
          *           WFS layer that was added
          * @param {String} featureId
          *           id for the feature that was selected
-         * @param {Boolean} makeNewSelection
+         * @param {Boolean} keepPrevious
          *           true to keep previous selection, false to clear before selecting
          * Notifies components that a selection was made
          */
         // TODO: why WFSLayerService doesn't send selected events??
-        _handleGridSelect: function (layer, featureId, makeNewSelection) {
+        _handleGridSelect: function (layer, featureId, keepPrevious) {
             const layerId = layer.getId();
             const panel = this.getPanel(layerId);
             if (!this.tabsContainer.isSelected(panel)) {
                 return;
             }
-            const service = this.getWFSLayerService();
-            const builder = Oskari.eventBuilder('WFSFeaturesSelectedEvent');
-            service.setWFSFeaturesSelections(layerId, [featureId], makeNewSelection);
-            var event = builder(service.getSelectedFeatureIds(layerId), layer, true);
-            this.instance.sandbox.notifyAll(event);
+            this.instance.setFeatureSelections(layerId, [featureId], keepPrevious);
         },
 
         /**

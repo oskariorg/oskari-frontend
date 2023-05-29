@@ -33,25 +33,8 @@ Oskari.registerLocalization(
                     "tileGrid": "Tile grid"
                 },
                 "locale": {
-                    "generic": {
-                        "name": "Name in {0}",
-                        "subtitle": "Description in {0}"
-                    },
-                    "en": {
-                        "lang": "English",
-                        "name": "Name in English",
-                        "subtitle": "Description in English"
-                    },
-                    "fi": {
-                        "lang": "Finnish",
-                        "name": "Name in Finnish",
-                        "subtitle": "Description in Finnish"
-                    },
-                    "sv": {
-                        "lang": "Swedish",
-                        "name": "Name in Swedish",
-                        "subtitle": "Description in Swedish"
-                    }
+                    "name": "Name",
+                    "description": "Description"
                 },
                 "opacity": "Opacity",
                 "params": {
@@ -61,6 +44,8 @@ Oskari.registerLocalization(
                 "realtime": "Real time layer",
                 "refreshRate": "Refresh rate in seconds",
                 "scale": "Scale",
+                "coverage":"Show map layer coverage on the map",
+                "declutter": "Draw object names separately (declutter).",
                 "gfiContent": "Additional GFI info",
                 "gfiType": "GFI response type",
                 "role_permissions": "Permissions",
@@ -138,13 +123,29 @@ Oskari.registerLocalization(
                 },
                 "vector": {
                     "newStyleName": "New style",
-                    "addStyle": "Add style",
                     "name": "Style name",
                     "selectDefault": "Select default style",
                     "deleteStyle": "Delete style",
+                    "edit": {
+                        "editor": "Edit by using editor",
+                        "json": "Edit JSON"
+                    },
+                    "add": {
+                        "editor": "Add by using editor",
+                        "json": "Add JSON",
+                        "mapbox": "Add Mapbox JSON",
+                        "cesium": "Add Cesium JSON"
+                    } ,
                     "validation": {
                         "name": "Please enter a name for the style",
-                        "noStyles": "No saved styles"
+                        "noStyles": "No saved styles",
+                        "json": "Invalid JSON syntax in Style definitions."
+                    },
+                    "json": {
+                        "featureStyle": "Style definitions (JSON)",
+                        "optionalStyles": "Property based style definitions (JSON)",
+                        "cesium": "3D Tiles/Cesium style definitions (JSON)",
+                        "mapbox": "Mapbox style definitions (JSON)"
                     }
                 }
             },
@@ -189,8 +190,6 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Mandatory fields missing:",
-                "styles": "Invalid JSON syntax in Style definitions.",
-                "externalStyles": "Invalid JSON syntax in 3rd party style definitions.",
                 "hover": "Invalid JSON syntax in Feature highlighting and tooltip.",
                 "attributes": "Invalid Attribute JSON syntax.",
                 "attributions": "Invalid Attributions JSON syntax.",
@@ -215,12 +214,11 @@ Oskari.registerLocalization(
                 "updateCapabilitiesFail": "Fetching service capabilities failed. Interface URL, type or version could be wrong or the service is currently down.",
                 "errorFetchLayerFailed": "Fetching layer details failed. The layer might have been removed or you don't have permission for the layer.",
                 "errorFetchLayerEnduserFailed": "Fetching layer details for the layer listing failed. Did you add 'View' permission for a role that you have?",
-                "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first."
+                "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first.",
+                "errorFetchCoverage": "Failed to get the map layer coverage from the service.",
+                "noCoverage": "The map layer coverage isn't restricted.",
+                "invalidScale": "Tarkista tason mittakaavarajat."
             },
-            "otherLanguages": "Other languages",
-            "stylesJSON": "Style definitions (JSON)",
-            "externalStylesJSON": "3rd party style definitions (JSON)",
-            "externalStyleFormats": "Supported formats: 3D Tiles, Mapbox",
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",

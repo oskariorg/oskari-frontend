@@ -19,9 +19,7 @@ Oskari.clazz.define(
         me.currentDrawMode = null;
         me.prefix = 'Default.';
         me.sandbox = sandbox;
-        me.WFSLayerService = me.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
-        me._features = null;
-        me._drawing = null;
+        me.selectFromAllLayers = false;
 
         if (me._config && me._config.id) {
             me.prefix = me._config.id + '.';
@@ -40,15 +38,11 @@ Oskari.clazz.define(
          * @params {String} includes drawMode, geometry and style
          */
         startDrawing: function (params) {
-            // Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
-            this.WFSLayerService.setSelectionToolsActive(true);
             this._toggleControl(params.drawMode);
         },
         clearDrawing: function () {
-            var me = this;
-            var sb = this.getSandbox();
-            sb.postRequestByName('DrawTools.StopDrawingRequest', [
-                me.DRAW_REQUEST_ID,
+            this.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [
+                this.DRAW_REQUEST_ID,
                 true,
                 true
             ]);
@@ -58,12 +52,17 @@ Oskari.clazz.define(
          * Disables all draw controls and
          * clears the layer of any drawn features
          */
-        stopDrawing: function () {
+        stopDrawing: function (keepDrawMode = false) {
             this.clearDrawing();
             // disable all draw controls
-            this._toggleControl();
+            this._toggleControl(null, keepDrawMode);
         },
-
+        setSelectFromAllLayers: function (selectAll) {
+            this.selectFromAllLayers = selectAll;
+        },
+        isSelectFromAllLayers: function () {
+            return this.selectFromAllLayers;
+        },
         /**
          * @method _toggleControl
          * Enables the given draw control
@@ -72,16 +71,19 @@ Oskari.clazz.define(
          * controls)
          * @private
          */
-        _toggleControl: function (drawMode) {
+        _toggleControl: function (drawMode, keepDrawMode = false) {
             var key,
                 control;
-            this.currentDrawMode = drawMode;
+            if (keepDrawMode && !drawMode) {
+                // keep previous draw mode active
+            } else {
+                this.currentDrawMode = drawMode;
+            }
             for (key in this.drawControls) {
                 if (this.drawControls.hasOwnProperty(key)) {
                     control = this.drawControls[key];
                     if (this.currentDrawMode === key) {
                         control();
-                    } else {
                     }
                 }
             }
@@ -130,34 +132,6 @@ Oskari.clazz.define(
                     ]);
                 }
             };
-        },
-        /**
-         * @Return the drawn geometry from the draw layer from drawing event
-         * @method setDrawing
-         */
-        setDrawing: function (drawing) {
-            this._drawing = drawing;
-        },
-        /**
-         * @Return the drawn geometry from the draw layer
-         * @method getDrawing
-         */
-        getDrawing: function () {
-            return this._drawing;
-        },
-        /**
-         * @method setFeatures
-         * @param features Features from the drawing event when drawing is finished
-         */
-        setFeatures: function (features) {
-            this._features = features;
-        },
-        /**
-         * @Return {String} the drawn geometry from the draw layer
-         * @method getFeatures
-         */
-        getFeatures: function () {
-            return this._features;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

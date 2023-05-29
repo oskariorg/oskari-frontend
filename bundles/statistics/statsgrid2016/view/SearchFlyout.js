@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.searchPending = false;
     this.searchParametersSelected = false;
     this.zeroIndicatorsNotification = null;
+    this.indicatorSelection = null;
     var me = this;
     this.on('show', function () {
         if (!me.getUiElement()) {
@@ -32,6 +33,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         this.uiElement.empty();
+    },
+    teardownUI: function () {
+        this.hide();
+        this.uiElement = null;
     },
     setSpinner: function (spinner) {
         this.spinner = spinner;
@@ -69,6 +74,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var me = this;
         var container = jQuery('<div></div>');
         var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', me.instance, me.sandbox);
+        this.indicatorSelection = selectionComponent;
         container.append(selectionComponent.getPanelContent());
 
         var buttonContainer = jQuery('<div></div>');
@@ -117,6 +123,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         indicatorListAccordionPanel.setTitle(this.loc('indicatorList.title'));
         indicatorListAccordionPanel.setContent(indicatorList.getElement());
+        if (this.service.getStateService().getIndicators().length > 0) {
+            // open at start if there are indicators selected
+            indicatorListAccordionPanel.open();
+        }
         indicatorListAccordion.addPanel(indicatorListAccordionPanel);
 
         indicatorListAccordion.insertTo(container);
@@ -405,8 +415,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                             resolve();
                             return;
                         }
-                        let counter = 0;
-                        const enoughData = Object.values(data).some(val => !isNaN(val) && ++counter > 1);
+                        const enoughData = Object.values(data).some(val => !isNaN(val));
                         if (!enoughData) {
                             searchFailed(search);
                             resolve();
@@ -539,6 +548,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         if (this.getSpinner()) {
             this.getSpinner().stop();
         }
+    },
+
+    getIndicatorSelectionComponent: function () {
+        return this.indicatorSelection;
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']

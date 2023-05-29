@@ -10,6 +10,7 @@ Oskari.clazz.define(
             'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',
             sandbox
         );
+        this.dataProviderId = null;
     }, {
         /**
          * Parses any additional fields to model
@@ -20,11 +21,35 @@ Oskari.clazz.define(
          */
         parseLayerData: function (layer, mapLayerJson, maplayerService) {
             // call parent parseLayerData
+            // TODO: only setHoverOptions and parseLayerAttributes
+            // -> set hoveroptions here and attributes in DescribeLayer
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
-            layer.setDescription(mapLayerJson.description);
-            layer.setSource(mapLayerJson.source);
-            layer.setRenderingElement(mapLayerJson.renderingElement);
-            layer.addLayerUrl(mapLayerJson.renderingUrl);
+            layer.setLocale(mapLayerJson.locale);
+            layer.setStylesFromOptions(mapLayerJson.options);
+
+            const toolName = Oskari.getMsg('MapWfs2', 'editLayer');
+            const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            toolOwnStyle.setName('editStyle');
+            toolOwnStyle.setIconCls('show-own-style-tool');
+            toolOwnStyle.setTooltip(toolName);
+            toolOwnStyle.setTitle(toolName);
+            toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('MyPlacesImport.ShowUserLayerDialogRequest', [layer.getId()]));
+            layer.addTool(toolOwnStyle);
+
+            if (!this.dataProviderId) {
+                this.dataProviderId = -10 * Oskari.getSeq('usergeneratedDataProvider').nextVal();
+                const dataProvider = maplayerService.getDataProviderById(this.dataProviderId);
+                if (!dataProvider) {
+                    const provider = {
+                        id: this.dataProviderId,
+                        name: Oskari.getMsg('MyPlacesImport', 'layer.organization')
+                    };
+                    maplayerService.addDataProvider(provider);
+                }
+            }
+            if (this.dataProviderId) {
+                layer.setDataProviderId(this.dataProviderId);
+            }
         }
     }
 );

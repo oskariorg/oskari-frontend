@@ -37,7 +37,7 @@ Oskari.registerLocalization(
             },
             "domain": {
                 "title": "Basic settings",
-                "label": "Restrict embedding only to the following <br>web address:",
+                "label": "Restrict embedding only to the following web address:",
                 "placeholder": "Allowed domain",
                 "tooltip": "Type a website URL-address without prefixes or a subpage address. For example: homepage.com.",
                 "inputWarning": "Verify typed web address"
@@ -64,10 +64,11 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Tools",
                 "tooltip": "Select available map tools. Check a placement in the map preview.",
+                "AnnouncementsPlugin": "Announcements",
                 "ScaleBarPlugin": "Scale bar",
                 "TimeseriesControlPlugin": "Time series player",
                 "IndexMapPlugin": "Index map",
-                "PanButtons": "Pan tool",
+                "PanButtons": "Move to the original map view",
                 "Portti2Zoombar": "Zoom bar",
                 "MyLocationPlugin": "Center to location",
                 "ControlsPlugin": "Pan by mouse",
@@ -78,7 +79,6 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
                 "CoordinateToolPlugin": "Coordinate tool",
-                "FeedbackServiceTool": "Feedback (Open311) service",
                 "MapLegend": "Show map legend",
                 "MapRotator": "Enable map rotation",
                 "CrosshairTool": "Show map focal point",
@@ -108,7 +108,10 @@ Oskari.registerLocalization(
                 "layerselection": {
                     "info": "Select the background map layer. You can select the default background map layer in the map preview.",
                     "selectAsBaselayer": "Select as baselayer",
-                    "allowStyleChange": "Allow style change"
+                    "allowStyleChange": "Allow presentation style change",
+                    "showMetadata": "Show metadata links",
+                    "noMultipleStyles": "Only single presentation style available on the selected map layers.",
+                    "noMetadata": "No metadata links availabe on the selected map layers"
                 },
                 "mylocation": {
                     "modes": {
@@ -120,13 +123,15 @@ Oskari.registerLocalization(
                         "mobileOnly": "Enable functionality only for mobile devices",
                         "centerMapAutomatically": "Center map on user location at startup"
                     }
+                },
+                "panButtonsOptions": {
+                    "showArrows": "Pan tool"
                 }
             },
             "toollayout": {
                 "label": "Tool Placement",
                 "tooltip": "Select a placement for map tools.",
-                "lefthanded": "Lefthanded",
-                "righthanded": "Righthanded",
+                "swapUI": "Swap sides",
                 "userlayout": "Custom placement",
                 "usereditmode": "Start editing",
                 "usereditmodeoff": "Finish editing"
@@ -143,6 +148,10 @@ Oskari.registerLocalization(
             },
             "layout": {
                 "label": "Graphic Layout",
+                "title": {
+                    "popup": "Popup window",
+                    "buttons": "Buttons"
+                },
                 "fields": {
                     "colours": {
                         "label": "Color scheme",
@@ -168,15 +177,22 @@ Oskari.registerLocalization(
                         "label": "Font style"
                     },
                     "toolStyles": {
-                        "label": "Tool style",
-                        "default": "Default style",
                         "rounded-dark": "Rounded (dark)",
                         "rounded-light": "Rounded (light)",
                         "sharp-dark": "Angular (dark)",
                         "sharp-light": "Angular (light)",
                         "3d-dark": "Three-dimensional (dark)",
                         "3d-light": "Three-dimensional (light)"
-                    }
+                    },
+                    "popupHeaderColor": "Title background color",
+                    "popupHeaderTextColor": "Title color",
+                    "buttonBackgroundColor": "Background color",
+                    "buttonTextColor": "Icon color",
+                    "buttonAccentColor": "Icon effect color",
+                    "buttonRounding": "Button rounding",
+                    "effect": "Effect",
+                    "3d": "3D",
+                    "presets": "Style presets"
                 },
                 "popup": {
                     "title": "Select Color Scheme",
@@ -218,6 +234,19 @@ Oskari.registerLocalization(
                 "tooltip": "The background layer is shown at the bottom layer on the map. If you select several background maps, only one of them can be visible at a time. User can select a background layer in the user interface. Please select a default background map in the map preview.",
                 "promote": "Do you want to show also orthophotos on the map?"
             },
+            "rpc": {
+                "label": "Programmatic use (RPC API)",
+                "info": "With the RPC API you can utilize published maps. For more information https://oskari.org/documentation/features/rpc/"
+            },
+            "mapLayers": {
+                "label": "Map layers",
+                "otherLayers": "Other maps",
+                "selectLayers": "Select map layers",
+                "layersDisplay": "Layer presentation",
+                "baseLayers": "Background maps",
+                "noBaseLayers": "No selected background maps",
+                "noLayers": "No selected map layers"
+            },
             "preview": "Map preview",
             "location": "Location and zoom level",
             "zoomlevel": "Zoom level",
@@ -231,8 +260,11 @@ Oskari.registerLocalization(
                 "nohelp": "The user guide is not available.",
                 "saveFailed": "The embedded map could not be saved.",
                 "nameIllegalCharacters": "The map name contains illegal characters (e.g. html-tags). Please correct the name and try again.",
-                "domainIllegalCharacters": "The website address contains illegal characters. Type a website URL-address without prefixes or a subpage address. For example: homepage.com. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9) and special characters (-, _, ., !, ~, *, ' and ()). Please correct the address and try again."
-            }
+                "domainIllegalCharacters": "The website address contains illegal characters. Type a website URL-address without prefixes or a subpage address. For example: homepage.com. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9) and special characters (-, _, ., !, ~, *, ' and ()). Please correct the address and try again.",
+                "enablePreview": "An error occured while opening preview. The preview might have additional tools that will not be part of the embedded map.",
+                "disablePreview": "An error occured while returning from preview mode. Page reload is recommended.",
+            },
+            "noUI": "Hide user interface (Use RPC interface)"
         },
         "NotLoggedView": {
             "text": "Welcome to publish embedded map on your website. Please log in or register first.",
@@ -248,7 +280,6 @@ Oskari.registerLocalization(
             "denied_tooltip": "These map layers are not publishable in embedded maps. Data producers have not granted permissions for publishing or the current map projection is unsupported. Please check publishable map layers in the Selected Layers menu.",
             "myPlacesDisclaimer": "NOTE! If you are using this map layer in an embedded map, the map layer will be published.",
             "noRights": "no permission",
-            "unsupportedProjection": "unsupported projection",
             "buttons": {
                 "continue": "Continue",
                 "continueAndAccept": "Accept and continue",

@@ -346,6 +346,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 var visibleCells = (indicators.length > me._maxCols) ? me._maxCols : indicators.length;
                 var cellWidth = 70 / visibleCells;
                 content.css('width', cellWidth + '%');
+                content.css('min-width', '110px');
                 content.append(tableHeader);
             });
         });
@@ -392,6 +393,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 me._handleIndicatorAdded(event.getDatasource(), event.getIndicator(), event.getSelections());
             }
         });
+        this.service.on('StatsGrid.DatasourceEvent', () => this._handleRegionsetChanged());
         this.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             log.debug('Region changed! ', event.getRegionset());
             me._handleRegionsetChanged(event.getRegionset());

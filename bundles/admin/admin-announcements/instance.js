@@ -1,3 +1,7 @@
+
+import { AdminAnnouncementsHandler } from './service/AdminAnnouncementsHandler';
+
+const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 /**
  * @class Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundleInstance
  *
@@ -5,22 +9,18 @@
  *
  * See Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundleInstance for bundle definition.
  */
-Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.AdminAnnouncementsBundleInstance',
-
-    /**
-     * @method create called automatically on construction
-     * @static
-     */
-    function () {
-        var conf = this.getConfiguration();
-        conf.name = 'admin-announcements';
-        conf.flyoutClazz = 'Oskari.admin.bundle.admin-announcements.Flyout';
-    }, {
-
-        afterStart: function () {
+Oskari.clazz.defineES('Oskari.admin.admin-announcements.instance',
+    class AdminAnnouncements extends BasicBundle {
+        constructor () {
+            super();
+            this.__name = 'admin-announcements';
+            this.handler = null;
         }
 
-    }, {
-        'extend': ['Oskari.userinterface.extension.DefaultExtension']
+        _startImpl () {
+            const annService = this.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
+            this.handler = new AdminAnnouncementsHandler(this, annService);
+            annService.registerAdminController(this.handler.getController());
+        }
     }
 );

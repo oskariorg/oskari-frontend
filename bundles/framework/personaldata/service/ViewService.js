@@ -64,9 +64,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                     }
                 },
                 success: function (response) {
+                    /* eslint-disable n/no-callback-literal */
                     callback(true, response);
                 },
                 error: function () {
+                    /* eslint-disable n/no-callback-literal */
                     callback(false);
                 }
             });
@@ -96,9 +98,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                     }
                 },
                 success: function (response) {
+                    /* eslint-disable n/no-callback-literal */
                     callback(true);
                 },
                 error: function () {
+                    /* eslint-disable n/no-callback-literal */
                     callback(false);
                 }
             });
@@ -133,9 +137,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                     }
                 },
                 success: function (response) {
+                    /* eslint-disable n/no-callback-literal */
                     callback(true);
                 },
                 error: function () {
+                    /* eslint-disable n/no-callback-literal */
                     callback(false);
                 }
             });
@@ -172,9 +178,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                     }
                 },
                 success: function (response) {
+                    /* eslint-disable n/no-callback-literal */
                     callback(true);
                 },
                 error: function () {
+                    /* eslint-disable n/no-callback-literal */
                     callback(false);
                 }
             });

@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocaleProvider } from 'oskari-ui/util';
-import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS } from './view/LayerViewTabs/';
-import { LAYER_GROUP_TOGGLE_LIMIT, LAYER_GROUP_TOGGLE_DEFAULTS } from './constants';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
+import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS, TABS_SELECTED_LAYERS } from './view/LayerViewTabs/';
+import { LAYER_GROUP_TOGGLE_LIMIT, LAYER_GROUP_TOGGLE_DEFAULTS, BACKEND_STATUS_AVAILABLE } from './constants';
 
 /**
  * @class Oskari.mapframework.bundle.layerlist.Flyout
@@ -20,8 +20,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
     function (instance) {
         this.instance = instance;
         // the show "add all layers to map" control for groups is disabled by default. Use instance conf to enable it.
+        // view/bundle modifier adds backend status available conf if bundle is present
         const defaultOpts = {
-            [LAYER_GROUP_TOGGLE_LIMIT]: LAYER_GROUP_TOGGLE_DEFAULTS.DISABLE_TOGGLE
+            [LAYER_GROUP_TOGGLE_LIMIT]: LAYER_GROUP_TOGGLE_DEFAULTS.DISABLE_TOGGLE,
+            [BACKEND_STATUS_AVAILABLE]: false
         };
         const instanceConf = this.instance.conf || {};
         this.optsForUI = {
@@ -97,14 +99,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * For request handler. This is used when opening the layerlist from outside this bundle.
          * @param {string} activeFilterId
          */
-        setActiveFilter: function (activeFilterId) {
+        setActiveFilter: function (activeFilterId, showSelectedLayers) {
             const filterHandler = this.tabsHandler.getLayerListHandler().getFilterHandler();
             filterHandler.stashCurrentState();
             filterHandler.updateState({
                 activeFilterId,
                 searchText: null
             });
-            this.tabsHandler.setTab(TABS_ALL_LAYERS);
+            const activeTab = showSelectedLayers ? TABS_SELECTED_LAYERS : TABS_ALL_LAYERS;
+            this.tabsHandler.setTab(activeTab);
         },
 
         /**
@@ -117,10 +120,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             }
             const content = (
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
-                    <LayerViewTabs
-                        {...this.tabsHandler.getState()}
-                        opts={this.optsForUI}
-                        controller={this.tabsHandler.getController()}/>
+                    <ThemeProvider>
+                        <LayerViewTabs
+                            {...this.tabsHandler.getState()}
+                            opts={this.optsForUI}
+                            controller={this.tabsHandler.getController()}/>
+                    </ThemeProvider>
                 </LocaleProvider>
             );
             ReactDOM.render(content, this.container);

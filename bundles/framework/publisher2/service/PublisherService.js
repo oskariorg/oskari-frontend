@@ -21,17 +21,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
          * @return {Oskari.mapframework.domain.AbstractLayer[]} list of layers that can't be published.
          */
         getLayersWithoutPublishRights: function () {
-            var me = this,
-                deniedLayers = [],
-                selectedLayers = this.__sandbox.findAllSelectedMapLayers();
-
-            _.each(selectedLayers, function (layer) {
-                if (!me.hasPublishRight(layer)) {
-                    deniedLayers.push(layer);
-                }
-            });
-
-            return deniedLayers;
+            const selectedLayers = this.__sandbox.findAllSelectedMapLayers();
+            return selectedLayers.filter(layer => !this.hasPublishRight(layer));
         },
         /**
          * @method hasPublishRight
@@ -84,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
          */
         addLayers: function () {
             var sandbox = this.__sandbox;
-            _.each(this.getNonPublisherLayers(), function (layer) {
+            this.getNonPublisherLayers().forEach(layer => {
                 sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), true]);
             });
         },
@@ -95,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
          */
         removeLayers: function () {
             var sandbox = this.__sandbox;
-            _.each(this.getNonPublisherLayers(), function (layer) {
+            this.getNonPublisherLayers().forEach(layer => {
                 sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
             });
         }

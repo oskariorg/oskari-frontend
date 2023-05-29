@@ -6,6 +6,9 @@
  * See Oskari.mapframework.bundle.featuredata2.FeatureDataBundle for bundle definition.
  *
  */
+import { FilterSelector } from './FilterSelector';
+import './publisher/FeaturedataTool';
+
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleInstance',
 
     /**
@@ -23,6 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         this.selectionPlugin = null;
         this.conf = {};
         this.__loadingStatus = {};
+        this._featureSelectionService = null;
     }, {
         /**
          * @static
@@ -69,7 +73,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             this.sandbox.register(this);
             this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
             Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-
             // Let's extend UI
             var requestBuilder = Oskari.requestBuilder('userinterface.AddExtensionRequest');
             if (requestBuilder) {
@@ -161,7 +164,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         getLayerService: function () {
             return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         },
+        getSelectionService: function () {
+            if (!this._featureSelectionService) {
+                this._featureSelectionService = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureSelectionService');
+            }
+            return this._featureSelectionService;
+        },
+        getFilterSelector: function () {
+            if (!this._selectionHelper) {
+                const featureQueryFn = (geojson, opts) => this.mapModule.getVectorFeatures(geojson, opts);
+                this._selectionHelper = new FilterSelector(featureQueryFn, this.getSelectionService());
+            }
+            return this._selectionHelper;
+        },
+        removeAllFeatureSelections: function () {
+            const service = this.getSelectionService();
+            if (!service) {
+                return;
+            }
+            service.removeSelection();
+        },
 
+        setFeatureSelections: function (layerId, featureIds, useToggle) {
+            const service = this.getSelectionService();
+            if (!service) {
+                return;
+            }
+            if (useToggle) {
+                featureIds.forEach(id => service.toggleFeatureSelection(layerId, id));
+            } else {
+                service.setSelectedFeatureIds(layerId, featureIds);
+            }
+        },
         /**
          * Adds the Feature data tool for layer
          * @param  {Object} layer layer to process
@@ -218,7 +252,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if (event.getLayerId() === undefined) {
                     return;
                 }
-                var layer = this.sandbox.findMapLayerFromSelectedMapLayers(event.getLayerId());
                 if (!this.__loadingStatus) {
                     this.__loadingStatus = {};
                 }
@@ -233,12 +266,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     delete this.__loadingStatus['' + event.getLayerId()];
                     this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
                     this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), false);
-
-                    if (layer && layer.isManualRefresh()) {
-                        if (event.getNop()) {
-                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer.getId(), 0.5);
-                        }
-                    }
                 }
                 if (event.getStatus() === event.status.error) {
                     if (this.__loadingStatus.hasOwnProperty('' + event.getLayerId())) {
@@ -271,21 +298,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              */
             'AfterMapLayerRemoveEvent': function (event) {
                 if (event.getMapLayer().hasFeatureData()) {
-                    this.plugin.refresh();
                     delete this.__loadingStatus['' + event.getMapLayer().getId()];
                     this.__refreshLoadingStatus();
-                }
-            },
-
-            /**
-             * @method AfterMapLayerAddEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-             *
-             * Calls flyouts layerAdded() method
-             */
-            'AfterMapLayerAddEvent': function (event) {
-                if (event.getMapLayer().hasFeatureData()) {
-                    this.plugin.refresh();
                 }
             },
 
@@ -310,19 +324,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
             },
 
-            /**
-             * @method FeatureData.FinishedDrawingEvent
-             */
-            'FeatureData.FinishedDrawingEvent': function () {
-                if (!this.selectionPlugin) {
-                    return;
-                }
-                const features = this.selectionPlugin.getFeaturesAsGeoJSON();
-                this.selectionPlugin.clearDrawing();
-
-                const evt = Oskari.eventBuilder('WFSSetFilter')(features);
-                this.sandbox.notifyAll(evt);
-            },
             'DrawingEvent': function (evt) {
                 if (!evt.getIsFinished() || !this.selectionPlugin) {
                     // only interested in finished drawings
@@ -333,21 +334,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     return;
                 }
                 var geojson = evt.getGeoJson();
-                var pixelTolerance = 15;
-                if (geojson.features.length > 0) {
-                    geojson.features[0].properties.buffer_radius = this.selectionPlugin.getMapModule().getResolution() * pixelTolerance;
-                } else {
-                    // no features
+                if (!geojson.features.length) {
+                    // no features drawn
                     return;
                 }
-
-                this.selectionPlugin.setFeatures(geojson.features);
-                this.selectionPlugin.stopDrawing();
-
-                const event = Oskari.eventBuilder('WFSSetFilter')(geojson);
-                this.sandbox.notifyAll(event);
-
-                this.popupHandler.removeButtonSelection();
+                const helper = this.getFilterSelector();
+                const layers = helper.getLayersToQuery(
+                    this.getSandbox().findAllSelectedMapLayers(),
+                    this.selectionPlugin.isSelectFromAllLayers());
+                helper.selectWithGeometry(geojson.features[0], layers);
+                this.selectionPlugin.stopDrawing(true);
             },
             'AfterMapMoveEvent': function () {
                 this.plugin.mapStatusChanged();
@@ -359,8 +355,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if (!event.getSticky()) {
                     return;
                 }
-                if (this.popupHandler) {
-                    this.popupHandler.close();
+                if (this.popupHandler && this.popupHandler.selectionPopup) {
+                    this.popupHandler.clearSelectionPopup(false);
                 }
             }
         },
@@ -432,16 +428,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          */
         createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
-            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin', {
-                instance: this
-            });
+            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin', this.conf);
             this.mapModule.registerPlugin(this.plugin);
             this.mapModule.startPlugin(this.plugin);
-
-            // get the plugin order straight in mobile toolbar even for the tools coming in late
-            if (Oskari.util.isMobile()) {
-                this.mapModule.redrawPluginUIs(true);
-            }
         }
     }, {
         /**

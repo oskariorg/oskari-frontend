@@ -5,7 +5,14 @@ import { Controller } from 'oskari-ui/util';
 import { MetadataButton } from './styled';
 
 export const ServiceMetadata = ({ capabilities, controller, hasHandler }) => {
-    const { metadataUuid } = capabilities;
+    // as of Oskari server 2.8.0-SNAPSHOT:
+    /*
+    "capabilities": {
+        "metadataUrl": "the whole url instead of just metadata uuid"
+        "metadataId": "uuid from metadata url"
+        ...
+    */
+    const metadataUuid = capabilities.metadataId;
     if (!metadataUuid) {
         return (
             <Fragment>

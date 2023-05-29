@@ -33,25 +33,8 @@ Oskari.registerLocalization(
                     "tileGrid": "Tiilimatriisi"
                 },
                 "locale": {
-                    "generic": {
-                        "name": "Nimi kielellä {0}",
-                        "subtitle": "Kuvaus kielellä {0}"
-                    },
-                    "en": {
-                        "lang": "Englanti",
-                        "name": "Nimi englanniksi",
-                        "subtitle": "Kuvaus englanniksi"
-                    },
-                    "fi": {
-                        "lang": "Suomi",
-                        "name": "Nimi suomeksi",
-                        "subtitle": "Kuvaus suomeksi"
-                    },
-                    "sv": {
-                        "lang": "Ruotsi",
-                        "name": "Nimi ruotsiksi",
-                        "subtitle": "Kuvaus ruotsiksi"
-                    }
+                    "name": "Nimi",
+                    "description": "Kuvaus"
                 },
                 "opacity": "Peittävyys",
                 "params": {
@@ -61,6 +44,8 @@ Oskari.registerLocalization(
                 "realtime": "Reaaliaikataso",
                 "refreshRate": " Virkistystaajuus sekunteina",
                 "scale": "Mittakaava",
+                "coverage":"Näytä karttatason kattavuusalue kartalla",
+                "declutter": "Piirrä kohteiden nimet erikseen (declutter).",
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
                 "role_permissions": "Oikeudet",
@@ -138,14 +123,30 @@ Oskari.registerLocalization(
                     "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite."
                 },
                 "vector": {
-                    "addStyle": "Lisää tyyli",
                     "newStyleName": "Uusi tyyli",
                     "name": "Tyylin nimi",
                     "selectDefault": "Valitse oletustyyli",
                     "deleteStyle": "Poista tyyli",
+                    "edit": {
+                        "editor": "Muokkaa editorilla",
+                        "json": "Muokkaa JSON"
+                    },
+                    "add": {
+                        "editor": "Lisää editorilla",
+                        "json": "Lisää JSON",
+                        "mapbox": "Lisää Mapbox JSON",
+                        "cesium": "Lisää Cesium JSON"
+                    },
                     "validation": {
                         "name": "Täytä nimi tyylille",
-                        "noStyles": "Ei tallennettuja tyylejä"
+                        "noStyles": "Ei tallennettuja tyylejä",
+                        "json": "Tyylimääritysten JSON-syntaksi on virheellinen."
+                    },
+                    "json": {
+                        "featureStyle": "Tyylimääritykset (JSON)",
+                        "optionalStyles": "Tyylittely ominaisuustietojen mukaan (JSON)",
+                        "cesium": "3D Tiles/Cesium tyylimääritykset (JSON)",
+                        "mapbox": "Mapbox tyylimääritykset (JSON)"
                     }
                 }
             },
@@ -190,8 +191,6 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Pakollisia tietoja puuttuu:",
-                "styles": "Tyylimääritysten JSON-syntaksi on virheellinen.",
-                "externalStyles": "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
                 "hover": "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
                 "attributes": "Attribuutit kentän JSON-syntaksi on virheellinen.",
                 "attributions": "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
@@ -216,12 +215,11 @@ Oskari.registerLocalization(
                 "updateCapabilitiesFail": "Rajapinnan tietojen haku epäonnistui. Tason osoite, tyyppi tai versio voi olla väärin tai rajapinta on tällä hetkellä pois käytöstä.",
                 "errorFetchLayerFailed": "Tason tietojen haku epäonnistui. Taso on mahdollisesti poistettu tai sinulla ei ole siihen oikeuksia.",
                 "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?",
-                "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät."
+                "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
+                "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
+                "noCoverage": "Karttatason kattavuutta ei ole rajoitettu.",
+                "invalidScale": "Tarkista tason mittakaavarajat."
             },
-            "otherLanguages": "Muut kielet",
-            "stylesJSON": "Tyylimääritykset (JSON)",
-            "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
-            "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",

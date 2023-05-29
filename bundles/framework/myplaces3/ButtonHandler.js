@@ -1,3 +1,5 @@
+import { DRAW_ID } from './constants';
+import { showDrawHelperPopup } from './view/DrawHelperPopup';
 /**
  * @class Oskari.mapframework.bundle.myplaces3.ButtonHandler
  *
@@ -13,54 +15,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
     function (instance) {
         this.instance = instance;
         this.buttonGroup = 'myplaces';
-        this.measureButtonGroup = 'basictools';
-        this.ignoreEvents = false;
-        this.dialog = null;
         this.drawMode = null;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
-        var me = this;
-        // options for DrawTools
-        var drawOptions = {
-            'allowMultipleDrawing': 'multiGeom',
-            'showMeasureOnMap': true,
-            'style': this.instance.getDrawStyle()
-        };
+        this.mapmodule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
+        this.popupControls = null;
+        this.measurementText = null;
+        this.description = null;
         this.buttons = {
-            'point': {
+            point: {
                 iconCls: 'myplaces-draw-point',
                 tooltip: '',
                 sticky: true,
-                callback: function () {
-                    me.sendDrawRequest({
-                        drawMode: 'point',
-                        shape: 'Point',
-                        drawOptions: drawOptions
-                    });
-                }
+                callback: () => this.startDrawing('point', 'Point')
             },
-            'line': {
+            line: {
                 iconCls: 'myplaces-draw-line',
                 tooltip: '',
                 sticky: true,
-                callback: function () {
-                    me.sendDrawRequest({
-                        drawMode: 'line',
-                        shape: 'LineString',
-                        drawOptions: drawOptions
-                    });
-                }
+                callback: () => this.startDrawing('line', 'LineString')
             },
-            'area': {
+            area: {
                 iconCls: 'myplaces-draw-area',
                 tooltip: '',
                 sticky: true,
-                callback: function () {
-                    me.sendDrawRequest({
-                        drawMode: 'area',
-                        shape: 'Polygon',
-                        drawOptions: drawOptions
-                    });
-                }
+                callback: () => this.startDrawing('area', 'Polygon')
             }
         };
         this.templateGuide = jQuery('<div><div class="guide"></div>' +
@@ -69,13 +47,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             '<div class="finish button"></div>' +
             '</div>' +
             '</div>');
-
-        this.templateHelper = jQuery(
-            '<div class="drawHelper">' +
-            '<div class="infoText"></div>' +
-            '<div class="measurementResult"></div>' +
-            '</div>'
-        );
     }, {
         __name: 'MyPlacesButtonHandler',
         /**
@@ -127,6 +98,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
                 sandbox.registerForEventByName(me, eventName);
             });
         },
+        closePopup: function () {
+            if (this.popupControls) {
+                this.popupControls.close();
+            }
+            this.popupControls = null;
+            this.measurementText = null;
+            this.description = null;
+        },
         /**
          * @method disableButtons
          * Disables draw buttons
@@ -136,82 +115,82 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             var stateReqBuilder = Oskari.requestBuilder('Toolbar.ToolButtonStateRequest');
             sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
         },
-        /**
-         * @method startNewDrawing
-         * Sends a StartDrawingRequest with given params. Changes the panel controls to match the application state (new/edit)
-         * @param config params for StartDrawingRequest
-         */
-        sendDrawRequest: function (config) {
-            this.drawMode = config.drawMode;
-            this.instance.setIsFinishedDrawing(false);
+        showDrawHelper: function () {
+            const drawMode = this.drawMode;
+            const title = this.loc('tools.' + drawMode + '.title');
+            const message = this.loc('tools.' + drawMode + '.add');
 
-            var conf = jQuery.extend(true, {}, config);
-            // clear drawing before start
-            this.instance.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), true, true]);
-            this.instance.getSandbox().postRequestByName('DrawTools.StartDrawingRequest', [this.instance.getName(), conf.shape, conf.drawOptions]);
-            this.instance.setIsEditPlace(false);
-            this._showDrawHelper(config.drawMode);
+            let measureResult = null;
+            if (drawMode !== 'point') {
+                measureResult = this.loc('tools.' + drawMode + '.noResult');
+            }
+
+            if (this.popupControls) {
+                this.closePopup();
+            }
+            this.measurementText = measureResult;
+            this.description = message;
+            this.popupControls = showDrawHelperPopup(title, message, () => this.stopDrawing(false), () => this.stopDrawing(true), measureResult);
+        },
+        stopDrawing: function (isCancel) {
+            if (isCancel) {
+                this.drawMode = null;
+                this.instance.getDrawHandler().stopDrawing();
+                // Select default tool
+                this.instance.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
+            } else {
+                // finish sketch and proceed with saving
+                this.instance.getDrawHandler().finishDrawing((geojson) => {
+                    this.instance.getMyPlacesHandler().addPlace(geojson);
+                    if (!geojson) {
+                        // geometry error, reset toolbar to default tool
+                        this.instance.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
+                    }
+                });
+            }
+            this.closePopup();
         },
         /**
-         * @method update
-         * implements Module protocol update method
+         * Setup state and UI-buttons when editing a myplaces feature
+         * @param {String} type the draw mode that we are starting based on feature geometry type
          */
-        _showDrawHelper: function (drawMode) {
-            if (this.dialog) {
-                this.dialog.close(true);
-                this.dialog = null;
+        setupModifyMode: function (type) {
+            // set drawMode so we know to reset functionality when another toolbar buttons is pressed while editing
+            this.drawMode = type;
+            if (this.drawMode) {
+                // make the button for myplaces draw functionality go "selected" when editing a feature
+                const buttonId = this.drawMode;
+                const buttonGroup = 'default-' + this.buttonGroup;
+                this.instance.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [buttonId, buttonGroup]);
             }
-            var me = this;
-            var title = me.loc('tools.' + drawMode + '.title');
-            var message = me.loc('tools.' + drawMode + '.add');
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            this.dialog = dialog;
-            var buttons = [];
-            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-
-            cancelBtn.setHandler(function () {
-                // ask toolbar to select default tool
-                var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
-                me.instance.sandbox.request(me, toolbarRequest); // stopDrawing -> clear current drawing
-                dialog.close(true);
-                me.dialog = null;
-            });
-            buttons.push(cancelBtn);
-
-            var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
-            finishBtn.setTitle(me.loc('buttons.finish'));
-            finishBtn.addClass('primary');
-            finishBtn.setHandler(function () {
-                me.instance.getMainView().completeDrawing(false);
-                dialog.close(true);
-                me.dialog = null;
-            });
-            buttons.push(finishBtn);
-
-            var content = this.templateHelper.clone();
-            content.find('div.infoText').html(message);
-
-            var measureResult = content.find('div.measurementResult');
-            if (drawMode === 'point') {
-                // No need to show the measurement result for a point
-                measureResult.remove();
-            } else {
-                measureResult.html(me.loc('tools.' + drawMode + '.noResult'));
+        },
+        someOtherToolSelected: function () {
+            // changed tool -> cancel any drawing and close popups
+            this.drawMode = null;
+            this.closePopup();
+            this.instance.getMyPlacesHandler().placePopupCleanup(false);
+            this.instance.getDrawHandler().stopDrawing();
+        },
+        startDrawing: function (drawMode, shape) {
+            if (this.drawMode === drawMode) {
+                // already in progress
+                return;
             }
-
-            dialog.show(title, content, buttons);
-            dialog.addClass('myplaces3');
-            dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
+            this.drawMode = drawMode;
+            this.instance.getDrawHandler().startDrawing(shape);
+            this.showDrawHelper();
         },
         /**
          * @method activeDrawing
          * Update the help dialog's measurement result
          * @param {Object} data
          */
-        activeDrawing: function (data) {
-            var measurement;
+        updateMeasurement: function (data) {
+            if (!this.popupControls) {
+                return;
+            }
 
+            let measurement;
             if (this.drawMode === 'line') {
                 measurement = data.length;
             } else if (this.drawMode === 'area') {
@@ -219,27 +198,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             } else {
                 return;
             }
-            var resultText = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(measurement, this.drawMode);
 
-            if (this.dialog && resultText) {
-                var content = this.dialog.getJqueryContent();
-                content.find('div.measurementResult').html(resultText);
+            const resultText = this.mapmodule.formatMeasurementResult(measurement, this.drawMode);
+            if (resultText) {
+                this.measurementText = resultText;
+                this.popupControls.update(this.description, resultText);
             }
         },
         /**
-         * @method featureAdded
+         * @method updateInfoText
          * Update the help dialog after a new feature was added
          * @param {Object} data
          */
-        featureAdded: function (data) {
-            if (!this.dialog || !this.drawMode) {
+        updateInfoText: function () {
+            if (!this.popupControls) {
                 return;
             }
-            var content = this.dialog.getJqueryContent();
             // after the first geometry change the popup text to instruct the user that another geometry can be added to the same feature
-            content.find('div.infoText').html(this.loc('tools.' + this.drawMode + '.next'));
-            // as the popup size probably changes with text change -> move it so it's still pointing at the button
-            this.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
+            const description = this.loc('tools.' + this.drawMode + '.next');
+            this.description = description;
+            this.popupControls.update(description, this.measurementText);
         },
 
         stop: function () {
@@ -268,14 +246,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
              * @method Toolbar.ToolSelectedEvent
              */
             'Toolbar.ToolSelectedEvent': function (event) {
-                if (this.drawMode === event.getToolId() || this.ignoreEvents || !event.getSticky()) {
-                    // do not trigger when placeform is shown
+                if (['point', 'area', 'line'].includes(event.getToolId())) {
+                    // it's me
                     return;
                 }
-                // changed tool -> cancel any drawing
-                this.instance.getMainView().cancelDrawing();
-                if (this.dialog) {
-                    this.dialog.close();
+                if (this.drawMode) {
+                    // draw mode is set when functionality is activated
+                    // reset tool if user was drawing and clicked on another tool
+                    this.someOtherToolSelected();
                 }
             },
 
@@ -285,45 +263,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
              * @param {Oskari.mapping.drawtools.event.DrawingEvent} event
              */
             'DrawingEvent': function (event) {
-                if (event.getId() !== this.instance.getName() || this.instance.isEditPlace()) {
+                // Helper dialog is shown only for new geometries
+                if (event.getId() !== DRAW_ID) {
                     return;
                 }
-                if (!event.getIsFinished()) {
-                    this.activeDrawing(event.getData());
+                if (event.getIsFinished()) {
+                    this.updateInfoText();
                     return;
                 }
-                if (!this.instance.isFinishedDrawing()) {
-                    this.featureAdded(event.getData());
-                    return;
-                }
-                // handle Finished drawing -> main view
-                // set ignore so we don't cancel our drawing unintentionally
-                this.ignoreEvents = true;
-                // ask toolbar to select default tool
-                this.instance.sandbox.request(this, Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')());
-                // disable ignore to act normally after ^request
-                this.ignoreEvents = false;
-                if (this.dialog) {
-                    this.dialog.close();
-                }
-            },
-
-            'InfoBox.InfoBoxEvent': function (event) {
-                var popupId = this.instance.getMainView().getPopupId();
-                if (event.getId() !== popupId) {
-                    return;
-                }
-
-                this.instance.getMainView().cancelDrawing();
-                var sandbox = this.instance.getSandbox();
-                if (sandbox.hasHandler('EnableMapKeyboardMovementRequest')) {
-                    sandbox.request(this, Oskari.requestBuilder('EnableMapKeyboardMovementRequest')());
-                }
-                var form = this.instance.getMainView().getForm();
-                if (form) {
-                    form.destroy();
-                    form = undefined;
-                }
+                this.updateMeasurement(event.getData());
             }
         }
     }, {

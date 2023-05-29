@@ -9,6 +9,12 @@ import { Message, Tooltip } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
+const Container = styled.div`
+    display: ${props => props.$isMobile ? 'block' : 'flex'};
+`;
+const Content = styled.div`
+    padding: 10px;
+`;
 const StyledBox = styled.div`
     min-height: 100px;
     box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.23);
@@ -18,25 +24,36 @@ const StyledBox = styled.div`
     margin-right: 5px;
     border: 1px #fff solid;
     background-color: #fff;
+    width: 100%;
 `;
-
 const Publishable = styled.span`
     font-style: italic;
     font-size: 14px;
     margin-left: 5px;
 `;
+const PublishableCol = styled(ColAutoRight)`
+    align-self: flex-end;
+`;
+const VisibilityIcon = styled('div')`
+    margin-right: 15px;
+    margin-left: 10px;
+`;
+const CloseButton = styled('div')`
+    position: absolute;
+    right: 0;
+    margin-right: 20px;
+`;
+const DragContainer = styled('div')`
+    margin-top: 10px;
+    margin-right: 10px;
+`;
 
-const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
+const LayerBox = ({ layer, index, controller }) => {
     const organizationName = layer.getOrganizationName();
     const publishable = layer.hasPermission('publish');
-
-    const [visible, setVisible] = useState(visibilityInfo.visible);
-    useEffect(() => {
-        setVisible(visibilityInfo.visible);
-    }, [visibilityInfo]);
+    const visible = layer.isVisible();
 
     const handleToggleVisibility = () => {
-        setVisible(!visible);
         controller.toggleLayerVisibility(layer);
     };
     const handleRemoveLayer = () => {
@@ -50,52 +67,61 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
         }
         return <Tooltip title={description}>{field}</Tooltip>;
     };
-
+    const isMobile = Oskari.util.isMobile();
     return (
         <Draggable draggableId={`${layer.getId()}`} index={index}>
             { provided => (
                 <div ref={provided.innerRef} {...provided.draggableProps}>
-                    <Row style={{ backgroundColor: '#fafafa', padding: '0px' }}>
-                        <ColAuto style={{ padding: '0px' }}>
-                            <DragIcon style={{ marginTop: '5px' }} {...provided.dragHandleProps} />
-                        </ColAuto>
-                        <Col style={{ paddingRight: '0px' }}>
+                    <Container $isMobile={isMobile} style={{ backgroundColor: '#fafafa' }}>
+                        <DragContainer>
+                            <Tooltip title={<Message messageKey='layer.drag' />} getPopupContainer={(triggerNode) => triggerNode.parentElement} placement='topRight'>
+                                <DragIcon {...provided.dragHandleProps} />
+                            </Tooltip>
+                        </DragContainer>
+                        <Col>
                             <StyledBox>
-                                <Row>
-                                    <ColAuto>
-                                        {visible ? <EyeOpen onClick={handleToggleVisibility} />
-                                            : <EyeShut onClick={handleToggleVisibility} />}
-                                    </ColAuto>
-                                    <Col>
-                                        <Row style={{ padding: '0px' }}>
-                                            <ColAuto style={{ padding: '0px' }}>
-                                                {getName()}<br/>
-                                                {organizationName}
+                                <Content>
+                                    <Row>
+                                        <VisibilityIcon>
+                                            <ColAuto>
+                                                {visible ? <Tooltip title={<Message messageKey='layer.hide' />}><EyeOpen onClick={handleToggleVisibility} /></Tooltip>
+                                                    : <Tooltip title={<Message messageKey='layer.show' />}><EyeShut onClick={handleToggleVisibility} /></Tooltip>}
                                             </ColAuto>
-                                            <ColAutoRight style={{ padding: '0px' }}>
-                                                {publishable &&
-                                                <Fragment>
-                                                    <br/>
-                                                    <CheckOutlined style={{ color: '#01ca79' }} />
-                                                    <Publishable>
-                                                        <Message messageKey={'layer.publishable'} />
-                                                    </Publishable>
-                                                </Fragment>
-                                                }
-                                            </ColAutoRight>
-                                        </Row>
-                                    </Col>
-                                    <ColAutoRight>
-                                        <CloseOutlined
-                                            onClick={handleRemoveLayer}
-                                            style={{ fontSize: '12px', marginRight: '4px' }}
-                                        />
-                                    </ColAutoRight>
-                                </Row>
-                                <Footer layer={layer} controller={controller} visibilityInfo={visibilityInfo}/>
+                                        </VisibilityIcon>
+                                        <Col>
+                                            <Row>
+                                                <ColAuto>
+                                                    {getName()}
+                                                </ColAuto>
+                                            </Row>
+                                            <Row>
+                                                <ColAuto>
+                                                    {organizationName}
+                                                </ColAuto>
+                                                <PublishableCol>
+                                                    {publishable &&
+                                                        <Fragment>
+                                                            <CheckOutlined style={{ color: '#01ca79' }} />
+                                                            <Publishable>
+                                                                <Message messageKey={'layer.publishable'} />
+                                                            </Publishable>
+                                                        </Fragment>
+                                                    }
+                                                </PublishableCol>
+                                            </Row>
+                                        </Col>
+                                        <CloseButton>
+                                            <CloseOutlined
+                                                onClick={handleRemoveLayer}
+                                                style={{ fontSize: '12px' }}
+                                            />
+                                        </CloseButton>
+                                    </Row>
+                                </Content>
+                                <Footer layer={layer} controller={controller}/>
                             </StyledBox>
                         </Col>
-                    </Row>
+                    </Container>
                 </div>
             )}
         </Draggable>
@@ -105,7 +131,6 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
 LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
-    visibilityInfo: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 

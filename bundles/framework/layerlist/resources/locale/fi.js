@@ -49,7 +49,11 @@ Oskari.registerLocalization(
                 'moveToScale': 'Siirry soveltuvalle mittakaavatasolle',
                 'moveToContentArea': 'Paikanna kohteet',
                 'publishable': 'Julkaistavissa',
-                'hidden': 'Karttataso on tilapäisesti piilotettu.'
+                'hidden': 'Karttataso on tilapäisesti piilotettu.',
+                'hide': 'Piilota karttataso',
+                'show': 'Näytä karttataso',
+                'drag': 'Raahaa karttatasoa ylemmäs tai alemmas: järjestys kartalla määräytyy tämän mukaisesti.',
+                'hiddenNotification': 'Olet aiemmin piilottanut karttatason. Aseta karttataso näkyväksi "Valitut tasot" -valikosta.'
             },
             'backendStatus': {
                 'OK': 'Karttataso on käytettävissä tällä hetkellä.',
@@ -64,12 +68,14 @@ Oskari.registerLocalization(
                 'wmts': 'Rasteritaso',
                 'arcgis93': 'Rasteritaso',
                 'arcgis': 'Rasteritaso',
+                'vectortile': 'Rasteritaso',
+                'bingmaps': 'Rasteritaso',
                 'wfs': 'Vektoritaso',
-                'vectortile': 'Vektoritaso',
-                'userlayer': '',
-                'myplaces': '',
-                'analysislayer': '',
-                'tiles3d': ''
+                'vector': 'Vektoritaso',
+                'userlayer': 'Oma aineisto',
+                'myplaces': 'Oma karttataso',
+                'analysislayer': 'Oma analyysi',
+                'tiles3d': '3D-taso'
             },
             'guidedTour': {
                 'title': 'Karttatasot',

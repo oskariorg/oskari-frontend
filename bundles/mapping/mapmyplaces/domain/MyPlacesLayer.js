@@ -1,3 +1,5 @@
+import { getValueFromLocale } from '../../mapmodule/util/UserDataHelper';
+
 /**
  * @class Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
  *
@@ -11,8 +13,22 @@ export class MyPlacesLayer extends WFSLayer {
         /* Layer Type */
         this._layerType = 'MYPLACES';
         this._metaType = 'MYPLACES';
+        this._locale = {};
     }
     /* Layer type specific functions */
+
+    // override to get name from locale
+    getName (lang) {
+        return getValueFromLocale(this.getLocale(), 'name', lang);
+    }
+
+    getLocale () {
+        return this._locale;
+    }
+
+    setLocale (locale) {
+        this._locale = locale;
+    }
 
     isFilterSupported () {
         // this defaults to false in AbstractLayer, but WFSLayer returns true.

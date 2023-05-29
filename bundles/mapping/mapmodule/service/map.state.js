@@ -373,7 +373,7 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
                 return;
             }
             if (this.isLayerSelected(layer.getId())) {
-                log.warn('Layer already added. Skipping id ' + layer.getId());
+                log.info('Layer already added. Skipping id ' + layer.getId());
                 return false;
             }
             this.getLayers().push(layer);
@@ -612,8 +612,9 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
                     if (supported instanceof UnsupportedLayerReason) {
                         return layer;
                     }
+                    return null;
                 })
-                .filter(layer => typeof layer !== 'undefined');
+                .filter(layer => !!layer);
 
             if (affectedLayers.length !== 0) {
                 const event = Oskari.eventBuilder('MapLayerEvent')(null, 'update');

@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Button, TextAreaInput, Collapse, CollapsePanel } from 'oskari-ui';
+import { Message, Button, TextAreaInput, Collapse, CollapsePanel, Link } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Numeric } from '../Numeric';
-import { StyledFormField } from '../styled';
-import styled from 'styled-components';
+import { StyledFormField, SpacedLabel } from '../styled';
 
 const UpdateNowButton = ({ controller }) => (
     <Button onClick={() => controller.updateCapabilities()}>
@@ -13,21 +12,6 @@ const UpdateNowButton = ({ controller }) => (
 );
 UpdateNowButton.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired
-};
-
-const Link = styled('a')`
-    margin-left: 10px;
-`;
-const ShowCapabilities = ({ layerId }) => {
-    const url = Oskari.urls.getRoute('GetLayerCapabilities', { id: layerId });
-    return (
-        <Link href={url} target='capabilities'>
-            <Message messageKey='capabilities.show' />
-        </Link>
-    );
-};
-ShowCapabilities.propTypes = {
-    layerId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
 };
 
 const parsedTextArea = {
@@ -51,6 +35,7 @@ ParsedCapabilities.propTypes = {
 };
 
 export const Capabilities = ({ layer, controller }) => {
+    const { id } = layer;
     return (
         <Fragment>
             <Numeric
@@ -61,10 +46,13 @@ export const Capabilities = ({ layer, controller }) => {
                 allowNegative={false}
                 allowZero={false}
                 onChange={value => controller.setCapabilitiesUpdateRate(value)}>
-                { layer.id &&
+                { id &&
                     <Fragment>
                         <UpdateNowButton controller={controller} />
-                        <ShowCapabilities layerId={layer.id} />
+                        <SpacedLabel/>
+                        <Link tooltip={null} url={Oskari.urls.getRoute('GetLayerCapabilities', { id })}>
+                            <Message messageKey='capabilities.show' />
+                        </Link>
                     </Fragment>
                 }
             </Numeric>

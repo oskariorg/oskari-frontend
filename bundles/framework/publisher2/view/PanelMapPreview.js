@@ -55,7 +55,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         this.tools = tools;
 
         me.panel = null;
-        me.modeChangedCB = null;
         this.templates = {
             help: jQuery('<div class="help icon-info"></div>')
         };
@@ -137,120 +136,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @return {Object} size
          */
         _getActiveMapSize: function () {
-            var mapDiv = this.mapmodule.getMapEl(),
-                width = mapDiv.width(),
-                height = mapDiv.height();
-
+            const mapDiv = this.mapmodule.getMapEl();
             return {
-                width: width,
-                height: height
+                width: mapDiv.width(),
+                height: mapDiv.height()
             };
         },
-
-        /**
-         * @private @method _calculateLeftComponentsWidth
-         * Calculates a sensible width for components on the left panel (but doesn't set it...)
-         */
-        _calculateLeftComponentsWidth: function () {
-            var toolsWidth = 0;
-            this.tools.forEach(function (tool) {
-                toolsWidth = toolsWidth + (tool.getAdditionalSize().width || 0);
-            });
-            // Width, but 400 at most.
-            return Math.min(toolsWidth, 400);
-        },
-
         /**
          * @private @method _adjustDataContainer
          * This horrific thing is what sets the left panel components, container and map size.
          */
         _adjustDataContainer: function () {
-            var me = this,
-                selectedSize = me._getSelectedMapSize(),
-                size = selectedSize.valid ? selectedSize : me._getActiveMapSize(),
-                content = jQuery('#contentMap'),
-                container = content.find('.row-fluid'),
-                dataContainer = container.find('.oskariui-left'),
-                mapContainer = container.find('.oskariui-center'),
-                mapDiv = me.mapmodule.getMapEl(),
-                mapWidth,
-                mapHeight,
-                totalWidth = size.width,
-                totalHeight = size.height,
-                leftPanelWidth = me._calculateLeftComponentsWidth(),
-                hasLeftComps = leftPanelWidth > 0;
-
-            if (totalWidth === null || totalWidth === undefined || totalWidth === '') {
-                if (!container.length) {
-                    // check if we actually have .row-fluid structure, fallback to mapmodule as container
-                    container = me.mapmodule.getMapEl();
-                }
-                // Ugly hack, container has a nasty habit of overflowing the viewport...
-                totalWidth = jQuery(window).width() - container.offset().left;
-            }
-            if (totalHeight === null || totalHeight === undefined || totalHeight === '') {
-                totalHeight = jQuery(window).height();
-            }
-
-            if (hasLeftComps) {
-                dataContainer.removeClass('oskari-closed');
-            } else {
-                dataContainer.addClass('oskari-closed');
-            }
-
-            mapWidth = (totalWidth - leftPanelWidth) + 'px';
-            mapHeight = totalHeight + 'px';
-            leftPanelWidth = leftPanelWidth + 'px';
-            dataContainer.css({
-                'width': leftPanelWidth,
-                'height': totalHeight
-            });
-            if (hasLeftComps) {
-                // this is usually statsgrid
-                dataContainer.children().height(mapHeight);
-            }
-            mapContainer.css({
-                'width': mapWidth,
-                'height': mapHeight
-            });
-
-            mapDiv.width(mapWidth);
-            mapDiv.height(mapHeight);
-
-            // notify map module that size has changed
-            me._updateMapModuleSize();
+            const selectedSize = this._getSelectedMapSize();
+            const size = selectedSize.valid ? selectedSize : this._getActiveMapSize();
+            const mapDiv = this.mapmodule.getMapEl();
+            mapDiv.width(size.width || '100%');
+            mapDiv.height(size.height || '100%');
         },
 
-        /**
-        * @private @method _updateMapModuleSize
-        * Update map size
-        */
-        _updateMapModuleSize: function () {
-            // turn off event handlers in order to avoid consecutive calls to mapsizechanged
-            this._unregisterEventHandlers();
-            var me = this;
-            if (me.sandbox.hasHandler('MapFull.MapSizeUpdateRequest')) {
-                me.sandbox.request(me.instance, Oskari.requestBuilder('MapFull.MapSizeUpdateRequest')());
-            }
-
-            me._updateMapMode();
-
-            // turn event handlers back on.
-            this._registerEventHandlers();
-        },
-
-        /**
-        * @private @method _updateMapMode
-        * Update map mode
-        */
-        _updateMapMode: function () {
-            var me = this,
-                size = me._getSelectedMapSize();
-
-            if (me.modeChangedCB) {
-                me.modeChangedCB(size.option.id);
-            }
-        },
         /**
          * @private @method _getSelectedMapSize
          * Returns an object containing the user seleted/set map size and the corresponding size option
@@ -293,9 +196,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          *
          * @method init
          * @param {Object} pData initial data
-         * @param {Object} modeChangedCB mode changed callback
          */
-        init: function (pData, modeChangedCB) {
+        init: function (pData) {
             var me = this,
                 fkey,
                 data,
@@ -304,7 +206,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 contentPanel = panel.getContainer(),
                 tooltipCont = me.templates.help.clone();
 
-            me.modeChangedCB = modeChangedCB;
             // initial mode selection if modify.
             if (pData && pData.metadata && pData.metadata.preview) {
                 var selectedOptions = me.sizeOptions.filter(function (option) {
@@ -440,8 +341,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
         getPanel: function () {
-            var me = this;
-            return me.panel;
+            return this.panel;
         },
 
         /**
@@ -456,22 +356,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @return {Object}
          */
         getValues: function () {
-            var me = this,
-                values = {},
-                selected = me._getSelectedMapSize(),
-                size = isNaN(parseInt(selected.width)) || isNaN(parseInt(selected.height)) ? undefined : {
-                    width: selected.width,
-                    height: selected.height
-                };
-
-            values = {
+            const selected = this._getSelectedMapSize();
+            const values = {
                 metadata: {
-                    preview: selected.option.id,
-                    size: size
-
+                    preview: selected.option.id
                 }
             };
 
+            if (!isNaN(parseInt(selected.width)) && !isNaN(parseInt(selected.height))) {
+                values.metadata.size = {
+                    width: selected.width,
+                    height: selected.height
+                };
+            }
             return values;
         },
         validate: function () {
@@ -491,21 +388,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         * @public
         **/
         stop: function () {
-            var me = this;
-            var mapElement = me.mapmodule.getMapEl();
-            // reset size as it's always set on init
-            mapElement.width('');
-            mapElement.height(jQuery(window).height());
+            // restore "fill" as default size setting
+            this.sizeOptions.forEach(item => {
+                item.selected = item.id === 'fill';
+            });
+            this._unregisterEventHandlers();
 
-            me._unregisterEventHandlers();
-
-            // FIXME: timing issue?
-            window.setTimeout(function () {
-                var reqBuilder = Oskari.requestBuilder('MapFull.MapSizeUpdateRequest');
-                // notify openlayers that size has changed
-                if (reqBuilder) {
-                    me.sandbox.request(me.instance, reqBuilder());
-                }
+            window.setTimeout(() => {
+                // calculate new sizes AFTER the publisher panel has been removed from page
+                // otherwise the publisher panel that we have while stopping is taking up space
+                // from the map and the map size is calculated wrong
+                this._adjustDataContainer(true);
             }, 200);
         },
         /**

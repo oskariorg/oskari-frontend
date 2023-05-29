@@ -37,7 +37,7 @@ Oskari.registerLocalization(
             },
             "domain": {
                 "title": "Julkaisutiedot",
-                "label": "Rajoita kartan upotus vain seuraavaan <br>verkko-osoitteeseen:",
+                "label": "Rajoita kartan upotus vain seuraavaan verkko-osoitteeseen:",
                 "placeholder": "Sivuston osoite",
                 "tooltip": "Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com.",
                 "inputWarning": "Tarkista syötetty verkko-osoite"
@@ -64,10 +64,11 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Kartalla näytettävät työkalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
+                "AnnouncementsPlugin": "Ilmoitukset",
                 "ScaleBarPlugin": "Mittakaavajana",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "IndexMapPlugin": "Indeksikartta",
-                "PanButtons": "Kartan liikuttaminen nuolipainikkeilla",
+                "PanButtons": "Palaa alkutilaan",
                 "Portti2Zoombar": "Mittakaavasäädin",
                 "MyLocationPlugin": "Käyttäjän sijaintiin keskittäminen",
                 "ControlsPlugin": "Kartan liikuttaminen hiirellä raahaamalla",
@@ -78,7 +79,6 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Valitse tallennustaso",
                 "LayerSelectionPlugin": "Karttatasovalikko",
                 "CoordinateToolPlugin": "Koordinaattityökalu",
-                "FeedbackServiceTool": "Palautteen antaminen (Open311)",
                 "MapLegend": "Näytä karttaselitteet",
                 "MapRotator": "Salli kartan pyörittäminen",
                 "CrosshairTool": "Näytä kartan keskipiste",
@@ -107,8 +107,11 @@ Oskari.registerLocalization(
                 },
                 "layerselection": {
                     "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
-                    "selectAsBaselayer": "Taustakarttataso",
-                    "allowStyleChange": "Salli esitystyylin valinta"
+                    "selectAsBaselayer": "Valitse taustakartaksi",
+                    "allowStyleChange": "Salli esitystyylin valinta",
+                    "showMetadata": "Näytä metatietolinkit",
+                    "noMultipleStyles": "Vain yksi esitystyyli saatavilla valituilla karttatasoilla.",
+                    "noMetadata": "Metatietolinkkejä ei saatavilla valituilla karttatasoilla"
                 },
                 "mylocation": {
                     "modes": {
@@ -120,13 +123,15 @@ Oskari.registerLocalization(
                         "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
                         "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
                     }
+                },
+                "panButtonsOptions": {
+                    "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
                 }
             },
             "toollayout": {
                 "label": "Työkalujen asettelu kartalla",
                 "tooltip": "Valitse, miten työkalut asetellaan kartalle.",
-                "lefthanded": "Vasenkätinen",
-                "righthanded": "Oikeakätinen",
+                "swapUI": "Vaihda puolet",
                 "userlayout": "Oma asettelu",
                 "usereditmode": "Muokkaa asettelua",
                 "usereditmodeoff": "Lopeta muokkaus"
@@ -143,6 +148,10 @@ Oskari.registerLocalization(
             },
             "layout": {
                 "label": "Ulkoasu",
+                "title": {
+                    "popup": "Ponnahdusikkuna",
+                    "buttons": "Painikkeet"
+                },
                 "fields": {
                     "colours": {
                         "label": "Värimaailma",
@@ -168,15 +177,22 @@ Oskari.registerLocalization(
                         "label": "Valitse fontti"
                     },
                     "toolStyles": {
-                        "label": "Työkalujen tyyli",
-                        "default": "Oletustyyli",
                         "rounded-dark": "Pyöristetty (tumma)",
                         "rounded-light": "Pyöristetty (vaalea)",
                         "sharp-dark": "Kulmikas (tumma)",
                         "sharp-light": "Kulmikas (vaalea)",
                         "3d-dark": "Kolmiulotteinen (tumma)",
                         "3d-light": "Kolmiulotteinen (vaalea)"
-                    }
+                    },
+                    "popupHeaderColor": "Otsikon taustaväri",
+                    "popupHeaderTextColor": "Otsikon väri",
+                    "buttonBackgroundColor": "Taustaväri",
+                    "buttonTextColor": "Ikonien väri",
+                    "buttonAccentColor": "Ikonien tehosteväri",
+                    "buttonRounding": "Painikkeiden pyöristys",
+                    "effect": "Efekti",
+                    "3d": "3D",
+                    "presets": "Valmiit tyylimääritykset"
                 },
                 "popup": {
                     "title": "Valitse värimaailma",
@@ -218,6 +234,19 @@ Oskari.registerLocalization(
                 "tooltip": "Valitse julkaistavalla kartalla näytettävät karttatasot.",
                 "promote": "Haluatko näyttää kartalla myös ilmakuvia?"
             },
+            "rpc": {
+                "label": "Ohjelmallinen käyttö (RPC-rajapinta)",
+                "info": "RPC-rajapinnan avulla voit hyödyntää julkaistuja karttoja. Lisätietoa https://oskari.org/documentation/features/rpc/"
+            },
+            "mapLayers": {
+                "label": "Karttatasot",
+                "otherLayers": "Muut kartat",
+                "selectLayers": "Valitse tasot",
+                "layersDisplay": "Tasojen esitystapa",
+                "baseLayers": "Taustakartat",
+                "noBaseLayers": "Ei valittuja taustakarttoja",
+                "noLayers": "Ei valittuja karttatasoja"
+            },
             "preview": "Kartan esikatselu",
             "location": "Sijainti ja mittakaavataso",
             "zoomlevel": "Mittakaavataso",
@@ -231,8 +260,11 @@ Oskari.registerLocalization(
                 "nohelp": "Ohjetta ei löytynyt.",
                 "saveFailed": "Kartan tallennus epäonnistui.",
                 "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä (esim. html-tagit). Poista kielletyt merkit ja yritä uudelleen.",
-                "domainIllegalCharacters": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ()."
-            }
+                "domainIllegalCharacters": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ().",
+                "enablePreview": "Virheitä esikatselun avaamisessa. Esikatselu ei täysin vastaa julkaistua karttaa.",
+                "disablePreview": "Virheitä esikatselusta palautumisessa. Sivu kannattaa ladata uudestaan.",
+            },
+            "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
         },
         "NotLoggedView": {
             "text": "\"Julkaise kartta\" -toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla. Upotetussa kartassa näkyy valitsemasi karttanäkymä ja työkalut. Kartan julkaisu vaatii kirjautumisen palveluun.",
@@ -248,7 +280,6 @@ Oskari.registerLocalization(
             "denied_tooltip": "Karttatasot eivät ole julkaistavissa upotetussa kartassa. Tiedontuottaja ei ole antanut lupaa julkaista karttatasoa muissa verkkopalveluissa tai tasoa ei voida näyttää tässä karttaprojektiossa. Tarkista karttatason julkaisuoikeudet Valitut tasot -valikosta.",
             "myPlacesDisclaimer": "HUOM! Jos käytät karttatasoa karttajulkaisussa, karttatasosta tulee julkinen.",
             "noRights": "ei julkaisuoikeutta",
-            "unsupportedProjection": "väärä karttaprojektio",
             "buttons": {
                 "continue": "Jatka",
                 "continueAndAccept": "Hyväksy ehdot ja jatka",

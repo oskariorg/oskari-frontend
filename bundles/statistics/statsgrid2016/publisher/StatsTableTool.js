@@ -2,8 +2,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
 }, {
     index: 1,
     group: 'data',
-    allowedLocations: [],
-    allowedSiblings: [],
 
     groupedSiblings: false,
     templates: {},
@@ -14,11 +12,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
      * @method init
      * @public
      */
-    init: function (pdata) {
-        var enabled = pdata &&
-            Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') &&
-            pdata.configuration.statsgrid.conf.grid === true;
-        this.setEnabled(enabled);
+    init: function (data) {
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.grid === true);
     },
     /**
     * Get tool object.
@@ -28,18 +24,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
     *
     * @returns {Object} tool
     */
-    getTool: function (pdata) {
-        var me = this;
-        if (!me.__tool) {
-            me.__tool = {
-                id: 'Oskari.statistics.statsgrid.StatsGridBundleInstance',
-                title: 'grid',
-                config: {
-                    grid: true
-                }
-            };
-        }
-        return me.__tool;
+    getTool: function () {
+        return {
+            id: 'Oskari.statistics.statsgrid.TogglePlugin',
+            title: 'grid',
+            config: {
+                grid: true
+            },
+            hasNoPlugin: true
+        };
     },
     /**
     * Set enabled.
@@ -48,13 +41,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
     *
     * @param {Boolean} enabled is tool enabled or not
     */
-    setEnabled: function (enabled) {
-        var me = this;
-        var changed = me.state.enabled !== enabled;
-        me.state.enabled = enabled;
-
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (!stats || !changed) {
+    _setEnabledImpl: function (enabled) {
+        var stats = this.getStatsgridBundle();
+        if (!stats) {
             return;
         }
         if (enabled) {
@@ -66,8 +55,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
     getValues: function () {
         return this.getConfiguration({ grid: this.isEnabled() });
     },
-    stop: function () {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+    _stopImpl: function () {
+        var stats = this.getStatsgridBundle();
         if (stats) {
             stats.togglePlugin.removeTool(this.id);
         }

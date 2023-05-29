@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeaturesSelecte
             return this.__name;
         },
         /**
-     * @method getName
+     * @method getWfsFeatureIds
      * @return {String[]} WFS feature id selection list
      */
         getWfsFeatureIds: function () {

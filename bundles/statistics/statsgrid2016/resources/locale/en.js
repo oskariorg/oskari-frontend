@@ -107,8 +107,20 @@ Oskari.registerLocalization({
         },
         'classify': {
             'classify': 'Classification',
-            'classifymethod': 'Classification method',
-            'classes': 'Class division',
+            'labels': {
+                'method': 'Classification method',
+                'count': 'Class division',
+                'mode': 'Class breaks',
+                'mapStyle': 'Map style',
+                'type': 'Distribution',
+                'reverseColors': 'Flip colors',
+                'color': 'Color',
+                'colorset': 'Colors',
+                'pointSize': 'Point size',
+                'transparency': 'Transparency',
+                'showValues': 'Show values',
+                'fractionDigits': 'Number of decimals'
+            },
             'methods': {
                 'jenks': 'Natural intervals',
                 'quantile': 'Quantiles',
@@ -121,7 +133,6 @@ Oskari.registerLocalization({
             'nanError': 'Given value is not a number. Correct value and try again. Use decimal point as separator mark.',
             'infoTitle': 'Manual interval classification',
             'info': 'Give class breaks as numbers separated with comma. Use decimal point as separator mark. For example by entering "0, 10.5, 24, 30.2, 57, 73.1" you get five classes which values are between "0-10,5", "10,5-24", "24-30,2", "30,2-57" and "57-73,1". Indicator values which are smaller than lowest class break (in previous exaple 0) or bigger than highest class break (73,1) are not shown in the map. Class breaks must be between smallest and largest value of the indicator.',
-            'mode': 'Class breaks',
             'modes': {
                 'distinct': 'Continuous',
                 'discontinuous': 'Discontinuous'
@@ -132,29 +143,19 @@ Oskari.registerLocalization({
                 'close': 'Close the classification editor'
             },
             'classifyFieldsTitle': 'Classification values',
-            'map': {
-                'mapStyle': 'Map style',
+            'mapStyles': {
                 'choropleth': 'Choropleth map',
-                'points': 'Point symbol map',
-                'pointSize': 'Point size',
+                'points': 'Point symbol map'
+            },
+            'pointSizes': {
                 'min': 'Minimum',
-                'max': 'Maximum',
-                'color': 'Color',
-                'transparency': 'Transparency',
-                'showValues': 'Show values',
-                'fractionDigits': 'Number of decimals'
+                'max': 'Maximum'
+            },
+            'types': {
+                'seq': 'Quantitative',
+                'qual': 'Qualitative',
+                'div': 'Diverging'
             }
-        },
-        'colorset': {
-            'button': 'Colors',
-            'flipButton': 'Flip colors',
-            'themeselection': 'Select colors for classes',
-            'setselection': 'Distribution',
-            'seq': 'Quantitative',
-            'qual': 'Qualitative',
-            'div': 'Diverging',
-            'info2': 'Choose colors by clicking color scheme.',
-            'cancel': 'Cancel'
         },
         'errors': {
             'title': 'Error',
@@ -168,9 +169,11 @@ Oskari.registerLocalization({
             'datasetSave': 'Error saving dataset.',
             'datasetDelete': 'Error deleting dataset.',
             'indicatorSave': 'Error saving indicator',
+            'myIndicatorNameInput': 'Name field cannot be empty.',
             'myIndicatorYearInput': 'Year field cannot be empty.',
             'myIndicatorRegionselect': 'Regionselect cannot be empty.',
             'myIndicatorDatasource': 'Datasource is empty.',
+            'myIndicatorInvalidData': 'Data has invalid values.',
             'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.',
             'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}',
             'onlyPartialDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}'
@@ -228,7 +231,10 @@ Oskari.registerLocalization({
             'grid': {
                 'name': 'Name',
                 'edit': 'Edit',
-                'delete': 'Delete'
+                'delete': 'Delete',
+                'actions': 'Actions',
+                'createDate': 'Created',
+                'updateDate': 'Updated'
             },
             'popup': {
                 'deletetitle': 'Delete Indicator',
@@ -284,7 +290,9 @@ Oskari.registerLocalization({
         'metadataPopup': {
             'open': 'Show indicator {indicators, plural, one {description} other {descriptions}}',
             'title': 'Indicator {indicators, plural, one {description} other {descriptions}}',
-            'noMetadata': 'Service did not return {indicators, plural, one {description for the indicator} other {descriptions for the indicators}}'
+            'noMetadata': 'Service did not return {indicators, plural, one {description for the indicator} other {descriptions for the indicators}}',
+            'updated': 'Last update',
+            'nextUpdate': 'Next update'
         },
         'sumo': {
             'placeholder': 'Select Here',

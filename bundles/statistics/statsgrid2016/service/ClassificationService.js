@@ -1,6 +1,7 @@
-import { equalSizeBands } from '../util/equalSizeBands';
+import { equalSizeBands, createClamp } from './util';
 import geostats from 'geostats/lib/geostats.min.js';
 import 'geostats/lib/geostats.css';
+import * as d3 from 'd3';
 
 /**
  * @class Oskari.statistics.statsgrid.ClassificationService
@@ -13,7 +14,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
      */
     function (colorService) {
         this._colorService = colorService;
-        this.lastUsedBounds = null;
+        this.log = Oskari.log(this.getQName());
+        // limits should be used when creating UI for classification
+        this.limits = {
+            // 2-7 used for points, colorservice's colorsets limits other mapStyles
+            count: { min: 2, max: 7 },
+            // values recognized by the code (and geostats)
+            methods: ['jenks', 'quantile', 'equal', 'manual'],
+            // values recognized by the code (and geostats)
+            modes: ['distinct', 'discontinuous'],
+            // values recognized by the code (and geostats)
+            mapStyles: ['choropleth', 'points'],
+            // values recognized by the code (and geostats)
+            types: this._colorService.getAvailableTypes(),
+            fractionDigits: 5
+        };
     }, {
         __name: 'StatsGrid.ClassificationService',
         __qname: 'Oskari.statistics.statsgrid.ClassificationService',
@@ -24,115 +39,69 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         getName: function () {
             return this.__name;
         },
-        // limits should be used when creating UI for classification
-        limits: {
-            // 2-9 ranges is what we have colorsets for in colorservice, 5 as default is arbitrary
-            count: {
-                min: 2,
-                max: 9,
-                def: 5
-            },
-            // values recognized by the code (and geostats)
-            method: ['jenks', 'quantile', 'equal', 'manual'],
-            // values recognized by the code (and geostats)
-            mode: ['distinct', 'discontinuous'],
-            // values recognized by the code (and geostats)
-            mapStyle: ['choropleth', 'points']
+        getRangeForPoints: function () {
+            return { ...this.limits.count };
         },
         getAvailableMethods: function () {
-            return this.limits.method.slice(0);
+            return [...this.limits.methods];
         },
         getAvailableModes: function () {
-            return this.limits.mode.slice(0);
+            return [...this.limits.modes];
         },
         getAvailableMapStyles: function () {
-            return this.limits.mapStyle.slice(0);
+            return [...this.limits.mapStyles];
         },
-        getAvailableOptions: function (data) {
-            var validOpts = {};
-            var list = Array.isArray(data) ? data : this._getDataAsList(data);
-            validOpts.maxCount = list.length - 1;
-            return validOpts;
+        getLimits: function (mapStyle, type) {
+            if (mapStyle === 'points') {
+                return { ...this.limits };
+            }
+            const count = this._colorService.getRange(type);
+            return { ...this.limits, count };
         },
         /**
          * Classifies given dataset.
-         * Returns an object like :
-         * {
-         *     bounds : [<classification bounds as numbers like [0,2,5,6]>],
-         *     ranges : [<classification ranges as strings ["0-2", "2-5", "5-6"]>],
-         *     stats : {
-         *         min : <min value in data>,
-         *         max : <max value in data>,
-         *         ...
-         *         mean : <mean value in data>
-         *     },
-         *     getGroups : <function to return keys in data grouped by value ranges, takes an optional param index to get just one group>,
-         *     getIndex : <function to return a group index for data
-         *     createLegend : <function to create html-legend for ranges, takes colorset and optional title as params>
-         * }
-         * Options can include:
-         * {
-         *    count : <number between 2-9 - defaults to 5>,
-         *    method : <one of 'jenks', 'quantile', 'equal' - defaults to 'jenks'>,
-         *    mode : <one of 'distinct', 'discontinuous' - defaults to 'distinct'>,
-         *    precission : <undefined or integer between 0-20 - defaults to undefined>
-         * }
          * @param  {Object} indicatorData data to classify. Keys are available for groups, values are used for classification
-         * @param  {Object} options       optional instructions for classification
+         * @param  {Object} opts      options for classification
          * @param  {geostats} groupStats precalculated geostats | optional
-         * @return {Object}               result with values and helper functions
+         * @return {Object}               result with classified values
          */
-        getClassification: function (indicatorData, options, groupStats) {
-            var me = this;
+        getClassification: function (indicatorData, opts, groupStats, uniqueCount) {
             if (typeof indicatorData !== 'object') {
-                throw new Error('Data expected as object with region/value as keys/values.');
+                this.log.warn('Data expected as object with region/value as keys/values.');
+                return { error: 'noData' };
             }
-            var opts = me._validateOptions(options);
-            var list = me._getDataAsList(indicatorData);
-            var formatter = Oskari.getNumberFormatter(opts.fractionDigits);
-
-            if (me._hasNonNumericValues(list)) {
-                // geostats can handle this, but lets not support for now (gstats.getUniqueValues() used previously)
-                throw new Error('Non-numeric data not supported for now');
+            // TODO: data should be validated and unique values counted in one place
+            // stateservice.getState() => returns or service triggers state for all components
+            const dataAsList = Object.values(indicatorData).filter(val => val !== null && val !== undefined);
+            const dataSize = uniqueCount || new Set(dataAsList).size;
+            // geostats fails with jenks if there isn't at least one more unique values than count
+            const minData = opts.method === 'jenks' ? Math.max(opts.count + 1, 3) : 1;
+            if ((groupStats && groupStats.serie.length < 3) || dataSize < minData) {
+                return { error: 'noEnough' };
             }
-
-            var stats = new geostats(list);
+            const isDivided = opts.type === 'div';
+            const { format } = Oskari.getNumberFormatter(opts.fractionDigits);
+            var stats = new geostats(dataAsList);
             stats.silent = true;
-            stats.setPrecision(opts.precision);
-
-            var response = {};
-
+            stats.setPrecision();
+            let bounds;
             const setBounds = (stats) => {
                 if (opts.method === 'jenks') {
-                    // Luonnolliset välit
-                    response.bounds = stats.getClassJenks(opts.count);
-                    stats.setBounds(response.bounds);
-                    stats.setRanges();
+                    bounds = stats.getClassJenks(opts.count);
                 } else if (opts.method === 'quantile') {
-                    // Kvantiilit
-                    response.bounds = stats.getQuantile(opts.count);
+                    bounds = stats.getQuantile(opts.count);
                 } else if (opts.method === 'equal') {
-                    // Tasavälit
-                    response.bounds = stats.getEqInterval(opts.count);
+                    bounds = stats.getEqInterval(opts.count);
                 } else if (opts.method === 'manual') {
-                    const bounds = this.getBoundsFallback(opts.manualBounds, opts.count, stats.min(), stats.max());
-                    response.bounds = stats.setClassManually(bounds);
+                    bounds = this.getBoundsFallback(opts.manualBounds, opts.count, stats.min(), stats.max());
+                    stats.setBounds(bounds);
                 }
             };
 
             if (groupStats) {
-                if (groupStats.serie.length < 3) {
-                    return;
-                }
                 groupStats.silent = true;
-                groupStats.setPrecision(opts.precision);
-
-                if (opts.count >= groupStats.serie.length) {
-                    opts.count = groupStats.serie.length - 1;
-                }
                 var groupOpts = groupStats.classificationOptions || {};
-                var calculateBounds =
-                    !groupStats.classificationOptions ||
+                const calculateBounds =
                     groupOpts.method !== opts.method ||
                     groupOpts.count !== opts.count ||
                     (opts.method === 'manual' && !Oskari.util.arraysEqual(groupStats.bounds, opts.manualBounds));
@@ -142,29 +111,57 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     groupOpts.method = opts.method;
                     groupOpts.count = opts.count;
                     groupStats.classificationOptions = groupOpts;
+                } else {
+                    bounds = groupStats.bounds;
                 }
                 // Set bounds manually.
                 stats.setBounds(groupStats.bounds);
-                stats.setRanges();
+            } else if (isDivided) {
+                bounds = this.getDividedBounds(stats, opts);
             } else {
-                if (list.length < 2) {
-                    return;
-                } else if (list.length === 2) {
-                    opts.count = list.length;
-                    /* Switch method from jenks to quantile with value length of two since geostats.getClassJenks()
-                     * does not return bounds correctly with two values
-                     */
-                    if (opts.method === 'jenks') {
-                        opts.method = 'quantile';
-                    }
-                } else if (opts.count >= list.length) {
-                    opts.count = list.length - 1;
-                }
                 setBounds(stats);
             }
+            if (bounds.some(bound => isNaN(bound))) {
+                this.log.warn('Failed to create bounds');
+                return { error: 'noEnough' };
+            }
 
-            response.ranges = stats.ranges;
-            response.stats = {
+            const ranges = opts.mode === 'distinct'
+                ? this.getRangesFromBounds(bounds, opts, format)
+                : this.getValueRanges(dataAsList, bounds, format);
+            const colors = isDivided ? this._colorService.getDividedColors(opts, bounds) : this._colorService.getColorsForClassification(opts);
+            const pixels = isDivided ? this.getDividedPixels(opts, bounds) : this.getPixelsForClassification(opts);
+            if (![colors, pixels, ranges].every(list => Array.isArray(list) && list.length === opts.count)) {
+                this.log.warn('Failed to create groups');
+                return { error: 'general' };
+            }
+            const groups = [];
+            for (let i = 0; i < opts.count; i++) {
+                const group = {
+                    sizePx: pixels[i],
+                    range: ranges[i],
+                    color: colors[i],
+                    regionIds: []
+                };
+                groups.push(group);
+            }
+
+            const getGroupForValue = value => {
+                const index = bounds.findIndex(bound => value < bound);
+                // first groups values is between bounds[0] and bounds[1]
+                // max value === last bound, max value isn't found, return last group index
+                return index === -1 ? bounds.length - 2 : index - 1;
+            };
+            for (const region in indicatorData) {
+                const value = indicatorData[region];
+                if (typeof value === 'undefined') {
+                    // no value for region -> skip
+                    continue;
+                }
+                var index = getGroupForValue(value);
+                groups[index].regionIds.push(region);
+            }
+            const statistics = {
                 min: stats.min(),
                 max: stats.max(),
                 sum: stats.sum(),
@@ -175,118 +172,153 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 stddev: stats.stddev(),
                 cov: stats.cov()
             };
-            var groups = [];
-            var getGroups = function () {
-                if (groups.length) {
-                    return groups;
-                }
-                // make groups.length equal to opts.count and each item is an array
-                for (var i = 0; i < opts.count; ++i) {
-                    groups.push([]);
-                }
-                for (var region in indicatorData) {
-                    var value = indicatorData[region];
-                    if (typeof value === 'undefined') {
-                        // no value for region -> skip
-                        continue;
-                    }
-                    var index = stats.getRangeNum(value);
-                    groups[index].push(region);
-                }
-                return groups;
+            return {
+                groups,
+                bounds,
+                format,
+                stats: statistics
             };
-            response.getGroups = function (index) {
-                var groups = getGroups();
-                if (index || index === 0) {
-                    if (index < 0 || index >= groups.length) {
-                        throw new Error('Grouped to ' + groups.length + ' parts, ' +
-                            index + ' is out of bounds.');
-                    }
-                    return groups[index];
-                }
-                return groups;
-            };
-            // functions in response
-            response.getIndex = function (value) {
-                return stats.getRangeNum(value);
-            };
-            // createLegend
-            response.createLegend = function (colors, title) {
-                // Point legend
-                if (opts.mapStyle === 'points') {
-                    stats.doCount();
-                    var counter = stats.counter;
-                    var ranges = stats.getRanges();
-                    if (opts.mode === 'discontinuous') {
-                        ranges = stats.getInnerRanges();
-                    }
-
-                    if (!ranges) {
-                        return;
-                    }
-
-                    return me._getPointsLegend(ranges, opts, colors[0], counter,
-                        {
-                            separator: stats.separator,
-                            legendSeparator: stats.legendSeparator
-                        },
-                        formatter
-                    );
-                }
-                // Choropleth  legend
-                stats.setColors(colors);
-
-                return stats.getHtmlLegend(null, title || '', true, formatter.format, opts.mode);
-            };
-            this.lastUsedBounds = response.bounds;
-            var maxBounds = [];
-            if (response.bounds) {
-                // max bounds are calculated for color scale used in diagram
-                var values = stats.sorted();
-                var j = 1;
-                for (var i = 0; i < values.length; i++) {
-                    if (parseFloat(values[i]) > parseFloat(response.bounds[j])) {
-                        maxBounds.push(values[i]);
-                        j++;
-                    }
-                }
-            }
-            response.maxBounds = maxBounds;
-            return response;
         },
-        getPixelForSize: function (index, size, range) {
-            var iconSize = size || {};
-            var ranges = range || {};
-            if (!iconSize.min) {
-                iconSize.min = 10;
-            }
-            if (!iconSize.max) {
-                iconSize.max = 150;
-            }
-            if (!ranges.min) {
-                ranges.min = 0;
-            }
-            if (!ranges.max) {
-                ranges.max = 4;
-            }
+        getPixelsForClassification: function (classification, index) {
+            const { min, max, count } = classification;
+            const x = d3.scaleLinear()
+                .domain([0, count - 1])
+                .range([min, max]);
 
-            var x = d3.scaleLinear()
-                .domain([ranges.min, ranges.max])
-                .range([iconSize.min, iconSize.max]);
+            const getSize = index => {
+                const size = Math.floor(x(index));
+                // Make size an even value for rendering
+                return size % 2 !== 0 ? size + 1 : size;
+            };
 
-            // Make size an even value for rendering
-            size = Math.floor(x(index));
-            if (size % 2 !== 0) {
-                size += 1;
+            if (typeof index !== 'undefined') {
+                return getSize(index);
             }
+            const sizes = [];
+            for (let i = 0; i < count; i++) {
+                sizes.push(getSize(i));
+            }
+            return sizes;
+        },
+        getDividedPixels: function (classification, bounds) {
+            const { min, max, base = 0 } = classification;
+            const baseIndex = bounds.findIndex(bound => bound >= base);
+            const minValueDif = base - bounds[0];
+            const maxValueDif = bounds[bounds.length - 1] - base;
+            const x = d3.scaleLinear()
+                .domain([base, Math.max(minValueDif, maxValueDif)])
+                .range([min, max]);
 
-            return size;
+            const getSize = index => {
+                const size = Math.floor(x(index));
+                // Make size an even value for rendering
+                return size % 2 !== 0 ? size + 1 : size;
+            };
+            const sizes = [];
+            for (let i = 0; i < bounds.length - 1; i++) {
+                const val = i < baseIndex ? base - bounds[i] : bounds[i + 1] - base;
+                sizes[i] = getSize(val);
+            }
+            return sizes;
+        },
+        getDividedBounds: function (stats, classification) {
+            const { method, count, manualBounds, base = 0 } = classification;
+            let bounds;
+            if (method === 'jenks') {
+                bounds = stats.getClassJenks(count);
+            } else if (method === 'quantile') {
+                bounds = stats.getQuantile(count);
+            } else if (method === 'equal') {
+                bounds = stats.getEqInterval(count);
+            } else if (method === 'manual') {
+                bounds = this.getBoundsFallback(manualBounds, count, stats.min(), stats.max());
+                // TODO: handle base bound drag
+                return bounds;
+            }
+            const potentialBaseIndex = bounds.findIndex(bound => bound > base);
+            const lastIndex = bounds.length - 1;
+            if (potentialBaseIndex <= 0) {
+                // All bounds are under or over base
+                return bounds;
+            }
+            // clamp function is used to ensure that we don't modify first or last bound
+            const clamp = createClamp(1, lastIndex - 1);
+            if (count % 2 === 0) {
+                const deltaToLowerBound = base - bounds[potentialBaseIndex - 1];
+                const deltaToUpperBound = bounds[potentialBaseIndex] - base;
+                // by default base index is the next bound over base value
+                let indexForBase = potentialBaseIndex;
+                if (deltaToLowerBound < deltaToUpperBound) {
+                    // but if next bound over base value is further from base than the lower bound, adjust lower instead
+                    indexForBase = potentialBaseIndex - 1;
+                }
+                indexForBase = clamp(indexForBase);
+                bounds[indexForBase] = base;
+            } else {
+                // odd count has 'neutral' group so both bounds have to move to base
+                let under = clamp(potentialBaseIndex - 1);
+                let over = clamp(potentialBaseIndex);
+                if (under === over) {
+                    if (over === 1) {
+                        over++;
+                    } else {
+                        under--;
+                    }
+                }
+                bounds[under] = base;
+                bounds[over] = base;
+            }
+            return bounds;
+        },
+
+        getRangeString: function (min, max) {
+            return `${min} - ${max}`;
+        },
+        getRangesFromBounds: function (bounds, opts, format) {
+            const { fractionDigits } = opts;
+            const ranges = [];
+            const lastRange = bounds.length - 2;
+            for (let i = 0; i < bounds.length - 1; i++) {
+                let min = bounds[i];
+                let max = bounds[i + 1];
+                const same = min === max;
+                // decrease groups max range by fraction digit, skip last
+                max = i === lastRange || same ? format(max) : format(max.toFixed(fractionDigits) - Math.pow(10, -fractionDigits));
+                if (same) {
+                    ranges.push(max);
+                } else {
+                    min = format(min);
+                    ranges.push(this.getRangeString(min, max));
+                }
+            }
+            return ranges;
+        },
+
+        getValueRanges: function (data, bounds, format) {
+            // TODO: could use sorted unique values which is used for classification options
+            const sorted = [...new Set(data)].sort((a, b) => a - b);
+            const ranges = [];
+            const lastRange = bounds.length - 2;
+            for (let i = 0; i < bounds.length - 1; i++) {
+                const max = bounds[i + 1];
+                const min = bounds[i];
+                const values = sorted.filter(val => val >= min && val < max);
+                if (i === lastRange) {
+                    // max value === last bound, add max value to last range
+                    values.push(sorted[sorted.length - 1]);
+                }
+                if (values.length === 0) {
+                    ranges[i] = '';
+                } else if (values.length === 1) {
+                    ranges[i] = format(values[0]);
+                } else {
+                    ranges[i] = this.getRangeString(format(values[0]), format(values[values.length - 1]));
+                }
+            }
+            return ranges;
         },
         getBoundsFallback: function (bounds, count, dataMin, dataMax) {
-            return this._tryKnownBounds(bounds, count, dataMin, dataMax) || equalSizeBands(count, dataMin, dataMax);
-        },
-        _tryKnownBounds: function (givenBounds, count, dataMin, dataMax) {
-            return this._tryBounds(givenBounds, count, dataMin, dataMax) || this._tryBounds(this.lastUsedBounds, count, dataMin, dataMax);
+            return this._tryBounds(bounds, count, dataMin, dataMax) || equalSizeBands(count, dataMin, dataMax);
         },
         _tryBounds: function (bounds, count, dataMin, dataMax) {
             if (!bounds) {
@@ -295,222 +327,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             if (bounds[0] !== dataMin || bounds[bounds.length - 1] !== dataMax) {
                 return;
             }
-            const targetLength = count + 1;
-            if (bounds.length === targetLength) {
+            if (bounds.length === count + 1) {
                 return bounds.slice();
             }
-            if (bounds.length > targetLength) {
-                return bounds.slice(0, targetLength - 1).concat([dataMax]);
-            }
-
-            const extraNeeded = equalSizeBands(targetLength - bounds.length + 1, bounds[bounds.length - 2], dataMax);
-
-            return bounds
-                .slice(0, -2)
-                .concat(extraNeeded);
-        },
-        _getPointsLegend: function (ranges, opts, color, counter, statsOpts, formatter) {
-            var me = this;
-            var x = 0;
-            var y = 0;
-            var fontSize = 8;
-
-            var legend = jQuery('<div class="statsgrid-svg-legend"></div>');
-            var svg = jQuery('<svg xmlns="http://www.w3.org/2000/svg">' +
-                '   <svg class="symbols"></svg>' +
-                '</svg>');
-
-            var pointSymbol = jQuery('<div>' +
-                '       <svg x="0" y="0">' +
-                '           <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"></circle>' +
-                '       </svg>' +
-                '</div>');
-
-            var lineAndText = jQuery('<div>' +
-                '   <svg>' +
-                '       <g>' +
-                '           <svg>' +
-                '               <line stroke="#000000" stroke-width="1"></line>' +
-                '           </svg>' +
-                '       </g>' +
-                '   </svg>' +
-                '</div>');
-
-            var maxSize = me.getPixelForSize(ranges.length - 1,
-                {
-                    min: opts.min,
-                    max: opts.max
-                }, {
-                    min: 0,
-                    max: opts.count - 1
-                }
-            );
-
-            var minSize = me.getPixelForSize(0,
-                {
-                    min: opts.min,
-                    max: opts.max
-                }, {
-                    min: 0,
-                    max: opts.count - 1
-                }
-            );
-
-            svg.attr('height', maxSize + fontSize + 2);
-            svg.find('svg.texts').attr('y', fontSize);
-            svg.find('svg.texts').attr('height', maxSize + fontSize);
-
-            var legendValuesPosition = function (size, index) {
-                var step = (maxSize - minSize / 2) / (ranges.length - 1);
-                var y = (ranges.length - index - 1) * step;
-                y += fontSize + 2;
-                return {
-                    x1: maxSize / 2,
-                    x2: maxSize + 10,
-                    y1: y,
-                    y2: y
-                };
-            };
-
-            var classificationLabelCorrection = function (index) {
-                return ((ranges.length - 1 - index) / (ranges.length - 1) * fontSize) / 2;
-            };
-
-            ranges.forEach(function (range, index) {
-                // Create point symbol
-                var point = pointSymbol.clone();
-                var svgMain = point.find('svg').first();
-
-                var tmp = range.split(statsOpts.separator);
-                var startValue = formatter.format(parseFloat(tmp[0]));
-                var endValue = formatter.format(parseFloat(tmp[1]));
-
-                var size = me.getPixelForSize(index,
-                    {
-                        min: opts.min,
-                        max: opts.max
-                    }, {
-                        min: 0,
-                        max: opts.count - 1
-                    }
-                );
-                svgMain.find('circle').attr('cx', size / 2 + 1);
-                svgMain.find('circle').attr('cy', size / 2 + 1);
-                svgMain.find('circle').attr('r', size / 2);
-                x = (maxSize - size) / 2;
-                y = maxSize + fontSize - size;
-
-                svgMain.attr('x', x);
-                svgMain.attr('y', y);
-                svgMain.attr('width', size + 2);
-                svgMain.attr('height', size + 2);
-
-                var circle = point.find('circle');
-                circle.attr({
-                    'fill': color
-                });
-
-                svg.find('svg.symbols').prepend(point.html());
-
-                // Create texts and lines
-                var label = lineAndText.clone();
-                var line = label.find('line');
-                var valPos = legendValuesPosition(size, index);
-                line.attr({
-                    x1: valPos.x1,
-                    y1: valPos.y1,
-                    x2: valPos.x2,
-                    y2: valPos.y2,
-                    'shape-rendering': 'crispEdges'
-                });
-
-                var count = counter[index];
-                var text = startValue + statsOpts.legendSeparator + endValue;
-                if (startValue === endValue) {
-                    text = startValue;
-                }
-                var textSvgEl = jQuery('<svg>' +
-                '   <text fill="#000000" font-size="' + fontSize + '" letter-spacing="0.7">' +
-                    text + '<tspan font-size="' + fontSize + '" fill="#666" dx="4">(' + count + ')</tspan>' +
-                '   </text>' +
-                '</svg>');
-
-                textSvgEl.find('text').attr({
-                    x: valPos.x2 + 4,
-                    y: valPos.y2 + classificationLabelCorrection(index)
-                });
-
-                label.find('g').append(textSvgEl);
-                svg.find('svg.symbols').prepend(label.html());
-            });
-
-            legend.append(svg);
-            return legend;
-        },
-        /**
-         * Validates and normalizes options
-         * @param  {Object} options options for classification
-         * @return {Object}         normalized options
-         */
-        _validateOptions: function (options) {
-            var opts = options || {};
-            opts.count = opts.count || this.limits.count.def;
-            opts.type = opts.type || 'seq';
-
-            var range = this._colorService.getRange(opts.type, opts.mapStyle);
-            if (opts.count < range.min) {
-                // no need to classify if partitioning to less than 2 groups
-                throw new Error('Requires atleast ' + range.min + ' partitions. Count was ' + opts.count);
-            }
-            if (opts.count > range.max) {
-                opts.count = range.max;
-            }
-            // maybe validate max count?
-            opts.method = opts.method || this.limits.method[0];
-            // method needs to be one of 'jenks', 'quantile', 'equal', 'manual'
-            if (this.limits.method.indexOf(opts.method) === -1) {
-                throw new Error('Requested method not allowed: ' + opts.method + '. Allowed values are: ' + this.limits.method.join());
-            }
-
-            // Jatkuva / epäjatkuva
-            opts.mode = opts.mode || this.limits.mode[0];
-            if (this.limits.mode.indexOf(opts.mode) === -1) {
-                throw new Error('Requested mode not allowed: ' + opts.mode + '. Allowed values are: ' + this.limits.mode.join());
-            }
-            return opts;
-        },
-        /**
-         * Transforms { key: value, key2 : null, key3: undefined, key4 : value2 } to [value, value2]
-         * @param  {Object} data input data object
-         * @return {Number[]}    values array
-         */
-        _getDataAsList: function (data) {
-            var list = [];
-            // object -> array and take out any missing values
-            for (var reg in data) {
-                var value = data[reg];
-                if (value !== undefined && value !== null) {
-                    list.push(value);
-                }
-            }
-            return list;
-        },
-        /**
-         * Determines if there are NaN-values in the input
-         * @param  {Array}  values Array of values
-         * @return {Boolean}       true if there are NaN values in the array
-         */
-        _hasNonNumericValues: function (values) {
-            var i, val, valLen;
-            for (i = 0, valLen = values.length; i < valLen; i += 1) {
-                val = values[i];
-                if (val !== undefined) {
-                    if (isNaN(val)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

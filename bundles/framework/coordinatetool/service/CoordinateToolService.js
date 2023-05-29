@@ -6,9 +6,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolSer
  * @method create called automatically on construction
  * @static
  */
-    function (instance, config) {
-        this._instance = instance;
-        this._sandbox = instance.sandbox;
+    function (sandbox, config) {
+        this._sandbox = sandbox;
         this._config = config;
         this._reverseGeocodingIds = config.reverseGeocodingIds;
         this.urls = {};
@@ -66,38 +65,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolSer
                 url: url,
                 type: 'GET',
                 dataType: 'json',
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType('application/j-son;charset=UTF-8');
-                    }
-                },
                 success: function (response) {
                     if (response) {
                         me._handleResponse(response, successCb);
                     }
                 },
                 error: function (jqXHR, textStatus) {
-                    if (_.isFunction(errorCb) && jqXHR.status !== 0) {
+                    if (typeof errorCb === 'function' && jqXHR.status !== 0) {
                         errorCb(jqXHR, textStatus);
                     }
                 }
             });
         },
-        _handleResponse: function (response, cb) {
-            var result = [];
-            if (response.locations) {
-                _.each(response.locations, function (location) {
-                    var loca = {};
-                    loca.channelId = location.channelId;
-                    loca.name = location.name;
-                    loca.type = location.type;
-                    result.push(loca);
-                });
+        _handleResponse: function (response = {}, cb) {
+            if (typeof cb !== 'function' || !response.locations) {
+                return;
             }
 
-            if (_.isFunction(cb)) {
-                cb(result);
-            }
+            const result = response.locations.map((location) => {
+                return {
+                    channelId: location.channelId,
+                    name: location.name,
+                    type: location.type
+                };
+            });
+            cb(result);
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

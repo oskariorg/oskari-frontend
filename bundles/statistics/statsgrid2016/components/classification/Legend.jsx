@@ -1,69 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withContext } from 'oskari-ui/util';
-import './legend.scss';
+import styled from 'styled-components';
+import { InactiveLegend } from './legend/InactiveLegend';
+import { LegendRow } from './legend/LegendRow';
 
-const createLegendHTML = props => {
-    const { loc, legendProps } = props;
-    const indicatorData = props.indicatorData.data;
-    const classification = legendProps.classification;
-    const colors = legendProps.colors;
-    const log = Oskari.log('Oskari.statistics.statsgrid.Classification');
-    if (Object.keys(indicatorData).length === 0) {
-        return { error: loc('legend.noData') };
-    }
-    if (!classification) {
-        log.warn('Error getting indicator classification', indicatorData);
-        return { error: loc('legend.noEnough') };
-    }
-    const opacity = props.transparency / 100 || 1;
-    let legend;
-    if (opacity !== 1) {
-        const rgba = colors.map(color => {
-            const { r, g, b } = Oskari.util.hexToRgb(color);
-            return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + opacity + ')';
-        });
-        legend = classification.createLegend(rgba);
-    } else {
-        legend = classification.createLegend(colors);
-    }
+const Container = styled.div`
+    margin: 0 auto;
+    width: 90%;
+    overflow: hidden;
+`;
 
-    if (!legend) {
-        return { error: loc('legend.cannotCreateLegend') };
-    } else if (legend instanceof jQuery) {
-        return { __html: legend.prop('outerHTML') }; // points legend
-    } else {
-        return { __html: legend };
+export const Legend = ({
+    transparency,
+    mapStyle,
+    classifiedDataset
+}) => {
+    const { error } = classifiedDataset;
+    if (error) {
+        const errorKey = error === 'general' ? 'cannotCreateLegend' : error;
+        return (<InactiveLegend error = {errorKey} />);
     }
-};
-
-const getNoActiveElem = text => {
+    const opacity = transparency / 100 || 1;
+    const { groups } = classifiedDataset;
+    const maxSizePx = groups.map(g => g.sizePx).reduce((max, val) => max < val ? val : max);
     return (
-        <div className="legend-noactive">
-            {text}
-        </div>
+        <Container>
+            { groups.map((group, i) =>
+                <LegendRow key={`item-${i}`}
+                    opacity={opacity}
+                    mapStyle={mapStyle}
+                    maxSizePx={maxSizePx}
+                    { ...group }
+                />
+            )}
+        </Container>
     );
 };
 
-const Legend = props => {
-    const legendHTML = createLegendHTML(props);
-
-    if (legendHTML.__html) {
-        return (
-            <div className="active-legend" dangerouslySetInnerHTML={legendHTML}/>
-        );
-    } else if (legendHTML.error) {
-        return getNoActiveElem(legendHTML.error);
-    }
-    return getNoActiveElem('');
-};
-
 Legend.propTypes = {
-    indicatorData: PropTypes.object.isRequired,
     transparency: PropTypes.number.isRequired,
-    legendProps: PropTypes.object.isRequired,
-    loc: PropTypes.func.isRequired
+    mapStyle: PropTypes.string.isRequired,
+    classifiedDataset: PropTypes.object.isRequired
 };
-
-const contextWrapped = withContext(Legend);
-export { contextWrapped as Legend };

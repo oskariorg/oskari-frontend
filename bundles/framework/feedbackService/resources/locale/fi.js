@@ -10,7 +10,8 @@ Oskari.registerLocalization(
                 "apiKey": "Palvelun avain (API key)",
                 "keyPlaceholder": "esim. e1301b1ded935fabc5eaa6a2ce975e6",
                 "apiExtensions": "Palvelun laajennukset (optio)",
-                "extensionsPlaceholder": "esim. citysdk,media,geometry"
+                "extensionsPlaceholder": "esim. citysdk,media,geometry",
+                "label": "Palautteen antaminen (Open311)"
             }
         }
     }

@@ -1,171 +1,116 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ColorPicker, Message } from 'oskari-ui';
-import { SvgRadioButton, Preview, SizeControl, constants } from './index';
-import { Form, Row, Col } from 'antd';
+import { ColorPicker } from '../ColorPicker';
+import { Message } from '../Message';
+import { SvgRadioButton, SizeControl, constants, PreviewCol } from './index';
+import { Row, Col, Tooltip } from 'antd';
+import { FormItem } from '../Form';
+import { FillPattern, isSolid } from './FillPattern';
 
-const getFillIconTransparent = (id) => {
-    const myId = 'transparent-' + id;
-    return `<svg viewBox="0 0 0 0" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <pattern id="${myId}" viewBox="0, 0, 0, 0" width="0%" height="0%"><path d="M0,0 l0,0" stroke="#000000" stroke-width="0"/></pattern>
-        </defs>
-        <rect width="0" height="0" fill="url(#${myId})" } />
-    </svg>`;
+const { FILLS, FILL_ORDER } = constants;
+
+const SIZE = 32;
+const COLOR = '#000000';
+const ID_PREFIX = 'pattern-';
+
+const getFillIcon = (name, fillCode) => {
+    const lowerName = name.toLowerCase();
+    const id = ID_PREFIX + lowerName;
+    const solid = isSolid(fillCode);
+    const fillPattern = solid ? COLOR : `url(#${id})`;
+    return (
+         // use tooltip from antd because oskari-ui tooltip wraps children inside span which has height issue with svg
+        <Tooltip title={<Message messageKey={`StyleEditor.tooltips.${lowerName}`}/>}>
+            <svg width={SIZE} height={SIZE}>
+                { !solid && <FillPattern id={id} fillCode={fillCode} color={COLOR} size={SIZE}/> }
+                <rect width={SIZE} height={SIZE} fill={fillPattern} />
+            </svg>
+        </Tooltip>
+    );
 };
 
-const createSVG = (id, pattern) => {
-    return `<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
-        <defs>${pattern}</defs>
-        <rect width="32" height="32" fill="url(#${id})" } />
-    </svg>`;
-};
-
-const getFillIconSolid = (id) => {
-    const myId = 'solid-' + id;
-    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 4, 4" width="100%" height="100%"><path d="M-1,2 l6,0" stroke="#000000" stroke-width="4"/></pattern>`);
-};
-
-const getFillIconHorizontalThin = (id) => {
-    const myId = 'thin_horizontal-' + id;
-    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 32, 32" width="100%" height="100%">
-                <path d="M0,4 l32,0, M0,12 l32,0 M0,20 l32,0 M0,28 l32,0" stroke="#000000" stroke-width="5"/>
-            </pattern>`);
-};
-
-const getFillIconHorizontalThick = (id) => {
-    const myId = 'thick_horizontal-' + id;
-    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 32, 32" width="100%" height="100%">
-                <path d="M0,4 l32,0, M0,15 l32,0 M0,26 l32,0" stroke="#000000" stroke-width="5"/>
-            </pattern>`);
-};
-
-const getFillIconDiagonalThin = (id) => {
-    const myId = 'thin_diagonal-' + id;
-    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 4, 4" width="50%" height="50%">
-                <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000000" stroke-width="1"/>
-            </pattern>`);
-};
-
-const getFillIconDiagonalThick = (id) => {
-    const myId = 'thick_diagonal-' + id;
-    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 4, 4" width="80%" height="80%">
-                <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000000" stroke-width="1"/>
-            </pattern>`);
-};
-
-const areaFills = [
-    {
-        name: 'TRANSPARENT',
-        data: getFillIconTransparent
-    },
-    {
-        name: 'SOLID',
-        data: getFillIconSolid
-    },
-    {
-        name: 'HORIZONTAL_THIN',
-        data: getFillIconHorizontalThin
-    },
-    {
-        name: 'HORIZONTAL_THICK',
-        data: getFillIconHorizontalThick
-    },
-    {
-        name: 'DIAGONAL_THIN',
-        data: getFillIconDiagonalThin
-    },
-    {
-        name: 'DIAGONAL_THICK',
-        data: getFillIconDiagonalThick
+let fillOtions;
+const getFillOptions = () => {
+    if (!fillOtions) {
+        fillOtions = FILL_ORDER.map(name  => {
+            const fillCode = FILLS[name];
+            return {
+                name: fillCode,
+                data: getFillIcon(name, fillCode)
+            };
+        });
     }
-];
+    return fillOtions;
+};
 
-// counter is used to generate changing ids for SVG to workaround conflicting ids when hard coded
-let counter = 0;
-export const AreaTab = ({oskariStyle}) => {
-    counter++;
-    const areaFillOptions = areaFills.map(item => {
-        return {
-            ...item,
-            data: item.data(counter)
-    }});
-
+export const AreaTab = ({oskariStyle, showPreview}) => {
+    const areaFillOptions = getFillOptions();
     return (
         <React.Fragment>
             <Row>
-                <Col span={ 10 }>
-                    <Form.Item
+                <Col span={ 12 }>
+                    <FormItem
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.area.color'
                         label={ <Message messageKey='StyleEditor.stroke.area.color' /> }
                         >
                         <ColorPicker />
-                    </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='stroke.area.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                    </Form.Item>
+                    </FormItem>
                 </Col>
 
-                <Col span={ 10 } offset={ 2 }>
-                    <Form.Item
+                <Col span={ 12 } >
+                    <FormItem
                         { ...constants.ANTD_FORMLAYOUT }
                         name='fill.color'
                         label={ <Message messageKey='StyleEditor.fill.color' /> }
                         >
                         <ColorPicker />
-                    </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='fill.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                    </Form.Item>
+                    </FormItem>
                 </Col>
             </Row>
 
             <Row>
-                <Form.Item
+                <FormItem
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.area.lineDash'
                     label={ <Message messageKey='StyleEditor.stroke.area.lineDash' /> }
                 >
                     <SvgRadioButton options={ constants.LINE_STYLES.lineDash } />
-                </Form.Item>
+                </FormItem>
 
-                <Form.Item
+                <FormItem
+                    { ...constants.ANTD_FORMLAYOUT }
+                    name='stroke.area.lineJoin'
+                    label={ <Message messageKey='StyleEditor.stroke.area.lineJoin' /> }
+                >
+                    <SvgRadioButton options={ constants.LINE_STYLES.corners } />
+                </FormItem>
+
+                <FormItem
                     { ...constants.ANTD_FORMLAYOUT }
                     name='fill.area.pattern'
                     label={ <Message messageKey='StyleEditor.fill.area.pattern' /> }
                 >
                     <SvgRadioButton options={ areaFillOptions } />
-                </Form.Item>
+                </FormItem>
             </Row>
 
             <Row>
-                <SizeControl
-                    format={ 'area' }
-                    name='stroke.area.width'
-                    localeKey={ 'StyleEditor.stroke.area.width' }
-                />
+                <Col span={ 16 }>
+                    <SizeControl
+                        format={ 'area' }
+                        name='stroke.area.width'
+                        localeKey={ 'StyleEditor.stroke.area.width' }
+                    />
+                </Col>
+                { showPreview && <PreviewCol oskariStyle={ oskariStyle } format='area' /> }
             </Row>
-
-            <Preview
-                oskariStyle={ oskariStyle }
-                format={ 'area' }
-                areaFills={ areaFillOptions }
-            />
-
         </React.Fragment>
     );
 };
 
 
 AreaTab.propTypes = {
-    oskariStyle: PropTypes.object.isRequired
+    oskariStyle: PropTypes.object.isRequired,
+    showPreview: PropTypes.bool
 };

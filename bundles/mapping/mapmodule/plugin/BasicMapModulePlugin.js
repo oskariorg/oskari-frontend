@@ -1,4 +1,5 @@
 import './AbstractMapModulePlugin';
+// import { AbstractMapPlugin } from './AbstractMapPlugin';
 /**
  * @class Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin
  */
@@ -9,14 +10,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
      */
     function (config) {
         this._config = config;
-        this._ctl = null;
         this._element = null;
         this._enabled = true;
         this._visible = true;
         // plugin index, override this. Smaller number = first plugin, bigger number = latest
         this._index = 1000;
-
-        this._mobileDefs = null;
     }, {
         /**
          * @method _startPluginImpl
@@ -41,17 +39,19 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setVisible: function (visible) {
-            var toolbarNotReady = false;
+            // this makes call to redrawUI() for plugins that don't override _startPluginImpl()
+            // TODO: if we migrate plugins to not rely on redrawUI() being called and implement _startPluginImpl() instead we can get rid of this
+            var notReadyToRender = false;
             var wasVisible = this._visible;
             this._visible = visible;
             if (!this.getElement() && visible) {
-                toolbarNotReady = this.redrawUI(this.getMapModule().getMobileMode());
+                notReadyToRender = this.redrawUI(this.getMapModule().getMobileMode());
             }
             // toggle element - wasVisible might not be in sync with the UI if the elements are recreated - so always hide on setVisible(false)
             if (this.getElement() && (wasVisible !== visible || !visible)) {
                 this.getElement().toggle(visible);
             }
-            return toolbarNotReady;
+            return notReadyToRender;
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -64,13 +64,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 // no point in drawing the ui if we are not visible
                 return;
             }
-            var me = this;
             if (this.getElement()) {
-                // ui already in place no need to do anything, override in plugins to do responsive
+                // ui already in place, just call refresh to allow plugin to adjust if needed
+                this.refresh();
                 return;
             }
-            me._element = me._createControlElement();
-            this.addToPluginContainer(me._element);
+            const el = this._createControlElement();
+            this.addToPluginContainer(el);
         },
         addToPluginContainer: function (element) {
             // var element = this.getElement();
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 // no element to place, log a warning
                 return;
             }
-            this._element = element;
+            this.setElement(element);
             element.attr('data-clazz', this.getClazz());
             try {
                 this.getMapModule().setMapControlPlugin(
@@ -98,7 +98,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var mapModule = this.getMapModule();
             mapModule.removeMapControlPlugin(
                 element,
-                this.inLayerToolsEditMode(),
                 !!preserve
             );
             if (!preserve) {
@@ -109,9 +108,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         teardownUI: function () {
             // remove old element
             this.removeFromPluginContainer(this.getElement());
-        },
-        getMobileDefs: function () {
-            return this._mobileDefs || {};
         },
 
         /**
@@ -144,7 +140,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         /**
          * @public @method getElement
          *
-         *
          * @return {jQuery}
          * Plugin jQuery element or null/undefined if no element has been set
          */
@@ -152,6 +147,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             // element should be created in startPlugin and only destroyed in
             // stopPlugin. I.e. don't start & stop the plugin to refresh it.
             return this._element;
+        },
+        setElement: function (el) {
+            this._element = el;
         },
 
         /**
@@ -175,11 +173,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * Plugin's location
          */
         getLocation: function () {
-            var ret = this._defaultLocation;
-            if (this._config && this._config.location && this._config.location.classes) {
-                ret = this._config.location.classes;
-            }
-            return ret;
+            const location = this._config?.location?.classes || this._defaultLocation;
+            return location || 'top right';
         },
 
         /**
@@ -191,52 +186,18 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setLocation: function (location) {
-            if (Oskari.util.isMobile()) {
-                return;
-            }
-            var me = this,
-                el = me.getElement();
+            const el = this.getElement();
 
-            if (!me._config) {
-                me._config = {};
+            if (!this._config) {
+                this._config = {};
             }
-            if (!me._config.location) {
-                me._config.location = {};
+            if (!this._config.location) {
+                this._config.location = {};
             }
 
-            me._config.location.classes = location;
+            this._config.location.classes = location;
             this.addToPluginContainer(el);
         },
-
-        /**
-         * @method setColorScheme
-         * Set the plugin's color scheme. Implement if needed.
-         * This will be deprecated if/when we move this to a map-level property.
-         *
-         * @param {Object} colorScheme
-         * Magical object with some colors and classes and whatnot...
-         *
-         */
-        _setColorScheme: function (colorScheme) {},
-
-        /**
-         * @method setFont
-         * Set the plugin's font. Implement if needed.
-         * This will be deprecated if/when we move this to a map-level property.
-         *
-         * @param {string} font Font ID
-         *
-         */
-        _setFont: function (font) {},
-
-        /**
-         * @method setStyle Set the plugin's style. Implement if needed.
-         * This will be deprecated if/when we move this to a map-level property.
-         *
-         * @param {Object} style Magical object with some widths and whatnot...
-         *
-         */
-        _setStyle: function (style) {},
 
         /**
          * @public @method hasUI
@@ -259,26 +220,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         _createControlElement: function () {},
 
         /**
-         * @method _destroyControlElement
-         * Called before _element is destroyed. Implement if needed.
-         *
-         *
-         */
-        _destroyControlElement: function () {},
-
-        /**
-         * @method _toggleControls
-         * Enable/disable plugin controls. Used in map layout edit mode.
-         *
-         * @param {Boolean} enable Should the controls be enabled or disabled.
-         *
-         */
-        _toggleUIControls: function (enable) {
-            // implement if needed... don't trust this._enabled, set the state
-            // even if enable === this._enabled
-        },
-
-        /**
          * @public @method setEnabled
          * Enable/Disable plugin controls.
          *
@@ -287,8 +228,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setEnabled: function (enabled) {
-            // toggle controls
-            this._toggleUIControls(enabled);
             this._enabled = enabled;
         },
 
@@ -315,115 +254,21 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         isVisible: function () {
             return this._visible;
         },
-        /**
-         * @public @method getToolStyleFromMapModule
-         *
-         * @return {Object} style object used by mapmodule or null if not available.
+
+        /** *****************************************
+         * Deprecated functions for backwards compatibility.
+         * Removed usage in Oskari 2.10.
+         * These can be removed after/in Oskari ~2.12
          */
-        getToolStyleFromMapModule: function () {
-            var value = this.getMapModule().getToolStyle();
-            return value || null;
+        getMobileDefs: function () {
+            Oskari.log('BasicMapModulePlugin').deprecated('getMobileDefs');
+            return {};
         },
-        /**
-         * @public @method getToolStyleFromMapModule
-         *
-         * @return {String} the font used by mapmodule or null if not available.
-         */
-        getToolFontFromMapModule: function () {
-            return this.getMapModule().getToolFont();
+        removeToolbarButtons: function () {
+            Oskari.log('BasicMapModulePlugin').deprecated('removeToolbarButtons');
         },
-
-        /**
-         * Removes all the css classes which respond to given regex from all elements
-         * and adds the given class to them.
-         *
-         * @method changeCssClasses
-         * @param {String} classToAdd the css class to add to all elements.
-         * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
-         * @param {Array[jQuery]} elements The elements where the classes should be changed.
-         */
-        changeCssClasses: function (classToAdd, removeClassRegex, elements) {
-            var i,
-                j,
-                el;
-
-            for (i = 0; i < elements.length; i += 1) {
-                el = elements[i];
-                // FIXME build the function outside the loop
-                el.removeClass(function (index, classes) {
-                    var removeThese = '',
-                        classNames = classes.split(' ');
-
-                    // Check if there are any old font classes.
-                    for (j = 0; j < classNames.length; j += 1) {
-                        if (removeClassRegex.test(classNames[j])) {
-                            removeThese += classNames[j] + ' ';
-                        }
-                    }
-
-                    // Return the class names to be removed.
-                    return removeThese;
-                });
-
-                // Add the new font as a CSS class.
-                el.addClass(classToAdd);
-            }
-        },
-        addToolbarButtons: function (buttons, group) {
-            var sandbox = this.getSandbox();
-            var toolbar = this.getMapModule().getMobileToolbar();
-            var themeColors = this.getMapModule().getThemeColours();
-            if (buttons && !sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
-                return true;
-            }
-            var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
-
-            if (sandbox.hasHandler('Toolbar.AddToolButtonRequest') && addToolButtonBuilder) {
-                for (var tool in buttons) {
-                    var buttonConf = buttons[tool];
-                    buttonConf.toolbarid = toolbar;
-                    // add active color if sticky and toggleChangeIcon
-                    if (buttonConf.sticky === true && buttonConf.toggleChangeIcon === true && !buttonConf.activeColor) {
-                        buttonConf.activeColour = themeColors.activeColour;
-                    }
-                    sandbox.request(this, addToolButtonBuilder(tool, group, buttonConf));
-                }
-            }
-        },
-        removeToolbarButtons: function (buttons, group) {
-            var sandbox = this.getSandbox();
-            if (!sandbox) {
-                return true;
-            }
-
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            if (buttons && !sandbox.hasHandler('Toolbar.RemoveToolButtonRequest')) {
-                return true;
-            }
-            var removeToolButtonBuilder = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest');
-            var toolbar = this.getMapModule().getMobileToolbar();
-            for (var tool in buttons) {
-                var buttonConf = buttons[tool];
-                buttonConf.toolbarid = toolbar;
-                sandbox.request(this, removeToolButtonBuilder(tool, group, toolbar));
-            }
-        },
-
-        /**
-         * Set a tool's mobile icon back to it's initial state after popup closing.
-         */
-        _resetMobileIcon: function (el, iconCls) {
-            var me = this,
-                restoreCls;
-
-            el.css('background-color', '');
-            el.removeClass('selected');
-            el.removeClass(iconCls + '-light');
-            el.removeClass(iconCls + '-dark');
-
-            restoreCls = (Oskari.util.isDarkColor(me.getMapModule().getThemeColours().activeColour)) ? iconCls + '-light' : iconCls + '-dark';
-            el.addClass(restoreCls);
+        addToolbarButtons: function () {
+            Oskari.log('BasicMapModulePlugin').deprecated('addToolbarButtons');
         }
     }, {
         /**

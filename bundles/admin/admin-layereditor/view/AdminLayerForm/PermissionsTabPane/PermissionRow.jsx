@@ -15,7 +15,7 @@ export const TEXT_COLUMN_SIZE = {
 };
 
 export const PERMISSION_TYPE_COLUMN_SIZE = {
-    width: 110,
+    width: 90,
     padding: 5
 };
 
@@ -34,6 +34,7 @@ const StyledPermissionDiv = styled.div`
     flex-wrap: wrap;
     justify-content: center;
     padding: ${PERMISSION_TYPE_COLUMN_SIZE.padding}px !important;
+    word-break: break-word;
 `;
 
 const Break = styled.div`

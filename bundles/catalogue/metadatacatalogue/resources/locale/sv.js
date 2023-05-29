@@ -32,15 +32,20 @@ Oskari.registerLocalization(
         "view": "Visa",
         "service-discovery": "Söktjänst",
         "service-download": "Nedladdningstjänst",
-        "service-other": "Andra tjänster",
+        "service-other": "Övriga tjänster",
         "service-transformation": "Omvandlingstjänst",
         "service-view": "Visningstjänst",
+        "service-OGC:WMS": "WMS-tjänst",
+        "service-OGC:WFS": "WFS-tjänst",
         "Language": "Metadataspråk",
         "ResourceLanguage": "Resursspråk",
+        "fin": "finska",
+        "eng": "engelska",
+        "swe": "svenska",
         "modifySearch": "Redigera sökalternativ",
-        "showSearch": "Visa alla sökresultatet",
-        "showDatasets": "Show only datasets",
-        "showServices": "Show only services",
+        "showSearch": "Visa alla sökresultat",
+        "showDatasets": "Visa endast dataset",
+        "showServices": "Visa endast tjänster",
         "metadataCatalogueResults": "Sökresultat",
         "show": "Visa kartlagret på kartan.",
         "hide": "Dölj kartlagret från kartan.",
@@ -68,6 +73,9 @@ Oskari.registerLocalization(
             "creation": "skapandedatum",
             "publication": "publiceringsdatum",
             "revision": "datum för senaste revidering"
+        },
+        "tool": {
+            "label": "Möjliggör användning av metadatasökningar programmatiskt",
         }
     }
 });

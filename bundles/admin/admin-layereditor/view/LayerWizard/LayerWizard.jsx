@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Step, Button, Message } from 'oskari-ui';
+import { Button, Message } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerTypeSelection';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerCapabilitiesListing';
 import { ServiceStep } from './ServiceStep';
 import { LoadingIndicator } from './LoadingIndicator';
-import { StyledAlert, StyledSteps, Paragraph, Header } from './styled';
+import { StyledSteps, Paragraph, Header } from './styled';
 
 const { CAPABILITIES } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -69,12 +69,15 @@ const LayerWizard = ({
         <Fragment>
             <LoadingIndicator loading={loading}>
                 { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
-                    <StyledSteps current={currentStep}>
-                        <Step title={<Message messageKey='wizard.type'/>} />
-                        <Step title={<Message messageKey='wizard.service'/>} />
-                        <Step title={<Message messageKey='wizard.layers'/>} />
-                        <Step title={<Message messageKey='wizard.details'/>} />
-                    </StyledSteps>
+                    <StyledSteps
+                        current={currentStep}
+                        items={[
+                            { title: <Message messageKey='wizard.type'/> },
+                            { title: <Message messageKey='wizard.service'/> },
+                            { title: <Message messageKey='wizard.layers'/> },
+                            { title: <Message messageKey='wizard.details'/> },
+                        ]}
+                    />
                 }
                 { currentStep === WIZARD_STEP.INITIAL &&
                     <Fragment>

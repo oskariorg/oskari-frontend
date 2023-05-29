@@ -3,7 +3,9 @@ import { LayerEditorFlyout } from './view/Flyout';
 import { ShowLayerEditorRequest } from './request/ShowLayerEditorRequest';
 import { ShowLayerEditorRequestHandler } from './request/ShowLayerEditorRequestHandler';
 import { LocalizingFlyout } from './view/LocalizingFlyout';
+import { Messaging } from 'oskari-ui/util';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { getNavigationDimensions } from 'oskari-ui/components/window';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
@@ -36,7 +38,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         _startImpl () {
             this._setupLayerTools();
             this._setupAdminTooling();
-            this._loadDataProviders();
             this.sandbox.requestHandler(ShowLayerEditorRequest.NAME, new ShowLayerEditorRequestHandler(this));
             const layerService = this._getLayerService();
             layerService.on('availableLayerTypesUpdated', () => this._setupLayerTools());
@@ -279,41 +280,17 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         }
 
         /**
-         * @private @method _loadDataProviders
-         * Loads data provider list
-         */
-        _loadDataProviders () {
-            const me = this;
-            jQuery.ajax({
-                type: 'GET',
-                dataType: 'json',
-                contentType: 'application/json; charset=UTF-8',
-                url: Oskari.urls.getRoute('GetMapLayerGroups'),
-                error: function () {
-                    var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));
-                    errorDialog.fadeout();
-                },
-                success: function (response) {
-                    const dataProviders = [];
-                    response.organization.forEach(function (org) {
-                        dataProviders.push({
-                            id: org.id,
-                            name: Oskari.getLocalized(org.name)
-                        });
-                    });
-                    me._getLayerService().setDataProviders(dataProviders);
-                }
-            });
-        }
-        /**
          * @private @method _getFlyout
          * Ensure flyout exists and return it
          * @return {LayerEditorFlyout}
          */
         _getFlyout () {
             if (!this.flyout) {
-                const xPosition = jQuery('#mapdiv').position().left;
+                const dimensions = getNavigationDimensions();
+                let xPosition = 0;
+                if (dimensions) {
+                    xPosition = dimensions.left + dimensions.width;
+                }
                 const offset = 150;
 
                 this.flyout = new LayerEditorFlyout(this.loc('flyout-title'));
@@ -346,12 +323,12 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     },
                     success: function (response) {
                         setLoading(false);
-                        setValue(response.name);
+                        setValue(response.locale);
                     }
                 });
             };
             const popupTitle = id ? this.loc('editTheme') : this.loc('addTheme');
-            const hasSubgroups = id ? this._getLayerService().getAllLayerGroups(id).hasSubgroups() : false;
+            const hasSubgroups = id ? this._getLayerService().findLayerGroupById(id).hasSubgroups() : false;
             this.themeFlyout = new LocalizingFlyout(this, popupTitle, {
                 headerMessageKey: 'themeName',
                 id,
@@ -365,40 +342,40 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 scroll: false
             });
             this.themeFlyout.setSaveAction((locales, id, parentId) => {
-                const httpMethod = id ? 'POST' : 'PUT';
+                const httpMethod = id ? 'PUT' : 'POST';
 
                 const payload = {
-                    id,
                     parentId,
                     locales
                 };
+                if (id) {
+                    payload.id = id;
+                }
 
                 jQuery.ajax({
                     type: httpMethod,
                     dataType: 'json',
                     contentType: 'application/json',
-                    url: Oskari.urls.getRoute('MapLayerGroups'),
+                    url: Oskari.urls.getRoute('MapLayerGroups', { id }),
                     data: JSON.stringify(payload),
                     success: response => {
                         this.themeFlyout.hide();
                         const group = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', response);
-                        group.setName(response.name);
+                        const locale = Oskari.getLocalized(response.locale);
+                        group.setName(locale.name);
+                        group.setDescription(locale.desc);
                         if (id) {
                             this._getLayerService().updateLayerGroup(group);
                         } else {
                             this._getLayerService().addLayerGroup(group, parentId);
                         }
                         // Inform user with popup
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show('', me.loc('messages.saveSuccess'));
-                        dialog.fadeout();
+                        Messaging.success(me.loc('messages.saveSuccess'));
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
                         this.themeFlyout.setLoading(false);
                         // Inform user with popup
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show('', me.loc('messages.saveFailed'));
-                        dialog.fadeout();
+                        Messaging.error(me.loc('messages.saveFailed'));
                         // Log error
                         const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
                         Oskari.log('admin-layereditor').error(errorText);
@@ -418,16 +395,12 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                             this.themeFlyout.hide();
                             this._getLayerService().deleteLayerGroup(response.id, response.parentId, deleteLayers);
                             // Inform user with popup
-                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(' ', me.loc('messages.deleteSuccess'));
-                            dialog.fadeout();
+                            Messaging.success(me.loc('messages.deleteSuccess'));
                         },
                         error: (jqXHR, textStatus, errorThrown) => {
                             this.themeFlyout.setLoading(false);
                             // Inform user with popup
-                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(' ', me.loc('messages.deleteFailed'));
-                            dialog.fadeout();
+                            Messaging.error(me.loc('messages.deleteFailed'));
                             // Log error
                             const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
                             Oskari.log('admin-layereditor').error(errorText);
@@ -457,7 +430,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     },
                     success: function (response) {
                         setLoading(false);
-                        setValue(response.name);
+                        setValue(response.locale);
                     }
                 });
             };
@@ -475,35 +448,37 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             });
             this.dataProviderFlyout.setSaveAction(value => {
                 const me = this;
-                const httpMethod = id ? 'POST' : 'PUT';
-                const payload = id ? { locales: value, id: id } : { locales: value };
+                const httpMethod = id ? 'PUT' : 'POST';
+                const payload = { locales: value };
+                if (id) {
+                    payload.id = id;
+                }
                 jQuery.ajax({
                     type: httpMethod,
                     dataType: 'json',
                     contentType: 'application/json',
-                    url: Oskari.urls.getRoute('SaveOrganization'),
+                    url: Oskari.urls.getRoute('DataProvider', { id }),
                     data: JSON.stringify(payload),
                     success: response => {
                         this.dataProviderFlyout.hide();
+                        const locale = Oskari.getLocalized(response.locale);
                         const dataProvider = {
                             id: response.id,
-                            name: Oskari.getLocalized(response.name)
+                            name: locale.name,
+                            desc: locale.desc
                         };
 
-                        httpMethod === 'POST'
-                            ? this._getLayerService().updateDataProvider(dataProvider)
-                            : this._getLayerService().addDataProvider(dataProvider);
-
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.saveSuccess'));
-                        dialog.fadeout();
+                        if (id) {
+                            this._getLayerService().updateDataProvider(dataProvider);
+                        } else {
+                            this._getLayerService().addDataProvider(dataProvider);
+                        }
+                        Messaging.success(me.loc('messages.saveSuccess'));
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
                         this.dataProviderFlyout.setLoading(false);
                         // Inform user with popup
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.saveFailed'));
-                        dialog.fadeout();
+                        Messaging.error(me.loc('messages.saveFailed'));
                         // Log error
                         const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
                         Oskari.log('admin-layereditor').error(errorText);
@@ -523,16 +498,12 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                             this.dataProviderFlyout.hide();
                             this._getLayerService().deleteDataProvider(response, deleteLayers);
                             // Inform user with popup
-                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(' ', me.loc('messages.deleteSuccess'));
-                            dialog.fadeout();
+                            Messaging.success(me.loc('messages.deleteSuccess'));
                         },
                         error: (jqXHR, textStatus, errorThrown) => {
                             this.dataProviderFlyout.setLoading(false);
                             // Inform user with popup
-                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(' ', me.loc('messages.deleteFailed'));
-                            dialog.fadeout();
+                            Messaging.error(me.loc('messages.deleteFailed'));
                             // Log error
                             const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
                             Oskari.log('admin-layereditor').error(errorText);

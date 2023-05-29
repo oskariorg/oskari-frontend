@@ -17,19 +17,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             "src": "../../../../bundles/framework/myplacesimport/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/myplacesimport/Flyout.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/myplacesimport/StyleForm.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/myplacesimport/service/MyPlacesImportService.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/myplacesimport/UserLayersTab.js"
+            "src": "../../../../bundles/framework/myplacesimport/PersonalDataUserLayersTab.js"
         }, {
-            "type": "text/css",
-            "src": "../../../../bundles/framework/myplacesimport/resources/scss/style.scss"
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/request/ShowUserLayerDialogRequest.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/request/ShowUserLayerDialogRequestHandler.js"
         }],
         "locales": [{
             "lang": "fi",

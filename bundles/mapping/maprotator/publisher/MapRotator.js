@@ -3,23 +3,11 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
     function () {
     }, {
         index: 500,
-        allowedLocations: ['top left', 'top right'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings: [
-            'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
-            'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
-            'Oskari.mapping.time-control-3d.TimeControl3dPlugin'
-        ],
         templates: {
             'toolOptions': '<div class="tool-options"></div>'
         },
-        noUI: null,
-        noUiIsCheckedInModifyMode: false,
         /**
          * Get tool object.
          * @method getTool
@@ -30,7 +18,7 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             return {
                 id: 'Oskari.mapping.maprotator.MapRotatorPlugin',
                 title: 'MapRotator',
-                config: {}
+                config: this.state.pluginConfig || {}
             };
         },
         isDisplayed: function () {
@@ -39,7 +27,7 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             return !!this.getMapRotatorInstance();
         },
         getMapRotatorInstance: function () {
-            return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
+            return this.getSandbox().findRegisteredModuleInstance(this.bundleName);
         },
         // Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
         bundleName: 'maprotator',
@@ -48,16 +36,24 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
          * @method init
          */
         init: function (data) {
-            var me = this;
-
-            var bundleData = data && data.configuration[me.bundleName];
+            var bundleData = data && data.configuration[this.bundleName];
             if (!bundleData) {
                 return;
             }
             var conf = bundleData.conf || {};
-            me.setEnabled(conf.enabled);
-            me.noUiIsCheckedInModifyMode = !!conf.noUI;
-            this.getMapRotatorInstance().setState(bundleData.state);
+            this.storePluginConf(conf);
+            this.storePluginState(bundleData.state);
+            this.setEnabled(true);
+        },
+        storePluginState: function (state) {
+            this.state.pluginState = state || {};
+        },
+        _setEnabledImpl: function (enabled) {
+            if (enabled && this.state.pluginState?.degrees) {
+                this.getPlugin().setRotation(this.state.pluginState?.degrees);
+            } else {
+                this.getMapmodule().getMap().getView().setRotation(0);
+            }
         },
         /**
          * Get values.
@@ -67,30 +63,18 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
          * @returns {Object} tool value object
          */
         getValues: function () {
-            var me = this;
-            if (me.state.enabled) {
-                var pluginConfig = this.getPlugin().getConfig();
-                for (var configName in pluginConfig) {
-                    if (configName === 'noUI' && !me.noUI) {
-                        pluginConfig[configName] = null;
-                        delete pluginConfig[configName];
-                    }
-                }
-                if (me.noUI) {
-                    pluginConfig.noUI = me.noUI;
-                }
-                pluginConfig.enabled = me.state.enabled;
-                var json = {
-                    configuration: {}
-                };
-                json.configuration[me.bundleName] = {
-                    conf: pluginConfig,
-                    state: this.getMapRotatorInstance().getState()
-                };
-                return json;
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            var pluginConfig = this.getPlugin().getConfig();
+            var json = {
+                configuration: {}
+            };
+            json.configuration[this.bundleName] = {
+                conf: pluginConfig,
+                state: this.getMapRotatorInstance().getState()
+            };
+            return json;
         },
         /**
          * Get extra options.
@@ -108,22 +92,19 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             );
 
             input.setTitle(labelNoUI);
-            input.setHandler(function (checked) {
-                if (!me.getPlugin()) {
+            input.setHandler((checked) => {
+                const plugin = this.getPlugin();
+                if (!plugin) {
                     return;
                 }
-                if (checked === 'on') {
-                    me.noUI = true;
-                    me.getPlugin().teardownUI();
-                } else {
-                    me.noUI = false;
-                    me.getPlugin().redrawUI();
-                }
+                plugin.setConfig({
+                    ...plugin.getConfig(),
+                    noUI: checked === 'on'
+                });
+                plugin.refresh();
             });
-            if (me.noUiIsCheckedInModifyMode) {
-                input.setChecked(true);
-                me.noUI = true;
-            }
+            // initial value from pluginconfig that we get when opening the publisher
+            input.setChecked(!!this.state.pluginConfig?.noUI);
             var inputEl = input.getElement();
             template.append(inputEl);
             return template;

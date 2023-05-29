@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { AimOutlined } from '@ant-design/icons';
+import { MapModuleButton } from '../../MapModuleButton';
+
 /**
  * @class Oskari.mapframework.bundle.mappublished.MyLocationPlugin
  *
@@ -23,23 +28,9 @@ Oskari.clazz.define(
         this.loc = Oskari.getMsg.bind(null, 'MapModule');
         me._dialog = null;
         me._defaultIconCls = null;
-        me._mobileDefs = {
-            buttons: {
-                'mobile-my-location': {
-                    iconCls: 'mobile-my-location',
-                    tooltip: '',
-                    sticky: false,
-                    show: true,
-                    callback: function (el) {
-                        me._setupRequest();
-                    }
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
 
         me._templates = {
-            plugin: jQuery('<div class="mapplugin mylocationplugin toolstyle-rounded-dark"><div class="icon"></div></div>')
+            plugin: jQuery('<div class="mapplugin mylocationplugin"></div>')
         };
         this._waiting = false; // used with single location request
         this._timeouts = 0; // timeouts for single location request
@@ -53,35 +44,7 @@ Oskari.clazz.define(
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            const el = this._templates.plugin.clone();
-            el.attr('title', this.loc('plugin.MyLocationPlugin.tooltip'));
-            this._bindIcon(el);
-            this._element = el;
-            return el;
-        },
-
-        _bindIcon: function (el) {
-            el.on('click', () => {
-                this._setupRequest();
-            });
-        },
-
-        /**
-         * @private @method _setLayerToolsEditModeImpl
-         *
-         */
-        _setLayerToolsEditModeImpl: function () {
-            const el = this.getElement();
-            if (!el) {
-                return;
-            }
-            if (this.inLayerToolsEditMode()) {
-                // disable icon
-                el.off('click');
-            } else {
-                // enable icon
-                this._bindIcon(el);
-            }
+            return this._templates.plugin.clone();
         },
         /**
          * @private @method _setWaiting
@@ -102,7 +65,6 @@ Oskari.clazz.define(
         },
         _setTracking: function (bln) {
             this._tracking = bln;
-            this._toggleToolStyle(this._tracking);
         },
         _clearRequests: function () {
             this._setWaiting(false);
@@ -110,77 +72,24 @@ Oskari.clazz.define(
         },
         /**
          * @public @method refresh
-         *
-         *
          */
         refresh: function () {
-            const conf = this.getConfig();
-            let toolStyle;
-            // Change the style if in the conf
-            if (conf && conf.toolStyle) {
-                toolStyle = conf.toolStyle;
-            } else {
-                toolStyle = this.getToolStyleFromMapModule();
-            }
-            this.changeToolStyle(toolStyle, this.getElement());
-        },
-
-        /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         *
-         * @param {Object} style
-         * @param {jQuery} div
-         *
-         */
-        changeToolStyle: function (style, div) {
-            const el = div || this.getElement();
+            const el = this.getElement();
             if (!el) {
                 return;
             }
-            var styleClass = 'toolstyle-' + (style || 'rounded-dark');
-            this._defaultIconCls = styleClass;
-            this.changeCssClasses(styleClass, /^toolstyle-/, [el]);
-        },
-        // used with continuous mode
-        _toggledIconStyle: function (styleClass) {
-            const light = styleClass.indexOf('-light');
-            if (light > 0) {
-                return styleClass.substring(0, light) + '-dark';
-            }
-            const dark = styleClass.indexOf('-dark');
-            if (dark > 0) {
-                return styleClass.substring(0, dark) + '-light';
-            }
-            return styleClass;
-        },
-        // used with continuous mode
-        _toggleToolStyle: function (active) {
-            let regEx;
-            let styleCls;
-            let el;
-            if (Oskari.util.isMobile()) {
-                el = this.getMapModule().getMobileDiv().find('.mobile-my-location');
-                const { iconCls } = this._mobileDefs.buttons['mobile-my-location'];
-                regEx = new RegExp('^' + iconCls + '-');
-                const { activeColour } = this.getMapModule().getThemeColours();
-                const isDark = Oskari.util.isDarkColor(activeColour);
-                if (active) {
-                    el.css('background-color', activeColour);
-                    styleCls = isDark ? iconCls + '-dark' : iconCls + '-light';
-                } else {
-                    el.css('background-color', '');
-                    styleCls = isDark ? iconCls + '-light' : iconCls + '-dark';
-                }
-            } else {
-                styleCls = this._defaultIconCls;
-                regEx = /^toolstyle-/;
-                el = this.getElement();
-                if (active) {
-                    styleCls = this._toggledIconStyle(styleCls);
-                }
-            }
-            this.changeCssClasses(styleCls, regEx, [el]);
+            ReactDOM.render(
+                <MapModuleButton
+                    visible={this.isEnabled()}
+                    className='t_mylocation'
+                    icon={<AimOutlined />}
+                    title={this.loc('plugin.MyLocationPlugin.tooltip')}
+                    onClick={() => this._setupRequest()}
+                    position={this.getLocation()}
+                />
+                ,
+                el[0]
+            );
         },
 
         /**
@@ -225,35 +134,10 @@ Oskari.clazz.define(
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            if (!this.isVisible() || !this.isEnabled()) {
-                // no point in drawing the ui if we are not visible or enabled
-                return;
-            }
-            var mobileDefs = this.getMobileDefs();
-
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
-            this.teardownUI();
-
-            if (!toolbarNotReady && mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-                this._createControlElement();
-                this.refresh();
-                this.addToPluginContainer(this.getElement());
-            }
-            if (this._tracking) {
-                this._toggleToolStyle(true);
-            }
+            this.refresh();
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -264,14 +148,12 @@ Oskari.clazz.define(
          * @return {Boolean}
          * True if plugin's tools are enabled
          */
-        isEnabled: function (showOnlyMobile) {
-            var conf = this.getConfig();
-            var mobileOnly = showOnlyMobile || conf.mobileOnly;
-
+        isEnabled: function () {
+            var { mobileOnly } = this.getConfig() || {};
             if (mobileOnly === true && !Oskari.util.isMobile(true)) {
                 return false;
             }
-            return this._enabled;
+            return true;
         },
 
         /**
@@ -307,11 +189,10 @@ Oskari.clazz.define(
             this.teardownUI();
         },
         _startPluginImpl: function () {
-            var me = this;
-            me.setEnabled(me._enabled);
-            const toolbarNotReady = me.setVisible(me._visible);
-            me._handleStartMode();
-            return toolbarNotReady;
+            this.setElement(this._createControlElement());
+            this.addToPluginContainer(this.getElement());
+            this.refresh();
+            this._handleStartMode();
         },
         /**
          * Checks at if device is outside of map viewport when mode is tracking.
