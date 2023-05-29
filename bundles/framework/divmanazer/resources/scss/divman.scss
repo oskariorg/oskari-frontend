@@ -153,6 +153,13 @@ body {
         .oskari-flyouttools {
             margin-right: 45px;
         }
+        .oskari-flyoutcontentcontainer {
+            width: 100%;
+            padding: 0;
+            border: 0;
+            overflow: auto;
+            max-height: 85%;
+        }
     }
 }
 
