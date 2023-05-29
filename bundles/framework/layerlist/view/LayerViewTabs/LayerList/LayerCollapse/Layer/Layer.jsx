@@ -12,7 +12,6 @@ const Flex = styled('div')`
 const LayerDiv = styled(Flex)`
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     clear: both;
     padding: 6px;
     min-height: 16px;
@@ -35,6 +34,7 @@ const Label = styled('label')`
 `;
 const Body = styled(Flex)`
     flex-grow: 1;
+    word-break: break-word;
 `;
 
 const onSelect = (checked, layerId, controller) => {
