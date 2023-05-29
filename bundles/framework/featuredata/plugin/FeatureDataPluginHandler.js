@@ -1,17 +1,20 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
-import { filterFeaturesByAttribute, getFilterAlternativesAsArray } from '../../../mapping/mapmodule/util/vectorfeatures/filter';
 import { COLUMN_SELECTION, FILETYPES, showExportDataPopup } from '../view/ExportData';
 import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
+import { WFS_ID_KEY, WFS_FTR_ID_KEY } from '../../../mapping/mapmodule/domain/constants';
+import { FilterSelector } from '../FilterSelector';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
-const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
+export const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
 const EXPORT_FEATUREDATA_ROUTE = 'ExportTableFile';
+
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
         super();
+        this.mapModule = mapModule;
         const featureDataLayers = this.getFeatureDataLayers() || [];
         const activeLayerId = this.determineActiveLayerId(featureDataLayers);
         this.setState({
@@ -30,15 +33,16 @@ class FeatureDataPluginUIHandler extends StateHandler {
                 filters: []
             }
         });
-        this.mapModule = mapModule;
         this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
         this.flyoutController = null;
         this.selectByPropertiespopupController = null;
+        const featureQueryFn = (geojson, opts) => this.mapModule.getVectorFeatures(geojson, opts);
+        this.filterSelector = new FilterSelector(featureQueryFn, this.selectionService);
         this.addStateListener(() => this.updateFlyout());
     }
 
     getFeatureDataLayers () {
-        return Oskari.getSandbox()
+        return this.mapModule.getSandbox()
             .findAllSelectedMapLayers()
             .filter(layer => layer.isVisibleOnMap() && layer.hasFeatureData && layer.hasFeatureData());
     }
@@ -281,7 +285,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     selectFeaturesByProperties () {
-        const { selectByPropertiesSettings, activeLayerId, activeLayerFeatures } = this.getState();
+        const { selectByPropertiesSettings, activeLayerId } = this.getState();
         const filters = selectByPropertiesSettings.filters;
 
         // separate the logical operators from the original filter and form a single array
@@ -292,21 +296,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
                 filterArray.push({ boolean: filter.logicalOperator });
             }
         });
-
-        const filteredIds = new Set();
-        const alternatives = getFilterAlternativesAsArray(filterArray);
-        alternatives.forEach(attributeFilters => {
-            let filteredList = activeLayerFeatures;
-            attributeFilters.forEach(filter => {
-                filteredList = filterFeaturesByAttribute(filteredList, filter);
-            });
-            filteredList
-                .map((feature) => feature.id)
-                .filter(id => !!id)
-                .forEach(id => filteredIds.add(id));
-        });
-
-        this.selectionService.setSelectedFeatureIds(activeLayerId, [...filteredIds]);
+        this.filterSelector.selectWithProperties(filters, activeLayerId);
     }
 
     initEmptyFilter (columnName) {

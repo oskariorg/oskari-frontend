@@ -107,7 +107,7 @@ export const showSelectToolPopup = (selectedTool, selectFromAll, drawTools, clea
                     setSelectFromAll={setSelectFromAll}
                     onClose={onClose}
                 />
-            )
+            );
         }
-    }
+    };
 };
