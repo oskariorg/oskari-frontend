@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { IconButton } from 'oskari-ui/components/buttons';
-import { CloseCircleFilled } from '@ant-design/icons';
 import { ThemeConsumer } from '../../util/contexts';
 import { getFontClass, getHeaderTheme } from '../../theme/ThemeHelper';
+import { CloseIcon } from './CloseIcon';
+import { ICON_SIZE } from './constants';
 
 const StyledPanel = styled('div')`
     background: #FFF;
@@ -24,35 +24,56 @@ const StyledPanel = styled('div')`
         height: calc(100% - 46px);
     }
 `;
-
 const Content = styled('div')`
     overflow: auto;
     padding-bottom: 20px;
 `;
-
 const StyledHeader = styled('div')`
-    background: ${props => props.theme.getBgColor()};
-    color: ${props => props.theme.getTextColor()};
-    padding: 5px 10px;
+    background: ${props => props.background};
+    padding: 15px 15px 10px 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 `;
-
-const StyledIconButton = styled(IconButton)`
-    float: right;
+const StyledTitle = styled('h3')`
+    color: ${props => props.color};
+    margin-bottom: 0;
+    padding: 0;
+`;
+const IconContainer = styled.span`
+    font-size: ${ICON_SIZE}px;
+    > button {
+        color: ${props => props.iconColor};
+    }
+    > button:hover {
+        color: ${props => props.hoverColor};
+    }
+    align-self: center;
+    margin-left: 10px;
 `;
 
 const Header = ({ title, onClose, theme }) => {
     return (
         <StyledHeader
             className="header"
-            theme={theme}
+            background={theme.getBgColor()}
         >
-            <StyledIconButton
-                onClick={onClose}
-                icon={<CloseCircleFilled />}
-            />
             {title && (
-                <h3>{title}</h3>
+                <StyledTitle
+                    color={theme.getTextColor()}
+                >
+                    {title}
+                </StyledTitle>
             )}
+            <IconContainer
+                iconColor={theme.getToolColor()}
+                hoverColor={theme.getToolHoverColor()}
+            >
+                <CloseIcon
+                    onClose={onClose}
+                />
+            </IconContainer>
         </StyledHeader>);
 };
 
