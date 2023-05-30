@@ -26,11 +26,11 @@ export const showLayerForm = (values, config, onOk, onClose) => {
     return {
         id,
         ...controls,
-        update: error => {
+        update: (error, prevValues) => {
             controls.update(getTitle(config),
                 (<LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
                     <ThemeProvider>
-                        <LayerFormContent values={values} config={config} onOk={onOk} onCancel={onClose} error={error}/>
+                        <LayerFormContent values={prevValues} config={config} onOk={onOk} onCancel={onClose} error={error}/>
                     </ThemeProvider>
                 </LocaleProvider>));
         }
