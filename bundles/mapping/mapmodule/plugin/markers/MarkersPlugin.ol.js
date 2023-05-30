@@ -325,7 +325,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             return style;
         },
         _addMarkerFromPopup: function (coord, style) {
-            const id = ID_PREFIX + Oskari.getSeq(this.getName()).nextVal();console.log(id)
+            const id = ID_PREFIX + Oskari.getSeq(this.getName()).nextVal();
             const { image, text } = style;
             const { fill, shape, size } = image;
             const styleData = {
