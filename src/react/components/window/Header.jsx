@@ -37,6 +37,7 @@ const TitleContainer = styled('div')`
 const StyledTitle = styled('h3')`
     padding: 0;
     margin: 0;
+    color: ${props => props.theme.getTextColor()};
 `;
 
 export const Header = ThemeConsumer(({ title, isDraggable = false, onClose, theme = {}, tools, ...rest }) => {
@@ -49,7 +50,7 @@ export const Header = ThemeConsumer(({ title, isDraggable = false, onClose, them
         >
             <TitleContainer>
                 {title && (
-                    <StyledTitle>{title}</StyledTitle>
+                    <StyledTitle theme={headerTheme}>{title}</StyledTitle>
                 )}
             </TitleContainer>
             <ToolsContainer theme={headerTheme}>
