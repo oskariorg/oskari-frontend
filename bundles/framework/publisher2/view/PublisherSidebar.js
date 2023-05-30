@@ -1,5 +1,8 @@
+import React from 'react';
 import { mergeValues } from '../util/util';
 import { Messaging } from 'oskari-ui/util';
+import { Header } from 'oskari-ui';
+import ReactDOM from 'react-dom';
 
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
@@ -26,9 +29,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         me.template = jQuery(
             '<div><div class="basic_publisher">' +
             '  <div class="header">' +
-            '    <div class="icon-close">' +
-            '    </div>' +
-            '    <h3></h3>' +
             '  </div>' +
             '  <div class="content">' +
             '  </div>' +
@@ -70,18 +70,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
             this.accordion = accordion;
 
-            // setup title based on new/edit
-            const sidebarTitle = content.find('div.header h3');
-
-            if (this.data.uuid) {
-                sidebarTitle.text(this.loc.titleEdit);
-            } else {
-                sidebarTitle.text(this.loc.title);
-            }
-            // bind close from header (X)
-            container
-                .find('div.header div.icon-close')
-                .on('click', () => this.cancel());
+            const header = content.find('div.header');
+            const headerContainer = jQuery('<div />');
+            header.append(headerContainer);
+            ReactDOM.render(
+                <Header
+                    title={this.data.uuid ? this.loc.titleEdit : this.loc.title}
+                    onClose={() => this.cancel()}
+                />,
+                headerContainer[0]
+            );
 
             // -- create panels --
             const genericInfoPanel = this._createGeneralInfoPanel();
