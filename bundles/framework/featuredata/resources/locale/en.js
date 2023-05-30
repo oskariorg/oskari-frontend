@@ -60,6 +60,42 @@ Oskari.registerLocalization(
                     "layerName": "Map layer name"
                 }
             },
-            "showSelectedFirst": "Show selected first"
-        }
+            "showSelectedFirst": "Show selected first",
+            "selectionTools": {
+                "title": "Select Features",
+                "instructions": " ",
+                "selectFromTop": "From topmost layer",
+                "selectAll": "From all layers",
+                "link": {
+                    "title": "Select more features"
+                },
+                "button": {
+                    "cancel": "Close",
+                    "empty": "Deselect All",
+                    "show": "Show features",
+                    "close": "Close",
+                    "edit": "Edit"
+                },
+                "tools": {
+                    "point": {
+                        "tooltip": "Draw a point. If the point is inside a feature, the feature will be selected."
+                    },
+                    "line": {
+                        "tooltip": "Draw a line. If the line intersects a feature, the feature will be selected."
+                    },
+                    "polygon": {
+                        "tooltip": "Draw a polygon. If the polygon intersects a feature, the feature will be selected."
+                    },
+                    "square": {
+                        "tooltip": "Draw a square. If the square intersects a feature, the square will be selected."
+                    },
+                    "circle": {
+                        "tooltip": "Draw a circle. If the circle intersects a feature, the feature will be selected."
+                    },
+                    "select": {
+                        "tooltip": "Draw a geometry and select features based on that geometry."
+                    }
+                }
+            },
+            }
     });

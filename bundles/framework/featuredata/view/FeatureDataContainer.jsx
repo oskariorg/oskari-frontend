@@ -28,6 +28,11 @@ const StyledTable = styled(Table)`
     .ant-table-selection-col, .ant-table-selection-column {
         display: none;
     }
+
+    max-height: 50vh;
+    max-width: 50vw;
+    overflow-y: auto;
+
 `;
 
 const SelectionsContainer = styled('div')`
@@ -69,7 +74,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
             columns={ columnSettings }
             size={ 'large '}
             dataSource={ dataSource }
-            pagination={{ position: ['none', 'none'] }}
+            pagination={false}
             onChange={(pagination, filters, sorter, extra) => {
                 controller.updateSorting(sorter);
             }}

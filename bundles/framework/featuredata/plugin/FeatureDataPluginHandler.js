@@ -1,17 +1,19 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
-import { filterFeaturesByAttribute, getFilterAlternativesAsArray } from '../../../mapping/mapmodule/util/vectorfeatures/filter';
 import { COLUMN_SELECTION, FILETYPES, showExportDataPopup } from '../view/ExportData';
 import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
+import { FilterSelector } from '../FilterSelector';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
-const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
+export const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
 const EXPORT_FEATUREDATA_ROUTE = 'ExportTableFile';
+
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
         super();
+        this.mapModule = mapModule;
         const featureDataLayers = this.getFeatureDataLayers() || [];
         const activeLayerId = this.determineActiveLayerId(featureDataLayers);
         this.setState({
@@ -30,15 +32,16 @@ class FeatureDataPluginUIHandler extends StateHandler {
                 filters: []
             }
         });
-        this.mapModule = mapModule;
         this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
         this.flyoutController = null;
         this.selectByPropertiespopupController = null;
+        const featureQueryFn = (geojson, opts) => this.mapModule.getVectorFeatures(geojson, opts);
+        this.filterSelector = new FilterSelector(featureQueryFn, this.selectionService);
         this.addStateListener(() => this.updateFlyout());
     }
 
     getFeatureDataLayers () {
-        return Oskari.getSandbox()
+        return this.mapModule.getSandbox()
             .findAllSelectedMapLayers()
             .filter(layer => layer.isVisibleOnMap() && layer.hasFeatureData && layer.hasFeatureData());
     }
@@ -153,7 +156,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
             flyoutOpen: true,
             activeLayerFeatures,
             visibleColumnsSettings,
-            selectByPropertiesSettings
+            selectByPropertiesSettings,
+            sorting: activeLayerFeatures ? this.determineSortingColumn(activeLayerFeatures) : null
         };
 
         if (!activeLayerFeatures) {
@@ -280,7 +284,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     selectFeaturesByProperties () {
-        const { selectByPropertiesSettings, activeLayerId, activeLayerFeatures } = this.getState();
+        const { selectByPropertiesSettings, activeLayerId } = this.getState();
         const filters = selectByPropertiesSettings.filters;
 
         // separate the logical operators from the original filter and form a single array
@@ -291,21 +295,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
                 filterArray.push({ boolean: filter.logicalOperator });
             }
         });
-
-        const filteredIds = new Set();
-        const alternatives = getFilterAlternativesAsArray(filterArray);
-        alternatives.forEach(attributeFilters => {
-            let filteredList = activeLayerFeatures;
-            attributeFilters.forEach(filter => {
-                filteredList = filterFeaturesByAttribute(filteredList, filter);
-            });
-            filteredList
-                .map((feature) => feature.id)
-                .filter(id => !!id)
-                .forEach(id => filteredIds.add(id));
-        });
-
-        this.selectionService.setSelectedFeatureIds(activeLayerId, [...filteredIds]);
+        this.filterSelector.selectWithProperties(filters, activeLayerId);
     }
 
     initEmptyFilter (columnName) {
@@ -371,18 +361,17 @@ class FeatureDataPluginUIHandler extends StateHandler {
         if (!features || !features.length) {
             return null;
         }
+        // this might not be set to state yet, if this is the first time flyout is opened
+        // so we're (re)creating this each time
+        const visibleColumnsSettings = this.createVisibleColumnsSettings(features);
 
         // get the first property that isn't in the default hidden fields and use that as default.
-        const defaultSortingColumn = Object.keys(features[0]?.properties).find((key) => this.columnShouldBeVisible(key));
+        const defaultSortingColumn = Object.keys(features[0]?.properties).find((key) => this.columnShouldBeVisible(key, visibleColumnsSettings));
         const sortedInfo = { order: 'ascend', columnKey: defaultSortingColumn };
         return sortedInfo;
     }
 
-    columnShouldBeVisible (key) {
-        const { visibleColumnsSettings } = this.getState();
-        if (!visibleColumnsSettings) {
-            return null;
-        }
+    columnShouldBeVisible (key, visibleColumnsSettings) {
         const { visibleColumns } = visibleColumnsSettings;
         return !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns?.includes(key);
     }
