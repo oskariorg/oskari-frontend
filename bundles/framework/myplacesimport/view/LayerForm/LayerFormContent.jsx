@@ -40,7 +40,7 @@ const getGeneralTabTitle = isValid => (
 export const LayerFormContent = ThemeConsumer(({ theme, values, config, onOk, onCancel, error }) => {
     const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = generateBlankStyle(theme), locale = {} } = values || {};
-    const [state, setState] = useState({ style, locale, loading: false, tab: 'general' });
+    const [state, setState] = useState({ style, locale, loading: false, tab: 'general', file: values?.file });
 
     const showSrs = isImport && error === ERRORS.NO_SRS;
 
