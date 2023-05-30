@@ -27,12 +27,15 @@ const Content = styled('div')`
     overflow: auto;
     padding-bottom: 20px;
 `;
+const StyledHeader = styled(Header)`
+    padding: 15px 15px 10px 10px;
+`;
 
 export const SidePanel = ThemeConsumer(({ title, onClose, children, theme = {} }) => {
     return (
         <StyledPanel className={`t_print_panel ${getFontClass(theme)}`}>
             <Content>
-                <Header
+                <StyledHeader
                     title={title}
                     onClose={onClose}
                 />

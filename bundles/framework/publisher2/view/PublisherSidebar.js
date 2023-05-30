@@ -1,8 +1,14 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { mergeValues } from '../util/util';
 import { Messaging } from 'oskari-ui/util';
 import { Header } from 'oskari-ui';
-import ReactDOM from 'react-dom';
+import { ThemeProvider } from 'oskari-ui/util';
+import styled from 'styled-components';
+
+const StyledHeader = styled(Header)`
+    padding: 15px 15px 10px 10px;
+`;
 
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
@@ -74,10 +80,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const headerContainer = jQuery('<div />');
             header.append(headerContainer);
             ReactDOM.render(
-                <Header
-                    title={this.data.uuid ? this.loc.titleEdit : this.loc.title}
-                    onClose={() => this.cancel()}
-                />,
+                <ThemeProvider>
+                    <StyledHeader
+                        title={this.data.uuid ? this.loc.titleEdit : this.loc.title}
+                        onClose={() => this.cancel()}
+                    />
+                </ThemeProvider>,
                 headerContainer[0]
             );
 
