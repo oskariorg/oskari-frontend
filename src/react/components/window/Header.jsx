@@ -19,8 +19,7 @@ const Container = styled('div')`
 const ToolsContainer = styled('div')`
     display: flex;
     flex-direction: row;
-    justify-self: flex-end;
-    font-size: ${ICON_SIZE};
+    font-size: ${ICON_SIZE}px;
     margin-left: 10px;
     height: 16px;
     > button {
