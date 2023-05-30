@@ -473,7 +473,7 @@ Oskari.clazz.define(
             'RPCUIEvent': function (event) {
                 var me = this;
                 if (event.getBundleId() === 'mapmodule.crosshair') {
-                    me.toggleCrosshair(isCrosshairActive(this.getMapDOMEl()));
+                    me.toggleCrosshair(!isCrosshairActive(this.getMapDOMEl()));
                 }
             }
         },
