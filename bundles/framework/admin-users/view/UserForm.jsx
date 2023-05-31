@@ -37,7 +37,7 @@ const StyledSelect = styled(Select)`
     width: 210px;
 `;
 
-const FIELDS = ['firstName', 'lastName', 'user', 'email'];
+const FIELDS = ['user', 'firstName', 'lastName', 'email'];
 const PASS_FIELDS = ['password', 'rePassword'];
 
 const getRoleOptions = (roles, systemRole) => {
