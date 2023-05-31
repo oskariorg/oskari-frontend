@@ -18,7 +18,8 @@ Oskari.registerLocalization({
             print: 'Få utskrift',
             search: 'Sök',
             reset: 'Återställa',
-            copy: 'Kopiera till klippbordet'
+            copy: 'Kopiera till klippbordet',
+            clear: 'Rensa'
         },
         messages: {
             confirm: 'Är du säker på att du vill fortsätta?',
