@@ -2,7 +2,7 @@ import React, { Fragment, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { Message, Space, Spin, Tooltip, TextInput, Select, Option, Button } from 'oskari-ui';
-import { DeleteButton, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
+import { DeleteButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import { EditOutlined, SearchOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
@@ -29,8 +29,7 @@ const StyledSelect = styled(Select)`
 `;
 
 const SearchIcon = styled(SearchOutlined)`
-    color: ${props => props.$filtered ? '#3c3c3c' : '#bfbfbf'};
-    background: ${props => props.$filtered ? props?.$theme?.color?.accent || '#3c3c3c' : 'none'};
+    color: ${props => props.$filtered ? props?.$theme?.color?.accent || '#3c3c3c' : '#bfbfbf'};
     ${props => props.$filtered && ('border-radius: 3px;')}
     font-size: ${props => props.$filtered ? '16px' : '12px'};
 `;
@@ -79,11 +78,10 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
                         size="small"
                     >
                         <Message messageKey='flyout.filter' />
-                        <SearchOutlined />
                     </Button>
                 )}
                 <SecondaryButton
-                    type="delete"
+                    type="clear"
                     onClick={() => {
                         clearFilters();
                         confirm({ closeDropdown: true });

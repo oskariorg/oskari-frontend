@@ -18,7 +18,8 @@ Oskari.registerLocalization({
             print: 'Tulosta',
             search: 'Etsi',
             reset: 'Tyhjennä',
-            copy: 'Kopioi leikepöydälle'
+            copy: 'Kopioi leikepöydälle',
+            clear: 'Tyhjennä'
         },
         messages: {
             confirm: 'Haluatko varmasti jatkaa?',
