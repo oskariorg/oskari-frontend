@@ -20,7 +20,7 @@ const ThemedFilter = ThemeConsumer(({ theme, filters, activeFilterId, controller
                 onChange={controller.setActiveFilterId}
                 value={activeFilterId}
                 className="t_filter"
-                $highlightColor={theme.color.accent}
+                $highlightColor={theme?.color?.accent}
             >
                 {
                     filters.map(({ id, text, tooltip }) => (
