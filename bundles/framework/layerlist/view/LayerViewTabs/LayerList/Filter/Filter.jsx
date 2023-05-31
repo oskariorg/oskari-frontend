@@ -5,10 +5,11 @@ import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { Labelled } from '../Labelled';
 import styled from 'styled-components';
 import { ThemeProvider, ThemeConsumer } from 'oskari-ui/util';
+import { DEFAULT_COLORS } from 'oskari-ui/theme/constants';
 
 const StyledSelect = styled(Select)`
     ${props => props.value !== 'all' && (
-        `border: 2px solid ${props.theme.color.accent}`
+        `border: 2px solid ${props.$highlightColor || DEFAULT_COLORS.accent}`
     )}
 `;
 
@@ -19,7 +20,7 @@ const ThemedFilter = ThemeConsumer(({ theme, filters, activeFilterId, controller
                 onChange={controller.setActiveFilterId}
                 value={activeFilterId}
                 className="t_filter"
-                theme={theme}
+                $highlightColor={theme.color.accent}
             >
                 {
                     filters.map(({ id, text, tooltip }) => (
