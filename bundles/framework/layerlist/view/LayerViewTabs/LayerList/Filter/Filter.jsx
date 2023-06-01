@@ -9,18 +9,19 @@ import { DEFAULT_COLORS } from 'oskari-ui/theme/constants';
 
 const StyledSelect = styled(Select)`
     ${props => props.value !== 'all' && (
-        `border: 2px solid ${props.$highlightColor || DEFAULT_COLORS.accent}`
+        `border: 2px solid ${props.$highlightColor};`
     )}
 `;
 
-const ThemedFilter = ThemeConsumer(({ theme, filters, activeFilterId, controller }) => {
+const ThemedFilter = ThemeConsumer(({ theme = {}, filters, activeFilterId, controller }) => {
+    const highlightColor = theme?.color?.accent || DEFAULT_COLORS.accent;
     return (
         <Labelled messageKey='filter.title'>
             <StyledSelect
                 onChange={controller.setActiveFilterId}
                 value={activeFilterId}
                 className="t_filter"
-                $highlightColor={theme?.color?.accent}
+                $highlightColor={highlightColor}
             >
                 {
                     filters.map(({ id, text, tooltip }) => (
