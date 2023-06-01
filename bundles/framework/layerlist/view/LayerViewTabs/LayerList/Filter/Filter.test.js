@@ -3,7 +3,7 @@ import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import { Filter } from './Filter';
 import { testFilters } from './Filter.test.util';
-import { Controller, LocaleProvider, ThemeProvider } from 'oskari-ui/util';
+import { Controller, LocaleProvider } from 'oskari-ui/util';
 import { Option } from 'oskari-ui';
 import { getBundleInstance } from '../../test.util';
 
@@ -23,9 +23,7 @@ describe('<Filter/>', () => {
 
     const wrapper = mount(
         <LocaleProvider value={{ bundleKey: instance.getName() }}>
-            <ThemeProvider>
-                <Filter filters={testFilters} activeFilterId={testFilters[1].id} controller={controller}/>
-            </ThemeProvider>
+            <Filter filters={testFilters} activeFilterId={testFilters[1].id} controller={controller}/>
         </LocaleProvider>
     );
 
