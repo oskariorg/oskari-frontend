@@ -6,7 +6,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const StyledInput = styled(TextInput)`
-    width: 100%;
+    flex-grow: 1;
 `;
 
 const Search = React.forwardRef(({ searchText, getMessage, controller }, ref) => {
