@@ -98,8 +98,8 @@ Oskari.registerLocalization(
                 "show": "Visa getCapabilities svar",
                 "update": "Hämta nu",
                 "updateRate": "Capabilities uppdateringsfrekvens",
-                "updateRateDesc": "Uppdateringsfrekvens i minuter.",
-                "updateRateCronMsg": "Päivitys ajastettu cronilla: {cron}, voit muuttaa päivitystiheyttä oskari-ext.propertiesin 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' arvolla.",
+                "updateRateDesc": "Uppdateringsfrekvensen i minuter.",
+                "updateRateCronMsg": "Uppdatering schemalagd med cron: {cron}, du kan ändra uppdateringsfrekvensen med 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' värdet i oskari-ext.properties.",
                 "updatedSuccesfully": "Uppdatering lyckades.",
                 "updateFailed": "Uppdatering misslyckades.",
                 "updateFailedWithReason": "Uppdatering misslyckades: {reason}",
@@ -216,7 +216,7 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "Gruppen du försöker ta bort innehåller undergrupper. Ta bort undergrupperna först.",
                 "errorFetchCoverage": "Kan inte hämtas kartlagrets täckningsområde från tjänsten.",
                 "noCoverage": "Kartlagrets täckningsområde är inte begränsat.",
-                "invalidScale": "Tarkista tason mittakaavarajat."
+                "invalidScale": "Kontrollera skalbegränsningarna för kartlagret."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",
