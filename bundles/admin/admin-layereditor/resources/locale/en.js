@@ -98,8 +98,8 @@ Oskari.registerLocalization(
                 "show": "Show GetCapabilities response",
                 "update": "Update now",
                 "updateRate": "Capabilities update rate",
-                "updateRateDesc": "Update rate in minutes.",
-                "updateRateCronMsg": "Päivitys ajastettu cronilla: {cron}, voit muuttaa päivitystiheyttä oskari-ext.propertiesin 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' arvolla.",
+                "updateRateDesc": "Update frequency in minutes.",
+                "updateRateCronMsg": "Update scheduled with cron: {cron}, you can change the update frequency with the 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' value of oskari-ext.properties.",
                 "updatedSuccesfully": "Capabilities re-check succeeded.",
                 "updateFailed": "Capablities re-check failed.",
                 "updateFailedWithReason": "Capablities re-check failed: {reason}",
@@ -218,7 +218,7 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first.",
                 "errorFetchCoverage": "Failed to get the map layer coverage from the service.",
                 "noCoverage": "The map layer coverage isn't restricted.",
-                "invalidScale": "Tarkista tason mittakaavarajat."
+                "invalidScale": "Check the layer scale limits."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",
