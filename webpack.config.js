@@ -51,12 +51,12 @@ module.exports = (env, argv) => {
 
     // Common config for both prod & dev
     const config = {
-        node: {
-            fs: 'empty'
-        },
         amd: {
             // Enable webpack-friendly use of require in Cesium
             toUrlUndefined: true
+        },
+        cache: {
+            type: 'filesystem'
         },
         mode: isProd ? 'production' : 'development',
         entry: entries,
@@ -65,6 +65,7 @@ module.exports = (env, argv) => {
             path: path.resolve(`dist/${version}/`),
             publicPath: `${publicPathPrefix}Oskari/dist/${version}/`,
             filename: '[name]/oskari.min.js',
+            assetModuleFilename: 'assets/[hash][ext][query]',
 
             // Needed to compile multiline strings in Cesium
             sourcePrefix: ''
