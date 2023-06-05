@@ -11,7 +11,7 @@ const Container = styled.div`
     border: 1px solid rgba(0,0,0,0.2);
     pointer-events: auto;
     text-align: left;
-    max-height: 80vh;
+    max-height: 100vh;
     &.transparent-classification {
         background-color: transparent;
         border: 1px solid transparent;
@@ -33,7 +33,7 @@ const Container = styled.div`
 `;
 const ContentWrapper = styled.div`
     overflow-y: auto;
-    max-height: 60vh;
+    max-height: 80vh;
 `;
 const LegendContainer = styled.div`
     margin-bottom: 6px;
