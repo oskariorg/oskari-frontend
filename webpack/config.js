@@ -84,6 +84,7 @@ const getExcludedNodeModules = (modules, blacklisted = true) => {
 };
 
 const BABEL_LOADER_RULE = {
+    /* eslint-disable array-bracket-spacing */
     test: /\.(js|jsx)$/,
     exclude: [
         /libraries/,
@@ -92,7 +93,7 @@ const BABEL_LOADER_RULE = {
         // getExcludedNodeModules(['react-dom', '@ant-design', 'antd', 'core-js'])
         // Exclude all but named dependencies (named deps contain es6+ modules that require transpiling)
         // FIXME: olcs seems problematic - adding it makes the build take reeeeaaaally long compared to not having it
-        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', 'olcs', 'cesium', '@mapbox'])
+        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib' /*, 'jsts', 'olcs', 'cesium', '@mapbox' */])
     ],
     use: {
         loader: 'babel-loader',
@@ -123,7 +124,14 @@ const getModuleRules = (isProd = false, antThemeFile) => {
     const rules = [
         {
             test: require.resolve('sumoselect'),
-            use: 'imports-loader?define=>undefined,exports=>undefined'
+            use: [{
+                loader: 'imports-loader',
+                options: {
+                    imports: [
+                        'side-effects sumoselect'
+                    ]
+                }
+            }]
         },
         BABEL_LOADER_RULE,
         ...styleFileRules,

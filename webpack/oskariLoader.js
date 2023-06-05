@@ -41,7 +41,7 @@ module.exports = function (source) {
 
     const output = source + '\n' + dependencies.map(d => {
         if (d.expose) {
-            return `import 'expose-loader?${d.expose}!${d.src}'`;
+            return `import 'expose-loader?exposes=${d.expose}!${d.src}'`;
         }
         return `import '${d.src}'`;
     }).join('\n');
