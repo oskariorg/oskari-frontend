@@ -200,7 +200,7 @@ Oskari.registerLocalization(
                     "gfiDialog": {
                         "title": "Feature Info",
                         "featureName": "Preview",
-                        "featureDesc": "The selected color scheme affects a graphic layout of feature and map layer popup info wimdows."
+                        "featureDesc": "The selected color scheme affects a graphic layout of feature and map layer popup info windows."
                     }
                 }
             },
