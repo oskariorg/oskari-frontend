@@ -67,12 +67,13 @@ Oskari.registerLocalization(
                 "noResult": "0 m"
             },
             "area": {
-                "title": "Add Area to Own Places",
+                "title": "Add My Area",
                 "tooltip": "Draw an area and add it to your own places.",
-                "add": "Draw an area to the map. Click breaking points. Finally double-click an ending point and click \"Save My Place\".",
+                "add": "Draw an area to the map by clicking breaking points. Finally double-click an ending point. You can draw several areas in one feature. Finally click \"Save as My Place\".",
                 "next": "You can draw several areas in one feature.",
                 "edit": "You can move breaking points to another location by clicking them with a mouse.",
-                "noResult": "0 m²"
+                "noResult": "0 m²",
+                "save": "Save as My Place"
             }
         },
         "buttons": {
