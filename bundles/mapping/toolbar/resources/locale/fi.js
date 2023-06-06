@@ -10,7 +10,7 @@ Oskari.registerLocalization(
                 "title": "Linkki karttanäkymään",
                 "cannot": "Karttalinkkiä ei voida luoda tähän näkymään. Luo uusi näkymä ja yritä uudelleen.",
                 "addMarker": "Näytä merkintä kartan keskipisteessä",
-                "skipInfo": "Älä näytä pikaopasta"
+                "skipInfo": "Älä näytä pikaopasta, kun linkki avataan"
             },
             "history": {
                 "reset": "Palaa alkutilaan",

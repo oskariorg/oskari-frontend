@@ -10,7 +10,7 @@ Oskari.registerLocalization(
                 "title": "Link to Map View",
                 "cannot": "This map view cannot be linked to. Create a new map view and try again.",
                 "addMarker": "Show a marker in the center of the map",
-                "skipInfo": "Do not show quick guide"
+                "skipInfo": "Do not show the quick guide, when the link is opened"
             },
             "history": {
                 "reset": "Move to the original map view",
