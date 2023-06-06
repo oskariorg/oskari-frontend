@@ -69,10 +69,11 @@ Oskari.registerLocalization(
             "area": {
                 "title": "Lisää alue omiin kohteisiin",
                 "tooltip": "Piirrä alue ja lisää se omiin kohteisiin.",
-                "add": "Piirrä alue kartalle. Klikkaa alueen reunapisteitä. Lopuksi kaksoisklikkaa viimeistä pistettä tai paina \"Tallenna kohde\".",
+                "add": "Piirrä alue kartalle klikkaamalla alueen reunapisteitä. Lopuksi kaksoisklikkaa viimeistä pistettä. Voit piirtää samaan kohteeseen useita alueita. Lopuksi paina \"Tallenna kohde\".",
                 "next": "Voit piirtää samaan kohteeseen useita alueita.",
                 "edit": "Voit siirtää taitepisteitä raahaamalla niitä hiirellä.",
-                "noResult": "0 m²"
+                "noResult": "0 m²",
+                "save": "Tallenna kohde"
             }
         },
         "buttons": {

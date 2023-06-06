@@ -115,6 +115,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             var stateReqBuilder = Oskari.requestBuilder('Toolbar.ToolButtonStateRequest');
             sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
         },
+        getSaveButtonText: function (mode) {
+            if (mode === 'area') {
+                return this.loc('tools.area.save');
+            }
+            return null;
+        },
         showDrawHelper: function () {
             const drawMode = this.drawMode;
             const title = this.loc('tools.' + drawMode + '.title');
@@ -130,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             }
             this.measurementText = measureResult;
             this.description = message;
-            this.popupControls = showDrawHelperPopup(title, message, () => this.stopDrawing(false), () => this.stopDrawing(true), measureResult);
+            this.popupControls = showDrawHelperPopup(title, message, () => this.stopDrawing(false), () => this.stopDrawing(true), measureResult, this.getSaveButtonText(drawMode));
         },
         stopDrawing: function (isCancel) {
             if (isCancel) {
@@ -202,7 +208,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             const resultText = this.mapmodule.formatMeasurementResult(measurement, this.drawMode);
             if (resultText) {
                 this.measurementText = resultText;
-                this.popupControls.update(this.description, resultText);
+                this.popupControls.update(this.description, resultText, this.getSaveButtonText(this.drawMode));
             }
         },
         /**
@@ -217,7 +223,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             // after the first geometry change the popup text to instruct the user that another geometry can be added to the same feature
             const description = this.loc('tools.' + this.drawMode + '.next');
             this.description = description;
-            this.popupControls.update(description, this.measurementText);
+            this.popupControls.update(description, this.measurementText, this.getSaveButtonText(this.drawMode));
         },
 
         stop: function () {
