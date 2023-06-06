@@ -1,3 +1,4 @@
+import { Messaging } from 'oskari-ui/util';
 /**
  * @class Oskari.userinterface.component.FilterDialog
  *
@@ -859,7 +860,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 },
                 // Error callback
                 function (jqXHR, textStatus, errorThrown) {
-                    Oskari.log('FilterDialog').error('Failed to load layer properties and types for layer:', layerId);
+                    Messaging.error({
+                        content: Oskari.getMsg('DivManazer', 'FilterDialog.validation.failedToLoadPropertiesAndPropTypes') + layerId
+                    });
                 });
         },
 

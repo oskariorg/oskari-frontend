@@ -331,7 +331,8 @@ Oskari.registerLocalization(
                 "operator_missing": "Operaattori puuttuu. Valitse operaattori ja yritä uudelleen.",
                 "value_missing": "Arvo puuttuu. Anna arvo ja yritä uudelleen",
                 "boolean_operator_missing": "Operaattori puuttuu. Valitse operaattori ja yritä uudelleen.",
-                "bbox_selected_with_no_properties": "Ilman maantieteellistä rajausta analyysi kohdistuu koko aineistoon. Lisää ominaisuustietojen perusteella tehtävä suodatus tai valitse \"Vain kartalla näkyvät kohteet\"."
+                "bbox_selected_with_no_properties": "Ilman maantieteellistä rajausta analyysi kohdistuu koko aineistoon. Lisää ominaisuustietojen perusteella tehtävä suodatus tai valitse \"Vain kartalla näkyvät kohteet\".",
+                "failedToLoadPropertiesAndPropTypes": "Failed to load layer properties and types for layer:"
             },
             "aggregateAnalysisFilter": {
                 "addAggregateFilter": "Käytä tunnuslukua",
