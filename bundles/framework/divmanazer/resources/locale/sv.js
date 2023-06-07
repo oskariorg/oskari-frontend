@@ -328,7 +328,7 @@ Oskari.registerLocalization(
                 "operator_missing": "Operatören saknas.",
                 "value_missing": "Värdet saknas.",
                 "boolean_operator_missing": "Den logiska operatören saknas.",
-                "failedToLoadPropertiesAndPropTypes": "Opening Select Features tool failed. The layer id is:"
+                "failedToLoadPropertiesAndPropTypes": "Öppnandet av Välj objekt verktyget misslyckades. Kartlagrets id är:"
             }
         },
         "fileInput": {
