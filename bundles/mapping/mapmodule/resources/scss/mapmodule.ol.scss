@@ -26,7 +26,7 @@ $pluginMargin: 10px;
 }
 
 /* This is the drag-n-drop handle on publisher */
-.mapplugin.ui-draggable-handle > div::after {
+.mapplugin.toollayoutedit.ui-draggable-handle > div::after {
     content: url("../images/holder-icon.svg");
     width: 24px;
     height: 24px;
