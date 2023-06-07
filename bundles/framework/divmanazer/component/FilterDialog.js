@@ -111,8 +111,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
             // Create filter dialog content
             const hasPropertyTypes = Object.keys(layer.getPropertyTypes()).length !== 0;
             if (!hasPropertyTypes) {
-                // TODO could use wfs2 plugin updateLayerProperties(layer)
-                me._loadWFSLayerPropertiesAndTypes(me._layer.getId(), prevJson, cb, clickedFeatures, selectedTemporaryFeatures);
+                Messaging.error({
+                    content: Oskari.getMsg('DivManazer', 'FilterDialog.validation.failedToLoadPropertiesAndPropTypes') + layer.getId()
+                });
+
                 return;
             }
             popupContent = this.getFilterDialogContent(me._layer, clickedFeatures, selectedTemporaryFeatures);
@@ -838,63 +840,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
             const closeButton = popup.createCloseButton();
             const popupContent = '<p>' + errors.join('</p><p>') + '</p>';
             popup.showFromModal(this.popup.getElement(), this.loc.validation.title, popupContent, [closeButton]);
-        },
-
-        /**
-         * @method loadWFSLayerPropertiesAndTypes
-         * @private
-         * Load analysis layers in start.
-         *
-         */
-        _loadWFSLayerPropertiesAndTypes: function (layerId, prevJson, cb, clickedFeatures, selectedTemporaryFeatures) {
-            // Request analyis layers via the backend
-            this._getWFSLayerPropertiesAndTypes(layerId,
-                // Success callback
-                function (response) {
-                    if (response) {
-                        this._handleWFSLayerPropertiesAndTypesResponse(response, prevJson, cb, clickedFeatures, selectedTemporaryFeatures);
-                    }
-                }
-            );
-        },
-
-        _getWFSLayerPropertiesAndTypes: function (layerId, success) {
-            return fetch(Oskari.urls.getRoute('DescribeLayer', { id: layerId }), {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json'
-                }
-            }).then(response => {
-                if (!response.ok) {
-                    Messaging.error({
-                        content: Oskari.getMsg('DivManazer', 'FilterDialog.validation.failedToLoadPropertiesAndPropTypes') + layerId
-                    });
-                    return;
-                }
-                return response.json();
-            }).then(json => {
-                return success(json);
-            });
-        },
-
-        /**
-         * Store property types
-         *
-         * @method _handleWFSLayerPropertiesAndTypesResponse
-         * @private
-         * @param {JSON} propertyJson properties and property types of WFS layer JSON returned by server.
-         */
-        _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, prevJson, cb, clickedFeatures, selectedTemporaryFeatures) {
-            const propTypes = propertyJson?.properties?.reduce((types, prop) => {
-                types[prop.name] = prop.type;
-                return types;
-            }, {});
-
-            if (Object.keys(propTypes).length === 0) {
-                Oskari.log('FilterDialog').error('Failed to load layer properties and types for layer:', this._layer.getId());
-            }
-            this._layer.setPropertyTypes(propTypes);
-            this.createFilterDialog(this._layer, prevJson, cb, clickedFeatures, selectedTemporaryFeatures);
         },
 
         /**

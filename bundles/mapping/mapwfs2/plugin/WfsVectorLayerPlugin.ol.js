@@ -365,6 +365,14 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
             handler.applyZoomBounds(layer, olLayer);
         });
     }
+
+    _handleDescribeLayerImpl (layer, info) {
+        const propTypes = info?.properties?.reduce((types, prop) => {
+            types[prop.name] = prop.type;
+            return types;
+        }, {});
+        layer.setPropertyTypes(propTypes);
+    }
 };
 
 Oskari.clazz.defineES('Oskari.wfsvector.WfsVectorLayerPlugin', WfsVectorLayerPlugin,
