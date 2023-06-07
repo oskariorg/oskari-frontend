@@ -332,7 +332,7 @@ Oskari.registerLocalization(
                 "value_missing": "The value is missing. Please type a value and try again.",
                 "boolean_operator_missing": "The logical operator is missing. Please select a logical operator and try again.",
                 "bbox_selected_with_no_properties": "Without geographic filter all the features are included in the analysis. Please add an attribute filter or select \"Only features visible on the map\" in the geographic filter.",
-                "failedToLoadPropertiesAndPropTypes": "Failed to load layer properties and types for layer:"
+                "failedToLoadPropertiesAndPropTypes": "Select Features Tool open failed. The layer id is:"
             },
             "aggregateAnalysisFilter": {
                 "addAggregateFilter": "Use statistical values",
