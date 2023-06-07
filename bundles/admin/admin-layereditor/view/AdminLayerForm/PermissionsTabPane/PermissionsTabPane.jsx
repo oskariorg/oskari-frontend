@@ -113,8 +113,9 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
             }
             // the actual role-based rows
             const role = modelRow.role.name;
+            const tooltip = <span>{role}: <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} /></span>;
             return (<Tooltip key={permission.id + '_' + role}
-                title={<Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} />}>
+                title={tooltip}>
                 <Checkbox
                     permissionDescription={permission.localizedText}
                     permission={permission.id}
