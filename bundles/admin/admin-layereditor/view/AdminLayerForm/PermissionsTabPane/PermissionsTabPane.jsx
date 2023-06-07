@@ -22,7 +22,6 @@ const StyledListItem = styled(ListItem)`
 const StyledIcon = styled('div')`
     font-size: 18px;
 `;
-const TooltipComponent = styled('span')``;
 
 // Overflow makes additional/customized permission types available by scrolling
 // It is not ideal at least when there are both many roles and additional permission types
@@ -114,7 +113,7 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
             }
             // the actual role-based rows
             const role = modelRow.role.name;
-            const tooltip = <span>{role}: <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} LabelComponent={TooltipComponent} /></span>;
+            const tooltip = <span>{role}: <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} /></span>;
             return (<Tooltip key={permission.id + '_' + role}
                 title={tooltip}>
                 <Checkbox
