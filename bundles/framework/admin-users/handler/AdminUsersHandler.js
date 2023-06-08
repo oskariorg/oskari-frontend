@@ -5,7 +5,7 @@ class UIHandler extends StateHandler {
         super();
         this.restUrl = conf.restUrl;
         this.isExternal = conf.isExternal;
-        this.passwordRequirements = conf.passwordRequirements || {};
+        this.passwordRequirements = conf.requirements || {};
         this.sandbox = Oskari.getSandbox();
         this.setState({
             activeTab: 'admin-users-tab',
