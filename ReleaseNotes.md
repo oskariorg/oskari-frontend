@@ -1,5 +1,109 @@
 # Release Notes
 
+# 2.11.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/42?closed=1
+
+- map plugin style enhancements
+- The layer comparison control (swipe-tool) and the crosshair on map is now shown under the infobox-popup instead of on top of it.
+
+### Publisher
+
+Map layer tools and controls have been restructured under the map layer accordion panel. Previously tools related to map layers were scattered under tools and the map layer controls.
+
+Tools that are only valid for RPC-based apps are now grouped under a new RPC-tools panel.
+
+The tools that are under RCP-tools and maplayer have been rewritten as React-implementation.
+
+The publisher tool interface has been streamlined and unnecessary functions have been removed. This might affect instances that have added their own application specific publisher tools:
+- https://github.com/oskariorg/oskari-frontend/pull/2164
+- https://github.com/oskariorg/oskari-frontend/pull/2180
+- layer tools can now have onLayersChanged() to get notified of layer changes: https://github.com/oskariorg/oskari-frontend/pull/2191
+- tool.isDiplayed() now receives the embedded map payload so it can determine if the tool should be shown or not
+- New base class for tools: https://github.com/oskariorg/oskari-frontend/pull/2218
+
+`ShowFilteredLayerListRequest` can now be used to open the selected layers tab of the geoportal layer listing UI. This is used by the publisher so we can use the existing UI for all layer related operations.
+
+Vector feature hover styles are now disabled when tools are dragged on publisher.
+
+Tool placement has been improved:
+- More tools can now be relocated on the publisher like the tools for statistical data functionalities.
+- The fiddly left/right hand toggle has been replaced with "switch sides" button that swaps tools from left to right and vice versa. 
+
+### Improved search UI
+
+The SearchPlugin implementation has been improved to support functionalities that have been available on the geoportal and it can now be used as a drop-in replacement for the Search flyout implementation.
+
+The plugin has new configuration options on how to handle search result click and for enabling user to select channels which are used for the search:
+- https://github.com/oskariorg/oskari-frontend/pull/2166
+- https://github.com/oskariorg/oskari-frontend/pull/2126
+
+The search results are now shown per channel which enables adding different kinds of channels for the search like searching for map layers, statistical indicators etc as the channel result can be handled differently based on result type. The channel with most results is shown first.
+
+Metadata search can now function without the search flyout. If the request to inject metadata search UI to the search flyout is not available the metadata search will create its own "tile"/menu item on the main menu.
+
+### Layer analytics improvements
+
+The functionality is used by admins to detect potential problems with services that have been registered to an Oskari instance. The UI has been improved by adding search/filter functionalities.
+
+### Map plugins
+
+- Removed old toolstyle references from plugins and mapmodule (using theme instead)
+- Removed unused functions from plugins and mapmodule: https://github.com/oskariorg/oskari-frontend/pull/2163
+- https://github.com/oskariorg/oskari-frontend/pull/2164
+- Plugins no longer need to care if they are in publisher "drag mode". Previously disabling clicks were handled by plugins and the drag handle was added by plugins. Now the publisher handles all of this so creating new plugins is much easier and less error-prone. Overall they work much better out of the box with the publisher functionalities.
+- https://github.com/oskariorg/oskari-frontend/pull/2200 -> refresh()
+- https://github.com/oskariorg/oskari-frontend/pull/2201
+
+### Layer handling changes
+
+End-users can now save styles for vector layers. Previously styling for end-users was done at runtime only, but now the styles can be saved which means they can be used in embedded maps and links etc. Admins also have new UI for configuring styles. End-users have a new tab on mydata to manage styles like other user generated content.
+
+The layers loaded for listing purposes no longer includes all the data for the layer. Instead a call to the server is done to load things like vector layer styles and WMTS tilematrices etc.
+
+The AbstractLayer baseclass now has more developer friendly functions:
+- isVisible() returns the status if the layer visibility has been changed by the user
+- isVisibleOnMap() can be used to detect if the layer is actually shown on the map. This takes into account:
+    - if the user has hidden the layer
+    - if the map is out of the scale range for the layer
+    - if the layers coverage area is not on the map viewport
+    - if the layer can't be shown (due not being supported like 3dtiles on non-3D map)
+
+### Initial mobile support changes for geoportal
+
+https://github.com/oskariorg/oskari-frontend/pull/2259
+
+### Other
+- User admin (admin-users bundle) has been reimplemented using React that includes a small facelift and makes it work better with instances with a lot of users.
+- Upgraded dependencies to enable NodeJS 16
+    - node-sass prevents using NodeJS 18 at the moment
+- Upgraded AntD - this might require changes to app specific code: https://github.com/oskariorg/oskari-frontend/pull/2165
+- Changed moment.js to day.js - this might require changes to app specific code
+- Upgraded D3 and it is now linked in package.json/used through npm install
+- printout cleaning https://github.com/oskariorg/oskari-frontend/pull/2144
+- Popups are no longer attached to document body, but under Oskari root element.
+- Lots of popups opened by toolbar tools have been migrated from jQuery to React.
+- Time series UI has been improved (and we'll continue working on theme support on these)
+- Make table implementations more consistent: https://github.com/oskariorg/oskari-frontend/pull/2151
+- Oskari.util.formatDate() is now used for time formatting through out the functionalities
+- Fixed a bunch of broken tooltips
+- Fixed an error on coordinate tool (sometimes sending coordinates to server with separator , instead of .)
+- Disabled statistical data histogram from being edited when classification is disabled.
+- Statistical regions are now sorted on the user data input form.
+- Some SVG-icons were not shown properly (mostly on Safari or zoomed in pages) - these have been fixed
+- Added error handling when a layer can't be shown on the map: https://github.com/oskariorg/oskari-frontend/pull/2234
+- Added new container types to oskari-ui/window: 
+    - MovableContainer acts like popups, but don't have the header part of popups. Can be used to add a draggable object on the screen. Used for example on the legend for statistical data.
+    - Sidebar
+- Added new components:
+    - IconButton,  includes the common icons used on buttons with tooltips, confirmation dialogs etc.
+    - CopyField and CopyButton for system clipboard handling
+
+- Theme: Badge component supports theming
+- Popup (and MovableContainer) now detects size changes and tries to keep the container on screen. So if the content grows beyond screen viewport the container is moved to accommodate content change.
+
+
 ## 2.10.0
 
 For a full list of changes see:
