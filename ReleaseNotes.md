@@ -60,7 +60,10 @@ The functionality is used by admins to detect potential problems with services t
 
 End-users can now save styles for vector layers. Previously styling for end-users was done at runtime only, but now the styles can be saved which means they can be used in embedded maps and links etc. Admins also have new UI for configuring styles. End-users have a new tab on mydata to manage styles like other user generated content.
 
-The layers loaded for listing purposes no longer includes all the data for the layer. Instead a call to the server is done to load things like vector layer styles and WMTS tilematrices etc.
+The layers loaded for listing purposes no longer includes all the data for the layer.
+Instead a DescribeLayer call to the server is done to load things like vector layer styles and WMTS tilematrices etc.
+Layers now have handleDescribeLayer() that can be overridden in layer types to add spcecific handling.
+Going forward DescribeLayer will be improved to make similar routes (like `GetWFSLayerFields` for `WFS` and `GetLayerCapabilities` for `WMTS`) unnecessary and this work has already started on this version.
 
 The AbstractLayer baseclass now has more developer friendly functions:
 - isVisible() returns the status if the layer visibility has been changed by the user
@@ -71,6 +74,17 @@ The AbstractLayer baseclass now has more developer friendly functions:
     - if the layer can't be shown (due not being supported like 3dtiles on non-3D map)
 
 ### Initial mobile support changes for geoportal
+
+The frontend now uses 650px as breaking point on both width and height to transform to "mobile mode". 
+The element size that is tracked is the root element of Oskari.
+Previously the measurements were 500px x 400px and the monitored element was the map element.
+
+- Added `Oskari.util.isSmallScreen()` so mobile breakpoint is managed in one place. Oskari.util.isMobile() uses this in addition to checking user device.
+- Flyouts in mobile mode now cover the screen and are not draggable.
+- Flyouts in "desktop mode" also respect the maximum screen space available and can't be bigger than the available screen space.
+- Search flyout now closes in mobile mode when search result is clicked so user can see the result on map
+- Layer listing has been modified to allow elements of the UI to work with smaller screen
+- Legend for statistical data now handles smaller screens by NOT growing out of screen
 
 https://github.com/oskariorg/oskari-frontend/pull/2259
 
@@ -84,23 +98,31 @@ https://github.com/oskariorg/oskari-frontend/pull/2259
 - printout cleaning https://github.com/oskariorg/oskari-frontend/pull/2144
 - Popups are no longer attached to document body, but under Oskari root element.
 - Lots of popups opened by toolbar tools have been migrated from jQuery to React.
+- Layer analytics UI for admins now includes quality of life improvements like searching
+- Layer admin UI fixes for capabilities scheduling and handling for invalid scale limits
 - Time series UI has been improved (and we'll continue working on theme support on these)
 - Make table implementations more consistent: https://github.com/oskariorg/oskari-frontend/pull/2151
 - Oskari.util.formatDate() is now used for time formatting through out the functionalities
 - Fixed a bunch of broken tooltips
 - Fixed an error on coordinate tool (sometimes sending coordinates to server with separator , instead of .)
+- Fixed an issue with markers where trying to hide an already hidden marker resulted in an error where the marker couldn't be restored on screen
 - Disabled statistical data histogram from being edited when classification is disabled.
 - Statistical regions are now sorted on the user data input form.
 - Some SVG-icons were not shown properly (mostly on Safari or zoomed in pages) - these have been fixed
 - Added error handling when a layer can't be shown on the map: https://github.com/oskariorg/oskari-frontend/pull/2234
-- Added new container types to oskari-ui/window: 
+- Added new container type to oskari-ui/window: MovableContainer
+- Added/improved components:
     - MovableContainer acts like popups, but don't have the header part of popups. Can be used to add a draggable object on the screen. Used for example on the legend for statistical data.
-    - Sidebar
-- Added new components:
-    - IconButton,  includes the common icons used on buttons with tooltips, confirmation dialogs etc.
+    - Sidebar for publisher, printout etc functionalities
+    - Flyout now has a new option `resizable` to make it resizable by user and 
+    - New (themed) Header component that is used for Popup and Sidebar
+    - IconButton component includes the common icons used on buttons with tooltips, confirmation dialogs etc.
     - CopyField and CopyButton for system clipboard handling
 
-- Theme: Badge component supports theming
+- Theming:
+    - Badge component supports theming
+    - User style forms like dataset import and adding additional layers for myplaces now uses theme color as default color
+    - Printout sidebar now respects theming colors
 - Popup (and MovableContainer) now detects size changes and tries to keep the container on screen. So if the content grows beyond screen viewport the container is moved to accommodate content change.
 
 
