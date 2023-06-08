@@ -89,8 +89,11 @@ class ViewHandler extends StateHandler {
         const updateLayerFilters = () => {
             previousState = handler.getState();
             const { activeFilterId, searchText } = previousState;
-            this.updateState({ updating: true });
-            setTimeout(() => this.getCollapseHandler().setFilter(activeFilterId, searchText), UI_UPDATE_TIMEOUT);
+            const textLength = searchText ? searchText.length : 0;
+            if (textLength !== 1) {
+                this.updateState({ updating: true });
+                setTimeout(() => this.getCollapseHandler().setFilter(activeFilterId, searchText), UI_UPDATE_TIMEOUT);
+            }
         };
 
         let typingTimeout = null;
@@ -113,11 +116,7 @@ class ViewHandler extends StateHandler {
                 typingTimeout.cancel();
             }
 
-            const textLength = searchText ? searchText.length : 0;
-            // Search text changed, give user some time to type in his search.
-            // The longer the search text the shorted delay.
-            let typingTimeoutMs = this.typingTimeoutScale.getValue(textLength);
-            typingTimeout = new Timeout(updateLayerFilters, typingTimeoutMs);
+            typingTimeout = new Timeout(updateLayerFilters, 500);
 
             this.updateState(immediateStateChange);
         });
