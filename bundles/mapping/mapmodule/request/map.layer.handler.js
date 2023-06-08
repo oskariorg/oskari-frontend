@@ -136,6 +136,13 @@ Oskari.clazz.define('map.layer.handler',
                     coverage: layer.getGeometryWKT()
                 });
             }
+            if (typeof layerId === 'string' && layerId.startsWith('myplaces')) {
+                // myplaces layer in embedded maps/links has the type wfslayer
+                // since they have their style in options but are NOT run through the myplaces modelbuilder
+                // we need to parse the styles here...
+                layer.setStylesFromOptions(layer.getOptions());
+                this.__handleLayerInfoSuccess(layer, {});
+            }
             // only layers that have numeric ids can have reasonable response for DescribeLayer
             if (isNaN(layerId)) {
                 done();
