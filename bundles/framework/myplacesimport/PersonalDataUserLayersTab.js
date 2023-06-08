@@ -160,13 +160,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.PersonalDataUserL
             return gridModel;
         },
         _editUserLayer: function (data) {
-            const { id } = data;
-            const layer = this.instance.getMapLayerService().findMapLayer(id);
-            const values = {
-                locale: layer.getLocale(),
-                style: layer.getCurrentStyle().getFeatureStyle(),
-                id
-            };
-            this.instance.openLayerDialog(values);
+            this.instance.showLayerDialog(data.id);
         }
     });
