@@ -15,7 +15,6 @@ class UIHandler extends StateHandler {
             roleFormState: this.initRoleForm(),
             users: [],
             roles: [],
-            roleOptions: [],
             userFormErrors: [],
             roleFormErrors: false,
             editingRoleError: false,
@@ -126,10 +125,7 @@ class UIHandler extends StateHandler {
             if (guestRole) {
                 roles = roles.filter(r => r.name !== guestRole);
             }
-            this.updateState({
-                roles: roles || [],
-                roleOptions: result.rolelist
-            });
+            this.updateState({ roles });
         } catch (e) {
             Messaging.error(Oskari.getMsg('AdminUsers', 'failed_to_get_roles_title'));
             this.updateState({
