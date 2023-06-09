@@ -123,7 +123,7 @@ export const UserForm = ({ state, controller, isExternal }) => {
                     onChange={(value) => controller.updateUserFormState('roles', value)}
                     defaultValue={state.userFormState.roles}
                     status={state.userFormErrors.includes('roles') ? 'error' : null}
-                    options={state.roleOptions.map(role => (
+                    options={state.roles.map(role => (
                         {
                             label: role.name,
                             value: role.id

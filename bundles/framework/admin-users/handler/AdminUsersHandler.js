@@ -15,7 +15,6 @@ class UIHandler extends StateHandler {
             roleFormState: this.initRoleForm(),
             users: [],
             roles: [],
-            roleOptions: [],
             userFormErrors: [],
             roleFormErrors: false,
             editingRoleError: false,
@@ -126,10 +125,7 @@ class UIHandler extends StateHandler {
             if (guestRole) {
                 roles = roles.filter(r => r.name !== guestRole);
             }
-            this.updateState({
-                roles: roles || [],
-                roleOptions: result.rolelist
-            });
+            this.updateState({ roles });
         } catch (e) {
             Messaging.error(Oskari.getMsg('AdminUsers', 'failed_to_get_roles_title'));
             this.updateState({
@@ -230,11 +226,7 @@ class UIHandler extends StateHandler {
         });
         const errors = [];
         if (this.isExternal) {
-            if (!this.state.userFormState.roles || !this.state.userFormState.roles.length > 0) {
-                errors.push('roles');
-                Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.form_invalid'));
-                return errors;
-            }
+            return errors;
         }
         Object.keys(this.state.userFormState).forEach(key => {
             if (key !== 'password' && key !== 'rePassword') {
