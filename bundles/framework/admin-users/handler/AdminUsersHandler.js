@@ -226,10 +226,6 @@ class UIHandler extends StateHandler {
         });
         const errors = [];
         if (this.isExternal) {
-            if (!this.state.userFormState.roles || !this.state.userFormState.roles.length > 0) {
-                errors.push('roles');
-                Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.form_invalid'));
-            }
             return errors;
         }
         Object.keys(this.state.userFormState).forEach(key => {
