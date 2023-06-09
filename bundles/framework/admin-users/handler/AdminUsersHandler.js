@@ -229,8 +229,8 @@ class UIHandler extends StateHandler {
             if (!this.state.userFormState.roles || !this.state.userFormState.roles.length > 0) {
                 errors.push('roles');
                 Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.form_invalid'));
-                return errors;
             }
+            return errors;
         }
         Object.keys(this.state.userFormState).forEach(key => {
             if (key !== 'password' && key !== 'rePassword') {
