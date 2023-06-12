@@ -14,9 +14,19 @@ class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
         super();
         this.mapModule = mapModule;
+        this.setState(this.initState());
+        this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
+        this.flyoutController = null;
+        this.selectByPropertiespopupController = null;
+        const featureQueryFn = (geojson, opts) => this.mapModule.getVectorFeatures(geojson, opts);
+        this.filterSelector = new FilterSelector(featureQueryFn, this.selectionService);
+        this.addStateListener(() => this.updateFlyout());
+    }
+
+    initState () {
         const featureDataLayers = this.getFeatureDataLayers() || [];
         const activeLayerId = this.determineActiveLayerId(featureDataLayers);
-        this.setState({
+        return {
             activeLayerId,
             layers: featureDataLayers,
             flyoutOpen: false,
@@ -31,13 +41,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
                 allColumns: [],
                 filters: []
             }
-        });
-        this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
-        this.flyoutController = null;
-        this.selectByPropertiespopupController = null;
-        const featureQueryFn = (geojson, opts) => this.mapModule.getVectorFeatures(geojson, opts);
-        this.filterSelector = new FilterSelector(featureQueryFn, this.selectionService);
-        this.addStateListener(() => this.updateFlyout());
+        };
     }
 
     getFeatureDataLayers () {
@@ -81,25 +85,34 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     updateStateAfterMapEvent () {
+        this.updateState(this.prepareFeaturesAndColumnSettingsForState());
+    }
+
+    prepareFeaturesAndColumnSettingsForState () {
         const featureDataLayers = this.getFeatureDataLayers() || [];
         if (!featureDataLayers || !featureDataLayers.length) {
             this.closeFlyout(true);
-            return;
+            return this.initState();
         }
 
         const activeLayerId = this.determineActiveLayerId(featureDataLayers);
         let activeLayerFeatures = null;
         let selectedFeatureIds = null;
+        let newVisibleColumnsSettings = null;
         if (activeLayerId && this.getState().flyoutOpen) {
             activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
             selectedFeatureIds = activeLayerFeatures && activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
+            const { visibleColumnsSettings } = this.getState();
+            newVisibleColumnsSettings = visibleColumnsSettings && visibleColumnsSettings.allColumns?.length ? visibleColumnsSettings : this.createVisibleColumnsSettings(activeLayerFeatures);
         };
-        this.updateState({
+
+        return {
             activeLayerId,
             layers: featureDataLayers,
             activeLayerFeatures,
-            selectedFeatureIds
-        });
+            selectedFeatureIds,
+            visibleColumnsSettings: newVisibleColumnsSettings
+        };
     }
 
     updateSelectedFeatures (layerId, selectedFeatureIds) {
@@ -118,8 +131,14 @@ class FeatureDataPluginUIHandler extends StateHandler {
         this.updateState(newState);
     }
 
-    updateLoadingStatus (loadingStatus) {
-        this.updateState({ loadingStatus });
+    updateLoadingStatus (loadingStatus, updateFeaturesAndColumns) {
+        if (!updateFeaturesAndColumns) {
+            this.updateState({ loadingStatus });
+            return;
+        }
+
+        const featuresAndColumnSettings = this.prepareFeaturesAndColumnSettingsForState();
+        this.updateState({ loadingStatus, ...featuresAndColumnSettings });
     }
 
     updateVisibleColumns (value) {
@@ -207,7 +226,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     createVisibleColumnsSettings (features) {
         if (!features || !features.length) {
-            return null;
+            return {
+                allColumns: [],
+                visibleColumns: []
+            };
         }
         const allColumns = Object.keys(features[0].properties).filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key));
         const visibleColumns = [].concat(allColumns);
