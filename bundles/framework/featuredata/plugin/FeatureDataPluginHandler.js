@@ -131,7 +131,12 @@ class FeatureDataPluginUIHandler extends StateHandler {
         this.updateState(newState);
     }
 
-    updateLoadingStatus (loadingStatus) {
+    updateLoadingStatus (loadingStatus, updateFeaturesAndColumns) {
+        if (!updateFeaturesAndColumns) {
+            this.updateState({ loadingStatus });
+            return;
+        }
+
         const featuresAndColumnSettings = this.prepareFeaturesAndColumnSettingsForState();
         this.updateState({ loadingStatus, ...featuresAndColumnSettings });
     }
