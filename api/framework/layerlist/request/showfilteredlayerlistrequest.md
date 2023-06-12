@@ -24,6 +24,9 @@ Layers shown to the user can be filtered by sending ShowFilteredLayerListRequest
 <tr>
   <td>openLayerList</td><td>Boolean</td><td>Open layerlist flyout</td><td>false</td>
 </tr>
+<tr>
+  <td>showSelectedLayers</td><td>Boolean</td><td>Show selected layers instead of full listing</td><td>false</td>
+</tr>
 </table>
 
 ## Examples
@@ -54,10 +57,17 @@ Filter layerlist to show only publishable layers using the code below:
 Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['publishable']);
 ```
 
-If you want also open layerlist (layerselector2 Flyout) then send request with second parameter true.
+To also open the layer listing flyout (layerlist bundle) then send request with second parameter.
 ```javascript
-Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest',true]);
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest', true]);
 ```
+
+To open the layer listing flyout AND show the selected layers listing (instead of full listing) then send request with third parameter true.
+```javascript
+Oskari.getSandbox().postRequestByName('ShowFilteredLayerListRequest', ['newest', true, true]);
+```
+
+ShowFilteredLayerListRequest
 
 ### Create own filters
 
