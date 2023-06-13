@@ -100,9 +100,8 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
             .toLowerCase()
             .includes((value).toLowerCase()),
         onFilterDropdownOpenChange: (visible) => {
-          if (visible) {
-            const ref = dataIndex === 'dataProducer' ? selectInput : searchInput;
-            setTimeout(() => ref.current?.select(), 100);
+          if (visible && dataIndex !== 'dataProducer') {
+            setTimeout(() => searchInput.current?.select(), 100);
           }
         },
         render: (text) => text
