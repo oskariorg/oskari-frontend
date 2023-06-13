@@ -79,9 +79,10 @@ export class AbstractVectorLayer extends AbstractLayer {
 
     removeStyle (name) {
         const styles = this.getStyles();
-        const index = styles.findIndex(s => s.getName() === name);
+        const index = styles.findIndex(s => Number.parseInt(s.getName(), 10) === name);
         if (index !== -1) {
             styles.splice(index, 1);
+            this.setStyles(styles);
         }
         // Remove style from layer if active.
         const current = this.getCurrentStyle().getName();
