@@ -89,9 +89,9 @@ class ViewHandler extends StateHandler {
         const updateLayerFilters = () => {
             previousState = handler.getState();
             const { activeFilterId, searchText } = previousState;
-            
+
             this.updateState({ updating: true });
-            new Timeout(this.getCollapseHandler().setFilter(activeFilterId, searchText), UI_UPDATE_TIMEOUT);
+            setTimeout(() => this.getCollapseHandler().setFilter(activeFilterId, searchText), UI_UPDATE_TIMEOUT);
         };
 
         let typingTimeout = null;
