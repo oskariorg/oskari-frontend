@@ -14,6 +14,7 @@ const IconContainer = styled.div`
         height: 24px;
     }
     padding-right: 5px;
+    display: flex;
 `;
 
 export const UserStyleRow = ({ name, onEdit, onDelete }) => {
