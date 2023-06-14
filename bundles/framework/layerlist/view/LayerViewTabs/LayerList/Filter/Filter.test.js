@@ -1,6 +1,6 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 import { Filter } from './Filter';
 import { testFilters } from './Filter.test.util';
 import { Controller, LocaleProvider } from 'oskari-ui/util';
@@ -21,7 +21,7 @@ describe('<Filter/>', () => {
     const mockFilterSelected = jest.fn();
     const controller = new Controller({ setActiveFilterId: mockFilterSelected }, ['setActiveFilterId']);
 
-    const wrapper = mount(
+    const wrapper = render(
         <LocaleProvider value={{ bundleKey: instance.getName() }}>
             <Filter filters={testFilters} activeFilterId={testFilters[1].id} controller={controller}/>
         </LocaleProvider>

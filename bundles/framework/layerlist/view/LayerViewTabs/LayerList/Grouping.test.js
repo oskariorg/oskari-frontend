@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render } from '@testing-library/react';
 import { Grouping } from './Grouping';
 import { GroupingOption } from '../../../model/GroupingOption';
 import { Select, Option } from 'oskari-ui';
@@ -15,7 +15,7 @@ describe('<Grouping/>', () => {
     ];
     const localeContextMock = { getMessage: () => {} };
 
-    let wrapper = shallow(
+    let wrapper = render(
         <Grouping selected={options[1].getKey()} options={options} controller={controller} {...localeContextMock} />);
 
     test('renders correct amount of options', () => {
