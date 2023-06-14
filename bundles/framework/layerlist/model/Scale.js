@@ -10,6 +10,6 @@ export class Scale {
         if (domainVal < this.min || domainVal > this.max) {
             return this.outOfRange;
         }
-        return this.outOfRange;
+        return this.rangeMax / domainVal;
     }
 };

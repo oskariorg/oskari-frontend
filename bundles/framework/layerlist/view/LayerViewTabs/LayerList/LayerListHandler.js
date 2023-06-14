@@ -19,8 +19,8 @@ class ViewHandler extends StateHandler {
         this.typingTimeoutScale = new Scale({
             min: MIN_CHAR_COUNT,
             max: MAX_CHAR_COUNT,
-            rangeMin: MAX,
-            rangeMax: MIN,
+            rangeMin: MIN,
+            rangeMax: MAX,
             outOfRange: MIN
         });
 
@@ -89,11 +89,9 @@ class ViewHandler extends StateHandler {
         const updateLayerFilters = () => {
             previousState = handler.getState();
             const { activeFilterId, searchText } = previousState;
-            const textLength = searchText ? searchText.length : 0;
-            if (textLength !== 1) {
-                this.updateState({ updating: true });
-                setTimeout(() => this.getCollapseHandler().setFilter(activeFilterId, searchText), UI_UPDATE_TIMEOUT);
-            }
+
+            this.updateState({ updating: true });
+            setTimeout(() => this.getCollapseHandler().setFilter(activeFilterId, searchText), UI_UPDATE_TIMEOUT);
         };
 
         let typingTimeout = null;
@@ -116,7 +114,8 @@ class ViewHandler extends StateHandler {
                 typingTimeout.cancel();
             }
 
-            typingTimeout = new Timeout(updateLayerFilters, 500);
+            const textLength = searchText ? searchText.length : 0;
+            typingTimeout = new Timeout(updateLayerFilters, this.typingTimeoutScale.getValue(textLength));
 
             this.updateState(immediateStateChange);
         });
