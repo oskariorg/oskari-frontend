@@ -78,7 +78,7 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
     useEffect(() => {
         if (layer && !layerChecked) {
             setLayerChecked(true);
-            const {minscale, maxscale} = layer;
+            const {minscale = -1, maxscale = -1} = layer;
             if (minscale === maxscale && minscale !== -1) {
                 Messaging.warn(<Message messageKey='messages.invalidScale' bundleKey='admin-layereditor' />);
             }
@@ -144,7 +144,7 @@ Scale.propTypes = {
 };
 
 function normalizeScales (layer) {
-    let { minscale, maxscale } = layer;
+    let { minscale = -1, maxscale = -1 } = layer;
     if (minscale === -1) {
         minscale = '';
     }
