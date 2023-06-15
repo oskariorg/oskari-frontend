@@ -251,8 +251,10 @@ Oskari.clazz.define(
             this.statsService.getUILabels({ datasource, indicator, selections }, callback);
         },
         clearDataProviderInfo: function () {
-            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
-            service.removeGroup('indicators');
+            const service = this.getDataProviderInfoService();
+            if (service) {
+                service.removeGroup('indicators');
+            }
         },
         /**
          * Add vectorlayer to map for features. Layer is empty on module start.

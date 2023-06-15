@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
         stop: function () {
             // when we exit publisher:
             // move plugin back to bottom left if it was dragged during publisher
-            this.getPlugin().setLocation('bottom left');
+            this.getPlugin()?.setLocation('bottom left');
         },
         /**
         * Get values.
@@ -50,6 +50,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
         * @returns {Object} tool value object
         */
         getValues: function () {
+            const plugin = this.getPlugin();
+            if (!plugin) {
+                return null;
+            }
             return {
                 configuration: {
                     mapfull: {
@@ -57,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
                             plugins: [{
                                 id: this.getTool().id,
                                 config: {
-                                    location: this.getPlugin().getConfig()?.location
+                                    location: plugin.getConfig()?.location
                                 }
                             }]
                         }
