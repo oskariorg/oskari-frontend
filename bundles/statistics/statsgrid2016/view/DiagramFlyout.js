@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
             }
         });
         this.service.on('StatsGrid.IndicatorEvent', function (event) {
-            if (event.isRemoved() && !me.hasIndicators()) {
+            if (event.isRemoved()) {
                 me.setSortingDisabled();
             }
         });
