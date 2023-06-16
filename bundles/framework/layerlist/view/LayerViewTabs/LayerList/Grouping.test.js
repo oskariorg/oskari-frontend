@@ -3,7 +3,6 @@ import { render } from '@testing-library/react';
 import { Grouping } from './Grouping';
 import { GroupingOption } from '../../../model/GroupingOption';
 import { Controller } from 'oskari-ui/util';
-import { error } from 'console';
 import { beforeEach } from '@jest/globals';
 const SELECTED_OPTION_TITLE = 'selected';
 const SELECTED_OPTION_KEY = 'key2';
@@ -31,27 +30,5 @@ describe('<Grouping/>', () => {
 
         // when dropdown is closed the selected option will be rendered and visible
         expect(wrapper.getAllByTitle(SELECTED_OPTION_TITLE).length).toBe(1);
-    });
-
-    test('renders correct options when dropdown is opened', async () => {
-        error('TODO: GROUPING: renders correct options when dropdown is opened implementation');
-    });
-
-    test('calls for update', () => {
-        error('TODO: implement calls for update - test');
-        /*
-        jest.useFakeTimers();
-        expect.assertions(1);
-        const input = wrapper.container.querySelector('input');
-        act(() => {
-            fireEvent.change(input, {
-                target: {
-                    value: 'a'
-                }
-            });
-        });
-        jest.runAllTimers();
-        expect(mockGroupingSelected).toHaveBeenCalled();
-        */
     });
 });
