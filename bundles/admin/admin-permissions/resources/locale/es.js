@@ -14,10 +14,10 @@ Oskari.registerLocalization(
         },
         "rights": {
             "name": "capa del mapa",
-            "rightToPublish": "publicar",
-            "rightToView": "ver",
-            "rightToDownload": "descargar",
-            "rightToPublishView": "ver mapa embebido",
+            "PUBLISH": "publicar",
+            "VIEW_LAYER": "ver",
+            "DOWNLOAD": "descargar",
+            "VIEW_PUBLISHED": "ver mapa embebido",
             "success": {
                 "title": "derechos de las capas actualizados",
                 "message": "los derechos para la capa de mapa  han sido actualizados"

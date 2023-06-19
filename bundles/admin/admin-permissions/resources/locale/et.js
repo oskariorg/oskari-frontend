@@ -14,10 +14,10 @@ Oskari.registerLocalization(
         },
         "rights": {
             "name": "Kaardikiht",
-            "rightToPublish": "Avalikusta",
-            "rightToView": "Vaata",
-            "rightToDownload": "Lae alla",
-            "rightToPublishView": "Vaata lõimkaardil",
+            "PUBLISH": "Avalikusta",
+            "VIEW_LAYER": "Vaata",
+            "DOWNLOAD": "Lae alla",
+            "VIEW_PUBLISHED": "Vaata lõimkaardil",
             "success": {
                 "title": "Kaardikihi õigused salvestatud",
                 "message": "Kaardikihi õigused uuendatud"

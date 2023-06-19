@@ -3,7 +3,7 @@
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.framework.bundle.admin-permissions.AdminPermissionsBundle",
+Oskari.clazz.define("Oskari.admin.bundle.admin-permissions.AdminPermissionsBundle",
 /**
  * @method create called automatically on construction
  * @static
@@ -23,9 +23,9 @@ function() {
         */
 
         /* or this if you want to tailor instance also */
-        var inst = Oskari.clazz.create("Oskari.framework.bundle.admin-permissions.AdminPermissionsBundleInstance",
+        var inst = Oskari.clazz.create("Oskari.admin.bundle.admin-permissions.AdminPermissionsBundleInstance",
             'admin-permissions',
-            "Oskari.framework.bundle.admin-permissions.AdminPermissionsFlyout"
+            "Oskari.admin.bundle.admin-permissions.AdminPermissionsFlyout"
             );
 
         return inst;
@@ -36,21 +36,21 @@ function() {
     }
 }, {
 
-    "protocol" : ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
+    "protocol": ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance"],
     "source" : {
 
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/instance.js"
+            "src" : "../../../../bundles/admin/admin-permissions/instance.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/Flyout.js"
+            "src" : "../../../../bundles/admin/admin-permissions/Flyout.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/Tile.js"
+            "src" : "../../../../bundles/admin/admin-permissions/Tile.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/scss/style.scss"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/scss/style.scss"
         }, {
             "src" : "../../../../libraries/chosen/1.5.1/chosen.jquery.js",
             "type" : "text/javascript"
@@ -62,51 +62,51 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/fi.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/sv.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/en.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/en.js"
         }, {
             "lang" : "et",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/et.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/et.js"
         }, {
             "lang" : "is",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/is.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/is.js"
         }, {
             "lang" : "it",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/it.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/it.js"
         }, {
             "lang" : "nl",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/nl.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/nl.js"
         }, {
             "lang" : "sk",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/sk.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/sk.js"
         }, {
             "lang" : "sl",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/sl.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/sl.js"
         }, {
             "lang" : "nb",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/nb.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/nb.js"
         }, {
             "lang" : "es",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/es.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/es.js"
         }, {
             "lang" : "fr",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-permissions/resources/locale/fr.js"
+            "src" : "../../../../bundles/admin/admin-permissions/resources/locale/fr.js"
         }]
     },
     "bundle" : {
@@ -142,4 +142,4 @@ function() {
 
 });
 
-Oskari.bundle_manager.installBundleClass("admin-permissions", "Oskari.framework.bundle.admin-permissions.AdminPermissionsBundle");
+Oskari.bundle_manager.installBundleClass("admin-permissions", "Oskari.admin.bundle.admin-permissions.AdminPermissionsBundle");

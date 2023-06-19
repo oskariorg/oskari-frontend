@@ -14,10 +14,10 @@ Oskari.registerLocalization(
         },
         "rights": {
             "name": "Sloji karte",
-            "rightToPublish": "Objava",
-            "rightToView": "Pogled",
-            "rightToDownload": "Prenos",
-            "rightToPublishView": "Pogled v vključeni karti",
+            "PUBLISH": "Objava",
+            "VIEW_LAYER": "Pogled",
+            "DOWNLOAD": "Prenos",
+            "VIEW_PUBLISHED": "Pogled v vključeni karti",
             "success": {
                 "title": "Shranjene pravice nad sloji",
                 "message": "Pravice nad sloji so bile posodobljene"

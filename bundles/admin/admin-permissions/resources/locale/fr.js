@@ -14,10 +14,10 @@ Oskari.registerLocalization(
         },
         "rights": {
             "name": "Couche cartographique",
-            "rightToPublish": "Publier",
-            "rightToView": "Visualiser",
-            "rightToDownload": "Téléchargement",
-            "rightToPublishView": "Voir dans la carte intégrée",
+            "PUBLISH": "Publier",
+            "VIEW_LAYER": "Visualiser",
+            "DOWNLOAD": "Téléchargement",
+            "VIEW_PUBLISHED": "Voir dans la carte intégrée",
             "success": {
                 "title": "Droits sur la couche enregistrés",
                 "message": "Les droits sur la couche cartographiques ont été mis à jour"

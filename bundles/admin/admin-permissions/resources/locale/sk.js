@@ -14,10 +14,10 @@ Oskari.registerLocalization(
         },
         "rights": {
             "name": "Mapová vrstva",
-            "rightToPublish": "Publikovať",
-            "rightToView": "Zobraziť",
-            "rightToDownload": "Stiahnuť",
-            "rightToPublishView": "Zobraziť vo vloženej mape",
+            "PUBLISH": "Publikovať",
+            "VIEW_LAYER": "Zobraziť",
+            "DOWNLOAD": "Stiahnuť",
+            "VIEW_PUBLISHED": "Zobraziť vo vloženej mape",
             "success": {
                 "title": "Právne vrstvy uložené",
                 "message": "Právne mapové vrsty boli aktualizované."

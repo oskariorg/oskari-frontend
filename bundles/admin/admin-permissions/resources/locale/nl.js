@@ -14,10 +14,10 @@ Oskari.registerLocalization(
         },
         "rights": {
             "name": "Kaartlaag",
-            "rightToPublish": "Publiceren",
-            "rightToView": "View",
-            "rightToDownload": "Download",
-            "rightToPublishView": "View in Embedded kaart",
+            "PUBLISH": "Publiceren",
+            "VIEW_LAYER": "View",
+            "DOWNLOAD": "Download",
+            "VIEW_PUBLISHED": "View in Embedded kaart",
             "success": {
                 "title": "Laag rechten opgeslagen",
                 "message": "Laag rechten zijn succesvol opgeslagen"

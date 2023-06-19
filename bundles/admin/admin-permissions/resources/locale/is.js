@@ -14,10 +14,10 @@ Oskari.registerLocalization(
         },
         "rights": {
             "name": "Kortalag",
-            "rightToPublish": "Gefa út",
-            "rightToView": "Skoða",
-            "rightToDownload": "Hala niður",
-            "rightToPublishView": "Skoða í innfelld kort.",
+            "PUBLISH": "Gefa út",
+            "VIEW_LAYER": "Skoða",
+            "DOWNLOAD": "Hala niður",
+            "VIEW_PUBLISHED": "Skoða í innfelld kort.",
             "success": {
                 "title": "Réttindi laga vistuð.",
                 "message": "Réttindi kortalaga hafa verið uppfærð."

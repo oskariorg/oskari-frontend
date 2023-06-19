@@ -1,9 +1,9 @@
 /*
- * @class Oskari.framework.bundle.admin-layerrights.Tile
+ * @class Oskari.admin.bundle.admin-layerrights.Tile
  *
  * Renders the layer rights management tile.
  */
-Oskari.clazz.define('Oskari.framework.bundle.admin-permissions.Tile',
+Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Tile',
 
     /**
        * @method create called automatically on construction
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-permissions.Tile',
          * @return {String} the name for the component
          */
         getName: function () {
-            return 'Oskari.framework.bundle.admin-permissions.Tile';
+            return 'Oskari.admin.bundle.admin-permissions.Tile';
         },
         /**
          * @method setEl

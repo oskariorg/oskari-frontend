@@ -5,16 +5,16 @@ import { LayerRightsHandler } from './handler/layerRightsHandler';
 import { LayerRights } from './view/LayerRights';
 
 /**
- * @class Oskari.framework.bundle.admin-layerrights.Flyout
+ * @class Oskari.admin.bundle.admin-layerrights.Flyout
  *
  * Renders the layer rights management flyout.
  */
-Oskari.clazz.define('Oskari.framework.bundle.admin-permissions.Flyout',
+Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
 
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.framework.bundle.admin-layerrights.AdminPermissionsBundleInstance}
+     * @param {Oskari.admin.bundle.admin-layerrights.AdminPermissionsBundleInstance}
      *        instance reference to component that created the tile
      */
     function (instance) {
@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-permissions.Flyout',
          * @return {String} the name for the component
          */
         getName: function () {
-            return 'Oskari.framework.bundle.admin-permissions.Flyout';
+            return 'Oskari.admin.bundle.admin-permissions.Flyout';
         },
 
         /**

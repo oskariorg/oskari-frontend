@@ -14,10 +14,10 @@ Oskari.registerLocalization(
         },
         "rights": {
             "name": "Layer della mappa",
-            "rightToPublish": "Pubblica",
-            "rightToView": "Visualizza",
-            "rightToDownload": "Scarica",
-            "rightToPublishView": "Visualizza la mappa esterna",
+            "PUBLISH": "Pubblica",
+            "VIEW_LAYER": "Visualizza",
+            "DOWNLOAD": "Scarica",
+            "VIEW_PUBLISHED": "Visualizza la mappa esterna",
             "success": {
                 "title": "Condizioni d'uso del layer salvate",
                 "message": "Condizioni d'uso del layer salvate con successo"

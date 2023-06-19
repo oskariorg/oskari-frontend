@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "lv",
+    "lang": "nb",
     "key": "admin-permissions",
     "value": {
         "title": "Layer Rights",
@@ -14,10 +14,10 @@ Oskari.registerLocalization(
         },
         "rights": {
             "name": "Map Layer",
-            "rightToPublish": "Publish",
-            "rightToView": "View",
-            "rightToDownload": "Download",
-            "rightToPublishView": "View in Embedded map",
+            "PUBLISH": "Publish",
+            "VIEW_LAYER": "View",
+            "DOWNLOAD": "Download",
+            "VIEW_PUBLISHED": "View in Embedded map",
             "success": {
                 "title": "Layer rights saved",
                 "message": "Layer rights were saved successfully."

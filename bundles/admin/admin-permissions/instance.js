@@ -1,12 +1,12 @@
 /**
- * @class Oskari.framework.bundle.admin-layerrights.AdminLayerRightsBundleInstance
+ * @class Oskari.admin.bundle.admin-layerrights.AdminLayerRightsBundleInstance
  *
  * Main component and starting point for the layer rights management functionality.
  *
- * See Oskari.framework.bundle.admin-layerrights.AdminLayerRightsBundle for bundle definition.
+ * See Oskari.admin.bundle.admin-layerrights.AdminLayerRightsBundle for bundle definition.
  *
  */
-Oskari.clazz.define('Oskari.framework.bundle.admin-permissions.AdminPermissionsBundleInstance',
+Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -184,9 +184,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-permissions.AdminPermissionsB
          */
         startExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] =
-                Oskari.clazz.create('Oskari.framework.bundle.admin-permissions.Flyout', this);
+                Oskari.clazz.create('Oskari.admin.bundle.admin-permissions.Flyout', this);
             this.plugins['Oskari.userinterface.Tile'] =
-                Oskari.clazz.create('Oskari.framework.bundle.admin-permissions.Tile', this);
+                Oskari.clazz.create('Oskari.admin.bundle.admin-permissions.Tile', this);
         },
 
         /**
