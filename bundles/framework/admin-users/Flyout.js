@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             const handler = this.getHandler();
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'AdminUsers' }}>
-                    <AdminUsersFlyout state={handler.getState()} controller={handler.getController()} isExternal={this.instance.conf.isExternal} />
+                    <AdminUsersFlyout state={handler.getState()} controller={handler.getController()} isExternal={this.instance?.conf?.isExternal} />
                 </LocaleProvider>,
                 this.container[0]
             );

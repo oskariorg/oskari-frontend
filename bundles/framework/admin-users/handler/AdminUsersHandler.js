@@ -1,9 +1,13 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
-    constructor (conf, consumer) {
+    constructor (conf = {}, consumer) {
         super();
-        this.restUrl = conf.restUrl;
+        if (conf.restUrl) {
+            this.restUrl = Oskari.urls.getRoute() + conf.restUrl;
+        } else {
+            this.restUrl = Oskari.urls.getRoute('Users');
+        }
         this.isExternal = conf.isExternal;
         this.passwordRequirements = conf.requirements || {};
         this.sandbox = Oskari.getSandbox();
@@ -76,7 +80,7 @@ class UIHandler extends StateHandler {
         try {
             const search = this.state.userPagination.search && this.state.userPagination.search.trim() !== '' ? this.state.userPagination.search : null;
             const offset = this.state.userPagination.page > 1 ? (this.state.userPagination.page - 1) * this.state.userPagination.limit : 0;
-            const response = await fetch(Oskari.urls.buildUrl(Oskari.urls.getRoute() + this.restUrl, {
+            const response = await fetch(Oskari.urls.buildUrl(this.restUrl, {
                 limit: this.state.userPagination.limit,
                 offset,
                 search
@@ -282,7 +286,7 @@ class UIHandler extends StateHandler {
                 data.append('roles', role);
             });
 
-            const response = await fetch(Oskari.urls.getRoute() + this.restUrl, {
+            const response = await fetch(this.restUrl, {
                 method: this.state.editingUserId ? 'POST' : 'PUT',
                 body: data.toString(),
                 headers: {
@@ -323,7 +327,7 @@ class UIHandler extends StateHandler {
 
     async deleteUser (uid) {
         try {
-            const response = await fetch(Oskari.urls.getRoute() + this.restUrl + '&id=' + uid, {
+            const response = await fetch(this.restUrl + '&id=' + uid, {
                 method: 'DELETE'
             });
             if (!response.ok) {
