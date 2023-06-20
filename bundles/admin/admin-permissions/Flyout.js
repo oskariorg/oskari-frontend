@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          * Plugin start
          */
         startPlugin: function () {
-            this.handler = new LayerRightsHandler(() => this.setContent());
+            this.handler = new LayerRightsHandler(() => this.renderContent());
         },
 
         /**
@@ -87,10 +87,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
         },
 
         /**
-         * @method setContent
+         * @method renderContent
          * Renders flyout content
          */
-        setContent: function () {
+        renderContent: function () {
             const flyout = jQuery(this.container);
 
             flyout.empty();

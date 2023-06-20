@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          */
         createUi: function () {
             var me = this;
-            me.plugins['Oskari.userinterface.Flyout'].setContent();
+            me.plugins['Oskari.userinterface.Flyout'].renderContent();
         }
     }, {
 
