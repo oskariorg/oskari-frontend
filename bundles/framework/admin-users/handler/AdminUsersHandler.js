@@ -192,11 +192,12 @@ class UIHandler extends StateHandler {
     }
 
     validateUserForm () {
+        if (this.isExternal) {
+            this.updateUserFormState('errors', errors);
+        }
+
         const { id, roles, errors: ignore, password, rePassword, ...fields } = this.state.userFormState;
         const errors = [];
-        if (this.isExternal) {
-            return errors;
-        }
 
         Object.keys(fields).forEach(key => {
             if (!fields[key]) {
