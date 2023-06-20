@@ -25,7 +25,7 @@ Oskari.registerLocalization(
             "addCategory": "Lägg till kartlagret",
             "editCategory": "Redigera kartlagret",
             "deleteCategory": "Ta bort kartlagret",
-            "deleteDefault": "Det förvalda kartlagret kan inte tas bprt-",
+            "deleteDefault": "Det förvalda kartlagret kan inte tas bort",
             "grid": {
                 "name": "Ortnamn",
                 "desc": "Ortnamnsbeskrivning",
@@ -67,12 +67,13 @@ Oskari.registerLocalization(
                 "noResult": "0 m"
             },
             "area": {
-                "title": "Lägg till område",
+                "title": "Lägg till ett eget område",
                 "tooltip": "Lägg till ett område till \"Mina platser\".",
-                "add": "Rita ett område genom att lägga till kantlinjens brytpunkter till kartan. Du kan lägga till brytpunkter genom att klicka på kartan. Sluta dra genom att dubbelklicka eller genom att klicka på \"Spara som min plats\".",
+                "add": "Rita ett område genom att klicka på kartan. Dubbelklicka för att avsluta. Ett objekt kan innehålla flera områden. Klicka till sist på \"Spara som mitt objekt\".",
                 "next": "En plats kan innehålla en eller flera områden.",
                 "edit": "Redigera området genom att klicka och dra i brytningspunkterna.",
-                "noResult": "0 m²"
+                "noResult": "0 m²",
+                "save": "Spara som mitt objekf"
             }
         },
         "buttons": {

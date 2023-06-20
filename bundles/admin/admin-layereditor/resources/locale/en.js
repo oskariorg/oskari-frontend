@@ -98,7 +98,8 @@ Oskari.registerLocalization(
                 "show": "Show GetCapabilities response",
                 "update": "Update now",
                 "updateRate": "Capabilities update rate",
-                "updateRateDesc": "Update rate in seconds",
+                "updateRateDesc": "Update frequency in minutes.",
+                "updateRateCronMsg": "Update scheduled with cron: {cron}, you can change the update frequency with the 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' value of oskari-ext.properties.",
                 "updatedSuccesfully": "Capabilities re-check succeeded.",
                 "updateFailed": "Capablities re-check failed.",
                 "updateFailedWithReason": "Capablities re-check failed: {reason}",
@@ -216,7 +217,8 @@ Oskari.registerLocalization(
                 "errorFetchLayerEnduserFailed": "Fetching layer details for the layer listing failed. Did you add 'View' permission for a role that you have?",
                 "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first.",
                 "errorFetchCoverage": "Failed to get the map layer coverage from the service.",
-                "noCoverage": "The map layer coverage isn't restricted."
+                "noCoverage": "The map layer coverage isn't restricted.",
+                "invalidScale": "Check the layer scale limits."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

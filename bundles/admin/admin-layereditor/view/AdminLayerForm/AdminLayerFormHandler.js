@@ -534,28 +534,25 @@ class UIHandler extends StateHandler {
         return composingModel ? composingModel.getPropertyFields(version) : [];
     }
 
-    // http://localhost:8080/action?action_route=GetWFSLayerFields&layer_id=888
+    // http://localhost:8080/action?action_route=LayerAdmin&layer_id=888
     fetchWFSLayerAttributes (layerId) {
         this.ajaxStarted();
-        return fetch(Oskari.urls.getRoute('GetWFSLayerFields', { layer_id: layerId }), {
+        return fetch(Oskari.urls.getRoute('LayerAdmin', { id: layerId }), {
             method: 'GET',
             headers: {
-                'Accept': 'application/json'
+                Accept: 'application/json'
             }
         }).then(response => {
             this.ajaxFinished();
             if (!response.ok) {
-                Messaging.error(getMessage('messages.errorFetchWFSLayerAttributes'));
+                Messaging.error(getMessage('messages.updateCapabilitiesFail'));
             }
             return response.json();
         }).then(json => {
-            const { types, locale } = json;
-            const attributeIdentifiers = Object.keys(types);
-            const currentLocale = Oskari.getLang();
-            const labelMapping = locale && locale[currentLocale] ? locale[currentLocale] : {};
-            return attributeIdentifiers.reduce((choices, identifier) => {
-                // use the attribute identifier as the label if no label is provided for current locale
-                choices[identifier] = labelMapping[identifier] || identifier;
+            const { capabilities } = json;
+            const { featureProperties } = capabilities;
+            return featureProperties?.reduce((choices, property) => {
+                choices[property.name] = property.name;
                 return choices;
             }, {});
         });

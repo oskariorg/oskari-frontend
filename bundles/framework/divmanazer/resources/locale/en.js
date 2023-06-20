@@ -331,7 +331,8 @@ Oskari.registerLocalization(
                 "operator_missing": "The operator is missing. Please select an operator and try again.",
                 "value_missing": "The value is missing. Please type a value and try again.",
                 "boolean_operator_missing": "The logical operator is missing. Please select a logical operator and try again.",
-                "bbox_selected_with_no_properties": "Without geographic filter all the features are included in the analysis. Please add an attribute filter or select \"Only features visible on the map\" in the geographic filter."
+                "bbox_selected_with_no_properties": "Without geographic filter all the features are included in the analysis. Please add an attribute filter or select \"Only features visible on the map\" in the geographic filter.",
+                "failedToLoadPropertiesAndPropTypes": "Opening Select Features tool failed. The layer id is:"
             },
             "aggregateAnalysisFilter": {
                 "addAggregateFilter": "Use statistical values",

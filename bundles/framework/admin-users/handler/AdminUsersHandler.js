@@ -1,11 +1,15 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
-    constructor (conf, consumer) {
+    constructor (conf = {}, consumer) {
         super();
-        this.restUrl = conf.restUrl;
+        if (conf.restUrl) {
+            this.restUrl = Oskari.urls.getRoute() + conf.restUrl;
+        } else {
+            this.restUrl = Oskari.urls.getRoute('Users');
+        }
         this.isExternal = conf.isExternal;
-        this.passwordRequirements = conf.passwordRequirements || {};
+        this.passwordRequirements = conf.requirements || {};
         this.sandbox = Oskari.getSandbox();
         this.setState({
             activeTab: 'admin-users-tab',
@@ -69,7 +73,7 @@ class UIHandler extends StateHandler {
         try {
             const trimmed = search.trim().length ? search.trim() : null;
             const offset = (page - 1) * limit;
-            const response = await fetch(Oskari.urls.buildUrl(Oskari.urls.getRoute() + this.restUrl, {
+            const response = await fetch(Oskari.urls.buildUrl(this.restUrl, {
                 limit,
                 offset,
                 search: trimmed
@@ -191,12 +195,7 @@ class UIHandler extends StateHandler {
         const { id, roles, errors: ignore, password, rePassword, ...fields } = this.state.userFormState;
         const errors = [];
         if (this.isExternal) {
-            if (roles.length === 0) {
-                errors.push('roles');
-                Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.form_invalid'));
-            }
-            this.updateUserFormState('errors', errors);
-            return;
+            return errors;
         }
 
         Object.keys(fields).forEach(key => {
@@ -235,7 +234,7 @@ class UIHandler extends StateHandler {
                 data.append('roles', role);
             });
 
-            const response = await fetch(Oskari.urls.getRoute() + this.restUrl, {
+            const response = await fetch(this.restUrl, {
                 method: userParams.id ? 'POST' : 'PUT',
                 body: data.toString(),
                 headers: {
@@ -271,7 +270,7 @@ class UIHandler extends StateHandler {
 
     async deleteUser (uid) {
         try {
-            const response = await fetch(Oskari.urls.getRoute() + this.restUrl + '&id=' + uid, {
+            const response = await fetch(this.restUrl + '&id=' + uid, {
                 method: 'DELETE'
             });
             if (!response.ok) {

@@ -99,7 +99,8 @@ Oskari.registerLocalization(
                 "show": "Näytä palvelun GetCapabilities-vastaus",
                 "update": "Päivitä nyt",
                 "updateRate": "Capabilities päivitystiheys",
-                "updateRateDesc": "Päivitystiheys sekunteina",
+                "updateRateDesc": "Päivitystiheys minuutteina.",
+                "updateRateCronMsg": "Päivitys ajastettu cronilla: {cron}, voit muuttaa päivitystiheyttä oskari-ext.propertiesin 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' arvolla.",
                 "updatedSuccesfully": "GetCapabilities päivitys onnistui.",
                 "updateFailed": "GetCapabilities päivitys epäonnistui.",
                 "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}",
@@ -217,7 +218,8 @@ Oskari.registerLocalization(
                 "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?",
                 "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
                 "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
-                "noCoverage": "Karttatason kattavuutta ei ole rajoitettu."
+                "noCoverage": "Karttatason kattavuutta ei ole rajoitettu.",
+                "invalidScale": "Tarkista tason mittakaavarajat."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

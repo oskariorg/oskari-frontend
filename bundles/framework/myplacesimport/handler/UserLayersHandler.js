@@ -45,22 +45,22 @@ class UserLayersHandler extends StateHandler {
             isImport
         };
         const onSuccess = () => this.popupCleanup();
-        const onError = (error = ERRORS.GENERIC) => {
+        const onError = (error = ERRORS.GENERIC, values) => {
             if (this.popupControls) {
-                this.popupControls.update(error);
+                this.popupControls.update(error, values);
             }
         };
         const save = values => {
             this.updateState({
                 loading: true
             });
-            this.instance.getService().submitUserLayer(values, onSuccess, onError);
+            this.instance.getService().submitUserLayer(values, onSuccess, (err) => onError(err, values));
         };
         const update = values => {
             this.updateState({
                 loading: true
             });
-            this.instance.getService().updateUserLayer(id, values, onSuccess, onError);
+            this.instance.getService().updateUserLayer(id, values, onSuccess, (err) => onError(err, values));
         };
         const onOk = isImport ? save : update;
         this.popupControls = showLayerForm(values, conf, onOk, () => this.popupCleanup());

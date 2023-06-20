@@ -2,8 +2,6 @@
 // libraries
 
 import 'expose-loader?jQuery!jquery';
-// registers global variable "MobileDetect" used in src/util.js:
-import 'expose-loader?MobileDetect!mobile-detect';
 import '../src/polyfills.js';
 
 // Oskari global

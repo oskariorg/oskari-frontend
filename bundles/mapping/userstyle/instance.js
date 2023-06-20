@@ -47,14 +47,15 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
     },
     showPopup (requestOpts) {
         const { id, addToLayer, layerId } = requestOpts;
+        const layerStyles = this.service.getStylesByLayer(layerId);
         const showEditor =
             typeof id !== 'undefined' ||
             typeof addToLayer === 'number' ||
-            this.service.getStylesByLayer(layerId).length === 0;
+            layerStyles.length === 0;
         const requestedLayer = addToLayer || layerId;
 
         const onClose = (wasEditor) => {
-            if (wasEditor === true) {
+            if (wasEditor === true && layerStyles.length > 1) {
                 this.updateStyleList(requestedLayer);
                 return;
             }

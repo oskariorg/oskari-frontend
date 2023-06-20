@@ -340,45 +340,6 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         });
     }
 
-    /**
-     * @method updateLayerProperties
-     * Requests and sets feature properties
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer wfs layer
-     * @param {Array} fields
-     */
-    updateLayerProperties (layer) {
-        if (!layer) {
-            return;
-        }
-        const onSuccess = response => {
-            const lang = Oskari.getLang();
-            const { types = {}, locale = {}, selection } = response;
-            if (Array.isArray(selection)) {
-                layer.setPropertyFilter(selection);
-            } else if (selection) {
-                const selectionArray = selection[lang] || selection.default || [];
-                layer.setPropertySelection(selectionArray);
-            }
-            const labels = locale[lang] || locale.default || {};
-            layer.setPropertyLabels(labels);
-            layer.setPropertyTypes(types);
-            // TODO: event should have only locale object not separate arrays
-            this.notify('WFSPropertiesEvent', layer, layer.getLocales(), layer.getFields());
-        };
-        jQuery.ajax({
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                layer_id: layer.getId()
-            },
-            url: Oskari.urls.getRoute('GetWFSLayerFields'),
-            success: onSuccess,
-            error: () => {
-                this._log.warn('Error getting fields for wfs layer ' + layer.getId());
-            }
-        });
-    }
-
     notify (eventName, ...args) {
         var builder = Oskari.eventBuilder(eventName);
         if (!builder) {
@@ -403,6 +364,14 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         layersImpls.forEach(olLayer => {
             handler.applyZoomBounds(layer, olLayer);
         });
+    }
+
+    _handleDescribeLayerImpl (layer, info) {
+        const propTypes = info?.properties?.reduce((types, prop) => {
+            types[prop.name] = prop.type;
+            return types;
+        }, {});
+        layer.setPropertyTypes(propTypes);
     }
 };
 

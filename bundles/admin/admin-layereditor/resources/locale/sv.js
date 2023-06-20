@@ -98,7 +98,8 @@ Oskari.registerLocalization(
                 "show": "Visa getCapabilities svar",
                 "update": "Hämta nu",
                 "updateRate": "Capabilities uppdateringsfrekvens",
-                "updateRateDesc": "Uppdateringsfrekvens i sekunder",
+                "updateRateDesc": "Uppdateringsfrekvensen i minuter.",
+                "updateRateCronMsg": "Uppdatering schemalagd med cron: {cron}, du kan ändra uppdateringsfrekvensen med 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' värdet i oskari-ext.properties.",
                 "updatedSuccesfully": "Uppdatering lyckades.",
                 "updateFailed": "Uppdatering misslyckades.",
                 "updateFailedWithReason": "Uppdatering misslyckades: {reason}",
@@ -214,7 +215,8 @@ Oskari.registerLocalization(
                 "errorFetchLayerEnduserFailed": "Listan över kartlagren kan inte uppdateras, eftersom kartlagret inte returnerar någon data. Du kom väl ihåg att uppdatera rättigheterna som tillhör din användarroll?",
                 "deleteErrorGroupHasSubgroups": "Gruppen du försöker ta bort innehåller undergrupper. Ta bort undergrupperna först.",
                 "errorFetchCoverage": "Kan inte hämtas kartlagrets täckningsområde från tjänsten.",
-                "noCoverage": "Kartlagrets täckningsområde är inte begränsat."
+                "noCoverage": "Kartlagrets täckningsområde är inte begränsat.",
+                "invalidScale": "Kontrollera skalbegränsningarna för kartlagret."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

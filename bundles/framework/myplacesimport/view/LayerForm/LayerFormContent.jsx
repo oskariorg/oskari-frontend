@@ -2,10 +2,11 @@ import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Tabs, Message, Tooltip, Spin } from 'oskari-ui';
+import { ThemeConsumer } from 'oskari-ui/util';
 import { GeneralTab, VisualizationTab } from './';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { ERRORS } from '../../constants';
-import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
+import { generateBlankStyle } from 'oskari-ui/components/StyleEditor/index';
 import { MandatoryIcon } from 'oskari-ui/components/icons';
 
 const Content = styled.div`
@@ -36,10 +37,10 @@ const getGeneralTabTitle = isValid => (
     </Fragment>
 );
 
-export const LayerFormContent = ({ values, config, onOk, onCancel, error }) => {
+export const LayerFormContent = ThemeConsumer(({ theme, values, config, onOk, onCancel, error }) => {
     const { maxSize, unzippedMaxSize, isImport } = config;
-    const { style = OSKARI_BLANK_STYLE, locale = {} } = values || {};
-    const [state, setState] = useState({ style, locale, loading: false, tab: 'general' });
+    const { style = generateBlankStyle(theme), locale = {} } = values || {};
+    const [state, setState] = useState({ style, locale, loading: false, tab: 'general', file: values?.file });
 
     const showSrs = isImport && error === ERRORS.NO_SRS;
 
@@ -121,7 +122,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error }) => {
         return <Spin showTip={true}>{Component}</Spin>;
     }
     return Component;
-};
+});
 
 LayerFormContent.propTypes = {
     values: PropTypes.object,

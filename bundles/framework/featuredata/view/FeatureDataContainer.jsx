@@ -8,6 +8,7 @@ import { ShowSelectedItemsFirst } from './ShowSelectedItemsFirst';
 import { FEATUREDATA_DEFAULT_HIDDEN_FIELDS } from '../plugin/FeatureDataPluginHandler';
 import { TabTitle } from './TabStatusIndicator';
 import { FilterVisibleColumns } from './FilterVisibleColumns';
+import { ExportButton } from './ExportData';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
 export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
@@ -27,14 +28,24 @@ const StyledTable = styled(Table)`
     .ant-table-selection-col, .ant-table-selection-column {
         display: none;
     }
+
+    max-height: 50vh;
+    max-width: 50vw;
+    overflow-y: auto;
+
 `;
 
 const SelectionsContainer = styled('div')`
     display: flex;
-    padding-bottom: 1em;
+    flex-direction: column;
 `;
 
-const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, controller) => {
+const SelectionRow = styled('div')`
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 1em;
+`;
+const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, showExportButton, controller) => {
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
     };
@@ -42,14 +53,28 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     const dataSource = createDatasourceFromFeatures(features);
     const featureTable = <>
         <SelectionsContainer>
-            <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
-            <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
+            { showExportButton && <>
+                <SelectionRow>
+                    <ExportButton onClick={() => { controller.openExportDataPopup(); }}/>
+                    <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
+                </SelectionRow>
+                <SelectionRow>
+                    <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+                </SelectionRow>
+            </>}
+
+            { !showExportButton &&
+                <SelectionRow>
+                    <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+                    <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
+                </SelectionRow>
+            }
         </SelectionsContainer>
         <StyledTable
             columns={ columnSettings }
             size={ 'large '}
             dataSource={ dataSource }
-            pagination={{ position: ['none', 'none'] }}
+            pagination={false}
             onChange={(pagination, filters, sorter, extra) => {
                 controller.updateSorting(sorter);
             }}
@@ -61,7 +86,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
                     }
                 };
             }}
-        />;
+        />
     </>;
     return featureTable;
 };
@@ -108,11 +133,12 @@ const createDatasourceFromFeatures = (features) => {
 const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, visibleColumnsSettings, controller) => {
     const tabs = layers?.map(layer => {
         const status = loadingStatus[layer.getId()];
+        const showExportButton = layer.hasPermission('download');
         return {
             key: layer.getId(),
-            label: <TabTitle status={status} title={layer.getName()}/>,
+            label: <TabTitle status={status} title={layer.getName()} active={layer.getId() === layerId} openSelectByPropertiesPopup={controller.openSelectByPropertiesPopup}/>,
             children: layer.getId() === layerId
-                ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, controller)
+                ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, showExportButton, controller)
                 : null
         };
     }) || [];

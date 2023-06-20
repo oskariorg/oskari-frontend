@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { PermissionRow, TEXT_COLUMN_SIZE, PERMISSION_TYPE_COLUMN_SIZE } from './PermissionRow';
 import { List, ListItem, Checkbox, Message, Tooltip } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
+import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
 
 const StyledListItem = styled(ListItem)`
     &:first-child > div {
@@ -18,6 +19,9 @@ const StyledListItem = styled(ListItem)`
         }
     }
 `;
+const StyledIcon = styled('div')`
+    font-size: 18px;
+`;
 
 // Overflow makes additional/customized permission types available by scrolling
 // It is not ideal at least when there are both many roles and additional permission types
@@ -26,6 +30,23 @@ const ListDiv = styled.div`
     margin-bottom: 20px;
     overflow: auto;
 `;
+
+const getPermissionTableHeader = (permission) => {
+    const translation = <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} bundleKey='admin-layereditor' />;
+    switch (permission.id) {
+        case 'VIEW_LAYER':
+            return <Tooltip title={translation}><StyledIcon><UnorderedListOutlined /></StyledIcon></Tooltip>
+        case 'VIEW_PUBLISHED':
+            return <Tooltip title={translation}><StyledIcon><EyeOutlined /></StyledIcon></Tooltip>
+        case 'PUBLISH':
+            return <Tooltip title={translation}><StyledIcon><ImportOutlined /></StyledIcon></Tooltip>
+        case 'DOWNLOAD':
+            return <Tooltip title={translation}><StyledIcon><ExportOutlined /></StyledIcon></Tooltip>
+        default:
+            // permissions might have server side localization as "name" that defaults to id if not given
+            return translation;
+    }
+};
 
 function getHeaderPermissions (dataRows, roles) {
     // key == permission, value == set of roles having the permission
@@ -57,8 +78,7 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
     const { roles, permissionTypes } = rolesAndPermissionTypes;
 
     const localizedPermissionTypes = permissionTypes.map(permission => {
-        // permissions might have server side localization as "name" that defaults to id if not given
-        permission.localizedText = <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} />;
+        permission.localizedText = getPermissionTableHeader(permission);
         return permission;
     });
 
@@ -93,8 +113,9 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
             }
             // the actual role-based rows
             const role = modelRow.role.name;
+            const tooltip = <span>{role}: <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} /></span>;
             return (<Tooltip key={permission.id + '_' + role}
-                title={<span>{role}: {permission.localizedText}</span>}>
+                title={tooltip}>
                 <Checkbox
                     permissionDescription={permission.localizedText}
                     permission={permission.id}
@@ -106,9 +127,8 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
 
         const rowKey = modelRow.isHeaderRow ? 'header' : modelRow.role.name;
         // calculate width in case there are additional permission types the background isn't colored properly without it
-        // 200 for role name column and 120/permission type (110 + 5 padding on both side)
-        const rowWidth = (TEXT_COLUMN_SIZE.width + TEXT_COLUMN_SIZE.padding) +
-            (PERMISSION_TYPE_COLUMN_SIZE.width + PERMISSION_TYPE_COLUMN_SIZE.padding * 2) * headerRow.permissionTypes.length;
+        // 195 for role name column and 90/permission type
+        const rowWidth = TEXT_COLUMN_SIZE.width + (PERMISSION_TYPE_COLUMN_SIZE.width * headerRow.permissionTypes.length);
         return (
             <StyledListItem style={{ width: rowWidth + 'px' }}>
                 <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} text={modelRow.text} checkboxes={checkboxes}/>

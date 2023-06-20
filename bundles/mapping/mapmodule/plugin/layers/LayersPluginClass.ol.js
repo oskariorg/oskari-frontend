@@ -223,14 +223,15 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      * @param {Number} orderNumber checks orderNumber against
      * #_visibilityCheckOrder
      *      to see if this is the latest check, if not - does nothing
+     * @param {boolean} isRequest triggered by a request
      */
-    _checkLayersVisibility (orderNumber) {
+    _checkLayersVisibility (orderNumber, isRequest) {
         if (orderNumber !== this._visibilityCheckOrder) {
             return;
         }
         this._sandbox.findAllSelectedMapLayers().forEach(layer => {
             if (layer.isVisible()) {
-                this.handleMapLayerVisibility(layer);
+                this.handleMapLayerVisibility(layer, isRequest);
             }
         });
         this._visibilityCheckScheduled = false;

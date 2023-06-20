@@ -21,7 +21,8 @@ Oskari.registerLocalization(
                 "layerDataProvider": "Dataproducent",
                 "sorterTooltip": "Sortera fallande / stigande",
                 "showDetailsTooltip": "Öppna detaljvyn",
-                "editLayerTooltip": "Editera kartlager"
+                "editLayerTooltip": "Editera kartlager",
+                "filter": "Filtrera"
             },
             "messages": {
                 "errorFetchingLayerAnalytics": "Layer analytics couldn't be fetched.",

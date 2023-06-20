@@ -24,8 +24,7 @@ Oskari.registerLocalization(
                 "editLayerTooltip": "Muokkaa tasoa",
                 "removeAllDataForLayer": "Poista tason kaikki seurantatiedot",
                 "removeSingleDataForLayer": "Poista yksittäisen käyttäjän raportoimat seurantatiedot",
-                "delete": "Poista",
-                "cancel": "Peruuta"
+                "filter": "Suodata"
             },
             "messages": {
                 "errorFetchingLayerAnalytics": "Tason analytiikka tietoja ei voitu hakea.",

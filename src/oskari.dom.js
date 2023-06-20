@@ -98,6 +98,14 @@ const getMapImplEl = () => {
     return mapImplEl;
 };
 
+const getWidth = (el = getRootEl()) => {
+    return el.clientWidth || parseInt(getComputedStyle(el).getPropertyValue('width'));
+};
+
+const getHeight = (el = getRootEl()) => {
+    return el.clientHeight || parseInt(getComputedStyle(el).getPropertyValue('height'));
+};
+
 const isEmbedded = () => {
     // 'published' is assumed to be in map container as class when the app is in "embedded mode"
     // publisher functionality sets this to fake it
@@ -111,5 +119,7 @@ export const DOMHelper = {
     getMapContainerEl,
     getMapImplEl,
     isEmbedded,
+    getWidth,
+    getHeight,
     APP_EMBEDDED_CLASS
 };

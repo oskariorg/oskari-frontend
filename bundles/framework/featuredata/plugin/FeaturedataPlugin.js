@@ -110,19 +110,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
         },
         _createEventHandlers: function () {
             return {
-                /**
-                 * @method AfterMapMoveEvent
-                 * Shows map center coordinates after map move
-                 */
+                MapMoveStartEvent: function () {
+                    // reset our own bookkeeping for layer statuses on each map move since we
+                    // can't rely on OpenLayers telling us about each status change
+                    this.handler.updateLoadingStatus({}, false);
+                },
                 AfterMapMoveEvent: function () {
                     this.handler.updateStateAfterMapEvent();
                 },
-                /**
-                 * @method AfterMapLayerAddEvent
-                 * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-                 *
-                 * Calls flyouts layerAdded() method
-                 */
                 AfterMapLayerAddEvent: function (event) {
                     if (event.getMapLayer().hasFeatureData()) {
                         this.handler.updateStateAfterMapEvent();
@@ -160,7 +155,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                     }
                     const layersStillLoading = !!Object.keys(loadingStatus).find(key => loadingStatus[key] && loadingStatus[key] === FEATUREDATA_WFS_STATUS.loading);
                     loadingStatus.loading = layersStillLoading;
-                    this.handler.updateLoadingStatus(loadingStatus);
+                    // wfs status changed -> also update features / columns etc.
+                    this.handler.updateLoadingStatus(loadingStatus, true);
                 }
             };
         }

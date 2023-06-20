@@ -18,7 +18,8 @@ Oskari.registerLocalization({
             print: 'Print',
             search: 'Search',
             reset: 'Reset',
-            copy: 'Copy to clipboard'
+            copy: 'Copy to clipboard',
+            clear: 'Clear'
         },
         messages: {
             confirm: 'Are you sure you want to continue?',

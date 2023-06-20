@@ -140,10 +140,17 @@ const SubGroupList = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts,
 const StyledCollapsePanel = styled(CollapsePanel)`
     > .ant-collapse-content > .ant-collapse-content-box {
         padding: 0px;
+        & > .ant-list {
+            width: 100%;
+        }
     }
     & > div:first-child {
         min-height: 22px;
-    };
+    }
+    & > .ant-collapse-header {
+        flex-direction: row;
+        flex-wrap: wrap !important;
+    }
 `;
 
 const getLayerRowModels = (layers = [], selectedLayerIds = [], controller, opts) => {
@@ -162,7 +169,7 @@ const LayerCollapsePanel = (props) => {
     const { group, selectedLayerIds, openGroupTitles, opts, controller, ...propsNeededForPanel } = props;
     const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
     // set group switch active if all layers in group are selected
-    const allLayersOnMap = layerRows.every(layer => selectedLayerIds.includes(layer.id));
+    const allLayersOnMap = layerRows.length > 0 && layerRows.every(layer => selectedLayerIds.includes(layer.id));
     // Note! Not rendering layerlist/subgroups when the panel is closed is a trade-off for performance
     //   between render as whole vs render when the panel is opened.
     const isPanelOpen = propsNeededForPanel.isActive;

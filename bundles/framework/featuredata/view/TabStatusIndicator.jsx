@@ -4,6 +4,7 @@ import { Spin } from 'oskari-ui';
 import styled from 'styled-components';
 import { getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 import { FEATUREDATA_WFS_STATUS } from './FeatureDataContainer';
+import { SelectByPropertiesFunnel } from './SelectByProperties';
 
 const theme = getHeaderTheme(Oskari.app.getTheming().getTheme());
 
@@ -34,11 +35,16 @@ const TabErrorTitle = styled('div')`
 `;
 
 const TabTitleContainer = styled('div')`
-    color: ${theme.getTextColor()}
+    color: ${theme.getTextColor()};
+    display: flex;
+`;
+
+const TabTitlePadding = styled('div')`
+    padding-right: 1em;
 `;
 
 export const TabTitle = (props) => {
-    const { status, title } = props;
+    const { status, title, active, openSelectByPropertiesPopup } = props;
 
     if (status) {
         if (status === FEATUREDATA_WFS_STATUS.loading) {
@@ -50,10 +56,15 @@ export const TabTitle = (props) => {
         }
     }
 
-    return <TabTitleContainer>{title}</TabTitleContainer>;
+    return <TabTitleContainer>
+        <TabTitlePadding>{title}</TabTitlePadding>
+        <SelectByPropertiesFunnel active={active} openSelectByPropertiesPopup={openSelectByPropertiesPopup}/>
+    </TabTitleContainer>;
 };
 
 TabTitle.propTypes = {
     title: PropTypes.any,
-    status: PropTypes.string
+    status: PropTypes.string,
+    active: PropTypes.bool,
+    openSelectByPropertiesPopup: PropTypes.func
 };

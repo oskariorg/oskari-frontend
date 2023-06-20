@@ -77,6 +77,7 @@ const Title = styled.h3`
     display: inline-block;
     font-size: 16px;
     line-height: 20px;
+    color: ${props => props.theme.getTextColor()};
 `;
 const ToolsContainer = styled.div`
     float: right;
@@ -125,7 +126,7 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
         >
             <FlyoutHeader theme={headerTheme} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
                 <HeaderBand theme={headerTheme}/>
-                <Title className='flyout-title'>{title}</Title>
+                <Title className='flyout-title' theme={headerTheme}>{title}</Title>
                 <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>
                     <CloseIcon onClose={onClose}/>
                 </ToolsContainer>

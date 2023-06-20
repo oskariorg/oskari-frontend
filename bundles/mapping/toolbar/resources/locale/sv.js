@@ -10,7 +10,7 @@ Oskari.registerLocalization(
                 "title": "Gör en länk till kartvyn",
                 "cannot": "Denna kartvy kan inte länkas till. Skapa en ny kartvy och försök igen.",
                 "addMarker": "Visa kartans mittmarkör",
-                "skipInfo": "Visa inte snabbguide"
+                "skipInfo": "Visa inte snabbguiden när länken öppnas"
             },
             "history": {
                 "reset": "Gå tillbaka till standardvyn för kartvyn",

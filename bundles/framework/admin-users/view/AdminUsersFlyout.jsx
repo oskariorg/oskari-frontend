@@ -1,15 +1,11 @@
 import React from 'react';
 import { Tabs, Message } from 'oskari-ui';
-import styled from 'styled-components';
 import { RolesTab } from './RolesTab';
 import { UsersTab } from './UsersTab';
 
-const Content = styled('div')`
-`;
-
-export const AdminUsersFlyout = ({ state, controller, isExternal }) => {
+export const AdminUsersFlyout = ({ state, controller, isExternal = false }) => {
     return (
-        <Content>
+        <div>
             <Tabs
                 activeKey={state.activeTab}
                 onChange={(key) => controller.setActiveTab(key)}
@@ -30,6 +26,6 @@ export const AdminUsersFlyout = ({ state, controller, isExternal }) => {
                     }
                 ]}
             />
-        </Content>
+        </div>
     );
 };

@@ -394,8 +394,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 delete this._hiddenMarkers[id];
             } else {
                 const feature = layerSource.getFeatureById(id);
-                this._hiddenMarkers[id] = feature;
-                layerSource.removeFeature(feature);
+                if (feature) {
+                    this._hiddenMarkers[id] = feature;
+                    layerSource.removeFeature(feature);
+                }
             }
         },
         /**

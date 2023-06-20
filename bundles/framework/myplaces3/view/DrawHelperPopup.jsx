@@ -1,6 +1,7 @@
 import React from 'react';
 import { showPopup, getNavigationDimensions, PLACEMENTS } from 'oskari-ui/components/window';
 import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
+import { Button } from 'oskari-ui';
 import styled from 'styled-components';
 
 const StyledContent = styled('div')`
@@ -8,7 +9,7 @@ const StyledContent = styled('div')`
     width: 300px;
 `;
 
-const PopupContent = ({ description, measurement, onSave, onClose }) => {
+const PopupContent = ({ description, measurement, buttonText, onSave, onClose }) => {
     return (
         <StyledContent>
             <div>
@@ -24,16 +25,25 @@ const PopupContent = ({ description, measurement, onSave, onClose }) => {
                     type='cancel'
                     onClick={onClose}
                 />
-                <PrimaryButton
-                    type='save'
-                    onClick={onSave}
-                />
+                {buttonText ? (
+                    <Button
+                        type='primary'
+                        onClick={onSave}
+                    >
+                        {buttonText}
+                    </Button>
+                ) : (
+                    <PrimaryButton
+                        type='save'
+                        onClick={onSave}
+                    />
+                )}
             </ButtonContainer>
         </StyledContent>
     );
 };
 
-export const showDrawHelperPopup = (title, description, onSave, onClose, measurement) => {
+export const showDrawHelperPopup = (title, description, onSave, onClose, measurement, buttonText) => {
     const dimensions = getNavigationDimensions();
     let placement = PLACEMENTS.BL;
     if (dimensions?.placement === 'right') {
@@ -51,6 +61,7 @@ export const showDrawHelperPopup = (title, description, onSave, onClose, measure
             onSave={onSave}
             onClose={onClose}
             measurement={measurement}
+            buttonText={buttonText}
         />,
         onClose,
         options
@@ -58,7 +69,7 @@ export const showDrawHelperPopup = (title, description, onSave, onClose, measure
 
     return {
         ...controls,
-        update: (updatedDescription, updatedMeasurement) => {
+        update: (updatedDescription, updatedMeasurement, buttonText) => {
             controls.update(
                 title,
                 <PopupContent
@@ -66,6 +77,7 @@ export const showDrawHelperPopup = (title, description, onSave, onClose, measure
                     onSave={onSave}
                     onClose={onClose}
                     measurement={updatedMeasurement}
+                    buttonText={buttonText}
                 />
             )
         }

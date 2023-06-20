@@ -7,6 +7,8 @@ import { EditOutlined } from '@ant-design/icons';
 const Component = styled.div`
     display: flex;
     padding: 5px;
+    max-height: 20vh;
+    overflow-y: auto;
     & ${Select} {
         width: 90%;
         flex-grow: 1;

@@ -167,6 +167,9 @@ Oskari.clazz.define(
             );
 
             sandbox.request(this.instance.getName(), request);
+            if (Oskari.util.isMobile()) {
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Search']);
+            }
         },
 
         _createAlternativeNamesHTMLBlock: function (result) {
