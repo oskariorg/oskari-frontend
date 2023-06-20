@@ -18,6 +18,7 @@ export class AbstractVectorLayer extends AbstractLayer {
         if (this.getStyles().length === 0) {
             return;
         }
+        // select style (defaults to first)
         super.selectStyle(name);
     }
 
@@ -79,7 +80,7 @@ export class AbstractVectorLayer extends AbstractLayer {
 
     removeStyle (name) {
         const styles = this.getStyles();
-        const index = styles.findIndex(s => Number.parseInt(s.getName(), 10) === name);
+        const index = styles.findIndex(s => s.getName() === name);
         if (index !== -1) {
             styles.splice(index, 1);
         }

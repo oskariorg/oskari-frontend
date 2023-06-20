@@ -173,25 +173,37 @@ export class UserStyleService {
         return 'Oskari.mapframework.userstyle.service.UserStyleService';
     }
 
+    _getStyleName(style) {
+        // id is used for VectorStyle name (string)
+        return style?.id.toString();
+    }
+
+    getStyleNamesForLayer (layerId) {
+        return this.getStylesByLayer(layerId).map(style => this._getStyleName(style));
+    }
+
     applyStyleToLayer (style) {
-        const { layerId, id } = style || {};
+        const { layerId } = style || {};
         // Users own styles are loaded (overrides) via DescribeLayer when layer is added first time on the map
         // Find layer from all available to be sure that style is added to layer
         // Note that style is selected only when layer is on the map (is selected)
         const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
         if (layer) {
             layer.addStyle(new VectorStyle(style));
-            layer.selectStyle(id);
-            this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId, id]);
+            const name = this._getStyleName(style);
+            layer.selectStyle(name);
+            // request notifies change if layer is selected
+            this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId, name]);
             this.notifyLayerUpdate(layerId);
         }
     }
 
     removeStyleFromLayer (style) {
-        const { layerId, id } = style || {};
+        const { layerId } = style || {};
         const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
         if (layer) {
-            layer.removeStyle(id);
+            const name = this._getStyleName(style);
+            layer.removeStyle(name);
             this.notifyLayerUpdate(layerId);
         }
     }
