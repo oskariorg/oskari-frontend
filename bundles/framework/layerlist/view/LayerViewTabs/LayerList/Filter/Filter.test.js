@@ -6,7 +6,6 @@ import { Filter } from './Filter';
 import { testFilters } from './Filter.test.util';
 import { Controller, LocaleProvider } from 'oskari-ui/util';
 import { getBundleInstance } from '../../test.util';
-// from https://github.com/ant-design/ant-design/blob/4.3.1/components/select/__tests__/index.test.js
 const SELECT_ELEMENT_TEST_ID = 'select-test-id';
 
 describe('<Filter/>', () => {
