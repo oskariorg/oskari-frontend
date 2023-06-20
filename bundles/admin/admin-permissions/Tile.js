@@ -69,14 +69,14 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Tile',
          * @return {String} localized text for the title of the tile
          */
         getTitle: function () {
-            return this.instance.getLocalization('title');
+            return Oskari.getMsg('admin-permissions', 'title');
         },
         /**
          * @method getDescription
          * @return {String} localized text for the description of the tile
          */
         getDescription: function () {
-            return this.instance.getLocalization('desc');
+            return Oskari.getMsg('admin-permissions', 'desc');
         }
     }, {
         /**

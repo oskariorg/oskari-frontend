@@ -1,3 +1,6 @@
+import './Flyout';
+import './Tile';
+
 /**
  * @class Oskari.admin.bundle.admin-layerrights.AdminLayerRightsBundleInstance
  *

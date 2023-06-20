@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          * @return {String} localized text for the title of the flyout
          */
         getTitle: function () {
-            return this.instance.getLocalization('title');
+            return Oskari.getMsg('admin-permissions', 'title');
         },
 
         /**
@@ -83,7 +83,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          * flyout
          */
         getDescription: function () {
-            return this.instance.getLocalization('desc');
+            return Oskari.getMsg('admin-permissions', 'desc');
         },
 
         /**

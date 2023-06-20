@@ -42,21 +42,6 @@ function() {
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/admin/admin-permissions/instance.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin-permissions/Flyout.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/admin/admin-permissions/Tile.js"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../bundles/admin/admin-permissions/resources/scss/style.scss"
-        }, {
-            "src" : "../../../../libraries/chosen/1.5.1/chosen.jquery.js",
-            "type" : "text/javascript"
-        }, {
-            "src" : "../../../../libraries/chosen/1.5.1/chosen.css",
-            "type" : "text/css"
         }],
 
         "locales" : [{
