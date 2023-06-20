@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { TextInput, Message, Button } from 'oskari-ui';
-import { PrimaryButton, DeleteButton, SecondaryButton } from 'oskari-ui/components/buttons';
+import { TextInput, Message, Divider } from 'oskari-ui';
+import { PrimaryButton } from 'oskari-ui/components/buttons';
+import { RoleBlock } from './RoleBlock';
 import styled from 'styled-components';
-import { EditOutlined } from '@ant-design/icons';
 
 const Content = styled('div')`
     display: flex;
@@ -27,54 +27,6 @@ const StyledInput = styled(TextInput)`
     width: 210px;
 `;
 
-const RoleBlock = styled('div')`
-    display: flex;
-    flex-direction: row;
-    border: 1px solid #999;
-    min-height: 50px;
-    align-items: center;
-    padding: 0 5px;
-    justify-content: space-between;
-    font-size: 16px;
-    background-color: #F3F3F3;
-`;
-
-const ButtonContainer = styled('div')`
-    display: flex;
-    flex-direction: row;
-`;
-
-const RoleButtons = ({ role, state, controller }) => {
-    return (
-        <ButtonContainer>
-            {state.editingRole && state.editingRole.id === role.id ? (
-                <div>
-                    <PrimaryButton
-                        type='save'
-                        onClick={() => controller.updateRole(state.editingRole)}
-                    />
-                    <SecondaryButton
-                        type='cancel'
-                        onClick={() => controller.setEditingRole(null)}
-                    />
-                </div>
-            ) : (
-                <Button
-                    type='edit'
-                    onClick={() => controller.setEditingRole(role)}
-                >
-                    <EditOutlined />
-                </Button>
-            )}
-            <DeleteButton
-                type='button'
-                title={<Message messageKey='flyout.adminroles.confirm_delete' messageArgs={{ role: role.name }} />}
-                onConfirm={() => controller.deleteRole(role.id)}
-            />
-        </ButtonContainer>
-    );
-};
-
 export const RolesTab = ({ state, controller }) => {
     const [roleName, setRoleName] = useState('');
     const [status, setStatus] = useState('');
@@ -88,10 +40,12 @@ export const RolesTab = ({ state, controller }) => {
         // TODO: clear roleName or move back to handler state
     }
     const { roles, editingRole } = state;
+    const systemRoles = roles.filter(role => role.systemRole === true);
+    const otherRoles = roles.filter(role => role.systemRole === false);
     return (
         <Content>
             <Form>
-                <span><Message messageKey='flyout.adminroles.newrole' /></span>
+                <Message messageKey='flyout.adminroles.newrole' />
                 <StyledInput
                     value={roleName}
                     onChange={(e) => setRoleName(e.target.value)}
@@ -102,22 +56,10 @@ export const RolesTab = ({ state, controller }) => {
                     onClick={() => addRole()}
                 />
             </Form>
-            {roles.map(role => (
-                <RoleBlock key={role.id}>
-                    {editingRole && editingRole.id === role.id ? (
-                        <StyledInput
-                            value={editingRole.name}
-                            onChange={(e) => controller.updateEditingRole('name', e.target.value)}
-                            status={editingRole.status}
-                        />
-                    ) : (
-                        <span>{role.name}</span>
-                    )}
-                    {!role.systemRole && (
-                        <RoleButtons role={role} state={state} controller={controller} />
-                    )}
-                </RoleBlock>
-            ))}
+            <Divider orientation="left"><Message messageKey="flyout.adminroles.roles.system"/></Divider>
+            { systemRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} isSystemRole/>) }
+            <Divider orientation="left"><Message messageKey="flyout.adminroles.roles.other"/></Divider>
+            { otherRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} editingRole={editingRole}/>) }
         </Content>
     );
 };
