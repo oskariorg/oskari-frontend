@@ -44,7 +44,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Tile',
          */
         startPlugin: function () {
             this._addTileStyleClasses();
-            this.refresh();
         },
         _addTileStyleClasses: function () {
             var isContainer = !!((this.container && this.instance.mediator));
@@ -78,29 +77,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Tile',
          */
         getDescription: function () {
             return this.instance.getLocalization('desc');
-        },
-        /**
-         * @method getOptions
-         * Interface method implementation, does nothing atm
-         */
-        getOptions: function () {
-
-        },
-        /**
-         * @method setState
-         * @param {Object} state
-         *      state that this component should use
-         * Interface method implementation, does nothing atm
-         */
-        setState: function (state) {
-
-        },
-        /**
-         * @method refresh
-         * Creates the UI for a fresh start
-         */
-        refresh: function () {
-
         }
     }, {
         /**

@@ -17,7 +17,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
-        this.localization = null;
         this.service = null;
     }, {
 
@@ -53,29 +52,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
         },
 
         /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for
-         * current language.
-         * If key-parameter is not given, returns the whole localization
-         * data.
-         *
-         * @param {String} key (optional) if given, returns the value for
-         *         key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
-            if (key) {
-                return this._localization[key];
-            }
-            return this._localization;
-        },
-
-        /**
          * @method start
          * implements BundleInstance protocol start methdod
          */
@@ -93,8 +69,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
 
             me.sandbox = sandbox;
 
-            me.localization = Oskari.getLocalization(me.getName());
-
             sandbox.register(me);
             for (var p in me.eventHandlers) {
                 sandbox.registerForEventByName(me, p);
@@ -105,8 +79,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
                 reqBuilder = Oskari.requestBuilder(reqName),
                 request = reqBuilder(this);
             sandbox.request(this, request);
-
-            sandbox.registerAsStateful(me.mediator.bundleId, this);
 
             // draw ui
             me.createUi();
@@ -130,30 +102,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
         },
 
         /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event
-         * object
-         * Event is handled forwarded to correct #eventHandlers if found
-         * or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) { return; }
-
-            return handler.apply(this, [event]);
-        },
-
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            'RoleChangedEvent': function (event) {
-                this.plugins['Oskari.userinterface.Flyout'].handleRoleChange(event.getRole(), event.getOperation());
-            }
-        },
-
-        /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
@@ -169,7 +117,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
 
             sandbox.request(me, reqBuilder(me));
 
-            me.sandbox.unregisterStateful(me.mediator.bundleId);
             me.sandbox.unregister(me);
             me.started = false;
         },
@@ -215,7 +162,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('title');
+            return Oskari.getMsg('admin-permissions', 'title');
         },
 
         /**
@@ -224,7 +171,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          * component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return Oskari.getMsg('admin-permissions', 'desc');
         },
 
         /**
@@ -234,23 +181,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
         createUi: function () {
             var me = this;
             me.plugins['Oskari.userinterface.Flyout'].setContent();
-            me.plugins['Oskari.userinterface.Tile'].refresh();
-        },
-
-        /**
-         * @method setState
-         * @param {Object} state bundle state as JSON
-         */
-        setState: function (state) {
-            this.plugins['Oskari.userinterface.Flyout'].setState(state);
-        },
-
-        /**
-         * @method getState
-         * @return {Object} bundle state as JSON
-         */
-        getState: function () {
-            return this.plugins['Oskari.userinterface.Flyout'].getState();
         }
     }, {
 

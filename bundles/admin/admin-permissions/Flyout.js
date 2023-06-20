@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
     function (instance) {
         var me = this;
         me.instance = instance;
-        me.state = null;
         me.handler = null;
     }, {
         /**
@@ -85,33 +84,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          */
         getDescription: function () {
             return this.instance.getLocalization('desc');
-        },
-
-        /**
-         * @method getOptions
-         * Interface method implementation, does nothing atm
-         */
-        getOptions: function () {
-
-        },
-
-        /**
-         * @method setState
-         * @param {Object} state
-         */
-        setState: function (state) {
-            this.state = state;
-        },
-
-        /**
-         * @method getState
-         * @return {Object} state
-         */
-        getState: function () {
-            if (!this.state) {
-                return {};
-            }
-            return this.state;
         },
 
         /**

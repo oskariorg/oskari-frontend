@@ -9,7 +9,7 @@ class UIHandler extends StateHandler {
             permissions: [],
             selectedRole: 0,
             loading: false,
-            changedIds: []
+            changedIds: new Set()
         });
         this.addStateListener(consumer);
         this.fetchRoles();
@@ -28,7 +28,7 @@ class UIHandler extends StateHandler {
         } else {
             this.updateState({
                 permissions: [],
-                changedIds: []
+                changedIds: new Set()
             });
         }
     }
@@ -41,7 +41,7 @@ class UIHandler extends StateHandler {
 
     async fetchRoles () {
         try {
-            const response = await fetch(Oskari.urls.buildUrl(Oskari.urls.getRoute('GetAllRoles'), {
+            const response = await fetch(Oskari.urls.getRoute('GetAllRoles', {
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 getExternalIds: 'ROLE'
@@ -72,7 +72,7 @@ class UIHandler extends StateHandler {
     async fetchPermissions () {
         try {
             this.setLoading(true);
-            const response = await fetch(Oskari.urls.buildUrl(Oskari.urls.getRoute('GetPermissionsLayerHandlers'), {
+            const response = await fetch(Oskari.urls.getRoute('GetPermissionsLayerHandlers', {
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 externalType: 'ROLE',
@@ -89,14 +89,14 @@ class UIHandler extends StateHandler {
             const result = await response.json();
             this.updateState({
                 permissions: result,
-                changedIds: []
+                changedIds: new Set()
             });
             this.setLoading(false);
         } catch (e) {
             Messaging.error(Oskari.getMsg('admin-permissions', 'rights.error.title'));
             this.updateState({
                 permissions: [],
-                changedIds: []
+                changedIds: new Set()
             });
             this.setLoading(false);
         }
@@ -105,7 +105,13 @@ class UIHandler extends StateHandler {
     async savePermissions () {
         try {
             this.setLoading(true);
-            let changedPermissions = this.state.changedIds.map(id => ({ ...this.state.permissions?.resource.find(p => p.id === id), roleId: this.state.selectedRole }));
+            const changedPermissions = [];
+            for (const changed of this.state.changedIds) {
+                changedPermissions.push({
+                    ...this.state.permissions?.resource.find(p => p.id === changed),
+                    roleId: this.state.selectedRole
+                });
+            }
             for (let perm of changedPermissions) {
                 perm.permissions = perm.permissions.map(p => ({ key: p.id, value: p.allow }));
             }
@@ -132,7 +138,7 @@ class UIHandler extends StateHandler {
         } catch (e) {
             Messaging.error(Oskari.getMsg('admin-permissions', 'rights.error.message'));
             this.updateState({
-                changedIds: []
+                changedIds: new Set()
             });
             this.setLoading(false);
         }
@@ -146,9 +152,9 @@ class UIHandler extends StateHandler {
         this.updateState({
             permissions: {
                 ...this.state.permissions,
-                resource: permissions
-            },
-            changedIds: [...this.state.changedIds, id]
+                resource: permissions,
+                changedIds: new Set(this.state.changedIds).add(id)
+            }
         });
     }
 
