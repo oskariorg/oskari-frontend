@@ -131,12 +131,23 @@ class UIHandler extends StateHandler {
             });
         }
     }
+
+    async showUsersByRole (roleId) {
+        const tab = 'admin-users-by-role-tab';
+        if (this.state.activeTab !== tab) {
+            this.setActiveTab(tab);
+        }
+        this.updateState({ usersByRole: { roleId } });
+        const users = await this.fetchUsersByRole(roleId);
+        this.updateState({ usersByRole: { users, roleId } });
+    }
+
+    async getUserCountByRole (roleId) {
+        const users = await this.fetchUsersByRole(roleId);
+        return users.length;
+    }
+
     async fetchUsersByRole (roleId) {
-        const usersByRole = {
-            roleId,
-            users: []
-        };
-        this.updateState({ usersByRole });
         try {
             const response = await fetch(Oskari.urls.buildUrl(this.restUrl, {
                 roleId
@@ -150,10 +161,10 @@ class UIHandler extends StateHandler {
                 throw new Error(response.statusText);
             }
             const { users } = await response.json();
-            this.updateState({ usersByRole: { users, roleId } });
+            return users;
         } catch (e) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.fetch_failed'));
-            this.updateState({ usersByRole });
+            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.usersByRole.fetchFailed'));
+            return [];
         }
     }
 
@@ -422,7 +433,8 @@ const wrapped = controllerMixin(UIHandler, [
     'setEditingRole',
     'updateRole',
     'updateEditingRole',
-    'fetchUsersByRole'
+    'showUsersByRole',
+    'getUserCountByRole'
 ]);
 
 export { wrapped as AdminUsersHandler };
