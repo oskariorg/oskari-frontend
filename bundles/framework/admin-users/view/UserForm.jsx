@@ -54,11 +54,11 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
     return (
         <Content>
             {FIELDS.map(field =>
-                <UserField field={field} controller={controller} readonly={isExternal}
+                <UserField key={field} field={field} controller={controller} readonly={isExternal}
                     value={userFormState[field]} error={errors.includes(field)}/>
             )}
             {!isExternal && PASS_FIELDS.map(field =>
-                <UserField field={field} controller={controller} mandatory={passwordRequired} type='password'
+                <UserField key={field} field={field} controller={controller} mandatory={passwordRequired} type='password'
                     value={userFormState[field]} error={errors.includes(field)}/>
             )}
             <LabelledField>
