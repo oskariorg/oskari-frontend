@@ -2,6 +2,7 @@ Oskari.registerLocalization({
     "lang": "en",
     "key": "catalogue.bundle.metadatasearch",
     "value": {
+        "tabTitle": "Metadata Search",
         "title": "Metadata",
         "grid": {
             "name": "Name",

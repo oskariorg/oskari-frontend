@@ -2,6 +2,7 @@ Oskari.registerLocalization({
     "lang": "fi",
     "key": "catalogue.bundle.metadatasearch",
     "value": {
+        "tabTitle": "Metatietohaku",
         "title": "Metatieto",
         "grid": {
             "name": "Nimi",

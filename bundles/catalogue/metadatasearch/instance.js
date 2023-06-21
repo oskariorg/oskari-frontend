@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { MetadataSearchContainer } from './view/MetadataSearchContainer';
+
 /**
  * @class Oskari.mapframework.bundle.metadatasearch.MetadataSearchBundleInstance
  *
@@ -7,6 +11,7 @@
  * See Oskari.mapframework.bundle.metadatasearch.MetadataCatalogueBundle for bundle definition.
  *
  */
+const METADATA_BUNDLE_LOCALIZATION_ID = 'catalogue.bundle.metadatasearch';
 Oskari.clazz.define(
     'Oskari.catalogue.bundle.metadatasearch.MetadataSearchBundleInstance',
 
@@ -427,166 +432,19 @@ Oskari.clazz.define(
          * (re)creates the UI for "metadata catalogue" functionality
          */
         createUi: function () {
-            var me = this;
-            me.metadataCatalogueContainer = me.templates.metadataTab.clone();
-            me.optionPanel = me.templates.optionPanel.clone();
-            me.searchPanel = me.templates.searchPanel.clone();
-            me.resultPanel = me.templates.resultPanel.clone();
-            me.metadataCatalogueContainer.append(me.optionPanel);
-            me.metadataCatalogueContainer.append(me.searchPanel);
-            me.metadataCatalogueContainer.append(me.resultPanel);
-            me.searchPanel.hide();
-            me.searchPanel.append(me.loc('searching'));
-            me.resultPanel.hide();
-
-            me.progressSpinner.insertTo(me.metadataCatalogueContainer);
-
-            var metadataCatalogueDescription = me.metadataCatalogueContainer.find(
-                'div.metadataCatalogueDescription'
-            );
-            metadataCatalogueDescription.html(
-                me.loc('metadataCatalogueDescription')
-            );
-
-            var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
-            field.setPlaceholder(me.loc('assistance'));
-            field.setIds('oskari_metadatacatalogue_forminput', 'oskari_metadatacatalogue_forminput_searchassistance');
-
-            field.bindChange(function (event) {
-                if (me.state === null) {
-                    me.state = {};
-                }
-                var value = field.getValue();
-                me.state.metadatacataloguetext = value;
-                if (!value) {
-                    // remove results when field is emptied
-                    var resultList = me.metadataCatalogueContainer.find('div.resultList');
-                    resultList.empty();
-                }
-            });
-            field.addClearButton('oskari_metadatacatalogue_forminput_clearbutton');
-
-            var button = Oskari.clazz.create(
-                'Oskari.userinterface.component.buttons.SearchButton'
-            );
-            button.setId('oskari_metadatacatalogue_button_search');
-
-            var doMetadataCatalogue = function () {
-                me.progressSpinner.start();
-                me._removeFeaturesFromMap();
-                me.metadataCatalogueContainer.find('.metadataOptions').hide();
-                me.metadataCatalogueContainer.find('.metadataSearching').show();
-                var search = {
-                    search: field.getValue().trim()
-                };
-                var isAdvancedSearch = false;
-                // Collect the advanced search options
-                if (moreLessLink.html() === me.loc('showLess')) {
-                    isAdvancedSearch = true;
-                    // Checkboxes
-                    var checkboxRows = me.metadataCatalogueContainer.find('.checkboxRow'),
-                        i,
-                        checkboxDefs,
-                        values,
-                        j,
-                        checkboxDef,
-                        dropdownDef,
-                        dropdownRows;
-                    for (i = 0; i < checkboxRows.length; i += 1) {
-                        checkboxDefs = jQuery(checkboxRows[i]).find('.metadataMultiDef');
-                        if (checkboxDefs.length === 0) {
-                            continue;
-                        }
-                        values = [];
-                        for (j = 0; j < checkboxDefs.length; j += 1) {
-                            checkboxDef = jQuery(checkboxDefs[j]);
-                            if (checkboxDef.is(':checked')) {
-                                values.push(checkboxDef.val());
-                            }
-                        }
-                        search[jQuery(checkboxDefs[0]).attr('name')] = values.join();
-                    }
-                    // Dropdown lists
-                    dropdownRows = me.metadataCatalogueContainer.find('.dropdownRow');
-                    for (i = 0; i < dropdownRows.length; i += 1) {
-                        dropdownDef = jQuery(dropdownRows[i]).find('.metadataDef');
-                        search[dropdownDef.attr('name')] = dropdownDef.find(':selected').val();
-                    }
-                    // Coverage geometry
-                    if (me.coverageButton && me.coverageButton[0] && me.coverageButton[0].data) {
-                        search[me.coverageButton.attr('name')] = me.coverageButton[0].data;
-                    }
-                }
-                me.lastSearch = field.getValue();
-
-                // Check if any search fields has values, otherwise it's useless to send post request
-                var doSearch = false;
-
-                jQuery.each(search, function (key, value) {
-                    doSearch = value ? true : doSearch;
-                });
-                if (doSearch) {
-                    me.searchService.doSearch(search);
-                } else {
-                    if (isAdvancedSearch) {
-                        me._showError(me.loc('no_search_selections'));
-                    } else {
-                        me._showError(me.loc('cannot_be_empty'));
-                    }
-                }
-            };
-
-            button.setHandler(doMetadataCatalogue);
-            field.bindEnterKey(doMetadataCatalogue);
-
-            var controls = me.metadataCatalogueContainer.find('div.controls');
-            controls.append(field.getField());
-            controls.append(button.getElement());
-
             // Metadata catalogue tab
+            const title = Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'tabTitle');
+            const content = document.createElement('div');
+            ReactDOM.render(<MetadataSearchContainer/>, content);
+            const priority = this.tabPriority;
+            const reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
 
-            var title = me.loc('tabTitle'),
-                content = me.metadataCatalogueContainer,
-                priority = this.tabPriority,
-                reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
             if (typeof reqBuilder === 'function') {
-                me.sandbox.request(me, reqBuilder(title, content, priority, this.id));
+                this.sandbox.request(this, reqBuilder(title, content, priority, this.id));
             } else {
                 // add a tile and flyout if search is not present on the appsetup
                 this.__addTileAndFlyout();
             }
-
-            // Link to advanced search
-            var moreLessLink = this.templates.moreLessLink.clone();
-            moreLessLink.html(me.loc('showMore'));
-            moreLessLink.on('click', function () {
-                var advancedContainer = me.metadataCatalogueContainer.find('div.advanced');
-                if (moreLessLink.html() === me.loc('showMore')) {
-                    if (advancedContainer.is(':empty')) {
-                        me.optionService.getOptions(function (data) {
-                            // open advanced/toggle link text
-                            moreLessLink.html(me.loc('showLess'));
-                            me._createAdvancedPanel(data, advancedContainer, moreLessLink);
-                        }, function (data) {
-                            // don't toggle link text on error
-                            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            var okBtn = dialog.createCloseButton('OK');
-                            var title = me.loc('metadataoptionservice_alert_title');
-                            var msg = me.loc('metadataoptionservice_not_found_anything_text');
-                            dialog.show(title, msg, [okBtn]);
-                        });
-                    } else {
-                        // open advanced/toggle link text
-                        moreLessLink.html(me.loc('showLess'));
-                        advancedContainer.show();
-                    }
-                } else {
-                    // close advanced/toggle link text
-                    moreLessLink.html(me.loc('showMore'));
-                    advancedContainer.hide();
-                }
-            });
-            me.metadataCatalogueContainer.find('div.moreLess').append(moreLessLink);
         },
 
         /* ----------- Tile and Flyout ------------- */
