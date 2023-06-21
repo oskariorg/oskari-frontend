@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
-import { Message, Divider } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import { PrimaryButton } from 'oskari-ui/components/buttons';
 import { RoleBlock } from './RoleBlock';
 import styled from 'styled-components';
-import { Content, StyledInput } from './styled';
+import { Content, LabelledField, StyledInput, StyledLabel } from './styled';
 
-const Form = styled('div')`
-    display: flex;
-    flex-direction: row;
+const Margin = styled.div`
     margin-bottom: 20px;
-    align-self: flex-end;
-    align-items: center;
 `;
 
 const AddButton = styled(PrimaryButton)`
-    margin-left: 15px;
+    margin-left: 10px;
 `;
 
 export const RolesTab = ({ state, controller }) => {
@@ -34,8 +30,8 @@ export const RolesTab = ({ state, controller }) => {
     const otherRoles = roles.filter(role => role.systemRole === false);
     return (
         <Content>
-            <Form>
-                <Message messageKey='roles.new' />
+            <LabelledField>
+                <StyledLabel><Message messageKey='roles.new' /></StyledLabel>
                 <StyledInput
                     value={roleName}
                     onChange={(e) => setRoleName(e.target.value)}
@@ -45,10 +41,10 @@ export const RolesTab = ({ state, controller }) => {
                     type='add'
                     onClick={() => addRole()}
                 />
-            </Form>
-            <Divider orientation="left"><Message messageKey="roles.types.system"/></Divider>
+            </LabelledField>
+            <Margin />
             { systemRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} isSystemRole/>) }
-            <Divider orientation="left"><Message messageKey="roles.types.other"/></Divider>
+            <Margin />
             { otherRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} editingRole={editingRole}/>) }
         </Content>
     );

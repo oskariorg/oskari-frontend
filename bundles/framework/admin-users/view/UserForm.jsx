@@ -3,7 +3,7 @@ import { Message, Label, Select } from 'oskari-ui';
 import { PrimaryButton, SecondaryButton, DeleteButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { UserField } from './UserField';
-import { Content, LabelledField } from './styled';
+import { Content, LabelledField, StyledLabel } from './styled';
 
 const StyledSelect = styled(Select)`
     width: 210px;
@@ -34,7 +34,7 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
                     value={userFormState[field]} error={errors.includes(field)}/>
             )}
             <LabelledField>
-                <Label><Message messageKey='users.addRole' /></Label>
+                <StyledLabel><Message messageKey='users.addRole' /></StyledLabel>
                 <StyledSelect
                     className='t_roles'
                     mode='multiple'
@@ -59,7 +59,7 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
                     type='cancel'
                     onClick={() => controller.closeUserForm()}
                 />
-                {(isExternal) && (
+                {(!isExternal) && (
                     <DeleteButton
                         type='label'
                         onConfirm={() => controller.deleteUser(id)}

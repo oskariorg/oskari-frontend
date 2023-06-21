@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TextInput } from 'oskari-ui';
+import { TextInput, Label } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 
 export const Content = styled.div`
@@ -33,9 +33,13 @@ export const LabelledField = styled.div`
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 5px;
+    align-items: center;
+`;
+
+export const StyledLabel = styled(Label)`
+    margin-right: 10px;
 `;
 
 export const StyledInput = styled(TextInput)`
-    margin-left: 10px;
     width: 210px;
 `;
