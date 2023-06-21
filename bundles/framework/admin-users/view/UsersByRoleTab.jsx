@@ -19,22 +19,24 @@ const UserBlock = styled('div')`
     background-color: #F3F3F3;
 `;
 
+const StyledSelect = styled(Select)`
+    margin-bottom: 20px;
+`;
+
 export const UsersByRoleTab = ({ state, controller }) => {
     const { usersByRole, roles } = state;
-    console.log(roles);
     const { users = [], roleId } = usersByRole;
-    const roleName = roles.find(r => r.id === roleId)?.name || '';
 
     const roleOptions = roles.map(role => ({
         label: role.name,
         value: role.id
     }));
-
+    const showNoUsers = roleId && users.length === 0;
     return (
         <Content>
-            <Select
+            <StyledSelect
                 className='t_roles'
-                onChange={(value) => console.log(value)}
+                onChange={(value) => controller.showUsersByRole(value)}
                 defaultValue={roleId}
                 options={roleOptions}/>
             {users.map(item => {
@@ -45,7 +47,8 @@ export const UsersByRoleTab = ({ state, controller }) => {
                         <span>{user}{details}</span>
                     </UserBlock>
                 )})
-            }       
+            }
+            {showNoUsers && <Message messageKey='flyout.usersByRole.noUsers' />}
         </Content>
     );
 };
