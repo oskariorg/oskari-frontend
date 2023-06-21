@@ -187,20 +187,24 @@ class UIHandler extends StateHandler {
             email: '',
             password: '',
             rePassword: '',
-            roles: []
+            roles: [],
+            errors: []
         };
     }
 
     validateUserForm () {
         if (this.isExternal) {
             this.updateUserFormState('errors', errors);
+            return;
         }
 
-        const { id, roles, errors: ignore, password, rePassword, ...fields } = this.state.userFormState;
+        const { id, errors: ignore, password, rePassword, ...fields } = this.state.userFormState;
         const errors = [];
 
         Object.keys(fields).forEach(key => {
-            if (!fields[key]) {
+            const field = fields[key];
+            // String or Array (roles)
+            if (!field || field.length === 0) {
                 errors.push(key);
             }
         });
@@ -210,6 +214,9 @@ class UIHandler extends StateHandler {
             const { length } = this.passwordRequirements;
             if (password.length < length) {
                 errors.push('password');
+            }
+            if (rePassword.length < length) {
+                errors.push('rePassword');
             }
             if (password !== rePassword) {
                 errors.push('rePassword');
