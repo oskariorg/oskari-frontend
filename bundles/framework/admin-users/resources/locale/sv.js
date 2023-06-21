@@ -43,10 +43,16 @@ Oskari.registerLocalization(
                 "confirm_delete": "Vill du säkert ta bort rollen {role}?",
                 "delete_failed": "Kunde inte tas bort.",
                 "doSave_failed": "Lagring av en ny roll misslyckades.",
+                "showUsers": "",
                 "roles": {
-                    "system": "Roller",
-                    "other": "Roller"
+                    "system": "",
+                    "other": ""
                 }
+            },
+            "usersByRole": {
+                "title": "",
+                "fetchFailed": "",
+                "noUsers": ""
             }
         },
         "save": "Lagra",

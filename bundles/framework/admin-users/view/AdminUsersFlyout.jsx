@@ -27,7 +27,7 @@ export const AdminUsersFlyout = ({ state, controller, isExternal = false }) => {
                     },
                     {
                         key: 'admin-users-by-role-tab',
-                        label: <Message messageKey='flyout.adminusers.title' />,
+                        label: <Message messageKey='flyout.usersByRole.title' />,
                         children: (
                             <UsersByRoleTab state={state} controller={controller} />
                         )

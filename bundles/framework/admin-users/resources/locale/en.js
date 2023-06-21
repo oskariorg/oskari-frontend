@@ -43,10 +43,16 @@ Oskari.registerLocalization(
                 "confirm_delete": "Are you sure you wish to delete role {role}?",
                 "delete_failed": "The user could not be deleted.",
                 "doSave_failed": "The new role could not be saved.",
+                "showUsers": "Show users",
                 "roles": {
                     "system": "System roles",
                     "other": "Additional roles"
                 }
+            },
+            "usersByRole": {
+                "title": "Users by role",
+                "fetchFailed": "Users could not be fetched for the role.",
+                "noUsers": "The role doesn't have any users."
             }
         },
         "save": "save",

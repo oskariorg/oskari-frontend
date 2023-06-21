@@ -43,10 +43,16 @@ Oskari.registerLocalization(
                 "confirm_delete": "Haluatko varmasti poistaa roolin {role}?",
                 "delete_failed": "Käyttäjän poistaminen epäonnistui.",
                 "doSave_failed": "Roolin tallennus epäonnistui.",
+                "showUsers": "Näytä käyttäjät",
                 "roles": {
                     "system": "Järjestelmäroolit",
                     "other": "Lisäroolit"
                 }
+            },
+            "usersByRole": {
+                "title": "Roolin käyttäjät",
+                "fetchFailed": "Käyttäjien tietoja ei voitu hakea roolille.",
+                "noUsers": "Roolilla ei ole yhtään käyttäjää."
             }
         },
         "save": "tallenna",
