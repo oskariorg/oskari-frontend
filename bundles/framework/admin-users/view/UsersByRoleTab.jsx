@@ -37,6 +37,7 @@ export const UsersByRoleTab = ({ state, controller }) => {
             <StyledSelect
                 className='t_roles'
                 onChange={(value) => controller.showUsersByRole(value)}
+                placeholder={<Message messageKey='flyout.usersByRole.selectRole' />}
                 defaultValue={roleId}
                 options={roleOptions}/>
             {users.map(item => {
