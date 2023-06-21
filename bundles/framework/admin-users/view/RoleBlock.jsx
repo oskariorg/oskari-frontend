@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextInput } from 'oskari-ui';
+import { TextInput, Message } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
+import { UserOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const Content = styled('div')`
@@ -52,6 +53,10 @@ export const RoleBlock = ({ role, controller, isSystemRole, editingRole }) => {
         <Content>
             <span>{name}</span>
             <ButtonContainer>
+                <Button
+                    icon={<UserOutlined />}
+                    title={<Message messageKey='flyout.adminroles.showUsers'/>}
+                    onClick={() => controller.showUsersByRole(id)} />
                 <Button type='edit' onClick={() => controller.setEditingRole(role)} />
                 <Button type='delete' onConfirm={() => controller.deleteRole(id)} />
             </ButtonContainer>
