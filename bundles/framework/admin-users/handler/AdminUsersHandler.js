@@ -96,7 +96,7 @@ class UIHandler extends StateHandler {
                 }
             });
         } catch (e) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.fetch_failed'));
+            Messaging.error(Oskari.getMsg('AdminUsers', 'users.errors.fetch'));
             this.updateState({
                 users: []
             });
@@ -104,6 +104,7 @@ class UIHandler extends StateHandler {
     }
 
     async fetchRoles () {
+        console.log(this.passwordRequirements);
         try {
             const response = await fetch(Oskari.urls.getRoute('ManageRoles'), {
                 method: 'GET',
@@ -125,7 +126,7 @@ class UIHandler extends StateHandler {
             }
             this.updateState({ roles });
         } catch (e) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'failed_to_get_roles_title'));
+            Messaging.error(Oskari.getMsg('AdminUsers', 'roles.errors.fetch'));
             this.updateState({
                 roles: []
             });
@@ -163,7 +164,7 @@ class UIHandler extends StateHandler {
             const { users } = await response.json();
             return users;
         } catch (e) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.usersByRole.fetchFailed'));
+            Messaging.error(Oskari.getMsg('AdminUsers', 'usersByRole.errors.fetch'));
             return [];
         }
     }
@@ -258,12 +259,12 @@ class UIHandler extends StateHandler {
             }
             if (password !== rePassword) {
                 errors.push('rePassword');
-                Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.password_mismatch'));
+                Messaging.error(Oskari.getMsg('AdminUsers', 'users.passwordRequirements.mismatch'));
             }
         }
 
         if (errors.length > 0) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.form_invalid'));
+            Messaging.error(Oskari.getMsg('AdminUsers', 'users.errors.form'));
         }
         this.updateUserFormState('errors', errors);
     }
@@ -295,12 +296,12 @@ class UIHandler extends StateHandler {
             this.fetchUsers();
         } catch (e) {
             if (e.message === 'Password too weak') {
-                let error = `${Oskari.getMsg('AdminUsers', 'flyout.adminusers.passwordRequirements.title')}`;
+                let error = `${Oskari.getMsg('AdminUsers', 'users.passwordRequirements.title')}`;
                 Object.keys(this.passwordRequirements).forEach((key, index) => {
                     if (key === 'length') {
-                        error += `${Oskari.getMsg('AdminUsers', 'flyout.adminusers.passwordRequirements.length', { length: this.passwordRequirements[key] })}`;
+                        error += `${Oskari.getMsg('AdminUsers', 'users.passwordRequirements.length', { length: this.passwordRequirements[key] })}`;
                     } else {
-                        error += `${Oskari.getMsg('AdminUsers', `flyout.adminusers.passwordRequirements.${key}`)}`;
+                        error += `${Oskari.getMsg('AdminUsers', `users.passwordRequirements.${key}`)}`;
                     }
                     if ((index + 1) < Object.keys(this.passwordRequirements).length) {
                         error += ', ';
@@ -309,7 +310,7 @@ class UIHandler extends StateHandler {
                 Messaging.error(error);
                 this.updateUserFormState('errors', ['password']);
             } else {
-                Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.save_failed'));
+                Messaging.error(Oskari.getMsg('AdminUsers', 'users.errors.save'));
             }
         }
     }
@@ -325,13 +326,13 @@ class UIHandler extends StateHandler {
             this.fetchUsers();
             this.closeUserForm();
         } catch (e) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.delete_failed'));
+            Messaging.error(Oskari.getMsg('AdminUsers', 'users.errors.delete'));
         }
     }
 
     async addRole (name) {
         if (!name) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.form_invalid'));
+            Messaging.error(Oskari.getMsg('AdminUsers', 'roles.errors.form'));
             return;
         }
         try {
@@ -347,14 +348,14 @@ class UIHandler extends StateHandler {
             }
             this.fetchRoles();
         } catch (e) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminroles.doSave_failed'));
+            Messaging.error(Oskari.getMsg('AdminUsers', 'roles.errors.save'));
         }
     }
 
     async updateRole () {
         const { id, name } = this.state.editingRole || {};
         if (!id || !name) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.form_invalid'));
+            Messaging.error(Oskari.getMsg('AdminUsers', 'roles.errors.form'));
             this.updateEditingRole('status', 'error');
             return;
         }
@@ -372,7 +373,7 @@ class UIHandler extends StateHandler {
             this.fetchRoles();
             this.setEditingRole(null);
         } catch (e) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminroles.doSave_failed'));
+            Messaging.error(Oskari.getMsg('AdminUsers', 'roles.errors.save'));
         }
     }
 
@@ -387,7 +388,7 @@ class UIHandler extends StateHandler {
             this.fetchRoles();
             this.setEditingRole(null);
         } catch (e) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminroles.delete_failed'));
+            Messaging.error(Oskari.getMsg('AdminUsers', 'roles.errors.delete'));
         }
     }
 

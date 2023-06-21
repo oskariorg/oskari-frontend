@@ -55,7 +55,7 @@ export const RoleBlock = ({ role, controller, isSystemRole, editingRole }) => {
             <ButtonContainer>
                 <Button
                     icon={<UserOutlined />}
-                    title={<Message messageKey='flyout.adminroles.showUsers'/>}
+                    title={<Message messageKey='roles.showUsers'/>}
                     onClick={() => controller.showUsersByRole(id)} />
                 <Button type='edit' onClick={() => controller.setEditingRole(role)} />
                 <Button type='delete' onConfirm={() => controller.deleteRole(id)} />

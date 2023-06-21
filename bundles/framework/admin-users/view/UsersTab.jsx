@@ -80,7 +80,7 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                 )}
             </SearchContainer>
             {userPagination.search && (
-                <SearchText><Message messageKey='flyout.adminusers.searchResults' /> ("{userPagination.search}"):</SearchText>
+                <SearchText><Message messageKey='users.searchResults' /> ("{userPagination.search}"):</SearchText>
             )}
             {users.map(item => {
                 const { id, user, firstName, lastName } = item;

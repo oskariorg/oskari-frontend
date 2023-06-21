@@ -37,7 +37,7 @@ export const UsersByRoleTab = ({ state, controller }) => {
             <StyledSelect
                 className='t_roles'
                 onChange={(value) => controller.showUsersByRole(value)}
-                placeholder={<Message messageKey='flyout.usersByRole.selectRole' />}
+                placeholder={<Message messageKey='usersByRole.selectRole' />}
                 defaultValue={roleId}
                 options={roleOptions}/>
             {users.map(item => {
@@ -49,7 +49,7 @@ export const UsersByRoleTab = ({ state, controller }) => {
                     </UserBlock>
                 )})
             }
-            {showNoUsers && <Message messageKey='flyout.usersByRole.noUsers' />}
+            {showNoUsers && <Message messageKey='usersByRole.noUsers' />}
         </Content>
     );
 };

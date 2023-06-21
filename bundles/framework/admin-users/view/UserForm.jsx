@@ -62,7 +62,7 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
                     value={userFormState[field]} error={errors.includes(field)}/>
             )}
             <LabelledField>
-                <Label><Message messageKey='flyout.adminusers.addRole' /></Label>
+                <Label><Message messageKey='users.addRole' /></Label>
                 <StyledSelect
                     className='t_roles'
                     mode='multiple'
@@ -72,11 +72,11 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
                     status={errors.includes('roles') ? 'error' : null}
                     options={[
                         {
-                            label: <Message messageKey='flyout.adminroles.roles.system' />,
+                            label: <Message messageKey='roles.types.system' />,
                             options: getRoleOptions(roles, true)
                         },
                         {
-                            label: <Message messageKey='flyout.adminroles.roles.other' />,
+                            label: <Message messageKey='roles.types.other' />,
                             options: getRoleOptions(roles, false)
                         }
                     ]}
@@ -91,7 +91,6 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
                     {(!isExternal) && (
                         <DeleteButton
                             type='label'
-                            title={<Message messageKey='flyout.adminusers.confirm_delete' messageArgs={{ user: userFormState.user }} />}
                             onConfirm={() => controller.deleteUser(id)}
                         />
                     )}

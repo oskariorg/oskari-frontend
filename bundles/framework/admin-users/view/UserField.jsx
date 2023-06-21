@@ -30,7 +30,7 @@ export const UserField = ({ field, value, controller, error, readonly = false, t
     };
     return (
         <LabelledField>
-            <Label><Message messageKey={`flyout.adminusers.${field}`} />{icon}</Label>
+            <Label><Message messageKey={`users.${field}`} />{icon}</Label>
             <StyledInput
                 className={`t_${field}`}
                 value={value}

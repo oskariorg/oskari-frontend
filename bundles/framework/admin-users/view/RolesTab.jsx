@@ -45,7 +45,7 @@ export const RolesTab = ({ state, controller }) => {
     return (
         <Content>
             <Form>
-                <Message messageKey='flyout.adminroles.newrole' />
+                <Message messageKey='roles.new' />
                 <StyledInput
                     value={roleName}
                     onChange={(e) => setRoleName(e.target.value)}
@@ -56,9 +56,9 @@ export const RolesTab = ({ state, controller }) => {
                     onClick={() => addRole()}
                 />
             </Form>
-            <Divider orientation="left"><Message messageKey="flyout.adminroles.roles.system"/></Divider>
+            <Divider orientation="left"><Message messageKey="roles.types.system"/></Divider>
             { systemRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} isSystemRole/>) }
-            <Divider orientation="left"><Message messageKey="flyout.adminroles.roles.other"/></Divider>
+            <Divider orientation="left"><Message messageKey="roles.types.other"/></Divider>
             { otherRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} editingRole={editingRole}/>) }
         </Content>
     );
