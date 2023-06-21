@@ -17,6 +17,7 @@ class UIHandler extends StateHandler {
             users: [],
             roles: [],
             editingRole: null,
+            usersByRole: {},
             userPagination: {
                 limit: 10,
                 page: 1,
@@ -128,6 +129,31 @@ class UIHandler extends StateHandler {
             this.updateState({
                 roles: []
             });
+        }
+    }
+    async fetchUsersByRole (roleId) {
+        const usersByRole = {
+            roleId,
+            users: []
+        };
+        this.updateState({ usersByRole });
+        try {
+            const response = await fetch(Oskari.urls.buildUrl(this.restUrl, {
+                roleId
+            }), {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            const { users } = await response.json();
+            this.updateState({ usersByRole: { users, roleId } });
+        } catch (e) {
+            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.fetch_failed'));
+            this.updateState({ usersByRole });
         }
     }
 
@@ -395,7 +421,8 @@ const wrapped = controllerMixin(UIHandler, [
     'resetSearch',
     'setEditingRole',
     'updateRole',
-    'updateEditingRole'
+    'updateEditingRole',
+    'fetchUsersByRole'
 ]);
 
 export { wrapped as AdminUsersHandler };
