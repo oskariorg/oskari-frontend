@@ -51,60 +51,61 @@ const SearchText = styled('span')`
 export const UsersTab = ({ state, controller, isExternal }) => {
     const [filter, setFilter] = useState('');
     const { userFormState, userPagination, users, roles } = state;
-    return (
-        <Content>
-            {userFormState ? (
+    if (userFormState) {
+        return (
+            <Content>
                 <UserForm
                     userFormState={userFormState}
                     roles={roles}
                     controller={controller}
                     isExternal={isExternal}
                 />
-            ) : (
-                <>
-                    <SearchContainer>
-                        <SearchInput
-                            className='t_user_search'
-                            value={filter}
-                            onChange={(e) => setFilter(e.target.value)}
-                            onSearch={(search) => controller.search(search)}
-                            autoComplete='nope'
-                            allowClear
-                            enterButton
-                        />
-                        {!isExternal && (
-                            <Button type='add' bordered onClick={() => controller.setAddingUser()} />
-                        )}
-                    </SearchContainer>
-                    {userPagination.search && (
-                        <SearchText><Message messageKey='flyout.adminusers.searchResults' /> ("{userPagination.search}"):</SearchText>
-                    )}
-                    {users.map(item => {
-                        const { id, user, firstName, lastName } = item;
-                        const details = firstName || lastName ? ` (${firstName} ${lastName})` : '';
-                        return (
-                            <UserBlock key={id}>
-                                <span>{user}{details}</span>
-                                <ButtonContainer>
-                                    <Button type='edit' onClick={() => controller.setEditingUser(id)} />
-                                    <Button type='delete' onConfirm={() => controller.deleteUser(id)} />
-                                </ButtonContainer>
-                            </UserBlock>
-                        )})
-                    }
-                    {userPagination.totalCount > userPagination.limit && (
-                        <Footer>
-                            <Pagination
-                                current={userPagination.page}
-                                onChange={(page) => controller.setUserPage(page)}
-                                simple
-                                total={userPagination.totalCount}
-                                pageSize={userPagination.limit}
-                                showSizeChanger={false}
-                            />
-                        </Footer>
-                    )}
-                </>
+            </Content>
+        );
+    }
+    return (
+        <Content>
+            <SearchContainer>
+                <SearchInput
+                    className='t_user_search'
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                    onSearch={(search) => controller.search(search)}
+                    autoComplete='nope'
+                    allowClear
+                    enterButton
+                />
+                {!isExternal && (
+                    <Button type='add' bordered onClick={() => controller.setAddingUser()} />
+                )}
+            </SearchContainer>
+            {userPagination.search && (
+                <SearchText><Message messageKey='flyout.adminusers.searchResults' /> ("{userPagination.search}"):</SearchText>
+            )}
+            {users.map(item => {
+                const { id, user, firstName, lastName } = item;
+                const details = firstName || lastName ? ` (${firstName} ${lastName})` : '';
+                return (
+                    <UserBlock key={id}>
+                        <span>{user}{details}</span>
+                        <ButtonContainer>
+                            <Button type='edit' onClick={() => controller.setEditingUser(id)} />
+                            <Button type='delete' onConfirm={() => controller.deleteUser(id)} />
+                        </ButtonContainer>
+                    </UserBlock>
+                )})
+            }
+            {userPagination.totalCount > userPagination.limit && (
+                <Footer>
+                    <Pagination
+                        current={userPagination.page}
+                        onChange={(page) => controller.setUserPage(page)}
+                        simple
+                        total={userPagination.totalCount}
+                        pageSize={userPagination.limit}
+                        showSizeChanger={false}
+                    />
+                </Footer>
             )}
         </Content>
     );
