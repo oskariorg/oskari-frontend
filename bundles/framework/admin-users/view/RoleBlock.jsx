@@ -3,10 +3,6 @@ import { TextInput } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 
-const BUTTON = {
-    iconSize: 18
-};
-
 const Content = styled('div')`
     display: flex;
     flex-direction: row;
@@ -46,8 +42,8 @@ export const RoleBlock = ({ role, controller, isSystemRole, editingRole }) => {
                     status={editingRole.status}
                 />
                 <ButtonContainer>
-                    <Button {...BUTTON} type='ok' onClick={() => controller.updateRole()} />
-                    <Button {...BUTTON} type='cancel' onClick={() => controller.setEditingRole(null) } />
+                    <Button type='ok' onClick={() => controller.updateRole()} />
+                    <Button type='cancel' onClick={() => controller.setEditingRole(null) } />
                 </ButtonContainer>
             </Content>
         );
@@ -56,8 +52,8 @@ export const RoleBlock = ({ role, controller, isSystemRole, editingRole }) => {
         <Content>
             <span>{name}</span>
             <ButtonContainer>
-                <Button {...BUTTON} type='edit' onClick={() => controller.setEditingRole(role)} />
-                <Button {...BUTTON} type='delete' onConfirm={() => controller.deleteRole(id)} />
+                <Button type='edit' onClick={() => controller.setEditingRole(role)} />
+                <Button type='delete' onConfirm={() => controller.deleteRole(id)} />
             </ButtonContainer>
         </Content>
     );

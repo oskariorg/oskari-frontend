@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { TextInput, Button, Pagination, Message } from 'oskari-ui';
-import { PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
-import { PlusOutlined, SearchOutlined, EditOutlined } from '@ant-design/icons';
+import { SearchInput, Pagination, Message } from 'oskari-ui';
+import { IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { UserForm } from './UserForm';
 
@@ -16,13 +15,8 @@ const SearchContainer = styled('div')`
     margin-bottom: 20px;    
 `;
 
-const AddButton = styled(PrimaryButton)`
-    margin-bottom: 10px;
-    align-self: flex-end;
-`;
-
-const EditButton = styled(Button)`
-    width: 50px;
+const Button = styled(IconButton)`
+    margin-left: 10px;
 `;
 
 const Footer = styled('div')`
@@ -45,6 +39,11 @@ const UserBlock = styled('div')`
     background-color: #F3F3F3;
 `;
 
+const ButtonContainer = styled('div')`
+    display: flex;
+    flex-direction: row;
+`;
+
 const SearchText = styled('span')`
     font-weight: bold;
 `;
@@ -64,50 +63,32 @@ export const UsersTab = ({ state, controller, isExternal }) => {
             ) : (
                 <>
                     <SearchContainer>
-                        <TextInput
+                        <SearchInput
                             className='t_user_search'
-                            prefix={<SearchOutlined />}
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
-                            onPressEnter={(e) => controller.search(filter)}
+                            onSearch={(search) => controller.search(search)}
                             autoComplete='nope'
+                            allowClear
+                            enterButton
                         />
-                        <PrimaryButton
-                            type='search'
-                            onClick={() => controller.search(filter)}
-                        />
-                        {userPagination.search && (
-                            <SecondaryButton
-                                type='reset'
-                                onClick={() => {
-                                    setFilter('');
-                                    controller.resetSearch();
-                                }}
-                            />
+                        {!isExternal && (
+                            <Button type='add' bordered onClick={() => controller.setAddingUser()} />
                         )}
                     </SearchContainer>
-                    {!isExternal && (
-                        <AddButton
-                            type='add'
-                            onClick={() => controller.setAddingUser()}
-                        >
-                            <PlusOutlined />
-                        </AddButton>
-                    )}
                     {userPagination.search && (
                         <SearchText><Message messageKey='flyout.adminusers.searchResults' /> ("{userPagination.search}"):</SearchText>
                     )}
-                    {users.map(user => {
-                        const { firstName, lastName } = user;
+                    {users.map(item => {
+                        const { id, user, firstName, lastName } = item;
                         const details = firstName || lastName ? ` (${firstName} ${lastName})` : '';
                         return (
-                            <UserBlock key={user.id}>
-                                <span>{user.user}{details}</span>
-                                <EditButton
-                                    onClick={() => controller.setEditingUser(user.id)}
-                                >
-                                    <EditOutlined />
-                                </EditButton>
+                            <UserBlock key={id}>
+                                <span>{user}{details}</span>
+                                <ButtonContainer>
+                                    <Button type='edit' onClick={() => controller.setEditingUser(id)} />
+                                    <Button type='delete' onConfirm={() => controller.deleteUser(id)} />
+                                </ButtonContainer>
                             </UserBlock>
                         )})
                     }
