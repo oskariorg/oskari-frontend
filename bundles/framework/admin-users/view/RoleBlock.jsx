@@ -43,8 +43,8 @@ export const RoleBlock = ({ role, controller, isSystemRole, editingRole }) => {
                     status={editingRole.status}
                 />
                 <ButtonContainer>
-                    <Button type='ok' onClick={() => controller.updateRole()} />
-                    <Button type='cancel' onClick={() => controller.setEditingRole(null) } />
+                    <Button type='accept' onClick={() => controller.updateRole()} />
+                    <Button type='reject' onClick={() => controller.setEditingRole(null) } />
                 </ButtonContainer>
             </Content>
         );

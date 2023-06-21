@@ -44,10 +44,10 @@ const DisabledWrapper = styled('div')`
 `;
 
 const getPredefinedIcon = (type) => {
-    if (type === 'ok') {
+    if (type === 'accept') {
         return <CheckOutlined style={{color: green.primary}}/>;
     }
-    if (type === 'cancel') {
+    if (type === 'reject') {
         return <StopOutlined style={{color: red.primary}} />;
     }
     if (type === 'add') {
@@ -154,7 +154,7 @@ export const IconButton = ({
 };
 
 IconButton.propTypes = {
-    type: PropTypes.oneOf(['add', 'edit', 'ok', 'candel', 'info', 'next', 'previous', 'delete']),
+    type: PropTypes.oneOf(['add', 'edit', 'accept', 'reject', 'info', 'next', 'previous', 'delete']),
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     icon: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
     onClick: PropTypes.func,
