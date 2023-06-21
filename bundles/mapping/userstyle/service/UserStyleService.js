@@ -173,7 +173,7 @@ export class UserStyleService {
         return 'Oskari.mapframework.userstyle.service.UserStyleService';
     }
 
-    _getStyleName(style) {
+    _getStyleName (style) {
         // id is used for VectorStyle name (string)
         return style?.id.toString();
     }
