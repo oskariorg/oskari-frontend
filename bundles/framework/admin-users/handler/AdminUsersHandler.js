@@ -143,7 +143,8 @@ class UIHandler extends StateHandler {
             userFormState: {
                 ...user,
                 password: '',
-                rePassword: ''
+                rePassword: '',
+                errors: []
             }
         });
         // mark invalid fields
@@ -194,7 +195,7 @@ class UIHandler extends StateHandler {
 
     validateUserForm () {
         if (this.isExternal) {
-            this.updateUserFormState('errors', errors);
+            this.updateUserFormState('errors', []);
             return;
         }
 

@@ -49,15 +49,16 @@ const getRoleOptions = (roles, systemRole) => {
 };
 
 export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
-    const { errors } = userFormState;
+    const { errors, id, password } = userFormState;
+    const passwordRequired = !id || password.length > 0;
     return (
         <Content>
             {FIELDS.map(field =>
-                <UserField field={field} controller={controller} disabled={isExternal}
+                <UserField field={field} controller={controller} readonly={isExternal}
                     value={userFormState[field]} error={errors.includes(field)}/>
             )}
             {!isExternal && PASS_FIELDS.map(field =>
-                <UserField field={field} controller={controller} mandatory={!editingUserId} type='password'
+                <UserField field={field} controller={controller} mandatory={passwordRequired} type='password'
                     value={userFormState[field]} error={errors.includes(field)}/>
             )}
             <LabelledField>
@@ -68,7 +69,7 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
                     allowClear
                     onChange={(value) => controller.updateUserFormState('roles', value)}
                     defaultValue={userFormState.roles}
-                    status={userFormState.roles.length === 0 ? 'error' : null}
+                    status={errors.includes('roles') ? 'error' : null}
                     options={[
                         {
                             label: <Message messageKey='flyout.adminroles.roles.system' />,
@@ -91,7 +92,7 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
                         <DeleteButton
                             type='label'
                             title={<Message messageKey='flyout.adminusers.confirm_delete' messageArgs={{ user: userFormState.user }} />}
-                            onConfirm={() => controller.deleteUser(userFormState.id)}
+                            onConfirm={() => controller.deleteUser(id)}
                         />
                     )}
                 </RightButtons>

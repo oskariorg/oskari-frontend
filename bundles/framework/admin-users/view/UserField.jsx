@@ -11,21 +11,31 @@ const LabelledField = styled('div')`
 `;
 
 const StyledInput = styled(TextInput)`
+    margin-left: 10px;
     width: 210px;
 `;
+const Padding = styled.span`
+    padding-left: 5px;
+`;
 
-export const UserField = ({ field, value, error, disabled = false, type = 'text', mandatory = true }) => {
-    // No need to render mandatory icon for disabled field
-    const icon = disabled ? null : getMandatoryIcon(mandatory, value);
+export const UserField = ({ field, value, controller, error, readonly = false, type = 'text', mandatory = true }) => {
+    // No need to render mandatory icon for read-only field
+    // TODO: or &nbsp;
+    const icon = readonly ? null : <Padding>{getMandatoryIcon(mandatory, value)}</Padding>;
+    const onChange = value => {
+        if (readonly) {
+            return;
+        }
+        controller.updateUserFormState(field, value);
+    };
     return (
         <LabelledField>
             <Label><Message messageKey={`flyout.adminusers.${field}`} />{icon}</Label>
             <StyledInput
                 className={`t_${field}`}
                 value={value}
-                onChange={(e) => controller.updateUserFormState(field, e.target.value)}
+                onChange={(e) => onChange(e.target.value)}
                 status={error ? 'error' : null}
-                disabled={disabled}
                 type={type}
                 autoComplete='nope'
             />
