@@ -46,7 +46,7 @@ Oskari.registerLocalization(
                 "save": "Tókst ekki að vista hlutverk.",
                 "delete": "Tókst ekki að eyða hlutverkinu."
             },
-            "roles": {
+            "types": {
 
 
             }

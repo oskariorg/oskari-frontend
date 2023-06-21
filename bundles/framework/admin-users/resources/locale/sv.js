@@ -46,7 +46,7 @@ Oskari.registerLocalization(
                 "save": "Lagring av en ny roll misslyckades.",
                 "delete": "Kunde inte tas bort.",
             },
-            "roles": {
+            "types": {
                 "system": "",
                 "other": ""
             }

@@ -46,7 +46,7 @@ Oskari.registerLocalization(
                 "save": "Roolin tallennus epäonnistui.",
                 "delete": "Roolin poistaminen epäonnistui."
             },               
-            "roles": {
+            "types": {
                 "system": "Järjestelmäroolit",
                 "other": "Lisäroolit"
             }
