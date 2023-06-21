@@ -46,7 +46,7 @@ Oskari.registerLocalization(
                 "save": "The role could not be saved.",
                 "delete": "The role could not be deleted.",
             },
-            "roles": {
+            "types": {
                 "system": "System roles",
                 "other": "Additional roles"
             }
