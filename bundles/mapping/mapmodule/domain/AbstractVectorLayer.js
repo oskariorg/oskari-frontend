@@ -18,6 +18,7 @@ export class AbstractVectorLayer extends AbstractLayer {
         if (this.getStyles().length === 0) {
             return;
         }
+        // select style (defaults to first)
         super.selectStyle(name);
     }
 
@@ -62,7 +63,9 @@ export class AbstractVectorLayer extends AbstractLayer {
         if (vs.length) {
             // override all styles as create map layer if there were any
             this.setStyles(vs);
-            // this is done on maplayer add, so try select style (defaults to first)
+            // update current style (defaults to first)
+            super.selectStyle(this._storedStyleName);
+            // request notifies change
             Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), this._storedStyleName]);
         }
     }
@@ -79,7 +82,7 @@ export class AbstractVectorLayer extends AbstractLayer {
 
     removeStyle (name) {
         const styles = this.getStyles();
-        const index = styles.findIndex(s => Number.parseInt(s.getName(), 10) === name);
+        const index = styles.findIndex(s => s.getName() === name);
         if (index !== -1) {
             styles.splice(index, 1);
         }
