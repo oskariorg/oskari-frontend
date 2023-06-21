@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-import { TextInput, Message, Divider } from 'oskari-ui';
+import { Message, Divider } from 'oskari-ui';
 import { PrimaryButton } from 'oskari-ui/components/buttons';
 import { RoleBlock } from './RoleBlock';
 import styled from 'styled-components';
-
-const Content = styled('div')`
-    display: flex;
-    flex-direction: column;
-`;
+import { Content, StyledInput } from './styled';
 
 const Form = styled('div')`
     display: flex;
@@ -19,12 +15,6 @@ const Form = styled('div')`
 
 const AddButton = styled(PrimaryButton)`
     margin-left: 15px;
-    align-self: flex-end;
-`;
-
-const StyledInput = styled(TextInput)`
-    margin-left: 10px;
-    width: 210px;
 `;
 
 export const RolesTab = ({ state, controller }) => {

@@ -1,37 +1,9 @@
 import React from 'react';
 import { Message, Label, Select } from 'oskari-ui';
-import { PrimaryButton, SecondaryButton, DeleteButton } from 'oskari-ui/components/buttons';
+import { PrimaryButton, SecondaryButton, DeleteButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { UserField } from './UserField';
-
-const Content = styled('div')`
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-`;
-
-const Buttons = styled('div')`
-    display flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 5px;
-`;
-
-const RightButtons = styled('div')`
-    display: flex;
-    flex-direction: row;
-`;
-
-const SaveButton = styled(PrimaryButton)`
-    margin-right: 5px;
-`;
-
-const LabelledField = styled('div')`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 5px;
-`;
+import { Content, LabelledField } from './styled';
 
 const StyledSelect = styled(Select)`
     width: 210px;
@@ -82,24 +54,22 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
                     ]}
                 />
             </LabelledField>
-            <Buttons>
-                <RightButtons>
-                    <SaveButton
-                        type='save'
-                        onClick={() => controller.saveUser()}
-                    />
-                    {(!isExternal) && (
-                        <DeleteButton
-                            type='label'
-                            onConfirm={() => controller.deleteUser(id)}
-                        />
-                    )}
-                </RightButtons>
+            <ButtonContainer>
                 <SecondaryButton
                     type='cancel'
                     onClick={() => controller.closeUserForm()}
                 />
-            </Buttons>
+                {(isExternal) && (
+                    <DeleteButton
+                        type='label'
+                        onConfirm={() => controller.deleteUser(id)}
+                    />
+                )}
+                <PrimaryButton
+                    type='save'
+                    onClick={() => controller.saveUser()}
+                />
+            </ButtonContainer>
         </Content>
     );
 };

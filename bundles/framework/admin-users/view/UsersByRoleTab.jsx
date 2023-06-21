@@ -1,23 +1,7 @@
 import React from 'react';
 import { Select, Message } from 'oskari-ui';
 import styled from 'styled-components';
-
-const Content = styled('div')`
-    display: flex;
-    flex-direction: column;
-`;
-
-const UserBlock = styled('div')`
-    display: flex;
-    flex-direction: row;
-    border: 1px solid #999;
-    min-height: 50px;
-    align-items: center;
-    padding: 0 5px;
-    justify-content: space-between;
-    font-size: 16px;
-    background-color: #F3F3F3;
-`;
+import { Block, Content } from './styled';
 
 const StyledSelect = styled(Select)`
     margin-bottom: 20px;
@@ -44,9 +28,9 @@ export const UsersByRoleTab = ({ state, controller }) => {
                 const { id, user, firstName, lastName } = item;
                 const details = firstName || lastName ? ` (${firstName} ${lastName})` : '';
                 return (
-                    <UserBlock key={id}>
+                    <Block key={id}>
                         <span>{user}{details}</span>
-                    </UserBlock>
+                    </Block>
                 )})
             }
             {showNoUsers && <Message messageKey='usersByRole.noUsers' />}

@@ -1,22 +1,13 @@
 import React, { useState } from 'react';
 import { SearchInput, Pagination, Message } from 'oskari-ui';
-import { IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { UserForm } from './UserForm';
-
-const Content = styled('div')`
-    display: flex;
-    flex-direction: column;
-`;
+import { Content, Block, ButtonContainer, Button } from './styled';
 
 const SearchContainer = styled('div')`
     display: flex;
     flex-direction: row;
     margin-bottom: 20px;    
-`;
-
-const Button = styled(IconButton)`
-    margin-left: 10px;
 `;
 
 const Footer = styled('div')`
@@ -25,23 +16,6 @@ const Footer = styled('div')`
     justify-content: center;
     width: 100%;
     margin-top: 15px;
-`;
-
-const UserBlock = styled('div')`
-    display: flex;
-    flex-direction: row;
-    border: 1px solid #999;
-    min-height: 50px;
-    align-items: center;
-    padding: 0 5px;
-    justify-content: space-between;
-    font-size: 16px;
-    background-color: #F3F3F3;
-`;
-
-const ButtonContainer = styled('div')`
-    display: flex;
-    flex-direction: row;
 `;
 
 const SearchText = styled('span')`
@@ -86,13 +60,13 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                 const { id, user, firstName, lastName } = item;
                 const details = firstName || lastName ? ` (${firstName} ${lastName})` : '';
                 return (
-                    <UserBlock key={id}>
+                    <Block key={id}>
                         <span>{user}{details}</span>
                         <ButtonContainer>
                             <Button type='edit' onClick={() => controller.setEditingUser(id)} />
                             <Button type='delete' onConfirm={() => controller.deleteUser(id)} />
                         </ButtonContainer>
-                    </UserBlock>
+                    </Block>
                 )})
             }
             {userPagination.totalCount > userPagination.limit && (
