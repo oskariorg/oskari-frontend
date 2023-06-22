@@ -3,7 +3,7 @@ Oskari.registerLocalization({
     "key": "catalogue.bundle.metadatasearch",
     "value": {
         "tabTitle": "Metadata Search",
-        "title": "Metadata",
+        "metadataSearchDescription": "Search spatial resources in other words spatial datasets, dataset series and services.",
         "grid": {
             "name": "Name",
             "removeBBOX": "Hide coverage area",

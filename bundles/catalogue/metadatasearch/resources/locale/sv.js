@@ -3,7 +3,7 @@ Oskari.registerLocalization({
     "key": "catalogue.bundle.metadatasearch",
     "value": {
         "tabTitle": "Metadatasökning",
-        "title": "Metadata",
+        "metadataSearchDescription": "Sök metadata för dataset, dataset-serier eller tjänster.",
         "grid": {
             "name": "Namn",
             "removeBBOX": "Göm geografisk datatäckning",

@@ -11,7 +11,7 @@ import { MetadataSearchContainer } from './view/MetadataSearchContainer';
  * See Oskari.mapframework.bundle.metadatasearch.MetadataCatalogueBundle for bundle definition.
  *
  */
-const METADATA_BUNDLE_LOCALIZATION_ID = 'catalogue.bundle.metadatasearch';
+export const METADATA_BUNDLE_LOCALIZATION_ID = 'catalogue.bundle.metadatasearch';
 Oskari.clazz.define(
     'Oskari.catalogue.bundle.metadatasearch.MetadataSearchBundleInstance',
 

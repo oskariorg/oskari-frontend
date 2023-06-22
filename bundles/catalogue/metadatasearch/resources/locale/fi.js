@@ -3,7 +3,7 @@ Oskari.registerLocalization({
     "key": "catalogue.bundle.metadatasearch",
     "value": {
         "tabTitle": "Metatietohaku",
-        "title": "Metatieto",
+        "metadataSearchDescription": "Hae paikkatietoresursseja eli paikkatietoaineistoja, -aineistosarjoja ja palveluja.",
         "grid": {
             "name": "Nimi",
             "removeBBOX": "Piilota kattavuusalue",
