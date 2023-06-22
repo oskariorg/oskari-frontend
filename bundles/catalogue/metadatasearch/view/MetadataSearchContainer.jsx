@@ -10,7 +10,10 @@ const Description = () => {
 const SearchContainer = (props) => {
     const { query, onChange } = props;
     return <div>
-        <SearchInput query={query} onChange={(event) => onChange(event.target.value)}/>
+        <SearchInput
+            query={query}
+            onChange={(event) => onChange(event.target.value)}
+            placeholder={Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'placeholder')}/>
     </div>;
 };
 

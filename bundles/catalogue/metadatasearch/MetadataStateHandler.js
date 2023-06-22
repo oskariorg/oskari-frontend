@@ -22,8 +22,6 @@ class MetadataStateHandler extends StateHandler {
         this.contentController.update(this.getState(), this.getController());
     }
 
-
-
     updateQuery (query) {
         this.updateState({ query });
     }

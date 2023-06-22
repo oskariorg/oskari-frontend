@@ -4,6 +4,8 @@ Oskari.registerLocalization({
     "value": {
         "tabTitle": "Metatietohaku",
         "metadataSearchDescription": "Hae paikkatietoresursseja eli paikkatietoaineistoja, -aineistosarjoja ja palveluja.",
+        "placeholder": "Kirjoita hakusana tähän.",
+
         "grid": {
             "name": "Nimi",
             "removeBBOX": "Piilota kattavuusalue",
