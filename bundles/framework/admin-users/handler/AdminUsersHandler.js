@@ -188,7 +188,7 @@ class UIHandler extends StateHandler {
     }
 
     setEditingRole (editingRole) {
-        this.updateState({editingRole});
+        this.updateState({ editingRole });
     }
 
     updateEditingRole (key, value) {
@@ -237,6 +237,7 @@ class UIHandler extends StateHandler {
             this.updateUserFormState('errors', errors);
             return;
         }
+        // eslint-disable-next-line no-unused-vars
         const { errors: ignore, passwordErrors, password, rePassword, ...fields } = this.state.userFormState;
 
         Object.keys(fields).forEach(key => {
