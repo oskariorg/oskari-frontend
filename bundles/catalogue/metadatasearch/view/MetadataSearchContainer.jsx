@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from '../instance';
 import { SearchInput } from 'oskari-ui';
+import { AdvancedSearchContainer } from './AdvancedSearchContainer';
 const Description = () => {
     return <div>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'metadataSearchDescription')}</div>;
 };
@@ -23,10 +24,11 @@ SearchContainer.propTypes = {
 };
 
 const MetadataSearchContainer = ({ state, controller }) => {
-    const { query } = state;
+    const { query, advancedSearchExpanded } = state;
     return <div>
         <Description/>
         <SearchContainer query={query} onChange={controller.updateQuery} />
+        <AdvancedSearchContainer isExpanded={advancedSearchExpanded} toggleAdvancedSearch={controller.toggleAdvancedSearch}/>
     </div>;
 };
 

@@ -5,6 +5,8 @@ Oskari.registerLocalization({
         "tabTitle": "Metadata Search",
         "metadataSearchDescription": "Search spatial resources in other words spatial datasets, dataset series and services.",
         "placeholder": "Type search term",
+        "showMore": "Show search options",
+        "showLess": "Hide search options",
         "grid": {
             "name": "Name",
             "removeBBOX": "Hide coverage area",

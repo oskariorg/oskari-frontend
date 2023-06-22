@@ -5,7 +5,8 @@ class MetadataStateHandler extends StateHandler {
     constructor () {
         super();
         this.setState({
-            query: ''
+            query: '',
+            advancedSearchExpanded: false
         });
         this.addStateListener(() => this.updateMetadataSearch());
     }
@@ -25,11 +26,19 @@ class MetadataStateHandler extends StateHandler {
     updateQuery (query) {
         this.updateState({ query });
     }
+
+    toggleAdvancedSearch () {
+        const { advancedSearchExpanded } = this.getState();
+        this.updateState({
+            advancedSearchExpanded: !advancedSearchExpanded
+        });
+    }
 }
 
 const wrapped = controllerMixin(MetadataStateHandler, [
     'updateQuery',
-    'renderMetadataSearch'
+    'renderMetadataSearch',
+    'toggleAdvancedSearch'
 ]);
 
 export { wrapped as MetadataStateHandler };
