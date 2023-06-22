@@ -28,6 +28,7 @@ Oskari.registerLocalization(
             },
             "selectValue": "Valitse tunniste"
         },
+        "unsavedChangesConfirm": "Tallentamattomat muutoksesi häviävät, haluatko jatkaa?",
         "save": "Tallenna",
         "selectRole": "Rooli"
     }

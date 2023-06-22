@@ -1,9 +1,8 @@
-import React, { useRef } from 'react';
-import { Checkbox, Message, Tooltip, Button, Space, TextInput } from 'oskari-ui';
+import React from 'react';
+import { Checkbox, Message, Tooltip } from 'oskari-ui';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
-import { SecondaryButton } from 'oskari-ui/components/buttons';
 import { ThemeConsumer } from 'oskari-ui/util';
-import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined, SearchOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const StyledTable = styled(Table)`
@@ -14,18 +13,12 @@ const StyledTable = styled(Table)`
 const StyledIcon = styled('div')`
     font-size: 18px;
 `;
-const FilterContainer = styled('div')`
-    padding: 10px;
-`;
-const FilterFields = styled('div')`
+const HeaderCell = styled('div')`
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
 `;
-const SearchIcon = styled(SearchOutlined)`
-    color: ${props => props.$filtered ? props?.$theme?.color?.accent || '#3c3c3c' : '#bfbfbf'};
-    ${props => props.$filtered && ('border-radius: 3px;')}
-    font-size: ${props => props.$filtered ? '16px' : '12px'};
+const CheckAllCheckbox = styled(Checkbox)`
+    margin-top: 10px;
 `;
 
 const getPermissionTableHeader = (permission) => {
@@ -46,66 +39,26 @@ const getPermissionTableHeader = (permission) => {
 };
 
 export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => {
-    const searchInput = useRef(null);
-    const getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-          <FilterContainer onKeyDown={(e) => e.stopPropagation()}>
-            <FilterFields>
-                <TextInput
-                    ref={searchInput}
-                    value={selectedKeys[0]}   
-                    onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => confirm({ closeDropdown: true })}
-                    allowClear
-                />
-            </FilterFields>
-            <Space>
-                <Button
-                    type="primary"
-                    onClick={() => confirm({ closeDropdown: true })}
-                    size="small"
-                >
-                    <Message messageKey='flyout.filter' />
-                </Button>
-                <SecondaryButton
-                    type="clear"
-                    onClick={() => {
-                        clearFilters();
-                        confirm({ closeDropdown: true });
-                    }}
-                    size="small"
-                />
-            </Space>
-          </FilterContainer>
-        ),
-        filterIcon: (filtered) => (
-          <SearchIcon $filtered={filtered} $theme={theme} />
-        ),
-        onFilter: (value, record) =>
-          record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes((value).toLowerCase()),
-        onFilterDropdownOpenChange: (visible) => {
-          if (visible) {
-            setTimeout(() => searchInput.current?.select(), 100);
-          }
-        },
-        render: (text) => text
-    });
     const columnSettings = [];
     if (state.permissions?.names) {
         columnSettings.push({
             align: 'left',
             title: <Message messageKey='rights.name' />,
             dataIndex: 'name',
-            sorter: getSorterFor('name'),
-            ...getColumnSearchProps('name')
+            sorter: getSorterFor('name')
         });
         state.permissions.names.forEach((name, index) => {
             columnSettings.push({
                 align: 'left',
-                title: getPermissionTableHeader(name),
+                title: () => (
+                    <HeaderCell>
+                        {getPermissionTableHeader(name)}
+                        <CheckAllCheckbox
+                            checked={state.checkAllCheckboxes[state.pagination.page]?.[name.id]}
+                            onChange={() => controller.setCheckAllForPermission(name.id)}
+                        />
+                    </HeaderCell>
+                ),
                 dataIndex: 'permissions',
                 render: (title, item) => {
                     const tooltip = <span>{state.roles.find(role => role.id === state.selectedRole)?.name}: <Message messageKey={`rights.${name.id}`} defaultMsg={name.name} /></span>;
@@ -125,11 +78,17 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
     return (
         <StyledTable
             columns={columnSettings}
-            dataSource={state.permissions?.resource?.map(r => ({
+            dataSource={state.resources?.map(r => ({
                 key: r.id,
                 ...r
             }))}
-            pagination={{ defaultPageSize: 50, hideOnSinglePage: true, simple: true }}
+            pagination={{
+                defaultPageSize: state.pagination.pageSize,
+                hideOnSinglePage: true,
+                simple: true,
+                current: state.pagination.page,
+                onChange: (page) => controller.setPage(page)
+            }}
             scroll={{ y: 500 }}
             loading={state.loading}
         />
