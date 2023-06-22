@@ -1,6 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { MetadataSearchContainer } from './view/MetadataSearchContainer';
+import { MetadataStateHandler } from './MetadataStateHandler';
 
 /**
  * @class Oskari.mapframework.bundle.metadatasearch.MetadataSearchBundleInstance
@@ -61,6 +59,7 @@ Oskari.clazz.define(
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this._vectorLayerId = 'METADATASEARCH_VECTORLAYER';
         this.id = 'oskari_metadatasearch_tabpanel_header';
+        this.handler = new MetadataStateHandler();
     }, {
         /**
          * @static
@@ -429,18 +428,18 @@ Oskari.clazz.define(
         },
         /**
          * @method createUi
-         * (re)creates the UI for "metadata catalogue" functionality
+         * (re)creates the UI for "metadata search" functionality
          */
         createUi: function () {
-            // Metadata catalogue tab
+            // Metadata search tab
             const title = Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'tabTitle');
-            const content = document.createElement('div');
-            ReactDOM.render(<MetadataSearchContainer/>, content);
+            const contentElement = document.createElement('div');
+            this.handler.getController().renderMetadataSearch(contentElement); // renderMetadataSearchContainer(this.handler.getState(), this.handler.getController(), contentElement);
             const priority = this.tabPriority;
             const reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
 
             if (typeof reqBuilder === 'function') {
-                this.sandbox.request(this, reqBuilder(title, content, priority, this.id));
+                this.sandbox.request(this, reqBuilder(title, contentElement, priority, this.id));
             } else {
                 // add a tile and flyout if search is not present on the appsetup
                 this.__addTileAndFlyout();
