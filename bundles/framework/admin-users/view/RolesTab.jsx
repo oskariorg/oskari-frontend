@@ -21,9 +21,9 @@ export const RolesTab = ({ state, controller }) => {
             setStatus('error');
             return;
         }
-        setStatus('');
         controller.addRole(roleName);
-        // TODO: clear roleName or move back to handler state
+        setStatus('');
+        setRoleName('');
     }
     const { roles, editingRole } = state;
     const systemRoles = roles.filter(role => role.systemRole === true);
