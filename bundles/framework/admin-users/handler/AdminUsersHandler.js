@@ -104,7 +104,6 @@ class UIHandler extends StateHandler {
     }
 
     async fetchRoles () {
-        console.log(this.passwordRequirements);
         try {
             const response = await fetch(Oskari.urls.getRoute('ManageRoles'), {
                 method: 'GET',
@@ -181,8 +180,7 @@ class UIHandler extends StateHandler {
             userFormState: {
                 ...user,
                 password: '',
-                rePassword: '',
-                errors: []
+                rePassword: ''
             }
         });
         // mark invalid fields
@@ -216,6 +214,9 @@ class UIHandler extends StateHandler {
                 [key]: value
             }
         });
+        if (key === 'password' || key === 'rePassword') {
+            this.validatePassword();
+        }
     }
 
     initUserForm () {
@@ -226,19 +227,17 @@ class UIHandler extends StateHandler {
             email: '',
             password: '',
             rePassword: '',
-            roles: [],
-            errors: []
+            roles: []
         };
     }
 
     validateUserForm () {
+        const errors = [];
         if (this.isExternal) {
-            this.updateUserFormState('errors', []);
+            this.updateUserFormState('errors', errors);
             return;
         }
-
-        const { id, errors: ignore, password, rePassword, ...fields } = this.state.userFormState;
-        const errors = [];
+        const { errors: ignore, passwordErrors, password, rePassword, ...fields } = this.state.userFormState;
 
         Object.keys(fields).forEach(key => {
             const field = fields[key];
@@ -248,31 +247,54 @@ class UIHandler extends StateHandler {
             }
         });
 
-        const passwordRequired = !id || password.length > 0;
-        if (passwordRequired) {
-            const { length } = this.passwordRequirements;
-            if (password.length < length) {
-                errors.push('password');
-            }
-            if (rePassword.length < length) {
-                errors.push('rePassword');
-            }
-            if (password !== rePassword) {
-                errors.push('rePassword');
-                Messaging.error(Oskari.getMsg('AdminUsers', 'users.passwordRequirements.mismatch'));
-            }
-        }
-
         if (errors.length > 0) {
             Messaging.error(Oskari.getMsg('AdminUsers', 'users.errors.form'));
         }
         this.updateUserFormState('errors', errors);
+        this.validatePassword(true);
+    }
+
+    validatePassword (notifyUser) {
+        const { id, password, rePassword } = this.state.userFormState;
+        const passwordRequired = !id || password.length > 0;
+        const errors = {};
+        if (!passwordRequired) {
+            this.updateUserFormState('passwordErrors', errors);
+            return;
+        }
+
+        const notify = (key, values) => notifyUser && Messaging.error(Oskari.getMsg('AdminUsers', `users.passwordRequirements.${key}`, values));
+        const add = (key, value) => {
+            if (!errors[key]) {
+                errors[key] = [];
+            }
+            errors[key].push(value);
+        };
+
+        const { length, case: caps } = this.passwordRequirements;
+        if (password.length < length) {
+            add('password', 'length');
+            notify('length', { length });
+        }
+        if (caps && password === password.toLowerCase()) {
+            add('password', 'case');
+            notify('case');
+        }
+        // only to mark error on submit
+        if (rePassword.length < length) {
+            add('rePassword', 'length');
+        }
+        if (password !== rePassword) {
+            add('rePassword', 'mismatch');
+            notify('mismatch');
+        }
+        this.updateUserFormState('passwordErrors', errors);
     }
 
     async saveUser () {
         this.validateUserForm();
-        const { errors, roles, ...userParams } = this.state.userFormState;
-        if (errors.length > 0) {
+        const { errors, passwordErrors, roles, ...userParams } = this.state.userFormState;
+        if (errors.length > 0 || Object.keys(passwordErrors).length > 0) {
             return;
         }
         try {

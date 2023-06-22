@@ -21,7 +21,7 @@ const getRoleOptions = (roles, systemRole) => {
 };
 
 export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
-    const { errors, id, password } = userFormState;
+    const { errors = [], passwordErrors = {}, id, password } = userFormState;
     const passwordRequired = !id || password.length > 0;
     return (
         <Content>
@@ -31,7 +31,7 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
             )}
             {!isExternal && PASS_FIELDS.map(field =>
                 <UserField key={field} field={field} controller={controller} mandatory={passwordRequired} type='password'
-                    value={userFormState[field]} error={errors.includes(field)}/>
+                    value={userFormState[field]} error={!!passwordErrors[field]}/>
             )}
             <LabelledField>
                 <StyledLabel><Message messageKey='users.addRole' /></StyledLabel>
