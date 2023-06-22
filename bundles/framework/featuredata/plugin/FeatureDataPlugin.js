@@ -7,10 +7,10 @@ import { FeatureDataPluginHandler } from './FeatureDataPluginHandler';
 import { FEATUREDATA_WFS_STATUS } from '../view/FeatureDataContainer';
 
 /**
- * @class Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin
+ * @class Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin
  * Provides WFS grid link on top of map
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin',
+Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin',
     /**
      * @method create called automatically on construction
      * @static
@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
      */
     function () {
         var me = this;
-        me._clazz = 'Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin';
+        me._clazz = 'Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin';
         me._defaultLocation = 'top right';
         me._index = 100;
         me._name = 'FeaturedataPlugin';

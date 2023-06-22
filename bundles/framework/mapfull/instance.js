@@ -388,7 +388,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 ...this.getMapModule().getState()
             };
             const styleService = sandbox.getService('Oskari.mapframework.userstyle.service.UserStyleService');
-            const getUserStylesForLayer = (layerId) => styleService && styleService.getStylesByLayer(layerId).map(s => s.id);
+            const getUserStylesForLayer = (layerId) => styleService && styleService.getStyleNamesForLayer(layerId);
             state.selectedLayers = map.getLayers().map(layer => {
                 const json = {
                     id: layer.getId(),
