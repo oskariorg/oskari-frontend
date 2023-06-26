@@ -34,17 +34,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-users.AdminUsersBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/admin-users/Tile.js"
-            }, {
-                "type": "text/css",
-                "src": "../../../../bundles/framework/admin-users/resources/scss/style.scss"
-            }, {
-                "src": "../../../../libraries/chosen/1.5.1/chosen.jquery.js",
-                "type": "text/javascript"
-            }, {
-                "src": "../../../../libraries/chosen/1.5.1/chosen.css",
-                "type": "text/css"
             }],
-
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",
@@ -86,14 +76,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-users.AdminUsersBundle",
                 "Import-Bundle": {}
 
             }
-        },
-
-        /**
-         * @static
-         * @property dependencies
-         */
-        "dependencies": ["jquery"]
-
+        }
     });
 
 Oskari.bundle_manager.installBundleClass("admin-users", "Oskari.framework.bundle.admin-users.AdminUsersBundle");

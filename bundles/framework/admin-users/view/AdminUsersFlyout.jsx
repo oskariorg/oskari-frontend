@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs, Message } from 'oskari-ui';
 import { RolesTab } from './RolesTab';
 import { UsersTab } from './UsersTab';
+import { UsersByRoleTab } from './UsersByRoleTab';
 
 export const AdminUsersFlyout = ({ state, controller, isExternal = false }) => {
     return (
@@ -12,16 +13,23 @@ export const AdminUsersFlyout = ({ state, controller, isExternal = false }) => {
                 items={[
                     {
                         key: 'admin-users-tab',
-                        label: <Message messageKey='flyout.adminusers.title' />,
+                        label: <Message messageKey='users.title' />,
                         children: (
                             <UsersTab state={state} controller={controller} isExternal={isExternal} />
                         )
                     },
                     {
                         key: 'admin-roles-tab',
-                        label: <Message messageKey='flyout.adminroles.title' />,
+                        label: <Message messageKey='roles.title' />,
                         children: (
                             <RolesTab state={state} controller={controller} />
+                        )
+                    },
+                    {
+                        key: 'admin-users-by-role-tab',
+                        label: <Message messageKey='usersByRole.title' />,
+                        children: (
+                            <UsersByRoleTab state={state} controller={controller} />
                         )
                     }
                 ]}

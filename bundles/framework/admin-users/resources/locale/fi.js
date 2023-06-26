@@ -9,44 +9,55 @@ Oskari.registerLocalization(
             "title": "A: Käyttäjät"
         },
         "flyout": {
-            "title": "Käyttäjien ylläpito",
-            "adminusers": {
-                "title": "Käyttäjät",
-                "firstName": "Etunimi",
-                "lastName": "Sukunimi",
-                "user": "Nimimerkki",
-                "pass": "Salasana",
-                "email": "Sähköposti",
-                "pass_retype": "Salasana uudestaan",
-                "addRole": "Valitse rooli(t)",
-                "password_mismatch": "Salasanat eivät täsmää.",
-                "password_too_short": "Salasanan on oltava vähintään kahdeksan merkkiä pitkä.",
-                "passwordRequirements": {
-                    "title": "Salasanan vaatimukset: ",
-                    "length": "Vähimmäispituus:  {length}",
-                    "case": "Pitää sisältää sekä pieniä että ISOJA kirjaimia"
-                },
-                "form_invalid": "Annetut arvot ovat virheellisiä tai puutteellisia.",
-                "field_required": "Kenttä \"{fieldName}\" on pakollinen",
-                "confirm_delete": "Haluatko varmasti poistaa käyttäjän {user}?",
-                "delete_failed": "Käyttäjän poistaminen epäonnistui.",
-                "fetch_failed": "Käyttäjien tietoja ei voitu hakea.",
-                "save_failed": "Tallennus epäonnistui.",
-                "save_failed_message": "Valitsemasi nimimerkki on jo käytössä, yritä eri nimimerkkiä.",
-                "noMatch": "Ei hakutuloksia.",
-                "selectRole": "Valitse rooli",
-                "searchResults": "Hakutulokset"
+            "title": "Käyttäjien ylläpito"
+        },
+        "users": {
+            "title": "Käyttäjät",
+            "firstName": "Etunimi",
+            "lastName": "Sukunimi",
+            "user": "Nimimerkki",
+            "password": "Salasana",
+            "email": "Sähköposti",
+            "rePassword": "Salasana uudestaan",
+            "addRole": "Valitse rooli(t)",
+            "noMatch": "Ei hakutuloksia.",
+            "searchResults": "Hakutulokset",
+            "passwordRequirements": {
+                "title": "Salasanan vaatimukset: ",
+                "length": "Vähimmäispituus:  {length}",
+                "case": "Pitää sisältää sekä pieniä että ISOJA kirjaimia",
+                "mismatch": "Salasanat eivät täsmää."
             },
-            "adminroles": {
-                "title": "Roolit",
-                "newrole": "Lisää rooli:",
-                "confirm_delete": "Haluatko varmasti poistaa roolin {role}?",
-                "delete_failed": "Käyttäjän poistaminen epäonnistui.",
-                "doSave_failed": "Roolin tallennus epäonnistui."
+            "errors": {
+                "form": "Annetut arvot ovat virheellisiä tai puutteellisia.",
+                "fetch": "Käyttäjien tietoja ei voitu hakea.",
+                "save": "Tallennus epäonnistui.",
+                "delete": "Käyttäjän poistaminen epäonnistui.",
+                "reserved": "Valitsemasi nimimerkki on jo käytössä, yritä eri nimimerkkiä."
             }
         },
-        "save": "tallenna",
-        "failed_to_get_roles_title": "Roolien haku epäonnistui",
-        "failed_to_get_roles_message": "Roolien haku epäonnistui, tarkista oskari-control-admin saatavuus."
+        "roles": {
+            "title": "Roolit",
+            "new": "Lisää rooli:",
+            "showUsers": "Näytä käyttäjät",
+            "errors": {
+                "form": "Nimi on pakollinen.",
+                "fetch": "Roolien haku epäonnistui",
+                "save": "Roolin tallennus epäonnistui.",
+                "delete": "Roolin poistaminen epäonnistui."
+            },               
+            "types": {
+                "system": "Järjestelmäroolit",
+                "other": "Lisäroolit"
+            }
+        },
+        "usersByRole": {
+            "title": "Roolin käyttäjät",
+            "selectRole": "Valitse rooli",
+            "noUsers": "Roolilla ei ole yhtään käyttäjää.",
+            "errors": {
+                "fetch": "Käyttäjien tietoja ei voitu hakea roolille.",
+            }
+        }
     }
 });

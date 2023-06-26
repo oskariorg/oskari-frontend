@@ -4,8 +4,8 @@ import { Message, Confirm, Button, Tooltip } from 'oskari-ui';
 import { ThemeConsumer } from '../../util';
 import { getColorEffect, EFFECT } from '../../theme';
 import styled from 'styled-components';
-import { PlusOutlined, EditOutlined, QuestionCircleOutlined, DeleteOutlined } from '@ant-design/icons';
-import { red } from '@ant-design/colors'
+import { PlusOutlined, EditOutlined, QuestionCircleOutlined, DeleteOutlined, CheckOutlined, StopOutlined} from '@ant-design/icons';
+import { red, green } from '@ant-design/colors'
 import { Forward } from '../icons/Forward'
 import { Backward } from '../icons/Backward'
 
@@ -44,6 +44,12 @@ const DisabledWrapper = styled('div')`
 `;
 
 const getPredefinedIcon = (type) => {
+    if (type === 'accept') {
+        return <CheckOutlined style={{color: green.primary}}/>;
+    }
+    if (type === 'reject') {
+        return <StopOutlined style={{color: red.primary}} />;
+    }
     if (type === 'add') {
         return <PlusOutlined/>;
     }
@@ -148,7 +154,7 @@ export const IconButton = ({
 };
 
 IconButton.propTypes = {
-    type: PropTypes.oneOf(['add', 'edit', 'info', 'next', 'previous', 'delete']),
+    type: PropTypes.oneOf(['add', 'edit', 'accept', 'reject', 'info', 'next', 'previous', 'delete']),
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     icon: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
     onClick: PropTypes.func,
