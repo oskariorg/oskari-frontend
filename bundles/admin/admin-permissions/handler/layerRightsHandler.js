@@ -11,7 +11,6 @@ class UIHandler extends StateHandler {
             selectedRole: 0,
             loading: false,
             changedIds: new Set(),
-            checkAllCheckboxes: {},
             pagination: {
                 pageSize: 50,
                 page: 1,
@@ -46,23 +45,14 @@ class UIHandler extends StateHandler {
         });
     }
 
-    setCheckAllForPermission (permissionId) {
-        this.updateState({
-            checkAllCheckboxes: {
-                ...this.state.checkAllCheckboxes,
-                [this.state.pagination.page]: {
-                    ...this.state.checkAllCheckboxes[this.state.pagination.page],
-                    [permissionId]: !this.state.checkAllCheckboxes[this.state.pagination.page]?.[permissionId]
-                }
-            }
-        });
+    setCheckAllForPermission (permissionType, enabled) {
         let permissions = [...this.state.resources];
         const startIndex = (this.state.pagination.page - 1) * this.state.pagination.pageSize;
         const endIndex = this.state.pagination.pageSize * this.state.pagination.page;
         const changedIds = new Set(this.state.changedIds);
         for (let i = startIndex; i < endIndex && i < permissions.length; i++) {
-            const permIndex = permissions[i].permissions.findIndex(p => p.id === permissionId);
-            permissions[i].permissions[permIndex].allow = this.state.checkAllCheckboxes[this.state.pagination.page][permissionId];
+            const permIndex = permissions[i].permissions.findIndex(p => p.id === permissionType);
+            permissions[i].permissions[permIndex].allow = enabled;
             changedIds.add(permissions[i].id);
         }
 
@@ -86,7 +76,6 @@ class UIHandler extends StateHandler {
         this.updateState({
             resources: permissions,
             changedIds: new Set(),
-            checkAllCheckboxes: {},
             pagination: {
                 ...this.state.pagination,
                 filter: searchText,
@@ -99,7 +88,6 @@ class UIHandler extends StateHandler {
         this.updateState({
             resources: structuredClone(this.state.permissions?.resource) || [],
             changedIds: new Set(),
-            checkAllCheckboxes: {},
             pagination: {
                 ...this.state.pagination,
                 filter: '',
@@ -160,7 +148,6 @@ class UIHandler extends StateHandler {
                 permissions: result,
                 resources: structuredClone(result?.resource) || [],
                 changedIds: new Set(),
-                checkAllCheckboxes: {},
                 pagination: {
                     ...this.state.pagination,
                     page: 1
@@ -172,8 +159,7 @@ class UIHandler extends StateHandler {
             this.updateState({
                 permissions: [],
                 resources: [],
-                changedIds: new Set(),
-                checkAllCheckboxes: {}
+                changedIds: new Set()
             });
             this.setLoading(false);
         }

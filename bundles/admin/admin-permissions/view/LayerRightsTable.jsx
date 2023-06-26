@@ -21,6 +21,10 @@ const CheckAllCheckbox = styled(Checkbox)`
     margin-top: 10px;
 `;
 
+const hasPermission = (layer, permissionType) => {
+    return layer.permissions.findIndex(p => p.id === permissionType && p.allow === true) > -1;
+};
+
 const getPermissionTableHeader = (permission) => {
     const translation = <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} bundleKey='admin-permissions' />;
     switch (permission.id) {
@@ -39,6 +43,19 @@ const getPermissionTableHeader = (permission) => {
 };
 
 export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => {
+    const allChecked = (permissionType) => {
+        let checked = true;
+        const startIndex = (state.pagination.page - 1) * state.pagination.pageSize;
+        const endIndex = state.pagination.pageSize * state.pagination.page;
+        state.resources
+            .filter((layer, index) => index >= startIndex && index < endIndex)
+            .forEach(layer => {
+                if (!hasPermission(layer, permissionType)) {
+                    checked = false
+                }
+            });
+        return checked;
+    };
     const columnSettings = [];
     if (state.permissions?.names) {
         columnSettings.push({
@@ -50,15 +67,19 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
         state.permissions.names.forEach((name, index) => {
             columnSettings.push({
                 align: 'left',
-                title: () => (
-                    <HeaderCell>
-                        {getPermissionTableHeader(name)}
-                        <CheckAllCheckbox
-                            checked={state.checkAllCheckboxes[state.pagination.page]?.[name.id]}
-                            onChange={() => controller.setCheckAllForPermission(name.id)}
-                        />
-                    </HeaderCell>
-                ),
+                title: () => {
+                    const permissionType = name.id;
+                    const allCurrentLayersHavePermission = allChecked(permissionType);
+                    return (
+                        <HeaderCell>
+                            {getPermissionTableHeader(name)}
+                            <CheckAllCheckbox
+                                checked={allCurrentLayersHavePermission}
+                                onChange={() => controller.setCheckAllForPermission(name.id, !allCurrentLayersHavePermission)}
+                            />
+                        </HeaderCell>
+                    );
+                },
                 dataIndex: 'permissions',
                 render: (title, item) => {
                     const tooltip = <span>{state.roles.find(role => role.id === state.selectedRole)?.name}: <Message messageKey={`rights.${name.id}`} defaultMsg={name.name} /></span>;
