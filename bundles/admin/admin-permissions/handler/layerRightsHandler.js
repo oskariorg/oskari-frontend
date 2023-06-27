@@ -156,7 +156,8 @@ class UIHandler extends StateHandler {
                 changedIds: new Set(),
                 pagination: {
                     ...this.state.pagination,
-                    page: 1
+                    page: 1,
+                    filter: ''
                 }
             });
             this.setLoading(false);
@@ -182,12 +183,12 @@ class UIHandler extends StateHandler {
                 });
             }
             for (let perm of changedPermissions) {
-                perm.permissions = perm.permissions.map(p => ({ key: p.id, value: p.allow }));
+                perm.permissions = perm.permissions[this.state.selectedRole];
             }
             const chunks = this.createChunks(changedPermissions, 100);
             for (const chunk of chunks) {
                 const payload = new URLSearchParams();
-                payload.append('resource', JSON.stringify(chunk));
+                payload.append('layers', JSON.stringify(chunk));
                 const response = await fetch(Oskari.urls.getRoute('LayerPermission'), {
                     method: 'POST',
                     headers: {
@@ -220,7 +221,7 @@ class UIHandler extends StateHandler {
         let permissions = layers[index]?.permissions[this.state.selectedRole] || [];
         if (enabled) {
             if (permissions.findIndex(p => p === permissionId) < 0) {
-                permissions.push(permissionId)
+                permissions.push(permissionId);
             }
         } else {
             const permIndex = permissions.findIndex(p => p === permissionId);
