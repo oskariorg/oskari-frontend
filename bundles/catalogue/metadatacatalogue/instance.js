@@ -533,6 +533,7 @@ Oskari.clazz.define(
                     } else {
                         me._showError(me.loc('cannot_be_empty'));
                     }
+                    me.progressSpinner.stop();
                 }
             };
 
