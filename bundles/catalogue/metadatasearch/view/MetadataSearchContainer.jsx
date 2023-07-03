@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from '../instance';
 import { SearchInput } from 'oskari-ui';
-import { AdvancedSearchContainer } from './AdvancedSearchContainer';
+import { AdvancedSearchContainer } from './advanced-search/AdvancedSearchContainer';
 const Description = () => {
     return <div>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'metadataSearchDescription')}</div>;
 };

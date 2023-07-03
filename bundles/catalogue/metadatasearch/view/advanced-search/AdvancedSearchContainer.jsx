@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { METADATA_BUNDLE_LOCALIZATION_ID } from '../instance';
-const AdvancedSearchOptions = (props) => {
- return <h1>kiikkikii</h1>;
-}
-
+import { METADATA_BUNDLE_LOCALIZATION_ID } from '../../instance';
+import { AdvancedSearchOptions } from './AdvancedSearchOptions';
 export const AdvancedSearchContainer = (props) => {
     const { isExpanded, toggleAdvancedSearch } = props;
     return (<div>
@@ -12,7 +9,7 @@ export const AdvancedSearchContainer = (props) => {
         { isExpanded &&
             <div>
                 <a onClick={toggleAdvancedSearch}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'showLess')}</a>
-                <AdvancedSearchOptions />
+                <AdvancedSearchOptions/>
             </div>
         }
     </div>);
