@@ -5,10 +5,10 @@ import { AdvancedSearchOptions } from './AdvancedSearchOptions';
 export const AdvancedSearchContainer = (props) => {
     const { isExpanded, toggleAdvancedSearch } = props;
     return (<div>
-        { !isExpanded && <a onClick={toggleAdvancedSearch}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'showMore')}</a>}
+        { !isExpanded && <a onClick={toggleAdvancedSearch}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.showMore')}</a>}
         { isExpanded &&
             <div>
-                <a onClick={toggleAdvancedSearch}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'showLess')}</a>
+                <a onClick={toggleAdvancedSearch}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.showLess')}</a>
                 <AdvancedSearchOptions/>
             </div>
         }

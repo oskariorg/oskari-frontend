@@ -5,8 +5,18 @@ Oskari.registerLocalization({
         "tabTitle": "Metatietohaku",
         "metadataSearchDescription": "Hae paikkatietoresursseja eli paikkatietoaineistoja, -aineistosarjoja ja palveluja.",
         "placeholder": "Kirjoita hakusana tähän.",
-        "showMore": "Lisää hakuehtoja",
-        "showLess": "Piilota tarkennettu haku",
+        "advancedSearch": {
+            "showMore": "Lisää hakuehtoja",
+            "showLess": "Piilota tarkennettu haku",
+            "resourceType": "Resurssin tyyppi",
+            "resourceName": "Resurssin nimi",
+            "serviceType": "Palvelun tyyppi",
+            "organisationName": "Vastuutaho",
+            "keyword": "Avainsana",
+            "topicCategory": "Aiheluokka",
+            "metadataLanguage": "Metatiedon kieli",
+            "resourceLanguage": "Resurssin kieli"
+        },
         "grid": {
             "name": "Nimi",
             "removeBBOX": "Piilota kattavuusalue",
