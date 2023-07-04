@@ -14,16 +14,26 @@ const FlexColumnContainer = styled('div')`
     flex-direction: column;
 `;
 
+const ADVANCED_SEARCH_PARAMS = {
+    resourceType: 'type',
+    resourceName: 'Title',
+    responsibleParty: 'OrganisationName',
+    keyword: 'Subject',
+    topicCategory: 'TopicCategory',
+    metadataLanguage: 'Language',
+    resourceLanguage: 'ResourceLanguage'
+};
+
 export const AdvancedSearchOptions = (props) => {
     const { advancedSearchOptions } = props;
     return <FlexColumnContainer>
-        <AdvancedSearchResourceType options={getByField('type', advancedSearchOptions)}/>
-        <AdvancedSearchResourceName/>
-        <AdvancedSearchResponsibleParty/>
-        <AdvancedSearchKeyword/>
-        <AdvancedSearchTopicCategory/>
-        <AdvancedSearchMetadataLanguage/>
-        <AdvancedSearchResourceLanguage/>
+        <AdvancedSearchResourceType options={getByField(ADVANCED_SEARCH_PARAMS.resourceType, advancedSearchOptions)}/>
+        <AdvancedSearchResourceName options={getByField(ADVANCED_SEARCH_PARAMS.resourceName, advancedSearchOptions)}/>
+        <AdvancedSearchResponsibleParty options={getByField(ADVANCED_SEARCH_PARAMS.responsibleParty, advancedSearchOptions)}/>
+        <AdvancedSearchKeyword options={getByField(ADVANCED_SEARCH_PARAMS.keyword, advancedSearchOptions)}/>
+        <AdvancedSearchTopicCategory options={getByField(ADVANCED_SEARCH_PARAMS.topicCategory, advancedSearchOptions)}/>
+        <AdvancedSearchMetadataLanguage options={getByField(ADVANCED_SEARCH_PARAMS.metadataLanguage, advancedSearchOptions)}/>
+        <AdvancedSearchResourceLanguage options={getByField(ADVANCED_SEARCH_PARAMS.resourceLanguage, advancedSearchOptions)}/>
     </FlexColumnContainer>;
 };
 
