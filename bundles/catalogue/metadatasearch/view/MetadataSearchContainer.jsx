@@ -24,11 +24,16 @@ SearchContainer.propTypes = {
 };
 
 const MetadataSearchContainer = ({ state, controller }) => {
-    const { query, advancedSearchExpanded, advancedSearchOptions } = state;
+    const { query, advancedSearchExpanded, advancedSearchOptions, advancedSearchValues } = state;
     return <div>
         <Description/>
         <SearchContainer query={query} onChange={controller.updateQuery} />
-        <AdvancedSearchContainer isExpanded={advancedSearchExpanded} toggleAdvancedSearch={controller.toggleAdvancedSearch} advancedSearchOptions={advancedSearchOptions}/>
+        <AdvancedSearchContainer
+            isExpanded={advancedSearchExpanded}
+            toggleAdvancedSearch={controller.toggleAdvancedSearch}
+            advancedSearchOptions={advancedSearchOptions}
+            advancedSearchValues={advancedSearchValues}
+            controller={controller}/>
     </div>;
 };
 

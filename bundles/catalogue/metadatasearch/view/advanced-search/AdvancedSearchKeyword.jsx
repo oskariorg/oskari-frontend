@@ -5,16 +5,18 @@ import PropTypes from 'prop-types';
 import { Option } from 'oskari-ui';
 
 export const AdvancedSearchKeyword = (props) => {
-    const { options } = props;
+    const { options, onChange, selected } = props;
     const hasOptions = options && options?.values?.length && options.values.length > 0;
     return <AdvancedSearchRowContainer>
         <AdvancedSearchInputLabel>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.keyword')}</AdvancedSearchInputLabel>
-        <AdvancedSearchSelect>
+        <AdvancedSearchSelect onChange={onChange} selected={selected}>
             { hasOptions && options.values.map(value => <Option key={value.val}>{value.val}</Option>) }
         </AdvancedSearchSelect>
     </AdvancedSearchRowContainer>;
 };
 
 AdvancedSearchKeyword.propTypes = {
-    options: PropTypes.object
+    options: PropTypes.object,
+    onChange: PropTypes.func,
+    selected: PropTypes.string
 };

@@ -5,7 +5,7 @@ import { Checkbox } from 'oskari-ui';
 import PropTypes from 'prop-types';
 
 export const AdvancedSearchResourceType = (props) => {
-    const { options } = props;
+    const { options, onChange, selected } = props;
     const hasOptions = options && options?.values?.length && options.values.length > 0;
     return <AdvancedSearchRowContainer>
         <AdvancedSearchInputLabel>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.resourceType')}</AdvancedSearchInputLabel>

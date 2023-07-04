@@ -25,15 +25,15 @@ const ADVANCED_SEARCH_PARAMS = {
 };
 
 export const AdvancedSearchOptions = (props) => {
-    const { advancedSearchOptions } = props;
+    const { advancedSearchOptions, advancedSearchValues, controller } = props;
     return <FlexColumnContainer>
-        <AdvancedSearchResourceType options={getByField(ADVANCED_SEARCH_PARAMS.resourceType, advancedSearchOptions)}/>
-        <AdvancedSearchResourceName options={getByField(ADVANCED_SEARCH_PARAMS.resourceName, advancedSearchOptions)}/>
-        <AdvancedSearchResponsibleParty options={getByField(ADVANCED_SEARCH_PARAMS.responsibleParty, advancedSearchOptions)}/>
-        <AdvancedSearchKeyword options={getByField(ADVANCED_SEARCH_PARAMS.keyword, advancedSearchOptions)}/>
-        <AdvancedSearchTopicCategory options={getByField(ADVANCED_SEARCH_PARAMS.topicCategory, advancedSearchOptions)}/>
-        <AdvancedSearchMetadataLanguage options={getByField(ADVANCED_SEARCH_PARAMS.metadataLanguage, advancedSearchOptions)}/>
-        <AdvancedSearchResourceLanguage options={getByField(ADVANCED_SEARCH_PARAMS.resourceLanguage, advancedSearchOptions)}/>
+        <AdvancedSearchResourceType options={getByField(ADVANCED_SEARCH_PARAMS.resourceType, advancedSearchOptions)} onChange={controller.advancedSearchResourceTypeChanged}/>
+        <AdvancedSearchResourceName options={getByField(ADVANCED_SEARCH_PARAMS.resourceName, advancedSearchOptions)} selected={advancedSearchValues.resourceName} onChange={controller.advancedSearchResourceNameChanged}/>
+        <AdvancedSearchResponsibleParty options={getByField(ADVANCED_SEARCH_PARAMS.responsibleParty, advancedSearchOptions)} selected={advancedSearchValues.responsibleParty} onChange={controller.advancedSearchResponsiblePartyChanged}/>
+        <AdvancedSearchKeyword options={getByField(ADVANCED_SEARCH_PARAMS.keyword, advancedSearchOptions)} selected={advancedSearchValues.keyword} onChange={controller.advancedSearchKeywordChanged}/>
+        <AdvancedSearchTopicCategory options={getByField(ADVANCED_SEARCH_PARAMS.topicCategory, advancedSearchOptions)} selected={advancedSearchValues.topicCategory} onChange={controller.advancedSearchTopicCategoryChanged}/>
+        <AdvancedSearchMetadataLanguage options={getByField(ADVANCED_SEARCH_PARAMS.metadataLanguage, advancedSearchOptions)} selected={advancedSearchValues.metadataLanguage} onChange={controller.advancedSearchMetadataLanguageChanged}/>
+        <AdvancedSearchResourceLanguage options={getByField(ADVANCED_SEARCH_PARAMS.resourceLanguage, advancedSearchOptions)} selected={advancedSearchValues.resourceLanguage} onChange={controller.advancedSearchResourceLanguageChanged}/>
     </FlexColumnContainer>;
 };
 
@@ -42,5 +42,7 @@ const getByField = (fieldName, optionsArray) => {
 };
 
 AdvancedSearchOptions.propTypes = {
-    advancedSearchOptions: PropTypes.object
+    advancedSearchOptions: PropTypes.object,
+    advancedSearchValues: PropTypes.object,
+    controller: PropTypes.object
 };

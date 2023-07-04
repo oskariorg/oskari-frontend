@@ -9,7 +9,8 @@ class MetadataStateHandler extends StateHandler {
         this.setState({
             query: '',
             advancedSearchExpanded: false,
-            advancedSearchOptions: null
+            advancedSearchOptions: null,
+            advancedSearchValues: {}
         });
         this.addStateListener(() => this.updateMetadataSearch());
     }
@@ -47,12 +48,67 @@ class MetadataStateHandler extends StateHandler {
             this.updateState({ advancedSearchOptions: options });
         });
     }
+
+    updateAdvancedSearchValues (newValues) {
+        this.updateState({
+            advancedSearchValues: newValues
+        });
+    }
+
+    advancedSearchResourceTypeChanged (value) {
+        const { advancedSearchValues } = this.getState();
+        advancedSearchValues.resourceType = [];
+        // TODO: array of values.
+    }
+
+    advancedSearchResourceNameChanged (value) {
+        const { advancedSearchValues } = this.getState();
+        advancedSearchValues.resourceName = value;
+        this.updateAdvancedSearchValues(advancedSearchValues);
+    }
+
+    advancedSearchResponsiblePartyChanged (value) {
+        const { advancedSearchValues } = this.getState();
+        advancedSearchValues.responsibleParty = value;
+        this.updateAdvancedSearchValues(advancedSearchValues);
+    }
+
+    advancedSearchKeywordChanged (value) {
+        const { advancedSearchValues } = this.getState();
+        advancedSearchValues.keyword = value;
+        this.updateAdvancedSearchValues(advancedSearchValues);
+    }
+
+    advancedSearchTopicCategoryChanged (value) {
+        const { advancedSearchValues } = this.getState();
+        advancedSearchValues.topicCategory = value;
+        this.updateAdvancedSearchValues(advancedSearchValues);
+    }
+
+    advancedSearchMetadataLanguageChanged (value) {
+        const { advancedSearchValues } = this.getState();
+        advancedSearchValues.metadataLanguage = value;
+        this.updateAdvancedSearchValues(advancedSearchValues);
+    }
+
+    advancedSearchResourceLanguageChanged (value) {
+        const { advancedSearchValues } = this.getState();
+        advancedSearchValues.resourceLanguage = value;
+        this.updateAdvancedSearchValues(advancedSearchValues);
+    }
 }
 
 const wrapped = controllerMixin(MetadataStateHandler, [
     'updateQuery',
     'renderMetadataSearch',
-    'toggleAdvancedSearch'
+    'toggleAdvancedSearch',
+    'advancedSearchResourceTypeChanged',
+    'advancedSearchResourceNameChanged',
+    'advancedSearchResponsiblePartyChanged',
+    'advancedSearchKeywordChanged',
+    'advancedSearchTopicCategoryChanged',
+    'advancedSearchMetadataLanguageChanged',
+    'advancedSearchResourceLanguageChanged'
 ]);
 
 export { wrapped as MetadataStateHandler };
