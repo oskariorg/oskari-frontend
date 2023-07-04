@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { AdvancedSearchResourceType } from './AdvancedSearchResourceType';
 import { AdvancedSearchResourceName } from './AdvancedSearchResourceName';
 import { AdvancedSearchResponsibleParty } from './AdvancedSearchResponsibleParty';
@@ -14,8 +15,9 @@ const FlexColumnContainer = styled('div')`
 `;
 
 export const AdvancedSearchOptions = (props) => {
+    const { advancedSearchOptions } = props;
     return <FlexColumnContainer>
-        <AdvancedSearchResourceType/>
+        <AdvancedSearchResourceType options={getByField('type', advancedSearchOptions)}/>
         <AdvancedSearchResourceName/>
         <AdvancedSearchResponsibleParty/>
         <AdvancedSearchKeyword/>
@@ -23,4 +25,12 @@ export const AdvancedSearchOptions = (props) => {
         <AdvancedSearchMetadataLanguage/>
         <AdvancedSearchResourceLanguage/>
     </FlexColumnContainer>;
+};
+
+const getByField = (fieldName, optionsArray) => {
+    return optionsArray?.fields?.find((item) => item.field === fieldName) || null;
+};
+
+AdvancedSearchOptions.propTypes = {
+    advancedSearchOptions: PropTypes.object
 };

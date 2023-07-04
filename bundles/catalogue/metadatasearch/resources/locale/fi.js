@@ -15,7 +15,19 @@ Oskari.registerLocalization({
             "keyword": "Avainsana",
             "topicCategory": "Aiheluokka",
             "metadataLanguage": "Metatiedon kieli",
-            "resourceLanguage": "Resurssin kieli"
+            "resourceLanguage": "Resurssin kieli",
+            "fetchAdvancedSearchOptionsFailed": "Hakuehtoja ei voida näyttää.",
+            "resourceTypes": {
+                "service-discovery": "Hakupalvelu",
+                "service-download": "Latauspalvelu",
+                "service-other": "Muu palvelu",
+                "service-transformation": "Muunnospalvelu",
+                "service-view": "Katselupalvelu",
+                "service-OGC:WMS": "WMS-palvelu",
+                "service-OGC:WFS": "WFS-palvelu",
+                "dataset": "Aineisto",
+                "series": "Aineistosarja",
+            }
         },
         "grid": {
             "name": "Nimi",

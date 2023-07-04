@@ -15,7 +15,19 @@ Oskari.registerLocalization({
             "keyword": "Keyword",
             "topicCategory": "Topic category",
             "metadataLanguage": "Metadata language",
-            "resourceLanguage": "Resource language"
+            "resourceLanguage": "Resource language",
+            "fetchAdvancedSearchOptionsFailed": "Search options could not be retrieved.",
+            "resourceTypes": {
+                "service-discovery": "Discovery service",
+                "service-download": "Download service",
+                "service-other": "Other service",
+                "service-transformation": "Transformation service",
+                "service-view": "View service",
+                "service-OGC:WMS": "WMS service",
+                "service-OGC:WFS": "WFS service",
+                "dataset": "Dataset",
+                "series": "Dataset series",
+            }
         },
         "grid": {
             "name": "Name",

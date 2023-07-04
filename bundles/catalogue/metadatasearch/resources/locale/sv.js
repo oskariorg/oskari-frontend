@@ -15,7 +15,19 @@ Oskari.registerLocalization({
             "keyword": "Nyckelord",
             "topicCategory": "Ämneskategori",
             "metadataLanguage": "Metadataspråk",
-            "resourceLanguage": "Resursspråk"
+            "resourceLanguage": "Resursspråk",
+            "fetchAdvancedSearchOptionsFailed": "Hämtning av alternativ misslyckades.",
+            "resourceTypes": {
+                "service-discovery": "Söktjänst",
+                "service-download": "Nedladdningstjänst",
+                "service-other": "Övriga tjänster",
+                "service-transformation": "Omvandlingstjänst",
+                "service-view": "Visningstjänst",
+                "service-OGC:WMS": "WMS-tjänst",
+                "service-OGC:WFS": "WFS-tjänst",
+                "dataset": "Dataset",
+                "series": "Serie",
+            }
         },
         "grid": {
             "name": "Namn",

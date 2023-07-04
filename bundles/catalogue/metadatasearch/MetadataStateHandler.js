@@ -1,12 +1,15 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { renderMetadataSearchContainer } from './view/MetadataSearchContainer';
+import { MetadataOptionService } from './service/MetadataOptionService';
 
 class MetadataStateHandler extends StateHandler {
-    constructor () {
+    constructor (optionsAjaxUrl) {
         super();
+        this.optionsService = new MetadataOptionService(optionsAjaxUrl);
         this.setState({
             query: '',
-            advancedSearchExpanded: false
+            advancedSearchExpanded: false,
+            advancedSearchOptions: null
         });
         this.addStateListener(() => this.updateMetadataSearch());
     }
@@ -28,9 +31,20 @@ class MetadataStateHandler extends StateHandler {
     }
 
     toggleAdvancedSearch () {
-        const { advancedSearchExpanded } = this.getState();
+        const { advancedSearchExpanded, advancedSearchOptions } = this.getState();
+        // toggling open and haven't fetched options yet -> fetch.
         this.updateState({
             advancedSearchExpanded: !advancedSearchExpanded
+        });
+
+        if (!advancedSearchExpanded && !advancedSearchOptions) {
+            this.fetchOptions();
+        }
+    }
+
+    async fetchOptions () {
+        await this.optionsService.getOptions((options) => {
+            this.updateState({ advancedSearchOptions: options });
         });
     }
 }
