@@ -22,163 +22,54 @@ Oskari.clazz.define(
         this.started = false;
         this.plugins = {};
         this.loc = Oskari.getMsg.bind(null, 'catalogue.bundle.metadatasearch');
-        this.optionService = null;
-        this.searchService = null;
-        this.tabPriority = 5.0;
-        this.conditions = [];
-        this.resultHeaders = [{
-            title: this.loc('grid.name'),
-            prop: 'name'
-        }, {
-            title: '',
-            tooltip: ''
-        }, {
-            title: '',
-            tooltip: this.loc('grid.showBBOX'),
-            prop: 'showBbox'
-        }, {
-            title: '',
-            tooltip: this.loc('grid.info'),
-            prop: 'info'
-        }, {
-            title: '',
-            tooltip: this.loc('grid.remove'),
-            prop: 'remove'
-        }];
-        this.lastSearch = '';
-        // last search result is saved so we can sort it in client
-        this.lastResult = null;
-        // last sort parameters are saved so we can change sort direction
-        // if the same column is sorted again
-        this.lastSort = null;
-        this.drawCoverage = true;
-        // Search result actions array.
-        this.searchResultActions = [];
-        this.conf = this.conf || {};
-        this.state = this.state || {};
-        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-        this._vectorLayerId = 'METADATASEARCH_VECTORLAYER';
+        this.optionAjaxUrl = null;
+        this.searchAjaxUrl = null;
+        this.initUrls();
         this.id = 'oskari_metadatasearch_tabpanel_header';
-        this.handler = new MetadataStateHandler();
+        this.handler = new MetadataStateHandler(this.optionAjaxUrl);
+/*
+-        this.tabPriority = 5.0;
+-        this.conditions = [];
+-        this.resultHeaders = [{
+-            title: this.loc('grid.name'),
+-            prop: 'name'
+-        }, {
+-            title: '',
+-            tooltip: ''
+-        }, {
+-            title: '',
+-            tooltip: this.loc('grid.showBBOX'),
+-            prop: 'showBbox'
+-        }, {
+-            title: '',
+-            tooltip: this.loc('grid.info'),
+-            prop: 'info'
+-        }, {
+-            title: '',
+-            tooltip: this.loc('grid.remove'),
+-            prop: 'remove'
+-        }];
+-        this.lastSearch = '';
+-        // last search result is saved so we can sort it in client
+-        this.lastResult = null;
+-        // last sort parameters are saved so we can change sort direction
+-        // if the same column is sorted again
+-        this.lastSort = null;
+-        this.drawCoverage = true;
+-        // Search result actions array.
+-        this.searchResultActions = [];
+-        this.conf = this.conf || {};
+-        this.state = this.state || {};
+-        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+-        this._vectorLayerId = 'METADATASEARCH_VECTORLAYER';
+-        this.id = 'oskari_metadatasearch_tabpanel_header';
+*/
     }, {
         /**
          * @static
          * @property __name
          */
         __name: 'catalogue.bundle.metadatasearch',
-        /**
-         * @static
-         * @property __drawStyle
-         */
-        __drawStyle: {
-            draw: {
-                fill: {
-                    color: 'rgba(35, 216, 194, 0.3)'
-                },
-                stroke: {
-                    color: 'rgba(35, 216, 194, 1)',
-                    width: 2
-                }
-            },
-            modify: {
-                fill: {
-                    color: 'rgba(0, 0, 238, 0.3)'
-                },
-                stroke: {
-                    color: 'rgba(0, 0, 238, 1)',
-                    width: 2
-                }
-            }
-        },
-        /**
-         * @static
-         * @property templates
-         */
-        templates: {
-            metadataTab: jQuery('<div class="metadataCatalogueContainer"></div>'),
-            optionPanel: jQuery(
-                '<div class="main metadataOptions">' +
-                '  <div class="metadataCatalogueDescription"></div>' +
-                '  <div class="controls"></div>' +
-                '  <div class="moreLess"></div>' +
-                '  <div class="advanced"></div>' +
-                '</div>'
-            ),
-            moreLessLink: jQuery('<a href="JavaScript:void(0);" class="moreLessLink"></a>'),
-            advanced: jQuery('<div class="advanced"></div>'),
-            metadataCheckbox: jQuery(
-                '<div class="metadataType">' +
-                '  <label class="metadataTypeText">' +
-                '    <input type="checkbox" class="metadataMultiDef">' +
-                '  </label>' +
-                '</div>'
-            ),
-            metadataDropdown: jQuery(
-                '<div class="metadataType">' +
-                '  <select class="metadataDef"></select>' +
-                '</div>'
-            ),
-            metadataButton: jQuery(
-                '<div class="metadataType">' +
-                '  <input id="metadataCoverageButton" class="metadataCoverageDef" type="button"></input>' +
-                '</div>'
-            ),
-            dropdownOption: jQuery('<option></option>'),
-            checkboxRow: jQuery(
-                '<div class="metadataRow checkboxRow">' +
-                '  <div class="rowLabel"></div>' +
-                '  <div class="checkboxes"></div>' +
-                '</div>'
-            ),
-            dropdownRow: jQuery(
-                '<div class="metadataRow dropdownRow">' +
-                '  <div class="rowLabel"></div>' +
-                '</div>'
-            ),
-            buttonRow: jQuery(
-                '<div class="metadataRow buttonRow">' +
-                '  <div class="rowLabel"></div>' +
-                '</div>'
-            ),
-            searchPanel: jQuery('<div class="main metadataSearching"></div>'),
-            resultPanel: jQuery('<div class="main metadataResults"></div>'),
-            resultHeader: jQuery(
-                '<div class="metadataResultHeader">' +
-                '  <div class="panelHeader resultTitle"></div>' +
-                '  <div class="panelHeader resultLinks">' +
-                '    <a href="JavaScript:void(0);" class="showDatasets filter-link" data-value="dataset,series"></a>' +
-                '    <a href="JavaScript:void(0);" class="showServices filter-link" data-value="service"></a>' +
-                '    <a href="JavaScript:void(0);" class="showLink"></a>' +
-                '    <a href="JavaScript:void(0);" class="modifyLink"></a>' +
-                '  </div>' +
-                '</div>'
-            ),
-            resultTable: jQuery(
-                '<div class="resultTable">' +
-                '  <table class="metadataSearchResult">' +
-                '    <thead><tr></tr></thead>' +
-                '    <tbody></tbody>' +
-                '  </table>' +
-                '</div>'
-            ),
-            resultTableHeader: jQuery('<th><a href="JavaScript:void(0);"></a></th>'),
-            resultTableRow: jQuery(
-                '<tr class="spacerRow">' +
-                '  <td class="spacer"></td>' +
-                '</tr>' +
-                '<tr class="resultRow">' +
-                '  <td></td>' +
-                '  <td></td>' +
-                '  <td><div class="actionPlaceholder"></div></td>' +
-                '  <td><div class="showBbox icon-info-area"></div></td>' +
-                '  <td><div class="layerInfo icon-info"></div></td>' +
-                '  <td><div class="resultRemove icon-close"></div></td>' +
-                '</tr>'
-            ),
-            layerList: jQuery('<ul class="layerList"></ul>'),
-            layerListItem: jQuery('<li></li>'),
-            layerLink: jQuery('<a href="JavaScript:void(0);" class="layerLink"></a>')
-        },
         /**
          * @method getName
          * @return {String} the name for the component
@@ -201,6 +92,20 @@ Oskari.clazz.define(
         getSandbox: function () {
             return this.sandbox;
         },
+
+        initUrls: function () {
+            if (this.conf && this.conf.optionUrl) {
+                this.optionAjaxUrl = this.conf.optionUrl;
+            } else {
+                this.optionAjaxUrl = Oskari.urls.getRoute('GetMetadataSearchOptions');
+            }
+
+            if (this.conf && this.conf.searchUrl) {
+                this.searchAjaxUrl = this.conf.searchUrl;
+            } else {
+                this.searchAjaxUrl = Oskari.urls.getRoute('GetMetadataSearch');
+            }
+        },
         /**
          * @method start
          * implements BundleInstance protocol start method
@@ -219,57 +124,11 @@ Oskari.clazz.define(
             const sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
-
-            var optionAjaxUrl = null;
-            if (me.conf && me.conf.optionUrl) {
-                optionAjaxUrl = me.conf.optionUrl;
-            } else {
-                optionAjaxUrl = Oskari.urls.getRoute('GetMetadataSearchOptions');
-            }
-
-            var searchAjaxUrl = null;
-            if (me.conf && me.conf.searchUrl) {
-                searchAjaxUrl = me.conf.searchUrl;
-            } else {
-                searchAjaxUrl = Oskari.urls.getRoute('GetMetadataSearch');
-            }
-
+            sandbox.register(me);
             // Default tab priority
             if (me.conf && typeof me.conf.priority === 'number') {
                 me.tabPriority = me.conf.priority;
             }
-
-            const optionServName =
-              'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService';
-            me.optionService = Oskari.clazz.create(optionServName, optionAjaxUrl);
-
-            const searchServName =
-                'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataSearchService';
-            me.searchService = Oskari.clazz.create(searchServName, searchAjaxUrl);
-
-            sandbox.register(me);
-            Object.keys(me.eventHandlers).forEach(eventName => {
-                sandbox.registerForEventByName(me, eventName);
-            });
-
-            const addSearchResultActionRequestHandler = Oskari.clazz.create(
-                'Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler',
-                sandbox,
-                me
-            );
-            sandbox.requestHandler(
-                'AddSearchResultActionRequest',
-                addSearchResultActionRequestHandler
-            );
-
-            const metadataSearchRequestHandler = Oskari.clazz.create(
-                'Oskari.catalogue.bundle.metadatacatalogue.request.MetadataSearchRequestHandler',
-                me
-            );
-            sandbox.requestHandler(
-                'MetadataSearchRequest',
-                metadataSearchRequestHandler
-            );
 
             if (conf.noUI === true) {
                 // bundle started by published map
@@ -302,7 +161,7 @@ Oskari.clazz.define(
          * or discarded if not.
          */
         onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
+            const handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
@@ -404,7 +263,7 @@ Oskari.clazz.define(
                 sandbox.unregisterFromEventByName(this, eventName);
             });
 
-            var reqBuilder = Oskari.requestBuilder('userinterface.RemoveExtensionRequest');
+            const reqBuilder = Oskari.requestBuilder('userinterface.RemoveExtensionRequest');
             this.sandbox.request(this, reqBuilder(this));
 
             this.sandbox.unregisterStateful(this.mediator.bundleId);
@@ -434,7 +293,8 @@ Oskari.clazz.define(
             // Metadata search tab
             const title = Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'tabTitle');
             const contentElement = document.createElement('div');
-            this.handler.getController().renderMetadataSearch(contentElement); // renderMetadataSearchContainer(this.handler.getState(), this.handler.getController(), contentElement);
+
+            this.handler.getController().renderMetadataSearch(contentElement);
             const priority = this.tabPriority;
             const reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
 
@@ -503,123 +363,6 @@ Oskari.clazz.define(
                 this.loc('metadataoptionservice_alert_title'),
                 error, [okButton]
             );
-        },
-        _createAdvancedPanel: function (data, advancedContainer, moreLessLink) {
-            var me = this,
-                dataFields = data.fields,
-                i,
-                dataField,
-                newRow,
-                newLabel,
-                newCheckboxDef,
-                newDropdown,
-                dropdownDef,
-                emptyOption,
-                renderCoverageButton = (_.filter(dataFields, { 'field': 'coverage' }).length > 0),
-                checkboxChange = function () {
-                    me._updateOptions(advancedContainer);
-                };
-            for (i = 0; i < dataFields.length; i += 1) {
-                dataField = dataFields[i];
-                if (dataField.values.length === 0) {
-                    // no options to show -> skip
-                    continue;
-                }
-                newRow = null;
-                newLabel = me.loc(dataField.field);
-                // Continue gracefully also without localization
-                if (typeof newLabel !== 'string') {
-                    newLabel = dataField.field;
-                }
-
-                const options = dataField.values.map(value => {
-                    const label = me._getOptionLocalization(value);
-                    return {
-                        label,
-                        val: value.val
-                    };
-                });
-                // We could filter out "bad values" here, but its easier to find them and fix at source if they are present in the lists
-                // .filter(opt => !opt.label.startsWith('--'));
-                options.sort((a, b) => Oskari.util.naturalSort(a.label, b.label));
-                // Checkbox
-                if (dataField.multi) {
-                    newRow = me.templates.checkboxRow.clone();
-                    newRow.find('div.rowLabel').text(newLabel);
-                    options.forEach(opt => {
-                        const newCheckbox = me.templates.metadataCheckbox.clone();
-                        newCheckboxDef = newCheckbox.find(':checkbox');
-                        newCheckboxDef.attr('name', dataField.field);
-                        newCheckboxDef.attr('value', opt.val);
-                        newCheckbox.find('label.metadataTypeText').append(opt.label);
-                        newCheckbox.on('change', checkboxChange);
-                        newRow.find('.checkboxes').append(newCheckbox);
-                    });
-                    // Dropdown list
-                } else {
-                    newRow = me.templates.dropdownRow.clone();
-                    newRow.find('div.rowLabel').append(newLabel);
-                    newDropdown = me.templates.metadataDropdown.clone();
-                    dropdownDef = newDropdown.find('.metadataDef');
-                    dropdownDef.attr('name', dataField.field);
-                    emptyOption = me.templates.dropdownOption.clone();
-                    emptyOption.attr('value', '');
-                    emptyOption.text(me.loc('emptyOption'));
-                    dropdownDef.append(emptyOption);
-                    options.forEach(opt => {
-                        const newOption = me.templates.dropdownOption.clone();
-                        newOption.attr('value', opt.val);
-                        newOption.text(opt.label);
-                        dropdownDef.append(newOption);
-                    });
-                    newDropdown.find('.metadataDef').on('change', checkboxChange);
-                    newRow.append(newDropdown);
-                }
-                // Conditional visibility
-                if ((typeof dataField.shownIf !== 'undefined') && (dataField.shownIf.length > 0)) {
-                    me.conditions.push({
-                        field: dataField.field,
-                        shownIf: dataField.shownIf
-                    });
-                    newRow.hide();
-                }
-                newRow.addClass(dataField.field);
-                advancedContainer.append(newRow);
-            }
-
-            if (renderCoverageButton) {
-                newRow = me.templates.buttonRow.clone();
-                newLabel = me.loc('searchArea');
-                newRow.find('div.rowLabel').append(newLabel);
-
-                var newButton = me.templates.metadataButton.clone();
-                this.coverageButton = this._initCoverageButton(me, newButton);
-                this.drawCoverage = true;
-
-                this.coverageButton.on('click', function () {
-                    if (me.drawCoverage === true) {
-                        me.coverageButton.prop('disabled', true).css({
-                            'border-color': '#0099CB'
-                        });
-                        me.coverageButton.val(me.loc('startDraw'));
-                        me._getCoverage();
-                        me.drawCoverage = false;
-                    } else {
-                        me.drawCoverage = true;
-                        me._stopCoverage();
-                        me.coverageButton.val(me.loc('delimitArea'));
-                        document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
-                        me.coverageButton[0].data = '';
-                        me._removeFeaturesFromMap();
-                    }
-                });
-
-                newRow.append(newButton);
-
-                advancedContainer.append(newRow);
-            }
-
-            me._updateOptions(advancedContainer);
         },
 
         _initCoverageButton: function (me, newButton) {
