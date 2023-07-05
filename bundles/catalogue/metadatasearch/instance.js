@@ -26,7 +26,7 @@ Oskari.clazz.define(
         this.searchAjaxUrl = null;
         this.initUrls();
         this.id = 'oskari_metadatasearch_tabpanel_header';
-        this.handler = new MetadataStateHandler(this.optionAjaxUrl);
+        this.handler = new MetadataStateHandler(this.optionAjaxUrl, this.searchAjaxUrl);
 /*
 -        this.tabPriority = 5.0;
 -        this.conditions = [];

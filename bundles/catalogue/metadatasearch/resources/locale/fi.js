@@ -17,6 +17,7 @@ Oskari.registerLocalization({
             "metadataLanguage": "Metatiedon kieli",
             "resourceLanguage": "Resurssin kieli",
             "fetchAdvancedSearchOptionsFailed": "Hakuehtoja ei voida näyttää.",
+            "metadataSearchserviceError": "Palvelussa on tilapäinen häiriö, ole hyvä ja yritä myöhemmin uudelleen.",
             "resourceTypes": {
                 "service-discovery": "Hakupalvelu",
                 "service-download": "Latauspalvelu",

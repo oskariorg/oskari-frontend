@@ -9,25 +9,27 @@ const Description = () => {
 };
 
 const SearchContainer = (props) => {
-    const { query, onChange } = props;
+    const { query, onChange, onSearch } = props;
     return <div>
         <SearchInput
             query={query}
             onChange={(event) => onChange(event.target.value)}
-            placeholder={Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'placeholder')}/>
+            placeholder={Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'placeholder')}
+            onSearch={onSearch}/>
     </div>;
 };
 
 SearchContainer.propTypes = {
     query: PropTypes.string,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    onSearch: PropTypes.func
 };
 
 const MetadataSearchContainer = ({ state, controller }) => {
     const { query, advancedSearchExpanded, advancedSearchOptions, advancedSearchValues } = state;
     return <div>
         <Description/>
-        <SearchContainer query={query} onChange={controller.updateQuery} />
+        <SearchContainer query={query} onChange={controller.updateQuery} onSearch={controller.doSearch}/>
         <AdvancedSearchContainer
             isExpanded={advancedSearchExpanded}
             toggleAdvancedSearch={controller.toggleAdvancedSearch}

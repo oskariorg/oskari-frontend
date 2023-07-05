@@ -1,17 +1,29 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { renderMetadataSearchContainer } from './view/MetadataSearchContainer';
 import { MetadataOptionService } from './service/MetadataOptionService';
+import { MetadataSearchService } from './service/MetadataSearchService';
+
+export const ADVANCED_SEARCH_PARAMS = {
+    resourceType: 'type',
+    resourceName: 'Title',
+    responsibleParty: 'OrganisationName',
+    keyword: 'Subject',
+    topicCategory: 'TopicCategory',
+    metadataLanguage: 'Language',
+    resourceLanguage: 'ResourceLanguage'
+};
 
 class MetadataStateHandler extends StateHandler {
-    constructor (optionsAjaxUrl) {
+    constructor (optionsAjaxUrl, searchAjaxUrl) {
         super();
         this.optionsService = new MetadataOptionService(optionsAjaxUrl);
+        this.searchService = new MetadataSearchService(searchAjaxUrl);
         this.setState({
             query: '',
             advancedSearchExpanded: false,
             advancedSearchOptions: null,
             advancedSearchValues: {
-                resourceTypes: []
+                resourceType: []
             }
         });
         this.addStateListener(() => this.updateMetadataSearch());
@@ -33,6 +45,31 @@ class MetadataStateHandler extends StateHandler {
         this.updateState({ query });
     }
 
+    doSearch () {
+        const { query, advancedSearchValues } = this.getState();
+        const formdata = {};
+        if (query) {
+            formdata.search = query;
+        }
+
+        Object.keys(ADVANCED_SEARCH_PARAMS).forEach(key => {
+            if (advancedSearchValues[key]) {
+                const keyInRequestParams = ADVANCED_SEARCH_PARAMS[key];
+
+                if (advancedSearchValues[key] instanceof Array) {
+                    formdata[keyInRequestParams] = advancedSearchValues[key].join(',');
+                } else {
+                    formdata[keyInRequestParams] = advancedSearchValues[key];
+                }
+            }
+        });
+
+        this.searchService.doSearch(formdata);
+    }
+
+    /**
+     * Advanced search
+     */
     toggleAdvancedSearch () {
         const { advancedSearchExpanded, advancedSearchOptions } = this.getState();
         // toggling open and haven't fetched options yet -> fetch.
@@ -64,11 +101,11 @@ class MetadataStateHandler extends StateHandler {
         const { advancedSearchValues } = this.getState();
         const checked = !!value.target.checked;
 
-        const newResourceTypes = advancedSearchValues?.resourceTypes?.filter(item => item !== value.target.value);
+        const newResourceType = advancedSearchValues?.resourceType?.filter(item => item !== value.target.value);
         if (checked) {
-            newResourceTypes.push(value.target.value);
+            newResourceType.push(value.target.value);
         }
-        advancedSearchValues.resourceTypes = newResourceTypes;
+        advancedSearchValues.resourceType = newResourceType;
         this.updateAdvancedSearchValues(advancedSearchValues);
     }
 
@@ -110,6 +147,7 @@ class MetadataStateHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(MetadataStateHandler, [
+    'doSearch',
     'updateQuery',
     'renderMetadataSearch',
     'toggleAdvancedSearch',

@@ -8,26 +8,17 @@ import { AdvancedSearchKeyword } from './AdvancedSearchKeyword';
 import { AdvancedSearchTopicCategory } from './AdvancedSearchTopicCategory';
 import { AdvancedSearchMetadataLanguage } from './AdvancedSearchMetadataLanguage';
 import { AdvancedSearchResourceLanguage } from './AdvancedSearchResourceLanguage';
+import { ADVANCED_SEARCH_PARAMS } from '../../MetadataStateHandler';
 
 const FlexColumnContainer = styled('div')`
     display: flex;
     flex-direction: column;
 `;
 
-const ADVANCED_SEARCH_PARAMS = {
-    resourceType: 'type',
-    resourceName: 'Title',
-    responsibleParty: 'OrganisationName',
-    keyword: 'Subject',
-    topicCategory: 'TopicCategory',
-    metadataLanguage: 'Language',
-    resourceLanguage: 'ResourceLanguage'
-};
-
 export const AdvancedSearchOptions = (props) => {
     const { advancedSearchOptions, advancedSearchValues, controller } = props;
     return <FlexColumnContainer>
-        <AdvancedSearchResourceType options={getByField(ADVANCED_SEARCH_PARAMS.resourceType, advancedSearchOptions)} selected={advancedSearchValues.resourceTypes} onChange={controller.advancedSearchResourceTypeChanged}/>
+        <AdvancedSearchResourceType options={getByField(ADVANCED_SEARCH_PARAMS.resourceType, advancedSearchOptions)} selected={advancedSearchValues.resourceType} onChange={controller.advancedSearchResourceTypeChanged}/>
         <AdvancedSearchResourceName options={getByField(ADVANCED_SEARCH_PARAMS.resourceName, advancedSearchOptions)} selected={advancedSearchValues.resourceName} onChange={controller.advancedSearchResourceNameChanged}/>
         <AdvancedSearchResponsibleParty options={getByField(ADVANCED_SEARCH_PARAMS.responsibleParty, advancedSearchOptions)} selected={advancedSearchValues.responsibleParty} onChange={controller.advancedSearchResponsiblePartyChanged}/>
         <AdvancedSearchKeyword options={getByField(ADVANCED_SEARCH_PARAMS.keyword, advancedSearchOptions)} selected={advancedSearchValues.keyword} onChange={controller.advancedSearchKeywordChanged}/>

@@ -24,5 +24,5 @@ const isChecked = (selected, value) => {
 AdvancedSearchResourceType.propTypes = {
     options: PropTypes.object,
     onChange: PropTypes.func,
-    selected: PropTypes.string
+    selected: PropTypes.array
 };
