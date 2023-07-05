@@ -10,7 +10,9 @@ class MetadataStateHandler extends StateHandler {
             query: '',
             advancedSearchExpanded: false,
             advancedSearchOptions: null,
-            advancedSearchValues: {}
+            advancedSearchValues: {
+                resourceTypes: []
+            }
         });
         this.addStateListener(() => this.updateMetadataSearch());
     }
@@ -56,9 +58,18 @@ class MetadataStateHandler extends StateHandler {
     }
 
     advancedSearchResourceTypeChanged (value) {
+        if (!value || !value.target) {
+            return;
+        }
         const { advancedSearchValues } = this.getState();
-        advancedSearchValues.resourceType = [];
-        // TODO: array of values.
+        const checked = !!value.target.checked;
+
+        const newResourceTypes = advancedSearchValues?.resourceTypes?.filter(item => item !== value.target.value);
+        if (checked) {
+            newResourceTypes.push(value.target.value);
+        }
+        advancedSearchValues.resourceTypes = newResourceTypes;
+        this.updateAdvancedSearchValues(advancedSearchValues);
     }
 
     advancedSearchResourceNameChanged (value) {

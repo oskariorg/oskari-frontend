@@ -27,7 +27,7 @@ const ADVANCED_SEARCH_PARAMS = {
 export const AdvancedSearchOptions = (props) => {
     const { advancedSearchOptions, advancedSearchValues, controller } = props;
     return <FlexColumnContainer>
-        <AdvancedSearchResourceType options={getByField(ADVANCED_SEARCH_PARAMS.resourceType, advancedSearchOptions)} onChange={controller.advancedSearchResourceTypeChanged}/>
+        <AdvancedSearchResourceType options={getByField(ADVANCED_SEARCH_PARAMS.resourceType, advancedSearchOptions)} selected={advancedSearchValues.resourceTypes} onChange={controller.advancedSearchResourceTypeChanged}/>
         <AdvancedSearchResourceName options={getByField(ADVANCED_SEARCH_PARAMS.resourceName, advancedSearchOptions)} selected={advancedSearchValues.resourceName} onChange={controller.advancedSearchResourceNameChanged}/>
         <AdvancedSearchResponsibleParty options={getByField(ADVANCED_SEARCH_PARAMS.responsibleParty, advancedSearchOptions)} selected={advancedSearchValues.responsibleParty} onChange={controller.advancedSearchResponsiblePartyChanged}/>
         <AdvancedSearchKeyword options={getByField(ADVANCED_SEARCH_PARAMS.keyword, advancedSearchOptions)} selected={advancedSearchValues.keyword} onChange={controller.advancedSearchKeywordChanged}/>

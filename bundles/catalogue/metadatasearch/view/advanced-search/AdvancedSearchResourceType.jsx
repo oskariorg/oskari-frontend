@@ -11,12 +11,18 @@ export const AdvancedSearchResourceType = (props) => {
         <AdvancedSearchInputLabel>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.resourceType')}</AdvancedSearchInputLabel>
         { hasOptions &&
             <AdvancedSearchCheckboxGroupContainer>
-                {options.values.map(value => <Checkbox key={value.val}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.resourceTypes.' + value.val)}</Checkbox>)}
+                {options.values.map(value => <Checkbox key={value.val} value={value.val} onChange={onChange} checked={isChecked(selected, value.val)}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.resourceTypes.' + value.val)}</Checkbox>)}
             </AdvancedSearchCheckboxGroupContainer>
         }
     </AdvancedSearchRowContainer>;
 };
 
+const isChecked = (selected, value) => {
+    return selected?.includes(value);
+};
+
 AdvancedSearchResourceType.propTypes = {
-    options: PropTypes.object
+    options: PropTypes.object,
+    onChange: PropTypes.func,
+    selected: PropTypes.string
 };
