@@ -18,6 +18,7 @@ Oskari.registerLocalization({
             "resourceLanguage": "Resource language",
             "fetchAdvancedSearchOptionsFailed": "Search options could not be retrieved.",
             "metadataSearchserviceError": "The service is temporarily unavailable. Please try again later.",
+            "emptyOption": "No selection",
             "resourceTypes": {
                 "service-discovery": "Discovery service",
                 "service-download": "Download service",

@@ -10,7 +10,7 @@ export const AdvancedSearchResponsibleParty = (props) => {
     return <AdvancedSearchRowContainer>
         <AdvancedSearchInputLabel>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.organisationName')}</AdvancedSearchInputLabel>
         <AdvancedSearchSelect onChange={onChange} selected={selected}>
-            { hasOptions && options.values.map(value => <Option key={value.val}>{value.val}</Option>) }
+            { hasOptions && options.values.map(value => <Option key={value.val} value={value.value}>{value.val}</Option>) }
         </AdvancedSearchSelect>
     </AdvancedSearchRowContainer>;
 };

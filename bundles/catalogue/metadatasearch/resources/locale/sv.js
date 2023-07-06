@@ -18,6 +18,7 @@ Oskari.registerLocalization({
             "resourceLanguage": "Resursspråk",
             "fetchAdvancedSearchOptionsFailed": "Hämtning av alternativ misslyckades.",
             "metadataSearchserviceError": "Tjänsten fungerar tillfälligtvis inte. Vänligen försök igen senare.",
+            "emptyOption": "Inget val",
             "resourceTypes": {
                 "service-discovery": "Söktjänst",
                 "service-download": "Nedladdningstjänst",

@@ -2,6 +2,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { renderMetadataSearchContainer } from './view/MetadataSearchContainer';
 import { MetadataOptionService } from './service/MetadataOptionService';
 import { MetadataSearchService } from './service/MetadataSearchService';
+import { METADATA_BUNDLE_LOCALIZATION_ID } from './instance';
 
 export const ADVANCED_SEARCH_PARAMS = {
     resourceType: 'type',
@@ -84,7 +85,19 @@ class MetadataStateHandler extends StateHandler {
 
     async fetchOptions () {
         await this.optionsService.getOptions((options) => {
-            this.updateState({ advancedSearchOptions: options });
+            const sortedOptions = { fields: [] };
+            const emptyOption = Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.emptyOption');
+            options?.fields?.forEach((field) => {
+                const newField = Object.assign({}, field);
+                let sortedValues = field.values.sort((a, b) => Oskari.util.naturalSort(a.val, b.val));
+                sortedValues.forEach((value) => { value.value = value.val; });
+                if (!newField.multi) {
+                    sortedValues = [{ val: emptyOption, value: '' }].concat(sortedValues);
+                }
+                newField.values = sortedValues;
+                sortedOptions.fields.push(newField);
+            });
+            this.updateState({ advancedSearchOptions: sortedOptions });
         });
     }
 
