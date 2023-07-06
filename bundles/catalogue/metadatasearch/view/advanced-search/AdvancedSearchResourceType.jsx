@@ -1,8 +1,9 @@
 import React from 'react';
 import { AdvancedSearchCheckboxGroupContainer, AdvancedSearchInputLabel, AdvancedSearchRowContainer } from './AdvancedSearchStyledComponents';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from '../../instance';
+import { PropTypes } from 'prop-types';
 import { Checkbox } from 'oskari-ui';
-import PropTypes from 'prop-types';
+import { AdvancedSearchDropdownCommonPropTypes } from './commonPropTypes';
 
 export const AdvancedSearchResourceType = (props) => {
     const { options, onChange, selected } = props;
@@ -21,8 +22,4 @@ const isChecked = (selected, value) => {
     return selected?.includes(value);
 };
 
-AdvancedSearchResourceType.propTypes = {
-    options: PropTypes.object,
-    onChange: PropTypes.func,
-    selected: PropTypes.array
-};
+AdvancedSearchResourceType.propTypes = { ...AdvancedSearchDropdownCommonPropTypes, selected: PropTypes.array };

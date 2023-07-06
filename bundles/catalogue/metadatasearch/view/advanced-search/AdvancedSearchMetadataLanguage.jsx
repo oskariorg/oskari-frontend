@@ -1,8 +1,8 @@
 import React from 'react';
 import { AdvancedSearchInputLabel, AdvancedSearchRowContainer, AdvancedSearchSelect } from './AdvancedSearchStyledComponents';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from '../../instance';
-import PropTypes from 'prop-types';
 import { Option } from 'oskari-ui';
+import { AdvancedSearchDropdownCommonPropTypes } from './commonPropTypes';
 
 export const AdvancedSearchMetadataLanguage = (props) => {
     const { options, onChange, selected } = props;
@@ -15,8 +15,4 @@ export const AdvancedSearchMetadataLanguage = (props) => {
     </AdvancedSearchRowContainer>;
 };
 
-AdvancedSearchMetadataLanguage.propTypes = {
-    options: PropTypes.object,
-    onChange: PropTypes.func,
-    selected: PropTypes.string
-};
+AdvancedSearchMetadataLanguage.propTypes = AdvancedSearchDropdownCommonPropTypes;

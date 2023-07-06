@@ -1,8 +1,8 @@
 import React from 'react';
 import { Option } from 'oskari-ui';
-import PropTypes from 'prop-types';
 import { AdvancedSearchInputLabel, AdvancedSearchRowContainer, AdvancedSearchSelect } from './AdvancedSearchStyledComponents';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from '../../instance';
+import { AdvancedSearchDropdownCommonPropTypes } from './commonPropTypes';
 
 export const AdvancedSearchResourceName = (props) => {
     const { options, onChange, selected } = props;
@@ -15,8 +15,4 @@ export const AdvancedSearchResourceName = (props) => {
     </AdvancedSearchRowContainer>;
 };
 
-AdvancedSearchResourceName.propTypes = {
-    options: PropTypes.object,
-    onChange: PropTypes.func,
-    selected: PropTypes.string
-};
+AdvancedSearchResourceName.propTypes = AdvancedSearchDropdownCommonPropTypes;
