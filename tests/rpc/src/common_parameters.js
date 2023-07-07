@@ -23,10 +23,10 @@ var counter;
 // ##################### //
 
 var general = {
-  "ExpectedOskariVersion": "1.44.3",
+  "ExpectedOskariVersion": "2.11.0",
   "ExpectedRPCVersion": "2.0.4",
   "IsSupported": true,
-  "srsName": "EPSG:4326"
+  "srsName": "EPSG:3067"
 };
 
 // ##################### //
