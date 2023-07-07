@@ -31,6 +31,19 @@ Oskari.registerLocalization({
                 "series": "Serie",
             }
         },
+        "searchResults": {
+            "resultTitle": "Sökresultat",
+            "noSearchResults": "Inga resultat hittades.",
+            "modifySearch": "Redigera sökalternativ",
+            "showSearch": "Visa alla sökresultat",
+            "showDatasets": "Visa endast dataset",
+            "showServices": "Visa endast tjänster",
+            "identificationCode": {
+                "creation": "skapandedatum",
+                "publication": "publiceringsdatum",
+                "revision": "datum för senaste revidering"
+            },
+        },
         "grid": {
             "name": "Namn",
             "removeBBOX": "Göm geografisk datatäckning",

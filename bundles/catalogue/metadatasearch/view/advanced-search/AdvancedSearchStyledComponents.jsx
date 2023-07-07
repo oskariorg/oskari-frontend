@@ -8,6 +8,11 @@ export const AdvancedSearchRowContainer = styled('div')`
     margin: 0.25em;
 `;
 
+export const FlexRowCentered = styled('div')`
+    display: flex;
+    justify-content: center;
+`;
+
 export const AdvancedSearchInputLabel = styled('label')`
     margin-right: 1em;
     max-width: 10em;

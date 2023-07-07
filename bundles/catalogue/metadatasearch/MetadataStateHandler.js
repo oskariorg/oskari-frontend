@@ -25,7 +25,9 @@ class MetadataStateHandler extends StateHandler {
             advancedSearchOptions: null,
             advancedSearchValues: {
                 resourceType: []
-            }
+            },
+            loading: false,
+            searchResultsVisible: false
         });
         this.addStateListener(() => this.updateMetadataSearch());
     }
@@ -47,6 +49,10 @@ class MetadataStateHandler extends StateHandler {
     }
 
     doSearch () {
+        this.updateState({
+            loading: true,
+            searchResultsVisible: false
+        });
         const { query, advancedSearchValues } = this.getState();
         const formdata = {};
         if (query) {
@@ -65,7 +71,11 @@ class MetadataStateHandler extends StateHandler {
             }
         });
 
-        this.searchService.doSearch(formdata);
+        this.searchService.doSearch(formdata, (results) => this.updateSearchResults(results));
+    }
+
+    updateSearchResults (json) {
+        this.updateState({ loading: false, searchResults: json?.results || null, searchResultsVisible: true, advancedSearchExpanded: false });
     }
 
     /**

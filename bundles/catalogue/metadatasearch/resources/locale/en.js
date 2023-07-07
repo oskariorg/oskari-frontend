@@ -31,6 +31,19 @@ Oskari.registerLocalization({
                 "series": "Dataset series",
             }
         },
+        "searchResults": {
+            "resultTitle": "Search results",
+            "noSearchResults": "No results found. Check your search term and try again.",
+            "modifySearch": "Edit search options",
+            "showSearch": "Show all search results",
+            "showDatasets": "Show only datasets",
+            "showServices": "Show only services",
+            "identificationCode": {
+                "creation": "creation",
+                "publication": "publication",
+                "revision": "revision"
+            },
+        },
         "grid": {
             "name": "Name",
             "removeBBOX": "Hide coverage area",

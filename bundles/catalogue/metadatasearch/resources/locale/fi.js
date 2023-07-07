@@ -31,6 +31,19 @@ Oskari.registerLocalization({
                 "series": "Aineistosarja",
             }
         },
+        "searchResults": {
+            "resultTitle": "Hakutulokset",
+            "noSearchResults": "Hakutuloksia ei löytynyt. Tarkista hakusana ja yritä uudelleen.",
+            "modifySearch": "Muokkaa hakuehtoja",
+            "showSearch": "Näytä kaikki hakutulokset",
+            "showDatasets": "Näytä vain aineistot",
+            "showServices": "Näytä vain palvelut",
+            "identificationCode": {
+                "creation": "luonti",
+                "publication": "julkaisu",
+                "revision": "päivitys"
+            },
+        },
         "grid": {
             "name": "Nimi",
             "removeBBOX": "Piilota kattavuusalue",

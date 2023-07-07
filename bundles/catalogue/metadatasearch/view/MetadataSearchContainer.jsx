@@ -2,8 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from '../instance';
-import { SearchInput } from 'oskari-ui';
+import { SearchInput, Spin } from 'oskari-ui';
 import { AdvancedSearchContainer } from './advanced-search/AdvancedSearchContainer';
+import { MetadataSearchResultListContainer } from './resultlist/MetadataSearchResultListContainer';
+import { FlexRowCentered } from './advanced-search/AdvancedSearchStyledComponents';
+
 const Description = () => {
     return <div>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'metadataSearchDescription')}</div>;
 };
@@ -26,16 +29,28 @@ SearchContainer.propTypes = {
 };
 
 const MetadataSearchContainer = ({ state, controller }) => {
-    const { query, advancedSearchExpanded, advancedSearchOptions, advancedSearchValues } = state;
+    const { query, advancedSearchExpanded, advancedSearchOptions, advancedSearchValues, loading, searchResultsVisible, searchResults } = state;
     return <div>
-        <Description/>
-        <SearchContainer query={query} onChange={controller.updateQuery} onSearch={controller.doSearch}/>
-        <AdvancedSearchContainer
-            isExpanded={advancedSearchExpanded}
-            toggleAdvancedSearch={controller.toggleAdvancedSearch}
-            advancedSearchOptions={advancedSearchOptions}
-            advancedSearchValues={advancedSearchValues}
-            controller={controller}/>
+        { loading && <FlexRowCentered><Spin/></FlexRowCentered>}
+        {
+            !(loading || searchResultsVisible) &&
+            <>
+                <Description/>
+                <SearchContainer query={query} onChange={controller.updateQuery} onSearch={controller.doSearch}/>
+                <AdvancedSearchContainer
+                    isExpanded={advancedSearchExpanded}
+                    toggleAdvancedSearch={controller.toggleAdvancedSearch}
+                    advancedSearchOptions={advancedSearchOptions}
+                    advancedSearchValues={advancedSearchValues}
+                    controller={controller}/>
+            </>
+        }
+        {
+            (!loading && searchResultsVisible) &&
+            <>
+                <MetadataSearchResultListContainer searchResults={searchResults}/>
+            </>
+        }
     </div>;
 };
 
