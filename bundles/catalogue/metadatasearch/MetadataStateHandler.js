@@ -75,7 +75,7 @@ class MetadataStateHandler extends StateHandler {
     }
 
     updateSearchResults (json) {
-        this.updateState({ loading: false, searchResults: json?.results || null, searchResultsVisible: true, advancedSearchExpanded: false });
+        this.updateState({ loading: false, searchResults: json?.results || null, searchResultsVisible: true });
     }
 
     /**
@@ -91,6 +91,15 @@ class MetadataStateHandler extends StateHandler {
         if (!advancedSearchExpanded && !advancedSearchOptions) {
             this.fetchOptions();
         }
+    }
+
+    /**
+     * Toggle from search results list back to search view
+     */
+    toggleSearch () {
+        this.updateState({
+            searchResultsVisible: false
+        });
     }
 
     async fetchOptions () {
@@ -173,6 +182,7 @@ const wrapped = controllerMixin(MetadataStateHandler, [
     'doSearch',
     'updateQuery',
     'renderMetadataSearch',
+    'toggleSearch',
     'toggleAdvancedSearch',
     'advancedSearchResourceTypeChanged',
     'advancedSearchResourceNameChanged',

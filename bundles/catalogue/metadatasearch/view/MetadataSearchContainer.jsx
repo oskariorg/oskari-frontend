@@ -13,9 +13,10 @@ const Description = () => {
 
 const SearchContainer = (props) => {
     const { query, onChange, onSearch } = props;
+    console.log('query ', query);
     return <div>
         <SearchInput
-            query={query}
+            value={query}
             onChange={(event) => onChange(event.target.value)}
             placeholder={Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'placeholder')}
             onSearch={onSearch}/>
@@ -48,7 +49,7 @@ const MetadataSearchContainer = ({ state, controller }) => {
         {
             (!loading && searchResultsVisible) &&
             <>
-                <MetadataSearchResultListContainer searchResults={searchResults}/>
+                <MetadataSearchResultListContainer searchResults={searchResults} toggleSearch={controller.toggleSearch}/>
             </>
         }
     </div>;

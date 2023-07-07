@@ -5,12 +5,12 @@ import { FlexRight, FlexRow } from './MetadataSearchResultListStyledComponents';
 import { MetadataSearchResultList } from './MetadataSearchResultList';
 
 export const MetadataSearchResultListContainer = (props) => {
-    const { searchResults } = props;
+    const { searchResults, toggleSearch } = props;
     return <>
         <FlexRow>
             <div>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'searchResults.resultTitle')}</div>
             <FlexRight>
-                <a>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'searchResults.modifySearch')}</a>
+                <a onClick={toggleSearch}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'searchResults.modifySearch')}</a>
             </FlexRight>
         </FlexRow>
         <MetadataSearchResultList searchResults={searchResults}/>
@@ -19,4 +19,5 @@ export const MetadataSearchResultListContainer = (props) => {
 
 MetadataSearchResultListContainer.propTypes = {
     searchResults: PropTypes.array,
+    toggleSearch: PropTypes.func
 };
