@@ -15,3 +15,7 @@ export const SearchResultRow = styled('div')`
 export const FlexRight = styled('div')`
     margin-left: auto;
 `;
+
+export const ActionLinkContainer = styled('span')`
+    margin: 0 0.25em;
+`;

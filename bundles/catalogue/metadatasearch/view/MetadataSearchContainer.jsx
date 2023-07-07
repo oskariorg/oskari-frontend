@@ -13,7 +13,6 @@ const Description = () => {
 
 const SearchContainer = (props) => {
     const { query, onChange, onSearch } = props;
-    console.log('query ', query);
     return <div>
         <SearchInput
             value={query}
@@ -30,7 +29,7 @@ SearchContainer.propTypes = {
 };
 
 const MetadataSearchContainer = ({ state, controller }) => {
-    const { query, advancedSearchExpanded, advancedSearchOptions, advancedSearchValues, loading, searchResultsVisible, searchResults } = state;
+    const { query, advancedSearchExpanded, advancedSearchOptions, advancedSearchValues, loading, searchResultsVisible, searchResults, searchResultsFilter } = state;
     return <div>
         { loading && <FlexRowCentered><Spin/></FlexRowCentered>}
         {
@@ -49,7 +48,11 @@ const MetadataSearchContainer = ({ state, controller }) => {
         {
             (!loading && searchResultsVisible) &&
             <>
-                <MetadataSearchResultListContainer searchResults={searchResults} toggleSearch={controller.toggleSearch}/>
+                <MetadataSearchResultListContainer
+                    searchResults={searchResults}
+                    searchResultsFilter={searchResultsFilter}
+                    toggleSearch={controller.toggleSearch}
+                    toggleSearchResultsFilter={controller.toggleSearchResultsFilter}/>
             </>
         }
     </div>;

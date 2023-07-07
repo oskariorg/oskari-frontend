@@ -27,7 +27,8 @@ class MetadataStateHandler extends StateHandler {
                 resourceType: []
             },
             loading: false,
-            searchResultsVisible: false
+            searchResultsVisible: false,
+            searchResultsFilter: null
         });
         this.addStateListener(() => this.updateMetadataSearch());
     }
@@ -51,7 +52,8 @@ class MetadataStateHandler extends StateHandler {
     doSearch () {
         this.updateState({
             loading: true,
-            searchResultsVisible: false
+            searchResultsVisible: false,
+            searchResultsFilter: null
         });
         const { query, advancedSearchValues } = this.getState();
         const formdata = {};
@@ -99,6 +101,12 @@ class MetadataStateHandler extends StateHandler {
     toggleSearch () {
         this.updateState({
             searchResultsVisible: false
+        });
+    }
+
+    toggleSearchResultsFilter (value) {
+        this.updateState({
+            searchResultsFilter: value
         });
     }
 
@@ -184,6 +192,7 @@ const wrapped = controllerMixin(MetadataStateHandler, [
     'renderMetadataSearch',
     'toggleSearch',
     'toggleAdvancedSearch',
+    'toggleSearchResultsFilter',
     'advancedSearchResourceTypeChanged',
     'advancedSearchResourceNameChanged',
     'advancedSearchResponsiblePartyChanged',
