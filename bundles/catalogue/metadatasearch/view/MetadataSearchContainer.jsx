@@ -52,7 +52,8 @@ const MetadataSearchContainer = ({ state, controller }) => {
                     searchResults={searchResults}
                     searchResultsFilter={searchResultsFilter}
                     toggleSearch={controller.toggleSearch}
-                    toggleSearchResultsFilter={controller.toggleSearchResultsFilter}/>
+                    toggleSearchResultsFilter={controller.toggleSearchResultsFilter}
+                    showMetadata={controller.showMetadata}/>
             </>
         }
     </div>;

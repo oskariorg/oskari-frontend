@@ -10,6 +10,12 @@ export const SearchResultRow = styled('div')`
     padding: 1em;
     margin: 0.25em;
     border: 1px solid grey;
+    font-size: smaller;
+    font-size: smaller;
+`;
+
+export const ClickableDiv = styled('div')`
+    cursor: pointer;
 `;
 
 export const FlexRight = styled('div')`

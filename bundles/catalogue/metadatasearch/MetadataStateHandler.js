@@ -15,10 +15,11 @@ export const ADVANCED_SEARCH_PARAMS = {
 };
 
 class MetadataStateHandler extends StateHandler {
-    constructor (optionsAjaxUrl, searchAjaxUrl) {
+    constructor (instance) {
         super();
-        this.optionsService = new MetadataOptionService(optionsAjaxUrl);
-        this.searchService = new MetadataSearchService(searchAjaxUrl);
+        this.optionsService = new MetadataOptionService(instance.optionsAjaxUrl);
+        this.searchService = new MetadataSearchService(instance.searchAjaxUrl);
+        this.sandbox = instance.getSandbox();
         this.setState({
             query: '',
             advancedSearchExpanded: false,
@@ -31,6 +32,10 @@ class MetadataStateHandler extends StateHandler {
             searchResultsFilter: null
         });
         this.addStateListener(() => this.updateMetadataSearch());
+    }
+
+    getSandbox () {
+        return this.sandbox;
     }
 
     renderMetadataSearch (element) {
@@ -78,6 +83,12 @@ class MetadataStateHandler extends StateHandler {
 
     updateSearchResults (json) {
         this.updateState({ loading: false, searchResults: json?.results || null, searchResultsVisible: true });
+    }
+
+    showMetadata (uuid) {
+        this.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{
+            uuid
+        }]);
     }
 
     /**
@@ -188,6 +199,7 @@ class MetadataStateHandler extends StateHandler {
 
 const wrapped = controllerMixin(MetadataStateHandler, [
     'doSearch',
+    'showMetadata',
     'updateQuery',
     'renderMetadataSearch',
     'toggleSearch',

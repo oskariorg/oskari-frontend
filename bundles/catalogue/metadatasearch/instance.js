@@ -18,7 +18,7 @@ Oskari.clazz.define(
      * @static
      */
     function () {
-        this.sandbox = null;
+        this.sandbox = Oskari.getSandbox();
         this.started = false;
         this.plugins = {};
         this.loc = Oskari.getMsg.bind(null, 'catalogue.bundle.metadatasearch');
@@ -26,44 +26,7 @@ Oskari.clazz.define(
         this.searchAjaxUrl = null;
         this.initUrls();
         this.id = 'oskari_metadatasearch_tabpanel_header';
-        this.handler = new MetadataStateHandler(this.optionAjaxUrl, this.searchAjaxUrl);
-/*
--        this.tabPriority = 5.0;
--        this.conditions = [];
--        this.resultHeaders = [{
--            title: this.loc('grid.name'),
--            prop: 'name'
--        }, {
--            title: '',
--            tooltip: ''
--        }, {
--            title: '',
--            tooltip: this.loc('grid.showBBOX'),
--            prop: 'showBbox'
--        }, {
--            title: '',
--            tooltip: this.loc('grid.info'),
--            prop: 'info'
--        }, {
--            title: '',
--            tooltip: this.loc('grid.remove'),
--            prop: 'remove'
--        }];
--        this.lastSearch = '';
--        // last search result is saved so we can sort it in client
--        this.lastResult = null;
--        // last sort parameters are saved so we can change sort direction
--        // if the same column is sorted again
--        this.lastSort = null;
--        this.drawCoverage = true;
--        // Search result actions array.
--        this.searchResultActions = [];
--        this.conf = this.conf || {};
--        this.state = this.state || {};
--        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
--        this._vectorLayerId = 'METADATASEARCH_VECTORLAYER';
--        this.id = 'oskari_metadatasearch_tabpanel_header';
-*/
+        this.handler = new MetadataStateHandler(this);
     }, {
         /**
          * @static

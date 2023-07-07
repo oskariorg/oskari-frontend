@@ -5,7 +5,7 @@ import { MetadataSearchResultListItem } from './MetadataSearchResultListItem';
 import { PropTypes } from 'prop-types';
 
 export const MetadataSearchResultList = (props) => {
-    const { searchResults } = props;
+    const { searchResults, showMetadata } = props;
     const hasSearchResults = (searchResults && searchResults.length);
 
     return <>
@@ -16,11 +16,12 @@ export const MetadataSearchResultList = (props) => {
                 </FlexRow>
         }
         {
-            hasSearchResults && searchResults.map((result) => <MetadataSearchResultListItem key={result.id} item={result}/>)
+            hasSearchResults && searchResults.map((result) => <MetadataSearchResultListItem key={result.id} item={result} showMetadata={showMetadata}/>)
         }
     </>;
 };
 
 MetadataSearchResultList.propTypes = {
-    searchResults: PropTypes.array
+    searchResults: PropTypes.array,
+    showMetadata: PropTypes.func
 };
