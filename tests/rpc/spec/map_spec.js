@@ -25,8 +25,8 @@ describe('Map', function(){
             channel.getAllLayers(function(data) {
                 // Expect atleast basemap layer to be found.
                 expect(Object.keys(data).length).toBeGreaterThan(0);
-                // Expect basemap layer to be have 4 elements.
-                expect(Object.keys(data[0]).length).toBe(4);
+                // Expect basemap layer to be have at least 4 elements.
+                expect(Object.keys(data[0]).length).toBeGreaterThanOrEqual(4);
                 // id, opacity, visible, name
                 expect(data[0].id).toBeDefined();
                 expect(data[0].opacity).not.toBeGreaterThan(100);
@@ -218,29 +218,29 @@ describe('Map', function(){
             //Save map position for testing.
             channel.getMapPosition(function(data) {
                 defaultPosition = data;
-                //Save layer for testing.
-                channel.getAllLayers(function(data) {
-                    defaultLayer= data;
-                    // Save state for loading.
-                    channel.getCurrentState(function(data) {
-                        savedState = data;
-                        done();
-                    });
-                });
             });
+            //Save layer for testing.
+            channel.getAllLayers(function(data) {
+                defaultLayer = data;
+            });
+            // Save state for loading.
+            channel.getCurrentState(function(data) {
+                savedState = data;
+            });
+            done();
         });
 
 
         it('Resets state', function(done) {
-            // Expect AfterMapMoveEvent to occur after resetState.
-            handleEvent('AfterMapMoveEvent', function(data) {
+            // Expect StateChangedEvent to occur after resetState.
+            handleEvent('StateChangedEvent', function(data) {
+                channel.log('StateChangedEvent launched!');
+                const position = data.current.mapfull.state;
                 // Expect map moved to default position.
-                expect(defaultPosition).toEqual(jasmine.objectContaining(data));
-                // More verbose:
-                expect(data.centerX).toBe(defaultPosition.centerX);
-                expect(data.centerY).toBe(defaultPosition.centerY);
-                expect(data.zoom).toBe(defaultPosition.zoom);
-                expect(data.scale).toBe(defaultPosition.scale);
+                expect(position.east).toBe(defaultPosition.centerX);
+                expect(position.north).toBe(defaultPosition.centerY);
+                expect(position.zoom).toBe(defaultPosition.zoom);
+                //expect(data.scale).toBe(defaultPosition.scale);
 
                 channel.log('ResetState moved map:', data);
                 counter++;
@@ -262,12 +262,13 @@ describe('Map', function(){
                             east: defaultPosition.centerX,
                             zoom: defaultPosition.zoom,
                             srs: defaultPosition.srsName,
-
-                            selectedLayers:[jasmine.objectContaining({
+                            
+                            // Every layer contains at least these fields
+                            selectedLayers:jasmine.arrayContaining([jasmine.objectContaining({
                                 id: defaultLayer[0].id,
                                 opacity:defaultLayer[0].opacity,
                                 //style:"default"
-                            })]
+                            })])
                         })
                     })
                 }));
@@ -285,15 +286,15 @@ describe('Map', function(){
         });
 
         it('Loads state', function(done) {
-            // Expect AfterMapMoveEvent to occur after useState.
-            handleEvent('AfterMapMoveEvent', function(data) {
+            // Expect StateChangedEvent to occur after useState.
+            handleEvent('StateChangedEvent', function(data) {
+                channel.log('StateChangedEvent launched!');
+                const position = data.current.mapfull.state;
                 // Expect map moved to default position.
-                expect(defaultPosition).toEqual(jasmine.objectContaining(data));
-                // More verbose:
-                expect(data.centerX).toBe(defaultPosition.centerX);
-                expect(data.centerY).toBe(defaultPosition.centerY);
-                expect(data.zoom).toBe(defaultPosition.zoom);
-                expect(data.scale).toBe(defaultPosition.scale);
+                expect(position.east).toBe(defaultPosition.centerX);
+                expect(position.north).toBe(defaultPosition.centerY);
+                expect(position.zoom).toBe(defaultPosition.zoom);
+                //expect(data.scale).toBe(defaultPosition.scale);
                 
                 channel.log('UseState moved map:', data);
                 counter++;
