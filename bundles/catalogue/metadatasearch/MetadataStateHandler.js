@@ -17,9 +17,9 @@ export const ADVANCED_SEARCH_PARAMS = {
 class MetadataStateHandler extends StateHandler {
     constructor (instance) {
         super();
-        this.optionsService = new MetadataOptionService(instance.optionsAjaxUrl);
-        this.searchService = new MetadataSearchService(instance.searchAjaxUrl);
-        this.sandbox = instance.getSandbox();
+        this.instance = instance;
+        this.optionsService = new MetadataOptionService(this.instance.optionsAjaxUrl);
+        this.searchService = new MetadataSearchService(this.instance.searchAjaxUrl);
         this.setState({
             query: '',
             advancedSearchExpanded: false,
@@ -35,7 +35,11 @@ class MetadataStateHandler extends StateHandler {
     }
 
     getSandbox () {
-        return this.sandbox;
+        return this.instance.getSandbox();
+    }
+
+    getVectorLayerId () {
+        return this.instance.getVectorLayerId();
     }
 
     renderMetadataSearch (element) {
@@ -89,6 +93,22 @@ class MetadataStateHandler extends StateHandler {
         this.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{
             uuid
         }]);
+    }
+
+    toggleCoverageArea (result) {
+        this.instance.removeFeaturesFromMap();
+        const { displayedCoverageId } = this.getState();
+        if (displayedCoverageId && displayedCoverageId === result.id) {
+            this.updateState({
+                displayedCoverageId: null
+            });
+            return;
+        }
+
+        this.updateState({
+            displayedCoverageId: result.id
+        });
+        this.instance.addCoverageFeatureToMap(result.geom);
     }
 
     /**
@@ -200,6 +220,7 @@ class MetadataStateHandler extends StateHandler {
 const wrapped = controllerMixin(MetadataStateHandler, [
     'doSearch',
     'showMetadata',
+    'toggleCoverageArea',
     'updateQuery',
     'renderMetadataSearch',
     'toggleSearch',

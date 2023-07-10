@@ -10,7 +10,7 @@ const SEARCH_RESULT_FILTER_TYPES = {
 };
 
 export const MetadataSearchResultListContainer = (props) => {
-    const { searchResults, toggleSearch, toggleSearchResultsFilter, searchResultsFilter, showMetadata } = props;
+    const { searchResults, toggleSearch, toggleSearchResultsFilter, searchResultsFilter, showMetadata, toggleCoverageArea, displayedCoverageId } = props;
     const searchResultsFiltered = searchResultsFilter ? searchResults.filter((item) => searchResultsFilter.includes(item.natureofthetarget)) : searchResults;
     return <>
         <FlexRow>
@@ -37,7 +37,11 @@ export const MetadataSearchResultListContainer = (props) => {
                 </ActionLinkContainer>
             </FlexRight>
         </FlexRow>
-        <MetadataSearchResultList searchResults={searchResultsFiltered} showMetadata={showMetadata}/>
+        <MetadataSearchResultList
+            searchResults={searchResultsFiltered}
+            showMetadata={showMetadata}
+            toggleCoverageArea={toggleCoverageArea}
+            displayedCoverageId={displayedCoverageId}/>
     </>;
 };
 
@@ -46,5 +50,7 @@ MetadataSearchResultListContainer.propTypes = {
     toggleSearch: PropTypes.func,
     toggleSearchResultsFilter: PropTypes.func,
     searchResultsFilter: PropTypes.array,
-    showMetadata: PropTypes.func
+    showMetadata: PropTypes.func,
+    toggleCoverageArea: PropTypes.func,
+    displayedCoverageId: PropTypes.string
 };

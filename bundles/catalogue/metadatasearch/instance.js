@@ -10,6 +10,16 @@ import { MetadataStateHandler } from './MetadataStateHandler';
  *
  */
 export const METADATA_BUNDLE_LOCALIZATION_ID = 'catalogue.bundle.metadatasearch';
+const COVERAGE_FEATURE_STYLE = {
+    stroke: {
+        color: 'rgba(211, 187, 27, 0.8)',
+        width: 2
+    },
+    fill: {
+        color: 'rgba(255,222,0, 0.6)'
+    }
+};
+
 Oskari.clazz.define(
     'Oskari.catalogue.bundle.metadatasearch.MetadataSearchBundleInstance',
 
@@ -26,6 +36,7 @@ Oskari.clazz.define(
         this.searchAjaxUrl = null;
         this.initUrls();
         this.id = 'oskari_metadatasearch_tabpanel_header';
+        this._vectorLayerId = 'METADATASEARCH_VECTORLAYER';
         this.handler = new MetadataStateHandler(this);
     }, {
         /**
@@ -39,6 +50,9 @@ Oskari.clazz.define(
          */
         getName: function () {
             return this.__name;
+        },
+        getVectorLayerId: function () {
+            return this._vectorLayerId;
         },
         /**
          * @method setSandbox
@@ -170,7 +184,7 @@ Oskari.clazz.define(
                 if (event.getNewTabId() !== this.id) {
                     this._teardownMetaSearch();
                 } else {
-                    this._removeFeaturesFromMap(); // unactive show-area-icons when changing to metadata search tab
+                    this.removeFeaturesFromMap(); // unactive show-area-icons when changing to metadata search tab
                 }
             },
             'MetadataSearchResultEvent': function (event) {
@@ -201,19 +215,34 @@ Oskari.clazz.define(
             }
 
             this.drawCoverage = true;
-            this._removeFeaturesFromMap();
+            this.removeFeaturesFromMap();
+        },
+
+        /**
+         * @method addCoverageFeatureToMap
+         * Adds coverage feature to map.
+         *
+         * @param {String} geom WKT representation of the geometry of the feature to add
+         */
+        addCoverageFeatureToMap: function (geom) {
+            const requestName = 'MapModulePlugin.AddFeaturesToMapRequest';
+            this.getSandbox().postRequestByName(requestName, [geom, {
+                layerId: this.getVectorLayerId(),
+                clearPrevious: true,
+                layerOptions: null,
+                centerTo: true,
+                featureStyle: COVERAGE_FEATURE_STYLE
+            }]);
         },
         /**
-         * @method _removeFeaturesFromMap
-         * @private
+         * @method removeFeaturesFromMap
          * Removes features from map.
          *
          * @param {String} identifier the identifier
          * @param {String} value the identifier value
          */
-        _removeFeaturesFromMap: function (identifier, value) {
-            this._unactiveShowInfoAreaIcons();
-            this.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [identifier, value, this._vectorLayerId]);
+        removeFeaturesFromMap: function (identifier, value) {
+            this.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [identifier, value, this.getVectorLayerId()]);
         },
         /**
          * @method stop
@@ -363,17 +392,6 @@ Oskari.clazz.define(
             this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.getName(), true]);
         },
 
-        /**
-        * Unactive show info area icons.
-        * @method _unactiveShowInfoAreaIcons
-        * @private
-        */
-        _unactiveShowInfoAreaIcons: function () {
-            jQuery('table.metadataSearchResult tr.resultRow td.showBbox div.showBbox')
-                .removeClass('icon-info-area-active')
-                .removeClass('icon-info-area')
-                .addClass('icon-info-area');
-        },
         _addLayerLinks: function (layer, layerList) {
             const me = this;
             const selectedLayers = this.sandbox.findAllSelectedMapLayers();
