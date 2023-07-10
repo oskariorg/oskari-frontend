@@ -6,7 +6,7 @@ import { PropTypes } from 'prop-types';
 
 export const MetadataSearchResultList = (props) => {
     const { searchResults, showMetadata, toggleCoverageArea, displayedCoverageId } = props;
-    const hasSearchResults = (searchResults && searchResults.length);
+    const hasSearchResults = !!(searchResults && searchResults.length);
 
     return <>
         {

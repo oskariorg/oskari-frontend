@@ -12,6 +12,7 @@ const SEARCH_RESULT_FILTER_TYPES = {
 export const MetadataSearchResultListContainer = (props) => {
     const { searchResults, toggleSearch, toggleSearchResultsFilter, searchResultsFilter, showMetadata, toggleCoverageArea, displayedCoverageId } = props;
     const searchResultsFiltered = searchResultsFilter ? searchResults.filter((item) => searchResultsFilter.includes(item.natureofthetarget)) : searchResults;
+    const hasSearchResults = !!(searchResults && searchResults.length);
     return <>
         <FlexRow>
             <div>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'searchResults.resultTitle')}</div>
@@ -22,7 +23,7 @@ export const MetadataSearchResultListContainer = (props) => {
                     </ActionLinkContainer>
                 }
                 {
-                    !searchResultsFilter &&
+                    hasSearchResults && !searchResultsFilter &&
                         <>
                             <ActionLinkContainer>
                                 <a onClick={() => toggleSearchResultsFilter(SEARCH_RESULT_FILTER_TYPES.datasets)}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'searchResults.showDatasets')}</a>
