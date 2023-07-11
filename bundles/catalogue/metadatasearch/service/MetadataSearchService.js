@@ -11,7 +11,6 @@ export class MetadataSearchService {
         if (!params.srs) {
             params.srs = epsg;
         }
-
         // create POST payload from params
         const payload = Object.keys(params)
             .filter(key => typeof params[key] !== 'undefined')

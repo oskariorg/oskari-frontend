@@ -8,6 +8,11 @@ export const AdvancedSearchRowContainer = styled('div')`
     margin: 0.25em;
 `;
 
+export const FlexColumnContainer = styled('div')`
+    display: flex;
+    flex-direction: column;
+`;
+
 export const FlexRowCentered = styled('div')`
     display: flex;
     justify-content: center;

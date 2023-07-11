@@ -1,30 +1,33 @@
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { AdvancedSearchResourceType } from './AdvancedSearchResourceType';
-import { AdvancedSearchResourceName } from './AdvancedSearchResourceName';
-import { AdvancedSearchResponsibleParty } from './AdvancedSearchResponsibleParty';
-import { AdvancedSearchKeyword } from './AdvancedSearchKeyword';
-import { AdvancedSearchTopicCategory } from './AdvancedSearchTopicCategory';
-import { AdvancedSearchMetadataLanguage } from './AdvancedSearchMetadataLanguage';
-import { AdvancedSearchResourceLanguage } from './AdvancedSearchResourceLanguage';
-import { ADVANCED_SEARCH_PARAMS } from '../../MetadataStateHandler';
-
-const FlexColumnContainer = styled('div')`
-    display: flex;
-    flex-direction: column;
-`;
+import { METADATA_BUNDLE_LOCALIZATION_ID } from '../../instance';
+import { AdvancedSearchDropdown } from './AdvancedSearchDropdown';
+import { FlexColumnContainer } from './AdvancedSearchStyledComponents';
+import { AdvancedSearchMulti } from './AdvancedSearchMulti';
 
 export const AdvancedSearchOptions = (props) => {
     const { advancedSearchOptions, advancedSearchValues, controller } = props;
     return <FlexColumnContainer>
-        <AdvancedSearchResourceType options={getByField(ADVANCED_SEARCH_PARAMS.resourceType, advancedSearchOptions)} selected={advancedSearchValues.resourceType} onChange={controller.advancedSearchResourceTypeChanged}/>
-        <AdvancedSearchResourceName options={getByField(ADVANCED_SEARCH_PARAMS.resourceName, advancedSearchOptions)} selected={advancedSearchValues.resourceName} onChange={controller.advancedSearchResourceNameChanged}/>
-        <AdvancedSearchResponsibleParty options={getByField(ADVANCED_SEARCH_PARAMS.responsibleParty, advancedSearchOptions)} selected={advancedSearchValues.responsibleParty} onChange={controller.advancedSearchResponsiblePartyChanged}/>
-        <AdvancedSearchKeyword options={getByField(ADVANCED_SEARCH_PARAMS.keyword, advancedSearchOptions)} selected={advancedSearchValues.keyword} onChange={controller.advancedSearchKeywordChanged}/>
-        <AdvancedSearchTopicCategory options={getByField(ADVANCED_SEARCH_PARAMS.topicCategory, advancedSearchOptions)} selected={advancedSearchValues.topicCategory} onChange={controller.advancedSearchTopicCategoryChanged}/>
-        <AdvancedSearchMetadataLanguage options={getByField(ADVANCED_SEARCH_PARAMS.metadataLanguage, advancedSearchOptions)} selected={advancedSearchValues.metadataLanguage} onChange={controller.advancedSearchMetadataLanguageChanged}/>
-        <AdvancedSearchResourceLanguage options={getByField(ADVANCED_SEARCH_PARAMS.resourceLanguage, advancedSearchOptions)} selected={advancedSearchValues.resourceLanguage} onChange={controller.advancedSearchResourceLanguageChanged}/>
+        { advancedSearchOptions &&
+            // coverage should be rendered separately
+            advancedSearchOptions?.fields?.filter((field) => !field.field !== 'coverage').map((field) => {
+                if (field.multi) {
+                    return <AdvancedSearchMulti
+                        key={field.field}
+                        title={Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.' + field.field)}
+                        options={getByField(field.field, advancedSearchOptions)}
+                        selected={advancedSearchValues[field.field]}
+                        onChange={(value) => controller.advancedSearchParamsChangedMulti(field.field, value)}/>;
+                }
+
+                return <AdvancedSearchDropdown
+                    key={field.field}
+                    title={Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.' + field.field)}
+                    options={getByField(field.field, advancedSearchOptions)}
+                    selected={advancedSearchValues[field.field]}
+                    onChange={(value) => controller.advancedSearchParamsChanged(field.field, value)}/>;
+            })
+        }
     </FlexColumnContainer>;
 };
 

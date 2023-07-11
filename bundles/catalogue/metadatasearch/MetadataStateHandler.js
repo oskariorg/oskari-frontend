@@ -4,28 +4,17 @@ import { MetadataOptionService } from './service/MetadataOptionService';
 import { MetadataSearchService } from './service/MetadataSearchService';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from './instance';
 
-export const ADVANCED_SEARCH_PARAMS = {
-    resourceType: 'type',
-    resourceName: 'Title',
-    responsibleParty: 'OrganisationName',
-    keyword: 'Subject',
-    topicCategory: 'TopicCategory',
-    metadataLanguage: 'Language',
-    resourceLanguage: 'ResourceLanguage'
-};
-
 class MetadataStateHandler extends StateHandler {
     constructor (instance) {
         super();
         this.instance = instance;
-        this.optionsService = new MetadataOptionService(this.instance.optionsAjaxUrl);
+        this.optionsService = new MetadataOptionService(this.instance.optionAjaxUrl);
         this.searchService = new MetadataSearchService(this.instance.searchAjaxUrl);
         this.setState({
             query: '',
             advancedSearchExpanded: false,
             advancedSearchOptions: null,
             advancedSearchValues: {
-                resourceType: []
             },
             loading: false,
             searchResultsVisible: false,
@@ -70,15 +59,11 @@ class MetadataStateHandler extends StateHandler {
             formdata.search = query;
         }
 
-        Object.keys(ADVANCED_SEARCH_PARAMS).forEach(key => {
-            if (advancedSearchValues[key]) {
-                const keyInRequestParams = ADVANCED_SEARCH_PARAMS[key];
-
-                if (advancedSearchValues[key] instanceof Array) {
-                    formdata[keyInRequestParams] = advancedSearchValues[key].join(',');
-                } else {
-                    formdata[keyInRequestParams] = advancedSearchValues[key];
-                }
+        Object.keys(advancedSearchValues).forEach(key => {
+            if (advancedSearchValues[key] instanceof Array) {
+                formdata[key] = advancedSearchValues[key].join(',');
+            } else {
+                formdata[key] = advancedSearchValues[key];
             }
         });
 
@@ -165,6 +150,27 @@ class MetadataStateHandler extends StateHandler {
         });
     }
 
+    advancedSearchParamsChanged (key, value) {
+        const { advancedSearchValues } = this.getState();
+        advancedSearchValues[key] = value;
+        this.updateAdvancedSearchValues(advancedSearchValues);
+    }
+
+    advancedSearchParamsChangedMulti (key, value) {
+        if (!value || !value.target) {
+            return;
+        }
+        const { advancedSearchValues } = this.getState();
+        const checked = !!value.target.checked;
+
+        const newMultiValue = advancedSearchValues[key]?.filter(item => item !== value.target.value) || [];
+        if (checked) {
+            newMultiValue.push(value.target.value);
+        }
+        advancedSearchValues[key] = newMultiValue;
+        this.updateAdvancedSearchValues(advancedSearchValues);
+    }
+    /*
     advancedSearchResourceTypeChanged (value) {
         if (!value || !value.target) {
             return;
@@ -215,6 +221,7 @@ class MetadataStateHandler extends StateHandler {
         advancedSearchValues.resourceLanguage = value;
         this.updateAdvancedSearchValues(advancedSearchValues);
     }
+    */
 }
 
 const wrapped = controllerMixin(MetadataStateHandler, [
@@ -226,13 +233,8 @@ const wrapped = controllerMixin(MetadataStateHandler, [
     'toggleSearch',
     'toggleAdvancedSearch',
     'toggleSearchResultsFilter',
-    'advancedSearchResourceTypeChanged',
-    'advancedSearchResourceNameChanged',
-    'advancedSearchResponsiblePartyChanged',
-    'advancedSearchKeywordChanged',
-    'advancedSearchTopicCategoryChanged',
-    'advancedSearchMetadataLanguageChanged',
-    'advancedSearchResourceLanguageChanged'
+    'advancedSearchParamsChanged',
+    'advancedSearchParamsChangedMulti'
 ]);
 
 export { wrapped as MetadataStateHandler };
