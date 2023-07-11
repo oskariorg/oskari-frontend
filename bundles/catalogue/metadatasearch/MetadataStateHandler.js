@@ -17,8 +17,10 @@ class MetadataStateHandler extends StateHandler {
             advancedSearchValues: {
             },
             loading: false,
+            drawing: false,
             searchResultsVisible: false,
-            searchResultsFilter: null
+            searchResultsFilter: null,
+            coverageFeature: null
         });
         this.addStateListener(() => this.updateMetadataSearch());
     }
@@ -170,58 +172,28 @@ class MetadataStateHandler extends StateHandler {
         advancedSearchValues[key] = newMultiValue;
         this.updateAdvancedSearchValues(advancedSearchValues);
     }
-    /*
-    advancedSearchResourceTypeChanged (value) {
-        if (!value || !value.target) {
-            return;
-        }
-        const { advancedSearchValues } = this.getState();
-        const checked = !!value.target.checked;
 
-        const newResourceType = advancedSearchValues?.resourceType?.filter(item => item !== value.target.value);
-        if (checked) {
-            newResourceType.push(value.target.value);
-        }
-        advancedSearchValues.resourceType = newResourceType;
-        this.updateAdvancedSearchValues(advancedSearchValues);
+    advancedSearchCoverageStartDrawing (evt) {
+        this.updateState({
+            drawing: true,
+            coverageFeature: null
+        });
+        this.instance.startDrawing();
     }
 
-    advancedSearchResourceNameChanged (value) {
-        const { advancedSearchValues } = this.getState();
-        advancedSearchValues.resourceName = value;
-        this.updateAdvancedSearchValues(advancedSearchValues);
+    advancedSearchCoverageCancelDrawing (evt) {
+        this.updateCoverageFeature(null);
+        this.instance.stopDrawing();
     }
 
-    advancedSearchResponsiblePartyChanged (value) {
+    updateCoverageFeature (coverageFeature) {
         const { advancedSearchValues } = this.getState();
-        advancedSearchValues.responsibleParty = value;
-        this.updateAdvancedSearchValues(advancedSearchValues);
+        advancedSearchValues.coverage = coverageFeature;
+        this.updateState({
+            drawing: false,
+            advancedSearchValues
+        });
     }
-
-    advancedSearchKeywordChanged (value) {
-        const { advancedSearchValues } = this.getState();
-        advancedSearchValues.keyword = value;
-        this.updateAdvancedSearchValues(advancedSearchValues);
-    }
-
-    advancedSearchTopicCategoryChanged (value) {
-        const { advancedSearchValues } = this.getState();
-        advancedSearchValues.topicCategory = value;
-        this.updateAdvancedSearchValues(advancedSearchValues);
-    }
-
-    advancedSearchMetadataLanguageChanged (value) {
-        const { advancedSearchValues } = this.getState();
-        advancedSearchValues.metadataLanguage = value;
-        this.updateAdvancedSearchValues(advancedSearchValues);
-    }
-
-    advancedSearchResourceLanguageChanged (value) {
-        const { advancedSearchValues } = this.getState();
-        advancedSearchValues.resourceLanguage = value;
-        this.updateAdvancedSearchValues(advancedSearchValues);
-    }
-    */
 }
 
 const wrapped = controllerMixin(MetadataStateHandler, [
@@ -234,7 +206,10 @@ const wrapped = controllerMixin(MetadataStateHandler, [
     'toggleAdvancedSearch',
     'toggleSearchResultsFilter',
     'advancedSearchParamsChanged',
-    'advancedSearchParamsChangedMulti'
+    'advancedSearchParamsChangedMulti',
+    'advancedSearchCoverageStartDrawing',
+    'advancedSearchCoverageCancelDrawing',
+    'updateCoverageFeature'
 ]);
 
 export { wrapped as MetadataStateHandler };

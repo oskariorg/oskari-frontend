@@ -102,6 +102,11 @@ Oskari.clazz.define(
 
             me.sandbox = sandbox;
             sandbox.register(me);
+
+            Object.keys(me.eventHandlers).forEach(eventName => {
+                sandbox.registerForEventByName(me, eventName);
+            });
+
             // Default tab priority
             if (me.conf && typeof me.conf.priority === 'number') {
                 me.tabPriority = me.conf.priority;
@@ -156,15 +161,7 @@ Oskari.clazz.define(
                 }
 
                 const coverageFeature = event.getGeoJson();
-
-                this.coverageButton.val(this.loc('deleteArea'));
-                this.coverageButton[0].data = JSON.stringify(coverageFeature);
-                this.coverageButton.prop('disabled', false).css({
-                    'border-color': ''
-                });
-                this.drawCoverage = false;
-
-                document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
+                this.handler.getController().updateCoverageFeature(JSON.stringify(coverageFeature));
             },
 
             'userinterface.ExtensionUpdatedEvent': function (event) {
@@ -207,15 +204,7 @@ Oskari.clazz.define(
          * Tears down meta data search when changing tab or closing flyout
          */
         _teardownMetaSearch: function () {
-            this._stopCoverage();
-
-            if (this.coverageButton) {
-                this.coverageButton.val(this.loc('delimitArea'));
-                this.coverageButton[0].data = '';
-            }
-
-            this.drawCoverage = true;
-            this.removeFeaturesFromMap();
+            this.handler.getController().advancedSearchCoverageCancelDrawing();
         },
 
         /**
@@ -244,6 +233,23 @@ Oskari.clazz.define(
         removeFeaturesFromMap: function (identifier, value) {
             this.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [identifier, value, this.getVectorLayerId()]);
         },
+        /**
+         * @method startDrawing
+         * Start drawing a feature for searching by coverage
+         */
+        startDrawing: function () {
+            this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.getName(), 'Box', {
+                style: COVERAGE_FEATURE_STYLE
+            }]);
+        },
+        /**
+         * @method stopDrawing
+         * Stop drawing
+         */
+        stopDrawing: function () {
+            this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.getName(), true]);
+        },
+
         /**
          * @method stop
          * implements BundleInstance protocol stop method
@@ -382,6 +388,8 @@ Oskari.clazz.define(
             return text;
         },
 
+/*
+
         _getCoverage: function () {
             this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.getName(), 'Box', {
                 style: this.__drawStyle
@@ -391,7 +399,7 @@ Oskari.clazz.define(
         _stopCoverage: function () {
             this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.getName(), true]);
         },
-
+*/
         _addLayerLinks: function (layer, layerList) {
             const me = this;
             const selectedLayers = this.sandbox.findAllSelectedMapLayers();

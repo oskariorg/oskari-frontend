@@ -9,7 +9,7 @@ const ContainerWithMargin = styled('div')`
 `;
 
 export const AdvancedSearchContainer = (props) => {
-    const { isExpanded, toggleAdvancedSearch, advancedSearchOptions, advancedSearchValues, controller } = props;
+    const { isExpanded, toggleAdvancedSearch, advancedSearchOptions, advancedSearchValues, drawing, controller } = props;
     return (<ContainerWithMargin>
         { !isExpanded && <a onClick={toggleAdvancedSearch}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.showMore')}</a>}
         { isExpanded &&
@@ -18,7 +18,8 @@ export const AdvancedSearchContainer = (props) => {
                 <AdvancedSearchOptions
                     advancedSearchOptions={advancedSearchOptions}
                     advancedSearchValues={advancedSearchValues}
-                    controller={controller}/>
+                    controller={controller}
+                    drawing={drawing}/>
             </div>
         }
     </ContainerWithMargin>);
@@ -29,5 +30,7 @@ AdvancedSearchContainer.propTypes = {
     toggleAdvancedSearch: PropTypes.func,
     advancedSearchOptions: PropTypes.object,
     advancedSearchValues: PropTypes.object,
+    coverageFeature: PropTypes.object,
+    drawing: PropTypes.bool,
     controller: PropTypes.object
 };
