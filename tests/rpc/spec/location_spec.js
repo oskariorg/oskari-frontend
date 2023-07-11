@@ -55,8 +55,8 @@ describe('Location', function(){
                 expect(result).toContain('rank');
                 expect(result).toContain('region');
                 expect(result).toContain('type');
-                expect(result).toContain('village');
-                //expect(result).toContain('zoomScale');
+                //expect(result).toContain('village');
+                expect(result).toContain('zoomScale');
             counter++;
             done();
         });
@@ -113,7 +113,7 @@ describe('Location', function(){
     it("Get feedback service list", function(done) {
 
         handleEvent('FeedbackResultEvent', function(data) {
-            
+            // Request does not work, success results to false
             expect(data.success).toEqual(true);
 
             result = Object.keys(data);

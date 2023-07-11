@@ -42,7 +42,10 @@ describe('Drawing', function(){
             );
         });
 
-
+        /*
+        * TODO: The tests do not work because DrawingEvents do not trigger. Need to find a way to
+        * for example click the map and move cursor on map
+        **/
         describe('Stop Drawing', function() {
 
             function listenDrawingEvent(Id) {

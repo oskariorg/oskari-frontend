@@ -79,6 +79,7 @@ describe('Markers', function(){
         });
     });
 
+    // This part does not work because of a bug in the RPC library 
     describe('Show or hide markers', function(){
 
         beforeEach(function() {
