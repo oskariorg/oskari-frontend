@@ -5,7 +5,7 @@ import { MetadataSearchResultListItem } from './MetadataSearchResultListItem';
 import { PropTypes } from 'prop-types';
 
 export const MetadataSearchResultList = (props) => {
-    const { searchResults, showMetadata, toggleCoverageArea, displayedCoverageId } = props;
+    const { searchResults, showMetadata, toggleCoverageArea, displayedCoverageId, selectedLayers, toggleLayerVisibility } = props;
     const hasSearchResults = !!(searchResults && searchResults.length);
 
     return <>
@@ -24,6 +24,8 @@ export const MetadataSearchResultList = (props) => {
                         showMetadata={showMetadata}
                         toggleCoverageArea={toggleCoverageArea}
                         displayedCoverageId={displayedCoverageId}
+                        selectedLayers={selectedLayers}
+                        toggleLayerVisibility={toggleLayerVisibility}
                     />)
         }
     </>;
@@ -33,5 +35,7 @@ MetadataSearchResultList.propTypes = {
     searchResults: PropTypes.array,
     showMetadata: PropTypes.func,
     toggleCoverageArea: PropTypes.func,
-    displayedCoverageId: PropTypes.string
+    displayedCoverageId: PropTypes.string,
+    selectedLayers: PropTypes.array,
+    toggleLayerVisibility: PropTypes.func
 };

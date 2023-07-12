@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Switch } from 'oskari-ui';
 export const FlexRow = styled('div')`
     display: flex;
     flex-direction: row;
@@ -18,10 +19,27 @@ export const ClickableDiv = styled('div')`
     cursor: pointer;
 `;
 
+export const FlexColumn = styled('div')`
+    display: flex;
+    flex-direction: column;
+`;
+
 export const FlexRight = styled('div')`
     margin-left: auto;
 `;
 
 export const ActionLinkContainer = styled('span')`
     margin: 0 0.25em;
+`;
+
+export const SearchResultLayerListContainer = styled('div')`
+    margin-left: 0.25em;
+`;
+
+export const SearchResultLayerListItem = styled('div')`
+    margin: 0.25em 0;
+`;
+
+export const LayerListSwitch = styled(Switch)`
+    margin-right: 0.5em;
 `;

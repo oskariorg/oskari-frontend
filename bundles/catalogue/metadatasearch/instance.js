@@ -196,6 +196,12 @@ Oskari.clazz.define(
                 } else {
                     this._showError(this.loc('metadatasearchservice_error'));
                 }
+            },
+            'AfterMapLayerAddEvent': function (event) {
+                this.handler.getController().updateSelectedLayers();
+            },
+            'AfterMapLayerRemoveEvent': function (event) {
+                this.handler.getController().updateSelectedLayers();
             }
         },
         /**
@@ -249,7 +255,24 @@ Oskari.clazz.define(
         stopDrawing: function () {
             this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.getName(), true]);
         },
-
+        /**
+         * @method addMapLayer
+         * Add layer to map
+         *
+         * @param {number} layerId id of the layer to add
+         */
+        addMapLayer: function (layerId) {
+            this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
+        },
+        /**
+         * @method removeMapLayer
+         * Remove layer from map and set visibility to true
+         *
+         * @param {number} layerId id of the layer to add
+         */
+        removeMapLayer: function (layerId) {
+            this.sandbox.postRequestByName('RemoveMapLayerRequest', [layerId]);
+        },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
@@ -363,137 +386,6 @@ Oskari.clazz.define(
             );
         },
 
-        _initCoverageButton: function (me, newButton) {
-            this.coverageButton = newButton.find('.metadataCoverageDef');
-            this.coverageButton.attr('value', me.loc('delimitArea'));
-            this.coverageButton.attr('name', 'coverage');
-            return this.coverageButton;
-        },
-
-        /**
-         * @method _getOptionLocalization
-         * Generates localization for option values
-         */
-        _getOptionLocalization: function (value) {
-            var text;
-            // Localization available?
-            if (typeof value.locale !== 'undefined') {
-                text = value.locale;
-            } else {
-                text = this.loc(value.val);
-                if (typeof text !== 'string') {
-                    text = value.val;
-                }
-            }
-            return text;
-        },
-
-/*
-
-        _getCoverage: function () {
-            this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.getName(), 'Box', {
-                style: this.__drawStyle
-            }]);
-        },
-
-        _stopCoverage: function () {
-            this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.getName(), true]);
-        },
-*/
-        _addLayerLinks: function (layer, layerList) {
-            const me = this;
-            const selectedLayers = this.sandbox.findAllSelectedMapLayers();
-            let layerSelected = selectedLayers.map(l => l.getId()).includes(layer.getId());
-            const layerLink = this.templates.layerLink.clone();
-            const showText = this.loc('show');
-            const hideText = this.loc('hide');
-
-            // Check if layer is already selected and visible
-            if ((layerSelected) && (layer.isVisible())) {
-                layerLink.html(hideText);
-            } else {
-                layerLink.html(showText);
-            }
-
-            // Click binding
-            layerLink.on('click', function () {
-                // Hide layer
-                if (jQuery(this).html() === hideText) {
-                    // Set previously selected layer only invisible
-                    var builder = Oskari.requestBuilder('RemoveMapLayerRequest');
-                    layerSelected = false;
-                    me.sandbox.request(me.getName(), builder(layer.getId()));
-                    jQuery(this).html(showText);
-                } else {
-                    // Select previously unselected layer
-                    if (!layerSelected) {
-                        me.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
-                    }
-                    // Set layer visible
-                    var visibilityRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
-                    me.sandbox.request(me.getName(), visibilityRequestBuilder(layer.getId(), true));
-                    jQuery(this).html(hideText);
-                }
-            });
-            const layerListItem = me.templates.layerListItem.clone();
-            layerListItem.text(layer.getName());
-            layerListItem.append('&nbsp;&nbsp;');
-            layerListItem.append(layerLink);
-            layerList.append(layerListItem);
-        },
-
-        /**
-         * @method _sortResults
-         * Sorts the last search result by comparing given attribute on
-         * the search objects
-         * @private
-         * @param {String} pAttribute attributename to sort by (e.g.
-         * result[pAttribute])
-         * @param {Boolean} pDescending true if sort direction is descending
-         */
-        _sortResults: function (pAttribute, pDescending) {
-            const me = this;
-
-            if (!this.lastResult) {
-                return;
-            }
-            this.lastSort = {
-                attr: pAttribute,
-                descending: pDescending
-            };
-            this.lastResult.sort(function (a, b) {
-                return me._searchResultComparator(a, b, pAttribute, pDescending);
-            });
-        },
-        /**
-         * @method _searchResultComparator
-         * Compares the given attribute on given objects for sorting
-         * search result objects.
-         * @private
-         * @param {Object} a search result 1
-         * @param {Object} b search result 2
-         * @param {String} pAttribute attributename to sort by (e.g.
-         * a[pAttribute])
-         * @param {Boolean} pDescending true if sort direction is descending
-         */
-        _searchResultComparator: function (a, b, pAttribute, pDescending) {
-            var nameA = a[pAttribute].toLowerCase();
-            var nameB = b[pAttribute].toLowerCase();
-            var value = 0;
-            if (nameA === nameB) {
-                nameA = a.id;
-                nameB = b.id;
-            }
-            if (nameA < nameB) {
-                value = -1;
-            } else if (nameA > nameB) {
-                value = 1;
-            }
-            if (pDescending) {
-                value = value * -1;
-            }
-            return value;
-        },
         /**
         * @method addSearchResultAction
         * Add search result action.

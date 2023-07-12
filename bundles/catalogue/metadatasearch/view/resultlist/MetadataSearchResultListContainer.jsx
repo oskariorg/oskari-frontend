@@ -10,7 +10,16 @@ const SEARCH_RESULT_FILTER_TYPES = {
 };
 
 export const MetadataSearchResultListContainer = (props) => {
-    const { searchResults, toggleSearch, toggleSearchResultsFilter, searchResultsFilter, showMetadata, toggleCoverageArea, displayedCoverageId } = props;
+    const { searchResults,
+        toggleSearch,
+        toggleSearchResultsFilter,
+        searchResultsFilter,
+        showMetadata,
+        toggleCoverageArea,
+        displayedCoverageId,
+        selectedLayers,
+        toggleLayerVisibility } = props;
+
     const searchResultsFiltered = searchResultsFilter ? searchResults.filter((item) => searchResultsFilter.includes(item.natureofthetarget)) : searchResults;
     const hasSearchResults = !!(searchResults && searchResults.length);
     return <>
@@ -42,7 +51,9 @@ export const MetadataSearchResultListContainer = (props) => {
             searchResults={searchResultsFiltered}
             showMetadata={showMetadata}
             toggleCoverageArea={toggleCoverageArea}
-            displayedCoverageId={displayedCoverageId}/>
+            displayedCoverageId={displayedCoverageId}
+            selectedLayers={selectedLayers}
+            toggleLayerVisibility={toggleLayerVisibility}/>
     </>;
 };
 
@@ -53,5 +64,7 @@ MetadataSearchResultListContainer.propTypes = {
     searchResultsFilter: PropTypes.array,
     showMetadata: PropTypes.func,
     toggleCoverageArea: PropTypes.func,
-    displayedCoverageId: PropTypes.string
+    displayedCoverageId: PropTypes.string,
+    selectedLayers: PropTypes.array,
+    toggleLayerVisibility: PropTypes.func
 };

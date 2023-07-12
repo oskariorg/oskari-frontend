@@ -29,8 +29,7 @@ SearchContainer.propTypes = {
 };
 
 const MetadataSearchContainer = ({ state, controller }) => {
-    const {
-        query,
+    const { query,
         advancedSearchExpanded,
         advancedSearchOptions,
         advancedSearchValues,
@@ -39,7 +38,8 @@ const MetadataSearchContainer = ({ state, controller }) => {
         searchResults,
         searchResultsFilter,
         displayedCoverageId,
-        drawing } = state;
+        drawing,
+        selectedLayers } = state;
     return <div>
         { loading && <FlexRowCentered><Spin/></FlexRowCentered>}
         {
@@ -66,7 +66,9 @@ const MetadataSearchContainer = ({ state, controller }) => {
                     toggleSearch={controller.toggleSearch}
                     toggleSearchResultsFilter={controller.toggleSearchResultsFilter}
                     showMetadata={controller.showMetadata}
-                    toggleCoverageArea={controller.toggleCoverageArea}/>
+                    toggleCoverageArea={controller.toggleCoverageArea}
+                    selectedLayers={selectedLayers}
+                    toggleLayerVisibility={controller.toggleLayerVisibility}/>
             </>
         }
     </div>;

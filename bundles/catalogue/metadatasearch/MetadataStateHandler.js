@@ -10,6 +10,7 @@ class MetadataStateHandler extends StateHandler {
         this.instance = instance;
         this.optionsService = new MetadataOptionService(this.instance.optionAjaxUrl);
         this.searchService = new MetadataSearchService(this.instance.searchAjaxUrl);
+        this.mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.setState({
             query: '',
             advancedSearchExpanded: false,
@@ -20,7 +21,8 @@ class MetadataStateHandler extends StateHandler {
             drawing: false,
             searchResultsVisible: false,
             searchResultsFilter: null,
-            coverageFeature: null
+            coverageFeature: null,
+            selectedLayers: null
         });
         this.addStateListener(() => this.updateMetadataSearch());
     }
@@ -65,7 +67,10 @@ class MetadataStateHandler extends StateHandler {
             if (advancedSearchValues[key] instanceof Array) {
                 formdata[key] = advancedSearchValues[key].join(',');
             } else {
-                formdata[key] = advancedSearchValues[key];
+                // eliminate nulls
+                if (advancedSearchValues[key]) {
+                    formdata[key] = advancedSearchValues[key];
+                }
             }
         });
 
@@ -73,7 +78,28 @@ class MetadataStateHandler extends StateHandler {
     }
 
     updateSearchResults (json) {
-        this.updateState({ loading: false, searchResults: json?.results || null, searchResultsVisible: true });
+        json?.results?.forEach(result => this.updateLayerInfo(result));
+        this.updateState({ loading: false, searchResults: json?.results || null, searchResultsVisible: true, selectedLayers: this.getSelectedLayers() });
+    }
+
+    getSelectedLayers () {
+        return this.getSandbox().findAllSelectedMapLayers() || null;
+    }
+
+    updateLayerInfo (searchResult) {
+        let layers = null;
+        if (searchResult.id) {
+            layers = this.mapLayerService.getLayersByMetadataId(searchResult.id);
+        }
+
+        if (searchResult?.uuid && searchResult?.uuid?.length) {
+            searchResult.uuid.forEach((uuid) => {
+                const newLayers = this.mapLayerService.getLayersByMetadataId(uuid).filter((newLayer) => !layers.find((oldLayer) => oldLayer.id === newLayer.id));
+                layers = layers.concat(newLayers);
+            });
+        }
+
+        searchResult.layers = layers;
     }
 
     showMetadata (uuid) {
@@ -96,6 +122,22 @@ class MetadataStateHandler extends StateHandler {
             displayedCoverageId: result.id
         });
         this.instance.addCoverageFeatureToMap(result.geom);
+    }
+
+    toggleLayerVisibility (checked, layerId) {
+        const { selectedLayers } = this.getState();
+        const layerSelected = !!selectedLayers.find((layer) => layer.getId() === layerId);
+        if (layerSelected) {
+            this.instance.removeMapLayer(layerId);
+        } else {
+            this.instance.addMapLayer(layerId);
+        }
+    }
+
+    updateSelectedLayers () {
+        this.updateState({
+            selectedLayers: this.getSelectedLayers()
+        });
     }
 
     /**
@@ -209,7 +251,9 @@ const wrapped = controllerMixin(MetadataStateHandler, [
     'advancedSearchParamsChangedMulti',
     'advancedSearchCoverageStartDrawing',
     'advancedSearchCoverageCancelDrawing',
-    'updateCoverageFeature'
+    'updateCoverageFeature',
+    'toggleLayerVisibility',
+    'updateSelectedLayers'
 ]);
 
 export { wrapped as MetadataStateHandler };
