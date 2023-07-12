@@ -253,7 +253,8 @@ const wrapped = controllerMixin(MetadataStateHandler, [
     'advancedSearchCoverageCancelDrawing',
     'updateCoverageFeature',
     'toggleLayerVisibility',
-    'updateSelectedLayers'
+    'updateSelectedLayers',
+    'updateSearchResults'
 ]);
 
 export { wrapped as MetadataStateHandler };

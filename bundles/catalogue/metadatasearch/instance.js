@@ -1,4 +1,5 @@
 import { MetadataStateHandler } from './MetadataStateHandler';
+import { Messaging } from 'oskari-ui/util';
 
 /**
  * @class Oskari.mapframework.bundle.metadatasearch.MetadataSearchBundleInstance
@@ -38,6 +39,7 @@ Oskari.clazz.define(
         this.id = 'oskari_metadatasearch_tabpanel_header';
         this._vectorLayerId = 'METADATASEARCH_VECTORLAYER';
         this.handler = new MetadataStateHandler(this);
+        this.contentElement = document.createElement('div');
     }, {
         /**
          * @static
@@ -185,16 +187,15 @@ Oskari.clazz.define(
                 }
             },
             'MetadataSearchResultEvent': function (event) {
-                this.progressSpinner.stop();
-
+                // TODO: test me via RPC
                 if (this.conf.noUI === true) {
                     // bundle started by published map --> not handle event
                     return;
                 }
                 if (event.hasSuccess()) {
-                    this._showResults(event.getResults());
+                    this.handler.getController().updateSearchResult(event.getResults());
                 } else {
-                    this._showError(this.loc('metadatasearchservice_error'));
+                    Messaging.error(Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.metadataSearchserviceError'));
                 }
             },
             'AfterMapLayerAddEvent': function (event) {
@@ -296,7 +297,7 @@ Oskari.clazz.define(
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.loc('tabTitle');
+            return Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'tabTitle');
         },
         /**
          * @method getDescription
@@ -313,14 +314,12 @@ Oskari.clazz.define(
         createUi: function () {
             // Metadata search tab
             const title = Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'tabTitle');
-            const contentElement = document.createElement('div');
-
-            this.handler.getController().renderMetadataSearch(contentElement);
+            this.handler.getController().renderMetadataSearch(this.contentElement);
             const priority = this.tabPriority;
             const reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
 
             if (typeof reqBuilder === 'function') {
-                this.sandbox.request(this, reqBuilder(title, contentElement, priority, this.id));
+                this.sandbox.request(this, reqBuilder(title, this.contentElement, priority, this.id));
             } else {
                 // add a tile and flyout if search is not present on the appsetup
                 this.__addTileAndFlyout();
@@ -332,7 +331,7 @@ Oskari.clazz.define(
             const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             this.getSandbox().request(this, request);
             // attach content to flyout when divmanazer has set up root element
-            this.plugins['Oskari.userinterface.Flyout'].getEl().append(this.metadataCatalogueContainer);
+            this.plugins['Oskari.userinterface.Flyout'].getEl().append(this.contentElement);
         },
 
         /**
@@ -371,21 +370,6 @@ Oskari.clazz.define(
             return this.plugins;
         },
         /* ----------- /Tile and Flyout ------------- */
-        _showError: function (error) {
-            this.searchPanel.hide();
-            this.optionPanel.show();
-            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            const okButton = dialog.createCloseButton('OK');
-
-            dialog.setId('oskari_search_error_popup');
-            dialog.makeModal();
-
-            dialog.show(
-                this.loc('metadataoptionservice_alert_title'),
-                error, [okButton]
-            );
-        },
-
         /**
         * @method addSearchResultAction
         * Add search result action.
@@ -412,14 +396,6 @@ Oskari.clazz.define(
             }
 
             this.searchResultActions.push(status);
-        },
-        /**
-        * @method _isAction
-        * @private
-        * @return {Boolean} is action
-        */
-        _isAction: function () {
-            return this.searchResultActions.length > 0;
         }
     }, {
         /**
