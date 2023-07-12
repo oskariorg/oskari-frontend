@@ -42,12 +42,18 @@ describe('Ui', function(){
         });
 
         it("Hides infobox", function(done) {
+            // Add event handler
+            handleEvent('InfoBox.InfoBoxEvent', function(data) {
+                channel.log('InfoBox.InfoBoxEvent launched!');
+                expect(data.id).toEqual(infoboxId);
+                expect(data.isOpen).toEqual(false);
+                counter++;
+                done();
+            });
             // Hides infobox using ID.
             //InfoBoxEvent occurs only if infobox is visible before HideInfoBoxRequest.
             channel.postRequest('InfoBox.HideInfoBoxRequest', [infoboxId]);
             channel.log("HideInfoBoxRequest done.");
-            counter++;
-            done();
         });
     });
 
@@ -63,7 +69,7 @@ describe('Ui', function(){
                 
                     it("toggles on", function(done) {
                         channel.sendUIEvent([UIEvent], function(data) {
-                            expect(data).toBe(true);
+                            expect(data).toEqual(true);
                             channel.log('sendUIEvent: ', data);
                             counter++;
                             done();
@@ -73,7 +79,7 @@ describe('Ui', function(){
                     // toggle off repeats the same call
                     it("toggles off", function(done) {
                         channel.sendUIEvent([UIEvent], function(data) {
-                            expect(data).toBe(true);
+                            expect(data).toEqual(true);
                             channel.log('sendUIEvent: ', data);
                             counter++;
                             done();
