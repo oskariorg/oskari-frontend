@@ -29,7 +29,9 @@ Oskari.clazz.define(
      * @static
      */
     function () {
-        this.sandbox = Oskari.getSandbox();
+        const sandboxName = (this.conf ? this.conf.sandbox : null) || 'sandbox';
+        this.sandbox = Oskari.getSandbox(sandboxName);
+        this.sandbox.register(this);
         this.started = false;
         this.plugins = {};
         this.loc = Oskari.getMsg.bind(null, 'catalogue.bundle.metadatasearch');
@@ -90,37 +92,27 @@ Oskari.clazz.define(
          * implements BundleInstance protocol start method
          */
         start: function () {
-            const me = this;
-
-            if (me.started) {
+            if (this.started) {
                 return;
             }
 
-            me.started = true;
-
-            const conf = me.conf;
-            const sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
-            const sandbox = Oskari.getSandbox(sandboxName);
-
-            me.sandbox = sandbox;
-            sandbox.register(me);
-
-            Object.keys(me.eventHandlers).forEach(eventName => {
-                sandbox.registerForEventByName(me, eventName);
+            this.started = true;
+            Object.keys(this.eventHandlers).forEach(eventName => {
+                this.sandbox.registerForEventByName(this, eventName);
             });
 
             // Default tab priority
-            if (me.conf && typeof me.conf.priority === 'number') {
-                me.tabPriority = me.conf.priority;
+            if (this.conf && typeof this.conf?.priority === 'number') {
+                this.tabPriority = this.conf.priority;
             }
 
-            if (conf.noUI === true) {
+            if (this.conf?.noUI === true) {
                 // bundle started by published map
                 return;
             }
 
             // draw ui
-            me.createUi();
+            this.createUi();
         },
         /**
          * @method init
@@ -183,7 +175,7 @@ Oskari.clazz.define(
                 if (event.getNewTabId() !== this.id) {
                     this._teardownMetaSearch();
                 } else {
-                    this.removeFeaturesFromMap(); // unactive show-area-icons when changing to metadata search tab
+                    this.removeFeaturesFromMap();
                 }
             },
             'MetadataSearchResultEvent': function (event) {
@@ -382,6 +374,7 @@ Oskari.clazz.define(
         * @param {Function} showAction function. If return true then shows action text. Optional.
         */
         addSearchResultAction: function (actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction) {
+            // TODO: implement search result actions if these are actually used someplace
             const status = {
                 actionElement: actionElement,
                 actionTextElement: actionTextElement,
