@@ -12,6 +12,7 @@ describe('Ui', function () {
     afterEach(function () {
         // Spy callback.
         expect(counter).toEqual(1);
+        resetEventHandlers();
     });
 
     describe('Show a progress spinner', function () {
@@ -68,7 +69,17 @@ describe('Ui', function () {
             ],
             function (UIEvent) {
 
+                function handleUIEvent(UIEvent) {
+                    handleEvent('RPCUIEvent', function (data) {
+                        channel.log('RPCUIEvent launched!');
+                        expect(data.bundleId).toEqual(UIEvent);
+                    });
+                }
+
                 it("toggles on", function (done) {
+                    // Listen to event
+                    handleUIEvent(UIEvent);
+
                     channel.sendUIEvent([UIEvent], function (data) {
                         expect(data).toEqual(true);
                         channel.log('sendUIEvent: ', data);
@@ -79,6 +90,9 @@ describe('Ui', function () {
 
                 // toggle off repeats the same call
                 it("toggles off", function (done) {
+                    // Listen to event
+                    handleUIEvent(UIEvent);
+
                     channel.sendUIEvent([UIEvent], function (data) {
                         expect(data).toEqual(true);
                         channel.log('sendUIEvent: ', data);
@@ -93,12 +107,12 @@ describe('Ui', function () {
     describe('Set cursor style', function () {
 
         all("Cursor style is visible",
-
             cursorStyles,
             function (cursorStyles, done) {
                 // Sets the cursor style on map. The value can be any valid css cursor value. 
                 // Not all possible values are supported by all browsers.
                 channel.setCursorStyle([cursorStyles], function (data) {
+                    expect(cursorStyles).toEqual(data);
                     channel.log('setCursorStyle: ', data);
                     counter++;
                     done();
