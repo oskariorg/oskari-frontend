@@ -73,6 +73,15 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 }
             });
         },
+        
+        /**
+         * Check at has UI configured to shown
+         * @method @private _hasUI
+         * @returns {Boolean} has UI visible
+         */
+        _hasUI: function () {
+            return !this._config.noUI;
+        },
 
         /**
         * @method openSelection
@@ -118,7 +127,11 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
             var me = this,
                 el = me.templates.main.clone(),
                 header = el.find('div.announcements-header');
-
+            
+            if (me._config.noUI) {
+                return null;
+            }
+            
             header.append(me._loc.plugin.title);
             me._bindHeader(header);
             return el;

@@ -35,12 +35,16 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 '</div>'),
             inputCheckbox: jQuery('<div><input type="checkbox" name="announcement"/><label></label></div>')
         };
+        this.noUI = null;
+        this.noUiIsCheckedInModifyMode = false;
     }, {
 
         init: function (data) {
             const me = this;
             me.data = data;
             me.selectedAnnouncements = [];
+
+            me.noUiIsCheckedInModifyMode = (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf && data.configuration.announcements.conf.plugin && data.configuration.announcements.conf.plugin.config && data.configuration.announcements.conf.plugin.config.noUI === true);
 
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
 
@@ -125,6 +129,37 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 }
             });
 
+            const labelNoUI = me.localization.publisher.noUI;
+            console.log(labelNoUI)
+
+            var input = Oskari.clazz.create(
+                'Oskari.userinterface.component.CheckboxInput'
+            );
+
+            input.setTitle(labelNoUI);
+            input.setHandler(function (checked) {
+                if (checked === 'on') {
+                    me.noUI = true;
+                    me.getPlugin().teardownUI();
+                } else {
+                    me.noUI = null;
+                    me.getPlugin().redrawUI(Oskari.util.isMobile());
+                }
+            });
+            console.log(input)
+
+
+            if (me.noUiIsCheckedInModifyMode) {
+                input.setChecked(true);
+                me.noUI = true;
+            }
+            var inputEl = input.getElement();
+            if (inputEl.style) {
+                inputEl.style.width = 'auto';
+            }
+
+            template.append(inputEl);
+            
             return template;
         },
 
@@ -244,6 +279,11 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             if (announcementsSelection && !jQuery.isEmptyObject(announcementsSelection)) {
                 pluginConfig.config.announcements = announcementsSelection.announcements;
             }
+            
+            if (me.noUI) {
+                pluginConfig.config.noUI = me.noUI;
+            }
+
             return {
                 configuration: {
                     announcements: {
