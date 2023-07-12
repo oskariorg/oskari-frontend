@@ -50,8 +50,9 @@ describe('Ui', function () {
                 counter++;
                 done();
             });
+            // InfoBoxEvent occurs only if infobox is visible before HideInfoBoxRequest.
+            channel.postRequest('InfoBox.ShowInfoBoxRequest', myInfoBox);
             // Hides infobox using ID.
-            //InfoBoxEvent occurs only if infobox is visible before HideInfoBoxRequest.
             channel.postRequest('InfoBox.HideInfoBoxRequest', [infoboxId]);
             channel.log("HideInfoBoxRequest done.");
         });
