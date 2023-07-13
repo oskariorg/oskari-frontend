@@ -71,7 +71,30 @@ describe('Map', function () {
             });
         });
 
-        //it('Changes map layer visibility')
+        it('Changes map layer visibility', function (done) {
+
+            var layerId = baseLayer.id;
+            var visible = baseLayer.visible;
+
+            // Change visibility
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, !visible]);
+
+            channel.getAllLayers(function (data) {
+                expect(data[0].visible).not.toEqual(visible);
+                expect(data[0].visible).toEqual(!visible);
+            })
+
+            // Toggle back
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, visible]);
+
+            channel.getAllLayers(function (data) {
+                expect(data[0].visible).not.toEqual(!visible);
+                expect(data[0].visible).toEqual(visible);
+            })
+
+            counter++;
+            done();
+        });
 
     });
 
@@ -312,6 +335,9 @@ describe('Map', function () {
                 expect(position.north).toEqual(defaultPosition.centerY);
                 expect(position.zoom).toEqual(defaultPosition.zoom);
                 //expect(data.scale).toEqual(defaultPosition.scale);
+                
+                // State after reset is same as starting state, object deep equality
+                expect(data.current).toEqual(savedState);
 
                 channel.log('ResetState moved map:', data);
                 counter++;
