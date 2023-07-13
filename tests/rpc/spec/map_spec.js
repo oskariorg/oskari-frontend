@@ -44,6 +44,38 @@ describe('Map', function () {
 
     });
 
+
+    describe('Change layer properties', function () {
+
+        var baseLayer;
+
+        beforeEach(function (done) {
+            channel.getAllLayers(function (data) {
+                baseLayer = data[0];
+                done();
+            })
+        });
+
+        it('Changes map layer opacity', function (done) {
+
+            var layerId = baseLayer.id;
+            var opacity = (baseLayer.opacity + 10) % 100;
+            // Change layer opacity
+            channel.postRequest('ChangeMapLayerOpacityRequest', [layerId, opacity]);
+
+            channel.getAllLayers(function (data) {
+                expect(data[0].opacity).not.toEqual(baseLayer.opacity);
+                expect(data[0].opacity).toEqual(opacity);
+                counter++;
+                done();
+            });
+        });
+
+        //it('Changes map layer visibility')
+
+    });
+
+
     describe('Get map position', function () {
 
         it('Gets map position', function (done) {
@@ -70,6 +102,7 @@ describe('Map', function () {
         });
 
     });
+
 
     describe('Move map', function () {
 
@@ -104,6 +137,7 @@ describe('Map', function () {
 
     });
 
+
     describe('Get map bounding box', function () {
 
         it('Gets map bbox', function (done) {
@@ -124,6 +158,7 @@ describe('Map', function () {
 
     });
 
+
     describe('Get a screenshot of the map', function () {
 
         it('Gets Screenshot', function (done) {
@@ -142,6 +177,7 @@ describe('Map', function () {
         });
 
     });
+
 
     describe('Rotate map', function () {
 
@@ -175,6 +211,7 @@ describe('Map', function () {
         });
 
     });
+
 
     describe('Zoom functions', function () {
 
@@ -242,6 +279,7 @@ describe('Map', function () {
             });
         });
     });
+
 
     describe('Handle map state', function () {
 
