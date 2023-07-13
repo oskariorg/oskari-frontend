@@ -1,9 +1,9 @@
-describe('Map', function(){
+describe('Map', function () {
 
-    beforeEach(function(done) {
-        channel.onReady(function() {
+    beforeEach(function (done) {
+        channel.onReady(function () {
             // Channel is now ready and listening.
-            channel.resetState(function() {
+            channel.resetState(function () {
                 // Reset map and event counter.
                 counter = 0;
                 done();
@@ -11,7 +11,7 @@ describe('Map', function(){
         });
     });
 
-    afterEach(function() {
+    afterEach(function () {
         // Spy callback.
         expect(counter).toEqual(1);
         // Reset event handlers.
@@ -19,10 +19,10 @@ describe('Map', function(){
     });
 
 
-    describe('Get available map layers', function() {
+    describe('Get available map layers', function () {
 
-        it('Get all layers', function(done) {
-            channel.getAllLayers(function(data) {
+        it('Get all layers', function (done) {
+            channel.getAllLayers(function (data) {
                 // Expect atleast basemap layer to be found.
                 expect(Object.keys(data).length).toBeGreaterThan(0);
                 // Expect basemap layer to be have at least 4 elements.
@@ -44,10 +44,10 @@ describe('Map', function(){
 
     });
 
-    describe('Get map position', function() {
+    describe('Get map position', function () {
 
-        it('Gets map position', function(done) {
-            channel.getMapPosition(function(data) {
+        it('Gets map position', function (done) {
+            channel.getMapPosition(function (data) {
                 // Expect getMapPosition data to have 5 elements.
                 expect(Object.keys(data).length).toBe(5);
                 // coordinates
@@ -71,10 +71,10 @@ describe('Map', function(){
 
     });
 
-    describe('Get map bounding box', function() {
+    describe('Get map bounding box', function () {
 
-        it('Gets map bbox', function(done) {
-            channel.getMapBbox(function(data) {
+        it('Gets map bbox', function (done) {
+            channel.getMapBbox(function (data) {
                 // Expect getMapBbox data to have 4 elements. 
                 expect(Object.keys(data).length).toBe(4);
                 // Bbox varies by screen size
@@ -91,16 +91,16 @@ describe('Map', function(){
 
     });
 
-    describe('Get a screenshot of the map', function() {
+    describe('Get a screenshot of the map', function () {
 
-        it('Gets Screenshot', function(done) {
-            channel.getScreenshot(function(data) {
-                setTimeout(function() {
+        it('Gets Screenshot', function (done) {
+            channel.getScreenshot(function (data) {
+                setTimeout(function () {
                     // Encode then decode and compare to the original.
                     expect(atob(btoa(data))).toBe(data);
                     expect(Object.keys(data).length).toBeGreaterThan(1000);
                     expect(data).toContain("data:image/png;base64,");
-                
+
                     channel.log('Get Screenshot done.');
                     counter++;
                     done();
@@ -110,19 +110,19 @@ describe('Map', function(){
 
     });
 
-    describe('Rotate map', function() {
-        
-        beforeEach(function(done) {
+    describe('Rotate map', function () {
+
+        beforeEach(function (done) {
             //Save map position.
-            channel.getMapPosition(function(data) {
+            channel.getMapPosition(function (data) {
                 defaultPosition = data;
                 done();
             });
         });
 
-        it('Rotates 180', function(done) {
+        it('Rotates 180', function (done) {
             // Listen AfterMapMoveEvent occurs and position stays same as before rotation
-            handleEvent('AfterMapMoveEvent', function(data) {
+            handleEvent('AfterMapMoveEvent', function (data) {
                 channel.log('AfterMapMoveEvent launched!');
                 expect(data.centerX).toBe(defaultPosition.centerX);
                 expect(data.centerY).toBe(defaultPosition.centerY);
@@ -134,7 +134,7 @@ describe('Map', function(){
             channel.postRequest('rotate.map', [180]);
             channel.log('rotate.map 180 request done.');
         });
-        it('Resets rotation', function(done) {
+        it('Resets rotation', function (done) {
             channel.postRequest('rotate.map', []);
             channel.log('rotate.map reset.');
             counter++;
@@ -143,20 +143,20 @@ describe('Map', function(){
 
     });
 
-    describe('Zoom functions', function() {
-        
+    describe('Zoom functions', function () {
+
         var zoom;
 
-        beforeEach(function(done) {
+        beforeEach(function (done) {
             //Save current zoom.
-            channel.getZoomRange(function(data) {
+            channel.getZoomRange(function (data) {
                 zoom = data;
                 done();
             });
         });
 
-        it('Gets Zoom Range', function(done) {
-            channel.getZoomRange(function(data) {
+        it('Gets Zoom Range', function (done) {
+            channel.getZoomRange(function (data) {
                 // Expect getzoom data to have 3 elements.
                 expect(Object.keys(data).length).toBe(3);
                 expect(data.min).not.toBeLessThan(0);
@@ -169,10 +169,10 @@ describe('Map', function(){
             });
         });
 
-        it('Zooms in', function(done) {
-            channel.zoomIn(function(data){
+        it('Zooms in', function (done) {
+            channel.zoomIn(function (data) {
                 // Expect zoom to be +1.
-                expect(data).toEqual(zoom.current+1);
+                expect(data).toEqual(zoom.current + 1);
 
                 expect(data).not.toBeLessThan(zoom.min);
                 expect(data).not.toBeGreaterThan(zoom.max);
@@ -183,10 +183,10 @@ describe('Map', function(){
             });
         });
 
-        it('Zooms out', function(done) {
-            channel.zoomOut(function(data){
+        it('Zooms out', function (done) {
+            channel.zoomOut(function (data) {
                 // Expect zoom to be -1. Cannot be negative.
-                expect(data).not.toBeLessThan(zoom.current-1);
+                expect(data).not.toBeLessThan(zoom.current - 1);
                 expect(data).not.toBeGreaterThan(zoom.current);
 
                 expect(data).not.toBeLessThan(zoom.min);
@@ -198,8 +198,8 @@ describe('Map', function(){
             });
         });
 
-        it('Zooms To 5', function(done) {
-            channel.zoomTo([5],function(data){
+        it('Zooms To 5', function (done) {
+            channel.zoomTo([5], function (data) {
                 // Expect zoom to be 5.
                 expect(data).toEqual(5);
 
@@ -210,30 +210,30 @@ describe('Map', function(){
         });
     });
 
-    describe('Handle map state', function() {
-        
+    describe('Handle map state', function () {
+
         var savedState;
-        
-        beforeEach(function(done) {
+
+        beforeEach(function (done) {
             //Save map position for testing.
-            channel.getMapPosition(function(data) {
+            channel.getMapPosition(function (data) {
                 defaultPosition = data;
             });
             //Save layer for testing.
-            channel.getAllLayers(function(data) {
+            channel.getAllLayers(function (data) {
                 defaultLayer = data;
             });
             // Save state for loading.
-            channel.getCurrentState(function(data) {
+            channel.getCurrentState(function (data) {
                 savedState = data;
             });
             done();
         });
 
 
-        it('Resets state', function(done) {
+        it('Resets state', function (done) {
             // Expect StateChangedEvent to occur after resetState.
-            handleEvent('StateChangedEvent', function(data) {
+            handleEvent('StateChangedEvent', function (data) {
                 channel.log('StateChangedEvent launched!');
                 const position = data.current.mapfull.state;
                 // Expect map moved to default position.
@@ -247,12 +247,12 @@ describe('Map', function(){
                 done();
             });
             // Reset state.
-            channel.resetState(function(){});
+            channel.resetState(function () { });
         });
 
-        it('Saves state', function(done) {
+        it('Saves state', function (done) {
             // Get current state.
-            channel.getCurrentState(function(data) {
+            channel.getCurrentState(function (data) {
                 // Mapfull contains state and layer info.
                 expect(data).toEqual(jasmine.objectContaining({
                     mapfull: jasmine.objectContaining({
@@ -262,11 +262,11 @@ describe('Map', function(){
                             east: defaultPosition.centerX,
                             zoom: defaultPosition.zoom,
                             srs: defaultPosition.srsName,
-                            
+
                             // Every layer contains at least these fields
-                            selectedLayers:jasmine.arrayContaining([jasmine.objectContaining({
+                            selectedLayers: jasmine.arrayContaining([jasmine.objectContaining({
                                 id: defaultLayer[0].id,
-                                opacity:defaultLayer[0].opacity,
+                                opacity: defaultLayer[0].opacity,
                                 //style:"default"
                             })])
                         })
@@ -285,9 +285,9 @@ describe('Map', function(){
             });
         });
 
-        it('Loads state', function(done) {
+        it('Loads state', function (done) {
             // Expect StateChangedEvent to occur after useState.
-            handleEvent('StateChangedEvent', function(data) {
+            handleEvent('StateChangedEvent', function (data) {
                 channel.log('StateChangedEvent launched!');
                 const position = data.current.mapfull.state;
                 // Expect map moved to default position.
@@ -295,13 +295,13 @@ describe('Map', function(){
                 expect(position.north).toBe(defaultPosition.centerY);
                 expect(position.zoom).toBe(defaultPosition.zoom);
                 //expect(data.scale).toBe(defaultPosition.scale);
-                
+
                 channel.log('UseState moved map:', data);
                 counter++;
                 done();
             });
             // Use saved state.
-            channel.useState([savedState], function(){
+            channel.useState([savedState], function () {
                 channel.log('UseState: ', savedState);
             });
         });
