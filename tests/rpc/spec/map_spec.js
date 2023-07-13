@@ -71,6 +71,39 @@ describe('Map', function () {
 
     });
 
+    describe('Move map', function () {
+
+        it('Moves map on request', function (done) {
+
+            // Handle event
+            handleEvent('AfterMapMoveEvent', function (data) {
+                channel.log('AfterMapMoveEvent launched!')
+                expect(data.centerX).toEqual(x);
+                expect(data.centerY).toEqual(y);
+                expect(data.zoom).toEqual(zoomLevel);
+                counter++;
+                done();
+            })
+
+            // Move to this position
+            var x = 552935;
+            var y = 7332639;
+            var zoomLevel = 7; // Not required in request
+
+            // AfterMapMove event triggers only when starting position is not the same as end position
+            channel.getMapPosition(function (data) {
+
+                var xIsDifferent = data.centerX !== x;
+                var yIsDifferent = data.centery !== y;
+                var zoomIsDifferent = data.zoom !== zoomLevel;
+
+                expect(xIsDifferent || yIsDifferent || zoomIsDifferent).toEqual(true);
+            })
+            channel.postRequest('MapMoveRequest', [x, y, zoomLevel])
+        });
+
+    });
+
     describe('Get map bounding box', function () {
 
         it('Gets map bbox', function (done) {
