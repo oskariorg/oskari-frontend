@@ -205,7 +205,7 @@ describe('Map', function () {
     describe('Rotate map', function () {
 
         beforeEach(function (done) {
-            //Save map position.
+            // Save map position
             channel.getMapPosition(function (data) {
                 defaultPosition = data;
                 done();
@@ -224,10 +224,22 @@ describe('Map', function () {
             });
             // rotate.map 180 degrees
             channel.postRequest('rotate.map', [180]);
+
+            // Expect that map was rotated
+            channel.getCurrentState(function (data) {
+                expect(data.maprotator.state.degrees).toEqual(180);
+            });
             channel.log('rotate.map 180 request done.');
         });
+
         it('Resets rotation', function (done) {
             channel.postRequest('rotate.map', []);
+
+            // Expect that map rotation was reset
+            channel.getCurrentState(function (data) {
+                expect(data.maprotator.state.degrees).toEqual(0);
+            });
+
             channel.log('rotate.map reset.');
             counter++;
             done();
@@ -324,7 +336,6 @@ describe('Map', function () {
             done();
         });
 
-
         it('Resets state', function (done) {
             // Expect StateChangedEvent to occur after resetState.
             handleEvent('StateChangedEvent', function (data) {
@@ -335,7 +346,7 @@ describe('Map', function () {
                 expect(position.north).toEqual(defaultPosition.centerY);
                 expect(position.zoom).toEqual(defaultPosition.zoom);
                 //expect(data.scale).toEqual(defaultPosition.scale);
-                
+
                 // State after reset is same as starting state, object deep equality
                 expect(data.current).toEqual(savedState);
 
@@ -392,6 +403,11 @@ describe('Map', function () {
                 expect(position.north).toEqual(defaultPosition.centerY);
                 expect(position.zoom).toEqual(defaultPosition.zoom);
                 //expect(data.scale).toEqual(defaultPosition.scale);
+
+                // Expect state object is equal to saved state
+                channel.getCurrentState(function (data) {
+                    expect(data).toEqual(savedState);
+                });
 
                 channel.log('UseState moved map:', data);
                 counter++;
