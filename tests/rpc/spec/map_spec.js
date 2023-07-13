@@ -49,7 +49,7 @@ describe('Map', function () {
         it('Gets map position', function (done) {
             channel.getMapPosition(function (data) {
                 // Expect getMapPosition data to have 5 elements.
-                expect(Object.keys(data).length).toBe(5);
+                expect(Object.keys(data).length).toEqual(5);
                 // coordinates
                 expect(data.centerX).not.toBeLessThan(0);
                 expect(data.centerY).not.toBeLessThan(0);
@@ -76,7 +76,7 @@ describe('Map', function () {
         it('Gets map bbox', function (done) {
             channel.getMapBbox(function (data) {
                 // Expect getMapBbox data to have 4 elements. 
-                expect(Object.keys(data).length).toBe(4);
+                expect(Object.keys(data).length).toEqual(4);
                 // Bbox varies by screen size
                 expect(data.bottom).toEqual(jasmine.any(Number));
                 expect(data.left).toEqual(jasmine.any(Number));
@@ -97,7 +97,7 @@ describe('Map', function () {
             channel.getScreenshot(function (data) {
                 setTimeout(function () {
                     // Encode then decode and compare to the original.
-                    expect(atob(btoa(data))).toBe(data);
+                    expect(atob(btoa(data))).toEqual(data);
                     expect(Object.keys(data).length).toBeGreaterThan(1000);
                     expect(data).toContain("data:image/png;base64,");
 
@@ -124,9 +124,9 @@ describe('Map', function () {
             // Listen AfterMapMoveEvent occurs and position stays same as before rotation
             handleEvent('AfterMapMoveEvent', function (data) {
                 channel.log('AfterMapMoveEvent launched!');
-                expect(data.centerX).toBe(defaultPosition.centerX);
-                expect(data.centerY).toBe(defaultPosition.centerY);
-                expect(data.zoom).toBe(defaultPosition.zoom);
+                expect(data.centerX).toEqual(defaultPosition.centerX);
+                expect(data.centerY).toEqual(defaultPosition.centerY);
+                expect(data.zoom).toEqual(defaultPosition.zoom);
                 counter++;
                 done();
             });
@@ -158,7 +158,7 @@ describe('Map', function () {
         it('Gets Zoom Range', function (done) {
             channel.getZoomRange(function (data) {
                 // Expect getzoom data to have 3 elements.
-                expect(Object.keys(data).length).toBe(3);
+                expect(Object.keys(data).length).toEqual(3);
                 expect(data.min).not.toBeLessThan(0);
                 expect(data.max).toBeGreaterThan(0);
                 expect(data.current).not.toBeLessThan(0);
@@ -237,10 +237,10 @@ describe('Map', function () {
                 channel.log('StateChangedEvent launched!');
                 const position = data.current.mapfull.state;
                 // Expect map moved to default position.
-                expect(position.east).toBe(defaultPosition.centerX);
-                expect(position.north).toBe(defaultPosition.centerY);
-                expect(position.zoom).toBe(defaultPosition.zoom);
-                //expect(data.scale).toBe(defaultPosition.scale);
+                expect(position.east).toEqual(defaultPosition.centerX);
+                expect(position.north).toEqual(defaultPosition.centerY);
+                expect(position.zoom).toEqual(defaultPosition.zoom);
+                //expect(data.scale).toEqual(defaultPosition.scale);
 
                 channel.log('ResetState moved map:', data);
                 counter++;
@@ -291,10 +291,10 @@ describe('Map', function () {
                 channel.log('StateChangedEvent launched!');
                 const position = data.current.mapfull.state;
                 // Expect map moved to default position.
-                expect(position.east).toBe(defaultPosition.centerX);
-                expect(position.north).toBe(defaultPosition.centerY);
-                expect(position.zoom).toBe(defaultPosition.zoom);
-                //expect(data.scale).toBe(defaultPosition.scale);
+                expect(position.east).toEqual(defaultPosition.centerX);
+                expect(position.north).toEqual(defaultPosition.centerY);
+                expect(position.zoom).toEqual(defaultPosition.zoom);
+                //expect(data.scale).toEqual(defaultPosition.scale);
 
                 channel.log('UseState moved map:', data);
                 counter++;
