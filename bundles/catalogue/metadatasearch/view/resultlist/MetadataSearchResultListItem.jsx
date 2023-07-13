@@ -14,11 +14,11 @@ export const MetadataSearchResultListItem = (props) => {
 
     const identificationCode = item?.identification?.code ? Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'searchResults.identificationCode.' + item.identification.code) : null;
     const identificationDate = item?.identification?.date ? item.identification.date : null;
-
+    const isMobile = Oskari.util.isMobile();
     return <SearchResultRow>
         <FlexColumn>
             <ClickableDiv title={Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'grid.info')} onClick={() => showMetadata(item.id)}>
-                <span>{item.name}, {item.organization} </span>
+                <a>{item.name}, {item.organization} </a>
                 { identificationCode && identificationDate &&
                     <span>({identificationCode}:{identificationDate})</span>
                 }
@@ -35,9 +35,11 @@ export const MetadataSearchResultListItem = (props) => {
                     </SearchResultLayerListContainer>
             }
         </FlexColumn>
-        <FlexRight>
-            { item.geom && <CoverageIcon active={displayedCoverageId === item.id} item={item} toggleCoverageArea={toggleCoverageArea}/> }
-        </FlexRight>
+        {
+            !isMobile && <FlexRight>
+                { item.geom && <CoverageIcon active={displayedCoverageId === item.id} item={item} toggleCoverageArea={toggleCoverageArea}/> }
+            </FlexRight>
+        }
     </SearchResultRow>;
 };
 
