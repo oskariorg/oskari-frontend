@@ -381,8 +381,9 @@ describe('Map', function () {
                     })
                 }));
 
-                // Expect toolbar and plugin settings to be found.
+                // Expect toolbar, map.rotator and plugin settings to be found.
                 expect(data.toolbar).toBeDefined();
+                expect(data.maprotator).toBeDefined();
                 expect(data.mapfull.state.plugins).toBeDefined();
                 // Basemap layer is at 0.
                 //expect(defaultLayer[0]).toEqual(jasmine.objectContaining(data.mapfull.state.selectedLayers[0]));
