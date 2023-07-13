@@ -73,6 +73,24 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 }
             });
         },
+
+        /**
+         * @private @method registerRPCFunctions
+         * Register RPC functions
+         */
+        _registerRPCFunctions () {
+            var me = this;
+
+            const rpcService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.rpc.service.RpcService');
+            if (!rpcService) {
+                return;
+            }
+            rpcService.addFunction('getSelectedAnnouncements', function () {
+                const announcementsIds = me._config.announcements;
+                const announcements = me.allAnnouncements.filter(ann => announcementsIds.includes(ann.id));
+                return announcements;
+            });
+        },
         
         /**
          * Check at has UI configured to shown
@@ -171,7 +189,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
             var me = this;
             const announcementsIds = me._config.announcements;
 
-            const announcements = this.allAnnouncements.filter(ann => announcementsIds.includes(ann.id));
+            const announcements = me.allAnnouncements.filter(ann => announcementsIds.includes(ann.id));
 
             if (!me.open) {
                 delete me.announcementsContent;
