@@ -1,7 +1,8 @@
 /*
 Switch map URL to test other maps
 */
-var mapUrl = 'https://kartta.paikkatietoikkuna.fi/?lang=en&uuid=053027f4-91d9-4351-aec4-c6a31dd68c56';
+var mapUrl = 'http://demo.oskari.org/?lang=en&uuid=8016f9be-131b-44ab-bcee-5055628dbd42';
+
 // sets source
 document.getElementById('map').src = mapUrl;
 // sets domain (localhost is allowed)
@@ -9,8 +10,8 @@ var iFrameDomain = mapUrl.substring(0, mapUrl.indexOf('?'));
 // init connection
 var iFrame = document.getElementById('map');
 window.channel = OskariRPC.connect(
-  iFrame,
-  iFrameDomain
+    iFrame,
+    iFrameDomain
 );
 
 /*
@@ -23,10 +24,10 @@ var counter;
 // ##################### //
 
 var general = {
-  "ExpectedOskariVersion": "2.11.0",
+  "ExpectedOskariVersion": "1.44.3",
   "ExpectedRPCVersion": "2.0.4",
   "IsSupported": true,
-  "srsName": "EPSG:3067"
+  "srsName": "EPSG:4326"
 };
 
 // ##################### //
@@ -44,7 +45,7 @@ var defaultPosition = {
 var defaultLayer = {
   "Id": "base_35",
   "Opacity": 100,
-  "visible": true ,
+  "visible": true,
   "name": "Taustakarttasarja",
 };
 
@@ -164,14 +165,14 @@ var featureStyle = {
     color: '#FF0000',
     width: 5
   },
-  text: {
-    scale: 2,
-    fill: {
-      color: 'rgba(0,0,0,1)'
+  text : {
+    scale : 2,
+    fill : {
+      color : 'rgba(0,0,0,1)'
     },
-    stroke: {
-      color: 'rgba(255,255,255,0)',
-      width: 1
+    stroke : {
+      color : 'rgba(255,255,255,0)',
+      width : 1
     },
     labelText: 'Test feature'
   }
@@ -222,95 +223,95 @@ var markerInfobox = [
 // ###################### //
 
 // # Show or hide info box
-var myInfoBox = [
-  "myInfoBox",
-  "Generic info box",
-  [
-    {
-      "html": "<div>Map position info:</div>"
-    },
-    {
-      "html": "<div>Center: " + defaultPosition.centerX + ", " + defaultPosition.centerY + "</div>",
-      "actions": [
+var myInfoBox =[
+    "myInfoBox",
+    "Generic info box",
+    [
         {
-          "name": "My link 1",
-          "type": "link",
-          "action": {
-            "info": "this can include any info",
-            "info2": "action-object can have any number of params"
-          }
+            "html": "<div>Map position info:</div>"
         },
         {
-          "name": "My link 2",
-          "type": "link",
-          "action": {
-            "info": "this can include any info",
-            "info2": "action-object can have any number of params"
-          }
+            "html": "<div>Center: "+defaultPosition.centerX+", "+defaultPosition.centerY+"</div>",
+            "actions": [
+                {
+                    "name": "My link 1",
+                    "type": "link",
+                    "action": {
+                        "info": "this can include any info",
+                        "info2": "action-object can have any number of params"
+                    }
+                },
+                {
+                    "name": "My link 2",
+                    "type": "link",
+                    "action": {
+                        "info": "this can include any info",
+                        "info2": "action-object can have any number of params"
+                    }
+                }
+            ]
+        },
+        {
+            "html": "<div>Zoom level: "+defaultPosition.zoom+"</div>"
+        },
+        {
+            "actions": [
+                {
+                    "name": "My link 3",
+                    "type": "link",
+                    "action": {
+                        "info": "this can include any info",
+                        "info2": "action-object can have any number of params"
+                    }
+                },
+                {
+                    "name": "My link 4",
+                    "type": "link",
+                    "action": {
+                        "info": "this can include any info",
+                        "info2": "action-object can have any number of params"
+                    }
+                },
+                {
+                    "name": "My button 1",
+                    "type": "button",
+                    "group": 1,
+                    "action": {
+                        "info": "this can include any info",
+                        "info2": "action-object can have any number of params",
+                        "buttonInfo": "This button has group 1 and is placed to the same row with other actions that have the same group"
+                    }
+                },
+                {
+                    "name": "My button 2",
+                    "type": "button",
+                    "group": 1,
+                    "action": {
+                        "info": "this can include any info",
+                        "info2": "action-object can have any number of params",
+                        "buttonInfo": "This button has group 1 and is placed to the same row with other actions that have the same group"
+                    }
+                }
+            ]
         }
-      ]
+    ],
+    {
+        "lon": defaultPosition.centerX,
+        "lat": defaultPosition.centerY
     },
     {
-      "html": "<div>Zoom level: " + defaultPosition.zoom + "</div>"
-    },
-    {
-      "actions": [
-        {
-          "name": "My link 3",
-          "type": "link",
-          "action": {
-            "info": "this can include any info",
-            "info2": "action-object can have any number of params"
-          }
+        "colourScheme": {
+            "bgColour": "#00CCFF",
+            "titleColour": "#FFFFFF",
+            "headerColour": "#00CCFF",
+            "iconCls": "icon-close-white",
+            "buttonBgColour": "#00CCFF",
+            "buttonLabelColour": "#FFFFFF",
+            "linkColour": "#000000"
         },
-        {
-          "name": "My link 4",
-          "type": "link",
-          "action": {
-            "info": "this can include any info",
-            "info2": "action-object can have any number of params"
-          }
-        },
-        {
-          "name": "My button 1",
-          "type": "button",
-          "group": 1,
-          "action": {
-            "info": "this can include any info",
-            "info2": "action-object can have any number of params",
-            "buttonInfo": "This button has group 1 and is placed to the same row with other actions that have the same group"
-          }
-        },
-        {
-          "name": "My button 2",
-          "type": "button",
-          "group": 1,
-          "action": {
-            "info": "this can include any info",
-            "info2": "action-object can have any number of params",
-            "buttonInfo": "This button has group 1 and is placed to the same row with other actions that have the same group"
-          }
-        }
-      ]
+        "font": "georgia",
+        "positioning": "left"
     }
-  ],
-  {
-    "lon": defaultPosition.centerX,
-    "lat": defaultPosition.centerY
-  },
-  {
-    "colourScheme": {
-      "bgColour": "#00CCFF",
-      "titleColour": "#FFFFFF",
-      "headerColour": "#00CCFF",
-      "iconCls": "icon-close-white",
-      "buttonBgColour": "#00CCFF",
-      "buttonLabelColour": "#FFFFFF",
-      "linkColour": "#000000"
-    },
-    "font": "georgia",
-    "positioning": "left"
-  }
 ];
 
 var infoboxId = 'myInfoBox';
@@ -356,9 +357,7 @@ var supportedEvents = [
   "InfoBox.InfoBoxEvent",
   "RPCUIEvent",
   "map.rotated",
-  "MapTourEvent",
-  "DataForMapLocationEvent",
-  "StateChangedEvent"
+  "DataForMapLocationEvent"
 ];
 
 var supportedFunctions = [
@@ -366,29 +365,27 @@ var supportedFunctions = [
   "getSupportedFunctions",
   "getSupportedRequests",
   "getInfo",
-  "resetState",
-  "getCurrentState",
-  "useState",
-  "sendUIEvent",
   "getAllLayers",
+  "getMapBbox",
+  "getMapPosition",
   "getZoomRange",
   "zoomIn",
   "zoomOut",
   "zoomTo",
   "getPixelMeasuresInScale",
-  "getMapBbox",
-  "getMapPosition",
+  "resetState",
+  "getCurrentState",
+  "useState",
+  "getFeatures",
   "setCursorStyle",
-  "getVectorFeatures",
-  "getScreenshot",
-  "getFeatures"
+  "sendUIEvent",
+  "getScreenshot"
 ];
 
 var supportedRequests = [
   "InfoBox.ShowInfoBoxRequest",
   "InfoBox.HideInfoBoxRequest",
   "MapModulePlugin.AddMarkerRequest",
-  "VectorLayerRequest",
   "MapModulePlugin.AddFeaturesToMapRequest",
   "MapModulePlugin.RemoveFeaturesFromMapRequest",
   "MapModulePlugin.GetFeatureInfoRequest",
@@ -396,13 +393,12 @@ var supportedRequests = [
   "MapModulePlugin.RemoveMarkersRequest",
   "MapModulePlugin.MarkerVisibilityRequest",
   "MapMoveRequest",
-  "MapTourRequest",
   "ShowProgressSpinnerRequest",
-  "SetTimeRequest",
   "GetRouteRequest",
   "GetFeedbackServiceRequest",
   "GetFeedbackRequest",
   "PostFeedbackRequest",
+  "rotate.map",
   "SearchRequest",
   "ChangeMapLayerOpacityRequest",
   "MyLocationPlugin.GetUserLocationRequest",
@@ -410,9 +406,6 @@ var supportedRequests = [
   "DrawTools.StopDrawingRequest",
   "MapModulePlugin.ZoomToFeaturesRequest",
   "MapModulePlugin.MapLayerUpdateRequest",
-  "rotate.map",
-  "StartUserLocationTrackingRequest",
-  "StopUserLocationTrackingRequest",
   "ChangeMapLayerStyleRequest",
   "RearrangeSelectedMapLayerRequest"
 ];
