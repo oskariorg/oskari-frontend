@@ -130,7 +130,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             });
 
             const labelNoUI = me.localization.publisher.noUI;
-            console.log(labelNoUI)
 
             var input = Oskari.clazz.create(
                 'Oskari.userinterface.component.CheckboxInput'
@@ -146,7 +145,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     me.getPlugin().redrawUI(Oskari.util.isMobile());
                 }
             });
-            console.log(input)
 
 
             if (me.noUiIsCheckedInModifyMode) {
