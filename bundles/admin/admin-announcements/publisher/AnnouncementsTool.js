@@ -35,8 +35,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 '</div>'),
             inputCheckbox: jQuery('<div><input type="checkbox" name="announcement"/><label></label></div>')
         };
-        this.noUI = null;
-        this.noUiIsCheckedInModifyMode = false;
+        this.noUI = true;
+        this.noUiIsCheckedInModifyMode = true;
     }, {
 
         init: function (data) {
@@ -146,7 +146,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 }
             });
 
-
             if (me.noUiIsCheckedInModifyMode) {
                 input.setChecked(true);
                 me.noUI = true;
@@ -157,7 +156,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             }
 
             template.append(inputEl);
-            
+
             return template;
         },
 
@@ -277,7 +276,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             if (announcementsSelection && !jQuery.isEmptyObject(announcementsSelection)) {
                 pluginConfig.config.announcements = announcementsSelection.announcements;
             }
-            
+
             if (me.noUI) {
                 pluginConfig.config.noUI = me.noUI;
             }

@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 return announcements;
             });
         },
-        
+
         /**
          * Check at has UI configured to shown
          * @method @private _hasUI
@@ -145,11 +145,11 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
             var me = this,
                 el = me.templates.main.clone(),
                 header = el.find('div.announcements-header');
-            
+
             if (me._config.noUI) {
                 return null;
             }
-            
+
             header.append(me._loc.plugin.title);
             me._bindHeader(header);
             return el;
