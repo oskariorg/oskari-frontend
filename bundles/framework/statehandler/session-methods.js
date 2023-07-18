@@ -23,6 +23,9 @@ Oskari.clazz.category(
                     });
                     me.setSessionExpiring(minutes);
                     popupController.close();
+                }, () => {
+                    // just close without reloading (use when switching to modal)
+                    popupController.close();
                 });
             });
         },

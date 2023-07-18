@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { showPopup } from 'oskari-ui/components/window';
+import { showPopup, showModal } from 'oskari-ui/components/window';
 import { Button } from 'oskari-ui';
 import styled from 'styled-components';
 import { PropTypes } from 'prop-types';
+
 const LOCALIZATION_ID = 'StateHandler';
 const SESSION_EXPIRES_SECONDS = 60;
+const SESSION_EXPIRES_POPUP_UPDATE_MILLISECONDS = 1000;
+const MODAL_DELAY_MS = 5000;
+
 const MessageContainer = styled('div')`
     margin: 1em;
     display: flex;
@@ -17,7 +21,7 @@ const ButtonContainer = styled('div')`
 `;
 
 const MessagePopup = (props) => {
-    const { minutes, cancelCallback, continueCallback } = props;
+    const { minutes, cancelCallback, continueCallback, closeCallback } = props;
     const [seconds, setSeconds] = useState(minutes * SESSION_EXPIRES_SECONDS);
     const [start] = useState(Date.now());
     let diff;
@@ -28,22 +32,30 @@ const MessagePopup = (props) => {
         newSeconds = newSeconds < 10 ? 0 + newSeconds : newSeconds;
 
         if (newSeconds < 1) {
+            const modalController = showSessionExpiredModal();
+            closeCallback();
             clearTimeout(timer);
             if (Oskari.user().isLoggedIn()) {
-                cancelCallback();
+                setTimeout(() => {
+                    modalController.close();
+                    cancelCallback();
+                }, MODAL_DELAY_MS);
             } else {
-                location.reload();
+                setTimeout(() => {
+                    location.reload();
+                }, MODAL_DELAY_MS);
             }
         } else {
             setSeconds(newSeconds);
         }
-    }, 1000);
+    }, SESSION_EXPIRES_POPUP_UPDATE_MILLISECONDS);
 
     useEffect(() => {
         return () => {
             clearTimeout(timer);
         };
     });
+
     const message = Oskari.getMsg(LOCALIZATION_ID, 'session.expiring.message').replace('{extend}', Oskari.getMsg(LOCALIZATION_ID, 'session.expiring.extend'));
     const expiringMessage = Oskari.getMsg(LOCALIZATION_ID, 'session.expiring.expires').replace('{expires}', seconds);
     return <MessageContainer>
@@ -59,10 +71,21 @@ const MessagePopup = (props) => {
 MessagePopup.propTypes = {
     minutes: PropTypes.number,
     cancelCallback: PropTypes.func,
-    continueCallback: PropTypes.func
+    continueCallback: PropTypes.func,
+    closeCallback: PropTypes.func
 };
 
-export const showSessionExpiringPopup = (minutes, cancelCallback, continueCallback) => {
+const ExpiredPopupContent = () => {
+    const message = Oskari.getMsg(LOCALIZATION_ID, 'session.expired.message');
+    return <MessageContainer>{message}</MessageContainer>;
+};
+
+export const showSessionExpiringPopup = (minutes, cancelCallback, continueCallback, closeCallback) => {
     const title = Oskari.getMsg(LOCALIZATION_ID, 'session.expiring.title');
-    return showPopup(title, <MessagePopup minutes={minutes} cancelCallback={cancelCallback} continueCallback={continueCallback}/>, null, { id: 'StateHandlerReactPopup' });
+    return showPopup(title, <MessagePopup minutes={minutes} cancelCallback={cancelCallback} continueCallback={continueCallback} closeCallback={closeCallback}/>, null, { id: 'StateHandlerReactPopup' });
+};
+
+export const showSessionExpiredModal = () => {
+    const title = Oskari.getMsg(LOCALIZATION_ID, 'session.expired.title');
+    return showModal(title, <ExpiredPopupContent/>, null, { id: 'StateHandlerSessionExpiredModal' });
 };
