@@ -390,8 +390,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             const layerSource = this.getMarkersLayer().getSource();
             if (visible) {
                 const feature = this._hiddenMarkers[id];
-                layerSource.addFeature(feature);
-                delete this._hiddenMarkers[id];
+                if (feature) {
+                    layerSource.addFeature(feature);
+                    delete this._hiddenMarkers[id];
+                }
             } else {
                 const feature = layerSource.getFeatureById(id);
                 if (feature) {
