@@ -1,3 +1,5 @@
+import { showSessionExpiredModal, showSessionExpiringPopup } from './SessionExpiringPopup';
+
 Oskari.clazz.category(
     'Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance',
     'state-methods', {
@@ -7,12 +9,21 @@ Oskari.clazz.category(
      */
         setSessionExpiring: function (minutes) {
             if (!minutes) return;
-
-            var sandbox = this.getSandbox();
-            var dialog = this._createNotificationDialog(minutes);
+            const me = this;
+            const sandbox = this.getSandbox();
 
             sandbox.setSessionExpiring((minutes - 1), function () {
-                dialog.show();
+                const popupController = showSessionExpiringPopup(minutes, () => {
+                    document.querySelector("form[action='/logout']").submit();
+                    popupController.close();
+                }, () => {
+                    // continue session
+                    sandbox.extendSession(() => {
+                        showSessionExpiredModal();
+                    });
+                    me.setSessionExpiring(minutes);
+                    popupController.close();
+                });
             });
         },
         /**
