@@ -383,23 +383,28 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param  {String} id  optional marker id for marker to change it's visibility, all markers visibility changed if not given.
          */
         changeMapMarkerVisibility: function (visible, id) {
-            if (!id) {
-                this.getMarkersLayer().setVisible(visible);
-                return;
-            }
             const layerSource = this.getMarkersLayer().getSource();
-            if (visible) {
-                const feature = this._hiddenMarkers[id];
-                if (feature) {
-                    layerSource.addFeature(feature);
-                    delete this._hiddenMarkers[id];
+            const update = feature => {
+                if (!feature) {
+                    // not found for requested id (invalid id or feature is visible/hidden already)
+                    return;
                 }
-            } else {
-                const feature = layerSource.getFeatureById(id);
-                if (feature) {
-                    this._hiddenMarkers[id] = feature;
+                const fid = feature.getId();
+                if (visible) {
+                    layerSource.addFeature(feature);
+                    delete this._hiddenMarkers[fid];
+                } else {
+                    this._hiddenMarkers[fid] = feature;
                     layerSource.removeFeature(feature);
                 }
+            };
+
+            if (id) {
+                const feature = visible ? this._hiddenMarkers[id] : layerSource.getFeatureById(id);
+                update(feature);
+            } else {
+                const features = visible ? Object.values(this._hiddenMarkers) : layerSource.getFeatures();
+                features.forEach(f => update(f));
             }
         },
         /**
