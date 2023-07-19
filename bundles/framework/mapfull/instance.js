@@ -309,8 +309,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             const sandbox = this.getSandbox();
             const mapModuleName = this.getMapModule().getName();
             const rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
-            const rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
-            const rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
             const isGuest = !Oskari.user().isLoggedIn();
             const layersNotAvailable = [];
             selectedLayers.forEach(layer => {
@@ -323,6 +321,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 if (layer.style) {
                     oskariLayer.selectStyle(layer.style);
                 }
+                if (layer.opacity || layer.opacity === 0) {
+                    oskariLayer.setOpacity(layer.opacity);
+                }
                 const options = {};
                 if (isGuest) {
                     // for logged in users styles will be populated based on the logged in user
@@ -331,10 +332,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     options.userStyles = layer.userStyles;
                 }
                 sandbox.request(mapModuleName, rbAdd(layer.id, options));
-                sandbox.request(mapModuleName, rbVisible(layer.id, !layer.hidden));
-                if (layer.opacity || layer.opacity === 0) {
-                    sandbox.request(mapModuleName, rbOpacity(layer.id, layer.opacity));
-                }
             });
 
             if (!this._initialStateInit || !layersNotAvailable.length) {
