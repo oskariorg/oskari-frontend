@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
+            const handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
@@ -42,6 +42,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
          * implements Module protocol init method - does nothing atm
          */
         init: function () {
+            this.requestHandlers = {
+                showFeaturedataHandler: Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.request.ShowFeatureDataRequestHandler', this)
+            };
         },
         getSandbox: function () {
             return this.sandbox;
@@ -71,6 +74,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
                 };
                 this.getSandbox().request(this, addBtnRequestBuilder('featuredataSelectionTools', 'selectiontools', btn));
             }
+            this.sandbox.requestHandler('Featuredata.ShowFeatureDataRequest', this.requestHandlers.showFeaturedataHandler);
+            this.__setupLayerTools();
         },
         /**
          * @method createUi
@@ -80,6 +85,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
             this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin', this.conf);
             this.mapModule.registerPlugin(this.plugin);
             this.mapModule.startPlugin(this.plugin);
+        },
+
+        /**
+         * Fetches reference to the map layer service
+         * @return {Oskari.mapframework.service.MapLayerService}
+         */
+        getLayerService: function () {
+            return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        },
+        /**
+         * Adds tools for all layers
+         */
+        __setupLayerTools: function () {
+            // add tools for feature data layers
+            this.getLayerService().getAllLayers().filter((layer) => layer.hasFeatureData()).forEach((layer) => this.__addTool(layer, true));
+            // update all layers at once since we suppressed individual events
+            const event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
+            this.sandbox.notifyAll(event);
+        },
+        /**
+         * Adds the Feature data tool for layer
+         * @param  {Object} layer layer to process
+         * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
+         */
+        __addTool: function (layer, suppressEvent) {
+            if (!layer || !layer.hasFeatureData()) {
+                return;
+            }
+            // add feature data tool for layer
+            const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            const label = Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'layer.featureData');
+
+            tool.setName('featureData');
+            tool.setIconCls('show-featuredata-tool');
+            tool.setTitle(label);
+            tool.setTooltip(label);
+            tool.setCallback(() => this.sandbox.postRequestByName('Featuredata.ShowFeatureDataRequest', [layer.getId()]));
+
+            this.getLayerService().addToolForLayer(layer, tool, suppressEvent);
         },
         eventHandlers: {
             DrawingEvent: function (evt) {
@@ -98,6 +142,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
                 }
 
                 this.selectToolPopupHandler.selectWithGeometry(geojson.features[0]);
+            },
+            MapLayerEvent: function (event) {
+                if (event.getOperation() !== 'add') {
+                    // only handle add layer
+                    return;
+                }
+                const id = event.getLayerId();
+                if (id) {
+                    const layer = this.getLayerService().findMapLayer(id);
+                    this.__addTool(layer);
+                } else {
+                    // ajax call for all layers
+                    this.__setupLayerTools();
+                }
             }
         }
     });

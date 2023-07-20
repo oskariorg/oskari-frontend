@@ -5,7 +5,8 @@ Oskari.registerLocalization(
         "value": {
             "title": "Kohdetiedot",
             "layer": {
-                "outOfContentArea": "Karttatasolla ei ole kohteita karttanäkymän alueella."
+                "outOfContentArea": "Karttatasolla ei ole kohteita karttanäkymän alueella.",
+                "featureData": "Kohdetiedot",
             },
             "flyout": {
                 "sorterTooltip": "Järjestä laskevasti/nousevasti",

@@ -164,6 +164,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
         this.selectionService.toggleFeatureSelection(this.getState().activeLayerId, featureId);
     }
 
+    isFlyoutOpen () {
+        return this.getState().flyoutOpen;
+    }
+
     openFlyout () {
         if (this.flyoutController) {
             this.closeFlyout();
@@ -499,6 +503,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
+    'isFlyoutOpen',
     'openFlyout',
     'closeFlyout',
     'setActiveTab',
