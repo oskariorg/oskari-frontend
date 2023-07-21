@@ -14,7 +14,7 @@ export const DEFAULT_DATA = {
     color: 'ffde00',
     msg: '',
     shape: 2,
-    size: 1,
+    size: 3,
     transient: false
 };
 
