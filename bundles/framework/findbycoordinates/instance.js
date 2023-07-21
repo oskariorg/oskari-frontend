@@ -1,4 +1,6 @@
 import { showFindByCoordinatesPopup } from './view/FindByCoordinatesPopup';
+
+const MARKER_ID_PREFIX = 'findbycoordinates_';
 /**
  * @class Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance
  */
@@ -286,14 +288,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             }
             // If there is more than one results then show results in popup
             else {
-                var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule'),
-                    oskariMarkers = Oskari.getMarkers(),
-                    markersLength = oskariMarkers.length,
-                    colorsLength = me.__colors.length,
-                    shapeIndex = 0,
-                    colorIndex = 0,
-                    addMarkerRequestBuilder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest'),
-                    MARKER_ID_PREFIX = 'findbycoordinates_';
+                const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+                const markersLength = Oskari.custom.getMarkers().length;
+                const colorsLength = me.__colors.length;
+                let shapeIndex = 0;
+                let colorIndex = 0;
+                const addMarkerRequestBuilder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
 
                 let channelResults = {};
 
@@ -311,11 +311,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                         langText = (lang !== '') ? ' (' + lang + ')' : '',
                         color = me.__colors[colorIndex];
 
-                    var markerSvg = mapmodule.getSvg({
-                        shape: shapeIndex,
-                        color: color,
-                        stroke: '#000000'
-                    });
 
                     var markerData = {
                         x: result.lon,
@@ -327,8 +322,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                         stroke: '#000000'
                     };
 
+                    const { src } = Oskari.custom.getSvg({
+                        shape: shapeIndex,
+                        fill: { color }
+                    });
+
                     const row = {
-                        img: markerSvg,
+                        img: src,
                         name: result.name || '',
                         info: result.village || '',
                         lonlat: result.lon + ', ' + result.lat
