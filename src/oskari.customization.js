@@ -104,6 +104,7 @@ const generateBlankStyle = () => {
         }
     };
 };
+
 // AppSetup.env.app.theme
 const setThemeColors = (theme = {}) => {
     if (!theme.color) {
