@@ -50,12 +50,13 @@ const getMarkers = () => _markers;
 const getMarker = shape => {
     const marker = _markers[shape];
     if (marker) {
-        return marker;
+        return { ...marker };
     }
     if (typeof shape === 'number') {
         Oskari.log('Oskari customization').warn(`Requested marker: ${shape} doesn't exist. Returning default marker instead.`);
     }
-    return _markers[DEFAULT_MARKER] || _markers[0] || EMPTY_MARKER;
+    const defaultMarker = _markers[DEFAULT_MARKER] || _markers[0] || EMPTY_MARKER;
+    return { ...defaultMarker };
 };
 
 // All svg icons with default colors for style editor buttons etc..
