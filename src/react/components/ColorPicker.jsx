@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Popover, TextInput, Tooltip, Message } from 'oskari-ui'
-import { constants, SvgRadioButton } from './StyleEditor/index';
+import { SvgRadioButton } from './StyleEditor/index';
 import { BgColorsOutlined } from '@ant-design/icons';
 
 // Use z-index to render popover top of the Modal
@@ -44,6 +44,14 @@ const MoreColors = styled('div')`
     display: inline-block;
 `;
 
+// Make array of inline SVG for pre-defined color block
+const getColorOptions = () => Oskari.custom.getColors().map((color) => {
+    return {
+        name: color,
+        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="32" height="32" fill="' + color + '" /></svg>'
+    };
+});
+
 const getContent = (props) => {
     // Don't add id to hidden input to avoid getting duplicate id with ColorTextInput, modify id if needed
     const { id, ...inputProps } = props;
@@ -55,7 +63,7 @@ const getContent = (props) => {
     }
     return (
         <StyledColorPicker>
-            <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } { ...props }/>
+            <SvgRadioButton options={ getColorOptions() } { ...props }/>
             <MoreColors>
                 <HiddenInput ref={colorInput} type='color' { ...inputProps }/>
                 <Button type="primary" onClick={onClick}>
@@ -94,7 +102,7 @@ export const ColorPicker = (props) => {
             { renderTextInput && <ColorTextInput { ...props }/> }
         </React.Fragment>
     );
-}
+};
 
 ColorPicker.propTypes = {
     value: PropTypes.string,
