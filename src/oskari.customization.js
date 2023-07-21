@@ -43,9 +43,6 @@ const getColors = () => Array.isArray(_customColors) ? [..._customColors ] : [..
 const setMarkers = markers => {
     _markers = markers || [];
     _iconSrc = null;
-    if (_markers.length < 3) {
-        _defaultMarker = 0;
-    }
 };
 
 const getMarkers = () => _markers;
