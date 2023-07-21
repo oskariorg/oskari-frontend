@@ -61,7 +61,7 @@ const getMarker = shape => {
 // All svg icons with default colors for style editor buttons etc..
 const getSvgIcons = () => {
     if (!_iconSrc) {
-        _iconSrc = getMarkers().map((m, index) => getSvg({ shape: index }));
+        _iconSrc = getMarkers().map((m, index) => getSvg({ shape: index, fill: { color: FILL_COLOR } }));
     }
     return _iconSrc;
 };
@@ -70,7 +70,7 @@ const getSvgIcons = () => {
 const getSvg = ({ shape, size, fill, stroke }) => {
     const { data, ...offsets } = getMarker(shape);
     const svg = data
-        .replace(PLACEHOLDER_FILL, fill?.color || FILL_COLOR)
+        .replace(PLACEHOLDER_FILL, fill?.color || getDefaultColor())
         .replace(PLACEHOLDER_STROKE, stroke?.color || STROKE_COLOR);
     return {
         ...offsets,
@@ -78,6 +78,7 @@ const getSvg = ({ shape, size, fill, stroke }) => {
         src: SVG_SRC + encodeURIComponent(svg)
     };
 };
+
 const getDefaultStyle = () => ({ ..._defaultStyle });
 
 // AppSetup.env.oskariStyle
@@ -85,8 +86,11 @@ const setDefaultStyle = (style) => {
     _defaultStyle = style || {};
 };
 
+const getFillColor = () => _themeColors.primary || '#FAEBD7';
+
+// to init style editor with theme color
 const generateBlankStyle = () => {
-    const color = _themeColors.primary;
+    const color = getFillColor();
     if (!color) {
         return { ..._defaultStyle };
     }
@@ -127,6 +131,7 @@ export const Customization = {
     getColors,
     getDefaultStyle,
     setDefaultStyle,
+    getFillColor,
     generateBlankStyle,
     setThemeColors
 };
