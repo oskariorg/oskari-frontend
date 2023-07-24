@@ -250,12 +250,29 @@ describe('Map', function () {
 
         var zoom;
 
+        function handleAfterMapMoveEvent () {
+            handleEvent('AfterMapMoveEvent', function (data) {
+                console.log('AfterMapMoveEvent launched!');
+
+                // Zoom functions do not move the map
+                expect(data.centerX).toEqual(position.centerX);
+                expect(data.centerY).toEqual(position.centerY);
+                // Zoom and scale change 
+                expect(data.zoom).not.toEqual(position.zoom);
+                expect(data.scale).not.toEqual(position.scale);
+            });
+        }
+
         beforeEach(function (done) {
+            channel.zoomTo([1], function (data) {});
             //Save current zoom.
             channel.getZoomRange(function (data) {
                 zoom = data;
-                done();
             });
+            channel.getMapPosition(function (data) {
+                position = data;
+            });
+            done();
         });
 
         it('Gets Zoom Range', function (done) {
@@ -283,6 +300,10 @@ describe('Map', function () {
         });
 
         it('Zooms in', function (done) {
+
+            // Expect zoom in to trigger an event
+            handleAfterMapMoveEvent();
+
             channel.zoomIn(function (data) {
                 // Expect zoom to be +1.
                 expect(data).toEqual(zoom.current + 1);
@@ -298,7 +319,13 @@ describe('Map', function () {
 
         it('Zooms out', function (done) {
             channel.zoomOut(function (data) {
-                // Expect zoom to be -1. Cannot be negative.
+
+                // Expect zoom out to trigger an event
+                handleAfterMapMoveEvent();
+
+                // Expect zoom to be decremented by 1.
+                expect(data).toEqual(zoom.current - 1);
+
                 expect(data).not.toBeLessThan(zoom.current - 1);
                 expect(data).not.toBeGreaterThan(zoom.current);
 
