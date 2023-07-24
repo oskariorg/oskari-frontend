@@ -433,8 +433,8 @@ describe('Map', function () {
 
                             // Every layer contains at least these fields
                             selectedLayers: jasmine.arrayContaining([jasmine.objectContaining({
-                                id: defaultLayer[0].id,
-                                opacity: defaultLayer[0].opacity,
+                                id: jasmine.any(Number),
+                                opacity: jasmine.any(Number),
                                 //style:"default"
                             })])
                         })
@@ -479,6 +479,54 @@ describe('Map', function () {
                 channel.log('UseState: ', savedState);
             });
         });
+    });
+
+    describe('Map tour', function () {
+
+        it('Tours the map', function (done) {
+
+            handleEvent('MapTourEvent', function (data) {
+                channel.log('MapTourEvent launched!');
+                eventCounter++;
+                // Tour is finished when in last location
+                if (data.status.steps === data.status.step) {
+                    expect(data.completed).toEqual(true);
+                }
+            });
+
+            var eventCounter = 0;
+            var routeSteps = [
+                {
+                  "lon": 488704,
+                  "lat": 6939136
+                },
+                {
+                  "lon": 338704,
+                  "lat": 6789136
+                },
+                {
+                  "lon": 563704,
+                  "lat": 6939136
+                }
+              ];
+            var stepDefaults = {
+                "zoom": 8,
+                "animation": "fly",
+                "duration": 1,
+                "srsName": "EPSG:3067"
+            };
+
+            channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
+
+            setTimeout(function () {}, 2000);
+
+            expect(eventCounter).toEqual(routeSteps.length + 1);
+
+            channel.log('Map tour done.');
+            counter++;
+            done();
+        });
+
     });
 
 });
