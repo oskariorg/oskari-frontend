@@ -98,12 +98,11 @@ class FeatureDataPluginUIHandler extends StateHandler {
         const activeLayerId = this.determineActiveLayerId(featureDataLayers);
         let activeLayerFeatures = null;
         let selectedFeatureIds = null;
-        let newVisibleColumnsSettings = null;
+        let visibleColumnsSettings = null;
         if (activeLayerId && this.getState().flyoutOpen) {
             activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
             selectedFeatureIds = activeLayerFeatures && activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
-            const { visibleColumnsSettings } = this.getState();
-            newVisibleColumnsSettings = visibleColumnsSettings && visibleColumnsSettings.allColumns?.length ? visibleColumnsSettings : this.createVisibleColumnsSettings(activeLayerFeatures);
+            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerFeatures);
         };
 
         return {
@@ -111,7 +110,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             layers: featureDataLayers,
             activeLayerFeatures,
             selectedFeatureIds,
-            visibleColumnsSettings: newVisibleColumnsSettings
+            visibleColumnsSettings
         };
     }
 
