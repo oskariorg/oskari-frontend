@@ -65,21 +65,22 @@ class FeatureDataPluginUIHandler extends StateHandler {
     setActiveTab (layerId) {
         const features = layerId ? this.getFeaturesByLayerId(layerId) : null;
         const selectedFeatureIds = layerId ? this.getSelectedFeatureIdsByLayerId(layerId) : null;
+        const visibleColumnsSettings = features && features.length ? this.createVisibleColumnsSettings(layerId, features) : null;
         this.updateState({
             activeLayerId: layerId,
             activeLayerFeatures: features,
             selectedFeatureIds,
-            visibleColumnsSettings: this.createVisibleColumnsSettings(features),
-            selectByPropertiesSettings: this.createSelectByPropertiesSettings(features),
-            sorting: this.determineSortingColumn(features)
+            visibleColumnsSettings,
+            selectByPropertiesSettings: this.createSelectByPropertiesSettings(visibleColumnsSettings),
+            sorting: this.determineSortingColumn(layerId, features)
         });
     }
 
     toggleShowSelectedFirst () {
-        const { activeLayerFeatures, sorting } = this.getState();
+        const { activeLayerId, activeLayerFeatures, sorting } = this.getState();
         const newState = { showSelectedFirst: !this.getState().showSelectedFirst };
         if (newState.showSelectedFirst && !sorting?.order) {
-            newState.sorting = this.determineSortingColumn(activeLayerFeatures);
+            newState.sorting = this.determineSortingColumn(activeLayerId, activeLayerFeatures);
         }
         this.updateState(newState);
     }
@@ -99,10 +100,11 @@ class FeatureDataPluginUIHandler extends StateHandler {
         let activeLayerFeatures = null;
         let selectedFeatureIds = null;
         let visibleColumnsSettings = null;
+
         if (activeLayerId && this.getState().flyoutOpen) {
             activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
             selectedFeatureIds = activeLayerFeatures && activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
-            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerFeatures);
+            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, activeLayerFeatures);
         };
 
         return {
@@ -123,9 +125,9 @@ class FeatureDataPluginUIHandler extends StateHandler {
     updateSorting (sorting) {
         // if show selected first - is checked but sorting is cancelled we need to set default sorting to keep the selected items first.
         const newState = { sorting };
-        const { showSelectedFirst, activeLayerFeatures } = this.getState();
+        const { showSelectedFirst, activeLayerFeatures, activeLayerId } = this.getState();
         if (showSelectedFirst && !sorting.order) {
-            newState.sorting = this.determineSortingColumn(activeLayerFeatures);
+            newState.sorting = this.determineSortingColumn(activeLayerId, activeLayerFeatures);
         }
         this.updateState(newState);
     }
@@ -141,7 +143,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     updateVisibleColumns (value) {
-        const { visibleColumnsSettings, activeLayerFeatures, sorting } = this.getState();
+        const { visibleColumnsSettings, activeLayerFeatures, activeLayerId, sorting } = this.getState();
 
         // Always have to have at least one column selected - don't allow setting this empty.
         if (value && value.length) {
@@ -153,7 +155,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         };
 
         if (!value.includes(sorting?.columnKey)) {
-            newState.sorting = this.determineSortingColumn(activeLayerFeatures);
+            newState.sorting = this.determineSortingColumn(activeLayerId, activeLayerFeatures);
         }
 
         this.updateState(newState);
@@ -175,7 +177,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             activeLayerFeatures,
             visibleColumnsSettings,
             selectByPropertiesSettings,
-            sorting: activeLayerFeatures ? this.determineSortingColumn(activeLayerFeatures) : null
+            sorting: activeLayerFeatures ? this.determineSortingColumn(activeLayerId, activeLayerFeatures) : null
         };
 
         if (!activeLayerFeatures) {
@@ -183,10 +185,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
             // empty should mean there is no features on viewport to list
             const newActiveLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
             newState.activeLayerFeatures = newActiveLayerFeatures;
-            newState.sorting = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.determineSortingColumn(newActiveLayerFeatures) : null;
+            newState.sorting = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.determineSortingColumn(activeLayerId, newActiveLayerFeatures) : null;
             newState.selectedFeatureIds = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
-            newState.visibleColumnsSettings = this.createVisibleColumnsSettings(newActiveLayerFeatures);
-            newState.selectByPropertiesSettings = this.createSelectByPropertiesSettings(newActiveLayerFeatures);
+            newState.visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, newActiveLayerFeatures);
+            newState.selectByPropertiesSettings = this.createSelectByPropertiesSettings(newState.visibleColumnsSettings);
         }
 
         this.updateState(newState);
@@ -223,28 +225,35 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
     }
 
-    createVisibleColumnsSettings (features) {
+    createVisibleColumnsSettings (activeLayerId, features) {
         if (!features || !features.length) {
             return {
                 allColumns: [],
-                visibleColumns: []
+                visibleColumns: [],
+                activeLayerPropertyLabels: null,
+                activeLayerPropertyTypes: null
             };
         }
         const allColumns = Object.keys(features[0].properties).filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key));
         const visibleColumns = [].concat(allColumns);
+        const activeLayer = this.mapModule.getSandbox().findMapLayerFromSelectedMapLayers(activeLayerId) || null;
+        const activeLayerPropertyLabels = activeLayer?.getPropertyLabels() || null;
+        const activeLayerPropertyTypes = activeLayer?.getPropertyTypes() || null;
+
         return {
             allColumns,
-            visibleColumns
+            visibleColumns,
+            activeLayerPropertyLabels,
+            activeLayerPropertyTypes
         };
     }
 
-    createSelectByPropertiesSettings (features) {
-        const settings = this.createVisibleColumnsSettings(features);
+    createSelectByPropertiesSettings (visibleColumnsSettings) {
         let filters;
-        if (settings?.allColumns && settings?.allColumns.length) {
-            filters = [this.initEmptyFilter(settings.allColumns[0])];
+        if (visibleColumnsSettings?.allColumns && visibleColumnsSettings?.allColumns.length) {
+            filters = [this.initEmptyFilter(visibleColumnsSettings.allColumns[0])];
         }
-        return settings?.allColumns ? { allColumns: settings.allColumns, filters, errors: null } : null;
+        return visibleColumnsSettings?.allColumns ? { allColumns: visibleColumnsSettings.allColumns, filters, errors: null } : null;
     }
 
     closeFlyout (resetLayers) {
@@ -378,13 +387,16 @@ class FeatureDataPluginUIHandler extends StateHandler {
         return currentLayer ? currentLayer.getId() : null;
     }
 
-    determineSortingColumn (features) {
+    determineSortingColumn (activeLayerId, features) {
         if (!features || !features.length) {
             return null;
         }
         // this might not be set to state yet, if this is the first time flyout is opened
-        // so we're (re)creating this each time
-        const visibleColumnsSettings = this.createVisibleColumnsSettings(features);
+        // so we're creating this in that case
+        let { visibleColumnsSettings } = this.getState();
+        if (!visibleColumnsSettings) {
+            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, features);
+        }
 
         // get the first property that isn't in the default hidden fields and use that as default.
         const defaultSortingColumn = Object.keys(features[0]?.properties).find((key) => this.columnShouldBeVisible(key, visibleColumnsSettings));
