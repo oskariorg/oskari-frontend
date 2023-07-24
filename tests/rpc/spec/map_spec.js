@@ -109,10 +109,8 @@ describe('Map', function () {
                 expect(data.centerX).not.toBeLessThan(0);
                 expect(data.centerY).not.toBeLessThan(0);
                 // zoom is int
-                expect(data.centerY).not.toBeLessThan(0);
                 expect(Math.trunc(data.zoom)).toEqual(data.zoom);
                 // scale is int
-                expect(data.centerY).not.toBeLessThan(0);
                 expect(Math.trunc(data.scale)).toEqual(data.scale);
                 // srs
                 expect(data.srsName).toMatch(/\d{1,}/);
@@ -264,8 +262,18 @@ describe('Map', function () {
             channel.getZoomRange(function (data) {
                 // Expect getzoom data to have 3 elements.
                 expect(Object.keys(data).length).toEqual(3);
+
+                // Data contains integers
+                expect(data.min).toEqual(jasmine.any(Number));
+                expect(Math.trunc(data.min)).toEqual(data.min);
                 expect(data.min).not.toBeLessThan(0);
+
+                expect(data.max).toEqual(jasmine.any(Number));
+                expect(Math.trunc(data.max)).toEqual(data.max);
                 expect(data.max).toBeGreaterThan(0);
+
+                expect(data.current).toEqual(jasmine.any(Number));
+                expect(Math.trunc(data.current)).toEqual(data.current);
                 expect(data.current).not.toBeLessThan(0);
 
                 channel.log('Get Zoom Range done.', data);
