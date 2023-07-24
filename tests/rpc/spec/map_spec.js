@@ -249,10 +249,24 @@ describe('Map', function () {
     describe('Zoom functions', function () {
 
         var zoom;
+        var position;
+
+        beforeEach(function (done) {
+            channel.zoomTo([1], function () {
+                //Save current zoom.
+                channel.getZoomRange(function (data) {
+                    zoom = data;
+                    channel.getMapPosition(function (data) {
+                        position = data;
+                        done();
+                    });
+                });
+            });
+        });
 
         function handleAfterMapMoveEvent () {
             handleEvent('AfterMapMoveEvent', function (data) {
-                console.log('AfterMapMoveEvent launched!');
+                channel.log('AfterMapMoveEvent launched!');
 
                 // Zoom functions do not move the map
                 expect(data.centerX).toEqual(position.centerX);
@@ -262,18 +276,6 @@ describe('Map', function () {
                 expect(data.scale).not.toEqual(position.scale);
             });
         }
-
-        beforeEach(function (done) {
-            channel.zoomTo([1], function (data) {});
-            //Save current zoom.
-            channel.getZoomRange(function (data) {
-                zoom = data;
-            });
-            channel.getMapPosition(function (data) {
-                position = data;
-            });
-            done();
-        });
 
         it('Gets Zoom Range', function (done) {
             channel.getZoomRange(function (data) {
@@ -317,12 +319,23 @@ describe('Map', function () {
             });
         });
 
+        it('Does not zoom past max limit', function (done) {
+            channel.zoomTo([zoom.max], function () {});
+
+            channel.zoomIn(function (data) {
+                expect(data).toEqual(zoom.max);
+            });
+
+            channel.log('Zoom past max limit done.');
+            counter++;
+            done();
+        })
+
         it('Zooms out', function (done) {
+            // Expect zoom out to trigger an event
+            handleAfterMapMoveEvent();
+
             channel.zoomOut(function (data) {
-
-                // Expect zoom out to trigger an event
-                handleAfterMapMoveEvent();
-
                 // Expect zoom to be decremented by 1.
                 expect(data).toEqual(zoom.current - 1);
 
@@ -337,6 +350,18 @@ describe('Map', function () {
                 done();
             });
         });
+
+        it('Does not zoom below min limit', function (done) {
+            channel.zoomTo([zoom.min], function () {});
+
+            channel.zoomOut(function (data) {
+                expect(data).toEqual(zoom.min);
+            });
+
+            channel.log('Zoom below min limit done.')
+            counter++;
+            done();
+        })
 
         it('Zooms To 5', function (done) {
             channel.zoomTo([5], function (data) {
