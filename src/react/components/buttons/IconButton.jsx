@@ -5,21 +5,35 @@ import { ThemeConsumer } from '../../util';
 import { getColorEffect, EFFECT } from '../../theme';
 import styled from 'styled-components';
 import { PlusOutlined, EditOutlined, QuestionCircleOutlined, DeleteOutlined, CheckOutlined, StopOutlined} from '@ant-design/icons';
-import { red, green } from '@ant-design/colors'
 import { Forward } from '../icons/Forward'
 import { Backward } from '../icons/Backward'
+
+const COLORS = {
+    red: '#f5222d',
+    green: '#52c41a',
+    blue: '#0290ff',
+    hover: '#ffd400'
+};
+
+const TYPE_COLORS = {
+    accept: COLORS.green,
+    reject: COLORS.red,
+    delete: COLORS.red,
+    info: COLORS.blue
+};
 
 // Note! AntD buttons default at 32x32px
 //  If the font-size of the icon is > 32px it will be clipped by at least Safari
 //  Let the user of this component define the size of the button instead of doing it here.
 const BorderlessButton = styled(Button)`
+    color:  ${props => props.$color};
     border: none;
     background: none;
     padding: 0px;
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
     &:hover {
-        color: ${props => props.color};
+        color: ${props => props.$hover};
         background: none;
     }
     &:disabled {
@@ -27,11 +41,12 @@ const BorderlessButton = styled(Button)`
     }
 `;
 const BorderedButton = styled(Button)`
+    color:  ${props => props.$color};
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
     &:hover {
-        color: ${props => props.color};
-        border-color: ${props => props.color};
+        color: ${props => props.$hover};
+        border-color: ${props => props.$hover};
     }
 `;
 
@@ -45,10 +60,10 @@ const DisabledWrapper = styled('div')`
 
 const getPredefinedIcon = (type) => {
     if (type === 'accept') {
-        return <CheckOutlined style={{color: green.primary}}/>;
+        return <CheckOutlined />;
     }
     if (type === 'reject') {
-        return <StopOutlined style={{color: red.primary}} />;
+        return <StopOutlined />;
     }
     if (type === 'add') {
         return <PlusOutlined/>;
@@ -57,7 +72,7 @@ const getPredefinedIcon = (type) => {
         return <EditOutlined/>;
     }
     if (type === 'info') {
-        return <QuestionCircleOutlined style={{ color: '#0290ff', borderRadius: '50%' }}/>;
+        return <QuestionCircleOutlined />;
     }
     if (type === 'next') {
         return <Forward/>;
@@ -66,7 +81,7 @@ const getPredefinedIcon = (type) => {
         return <Backward/>;
     }
     if (type === 'delete') {
-        return <DeleteOutlined style={{color: red.primary}} />
+        return <DeleteOutlined />
     }
     return null;
 }
@@ -87,27 +102,28 @@ const getConfirmProps = (type) => {
     };
 };
 
-const ThemeButton = ThemeConsumer(({ theme, bordered, iconSize, ...rest }) => {
-    let color = theme?.color?.accent;
-    if (color && Oskari.util.isDarkColor(color)) {
-        color = theme?.color?.primary;
+const ThemeButton = ThemeConsumer(({ theme, bordered, iconSize, color, ...rest }) => {
+    let hover = theme?.color?.accent;
+    if (hover && Oskari.util.isDarkColor(hover)) {
+        hover = theme?.color?.primary;
     }
-    if (!color) {
-        color = '#ffd400';
-    } else if (Oskari.util.isDarkColor(color)) {
-        color = getColorEffect(color, EFFECT.LIGHTEN);
+    if (!hover) {
+        hover = COLORS.hover;
+    } else if (Oskari.util.isDarkColor(hover)) {
+        hover = getColorEffect(hover, EFFECT.LIGHTEN);
     }
     if (bordered) {
-        return <BorderedButton color={color} $iconSize={iconSize} { ...rest }/>
+        return <BorderedButton $hover={hover} $color={color} $iconSize={iconSize} { ...rest }/>
     }
     // default
-    return <BorderlessButton color={color} $iconSize={iconSize} { ...rest }/>
+    return <BorderlessButton $hover={hover} $color={color} $iconSize={iconSize} { ...rest }/>
 });
 
 export const IconButton = ({
     type,
     title = type ? <Message messageKey={`buttons.${type}`} bundleKey='oskariui'/> : '',
     icon = type ? getPredefinedIcon(type) : null,
+    color = TYPE_COLORS[type],
     onClick,
     onConfirm,
     disabled = false,
