@@ -102,7 +102,16 @@ const getConfirmProps = (type) => {
     };
 };
 
-const ThemeButton = ThemeConsumer(({ theme, bordered, iconSize, color, ...rest }) => {
+const ThemeButton = ThemeConsumer(({
+    theme,
+    type,
+    bordered = false,
+    disabled = false,
+    icon = type ? getPredefinedIcon(type) : null,
+    iconSize = 16,
+    color = TYPE_COLORS[type],
+    ...rest
+}) => {
     let hover = theme?.color?.accent;
     if (hover && Oskari.util.isDarkColor(hover)) {
         hover = theme?.color?.primary;
@@ -112,22 +121,20 @@ const ThemeButton = ThemeConsumer(({ theme, bordered, iconSize, color, ...rest }
     } else if (Oskari.util.isDarkColor(hover)) {
         hover = getColorEffect(hover, EFFECT.LIGHTEN);
     }
-    if (bordered) {
-        return <BorderedButton $hover={hover} $color={color} $iconSize={iconSize} { ...rest }/>
-    }
-    // default
-    return <BorderlessButton $hover={hover} $color={color} $iconSize={iconSize} { ...rest }/>
+    const ButtonNode = bordered ? BorderedButton : BorderlessButton;
+    return (
+        <DisabledWrapper $disabled={disabled}>
+            <ButtonNode $hover={hover} $color={color} $iconSize={iconSize} { ...rest }>
+                {icon}
+            </ButtonNode>
+        </DisabledWrapper>
+    );
 });
 
 export const IconButton = ({
     type,
     title = type ? <Message messageKey={`buttons.${type}`} bundleKey='oskariui'/> : '',
-    icon = type ? getPredefinedIcon(type) : null,
-    color = TYPE_COLORS[type],
-    onClick,
     onConfirm,
-    disabled = false,
-    iconSize = 16,
     ...rest
 }) => {
     if (onConfirm) {
@@ -137,15 +144,11 @@ export const IconButton = ({
                 onConfirm={onConfirm}
                 okButtonProps={{className: `t_button t_${type || 'ok'}`}}
                 cancelButtonProps={{className: 't_button t_cancel'}}
-                disabled={disabled}
+                disabled={rest.disabled === true}
                 placement={title ? 'bottom' : 'top'}
                 { ...getConfirmProps(type) }>
                     <Tooltip title={title}>
-                        <DisabledWrapper $disabled={disabled}>
-                            <ThemeButton disabled={disabled} iconSize={iconSize} onClick={onClick} { ...rest }>
-                                {icon}
-                            </ThemeButton>
-                        </DisabledWrapper>
+                        <ThemeButton type={type} { ...rest }/>
                     </Tooltip>
             </Confirm>
         );
@@ -153,20 +156,11 @@ export const IconButton = ({
     if (title) {
         return (
             <Tooltip title={title}>
-                <DisabledWrapper $disabled={disabled}>
-                    <ThemeButton disabled={disabled} iconSize={iconSize} onClick={onClick} { ...rest }>
-                        {icon}
-                    </ThemeButton>
-                </DisabledWrapper>
+                <ThemeButton type={type} { ...rest }/>
             </Tooltip>
         );
     }
-    return (
-        <ThemeButton onClick={onClick} iconSize={iconSize} { ...rest }>
-            {icon}
-        </ThemeButton>
-    );
-
+    return <ThemeButton type={type} { ...rest }/>;
 };
 
 IconButton.propTypes = {
