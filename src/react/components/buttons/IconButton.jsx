@@ -110,8 +110,12 @@ const ThemeButton = ThemeConsumer(({
     icon = type ? getPredefinedIcon(type) : null,
     iconSize = 16,
     color = TYPE_COLORS[type],
+    className = '',
     ...rest
 }) => {
+    if (type && !className.includes(`t_${type}`)) {
+        className = `${className} t_${type}`;
+    }
     let hover = theme?.color?.accent;
     if (hover && Oskari.util.isDarkColor(hover)) {
         hover = theme?.color?.primary;
@@ -124,7 +128,7 @@ const ThemeButton = ThemeConsumer(({
     const ButtonNode = bordered ? BorderedButton : BorderlessButton;
     return (
         <DisabledWrapper $disabled={disabled}>
-            <ButtonNode $hover={hover} $color={color} $iconSize={iconSize} { ...rest }>
+            <ButtonNode $hover={hover} $color={color} $iconSize={iconSize} disabled={disabled} className={className} { ...rest }>
                 {icon}
             </ButtonNode>
         </DisabledWrapper>
