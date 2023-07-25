@@ -82,7 +82,7 @@ describe('Map', function () {
             channel.getAllLayers(function (data) {
                 expect(data[0].visible).not.toEqual(visible);
                 expect(data[0].visible).toEqual(!visible);
-            })
+            });
 
             // Toggle back
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, visible]);
@@ -152,8 +152,8 @@ describe('Map', function () {
                 var zoomIsDifferent = data.zoom !== zoomLevel;
 
                 expect(xIsDifferent || yIsDifferent || zoomIsDifferent).toEqual(true);
-            })
-            channel.postRequest('MapMoveRequest', [x, y, zoomLevel])
+            });
+            channel.postRequest('MapMoveRequest', [x, y, zoomLevel]);
         });
 
     });
@@ -509,7 +509,7 @@ describe('Map', function () {
             setTimeout(function () {
                 channel.log('MapTourEvent done.');
                 counter++;
-                done()
+                done();
             }, 1000);
         });
 
