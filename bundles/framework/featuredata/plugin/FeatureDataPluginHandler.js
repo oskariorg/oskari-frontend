@@ -296,7 +296,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
     applyFilters () {
         const { selectByPropertiesSettings } = this.getState();
         const { filters } = selectByPropertiesSettings;
-
         let hasErrors = false;
         filters.forEach((filter) => {
             if (!filter?.value?.length) {
@@ -325,13 +324,13 @@ class FeatureDataPluginUIHandler extends StateHandler {
                 filterArray.push({ boolean: filter.logicalOperator });
             }
         });
-        this.filterSelector.selectWithProperties(filters, activeLayerId);
+        this.filterSelector.selectWithProperties(filterArray, activeLayerId);
     }
 
     initEmptyFilter (columnName) {
         return {
             attribute: columnName,
-            operator: FilterTypes.equals,
+            operator: FilterTypes.ALL.equals,
             value: '',
             error: null,
             logicalOperator: LogicalOperators.AND,
