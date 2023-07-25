@@ -78,16 +78,16 @@ describe('Markers', function () {
         });
     });
 
-    // TODO: find a way to test click events
-    // describe('Click a marker')
-
-    // This part does not work because of a bug in the RPC library 
     describe('Show or hide markers', function () {
 
         beforeEach(function () {
             channel.postRequest('MapModulePlugin.AddMarkerRequest', [testMarker, MARKER_ID]);
         });
 
+        /**
+         * Test fails due to a bug in the RPC library that causes an error when trying to 
+         * set an already visible marker as visible.
+         */
         it("Show marker", function (done) {
             // If MARKER_ID is not defined then show all invisible markers
             channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [true, MARKER_ID]);
@@ -118,9 +118,21 @@ describe('Markers', function () {
         });
 
         it("Hides infobox for marker", function (done) {
-            channel.postRequest('InfoBox.HideInfoBoxRequest', markerInfobox);
-            counter++;
-            done();
+            // Hiding an existing infobox launches an event
+            handleEvent('InfoBox.InfoBoxEvent', function (data) {
+                channel.log('InfoBox.InfoBoxEvent launched!');
+                expect(data.id).toEqual(markerInfobox[0]);
+                expect(data.isOpen).toEqual(false);
+
+                channel.log('HideInfoBox done.');
+                counter++;
+                done();
+            });
+
+            // Add infobox with data
+            channel.postRequest('InfoBox.ShowInfoBoxRequest', markerInfobox);
+            // Hide infobox with id
+            channel.postRequest('InfoBox.HideInfoBoxRequest', [markerInfobox[0]]);
         });
     });
 });

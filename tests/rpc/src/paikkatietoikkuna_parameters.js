@@ -226,7 +226,7 @@ var infoboxContent = [{
 }];
 
 var markerInfobox = [
-  'TEST_MARKER',
+  'InfoBoxId',
   'Marker info box header',
   infoboxContent, {
     marker: MARKER_ID
