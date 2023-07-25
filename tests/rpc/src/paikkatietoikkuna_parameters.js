@@ -48,6 +48,27 @@ var defaultLayer = {
   "name": "Taustakarttasarja",
 };
 
+var routeSteps = [
+  {
+      "lon": 488704,
+      "lat": 6939136
+  },
+  {
+      "lon": 338704,
+      "lat": 6789136
+  },
+  {
+      "lon": 563704,
+      "lat": 6939136
+  }
+];
+
+var tourOptions = {
+  "animation": "fly",
+  "duration": 1,
+  "srsName": "EPSG:3067"
+};
+
 // ##################### //
 // ##### Features ##### //
 // ##################### //

@@ -264,7 +264,7 @@ describe('Map', function () {
             });
         });
 
-        function handleAfterMapMoveEvent () {
+        function handleAfterMapMoveEvent() {
             handleEvent('AfterMapMoveEvent', function (data) {
                 channel.log('AfterMapMoveEvent launched!');
 
@@ -320,7 +320,7 @@ describe('Map', function () {
         });
 
         it('Does not zoom past max limit', function (done) {
-            channel.zoomTo([zoom.max], function () {});
+            channel.zoomTo([zoom.max], function () { });
 
             channel.zoomIn(function (data) {
                 expect(data).toEqual(zoom.max);
@@ -352,7 +352,7 @@ describe('Map', function () {
         });
 
         it('Does not zoom below min limit', function (done) {
-            channel.zoomTo([zoom.min], function () {});
+            channel.zoomTo([zoom.min], function () { });
 
             channel.zoomOut(function (data) {
                 expect(data).toEqual(zoom.min);
@@ -483,48 +483,57 @@ describe('Map', function () {
 
     describe('Map tour', function () {
 
+        it('Launches MapTourEvent', function (done) {
+
+            handleEvent('MapTourEvent', function (data) {
+                channel.log('MapTourEvent launched!');
+                // Expect event object to contain required fields
+                expect(data).toEqual(
+                    jasmine.objectContaining({
+                        status: jasmine.objectContaining({
+                            steps: jasmine.any(Number),
+                            step: jasmine.any(Number)
+                        }),
+                        location: jasmine.objectContaining({
+                            lon: jasmine.any(Number),
+                            lat: jasmine.any(Number)
+                        }),
+                        completed: jasmine.any(Boolean),
+                        cancelled: jasmine.any(Boolean)
+                    }));
+            });
+
+            // Posting without arguments also launches event
+            channel.postRequest('MapTourRequest', [[]]);
+            // Wait for event handler
+            setTimeout(function () {
+                channel.log('MapTourEvent done.');
+                counter++;
+                done()
+            }, 1000);
+        });
+
         it('Tours the map', function (done) {
 
             handleEvent('MapTourEvent', function (data) {
                 channel.log('MapTourEvent launched!');
                 eventCounter++;
-                // Tour is finished when in last location
-                if (data.status.steps === data.status.step) {
-                    expect(data.completed).toEqual(true);
-                }
+                // Tour is completed only when in last location
+                expect(data.completed).toEqual(data.status.steps === data.status.step);
+                expect(data.cancelled).toEqual(false);
             });
 
             var eventCounter = 0;
-            var routeSteps = [
-                {
-                  "lon": 488704,
-                  "lat": 6939136
-                },
-                {
-                  "lon": 338704,
-                  "lat": 6789136
-                },
-                {
-                  "lon": 563704,
-                  "lat": 6939136
-                }
-              ];
-            var stepDefaults = {
-                "zoom": 8,
-                "animation": "fly",
-                "duration": 1,
-                "srsName": "EPSG:3067"
-            };
 
-            channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
+            channel.postRequest('MapTourRequest', [routeSteps, tourOptions]);
 
-            setTimeout(function () {}, 2000);
-
-            expect(eventCounter).toEqual(routeSteps.length + 1);
-
-            channel.log('Map tour done.');
-            counter++;
-            done();
+            // Wait for tour to finish
+            setTimeout(function () {
+                expect(eventCounter).toEqual(routeSteps.length + 1);
+                channel.log('Map tour done.');
+                counter++;
+                done();
+            }, 2000);
         });
 
     });
