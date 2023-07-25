@@ -174,5 +174,8 @@ IconButton.propTypes = {
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     icon: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
     onClick: PropTypes.func,
-    onConfirm: PropTypes.func
+    onConfirm: PropTypes.func,
+    disabled: PropTypes.bool,
+    color: PropTypes.string,
+    iconSize: PropTypes.number
 };
