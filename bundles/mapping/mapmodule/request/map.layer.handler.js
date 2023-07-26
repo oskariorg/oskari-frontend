@@ -95,10 +95,14 @@ Oskari.clazz.define('map.layer.handler',
                 // add layers from front of queue to map
                 this.__processLayerQueue();
                 // zoom to content or center/supported zoom level
+                const sandbox = this.layerService.getSandbox();
                 if (opts.zoomContent) {
-                    const sandbox = this.layerService.getSandbox();
                     sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, opts.zoomContent]);
                 }
+                if (typeof opts.toPosition === 'number') {
+                    sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, opts.toPosition]);
+                }
+
             };
             this._loadLayerInfo(layer, opts, done);
         },
