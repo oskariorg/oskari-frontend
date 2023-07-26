@@ -310,19 +310,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             const mapModuleName = this.getMapModule().getName();
             const rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
             const isGuest = !Oskari.user().isLoggedIn();
-            const layersNotAvailable = [];
-            selectedLayers.forEach(layer => {
-                const oskariLayer = sandbox.findMapLayerFromAllAvailable(layer.id);
+
+            const addMapLayer = layer => {
+                const { id, style, hidden, opacity } = layer;
+                const oskariLayer = sandbox.findMapLayerFromAllAvailable(id);
                 if (!oskariLayer) {
-                    layersNotAvailable.push(layer);
-                    return;
+                    return layer;
                 }
-                oskariLayer.setVisible(!layer.hidden);
-                if (layer.style) {
-                    oskariLayer.selectStyle(layer.style);
+                oskariLayer.setVisible(!hidden);
+                if (style) {
+                    oskariLayer.selectStyle(style);
                 }
-                if (layer.opacity || layer.opacity === 0) {
-                    oskariLayer.setOpacity(layer.opacity);
+                if (!isNaN(opacity)) {
+                    oskariLayer.setOpacity(Number.parseInt(opacity));
                 }
                 const options = {};
                 if (isGuest) {
@@ -332,28 +332,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     options.userStyles = layer.userStyles;
                 }
                 sandbox.request(mapModuleName, rbAdd(layer.id, options));
-            });
+            };
+            // add available layers and store unavailable
+            const layersNotAvailable = selectedLayers.filter(addMapLayer);
 
             if (!this._initialStateInit || !layersNotAvailable.length) {
                 return;
             }
             // only register this when starting the app to work around timing issues with some dynamically registered layers
-            Oskari.on('app.start', function () {
-                layersNotAvailable.forEach(({ id, style, hidden, opacity }) => {
-                    const oskariLayer = sandbox.findMapLayerFromAllAvailable(id);
-                    if (!oskariLayer) {
-                        return;
-                    }
-                    if (style) {
-                        oskariLayer.selectStyle(style);
-                    }
-                    sandbox.postRequestByName('AddMapLayerRequest', [id]);
-                    sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [id, !hidden]);
-                    if (!isNaN(opacity)) {
-                        sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [id, Number.parseInt(opacity)]);
-                    }
-                });
-            });
+            Oskari.on('app.start', () => layersNotAvailable.forEach(addMapLayer));
         },
         // TODO: maybe style.getName() could return '' if name === '!default!', so we get rid of this
         _getCurrentStyleName: function (layer) {
