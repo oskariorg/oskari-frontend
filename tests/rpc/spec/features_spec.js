@@ -29,6 +29,10 @@ describe('Features', function(){
         resetEventHandlers();
     });
 
+    afterAll(function () {
+        channel.resetState(function () {});
+    })
+
     it("Adds point feature", function(done) {
         handleEvent('FeatureEvent', function(data) {
             channel.log('FeatureEvent triggered:', data);

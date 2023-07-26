@@ -26,6 +26,10 @@ describe('Markers', function () {
         resetEventHandlers();
     });
 
+    afterAll(function () {
+        channel.resetState(function () {});
+    })
+
     describe('Add or remove markers', function () {
 
         all("Marker shapes",

@@ -18,6 +18,9 @@ describe('Map', function () {
         resetEventHandlers();
     });
 
+    afterAll(function () {
+        channel.resetState(function () {});
+    })
 
     describe('Get available map layers', function () {
 
