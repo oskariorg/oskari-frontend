@@ -31,7 +31,7 @@ export const Attributes = ({ layer, controller }) => {
     }
     return (
         <Fragment>
-            <Message messageKey='attributes'/>
+            <Message messageKey='attributes.label'/>
             { !isValid && <AttributeInfo attributes={layer.attributes} /> }
             <StyledFormField>
                 <JsonInput
