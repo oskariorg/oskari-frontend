@@ -115,10 +115,10 @@ Oskari.registerLocalization(
                 "label": "Attribuutit",
                 "geometryType": {
                     "label": "Geometriatyyppi",
+                    "unknown":"Ei tiedossa",
                     "point": "Piste",
                     "line": "Viiva",
-                    "polygon":"Alue",
-                    "unknown":"Ei tiedossa",
+                    "area":"Alue",
                     "collection":"Kaikki"
                 }
             },
