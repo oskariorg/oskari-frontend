@@ -203,6 +203,9 @@ var testLayerOptions = {
   'maxResolution': 10000
 };
 
+// layerId for forest vegetation map
+var queryLayerId = 492;
+
 // ###################### //
 // ###### Markers ###### //
 // ###################### //

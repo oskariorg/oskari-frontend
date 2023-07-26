@@ -61,7 +61,7 @@ describe('Features', function(){
     });
 
     it("Removes specific features", function(done) {
-        // AddFeaturesToMapRequest adds line and point feautures
+        // AddFeaturesToMapRequest adds line and point features
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addLineFeatureParams);
         channel.log('AddFeaturesToMapRequest:', addLineFeatureParams);
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
@@ -86,12 +86,42 @@ describe('Features', function(){
         done();
     });
 
+    it('Zooms to features', function(done) {
+        handleEvent('FeatureEvent', function(data) {
+            channel.log('FeatureEvent launched!', data);
+
+            expect(data.operation).toEqual('zoom');
+            expect(data.features).toBeDefined();
+
+            counter++;
+            done()
+        })
+
+        channel.postRequest('MapModulePlugin.ZoomToFeaturesRequest', [])
+    });
+
     it("Gets feature info", function(done) {
-        //requires feature layer to show popup
+
+        handleEvent('DataForMapLocationEvent', function (data) {
+            channel.log('DataForMapLocationEvent launched!', data);
+            
+            expect(data.x).toEqual(defaultPosition.centerX);
+            expect(data.y).toEqual(defaultPosition.centerY);
+            expect(data.layerId).toEqual(queryLayerId);
+            expect(data.type).toEqual(jasmine.any(String));
+            expect(data.content).toBeDefined();
+            // Content can be string or JSON
+            //expect(data.content).toEqual(jasmine.any(String));
+
+            channel.log('MapModulePlugin.GetFeatureInfoRequest done.');
+            counter++;
+            done();
+        });
+
+        // Test requires a feature layer on the map that supports info querying
+        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [queryLayerId, true]);
+
         channel.postRequest('MapModulePlugin.GetFeatureInfoRequest', [defaultPosition.centerX, defaultPosition.centerY]);
-        channel.log('MapModulePlugin.GetFeatureInfoRequest done.');
-        counter++;
-        done();
     });
 
 });
