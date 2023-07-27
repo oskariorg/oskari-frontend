@@ -95,11 +95,16 @@ var pointGeojsonObject = {
 };
 
 var addPointFeatureParams = [pointGeojsonObject, {
-  layerId: 'VECTOR',
+  layerId: 'MY_VECTOR_LAYER',
+  attributes: {
+    testAttribute: "value"
+  },
   clearPrevious: false,
   centerTo: true,
   cursor: 'zoom-in',
-  featureStyle: featureStyle
+  prio: 2,
+  featureStyle: featureStyle,
+  optionalStyles: []
 }];
 
 var lineGeojsonObject = {

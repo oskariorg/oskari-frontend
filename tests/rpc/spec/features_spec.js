@@ -30,6 +30,7 @@ describe('Features', function(){
     });
 
     afterAll(function () {
+        // Reset map state after spec
         channel.resetState(function () {});
     })
 
@@ -76,6 +77,25 @@ describe('Features', function(){
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPolygonFeatureParams);
         channel.log('AddFeaturesToMapRequest:', addPolygonFeatureParams);
     });
+
+    it('Appends options and properties to features', function (done) {
+        handleEvent('FeatureEvent', function(data) {
+            channel.log('FeatureEvent triggered:', data);
+            // Layer id matches
+            expect(data.features[0].layerId).toBe(addPointFeatureParams[1].layerId);
+            // GeoJSON properties added
+            expect(data.features[0].geojson.features[0].properties.label).toBe(pointGeojsonObject.features[0].properties.label);
+            expect(data.features[0].geojson.features[0].properties.test_property).toBe(pointGeojsonObject.features[0].properties.test_property);
+            // Additional options added
+            expect(data.features[0].geojson.features[0].properties.testAttribute).toBe(addPointFeatureParams[1].attributes.testAttribute);
+            expect(data.features[0].geojson.features[0].properties["oskari-cursor"]).toBe(addPointFeatureParams[1].cursor);
+            counter++;
+            done();
+        });
+
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
+        channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
+    })
 
     it("Removes specific features", function(done) {
         // AddFeaturesToMapRequest adds line and point features
