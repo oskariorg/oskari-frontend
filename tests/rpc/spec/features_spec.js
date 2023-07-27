@@ -16,7 +16,7 @@ describe('Features', function(){
                     // Delay between tests
                     setTimeout(function() {
                         done();
-                    }, 0);
+                    }, 1000);
                 });
              });
         });
@@ -33,35 +33,48 @@ describe('Features', function(){
         channel.resetState(function () {});
     })
 
-    it("Adds point feature", function(done) {
+    it("Adds point feature", function (done) {
         handleEvent('FeatureEvent', function(data) {
             channel.log('FeatureEvent triggered:', data);
             expect(data.operation).toBe("add");
             expect(data.features[0].geojson.type).toBe(pointGeojsonObject.type);
-            expect(data.features[0].geojson.features[0].geometry.coordinates[0]).toBe(pointGeojsonObject.features[0].geometry.coordinates[0]);
-            expect(data.features[0].geojson.features[0].geometry.coordinates[1]).toBe(pointGeojsonObject.features[0].geometry.coordinates[1]);
+            expect(data.features[0].geojson.features[0].geometry.coordinates).toEqual(pointGeojsonObject.features[0].geometry.coordinates);
             counter++;
             done();
         });
+
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
         channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
     });
 
-    it("Adds line feature", function(done) {
-        handleEvent('FeatureEvent', function(data) {
+    it("Adds line feature", function (done) {
+        handleEvent('FeatureEvent', function (data) {
             channel.log('FeatureEvent triggered:', data);
             expect(data.operation).toBe("add");
             expect(data.features[0].geojson.type).toBe(lineGeojsonObject.type);
             expect(data.features[0].geojson.features[0].geometry.type).toBe(lineGeojsonObject.features[0].geometry.type);
-            expect(data.features[0].geojson.features[0].geometry.coordinates[0][0]).toBe(lineGeojsonObject.features[0].geometry.coordinates[0][0]);
-            expect(data.features[0].geojson.features[0].geometry.coordinates[0][1]).toBe(lineGeojsonObject.features[0].geometry.coordinates[0][1]);
-            expect(data.features[0].geojson.features[0].geometry.coordinates[1][0]).toBe(lineGeojsonObject.features[0].geometry.coordinates[1][0]);
-            expect(data.features[0].geojson.features[0].geometry.coordinates[1][1]).toBe(lineGeojsonObject.features[0].geometry.coordinates[1][1]);
+            expect(data.features[0].geojson.features[0].geometry.coordinates).toEqual(lineGeojsonObject.features[0].geometry.coordinates);
             counter++;
             done();
         });
+
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addLineFeatureParams);
         channel.log('AddFeaturesToMapRequest:', addLineFeatureParams);
+    });
+
+    it("Adds polygon feature", function(done) {
+        handleEvent('FeatureEvent', function(data) {
+            channel.log('FeatureEvent triggered:', data);
+            expect(data.operation).toBe("add");
+            expect(data.features[0].geojson.type).toBe(polygonGeojsonObject.type);
+            expect(data.features[0].geojson.features[0].geometry.type).toBe(polygonGeojsonObject.features[0].geometry.type);
+            expect(data.features[0].geojson.features[0].geometry.coordinates).toEqual(polygonGeojsonObject.features[0].geometry.coordinates);
+            counter++;
+            done();
+        });
+
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPolygonFeatureParams);
+        channel.log('AddFeaturesToMapRequest:', addPolygonFeatureParams);
     });
 
     it("Removes specific features", function(done) {

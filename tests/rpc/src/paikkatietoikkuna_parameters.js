@@ -99,27 +99,7 @@ var addPointFeatureParams = [pointGeojsonObject, {
   clearPrevious: false,
   centerTo: true,
   cursor: 'zoom-in',
-  featureStyle: {
-    image: {
-      shape: 4,
-      size: 5,
-      color: '#ff3300',
-      stroke: '#000000'
-    },
-    text: {
-      scale: 1.3,
-      fill: {
-        color: 'rgba(0,0,0,1)'
-      },
-      stroke: {
-        color: 'rgba(255,255,255,1)',
-        width: 2
-      },
-      labelProperty: 'label',
-      offsetX: 65,
-      offsetY: 8
-    }
-  }
+  featureStyle: featureStyle
 }];
 
 var lineGeojsonObject = {
@@ -152,29 +132,43 @@ var addLineFeatureParams = [lineGeojsonObject, {
   layerOptions: testLayerOptions,
   centerTo: true,
   cursor: 'zoom-in',
-  featureStyle: {
-    fill: {
-      color: '#2200ff'
-    },
-    stroke: {
-      color: '#2200ff',
-      width: 3
-    },
-    text: {
-      scale: 2.0,
-      fill: {
-        color: 'rgba(2,2,0,1)'
-      },
-      stroke: {
-        color: 'rgba(0,255,1,1)',
-        width: 0
-      },
-      labelProperty: 'label'
-    }
-  },
+  featureStyle: featureStyle,
   prio: 4,
   //minScale: 1451336
 }];
+
+var polygonGeojsonObject = {
+  'type': 'FeatureCollection',
+  'crs': {
+    'type': 'name',
+    'properties': {
+      'name': defaultPosition.srsName
+    }
+  },
+  'features': [{
+    'type': 'Feature',
+    'geometry': {
+      'type': 'Polygon',
+      'coordinates': [[
+        [defaultPosition.centerX, defaultPosition.centerY],
+        [defaultPosition.centerX + 100000, defaultPosition.centerY + 1100000],
+        [defaultPosition.centerX + 1100000, defaultPosition.centerY + 100000],
+        [defaultPosition.centerX, defaultPosition.centerY]
+      ]]
+    },
+    'properties': {
+      'label': "I am a polygon!",
+      'test_property': "polygon feature"
+    }
+  }]
+};
+
+var addPolygonFeatureParams = [
+  polygonGeojsonObject,
+  {
+    // Add options here
+  }
+]
 
 // Styling for object
 var featureStyle = {
