@@ -110,6 +110,17 @@ Oskari.registerLocalization(
                     "globalWithStyles": "The layer has more than one style available in the service. However, the layer has been defined with a single default legend. Consider removing the current default legend to be able to use the style based legends."
                 }
             },
+            "attributes": {
+                "label": "Attributes",
+                "geometryType": {
+                    "label": "Geometry type",
+                    "unknown":"Unknown",
+                    "point": "Point",
+                    "line": "Line",
+                    "area":"Area",
+                    "collection":"Collection"
+                }
+            },
             "styles": {
                 "default": "Default style",
                 "desc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
@@ -159,7 +170,6 @@ Oskari.registerLocalization(
             "gfiTypeDesc": "Select a format for Get Feature Information (GFI). Possible formats are fetched automatically from the GetCapabilities response.",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",
-            "attributes": "Attributes",
             "clusteringDistance": "Point distance in cluster",
             "forcedSRS": "Forced SRS",
             "forcedSRSInfo": "View projections override compared to capabilities",
