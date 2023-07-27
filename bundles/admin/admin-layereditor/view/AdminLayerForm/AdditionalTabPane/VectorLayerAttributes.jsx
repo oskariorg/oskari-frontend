@@ -4,11 +4,14 @@ import { Message, Select, Option } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
 import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
+import { InfoTooltip } from '../InfoTooltip';
 
 export const VectorLayerAttributes = ({ layer, controller }) => {
+    const geometryTypeSource = layer.attributes.data?.geometryType ? 'Attributes' : 'Capabilities';
     return (
         <Fragment>
             <Message messageKey='attributes.geometryType.label'/>
+            <InfoTooltip messageKeys={`attributes.geometryType.source${geometryTypeSource}`}/>
             <StyledFormField>
                 <Select
                     value={getGeometryType(layer)}

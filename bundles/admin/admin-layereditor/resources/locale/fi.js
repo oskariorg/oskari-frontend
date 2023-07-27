@@ -115,6 +115,8 @@ Oskari.registerLocalization(
                 "label": "Attribuutit",
                 "geometryType": {
                     "label": "Geometriatyyppi",
+                    "sourceAttributes": "Lähde: tason attribuutit",
+                    "sourceCapabilities": "Lähde: tason Capabilities-tiedot",
                     "unknown":"Ei tiedossa",
                     "point": "Piste",
                     "line": "Viiva",

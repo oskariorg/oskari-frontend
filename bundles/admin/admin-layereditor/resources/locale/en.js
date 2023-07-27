@@ -114,6 +114,8 @@ Oskari.registerLocalization(
                 "label": "Attributes",
                 "geometryType": {
                     "label": "Geometry type",
+                    "sourceAttributes": "Source: layer attributes",
+                    "sourceCapabilities": "Source: layer capabilities",
                     "unknown":"Unknown",
                     "point": "Point",
                     "line": "Line",

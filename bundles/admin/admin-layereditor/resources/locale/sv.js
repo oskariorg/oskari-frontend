@@ -113,6 +113,8 @@ Oskari.registerLocalization(
                 "label": "Attribut",
                 "geometryType": {
                     "label": "Typ av geometri",
+                    "sourceAttributes": "Källa: kartlagrets attribut",
+                    "sourceCapabilities": "Källa: kartlagrets capabilities",
                     "unknown":"Okänd",
                     "point": "Punkten",
                     "line": "Linje",
