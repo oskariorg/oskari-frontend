@@ -293,7 +293,11 @@ class UIHandler extends StateHandler {
     setAttributesData (key, value) {
         const layer = { ...this.getState().layer };
         const { data = {} } = layer.attributes || {};
-        data[key] = value;
+        if (typeof value === 'undefined') {
+            delete data[key];
+        } else {
+            data[key] = value;
+        }
         this.updateLayerAttributes({ ...layer.attributes, data }, layer);
     }
 

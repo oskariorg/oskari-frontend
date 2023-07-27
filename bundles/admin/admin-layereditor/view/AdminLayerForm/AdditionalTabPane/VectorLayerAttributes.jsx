@@ -8,6 +8,13 @@ import { InfoTooltip } from '../InfoTooltip';
 
 export const VectorLayerAttributes = ({ layer, controller }) => {
     const geometryTypeSource = layer.attributes.data?.geometryType ? 'Attributes' : 'Capabilities';
+    const onGeometryTypeChange = value => {
+        if (GEOMETRY_TYPES[0] === value) {
+            controller.setAttributesData('geometryType');
+        } else {
+            controller.setAttributesData('geometryType', value);
+        }
+    };
     return (
         <Fragment>
             <Message messageKey='attributes.geometryType.label'/>
@@ -15,7 +22,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
             <StyledFormField>
                 <Select
                     value={getGeometryType(layer)}
-                    onChange={value => controller.setAttributesData('geometryType', value)}>
+                    onChange={onGeometryTypeChange}>
                     { GEOMETRY_TYPES.map(type => (
                         <Option key={type} value={type}>
                             <Message messageKey={`attributes.geometryType.${type}`} />
