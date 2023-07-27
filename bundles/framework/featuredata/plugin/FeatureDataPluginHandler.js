@@ -1,7 +1,7 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
-import { COLUMN_SELECTION, FILETYPES, showExportDataPopup } from '../view/ExportData';
+import { COLUMN_SELECTION, FILETYPES, SEPARATORS, showExportDataPopup } from '../view/ExportData';
 import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
 import { FilterSelector } from '../FilterSelector';
 
@@ -9,6 +9,7 @@ export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__cente
 
 export const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
 const EXPORT_FEATUREDATA_ROUTE = 'ExportTableFile';
+const EXPORT_FEATUREDATA_EXCEL_MAX_LENGTH = 120000;
 
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
@@ -409,17 +410,68 @@ class FeatureDataPluginUIHandler extends StateHandler {
         const layer = layers?.find(layer => layer.getId() === activeLayerId);
 
         params.filename = layer.getName();
-        params.data = JSON.stringify(this.gatherExportData(exportOnlySelected, columns === COLUMN_SELECTION.opened));
-        params.additionalData = JSON.stringify(
-            this.gatherAdditionalInfo(
-                exportDataSource,
-                exportMetadataLink,
-                layer));
+        params.data = this.gatherExportData(exportOnlySelected, columns === COLUMN_SELECTION.opened);
+        params.additionalData = this.gatherAdditionalInfo(
+            exportDataSource,
+            exportMetadataLink,
+            layer
+        );
+
+        if (format === FILETYPES.excel) {
+            this.exportAsExcel(params);
+            return;
+        }
+
+        this.exportAsCsv(params);
+    }
+
+    exportAsExcel (params) {
+        params.data = JSON.stringify(params.data);
+        params.additionalData = JSON.stringify(params.additionalData);
+        let contentLength = 0;
+        Object.keys(params).forEach((key) => {
+            if (params[key]?.length) {
+                contentLength += params[key].length;
+            }
+        });
+
+        if (contentLength >= EXPORT_FEATUREDATA_EXCEL_MAX_LENGTH) {
+            Messaging.error(Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'exportDataPopup.datasetTooLargeForExcel'));
+            return;
+        }
 
         const payload = new URLSearchParams();
         Object.keys(params).forEach(key => payload.append(key, params[key]));
-        const extension = format === FILETYPES.csv ? '.csv' : '.xlsx';
+        const extension = '.xlsx';
         this.sendData(payload, params.filename + extension);
+    }
+
+    exportAsCsv (params) {
+        if (params?.delimiter === SEPARATORS.tabulator) {
+            params.delimiter = '\t';
+        }
+        const replacer = (value) => !value ? '' : value;
+        const headers = params.data.splice(0, 1)[0];
+        const headerRow = headers.join(params.delimiter);
+        const dataRows = params.data
+            .map((values) => values.map((value) => replacer(value)).join(params.delimiter))
+            .join('\r\n');
+
+        const additionalDataRows = params.additionalData.map((value) => {
+            // TODO: case metadata - we should dig up the metadata service url from someplace
+            // not currently available in fe
+            return [value.name, value.value].join(params.delimiter);
+        }).join('\r\n');
+        const emptyRow = null;
+        const csv = [headerRow, dataRows, emptyRow, additionalDataRows].join('\r\n');
+
+        const link = document.createElement('a');
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(csv));
+        link.setAttribute('download', params.filename + '.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     sendData (payload, filename) {
