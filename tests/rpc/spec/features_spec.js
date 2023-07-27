@@ -107,6 +107,9 @@ describe('Features', function(){
         handleEvent('FeatureEvent', function(data) {
             channel.log('FeatureEvent trigggered:', data);
             expect(data.operation).toBe("remove");
+            // Only the line string feature is removed
+            expect(data.features.length).toBe(1);
+            expect(data.features[0].geojson.features[0].geometry.type).toBe(lineGeojsonObject.features[0].geometry.type);
             counter++;
             done();
         });
