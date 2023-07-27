@@ -10,9 +10,9 @@ describe('Features', function(){
                     defaultPosition = data;
                     // update test feature coordinates
                     pointGeojsonObject.features[0]. geometry.coordinates = [defaultPosition.centerX, defaultPosition.centerY];
-                    pointGeojsonObject.crs.properties.name = defaultPosition.srsName
+                    pointGeojsonObject.crs.properties.name = defaultPosition.srsName;
                     lineGeojsonObject.features[0]. geometry.coordinates = [[defaultPosition.centerX, defaultPosition.centerY], [defaultPosition.centerX + 10, defaultPosition.centerY+ 10]];
-                    lineGeojsonObject.crs.properties.name = defaultPosition.srsName
+                    lineGeojsonObject.crs.properties.name = defaultPosition.srsName;
                     // Delay between tests
                     setTimeout(function() {
                         done();
@@ -85,7 +85,7 @@ describe('Features', function(){
         channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
         // Listen FeatureEvent for RemoveFeaturesFromMapRequest
         handleEvent('FeatureEvent', function(data) {
-            channel.log('FeatureEvent trigggered:', data)
+            channel.log('FeatureEvent trigggered:', data);
             expect(data.operation).toBe("remove");
             counter++;
             done();
@@ -112,9 +112,9 @@ describe('Features', function(){
 
             counter++;
             done()
-        })
+        });
 
-        channel.postRequest('MapModulePlugin.ZoomToFeaturesRequest', [])
+        channel.postRequest('MapModulePlugin.ZoomToFeaturesRequest', []);
     });
 
     it("Gets feature info", function(done) {
