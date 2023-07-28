@@ -50,7 +50,7 @@ const FilteredProperty = ({name, label, toggle}) => {
 
 const SelectedProperty = ({name, label, index, reorder, toggle}) => {
     return (
-        <Draggable key={name} draggableId={name} index={index}>
+        <Draggable draggableId={name} index={index}>
             { provided => (
                 <StyledBox ref={provided.innerRef} {...provided.draggableProps}>
                     <Switch size='small' checked={true} onChange={checked => toggle(name, checked)} />
