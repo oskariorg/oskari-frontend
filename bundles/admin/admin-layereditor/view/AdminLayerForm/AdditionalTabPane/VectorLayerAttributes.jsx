@@ -15,7 +15,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     const [state, setState] = useState({
         filter: data.filter || {},
         locale: data.locale || {},
-        formatter: data.formatter || {}
+        format: data.format || {}
     });
 
     const onGeometryTypeChange = value => {
@@ -68,7 +68,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                     <Button onClick={() => onButtonClick('locale')}>
                         <Message messageKey='attributes.locale.button' />
                     </Button>
-                    <Button onClick={() => onButtonClick('formatter')}>
+                    <Button onClick={() => onButtonClick('format')}>
                         <Message messageKey='attributes.formatter.button' />
                     </Button>
                 </Space>
@@ -91,9 +91,9 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 { modal === 'locale' &&
                     <PropertiesLocale update={onModalUpdate} locale={state.locale} properties={propNames}/>
                 }
-                { modal === 'formatter' &&
+                { modal === 'format' &&
                     <PropertiesFormatter update={onModalUpdate} properties={propNames}
-                        formatter={state.formatter} labels={propLabels}/>
+                        format={state.format} labels={propLabels}/>
                 }
             </Modal>
         </Fragment>

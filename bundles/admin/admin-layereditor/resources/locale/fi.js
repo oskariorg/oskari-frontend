@@ -113,6 +113,7 @@ Oskari.registerLocalization(
             },
             "attributes": {
                 "label": "Attribuutit",
+                "properties": "Tason kohteiden ominaisuustiedot",
                 "geometryType": {
                     "label": "Geometriatyyppi",
                     "sourceAttributes": "Lähde: tason attribuutit",
@@ -122,6 +123,31 @@ Oskari.registerLocalization(
                     "line": "Viiva",
                     "area":"Alue",
                     "collection":"Kaikki"
+                },
+                "filter": {
+                    "title": "Ominaisuustietojen näyttäminen",
+                    "lang": "Valitse tason kohteille näytettävät ominaisuustiedot ja niiden järjestys",
+                    "default": "Oletussuodattimelle",
+                    "fromDefault": "Valitulle kielelle ei ole lisätty suodatinta. Näytetään oletussuodattimen valinnat.",
+                    "button": "Lisää suodatin"
+                },
+                "locale": {
+                    "title": "Käyttöliittymässä näytettävät nimet ominaisuustiedoille",
+                    "button": "Lisää nimet"
+                },
+                "format": {
+                    "title": "Kohteiden ominaisuustietojen muoto",
+                    "button": "Lisää muotoilu",
+                    "type": {
+                        "link": "Linkki",
+                        "image": "Kuva",
+                        "number": "Numero"
+                    },
+                    "options": {
+                        "noLabel": "Näytä vain arvo",
+                        "skipEmpty": "Poista tyhjät",
+                        "link": "Näytä linkkinä"
+                    }
                 }
             },
             "styles": {

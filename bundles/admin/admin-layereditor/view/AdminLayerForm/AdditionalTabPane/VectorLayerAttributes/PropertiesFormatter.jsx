@@ -23,25 +23,28 @@ const getOptions = () => {
     return opts;
 };
 
-const CollapseContent = ({name, formatter, update }) => {
-    const { noLabel, skipEmpty, type, params = {} } = formatter[name] || {};
+const CollapseContent = ({name, format, update }) => {
+    const { noLabel, skipEmpty, type, params = {} } = format[name] || {};
     const { link } = params;
 
-    const onChange = value => console.log(value);
+    const onChange = (key, value) => {
+        console.log(key, value);
+        // update({...format, [name] })
+    };
     return (
         <Fragment>
             <StyledSelect
                 value={type}
-                onChange={onChange}
+                onChange={value => onChange('type', value)}
                 options={getOptions()}/>
             <CheckboxWrapper>
-                <Checkbox checked={noLabel} onChange={onChange}>
+                <Checkbox checked={noLabel} onChange={evt => onChange('noLabel', evt.target.checked)}>
                     <Message messageKey='noLabel' />
                 </Checkbox>
-                <Checkbox checked={skipEmpty} onChange={onChange}>
+                <Checkbox checked={skipEmpty} onChange={evt => onChange('skipEmpty', evt.target.checked)}>
                     <Message messageKey='skipEmpty' />
                 </Checkbox>
-                <Checkbox checked={link} onChange={onChange}>
+                <Checkbox checked={link} onChange={evt => onChange('link', evt.target.checked)}>
                     <Message messageKey='link' />
                 </Checkbox>
             </CheckboxWrapper>
@@ -49,12 +52,12 @@ const CollapseContent = ({name, formatter, update }) => {
     );
 };
 
-export const PropertiesFormatter = ({ properties, labels, ...rest }) => {
+export const PropertiesFormat = ({ properties, labels, ...rest }) => {
     return (
         <Collapse accordion>
             { properties.map(name => {
                 return (
-                    <CollapsePanel header={labels[name] ? `${name} (${labels[name]})` : name}>
+                    <CollapsePanel key={name} header={labels[name] ? `${name} (${labels[name]})` : name}>
                         <CollapseContent key={name} name={name} {...rest} />
                     </CollapsePanel>
                 )})
@@ -63,8 +66,8 @@ export const PropertiesFormatter = ({ properties, labels, ...rest }) => {
     );
 };
 
-PropertiesFormatter.propTypes = {
-    formatter: PropTypes.object.isRequired,
+PropertiesFormat.propTypes = {
+    format: PropTypes.object.isRequired,
     update: PropTypes.func.isRequired,
     properties: PropTypes.array.isRequired,
     labels: PropTypes.object.isRequired
