@@ -39,22 +39,22 @@ const Italic = styled.div`
     font-style: italic;
 `;
 
-const FilteredProperty = ({name, toggle}) => {
+const FilteredProperty = ({name, label, toggle}) => {
     return (
         <StyledBox>
             <Switch size='small' checked={false} onChange={checked => toggle(name, checked)} />
-            <Label>{name}</Label>
+            <Label>{label ? `${name} (${label})` : name}</Label>
         </StyledBox>
     );
 };
 
-const SelectedProperty = ({name, index, reorder, toggle}) => {
+const SelectedProperty = ({name, label, index, reorder, toggle}) => {
     return (
         <Draggable key={name} draggableId={name} index={index}>
             { provided => (
                 <StyledBox ref={provided.innerRef} {...provided.draggableProps}>
                     <Switch size='small' checked={true} onChange={checked => toggle(name, checked)} />
-                    <Label>{name}</Label>
+                    <Label>{label ? `${name} (${label})` : name}</Label>
                     <Buttons>
                         <IconButton {...provided.dragHandleProps} icon={<DragIcon/>} />
                         <IconButton icon={<UpOutlined/>} onClick={() => reorder(index, index - 1)} />
@@ -66,7 +66,7 @@ const SelectedProperty = ({name, index, reorder, toggle}) => {
     );
 };
 
-export const PropertiesFilter = ({ filter, update, properties }) => {
+export const PropertiesFilter = ({ filter, update, properties, labels }) => {
     const [lang, setLang] = useState('default');
     const options = ['default', ...Oskari.getSupportedLanguages()];
     const selectedProps = filter[lang] || filter.default || properties;
@@ -114,8 +114,9 @@ export const PropertiesFilter = ({ filter, update, properties }) => {
                 <Droppable droppableId="properties">
                     {provided => (
                         <Content ref={provided.innerRef} {...provided.droppableProps}>
-                            { selectedProps.map((prop, index) =>
-                                <SelectedProperty key={prop} index={index} name={prop} reorder={reorder} toggle={toggle}/>
+                            { selectedProps.map((name, index) =>
+                                <SelectedProperty key={name} index={index} name={name} reorder={reorder}
+                                    toggle={toggle} label={labels[name]} />
                             )}
                             { provided.placeholder }
                         </Content>
@@ -123,7 +124,8 @@ export const PropertiesFilter = ({ filter, update, properties }) => {
                 </Droppable>
             </DragDropContext>
             { filteredProps.length > 0 && <Divider/> }
-            { filteredProps.map((prop) => <FilteredProperty key={prop} name={prop} toggle={toggle}/>) }
+            { filteredProps.map((name) =>
+                <FilteredProperty key={name} name={name} toggle={toggle} label={labels[name]}/>) }
         </div>
     );
 };
@@ -131,5 +133,6 @@ export const PropertiesFilter = ({ filter, update, properties }) => {
 PropertiesFilter.propTypes = {
     filter: PropTypes.object.isRequired,
     update: PropTypes.func.isRequired,
-    properties: PropTypes.array.isRequired
+    properties: PropTypes.array.isRequired,
+    labels: PropTypes.object.isRequired
 };

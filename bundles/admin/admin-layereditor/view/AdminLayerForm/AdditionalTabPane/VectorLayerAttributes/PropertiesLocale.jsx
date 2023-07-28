@@ -4,10 +4,9 @@ import { LabeledInput } from 'oskari-ui';
 import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 
 export const PropertiesLocale = ({ locale, update, properties }) => {
-    // TODO: add toggle to show/hide filtered properties
     return (
         <LocalizationComponent showDivider onChange={update} value={locale}>
-            { properties.map(prop => <LabeledInput minimal key={prop} label={prop} name={prop}/>) }
+            { properties.map(name => <LabeledInput minimal key={name} label={name} name={name}/>) }
         </LocalizationComponent>
     );
 };

@@ -42,7 +42,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     };
     const propNames = featureProperties.filter(prop => prop.name !== geomName).map(prop => prop.name);
     const geometryTypeSource = data.geometryType ? 'Attributes' : 'Capabilities';
-    const propLabels = Oskari.getLocalized(locale);
+    const propLabels = Oskari.getLocalized(data.locale) || {};
 
     return (
         <Fragment>
@@ -85,13 +85,15 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
             >
                 <h3><Message messageKey={`attributes.${modal}.title`} /></h3>
                 { modal === 'filter' &&
-                    <PropertiesFilter update={onModalUpdate} filter={state.filter} properties={propNames}/>
+                    <PropertiesFilter update={onModalUpdate} properties={propNames}
+                        filter={state.filter} labels={propLabels}/>
                 }
                 { modal === 'locale' &&
                     <PropertiesLocale update={onModalUpdate} locale={state.locale} properties={propNames}/>
                 }
                 { modal === 'formatter' &&
-                    <PropertiesFormatter update={onModalUpdate} formatter={state.formatter} properties={propNames}/>
+                    <PropertiesFormatter update={onModalUpdate} properties={propNames}
+                        formatter={state.formatter} labels={propLabels}/>
                 }
             </Modal>
         </Fragment>
