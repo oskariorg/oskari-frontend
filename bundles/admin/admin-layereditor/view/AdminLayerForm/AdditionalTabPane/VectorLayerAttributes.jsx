@@ -10,6 +10,7 @@ import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
 
 export const VectorLayerAttributes = ({ layer, controller }) => {
     const { data = {} } = layer.attributes;
+    const { geomName, featureProperties = []} = layer.capabilities;
     const [modal, setModal] = useState(null);
     const [state, setState] = useState({
         filter: data.filter || {},
@@ -30,7 +31,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
         setModal(null);
     };
     const onButtonClick = mode => {
-        if (!properties.length) {
+        if (!featureProperties.length) {
             // nothing to see, TODO: notify
             return;
         }
@@ -39,9 +40,9 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     const onModalUpdate = (value) => {
         setState({ ...state, [modal]: value });
     };
-
-    const properties = layer.capabilities.featureProperties?.map(prop => prop.name) || []; // TODO: filter geom
+    const propNames = featureProperties.filter(prop => prop.name !== geomName).map(prop => prop.name);
     const geometryTypeSource = data.geometryType ? 'Attributes' : 'Capabilities';
+    const propLabels = Oskari.getLocalized(locale);
 
     return (
         <Fragment>
@@ -84,13 +85,13 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
             >
                 <h3><Message messageKey={`attributes.${modal}.title`} /></h3>
                 { modal === 'filter' &&
-                    <PropertiesFilter update={onModalUpdate} filter={state.filter} properties={properties}/>
+                    <PropertiesFilter update={onModalUpdate} filter={state.filter} properties={propNames}/>
                 }
                 { modal === 'locale' &&
-                    <PropertiesLocale update={onModalUpdate} locale={state.locale} properties={properties}/>
+                    <PropertiesLocale update={onModalUpdate} locale={state.locale} properties={propNames}/>
                 }
                 { modal === 'formatter' &&
-                    <PropertiesFormatter update={onModalUpdate} formatter={state.formatter} properties={properties}/>
+                    <PropertiesFormatter update={onModalUpdate} formatter={state.formatter} properties={propNames}/>
                 }
             </Modal>
         </Fragment>
