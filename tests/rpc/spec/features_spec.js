@@ -93,6 +93,7 @@ describe('Features', function(){
             done();
         });
 
+        channel.log('Centering to feature.', addPointFeatureParams);
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
         channel.log('Center to feature done.')
     });
@@ -116,7 +117,7 @@ describe('Features', function(){
         // Track events, we are interested in the second event that occurs when zooming the map
         var eventCounter = 0;
 
-        channel.log('MapModulePlugin.AddFeaturesToMapRequest', testParams);
+        channel.log('Zooming to feature', testParams);
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
         channel.log('Zoom to feature done.')
     });
@@ -140,7 +141,7 @@ describe('Features', function(){
         // Track events, we are interested in the second event that occurs when zooming the map
         var eventCounter = 0;
 
-        channel.log('MapModulePlugin.AddFeaturesToMapRequest', testParams);
+        channel.log('Setting map scale', testParams);
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
         channel.log('Zoom to feature done.')
     });
