@@ -24,27 +24,30 @@ const getOptions = () => {
 };
 
 const CollapseContent = ({name, format, update }) => {
-    const { noLabel, skipEmpty, type, params = {} } = format[name] || {};
-    const { link } = params;
+    const values =  format[name] || {};
+    const { params = {} } = values;
 
     const onChange = (key, value) => {
-        console.log(key, value);
-        // update({...format, [name] })
+        // TODO: handle params
+        // TODO: remove false booleans??
+        const updated = { ...values, [key]:  value };
+        update({...format, [name]: updated });
     };
+
     return (
         <Fragment>
             <StyledSelect
-                value={type}
+                value={values.type}
                 onChange={value => onChange('type', value)}
                 options={getOptions()}/>
             <CheckboxWrapper>
-                <Checkbox checked={noLabel} onChange={evt => onChange('noLabel', evt.target.checked)}>
+                <Checkbox checked={values.noLabel} onChange={evt => onChange('noLabel', evt.target.checked)}>
                     <Message messageKey='noLabel' />
                 </Checkbox>
-                <Checkbox checked={skipEmpty} onChange={evt => onChange('skipEmpty', evt.target.checked)}>
+                <Checkbox checked={values.skipEmpty} onChange={evt => onChange('skipEmpty', evt.target.checked)}>
                     <Message messageKey='skipEmpty' />
                 </Checkbox>
-                <Checkbox checked={link} onChange={evt => onChange('link', evt.target.checked)}>
+                <Checkbox checked={params.link} onChange={evt => onChange('link', evt.target.checked)}>
                     <Message messageKey='link' />
                 </Checkbox>
             </CheckboxWrapper>
