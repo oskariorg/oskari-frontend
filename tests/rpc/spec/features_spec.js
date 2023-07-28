@@ -78,6 +78,73 @@ describe('Features', function(){
         channel.log('AddFeaturesToMapRequest:', addPolygonFeatureParams);
     });
 
+
+    /*
+    * Centering to feature when adding it to the map triggers at maximum two AfterMapMoveEvents,
+    * the first one is triggered when moving the map and the second one when zooming the map. 
+    */
+    it('Centers to feature when flag is set', function (done) {
+        // Centering to feature launches event
+        handleEvent('AfterMapMoveEvent', function (data) {
+            channel.log('AfterMapMoveEvent launched!', data);
+            expect(data.centerX).toBe(pointGeojsonObject.features[0].geometry.coordinates[0]);
+            expect(data.centerY).toBe(pointGeojsonObject.features[0].geometry.coordinates[1]);
+            counter++;
+            done();
+        });
+
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
+        channel.log('Center to feature done.')
+    });
+
+    it('Zooms to at most to maxZoomLevel when centering', function (done) {
+        // Set zoom level
+        var maxZoomLevel = 5;
+        var testParams = [pointGeojsonObject, {...addPointFeatureParams[1], maxZoomLevel}]
+
+        // Centering to feature launches event
+        handleEvent('AfterMapMoveEvent', function (data) {
+            channel.log('AfterMapMoveEvent launched!', data);
+            eventCounter++;
+
+            if (eventCounter === 2) {
+                expect(data.zoom).not.toBeGreaterThan(maxZoomLevel);
+                counter++;
+                done();
+            }
+        });
+        // Track events, we are interested in the second event that occurs when zooming the map
+        var eventCounter = 0;
+
+        channel.log('MapModulePlugin.AddFeaturesToMapRequest', testParams);
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
+        channel.log('Zoom to feature done.')
+    });
+
+    it('Sets map scale at least to to minScale when centering', function (done) {
+        // Set minimum map scale
+        var minScale = 1000;
+        var testParams = [pointGeojsonObject, {...addPointFeatureParams[1], minScale}];
+
+        // Centering to feature launches event
+        handleEvent('AfterMapMoveEvent', function (data) {
+            channel.log('AfterMapMoveEvent launched!', data);
+            eventCounter++;
+
+            if (eventCounter === 2) {
+                expect(data.scale).toBeGreaterThanOrEqual(minScale);
+                counter++;
+                done();
+            }
+        });
+        // Track events, we are interested in the second event that occurs when zooming the map
+        var eventCounter = 0;
+
+        channel.log('MapModulePlugin.AddFeaturesToMapRequest', testParams);
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
+        channel.log('Zoom to feature done.')
+    });
+
     it('Appends options and properties to features', function (done) {
         handleEvent('FeatureEvent', function(data) {
             channel.log('FeatureEvent triggered:', data);
