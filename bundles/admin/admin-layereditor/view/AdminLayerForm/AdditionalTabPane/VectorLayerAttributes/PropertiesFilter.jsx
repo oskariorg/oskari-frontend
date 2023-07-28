@@ -1,0 +1,135 @@
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { StyledFormField } from '../../styled';
+import { Message, Select, Option, Switch, Divider } from 'oskari-ui';
+import { Draggable, DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragIcon } from 'oskari-ui/components/icons';
+import { IconButton } from 'oskari-ui/components/buttons';
+import { UpOutlined, DownOutlined } from '@ant-design/icons';
+
+const Content = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const StyledBox = styled.div`
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.23);
+    border-radius: 3px;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px #fff solid;
+    background-color: #fff;
+    display: flex;
+`;
+
+const Buttons = styled.div`
+    margin-left: auto;
+    button {
+        margin-left: 10px;
+    }
+`;
+
+const Label = styled.span`
+    margin-left: 10px;
+    font-weight: bold;
+`;
+
+const Italic = styled.div`
+    font-style: italic;
+`;
+
+const FilteredProperty = ({name, toggle}) => {
+    return (
+        <StyledBox>
+            <Switch size='small' checked={false} onChange={checked => toggle(name, checked)} />
+            <Label>{name}</Label>
+        </StyledBox>
+    );
+};
+
+const SelectedProperty = ({name, index, reorder, toggle}) => {
+    return (
+        <Draggable key={name} draggableId={name} index={index}>
+            { provided => (
+                <StyledBox ref={provided.innerRef} {...provided.draggableProps}>
+                    <Switch size='small' checked={true} onChange={checked => toggle(name, checked)} />
+                    <Label>{name}</Label>
+                    <Buttons>
+                        <IconButton {...provided.dragHandleProps} icon={<DragIcon/>} />
+                        <IconButton icon={<UpOutlined/>} onClick={() => reorder(index, index - 1)} />
+                        <IconButton icon={<DownOutlined/>} onClick={() => reorder(index, index + 1)} />
+                    </Buttons>
+                </StyledBox>
+            )}
+        </Draggable>
+    );
+};
+
+export const PropertiesFilter = ({ filter, update, properties }) => {
+    const [lang, setLang] = useState('default');
+    const options = ['default', ...Oskari.getSupportedLanguages()];
+    const selectedProps = filter[lang] || filter.default || properties;
+    
+    const reorder = (from, to) => {
+        if (from === to || from >= selectedProps.length || to >= selectedProps.length) {
+            return;
+        }
+        const props = [...selectedProps];
+        const removed = props.splice(from, 1)[0];
+        props.splice(to, 0, removed);
+        update({ ...filter, [lang]: props });
+    };
+    const toggle = (name, selected) => {
+        const props = selected
+            ? [...selectedProps, name]
+            : selectedProps.filter(f => f !== name)
+        if (props.length === properties.length) {
+            // TODO remove lang ??
+        }
+        update({ ...filter, [lang]: props });
+    };
+    // TODO: Droppable: unsupported nested scroll container detected.
+    const showFromDefault = !filter[lang]?.length && filter.default?.length > 0;
+    const filteredProps = properties.filter(p => !selectedProps.includes(p));
+    return (
+        <div>
+            <Message messageKey='attributes.filter.lang'/>
+            <StyledFormField>
+                <Select
+                    value={lang}
+                    onChange={setLang}>
+                    { options.map(opt => (
+                        <Option key={opt} value={opt}>
+                            { opt === 'default'
+                                ? <Message messageKey='attributes.filter.default'/>
+                                : <Message messageKey={`LocalizationComponent.locale.${opt}`} bundleKey='oskariui' />
+                            } 
+                        </Option>)) 
+                    }
+                </Select>
+            </StyledFormField>
+            { showFromDefault && <Italic><Message messageKey='attributes.filter.fromDefault'/></Italic> }
+            <DragDropContext onDragEnd={result => reorder(result.source.index, result.destination.index)}>
+                <Droppable droppableId="properties">
+                    {provided => (
+                        <Content ref={provided.innerRef} {...provided.droppableProps}>
+                            { selectedProps.map((prop, index) =>
+                                <SelectedProperty key={prop} index={index} name={prop} reorder={reorder} toggle={toggle}/>
+                            )}
+                            { provided.placeholder }
+                        </Content>
+                    )}    
+                </Droppable>
+            </DragDropContext>
+            { filteredProps.length > 0 && <Divider/> }
+            { filteredProps.map((prop) => <FilteredProperty key={prop} name={prop} toggle={toggle}/>) }
+        </div>
+    );
+};
+
+PropertiesFilter.propTypes = {
+    filter: PropTypes.object.isRequired,
+    update: PropTypes.func.isRequired,
+    properties: PropTypes.array.isRequired
+};
