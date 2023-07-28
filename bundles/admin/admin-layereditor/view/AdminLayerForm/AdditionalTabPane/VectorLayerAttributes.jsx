@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Message, Select, Option, Space, Button } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
 import { Controller } from 'oskari-ui/util';
-import { PropertiesFilter, PropertiesLocale, PropertiesFormatter } from './VectorLayerAttributes/';
+import { PropertiesFilter, PropertiesLocale, PropertiesFormat } from './VectorLayerAttributes/';
 import { StyledFormField } from '../styled';
 import { InfoTooltip } from '../InfoTooltip';
 import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
@@ -69,7 +69,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                         <Message messageKey='attributes.locale.button' />
                     </Button>
                     <Button onClick={() => onButtonClick('format')}>
-                        <Message messageKey='attributes.formatter.button' />
+                        <Message messageKey='attributes.format.button' />
                     </Button>
                 </Space>
             </StyledFormField>
@@ -92,7 +92,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                     <PropertiesLocale update={onModalUpdate} locale={state.locale} properties={propNames}/>
                 }
                 { modal === 'format' &&
-                    <PropertiesFormatter update={onModalUpdate} properties={propNames}
+                    <PropertiesFormat update={onModalUpdate} properties={propNames}
                         format={state.format} labels={propLabels}/>
                 }
             </Modal>
