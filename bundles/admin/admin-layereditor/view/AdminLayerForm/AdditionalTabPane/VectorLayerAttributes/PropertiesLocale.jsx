@@ -7,7 +7,7 @@ export const PropertiesLocale = ({ locale, update, properties }) => {
     // TODO: add toggle to show/hide filtered properties
     return (
         <LocalizationComponent showDivider onChange={update} value={locale}>
-            { properties.map(prop => <LabeledInput minimal key={prop} name={prop}/>) }
+            { properties.map(prop => <LabeledInput minimal key={prop} label={prop} name={prop}/>) }
         </LocalizationComponent>
     );
 };
