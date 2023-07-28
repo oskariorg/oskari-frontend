@@ -71,8 +71,9 @@ export const PropertiesFilter = ({ filter, update, properties, labels }) => {
     const options = ['default', ...Oskari.getSupportedLanguages()];
     const selectedProps = filter[lang] || filter.default || properties;
     
-    const reorder = (from, to) => {
-        if (from === to || from >= selectedProps.length || to >= selectedProps.length) {
+    const reorder = (from, to = -1) => {
+        const max = selectedProps.length - 1;
+        if (from === to || from > max || to < 0 || to > max) {
             return;
         }
         const props = [...selectedProps];
@@ -110,7 +111,7 @@ export const PropertiesFilter = ({ filter, update, properties, labels }) => {
                 </Select>
             </StyledFormField>
             { showFromDefault && <Italic><Message messageKey='attributes.filter.fromDefault'/></Italic> }
-            <DragDropContext onDragEnd={result => reorder(result.source.index, result.destination.index)}>
+            <DragDropContext onDragEnd={result => reorder(result.source.index, result.destination?.index)}>
                 <Droppable droppableId="properties">
                     {provided => (
                         <Content ref={provided.innerRef} {...provided.droppableProps}>
