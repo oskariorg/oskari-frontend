@@ -14,12 +14,15 @@ const CheckboxWrapper = styled.div`
 
 const TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'i', 'b', 'em'];
 const FORMATTERS = ['link', 'image', 'number'];
-const HIDDEN = 'hidden'; // TODO: support or notify to use filter
+// eslint-disable-next-line no-unused-vars
+const HIDDEN = 'hidden'; // TODO: support or notify to use filter?
+
+const localize = key => Oskari.getMsg('admin-layereditor', `attributes.format.type.${key}`)
 
 const getOptions = () => {
     const opts = [];
-    opts.push({ label: 'formatters', options: FORMATTERS.map(f => ({label: f, value: f}))});
-    opts.push({ label: 'tags', options: TAGS.map(f => ({label: f, value: f}))});
+    opts.push({ label: localize('typeFormats'), options: FORMATTERS.map(f => ({label: localize(f), value: f}))});
+    opts.push({ label: localize('textFormats'), options: TAGS.map(f => ({label: f, value: f}))});
     return opts;
 };
 
@@ -28,28 +31,32 @@ const CollapseContent = ({name, format, update }) => {
     const { params = {} } = values;
 
     const onChange = (key, value) => {
-        // TODO: handle params
-        // TODO: remove false booleans??
         const updated = { ...values, [key]:  value };
         update({...format, [name]: updated });
+    };
+    const onParamChange = (key, value) => {
+        const updated = { ...params, [key]: value };
+        onChange('params', updated);
     };
 
     return (
         <Fragment>
-            <StyledSelect
+            <StyledSelect allowClear
                 value={values.type}
                 onChange={value => onChange('type', value)}
                 options={getOptions()}/>
             <CheckboxWrapper>
                 <Checkbox checked={values.noLabel} onChange={evt => onChange('noLabel', evt.target.checked)}>
-                    <Message messageKey='noLabel' />
+                    <Message messageKey='attributes.format.options.noLabel' />
                 </Checkbox>
                 <Checkbox checked={values.skipEmpty} onChange={evt => onChange('skipEmpty', evt.target.checked)}>
-                    <Message messageKey='skipEmpty' />
+                    <Message messageKey='attributes.format.options.skipEmpty' />
                 </Checkbox>
-                <Checkbox checked={params.link} onChange={evt => onChange('link', evt.target.checked)}>
-                    <Message messageKey='link' />
-                </Checkbox>
+                { values.type === 'image' &&
+                    <Checkbox checked={params.link} onChange={evt => onParamChange('link', evt.target.checked)}>
+                        <Message messageKey='attributes.format.options.link' />
+                    </Checkbox>
+                }
             </CheckboxWrapper>
         </Fragment>
     );
