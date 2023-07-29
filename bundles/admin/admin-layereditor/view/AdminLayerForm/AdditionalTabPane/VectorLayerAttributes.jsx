@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Select, Option, Space, Button } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
-import { Controller } from 'oskari-ui/util';
+import { Controller, Messaging } from 'oskari-ui/util';
 import { PropertiesFilter, PropertiesLocale, PropertiesFormat } from './VectorLayerAttributes/';
 import { StyledFormField } from '../styled';
 import { InfoTooltip } from '../InfoTooltip';
@@ -62,7 +62,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     };
     const onButtonClick = mode => {
         if (!featureProperties.length) {
-            // nothing to see, TODO: notify
+            Messaging.warn(<Message messageKey='messages.noFeatureProperties' bundleKey='admin-layereditor'/>);
             return;
         }
         setModal(mode);

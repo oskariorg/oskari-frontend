@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { StyledFormField } from '../../styled';
 import { Message, Select, Option, Switch, Divider } from 'oskari-ui';
 import { Draggable, DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { DragIcon } from 'oskari-ui/components/icons';
@@ -21,6 +20,22 @@ const StyledBox = styled.div`
     border: 1px #fff solid;
     background-color: #fff;
     display: flex;
+    align-items: center;
+`;
+
+// DragIcon is bigger than arrows -> adjust (maybe should fix icon size)
+const StyledDrag = styled(IconButton)`
+    vertical-align: -5px;
+`;
+
+const SelectRow = styled.div`
+    padding-top: 5px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    & ${Select} {
+        width: 100%;
+    }
 `;
 
 const Buttons = styled.div`
@@ -56,7 +71,7 @@ const SelectedProperty = ({name, label, index, reorder, toggle}) => {
                     <Switch size='small' checked={true} onChange={checked => toggle(name, checked)} />
                     <Label>{label ? `${name} (${label})` : name}</Label>
                     <Buttons>
-                        <IconButton {...provided.dragHandleProps} icon={<DragIcon/>} />
+                        <StyledDrag {...provided.dragHandleProps} icon={<DragIcon/>} />
                         <IconButton icon={<UpOutlined/>} onClick={() => reorder(index, index - 1)} />
                         <IconButton icon={<DownOutlined/>} onClick={() => reorder(index, index + 1)} />
                     </Buttons>
@@ -85,18 +100,21 @@ export const PropertiesFilter = ({ filter, update, properties, labels }) => {
         const props = selected
             ? [...selectedProps, name]
             : selectedProps.filter(f => f !== name)
-        if (props.length === properties.length) {
-            // TODO remove lang ??
-        }
         update({ ...filter, [lang]: props });
     };
+    const deleteFilter = () => {
+        const updated = { ...filter };
+        delete updated[lang];
+        update(updated);
+    };
     // TODO: Droppable: unsupported nested scroll container detected.
-    const showFromDefault = !filter[lang]?.length && filter.default?.length > 0;
+    const showFromDefault = !filter[lang] && !!filter.default;
     const filteredProps = properties.filter(p => !selectedProps.includes(p));
+
     return (
         <div>
             <Message messageKey='attributes.filter.lang'/>
-            <StyledFormField>
+            <SelectRow>
                 <Select
                     value={lang}
                     onChange={setLang}>
@@ -109,7 +127,8 @@ export const PropertiesFilter = ({ filter, update, properties, labels }) => {
                         </Option>)) 
                     }
                 </Select>
-            </StyledFormField>
+                { !!filter[lang] && <IconButton type='delete' bordered onConfirm={() => deleteFilter()}/> }
+            </SelectRow>
             { showFromDefault && <Italic><Message messageKey='attributes.filter.fromDefault'/></Italic> }
             <DragDropContext onDragEnd={result => reorder(result.source.index, result.destination?.index)}>
                 <Droppable droppableId="properties">
