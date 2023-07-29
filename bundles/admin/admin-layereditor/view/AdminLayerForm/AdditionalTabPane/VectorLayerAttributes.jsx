@@ -8,6 +8,26 @@ import { StyledFormField } from '../styled';
 import { InfoTooltip } from '../InfoTooltip';
 import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
 
+// Clean empty objects and values that doesn't need to store
+// format: false options
+// locale: empty strings
+const clean = obj => {
+    for (const key in obj) {
+        const val = obj[key];
+        if(typeof val === "object" && !Array.isArray(val) && val !== null) {
+            if (!Object.keys(val).length) {
+                delete obj[key];
+            } else {
+                clean(val);
+            }
+        } else if (typeof val === 'string' && !val.trim().length) {
+            delete obj[key];
+        } else if (val === null || val === false) {
+            delete obj[key];
+        }
+    }
+};
+
 export const VectorLayerAttributes = ({ layer, controller }) => {
     const { data = {} } = layer.attributes;
     const { geomName, featureProperties = []} = layer.capabilities;
@@ -26,8 +46,18 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
         }
     };
     const onModalOk = () => {
-        // TODO: clean empty objects??
-        controller.setAttributesData(modal, state[modal]);
+        // deep clone to not mess local state
+        const value = JSON.parse(JSON.stringify(state[modal]));
+        // clean twice to get rid of empty objects if last value is deleted from it
+        clean(value);
+        clean(value);
+        if (Object.keys(value).length) {
+            controller.setAttributesData(modal, value);
+        } else {
+            controller.setAttributesData(modal);
+        }
+        // update local state
+        onModalUpdate(value);
         setModal(null);
     };
     const onButtonClick = mode => {
