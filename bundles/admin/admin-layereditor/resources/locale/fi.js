@@ -260,7 +260,8 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
                 "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
                 "noCoverage": "Karttatason kattavuutta ei ole rajoitettu.",
-                "invalidScale": "Tarkista tason mittakaavarajat."
+                "invalidScale": "Tarkista tason mittakaavarajat.",
+                "noFeatureProperties": "Kohteiden ominaisuustietoja ei ole saatavilla tasolle."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",
