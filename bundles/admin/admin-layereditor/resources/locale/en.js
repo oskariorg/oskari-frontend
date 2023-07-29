@@ -112,6 +112,7 @@ Oskari.registerLocalization(
             },
             "attributes": {
                 "label": "Attributes",
+                "properties": "Feature properties",
                 "geometryType": {
                     "label": "Geometry type",
                     "sourceAttributes": "Source: layer attributes",
@@ -121,6 +122,34 @@ Oskari.registerLocalization(
                     "line": "Line",
                     "area":"Area",
                     "collection":"Collection"
+                },
+                "filter": {
+                    "title": "Properties filter",
+                    "lang": "Choose shown feature properties and ordering",
+                    "default": "for default filter",
+                    "fromDefault": "Selected language doesn't have filter. Default filter is used for selected language. Edit values to create new filter for language.",
+                    "button": "Edit filter"
+                },
+                "locale": {
+                    "title": "Labels for feature properties",
+                    "button": "Edit labels"
+                },
+                "format": {
+                    "title": "Feature properties value formatting",
+                    "button": "Edit format",
+                    "type": {
+                        "label": "Type",
+                        "typeFormats": "Value type",
+                        "textFormats": "Text formatting",
+                        "link": "Link",
+                        "image": "Image",
+                        "number": "Number"
+                    },
+                    "options": {
+                        "noLabel": "Don't show label",
+                        "skipEmpty": "Skip empty value",
+                        "link": "Show as link"
+                    }
                 }
             },
             "styles": {

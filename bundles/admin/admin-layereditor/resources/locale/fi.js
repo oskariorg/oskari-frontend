@@ -113,7 +113,7 @@ Oskari.registerLocalization(
             },
             "attributes": {
                 "label": "Attribuutit",
-                "properties": "Tason kohteiden ominaisuustiedot",
+                "properties": "Kohteiden ominaisuustiedot",
                 "geometryType": {
                     "label": "Geometriatyyppi",
                     "sourceAttributes": "Lähde: tason attribuutit",
@@ -127,8 +127,8 @@ Oskari.registerLocalization(
                 "filter": {
                     "title": "Ominaisuustietojen näyttäminen",
                     "lang": "Valitse tason kohteille näytettävät ominaisuustiedot ja niiden järjestys",
-                    "default": "Oletussuodattimelle",
-                    "fromDefault": "Valitulle kielelle ei ole lisätty suodatinta. Näytetään oletussuodattimen valinnat.",
+                    "default": "oletussuodattimelle",
+                    "fromDefault": "Valitulle kielelle ei ole lisätty suodatinta. Valitulla kielellä käytetään oletussuodatinta. Muokkaa valintoja luodaksesi kielelle oman suodattimen.",
                     "button": "Lisää suodatin"
                 },
                 "locale": {
@@ -136,16 +136,19 @@ Oskari.registerLocalization(
                     "button": "Lisää nimet"
                 },
                 "format": {
-                    "title": "Kohteiden ominaisuustietojen muoto",
-                    "button": "Lisää muotoilu",
+                    "title": "Kohteiden ominaisuustietojen arvon muotoilu",
+                    "button": "Muokkaa muotoilua",
                     "type": {
+                        "label": "Tyyppi",
+                        "typeFormats": "Arvon tyyppi",
+                        "textFormats": "Tekstin muotoilu",
                         "link": "Linkki",
                         "image": "Kuva",
                         "number": "Numero"
                     },
                     "options": {
                         "noLabel": "Näytä vain arvo",
-                        "skipEmpty": "Poista tyhjät",
+                        "skipEmpty": "Älä näytä tyhjää",
                         "link": "Näytä linkkinä"
                     }
                 }
