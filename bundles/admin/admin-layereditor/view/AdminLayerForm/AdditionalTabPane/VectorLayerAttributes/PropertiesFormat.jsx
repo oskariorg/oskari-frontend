@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { Message, Select, Collapse, CollapsePanel, Checkbox } from 'oskari-ui';
 
 const StyledSelect = styled(Select)`
-    width: 50%;
+    min-width: 200px;
     margin-bottom: 10px;
+    margin-left: 10px;
 `;
 
 const CheckboxWrapper = styled.div`
@@ -41,6 +42,7 @@ const CollapseContent = ({name, format, update }) => {
 
     return (
         <Fragment>
+            <Message messageKey='attributes.format.type.label' />
             <StyledSelect allowClear
                 value={values.type}
                 onChange={value => onChange('type', value)}
