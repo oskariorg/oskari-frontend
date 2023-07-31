@@ -200,6 +200,68 @@ describe('Features', function(){
 
     });
 
+    describe('Get features', function() {
+
+        beforeEach(function (done) {
+            // Set up tests by adding features to the map
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addLineFeatureParams);
+            done();
+        });
+
+        it('Gets only layer IDs', function (done) {
+            channel.getFeatures([], function (data) {
+                channel.log('channel.getFeatures', data)
+
+                expect(Object.keys(data).length).toBe(2);
+                // Default feature layer
+                expect(data.VECTOR).toBeDefined();
+                expect(data.VECTOR).toEqual([]);
+                // Custom feature layer specified in request parameters
+                expect(data[addPointFeatureParams[1].layerId]).toBeDefined();
+                expect(data[addPointFeatureParams[1].layerId]).toEqual([]);
+
+                channel.log('Get layer IDs done.');
+                counter++;
+                done();
+            });
+        });
+
+        it('Gets features grouped by layer', function (done) {
+            channel.getFeatures([true], function (data) {
+                channel.log('channel.getFeatures', data);
+
+                // Feature objects are grouped by ID
+                var pointObject = data[addPointFeatureParams[1].layerId].features[0];
+                var lineObject = data.VECTOR.features[0];
+                expect(pointObject).toBeDefined();
+                expect(lineObject).toBeDefined();
+                
+                // Features have expected properties
+                expect(pointObject.id).toBeDefined();
+                expect(pointObject.geometry.type).toBe('Point');
+                expect(pointObject.geometry.coordinates).toEqual(pointGeojsonObject.features[0].geometry.coordinates);
+                expect(pointObject.properties.label).toBe(pointGeojsonObject.features[0].properties.label);
+                expect(pointObject.properties['oskari-cursor']).toBe(addPointFeatureParams[1].cursor);
+                expect(pointObject.properties.testAttribute).toBe(addPointFeatureParams[1].attributes.testAttribute);
+                expect(pointObject.properties.test_property).toBe(pointGeojsonObject.features[0].properties.test_property);
+
+                expect(lineObject.id).toBeDefined();
+                expect(lineObject.geometry.type).toBe('LineString');
+                expect(lineObject.geometry.coordinates).toEqual(lineGeojsonObject.features[0].geometry.coordinates);
+                expect(lineObject.properties.label).toBe(lineGeojsonObject.features[0].properties.label);
+                expect(lineObject.properties['oskari-cursor']).toBe(addLineFeatureParams[1].cursor);
+                expect(lineObject.properties.testAttribute);
+                expect(lineObject.properties.test_property).toBe(lineGeojsonObject.features[0].properties.test_property);
+
+                channel.log('Get features done.');
+                counter++;
+                done()
+            })
+        });
+
+    });
+
 
     it("Gets feature info", function(done) {
 
