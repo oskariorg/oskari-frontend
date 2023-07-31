@@ -2,6 +2,7 @@ import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, Select, Collapse, CollapsePanel, Checkbox, TextInput, Switch } from 'oskari-ui';
+import { IconButton } from 'oskari-ui/components/buttons';
 
 const BUNDLE_NAME = 'admin-layereditor';
 
@@ -55,14 +56,21 @@ const ParamOption = ({name, value, onChange}) => {
     );
 };
 
-const CollapseContent = ({name, format, update }) => {
-    const values =  format[name] || {};
-    const { params = {} } = values;
+const PanelExtra = ({ noValues, onRemove}) => {
+    if(noValues) {
+        return null;
+    }
 
-    const onChange = (key, value) => {
-        const updated = { ...values, [key]:  value };
-        update({...format, [name]: updated });
-    };
+    return (
+        <div onClick={e => e.stopPropagation()}>
+            <IconButton type='delete' onConfirm={onRemove}/>
+        </div>
+    );
+};
+
+const CollapseContent = ({values = {}, onChange }) => {
+    const { type, noLabel, skipEmpty, params = {} } = values;
+
     const onParamChange = (key, value) => {
         const updated = { ...params, [key]: value };
         onChange('params', updated);
@@ -73,14 +81,14 @@ const CollapseContent = ({name, format, update }) => {
         <Fragment>
             <Message messageKey='attributes.format.type.label' />
             <StyledSelect allowClear
-                value={values.type}
+                value={type}
                 onChange={value => onChange('type', value)}
                 options={getTypeOptions()}/>
             <Options>
-                <Checkbox checked={values.noLabel} onChange={evt => onChange('noLabel', evt.target.checked)}>
+                <Checkbox checked={noLabel} onChange={evt => onChange('noLabel', evt.target.checked)}>
                     <Message messageKey='attributes.format.options.noLabel' />
                 </Checkbox>
-                <Checkbox checked={values.skipEmpty} onChange={evt => onChange('skipEmpty', evt.target.checked)}>
+                <Checkbox checked={skipEmpty} onChange={evt => onChange('skipEmpty', evt.target.checked)}>
                     <Message messageKey='attributes.format.options.skipEmpty' />
                 </Checkbox>
                 { paramOptions.map(name => <ParamOption key={name} name={name} value={params[name]} onChange={onParamChange} />) }
@@ -89,20 +97,35 @@ const CollapseContent = ({name, format, update }) => {
     );
 };
 
-export const PropertiesFormat = ({ properties, selected, labels, ...rest }) => {
+export const PropertiesFormat = ({ properties, selected, labels, format, update }) => {
     const allSelected = properties.length === selected.length;
     const [showAll, setShowAll] = useState(allSelected);
     const propNames = showAll ? properties : selected;
+
+    const onChange = (name, key, value) => {
+        const values = format[name] || {};
+        const updated = { ...values, [key]:  value };
+        update({...format, [name]: updated });
+    };
+
+    const onRemove = (name) => {
+        const updated = { ...format };
+        delete updated[name];
+        update(updated);
+    };
+
     return (
         <Fragment>
             { !allSelected &&
                 <StyledSwitch checked={showAll} onChange={setShowAll} label={<Message messageKey='attributes.showAll'/>}/>
             }
-            <Collapse accordion>
+            <Collapse>
                 { propNames.map(name => {
                     return (
-                        <CollapsePanel key={name} header={labels[name] ? `${name} (${labels[name]})` : name}>
-                            <CollapseContent key={name} name={name} {...rest} />
+                        <CollapsePanel key={name}
+                            header={labels[name] ? `${name} (${labels[name]})` : name}
+                            extra={<PanelExtra onRemove={() => onRemove(name)} noValues={!format[name]}/>}>
+                            <CollapseContent key={name} values={format[name]} onChange={(key, value) => onChange(name, key, value)} />
                         </CollapsePanel>
                     )})
                 }
