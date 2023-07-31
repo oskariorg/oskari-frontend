@@ -143,12 +143,17 @@ Oskari.registerLocalization(
                         "textFormats": "Text formatting",
                         "link": "Link",
                         "image": "Image",
-                        "number": "Number"
+                        "number": "Number",
+                        "phone": "Phone number"
                     },
                     "options": {
                         "noLabel": "Don't show label",
-                        "skipEmpty": "Skip empty value",
-                        "link": "Show as link"
+                        "skipEmpty": "Skip empty value"
+                    },
+                    "params": {
+                        "link": "Show as link",
+                        "fullUrl": "Show full url",
+                        "label": "Label for link"
                     }
                 }
             },

@@ -144,12 +144,17 @@ Oskari.registerLocalization(
                         "textFormats": "Tekstin muotoilu",
                         "link": "Linkki",
                         "image": "Kuva",
-                        "number": "Numero"
+                        "number": "Numero",
+                        "phone": "Puhelinnumero"
                     },
                     "options": {
                         "noLabel": "Näytä vain arvo",
-                        "skipEmpty": "Älä näytä tyhjää",
-                        "link": "Näytä linkkinä"
+                        "skipEmpty": "Älä näytä tyhjää"
+                    },
+                    "params": {
+                        "link": "Näytä linkkinä",
+                        "fullUrl": "Näytä koko osoite",
+                        "label": "Linkin label"
                     }
                 }
             },
