@@ -1,9 +1,13 @@
-import React, {Fragment} from 'react';
+import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Select, Collapse, CollapsePanel, Checkbox, TextInput } from 'oskari-ui';
+import { Message, Select, Collapse, CollapsePanel, Checkbox, TextInput, Switch } from 'oskari-ui';
 
 const BUNDLE_NAME = 'admin-layereditor';
+
+const StyledSwitch = styled(Switch)`
+    margin-bottom: 24px;
+`;
 
 const StyledSelect = styled(Select)`
     min-width: 200px;
@@ -85,17 +89,25 @@ const CollapseContent = ({name, format, update }) => {
     );
 };
 
-export const PropertiesFormat = ({ properties, labels, ...rest }) => {
+export const PropertiesFormat = ({ properties, selected, labels, ...rest }) => {
+    const allSelected = properties.length === selected.length;
+    const [showAll, setShowAll] = useState(allSelected);
+    const propNames = showAll ? properties : selected;
     return (
-        <Collapse accordion>
-            { properties.map(name => {
-                return (
-                    <CollapsePanel key={name} header={labels[name] ? `${name} (${labels[name]})` : name}>
-                        <CollapseContent key={name} name={name} {...rest} />
-                    </CollapsePanel>
-                )})
+        <Fragment>
+            { !allSelected &&
+                <StyledSwitch checked={showAll} onChange={setShowAll} label={<Message messageKey='attributes.showAll'/>}/>
             }
-        </Collapse>
+            <Collapse accordion>
+                { propNames.map(name => {
+                    return (
+                        <CollapsePanel key={name} header={labels[name] ? `${name} (${labels[name]})` : name}>
+                            <CollapseContent key={name} name={name} {...rest} />
+                        </CollapsePanel>
+                    )})
+                }
+            </Collapse>
+        </Fragment>
     );
 };
 
@@ -103,5 +115,6 @@ PropertiesFormat.propTypes = {
     format: PropTypes.object.isRequired,
     update: PropTypes.func.isRequired,
     properties: PropTypes.array.isRequired,
-    labels: PropTypes.object.isRequired
+    labels: PropTypes.object.isRequired,
+    selected: PropTypes.array.isRequired
 };

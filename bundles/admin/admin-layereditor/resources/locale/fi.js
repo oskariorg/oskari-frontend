@@ -114,6 +114,7 @@ Oskari.registerLocalization(
             "attributes": {
                 "label": "Attribuutit",
                 "properties": "Kohteiden ominaisuustiedot",
+                "showAll": "Näytä kaikki ominaisuustiedot",
                 "geometryType": {
                     "label": "Geometriatyyppi",
                     "sourceAttributes": "Lähde: tason attribuutit",

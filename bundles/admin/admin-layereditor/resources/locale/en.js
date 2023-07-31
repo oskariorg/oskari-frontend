@@ -113,6 +113,7 @@ Oskari.registerLocalization(
             "attributes": {
                 "label": "Attributes",
                 "properties": "Feature properties",
+                "showAll": "Show all properties",
                 "geometryType": {
                     "label": "Geometry type",
                     "sourceAttributes": "Source: layer attributes",
