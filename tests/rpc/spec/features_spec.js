@@ -34,179 +34,172 @@ describe('Features', function(){
         channel.resetState(function () {});
     })
 
-    it("Adds point feature", function (done) {
-        handleEvent('FeatureEvent', function(data) {
-            channel.log('FeatureEvent triggered:', data);
-            expect(data.operation).toBe("add");
-            expect(data.features[0].geojson.type).toBe(pointGeojsonObject.type);
-            expect(data.features[0].geojson.features[0].geometry.coordinates).toEqual(pointGeojsonObject.features[0].geometry.coordinates);
-            counter++;
-            done();
+    describe('Add features to map', function () {
+
+        it("Adds point feature", function (done) {
+            handleEvent('FeatureEvent', function(data) {
+                channel.log('FeatureEvent triggered:', data);
+                expect(data.operation).toBe("add");
+                expect(data.features[0].geojson.type).toBe(pointGeojsonObject.type);
+                expect(data.features[0].geojson.features[0].geometry.coordinates).toEqual(pointGeojsonObject.features[0].geometry.coordinates);
+                counter++;
+                done();
+            });
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
+            channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
         });
 
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
-        channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
-    });
+        it("Adds line feature", function (done) {
+            handleEvent('FeatureEvent', function (data) {
+                channel.log('FeatureEvent triggered:', data);
+                expect(data.operation).toBe("add");
+                expect(data.features[0].geojson.type).toBe(lineGeojsonObject.type);
+                expect(data.features[0].geojson.features[0].geometry.type).toBe(lineGeojsonObject.features[0].geometry.type);
+                expect(data.features[0].geojson.features[0].geometry.coordinates).toEqual(lineGeojsonObject.features[0].geometry.coordinates);
+                counter++;
+                done();
+            });
 
-    it("Adds line feature", function (done) {
-        handleEvent('FeatureEvent', function (data) {
-            channel.log('FeatureEvent triggered:', data);
-            expect(data.operation).toBe("add");
-            expect(data.features[0].geojson.type).toBe(lineGeojsonObject.type);
-            expect(data.features[0].geojson.features[0].geometry.type).toBe(lineGeojsonObject.features[0].geometry.type);
-            expect(data.features[0].geojson.features[0].geometry.coordinates).toEqual(lineGeojsonObject.features[0].geometry.coordinates);
-            counter++;
-            done();
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addLineFeatureParams);
+            channel.log('AddFeaturesToMapRequest:', addLineFeatureParams);
         });
 
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addLineFeatureParams);
-        channel.log('AddFeaturesToMapRequest:', addLineFeatureParams);
-    });
+        it("Adds polygon feature", function(done) {
+            handleEvent('FeatureEvent', function(data) {
+                channel.log('FeatureEvent triggered:', data);
+                expect(data.operation).toBe("add");
+                expect(data.features[0].geojson.type).toBe(polygonGeojsonObject.type);
+                expect(data.features[0].geojson.features[0].geometry.type).toBe(polygonGeojsonObject.features[0].geometry.type);
+                expect(data.features[0].geojson.features[0].geometry.coordinates).toEqual(polygonGeojsonObject.features[0].geometry.coordinates);
+                counter++;
+                done();
+            });
 
-    it("Adds polygon feature", function(done) {
-        handleEvent('FeatureEvent', function(data) {
-            channel.log('FeatureEvent triggered:', data);
-            expect(data.operation).toBe("add");
-            expect(data.features[0].geojson.type).toBe(polygonGeojsonObject.type);
-            expect(data.features[0].geojson.features[0].geometry.type).toBe(polygonGeojsonObject.features[0].geometry.type);
-            expect(data.features[0].geojson.features[0].geometry.coordinates).toEqual(polygonGeojsonObject.features[0].geometry.coordinates);
-            counter++;
-            done();
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPolygonFeatureParams);
+            channel.log('AddFeaturesToMapRequest:', addPolygonFeatureParams);
         });
 
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPolygonFeatureParams);
-        channel.log('AddFeaturesToMapRequest:', addPolygonFeatureParams);
     });
 
 
+    describe('Zoom options', function () {
     /*
     * Centering to feature when adding it to the map triggers at maximum two AfterMapMoveEvents,
     * the first one is triggered when moving the map and the second one when zooming the map. 
     */
-    it('Centers to feature when flag is set', function (done) {
-        // Centering to feature launches event
-        handleEvent('AfterMapMoveEvent', function (data) {
-            channel.log('AfterMapMoveEvent launched!', data);
-            expect(data.centerX).toBe(pointGeojsonObject.features[0].geometry.coordinates[0]);
-            expect(data.centerY).toBe(pointGeojsonObject.features[0].geometry.coordinates[1]);
-            counter++;
-            done();
-        });
-
-        channel.log('Centering to feature.', addPointFeatureParams);
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
-        channel.log('Center to feature done.')
-    });
-
-    it('Zooms to at most to maxZoomLevel when centering', function (done) {
-        // Set zoom level
-        var maxZoomLevel = 5;
-        var testParams = [pointGeojsonObject, {...addPointFeatureParams[1], maxZoomLevel}]
-
-        // Centering to feature launches event
-        handleEvent('AfterMapMoveEvent', function (data) {
-            channel.log('AfterMapMoveEvent launched!', data);
-            eventCounter++;
-
-            if (eventCounter === 2) {
-                expect(data.zoom).not.toBeGreaterThan(maxZoomLevel);
+        it('Centers to feature when flag is set', function (done) {
+            // Centering to feature launches event
+            handleEvent('AfterMapMoveEvent', function (data) {
+                channel.log('AfterMapMoveEvent launched!', data);
+                expect(data.centerX).toBe(pointGeojsonObject.features[0].geometry.coordinates[0]);
+                expect(data.centerY).toBe(pointGeojsonObject.features[0].geometry.coordinates[1]);
                 counter++;
                 done();
-            }
-        });
-        // Track events, we are interested in the second event that occurs when zooming the map
-        var eventCounter = 0;
+            });
 
-        channel.log('Zooming to feature', testParams);
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
-        channel.log('Zoom to feature done.')
+            channel.log('Centering to feature.', addPointFeatureParams);
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
+            channel.log('Center to feature done.')
+        });
+
+        it('Zooms to at most to maxZoomLevel when centering', function (done) {
+            // Set zoom level
+            var maxZoomLevel = 5;
+            var testParams = [pointGeojsonObject, {...addPointFeatureParams[1], maxZoomLevel}]
+
+            // Centering to feature launches event
+            handleEvent('AfterMapMoveEvent', function (data) {
+                channel.log('AfterMapMoveEvent launched!', data);
+                eventCounter++;
+
+                if (eventCounter === 2) {
+                    expect(data.zoom).not.toBeGreaterThan(maxZoomLevel);
+                    counter++;
+                    done();
+                }
+            });
+            // Track events, we are interested in the second event that occurs when zooming the map
+            var eventCounter = 0;
+
+            channel.log('Zooming to feature', testParams);
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
+            channel.log('Zoom to feature done.')
+        });
+
+        it('Sets map scale at least to to minScale when centering', function (done) {
+            // Set minimum map scale
+            var minScale = 1000;
+            var testParams = [pointGeojsonObject, {...addPointFeatureParams[1], minScale}];
+
+            // Centering to feature launches event
+            handleEvent('AfterMapMoveEvent', function (data) {
+                channel.log('AfterMapMoveEvent launched!', data);
+                eventCounter++;
+
+                if (eventCounter === 2) {
+                    expect(data.scale).toBeGreaterThanOrEqual(minScale);
+                    counter++;
+                    done();
+                }
+            });
+            // Track events, we are interested in the second event that occurs when zooming the map
+            var eventCounter = 0;
+
+            channel.log('Setting map scale', testParams);
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
+            channel.log('Zoom to feature done.')
+        });
+
+        it('Zooms to features', function(done) {
+            handleEvent('FeatureEvent', function(data) {
+                channel.log('FeatureEvent launched!', data);
+                expect(data.operation).toEqual('zoom');
+                expect(data.features).toBeDefined();
+                counter++;
+                done()
+            });
+
+            channel.postRequest('MapModulePlugin.ZoomToFeaturesRequest', []);
+            channel.log('ZoomFeaturesRequest done.')
+        });
+
     });
 
-    it('Sets map scale at least to to minScale when centering', function (done) {
-        // Set minimum map scale
-        var minScale = 1000;
-        var testParams = [pointGeojsonObject, {...addPointFeatureParams[1], minScale}];
 
-        // Centering to feature launches event
-        handleEvent('AfterMapMoveEvent', function (data) {
-            channel.log('AfterMapMoveEvent launched!', data);
-            eventCounter++;
+    describe('Remove features from map', function () {
 
-            if (eventCounter === 2) {
-                expect(data.scale).toBeGreaterThanOrEqual(minScale);
+        it("Removes specific features", function(done) {
+            // AddFeaturesToMapRequest adds line and point features
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addLineFeatureParams);
+            channel.log('AddFeaturesToMapRequest:', addLineFeatureParams);
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
+            channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
+            // Listen FeatureEvent for RemoveFeaturesFromMapRequest
+            handleEvent('FeatureEvent', function(data) {
+                channel.log('FeatureEvent trigggered:', data);
+                expect(data.operation).toBe("remove");
+                // Only the line string feature is removed
+                expect(data.features.length).toBe(1);
+                expect(data.features[0].geojson.features[0].geometry.type).toBe(lineGeojsonObject.features[0].geometry.type);
                 counter++;
                 done();
-            }
+            });
+            // Remove all features which 'test_property' === 'line feature' from the layer id==='VECTOR'
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', ['test_property', lineGeojsonObject.features[0].properties.test_property, addLineFeatureParams[1].layerId]);
+            channel.log('RemoveFeaturesFromMapRequest test_property:', lineGeojsonObject.features[0].properties.test_property, addLineFeatureParams[1].layerId);
         });
-        // Track events, we are interested in the second event that occurs when zooming the map
-        var eventCounter = 0;
 
-        channel.log('Setting map scale', testParams);
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
-        channel.log('Zoom to feature done.')
-    });
-
-    it('Appends options and properties to features', function (done) {
-        handleEvent('FeatureEvent', function(data) {
-            channel.log('FeatureEvent triggered:', data);
-            // Layer id matches
-            expect(data.features[0].layerId).toBe(addPointFeatureParams[1].layerId);
-            // GeoJSON properties added
-            expect(data.features[0].geojson.features[0].properties.label).toBe(pointGeojsonObject.features[0].properties.label);
-            expect(data.features[0].geojson.features[0].properties.test_property).toBe(pointGeojsonObject.features[0].properties.test_property);
-            // Additional options added
-            expect(data.features[0].geojson.features[0].properties.testAttribute).toBe(addPointFeatureParams[1].attributes.testAttribute);
-            expect(data.features[0].geojson.features[0].properties["oskari-cursor"]).toBe(addPointFeatureParams[1].cursor);
+        it("Removes all features", function(done) {
+            //annihilate everything - does not trigger featureEvent currently
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+            channel.log('FeatureEvent triggered.');
             counter++;
             done();
         });
 
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
-        channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
-    })
-
-    it("Removes specific features", function(done) {
-        // AddFeaturesToMapRequest adds line and point features
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addLineFeatureParams);
-        channel.log('AddFeaturesToMapRequest:', addLineFeatureParams);
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
-        channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
-        // Listen FeatureEvent for RemoveFeaturesFromMapRequest
-        handleEvent('FeatureEvent', function(data) {
-            channel.log('FeatureEvent trigggered:', data);
-            expect(data.operation).toBe("remove");
-            // Only the line string feature is removed
-            expect(data.features.length).toBe(1);
-            expect(data.features[0].geojson.features[0].geometry.type).toBe(lineGeojsonObject.features[0].geometry.type);
-            counter++;
-            done();
-        });
-        // Remove all features which 'test_property' === 'line feature' from the layer id==='VECTOR'
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', ['test_property', lineGeojsonObject.features[0].properties.test_property, addLineFeatureParams[1].layerId]);
-        channel.log('RemoveFeaturesFromMapRequest test_property:', lineGeojsonObject.features[0].properties.test_property, addLineFeatureParams[1].layerId);
     });
 
-    it("Removes all features", function(done) {
-        //annihilate everything - does not trigger featureEvent currently
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-        channel.log('FeatureEvent triggered.');
-        counter++;
-        done();
-    });
-
-    it('Zooms to features', function(done) {
-        handleEvent('FeatureEvent', function(data) {
-            channel.log('FeatureEvent launched!', data);
-
-            expect(data.operation).toEqual('zoom');
-            expect(data.features).toBeDefined();
-
-            counter++;
-            done()
-        });
-
-        channel.postRequest('MapModulePlugin.ZoomToFeaturesRequest', []);
-    });
 
     it("Gets feature info", function(done) {
 
@@ -231,6 +224,25 @@ describe('Features', function(){
 
         channel.postRequest('MapModulePlugin.GetFeatureInfoRequest', [defaultPosition.centerX, defaultPosition.centerY]);
     });
+
+    it('Appends options and properties to features', function (done) {
+        handleEvent('FeatureEvent', function(data) {
+            channel.log('FeatureEvent triggered:', data);
+            // Layer id matches
+            expect(data.features[0].layerId).toBe(addPointFeatureParams[1].layerId);
+            // GeoJSON properties added
+            expect(data.features[0].geojson.features[0].properties.label).toBe(pointGeojsonObject.features[0].properties.label);
+            expect(data.features[0].geojson.features[0].properties.test_property).toBe(pointGeojsonObject.features[0].properties.test_property);
+            // Additional options added
+            expect(data.features[0].geojson.features[0].properties.testAttribute).toBe(addPointFeatureParams[1].attributes.testAttribute);
+            expect(data.features[0].geojson.features[0].properties["oskari-cursor"]).toBe(addPointFeatureParams[1].cursor);
+            counter++;
+            done();
+        });
+
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
+        channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
+    })
 
 });
 
