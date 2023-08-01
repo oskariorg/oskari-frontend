@@ -300,9 +300,21 @@ describe('Features', function(){
 
     describe('Add feature layers', function () {
 
+        beforeEach(function (done) {
+            // Add feature layer for tests
+            channel.postRequest('VectorLayerRequest', [featureLayer]);
+            done()
+        });
+
+        afterEach(function (done) {
+            // Clean up
+            channel.postRequest('VectorLayerRequest', [{...featureLayer.layerId, remove: true}]);
+            done()
+        });
+
         it('Adds a feature layer', function (done) {
             channel.postRequest('VectorLayerRequest', [featureLayer]);
-            channel.log('VectorLayerRequest', [featureLayer]);
+            channel.log('Adding layer:', [featureLayer]);
 
             channel.getFeatures([], function (data) {
                 channel.log('getFeatures:', data);
@@ -314,7 +326,28 @@ describe('Features', function(){
             })
         });
 
+        it('Removes layer', function (done) {
+            channel.postRequest('VectorLayerRequest', [{layerId: featureLayer.layerId, remove: true}]);
+            channel.log('Removing layer:', [{layerId: featureLayer.layerId, remove: true}]);
+
+            channel.getFeatures([], function (data) {
+                channel.log('getFeatures:', data);
+                expect(data[featureLayer.layerId]).not.toBeDefined();
+
+                channel.log('Remove layer done.');
+                counter++;
+                done();
+            })
+        });
+
         it('Adds features to layer', function (done) {
+            // TODO:
+            counter++;
+            done();
+        })
+
+        it('Updates layer properties', function (done) {
+            // TODO:
             counter++;
             done();
         })
