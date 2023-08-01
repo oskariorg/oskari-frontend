@@ -27,6 +27,8 @@ describe('Features', function(){
         expect(counter).toEqual(1);
         // Reset event handlers.
         resetEventHandlers();
+        // Remove features from map
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
     });
 
     afterAll(function () {
@@ -178,24 +180,57 @@ describe('Features', function(){
             // Listen FeatureEvent for RemoveFeaturesFromMapRequest
             handleEvent('FeatureEvent', function(data) {
                 channel.log('FeatureEvent trigggered:', data);
+                eventCounter++
                 expect(data.operation).toBe("remove");
                 // Only the line string feature is removed
                 expect(data.features.length).toBe(1);
                 expect(data.features[0].geojson.features[0].geometry.type).toBe(lineGeojsonObject.features[0].geometry.type);
-                counter++;
-                done();
             });
+
+            var eventCounter = 0;
+
             // Remove all features which 'test_property' === 'line feature' from the layer id==='VECTOR'
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', ['test_property', lineGeojsonObject.features[0].properties.test_property, addLineFeatureParams[1].layerId]);
             channel.log('RemoveFeaturesFromMapRequest test_property:', lineGeojsonObject.features[0].properties.test_property, addLineFeatureParams[1].layerId);
+        
+            // Wait for events to trigger
+            setTimeout(function () {
+                // Expect only 1 FeatureEvent
+                if (eventCounter === 1) {
+                    counter++;
+                    done();
+                }
+            }, 1000);
         });
 
         it("Removes all features", function(done) {
-            //annihilate everything - does not trigger featureEvent currently
+            // AddFeaturesToMapRequest adds line and point features
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addLineFeatureParams);
+            channel.log('AddFeaturesToMapRequest:', addLineFeatureParams);
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
+            channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
+
+            var eventCounter = 0;
+
+            handleEvent('FeatureEvent', function(data) {
+                channel.log('FeatureEvent trigggered:', data);
+                expect(data.operation).toBe('remove');
+                expect(data.features.length).toBe(1);
+                eventCounter++;
+            });
+
+            // Annihilate everything - Triggers a FeatureEvent for each removed feature
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
             channel.log('FeatureEvent triggered.');
-            counter++;
-            done();
+
+            // Wait for events to trigger
+            setTimeout(function () {
+                // Expect 2 FeatureEvents since 2 features were removed
+                if (eventCounter === 2) {
+                    counter++;
+                    done();
+                }
+            }, 1000);
         });
 
     });
