@@ -69,6 +69,16 @@ var tourOptions = {
   "srsName": "EPSG:3067"
 };
 
+var layerParams = {
+  layerId: 1632,
+  changeLayerStyle: {
+    SLD_BODY: "<?xml version=\"1.0\" ?><StyledLayerDescriptor version=\"1.0.0\" xmlns=\"http://www.opengis.net/sld\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd\"><NamedLayer><Name>tieliikenne:tieliikenne_2015</Name><UserStyle><Title>Heatmap</Title><FeatureTypeStyle><Transformation><ogc:Function name=\"gs:Heatmap\"><ogc:Function name=\"parameter\"><ogc:Literal>data</ogc:Literal></ogc:Function><ogc:Function name=\"parameter\"><ogc:Literal>radiusPixels</ogc:Literal><ogc:Function name=\"env\"><ogc:Literal>radius</ogc:Literal><ogc:Literal>30</ogc:Literal></ogc:Function></ogc:Function><ogc:Function name=\"parameter\"><ogc:Literal>pixelsPerCell</ogc:Literal><ogc:Literal>10</ogc:Literal></ogc:Function><ogc:Function name=\"parameter\"><ogc:Literal>outputBBOX</ogc:Literal><ogc:Function name=\"env\"><ogc:Literal>wms_bbox</ogc:Literal></ogc:Function></ogc:Function><ogc:Function name=\"parameter\"><ogc:Literal>outputWidth</ogc:Literal><ogc:Function name=\"env\"><ogc:Literal>wms_width</ogc:Literal></ogc:Function></ogc:Function><ogc:Function name=\"parameter\"><ogc:Literal>outputHeight</ogc:Literal><ogc:Function name=\"env\"><ogc:Literal>wms_height</ogc:Literal></ogc:Function></ogc:Function></ogc:Function></Transformation><Rule><RasterSymbolizer><Geometry><ogc:PropertyName>the_geom</ogc:PropertyName></Geometry><Opacity>1</Opacity><ColorMap type=\"ramp\" ><ColorMapEntry color=\"#FFFFFF\" quantity=\"0.02\" opacity=\"0\" /><ColorMapEntry color=\"#4444FF\" quantity=\"0.1\" opacity=\"1\" /><ColorMapEntry color=\"#FF0000\" quantity=\"0.5\" opacity=\"1\" /><ColorMapEntry color=\"#FFFF00\" quantity=\"1\" opacity=\"1\" /></ColorMap></RasterSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>"
+  },
+  resetLayerStyle: {
+    SLD_BODY: null
+  }
+};
+
 // ##################### //
 // ##### Features ##### //
 // ##################### //

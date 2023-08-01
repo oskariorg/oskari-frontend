@@ -541,6 +541,28 @@ describe('Map', function () {
 
     });
 
+    /**
+    * Tests require a map layer that support external SLD
+    */
+    describe('Change map layer style', function () {
+
+        it('Changes map layer style', function (done) {
+            channel.postRequest('MapModulePlugin.MapLayerUpdateRequest', [layerParams.layerId, true, layerParams.changeLayerStyle]);
+            channel.log('MapModulePlugin.MapLayerUpdateRequest', [layerParams.layerId, true, layerParams.changeLayerStyle]);
+            
+            counter++;
+            done();
+        });
+
+        it ('Resets map layer style', function (done) {
+            channel.postRequest('MapModulePlugin.MapLayerUpdateRequest', [layerParams.layerId, true, layerParams.resetLayerStyle]);
+            channel.log('MapModulePlugin.MapLayerUpdateRequest', [layerParams.layerId, true, layerParams.resetLayerStyle]);
+            
+            counter++;
+            done();
+        })
+    });
+
 });
 
 
