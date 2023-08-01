@@ -45,18 +45,22 @@ describe('Location', function(){
         handleEvent('SearchResultEvent', function(data) {
             channel.log('SearchResultEvent:', data);
             expect(data.success).toBe(true);
+            expect(data.requestParameters).toEqual(searchCriteria);
             expect(data.result.locations[0].name).toContain(searchCriteria);
-            
+
             result = Object.keys(data.result.locations[0]);
-                expect(result).toContain('channelId');
-                expect(result).toContain('id');
-                expect(result).toContain('lat');
-                expect(result).toContain('lon');
-                expect(result).toContain('rank');
-                expect(result).toContain('region');
-                expect(result).toContain('type');
-                //expect(result).toContain('village');
-                expect(result).toContain('zoomScale');
+            expect(result).toContain('zoomScale');
+            expect(result).toContain('paikkatyyppi');
+            expect(result).toContain('name');
+            expect(result).toContain('rank');
+            expect(result).toContain('lon');
+            expect(result).toContain('id');
+            expect(result).toContain('source');
+            expect(result).toContain('type');
+            expect(result).toContain('region');
+            expect(result).toContain('lat');
+            expect(result).toContain('channelId');
+
             counter++;
             done();
         });
