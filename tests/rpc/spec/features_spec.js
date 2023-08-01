@@ -298,6 +298,30 @@ describe('Features', function(){
     });
 
 
+    describe('Add feature layers', function () {
+
+        it('Adds a feature layer', function (done) {
+            channel.postRequest('VectorLayerRequest', [featureLayer]);
+            channel.log('VectorLayerRequest', [featureLayer]);
+
+            channel.getFeatures([], function (data) {
+                channel.log('getFeatures:', data);
+                expect(data[featureLayer.layerId]).toBeDefined();
+
+                channel.log('Add layer done.');
+                counter++;
+                done();
+            })
+        });
+
+        it('Adds features to layer', function (done) {
+            counter++;
+            done();
+        })
+
+    });
+
+
     it("Gets feature info", function(done) {
 
         handleEvent('DataForMapLocationEvent', function (data) {
