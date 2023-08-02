@@ -17,7 +17,7 @@ Test parameters for specs
 var counter;
 
 // ##################### //
-// ##### General ##### //
+// ##### General ####### //
 // ##################### //
 
 var general = {
@@ -28,7 +28,7 @@ var general = {
 };
 
 // ##################### //
-// ##### Map ##### //
+// ##### Map ########### //
 // ##################### //
 
 var defaultPosition = {
@@ -37,13 +37,6 @@ var defaultPosition = {
   zoom: 0,
   scale: 5805343,
   srsName: "EPSG:3067",
-};
-
-var defaultLayer = {
-  Id: "base_35",
-  Opacity: 100,
-  visible: true,
-  name: "Taustakarttasarja",
 };
 
 var routeSteps = [
@@ -86,26 +79,7 @@ var featureLayer = {
   layerId: "TEST_LAYER",
   opacity: 75,
   showLayer: true,
-  layerName: 'TEST_LAYER',
-  hover: {
-    featureStyle: {
-      fill: {
-        color: "#ff00ff",
-      },
-      stroke: {
-        color: "#000000",
-      },
-    },
-    content: [
-      {
-        key: "Layer: MY_VECTOR_LAYER",
-      },
-      {
-        key: "Name",
-        valueProperty: "name",
-      },
-    ],
-  },
+  layerName: "TEST_LAYER",
 };
 
 var pointGeojsonObject = {
@@ -142,7 +116,6 @@ var addPointFeatureParams = [
     centerTo: true,
     cursor: "zoom-in",
     prio: 2,
-    featureStyle: featureStyle,
     optionalStyles: [],
   },
 ];
@@ -178,10 +151,8 @@ var addLineFeatureParams = [
   {
     layerId: "VECTOR",
     clearPrevious: true,
-    layerOptions: testLayerOptions,
     centerTo: true,
     cursor: "zoom-in",
-    featureStyle: featureStyle,
     prio: 4,
     //minScale: 1451336
   },
@@ -229,33 +200,6 @@ var addPolygonFeatureParams = [
     // Add options here
   },
 ];
-
-// Styling for object
-var featureStyle = {
-  fill: {
-    color: "rgba(0,0,0,0.3)",
-  },
-  stroke: {
-    color: "#FF0000",
-    width: 5,
-  },
-  text: {
-    scale: 2,
-    fill: {
-      color: "rgba(0,0,0,1)",
-    },
-    stroke: {
-      color: "rgba(255,255,255,0)",
-      width: 1,
-    },
-    labelText: "Test feature",
-  },
-};
-
-var testLayerOptions = {
-  minResolution: 0,
-  maxResolution: 10000,
-};
 
 // layerId for forest vegetation map
 var queryLayerId = 492;
@@ -318,92 +262,16 @@ var myInfoBox = [
         defaultPosition.centerX +
         ", " +
         defaultPosition.centerY +
-        "</div>",
-      actions: [
-        {
-          name: "My link 1",
-          type: "link",
-          action: {
-            info: "this can include any info",
-            info2: "action-object can have any number of params",
-          },
-        },
-        {
-          name: "My link 2",
-          type: "link",
-          action: {
-            info: "this can include any info",
-            info2: "action-object can have any number of params",
-          },
-        },
-      ],
-    },
-    {
-      html: "<div>Zoom level: " + defaultPosition.zoom + "</div>",
-    },
-    {
-      actions: [
-        {
-          name: "My link 3",
-          type: "link",
-          action: {
-            info: "this can include any info",
-            info2: "action-object can have any number of params",
-          },
-        },
-        {
-          name: "My link 4",
-          type: "link",
-          action: {
-            info: "this can include any info",
-            info2: "action-object can have any number of params",
-          },
-        },
-        {
-          name: "My button 1",
-          type: "button",
-          group: 1,
-          action: {
-            info: "this can include any info",
-            info2: "action-object can have any number of params",
-            buttonInfo:
-              "This button has group 1 and is placed to the same row with other actions that have the same group",
-          },
-        },
-        {
-          name: "My button 2",
-          type: "button",
-          group: 1,
-          action: {
-            info: "this can include any info",
-            info2: "action-object can have any number of params",
-            buttonInfo:
-              "This button has group 1 and is placed to the same row with other actions that have the same group",
-          },
-        },
-      ],
-    },
+        "</div>"
+    }
   ],
   {
     lon: defaultPosition.centerX,
     lat: defaultPosition.centerY,
-  },
-  {
-    colourScheme: {
-      bgColour: "#00CCFF",
-      titleColour: "#FFFFFF",
-      headerColour: "#00CCFF",
-      iconCls: "icon-close-white",
-      buttonBgColour: "#00CCFF",
-      buttonLabelColour: "#FFFFFF",
-      linkColour: "#000000",
-    },
-    font: "georgia",
-    positioning: "left",
-  },
+  }
 ];
 
-var infoboxId = "myInfoBox";
+var infoboxId = myInfoBox[0];
 
 // # Send UI event
 var UIEvents = ["coordinatetool", "mapmodule.crosshair"];
