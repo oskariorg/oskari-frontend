@@ -85,6 +85,8 @@ var layerParams = {
 var featureLayer = {
   layerId: "TEST_LAYER",
   opacity: 75,
+  showLayer: true,
+  layerName: 'TEST_LAYER',
   hover: {
     featureStyle: {
       fill: {

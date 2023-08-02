@@ -102,13 +102,13 @@ describe('Features', function(){
 
             channel.log('Centering to feature.', addPointFeatureParams);
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
-            channel.log('Center to feature done.')
+            channel.log('Center to feature done.');
         });
 
         it('Zooms to at most to maxZoomLevel when centering', function (done) {
             // Set zoom level
             var maxZoomLevel = 5;
-            var testParams = [pointGeojsonObject, {...addPointFeatureParams[1], maxZoomLevel}]
+            var testParams = [pointGeojsonObject, {...addPointFeatureParams[1], maxZoomLevel}];
 
             // Centering to feature launches event
             handleEvent('AfterMapMoveEvent', function (data) {
@@ -126,7 +126,7 @@ describe('Features', function(){
 
             channel.log('Zooming to feature', testParams);
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
-            channel.log('Zoom to feature done.')
+            channel.log('Zoom to feature done.');
         });
 
         it('Sets map scale at least to to minScale when centering', function (done) {
@@ -150,7 +150,7 @@ describe('Features', function(){
 
             channel.log('Setting map scale', testParams);
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
-            channel.log('Zoom to feature done.')
+            channel.log('Zoom to feature done.');
         });
 
         it('Zooms to features', function(done) {
@@ -159,11 +159,11 @@ describe('Features', function(){
                 expect(data.operation).toEqual('zoom');
                 expect(data.features).toBeDefined();
                 counter++;
-                done()
+                done();
             });
 
             channel.postRequest('MapModulePlugin.ZoomToFeaturesRequest', []);
-            channel.log('ZoomFeaturesRequest done.')
+            channel.log('ZoomFeaturesRequest done.');
         });
 
     });
@@ -180,7 +180,7 @@ describe('Features', function(){
             // Listen FeatureEvent for RemoveFeaturesFromMapRequest
             handleEvent('FeatureEvent', function(data) {
                 channel.log('FeatureEvent trigggered:', data);
-                eventCounter++
+                eventCounter++;
                 expect(data.operation).toBe("remove");
                 // Only the line string feature is removed
                 expect(data.features.length).toBe(1);
@@ -246,7 +246,7 @@ describe('Features', function(){
 
         it('Gets only layer IDs', function (done) {
             channel.getFeatures([], function (data) {
-                channel.log('channel.getFeatures', data)
+                channel.log('channel.getFeatures', data);
 
                 expect(Object.keys(data).length).toBe(2);
                 // Default feature layer
@@ -291,8 +291,8 @@ describe('Features', function(){
 
                 channel.log('Get features done.');
                 counter++;
-                done()
-            })
+                done();
+            });
         });
 
     });
@@ -303,13 +303,13 @@ describe('Features', function(){
         beforeEach(function (done) {
             // Add feature layer for tests
             channel.postRequest('VectorLayerRequest', [featureLayer]);
-            done()
+            done();
         });
 
         afterEach(function (done) {
             // Clean up
             channel.postRequest('VectorLayerRequest', [{...featureLayer.layerId, remove: true}]);
-            done()
+            done();
         });
 
         it('Adds a feature layer', function (done) {
@@ -337,20 +337,50 @@ describe('Features', function(){
                 channel.log('Remove layer done.');
                 counter++;
                 done();
-            })
+            });
         });
 
         it('Adds features to layer', function (done) {
-            // TODO:
-            counter++;
-            done();
-        })
+            var testParams = [pointGeojsonObject, {layerId: featureLayer.layerId}];
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
+            channel.log('Adding feature to map layer:', testParams);
+
+            channel.getFeatures([true], function (data) {
+                channel.log('getFeatures:', data);
+
+                // Feature was added to feature layer correctly
+                expect(data[featureLayer.layerId].features.length).toBe(1);
+                expect(data[featureLayer.layerId].features[0].geometry.type).toBe('Point');
+                expect(data[featureLayer.layerId].features[0].geometry.coordinates).toEqual(pointGeojsonObject.features[0].geometry.coordinates);
+
+                counter++;
+                done();
+            });
+        });
 
         it('Updates layer properties', function (done) {
-            // TODO:
-            counter++;
-            done();
-        })
+            var testParams = {
+                layerId: featureLayer.layerId,
+                opacity: 100
+                // Possible to add more editable properties, like hover, but some do not appear in getAllLayers data
+            };
+
+            // Update feature layer
+            channel.postRequest('VectorLayerRequest', [testParams]);
+            channel.log('Updating layer properties:', testParams);
+
+            channel.getAllLayers(function (data) {
+                channel.log('getAllLayers:', data);
+
+                var editedLayer = data[data.length - 1]
+                expect(editedLayer.id).toBe(featureLayer.layerId);
+                expect(editedLayer.opacity).toBe(testParams.opacity);
+
+                counter++;
+                done();
+            });
+        });
 
     });
 
@@ -396,7 +426,7 @@ describe('Features', function(){
 
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
         channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
-    })
+    });
 
 });
 
