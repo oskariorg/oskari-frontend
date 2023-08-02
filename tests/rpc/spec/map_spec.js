@@ -388,10 +388,6 @@ describe('Map', function () {
             channel.getMapPosition(function (data) {
                 defaultPosition = data;
             });
-            //Save layer for testing.
-            channel.getAllLayers(function (data) {
-                defaultLayer = data;
-            });
             // Save state for loading.
             channel.getCurrentState(function (data) {
                 savedState = data;
@@ -448,8 +444,6 @@ describe('Map', function () {
                 expect(data.toolbar).toBeDefined();
                 expect(data.maprotator).toBeDefined();
                 expect(data.mapfull.state.plugins).toBeDefined();
-                // Basemap layer is at 0.
-                //expect(defaultLayer[0]).toEqual(jasmine.objectContaining(data.mapfull.state.selectedLayers[0]));
 
                 channel.log('GetCurrentState: ', data);
                 counter++;

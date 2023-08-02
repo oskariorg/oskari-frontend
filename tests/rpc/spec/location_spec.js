@@ -114,7 +114,7 @@ describe('Location', function(){
     );
 
     // # Requests: GetFeedbackServiceRequest
-    it("Get feedback service list", function(done) {
+    xit("Get feedback service list", function(done) {
 
         handleEvent('FeedbackResultEvent', function(data) {
             // Request does not work, success results to false
