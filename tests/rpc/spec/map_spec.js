@@ -557,6 +557,27 @@ describe('Map', function () {
         })
     });
 
+
+    it('Gets pixel measures in scale', function (done) {
+        // Measures in mm
+        var measure = [16, 9];
+        var scale = 50000;
+        channel.getPixelMeasuresInScale([measure, scale], function (data) {
+            channel.log('Get pixel measures in scale:', data)
+            // Returns scaled measures
+            expect(data.pixelMeasures.length).toBe(2);
+            expect(data.pixelMeasures).toEqual(jasmine.arrayContaining([jasmine.any(Number)]));
+            // Scale stays unchanged
+            expect(data.scale).toBe(scale);
+            // Zoom level changes depending on the size of map view port, can not expect an absolute value
+            expect(data.zoomLevel).toBeDefined();
+            expect(data.zoomLevel).toEqual(jasmine.any(Number))
+            
+            counter++;
+            done();
+        });
+    });
+
 });
 
 
