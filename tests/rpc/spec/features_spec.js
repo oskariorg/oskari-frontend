@@ -82,6 +82,24 @@ describe('Features', function(){
             channel.log('AddFeaturesToMapRequest:', addPolygonFeatureParams);
         });
 
+        it('Adds feature with WKT', function (done) {
+            handleEvent('FeatureEvent', function(data) {
+                channel.log('FeatureEvent triggered:', data);
+                expect(data.operation).toBe("add");
+                expect(data.features[0].geojson.features.length).toBe(1);
+                // Geometry type in WKT string
+                expect(data.features[0].geojson.features[0].geometry.type).toBe('Polygon');
+                // Number of coordinate pairs in wkt string
+                expect(data.features[0].geojson.features[0].geometry.coordinates[0].length).toBe(5);
+                counter++;
+                done();
+            });
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [WKT]);
+            channel.log('AddFeaturesToMapRequest', WKT);
+        });
+
+        
     });
 
 
