@@ -9,6 +9,7 @@ const NUMBER_FILTERS = ['greaterThan', 'atLeast', 'lessThan', 'atMost']; // For 
 const NUMBER_RAW_TYPES = ['int', 'double', 'long', 'float'];
 
 const SEPARATOR = ';';
+const BUNDLE_KEY = 'oskariui'
 
 const RowContainer = styled.div`
     display: flex;
@@ -104,7 +105,7 @@ export const cleanFilter = (layer, filter) => {
 };
 
 const getFilterOptions = list => list.map(value => {
-    const label = Oskari.getMsg('admin-layereditor', `attributes.featureFilter.operators.${value}`)
+    const label = Oskari.getMsg(BUNDLE_KEY, `FeatureFilter.operators.${value}`)
     return { label, value };
 });
 
@@ -183,12 +184,12 @@ const FilterRow = ({properties, labels = {}, filter = {}, onFilterUpdate, onFilt
             )}
             { !isNumber &&
                 <IconButton bordered icon='Aa' active={caseSensitive}
-                    title={<Message messageKey={`attributes.featureFilter.caseSensitive.${caseSensitive}`}/>}
+                    title={<Message messageKey={`FeatureFilter.caseSensitive.${caseSensitive}`}/>}
                     onClick={() => onValueChange('caseSensitive', !caseSensitive)}/>
             }
             { isNumber &&
                 <IconButton bordered icon='><' active={isRange} onClick={toggleRange}
-                    title={<Message messageKey='attributes.featureFilter.range'/>}/>
+                    title={<Message messageKey='FeatureFilter.range'/>}/>
             }
             { typeof onFilterRemove === 'function' &&
                 <IconButton bordered type='delete' onClick={onFilterRemove} />
@@ -227,10 +228,10 @@ const MultiFilter = ({and, or, onUpdate, ...rest}) => {
         <Fragment>
             <Buttons>
                 <Button onClick={() => toggle('AND', !and)}>
-                    <Message messageKey={and ? 'buttons.delete' : 'buttons.add'} bundleKey='oskariui'/>&nbsp;AND
+                    <Message messageKey={and ? 'buttons.delete' : 'buttons.add'}/>&nbsp;AND
                 </Button>
                 <Button onClick={() => toggle('OR', !or)}>
-                    <Message messageKey={or ? 'buttons.delete' : 'buttons.add'} bundleKey='oskariui'/>&nbsp;OR
+                    <Message messageKey={or ? 'buttons.delete' : 'buttons.add'}/>&nbsp;OR
                 </Button>
             </Buttons>
             <FilterList type='AND' onUpdate={onUpdate} filters={and} {...rest} />
@@ -249,19 +250,19 @@ export const FeatureFilter = ({  filter = {}, onChange, ...rest }) => {
     // TODO: on modal close clean filter and notify if cleaned
     console.log('state', state);
     return (
-        <Fragment>
+        <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Radio.Group value={single} onChange={evt => setSingle(evt.target.value)}>
                 <Radio.Button value={true}>
-                    <Message messageKey='attributes.featureFilter.single'/>
+                    <Message messageKey='FeatureFilter.single'/>
                 </Radio.Button>
                 <Radio.Button value={false}>
-                    <Message messageKey='attributes.featureFilter.list'/>
+                    <Message messageKey='FeatureFilter.list'/>
                 </Radio.Button>
             </Radio.Group>
             <Margin/>
             { single && <FilterRow filter={state.property} onFilterUpdate={filter => onUpdate('property', filter)} {...rest} /> }
             { !single && <MultiFilter and={state.AND} or={state.OR} onUpdate={onUpdate} {...rest} /> }
-        </Fragment>
+        </LocaleProvider>
     );
 };
 

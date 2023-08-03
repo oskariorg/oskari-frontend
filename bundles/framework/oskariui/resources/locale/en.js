@@ -107,6 +107,26 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading: 'Loading...'
+        },
+        FeatureFilter: {
+            single: 'Single property',
+            list: 'More properties',
+            range: 'Use value range',
+            caseSensitive: {
+                true: 'Case sensitive',
+                false: 'Case insensitive'
+            },
+            operators: {
+                value: 'is',
+                in: 'in',
+                notIn: 'not in',
+                like: 'like',
+                notLike: 'not like',
+                greaterThan: 'greater than',
+                atLeast: 'at least',
+                lessThan: 'less than',
+                atMost: 'at most'
+            }
         }
     }
 });

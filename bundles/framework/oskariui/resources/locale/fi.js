@@ -107,6 +107,26 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading: 'Ladataan...'
+        },
+        FeatureFilter: {
+            single: 'Yksi ominaisuustieto',
+            list: 'Monta ominaisuustietoa',
+            range: 'Käytä arvoaluetta',
+            caseSensitive: {
+                true: 'Kirjainkoko vaikuttaa',
+                false: 'Kirjainkoko ei vaikuta'
+            },
+            operators: {
+                value: 'on',
+                in: 'jokin',
+                notIn: 'ei mikään',
+                like: 'kuten',
+                notLike: 'ei kuten',
+                greaterThan: 'suurempi kuin',
+                atLeast: 'vähintään',
+                lessThan: 'pienempi kuin',
+                atMost: 'enintään'
+            }
         }
     }
 });
