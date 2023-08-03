@@ -99,6 +99,19 @@ describe('Map', function () {
             done();
         });
 
+        it('Reorders layers', function (done) {
+            
+            var layerId = baseLayer.id;
+            var newPos = 1;
+            
+            // Reorder layer to position 1 on layer stack with request
+            channel.postRequest('RearrangeSelectedMapLayerRequest', [layerId, newPos])
+            channel.log('RearrangeSelectedMapLayerRequest', [layerId, newPos])
+
+            counter++;
+            done();
+        });
+
     });
 
 
