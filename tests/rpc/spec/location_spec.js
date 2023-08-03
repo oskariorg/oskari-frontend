@@ -78,23 +78,7 @@ describe('Location', function(){
        ],
         function(routeRequest, done) {
 
-            var myRouteRequest2 = {
-              "fromlat": defaultPosition.centerY,
-              "fromlon": defaultPosition.centerX,
-              "srs": defaultPosition.srsName,
-              "tolat": defaultPosition.centerY+10,
-              "tolon": defaultPosition.centerX+1,
-              "mode": routeRequest
-            };
-
-            var myRouteRequest = {
-                'fromlat': '6683840',
-                'fromlon': '360448',
-                'srs': 'EPSG:3067',
-                'tolat': '6675728',
-                'tolon': '394240',
-                'mode': routeRequest // TRANSIT, WALK, BICYCLE, TRAIN and so on
-              };
+            var myRouteRequest = {...routeRequestParams, mode: routeRequest};
 
             handleEvent('RouteResultEvent', function(data) {
                 channel.log('RouteResultEvent:', data);

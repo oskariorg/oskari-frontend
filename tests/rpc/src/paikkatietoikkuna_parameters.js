@@ -298,6 +298,15 @@ var cursorStyles = ["progress", "crosshair", "move", "pointer", "default"];
 // ##### Location ##### //
 // ##################### //
 
+var routeRequestParams = {
+  'fromlat': '6683840',
+  'fromlon': '360448',
+  'srs': 'EPSG:3067',
+  'tolat': '6675728',
+  'tolon': '394240'
+  //'mode': TRANSIT, WALK, BICYCLE, TRAIN and so on, value appended in unit tests
+};
+
 var searchCriteria = "Helsinki";
 
 // ##################### //
