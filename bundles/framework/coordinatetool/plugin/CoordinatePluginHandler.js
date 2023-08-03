@@ -103,6 +103,14 @@ class UIHandler extends StateHandler {
                 lat: this.formatNumber(this.state.latField, '.')
             }
         };
+
+        // Special treatment for these degree format projections to allow coordinates in decimal format as well
+        if (this.state.selectedProjection === 'EPSG:4258' || this.state.selectedProjection === 'LATLON:kkj') {
+            const regexp = /^\d+(\.|,)\d+$/;
+            if (regexp.test(data.lonlat.lon)) data.lonlat.lon = data.lonlat.lon + '°';
+            if (regexp.test(data.lonlat.lat)) data.lonlat.lat = data.lonlat.lat + '°';
+        }
+
         const converted = await this.convertCoordinates(data, this.state.selectedProjection, this.originalProjection);
         this.updateLonLat(converted, true, true, true);
     }
