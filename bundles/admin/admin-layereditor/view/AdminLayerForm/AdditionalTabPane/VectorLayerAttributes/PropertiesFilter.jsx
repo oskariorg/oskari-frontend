@@ -81,7 +81,7 @@ const SelectedProperty = ({name, label, index, reorder, toggle}) => {
     );
 };
 
-export const PropertiesFilter = ({ filter, update, properties, labels }) => {
+export const PropertiesFilter = ({ filter = {}, update, properties, labels }) => {
     const [lang, setLang] = useState('default');
     const options = ['default', ...Oskari.getSupportedLanguages()];
     const selectedProps = filter[lang] || filter.default || properties;
@@ -151,7 +151,7 @@ export const PropertiesFilter = ({ filter, update, properties, labels }) => {
 };
 
 PropertiesFilter.propTypes = {
-    filter: PropTypes.object.isRequired,
+    filter: PropTypes.object,
     update: PropTypes.func.isRequired,
     properties: PropTypes.array.isRequired,
     labels: PropTypes.object.isRequired

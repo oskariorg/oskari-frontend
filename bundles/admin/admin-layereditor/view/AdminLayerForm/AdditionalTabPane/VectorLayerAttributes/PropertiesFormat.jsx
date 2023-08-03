@@ -97,7 +97,7 @@ const CollapseContent = ({values = {}, onChange }) => {
     );
 };
 
-export const PropertiesFormat = ({ properties, selected, labels, format, update }) => {
+export const PropertiesFormat = ({ format = {}, properties, selected, labels, update }) => {
     const allSelected = properties.length === selected.length;
     const [showAll, setShowAll] = useState(allSelected);
     const propNames = showAll ? properties : selected;
@@ -135,7 +135,7 @@ export const PropertiesFormat = ({ properties, selected, labels, format, update 
 };
 
 PropertiesFormat.propTypes = {
-    format: PropTypes.object.isRequired,
+    format: PropTypes.object,
     update: PropTypes.func.isRequired,
     properties: PropTypes.array.isRequired,
     labels: PropTypes.object.isRequired,

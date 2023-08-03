@@ -30,14 +30,14 @@ const clean = obj => {
 };
 
 export const VectorLayerAttributes = ({ layer, controller }) => {
-    const { data = {} } = layer.attributes;
+    const { data = {}, filter: featureFilter } = layer.attributes;
     const { geomName, featureProperties = []} = layer.capabilities;
     const [modal, setModal] = useState(null);
     const [state, setState] = useState({
-        filter: data.filter || {},
-        locale: data.locale || {},
-        format: data.format || {},
-        featureFilter: layer.attributes.filter || {}
+        filter: data.filter,
+        locale: data.locale,
+        format: data.format,
+        featureFilter
     });
 
     const getButtonForModal = type => {
@@ -87,6 +87,11 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     const onModalUpdate = (value) => {
         setState({ ...state, [modal]: value });
     };
+    const onModalCancel = () => {
+        const attr = modal === 'featureFilter' ? featureFilter : data[modal];
+        setState({ ...state, [modal]: attr });
+        setModal(null);
+    };
     const properties = featureProperties.filter(prop => prop.name !== geomName);
     const propNames = properties.map(prop => prop.name);
     const geometryTypeSource = data.geometryType ? 'Attributes' : 'Capabilities';
@@ -123,8 +128,8 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 mask={ false }
                 maskClosable= { false }
                 open={ !!modal }
-                onOk={ () => onModalOk() }
-                onCancel={ () => setModal(null) }
+                onOk={ onModalOk}
+                onCancel={ onModalCancel }
                 cancelText={ <Message messageKey="cancel" /> }
                 okText={ <Message messageKey="save" /> }
                 width={ modal === 'featureFilter' ? 800 : 500 }
