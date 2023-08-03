@@ -130,15 +130,18 @@ Oskari.registerLocalization(
                     "lang": "Valitse tason kohteille näytettävät ominaisuustiedot ja niiden järjestys",
                     "default": "oletussuodattimelle",
                     "fromDefault": "Valitulle kielelle ei ole lisätty suodatinta. Valitulla kielellä käytetään oletussuodatinta. Muokkaa valintoja luodaksesi kielelle oman suodattimen.",
-                    "button": "Lisää suodatin"
+                    "add": "Lisää suodatin",
+                    "edit": "Muokkaa suodatinta"
                 },
                 "locale": {
                     "title": "Käyttöliittymässä näytettävät nimet ominaisuustiedoille",
-                    "button": "Lisää nimet"
+                    "add": "Lisää nimet",
+                    "edit": "Muokkaa nimiä"
                 },
                 "format": {
                     "title": "Kohteiden ominaisuustietojen arvon muotoilu",
-                    "button": "Muokkaa muotoilua",
+                    "add": "Lisää muotoilu",
+                    "edit": "Muokkaa muotoilua",
                     "type": {
                         "label": "Tyyppi",
                         "typeFormats": "Arvon tyyppi",

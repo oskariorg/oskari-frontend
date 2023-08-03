@@ -32,7 +32,7 @@ const PARAM_OPTIONS = {
     phone: ['label']
 };
 
-const localize = key => Oskari.getMsg(BUNDLE_NAME, `attributes.format.type.${key}`)
+const localize = key => Oskari.getMsg(BUNDLE_NAME, `attributes.format.type.${key}`);
 
 const getTypeOptions = () => {
     const opts = [];

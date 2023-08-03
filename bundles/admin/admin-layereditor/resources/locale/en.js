@@ -129,15 +129,18 @@ Oskari.registerLocalization(
                     "lang": "Choose shown feature properties and ordering",
                     "default": "for default filter",
                     "fromDefault": "Selected language doesn't have filter. Default filter is used for selected language. Edit values to create new filter for language.",
-                    "button": "Edit filter"
+                    "add": "Add filter",
+                    "edit": "Edit filter"
                 },
                 "locale": {
                     "title": "Labels for feature properties",
-                    "button": "Edit labels"
+                    "add": "Add labels",
+                    "edit": "Edit labels"
                 },
                 "format": {
                     "title": "Feature properties value formatting",
-                    "button": "Edit format",
+                    "add": "Add formatting",
+                    "edit": "Edit formatting",
                     "type": {
                         "label": "Type",
                         "typeFormats": "Value type",

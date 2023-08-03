@@ -10,8 +10,8 @@ import { InfoTooltip } from '../InfoTooltip';
 import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
 
 // Clean empty objects and values that doesn't need to store
-// format: false options
-// locale: empty strings
+// data.format: false options
+// data.locale: empty strings
 const clean = obj => {
     for (const key in obj) {
         const val = obj[key];
@@ -39,6 +39,15 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
         format: data.format || {},
         featureFilter: layer.attributes.filter || {}
     });
+
+    const getButtonForModal = type => {
+        const btn = Object.keys(state[type]).length === 0 ? 'add' : 'edit';
+        return (
+            <Button onClick={() => onButtonClick(type)}>
+                <Message messageKey={`attributes.${type}.${btn}`} />
+            </Button>
+        );
+    };
 
     const onGeometryTypeChange = value => {
         if (GEOMETRY_TYPES[0] === value) {
@@ -107,15 +116,9 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
             <Message messageKey='attributes.properties' />
             <StyledFormField>
                 <Space direction='horizontal'>
-                    <Button onClick={() => onButtonClick('filter')}>
-                        <Message messageKey='attributes.filter.button' />
-                    </Button>
-                    <Button onClick={() => onButtonClick('locale')}>
-                        <Message messageKey='attributes.locale.button' />
-                    </Button>
-                    <Button onClick={() => onButtonClick('format')}>
-                        <Message messageKey='attributes.format.button' />
-                    </Button>
+                    { getButtonForModal('filter') }
+                    { getButtonForModal('locale') }
+                    { getButtonForModal('format') }
                 </Space>
             </StyledFormField>
             <Modal
