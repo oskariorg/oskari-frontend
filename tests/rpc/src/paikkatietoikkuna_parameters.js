@@ -79,6 +79,10 @@ var layerParams = {
   },
 };
 
+// Measures in mm
+var measure = [16, 9];
+var scale = 50000;
+
 // ##################### //
 // ##### Features #####  //
 // ##################### //

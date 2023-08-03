@@ -568,9 +568,6 @@ describe('Map', function () {
 
 
     it('Gets pixel measures in scale', function (done) {
-        // Measures in mm
-        var measure = [16, 9];
-        var scale = 50000;
         channel.getPixelMeasuresInScale([measure, scale], function (data) {
             channel.log('Get pixel measures in scale:', data)
             // Returns scaled measures
