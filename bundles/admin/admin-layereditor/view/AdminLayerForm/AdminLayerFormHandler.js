@@ -290,6 +290,17 @@ class UIHandler extends StateHandler {
         this.updateLayerAttributes(attributes, layer);
     }
 
+    setFeatureFilter (filter = {}) {
+        const layer = { ...this.getState().layer };
+        let attributes = layer.attributes || {};
+        if (Object.keys(filter) === 0) {
+            delete attributes.filter;
+        } else {
+            attributes = { ...attributes, filter };
+        }
+        this.updateLayerAttributes(attributes, layer);
+    }
+
     setAttributesData (key, value) {
         const layer = { ...this.getState().layer };
         const { data = {} } = layer.attributes || {};
@@ -1202,6 +1213,7 @@ const wrapped = controllerMixin(UIHandler, [
     'saveVectorStyleToLayer',
     'setAttributes',
     'setAttributesData',
+    'setFeatureFilter',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
     'setClusteringDistance',
