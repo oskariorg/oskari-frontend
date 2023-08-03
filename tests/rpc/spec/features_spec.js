@@ -263,8 +263,8 @@ describe('Features', function(){
 
                 expect(Object.keys(data).length).toBe(2);
                 // Default feature layer
-                expect(data.VECTOR).toBeDefined();
-                expect(data.VECTOR).toEqual([]);
+                expect(data[addLineFeatureParams[1].layerId]).toBeDefined();
+                expect(data[addLineFeatureParams[1].layerId]).toEqual([]);
                 // Custom feature layer specified in request parameters
                 expect(data[addPointFeatureParams[1].layerId]).toBeDefined();
                 expect(data[addPointFeatureParams[1].layerId]).toEqual([]);
@@ -281,7 +281,7 @@ describe('Features', function(){
 
                 // Feature objects are grouped by ID
                 var pointObject = data[addPointFeatureParams[1].layerId].features[0];
-                var lineObject = data.VECTOR.features[0];
+                var lineObject = data[addLineFeatureParams[1].layerId].features[0];
                 expect(pointObject).toBeDefined();
                 expect(lineObject).toBeDefined();
                 
