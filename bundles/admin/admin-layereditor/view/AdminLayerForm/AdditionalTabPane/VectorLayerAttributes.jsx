@@ -2,6 +2,7 @@ import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Select, Option, Space, Button } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
+import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
 import { Controller, Messaging } from 'oskari-ui/util';
 import { PropertiesFilter, PropertiesLocale, PropertiesFormat } from './VectorLayerAttributes/';
 import { StyledFormField } from '../styled';
@@ -35,7 +36,8 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     const [state, setState] = useState({
         filter: data.filter || {},
         locale: data.locale || {},
-        format: data.format || {}
+        format: data.format || {},
+        featureFilter: layer.attributes.filter || {}
     });
 
     const onGeometryTypeChange = value => {
@@ -46,6 +48,12 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
         }
     };
     const onModalOk = () => {
+        if (modal === 'featureFilter') {
+            const filter = cleanFilter(state.featureFilter, featureProperties);
+            controller.setFeatureFilter(filter);
+            setModal(null);
+            return;
+        }
         // deep clone to not mess local state
         const value = JSON.parse(JSON.stringify(state[modal]));
         // clean twice to get rid of empty objects if last value is deleted from it
@@ -70,7 +78,8 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     const onModalUpdate = (value) => {
         setState({ ...state, [modal]: value });
     };
-    const propNames = featureProperties.filter(prop => prop.name !== geomName).map(prop => prop.name);
+    const properties = featureProperties.filter(prop => prop.name !== geomName);
+    const propNames = properties.map(prop => prop.name);
     const geometryTypeSource = data.geometryType ? 'Attributes' : 'Capabilities';
     const propLabels = Oskari.getLocalized(data.locale) || {};
     // gather selected properties from all (localized) filters
@@ -89,6 +98,11 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                         </Option>
                     )) }
                 </Select>
+            </StyledFormField>
+            <StyledFormField>
+                <Button onClick={() => onButtonClick('featureFilter')}>
+                    <Message messageKey={`attributes.featureFilter.button`} />
+                </Button>
             </StyledFormField>
             <Message messageKey='attributes.properties' />
             <StyledFormField>
@@ -112,7 +126,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 onCancel={ () => setModal(null) }
                 cancelText={ <Message messageKey="cancel" /> }
                 okText={ <Message messageKey="save" /> }
-                width={ 500 }
+                width={ modal === 'featureFilter' ? 800 : 500 }
             >
                 <h3><Message messageKey={`attributes.${modal}.title`} /></h3>
                 { modal === 'filter' &&
@@ -126,6 +140,10 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 { modal === 'format' &&
                     <PropertiesFormat update={onModalUpdate} properties={propNames}
                         format={state.format} labels={propLabels} selected={selectedProperties}/>
+                }
+                { modal === 'featureFilter' &&
+                    <FeatureFilter onChange={onModalUpdate} properties={propNames}
+                        filter={state.featureFilter} labels={propLabels} types={properties}/>
                 }
             </Modal>
         </Fragment>
