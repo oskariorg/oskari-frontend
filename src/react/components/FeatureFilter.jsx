@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { LocaleProvider } from '../util';
 import { Message, Select, Radio, TextInput, Button, Divider } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 
@@ -41,7 +42,7 @@ const toNumber = value => {
 
 // For admin: layer.capabilities.featureProperties => [{name, type}] (raw)
 // DescribeLayer => response.properties => [{name, type, rawType}]
-// wfs layer getPropertyTypes() => { name:type }
+// TODO: wfs layer getPropertyTypes() => { name:type }
 const isNumberType = (name, types = []) => {
     const { type } = types.find(p => p.name === name) || {};
     return type === 'number' || NUMBER_RAW_TYPES.includes(type);
@@ -83,22 +84,21 @@ const cleanFilterValues = (filter, types) => {
     return cleaned;
 };
 
-export const cleanFilter = (layer, filter) => {
+export const cleanFilter = (filter, types) => {
     if (!filter) {
         return {};
     }
-    const types = layer.capabilities.featureProperties;
-    const AND = filter?.AND.map(f => cleanFilterValues(f, types)).filter(a => a);
-    const OR = filter?.OR.map(cleanFilterValues).filter(a => a);
+    const AND = filter.AND?.map(f => cleanFilterValues(f, types)).filter(a => a) || [];
+    const OR = filter.OR?.map(f => cleanFilterValues(f, types)).filter(a => a) || [];
     const property = cleanFilterValues(filter.property);
     if (property && AND.length < 2  && OR.length < 2) {
         return { property };
     } 
     const cleaned = {};
-    if (AND.length > 2) {
+    if (AND.length >= 2) {
         cleaned.AND = AND;
     }
-    if (OR.length > 2) {
+    if (OR.length >= 2) {
         cleaned.OR = OR;
     }
     return cleaned;
@@ -109,17 +109,19 @@ const getFilterOptions = list => list.map(value => {
     return { label, value };
 });
 
-const FilterRow = ({properties, labels = {}, filter = {}, onFilterUpdate, onFilterRemove }) => {
+const FilterRow = ({properties, types, labels = {}, filter = {}, onFilterUpdate, onFilterRemove }) => {
     const { key, caseSensitive = false, ...operatorsObj } = filter;
-    const operators = Object.keys(operatorsObj);
-    const [ isRange, setRange ] = useState(operators.length === 2);
+    let operators = Object.keys(operatorsObj);
+    const isRange = operators.length === 2;
+    const isNumber = isNumberType(key, types);
     if (operators.length > 2) {
         // something went wrong
         return null;
     }
-
-    const propertyNames = properties.map(prop => prop.name);
-    const isNumber = isNumberType(key, properties);
+    // filter is object so we have to check that range operators are in right order
+    if (isRange && NUMBER_FILTERS.indexOf(operators[0]) > 1) {
+        operators.reverse();
+    }
 
     const onOperatorChange = (oldOP, newOP) => {
         const updated = { ...filter, [newOP]: filter[oldOP] };
@@ -134,7 +136,6 @@ const FilterRow = ({properties, labels = {}, filter = {}, onFilterUpdate, onFilt
             if (isRange) {
                 // reset operators
                 operators.forEach(op => delete updated[op]);
-                setRange(false);
             } else if (!newIsNumber && NUMBER_FILTERS.includes(op)) {
                 // selected operator isn't available for type -> update
                 updated[FILTERS[0]] = filter[op];
@@ -157,7 +158,6 @@ const FilterRow = ({properties, labels = {}, filter = {}, onFilterUpdate, onFilt
             updated.lessThan = '';
         }
         onFilterUpdate(updated);
-        setRange(toggled);
     };
 
     let filters = FILTERS;
@@ -170,7 +170,7 @@ const FilterRow = ({properties, labels = {}, filter = {}, onFilterUpdate, onFilt
     return (
         <RowContainer>
             <Select value={key} onChange={onKeyChange}
-                options={propertyNames.map(name => ({label: labels[name] || name, value: name})) }/>
+                options={properties.map(name => ({label: labels[name] || name, value: name})) }/>
             <Select value={operators[0]} onChange={value => onOperatorChange(operators[0], value)}
                 options={ getFilterOptions(filters)}/>
             <TextInput value={filter[operators[0]]} placeholder={placeholder}
@@ -241,14 +241,10 @@ const MultiFilter = ({and, or, onUpdate, ...rest}) => {
 };
 
 export const FeatureFilter = ({  filter = {}, onChange, ...rest }) => {
-    const [single, setSingle] = useState(!filter.AND && !filter.OR);
-    const [state, setState] = useState({ ...filter });
-
+    const [single, setSingle]= useState(!filter.AND && !filter.OR);
     const onUpdate = (key, value) => {
-        setState({...state, [key]: value });
+        onChange({...filter, [key]: value });
     };
-    // TODO: on modal close clean filter and notify if cleaned
-    console.log('state', state);
     return (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Radio.Group value={single} onChange={evt => setSingle(evt.target.value)}>
@@ -260,8 +256,8 @@ export const FeatureFilter = ({  filter = {}, onChange, ...rest }) => {
                 </Radio.Button>
             </Radio.Group>
             <Margin/>
-            { single && <FilterRow filter={state.property} onFilterUpdate={filter => onUpdate('property', filter)} {...rest} /> }
-            { !single && <MultiFilter and={state.AND} or={state.OR} onUpdate={onUpdate} {...rest} /> }
+            { single && <FilterRow filter={filter.property} onFilterUpdate={filter => onUpdate('property', filter)} {...rest} /> }
+            { !single && <MultiFilter and={filter.AND} or={filter.OR} onUpdate={onUpdate} {...rest} /> }
         </LocaleProvider>
     );
 };
@@ -270,5 +266,6 @@ FeatureFilter.propTypes = {
     filter: PropTypes.object,
     onChange: PropTypes.func.isRequired,
     properties: PropTypes.array.isRequired,
+    types: PropTypes.array,
     labels: PropTypes.object
 };
