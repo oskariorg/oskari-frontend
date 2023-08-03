@@ -148,28 +148,24 @@ describe('Map', function () {
             // Handle event
             handleEvent('AfterMapMoveEvent', function (data) {
                 channel.log('AfterMapMoveEvent launched!')
-                expect(data.centerX).toEqual(x);
-                expect(data.centerY).toEqual(y);
-                expect(data.zoom).toEqual(zoomLevel);
+                expect(data.centerX).toEqual(moveMapParams.x);
+                expect(data.centerY).toEqual(moveMapParams.y);
+                expect(data.zoom).toEqual(moveMapParams.zoomLevel);
                 counter++;
                 done();
             })
 
-            // Move to this position
-            var x = 552935;
-            var y = 7332639;
-            var zoomLevel = 7; // Not required in request
-
-            // AfterMapMove event triggers only when starting position is not the same as end position
             channel.getMapPosition(function (data) {
-
-                var xIsDifferent = data.centerX !== x;
-                var yIsDifferent = data.centery !== y;
-                var zoomIsDifferent = data.zoom !== zoomLevel;
+                // Compare current map position to test parameters, since AfterMapMove event 
+                // triggers only when starting position is not the same as end position
+                var xIsDifferent = data.centerX !== moveMapParams.x;
+                var yIsDifferent = data.centery !== moveMapParams.y;
+                var zoomIsDifferent = data.zoom !== moveMapParams.zoomLevel;
 
                 expect(xIsDifferent || yIsDifferent || zoomIsDifferent).toEqual(true);
             });
-            channel.postRequest('MapMoveRequest', [x, y, zoomLevel]);
+            channel.postRequest('MapMoveRequest', Object.values(moveMapParams));
+            channel.log('MapMoveRequest', Object.values(moveMapParams));
         });
 
     });

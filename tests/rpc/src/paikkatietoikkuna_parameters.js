@@ -41,6 +41,12 @@ var defaultPosition = {
   srsName: "EPSG:3067",
 };
 
+var moveMapParams = {
+  x: 552935,
+  y: 7332639,
+  zoomLevel: 7, // Not required in request
+};
+
 var routeSteps = [
   {
     lon: 488704,
@@ -267,13 +273,13 @@ var myInfoBox = [
         defaultPosition.centerX +
         ", " +
         defaultPosition.centerY +
-        "</div>"
-    }
+        "</div>",
+    },
   ],
   {
     lon: defaultPosition.centerX,
     lat: defaultPosition.centerY,
-  }
+  },
 ];
 
 var infoboxId = myInfoBox[0];
