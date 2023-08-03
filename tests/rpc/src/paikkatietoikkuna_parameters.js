@@ -16,6 +16,8 @@ Test parameters for specs
 */
 var counter;
 
+var eventCounter;
+
 // ##################### //
 // ##### General ####### //
 // ##################### //

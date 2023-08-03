@@ -5,6 +5,7 @@ describe('Features', function(){
              // Reset map and event counter.
             channel.resetState(function() {
                 counter = 0;
+                eventCounter = 0;
                 // Get default position
                 channel.getMapPosition(function(data) {
                     defaultPosition = data;
@@ -99,7 +100,7 @@ describe('Features', function(){
             channel.log('AddFeaturesToMapRequest', WKT);
         });
 
-        
+
     });
 
 
@@ -132,15 +133,14 @@ describe('Features', function(){
             handleEvent('AfterMapMoveEvent', function (data) {
                 channel.log('AfterMapMoveEvent launched!', data);
                 eventCounter++;
-
+                
+                // Track events, we are interested in the second event that occurs when zooming the map
                 if (eventCounter === 2) {
                     expect(data.zoom).not.toBeGreaterThan(maxZoomLevel);
                     counter++;
                     done();
                 }
             });
-            // Track events, we are interested in the second event that occurs when zooming the map
-            var eventCounter = 0;
 
             channel.log('Zooming to feature', testParams);
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
@@ -157,14 +157,13 @@ describe('Features', function(){
                 channel.log('AfterMapMoveEvent launched!', data);
                 eventCounter++;
 
+                // Track events, we are interested in the second event that occurs when zooming the map
                 if (eventCounter === 2) {
                     expect(data.scale).toBeGreaterThanOrEqual(minScale);
                     counter++;
                     done();
                 }
             });
-            // Track events, we are interested in the second event that occurs when zooming the map
-            var eventCounter = 0;
 
             channel.log('Setting map scale', testParams);
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', testParams);
@@ -205,8 +204,6 @@ describe('Features', function(){
                 expect(data.features[0].geojson.features[0].geometry.type).toBe(lineGeojsonObject.features[0].geometry.type);
             });
 
-            var eventCounter = 0;
-
             // Remove all features which 'test_property' === 'line feature' from the layer id==='VECTOR'
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', ['test_property', lineGeojsonObject.features[0].properties.test_property, addLineFeatureParams[1].layerId]);
             channel.log('RemoveFeaturesFromMapRequest test_property:', lineGeojsonObject.features[0].properties.test_property, addLineFeatureParams[1].layerId);
@@ -227,8 +224,6 @@ describe('Features', function(){
             channel.log('AddFeaturesToMapRequest:', addLineFeatureParams);
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', addPointFeatureParams);
             channel.log('AddFeaturesToMapRequest:', addPointFeatureParams);
-
-            var eventCounter = 0;
 
             handleEvent('FeatureEvent', function(data) {
                 channel.log('FeatureEvent trigggered:', data);

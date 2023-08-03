@@ -103,7 +103,7 @@ describe('Map', function () {
             
             var layerId = baseLayer.id;
             var newPos = 1;
-            
+
             // Reorder layer to position 1 on layer stack with request
             channel.postRequest('RearrangeSelectedMapLayerRequest', [layerId, newPos])
             channel.log('RearrangeSelectedMapLayerRequest', [layerId, newPos])
@@ -525,6 +525,8 @@ describe('Map', function () {
 
         it('Tours the map', function (done) {
 
+            eventCounter = 0;
+
             handleEvent('MapTourEvent', function (data) {
                 channel.log('MapTourEvent launched!');
                 eventCounter++;
@@ -532,8 +534,6 @@ describe('Map', function () {
                 expect(data.completed).toEqual(data.status.steps === data.status.step);
                 expect(data.cancelled).toEqual(false);
             });
-
-            var eventCounter = 0;
 
             channel.postRequest('MapTourRequest', [routeSteps, tourOptions]);
 
