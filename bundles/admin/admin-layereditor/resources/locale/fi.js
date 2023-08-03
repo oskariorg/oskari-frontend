@@ -125,6 +125,11 @@ Oskari.registerLocalization(
                     "area":"Alue",
                     "collection":"Kaikki"
                 },
+                "featureFilter": {
+                    "title": "Kohteiden suodatus",
+                    "add": "Lisää kohteiden suodatus",
+                    "edit": "Muokkaa kohteiden suodatusta"
+                },
                 "filter": {
                     "title": "Ominaisuustietojen näyttäminen",
                     "lang": "Valitse tason kohteille näytettävät ominaisuustiedot ja niiden järjestys",

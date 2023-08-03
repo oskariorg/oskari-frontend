@@ -124,6 +124,11 @@ Oskari.registerLocalization(
                     "area":"Area",
                     "collection":"Collection"
                 },
+                "featureFilter": {
+                    "title": "Feature filter",
+                    "add": "Add feature filter",
+                    "edit": "Edit feature filter"
+                },
                 "filter": {
                     "title": "Properties filter",
                     "lang": "Choose shown feature properties and ordering",

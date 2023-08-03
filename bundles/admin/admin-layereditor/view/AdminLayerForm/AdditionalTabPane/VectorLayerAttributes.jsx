@@ -109,9 +109,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 </Select>
             </StyledFormField>
             <StyledFormField>
-                <Button onClick={() => onButtonClick('featureFilter')}>
-                    <Message messageKey={`attributes.featureFilter.button`} />
-                </Button>
+                { getButtonForModal('featureFilter') }
             </StyledFormField>
             <Message messageKey='attributes.properties' />
             <StyledFormField>
