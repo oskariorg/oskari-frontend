@@ -184,6 +184,10 @@ Oskari.registerLocalization(
                     "name": "Tyylin nimi",
                     "selectDefault": "Valitse oletustyyli",
                     "deleteStyle": "Poista tyyli",
+                    "optionalStyles": "Tyylittely ominaisuustietojen mukaan",
+                    "featureStyle": "Tyylimääritykset",
+                    "cesium": "3D Tiles/Cesium tyylimääritykset",
+                    "mapbox": "Mapbox tyylimääritykset",
                     "edit": {
                         "editor": "Muokkaa editorilla",
                         "json": "Muokkaa JSON"
@@ -198,12 +202,6 @@ Oskari.registerLocalization(
                         "name": "Täytä nimi tyylille",
                         "noStyles": "Ei tallennettuja tyylejä",
                         "json": "Tyylimääritysten JSON-syntaksi on virheellinen."
-                    },
-                    "json": {
-                        "featureStyle": "Tyylimääritykset (JSON)",
-                        "optionalStyles": "Tyylittely ominaisuustietojen mukaan (JSON)",
-                        "cesium": "3D Tiles/Cesium tyylimääritykset (JSON)",
-                        "mapbox": "Mapbox tyylimääritykset (JSON)"
                     }
                 }
             },
