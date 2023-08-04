@@ -31,9 +31,6 @@ const Buttons = styled.div`
         margin-right: 10px;
     }
 `;
-const Margin = styled.div`
-    margin-bottom: 24px;
-`;
 
 const toNumber = value => {
     const modified = value.replace(',', '.');
@@ -60,7 +57,7 @@ const cleanFilterValues = (filter, types) => {
         if(!value) {
             return obj;
         }
-        if (op === 'in' || op === 'notIn') {
+        if ((op === 'in' || op === 'notIn') && typeof value === 'string') {
             const arr = value.split(SEPARATOR);
             const modified = isNumber ? arr.map(toNumber) : arr.map(s => s.trim());
             if (modified.length) {
@@ -102,6 +99,42 @@ export const cleanFilter = (filter, types) => {
         cleaned.OR = OR;
     }
     return cleaned;
+};
+
+export const getDescription = filter => {
+    const { property, AND = [], OR = [] } = filter;
+
+    const getShortOp = op => {
+        if (!op) return '';
+        if (FILTERS.includes(op)) {
+            return op.includes('not') ? '≠' : '=';
+        }
+        return op.includes('Than') ? '<' : '≦';
+    };
+    const getProperty = ({key, caseSensitive, ...opObj}) => {
+        if (!key) return '';
+        const [ op, range ] = Object.keys(opObj);
+        const short = getShortOp(op);
+        const val = key => typeof opObj[key] === 'undefined' ? '' : opObj[key];
+        if (range) {
+            const rShort = getShortOp(range);
+            if (val(range) < val(op)) {
+                // got operators in wrong order from object
+                return `${val(range)} ${rShort} ${key} ${short} ${val(op)}`;
+            }
+            return `${val(op)} ${short} ${key} ${rShort} ${val(range)}`;
+        }
+        return `${key} ${short} ${val(op)}`;
+    };
+    if (property) {
+        return getProperty(property);
+    }
+    const and = AND.map(getProperty).join(' AND ');
+    const or  = OR.map(getProperty).join(' OR ');
+    if (AND.length && OR.length) {
+        return `(${and}) AND (${or})`;
+    }
+    return `${and}${or}`
 };
 
 const getFilterOptions = list => list.map(value => {
@@ -159,6 +192,10 @@ const FilterRow = ({properties, types, labels = {}, filter = {}, onFilterUpdate,
         }
         onFilterUpdate(updated);
     };
+    const valueForInput = opIndex => {
+        const value = filter[operators[opIndex]];
+        return Array.isArray(value) ? value.join(SEPARATOR) : value;
+    };
 
     let filters = FILTERS;
     if (isRange) {
@@ -173,13 +210,13 @@ const FilterRow = ({properties, types, labels = {}, filter = {}, onFilterUpdate,
                 options={properties.map(name => ({label: labels[name] || name, value: name})) }/>
             <Select value={operators[0]} onChange={value => onOperatorChange(operators[0], value)}
                 options={ getFilterOptions(filters)}/>
-            <TextInput value={filter[operators[0]]} placeholder={placeholder}
+            <TextInput value={valueForInput(0)} placeholder={placeholder}
                 onChange={evt => onValueChange(operators[0], evt.target.value)}/>
             { isRange && (
                 <Fragment>
                     <Select value={operators[1]} onChange={value => onOperatorChange(operators[1], value)}
                         options={ getFilterOptions(NUMBER_FILTERS.slice(2)) }/>
-                    <TextInput value={filter[operators[1]]} onChange={evt => onValueChange(operators[1], evt.target.value)}/>
+                    <TextInput value={valueForInput(1)} onChange={evt => onValueChange(operators[1], evt.target.value)}/>
                 </Fragment>
             )}
             { !isNumber &&
@@ -203,11 +240,11 @@ const FilterList = ({filters, type, onUpdate, ...rest }) => {
         return null;
     }
     const onAdd = () => onUpdate(type, [...filters, {}]);
-    const onFilterUpdate = (i, filter) => {
-        onUpdate(type, [...filters.slice(0, i), filter, ...filters.slice(i+1)]);
+    const onFilterUpdate = (index, filter) => {
+        onUpdate(type, filters.map((f,i) => i === index ? filter : f));
     };
-    const onFilterRemove = i => {
-        onUpdate(type, [...filters.slice(0, i), ...filters.slice(i+1)]);
+    const onFilterRemove = index => {
+        onUpdate(type, filters.filter((f,i) => i !== index));
     };
     return (
         <Fragment>
@@ -247,15 +284,17 @@ export const FeatureFilter = ({  filter = {}, onChange, ...rest }) => {
     };
     return (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <Radio.Group value={single} onChange={evt => setSingle(evt.target.value)}>
-                <Radio.Button value={true}>
-                    <Message messageKey='FeatureFilter.single'/>
-                </Radio.Button>
-                <Radio.Button value={false}>
-                    <Message messageKey='FeatureFilter.list'/>
-                </Radio.Button>
-            </Radio.Group>
-            <Margin/>
+            <RowContainer>
+                <Radio.Group value={single} onChange={evt => setSingle(evt.target.value)}>
+                    <Radio.Button value={true}>
+                        <Message messageKey='FeatureFilter.single'/>
+                    </Radio.Button>
+                    <Radio.Button value={false}>
+                        <Message messageKey='FeatureFilter.list'/>
+                    </Radio.Button>
+                </Radio.Group>
+                <IconButton bordered type='delete' onClick={() => onChange({})} />
+            </RowContainer>
             { single && <FilterRow filter={filter.property} onFilterUpdate={filter => onUpdate('property', filter)} {...rest} /> }
             { !single && <MultiFilter and={filter.AND} or={filter.OR} onUpdate={onUpdate} {...rest} /> }
         </LocaleProvider>
