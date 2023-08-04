@@ -127,7 +127,7 @@ export const PropertiesFilter = ({ filter = {}, update, properties, labels }) =>
                         </Option>)) 
                     }
                 </Select>
-                { !!filter[lang] && <IconButton type='delete' bordered onConfirm={() => deleteFilter()}/> }
+                { !!filter[lang] && <IconButton type='delete' bordered onClick={() => deleteFilter()}/> }
             </SelectRow>
             { showFromDefault && <Italic><Message messageKey='attributes.filter.fromDefault'/></Italic> }
             <DragDropContext onDragEnd={result => reorder(result.source.index, result.destination?.index)}>

@@ -63,7 +63,7 @@ const PanelExtra = ({ noValues, onRemove}) => {
 
     return (
         <div onClick={e => e.stopPropagation()}>
-            <IconButton type='delete' onConfirm={onRemove}/>
+            <IconButton type='delete' onClick={onRemove}/>
         </div>
     );
 };

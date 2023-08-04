@@ -41,7 +41,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     });
 
     const getButtonForModal = type => {
-        const btn = Object.keys(state[type]).length === 0 ? 'add' : 'edit';
+        const btn = state[type] ? 'edit' : 'add';
         return (
             <Button onClick={() => onButtonClick(type)}>
                 <Message messageKey={`attributes.${type}.${btn}`} />
