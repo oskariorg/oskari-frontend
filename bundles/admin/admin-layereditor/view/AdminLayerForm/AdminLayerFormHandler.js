@@ -474,7 +474,7 @@ class UIHandler extends StateHandler {
         }
 
         // Delete missing attibute keys but keep managed attributes
-        const managedAttributes = ['forcedSRS', 'data'];
+        const managedAttributes = ['forcedSRS', 'data', 'filter'];
         Object.keys(layer.attributes)
             .filter(key => !managedAttributes.includes(key))
             .forEach(key => delete layer.attributes[key]);

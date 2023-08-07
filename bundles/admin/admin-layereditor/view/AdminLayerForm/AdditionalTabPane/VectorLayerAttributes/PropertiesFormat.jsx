@@ -98,7 +98,7 @@ const CollapseContent = ({values = {}, onChange }) => {
 };
 
 export const PropertiesFormat = ({ format = {}, properties, selected, labels, update }) => {
-    const allSelected = properties.length === selected.length;
+    const allSelected = selected.length === 0 || properties.length === selected.length;
     const [showAll, setShowAll] = useState(allSelected);
     const propNames = showAll ? properties : selected;
 

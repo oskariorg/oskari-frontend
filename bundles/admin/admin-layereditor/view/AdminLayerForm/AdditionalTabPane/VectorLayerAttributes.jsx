@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Select, Option, Space, Button } from 'oskari-ui';
+import { Message, Select, Option, Space, Button, Link } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
 import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
 import { Controller, Messaging } from 'oskari-ui/util';
@@ -97,7 +97,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     const geometryTypeSource = data.geometryType ? 'Attributes' : 'Capabilities';
     const propLabels = Oskari.getLocalized(data.locale) || {};
     // gather selected properties from all (localized) filters
-    const selectedProperties = [...new Set([].concat(...Object.values(state.filter)))];
+    const selectedProperties = state.filter ? [...new Set([].concat(...Object.values(state.filter)))] : [];
     return (
         <Fragment>
             <Message messageKey='attributes.geometryType.label'/>
@@ -112,6 +112,13 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                         </Option>
                     )) }
                 </Select>
+            </StyledFormField>
+            <Message messageKey='attributes.idProperty'/>
+            <Link url={''} tooltip={<Message messageKey='attributes.idPropertyTooltip'/>}/>
+            <StyledFormField>
+                <Select allowClear value={data.idProperty}
+                    onChange={value => controller.setAttributesData('idProperty', value)}
+                    options={propNames.map(value => ({value}))}/>
             </StyledFormField>
             <StyledFormField>
                 { getButtonForModal('featureFilter') }

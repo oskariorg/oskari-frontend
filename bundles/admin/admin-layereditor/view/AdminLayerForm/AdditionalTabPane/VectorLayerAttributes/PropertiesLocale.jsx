@@ -9,7 +9,7 @@ const StyledSwitch = styled(Switch)`
 `;
 
 export const PropertiesLocale = ({ locale = {}, update, properties, selected }) => {
-    const allSelected = properties.length === selected.length;
+    const allSelected = selected.length === 0 || properties.length === selected.length;
     const [showAll, setShowAll] = useState(allSelected);
     const propNames = showAll ? properties : selected;
     return (
