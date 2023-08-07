@@ -6,16 +6,18 @@ import { Modal } from 'oskari-ui/components/Modal';
 import { FeatureFilter, cleanFilter, getDescription } from 'oskari-ui/components/FeatureFilter';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { IconButton } from 'oskari-ui/components/buttons';
-import { Controller } from 'oskari-ui/util';
+import { Controller, Messaging } from 'oskari-ui/util';
 
-// TODO: z-index or margin (hidden is above add button)
 const HeaderContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    & Button {
+        z-index: 20;
+    }
 `;
 
 // Modal.closeIcon: Custom close icon. 5.7.0: close button will be hidden when setting to null or false
-// workaround to hide close icon
+// workaround to hide close icon. Also Header button has z-index to render it above close icon
 const Hidden = styled.div`
     width: 54px;
     height: 54px;
@@ -29,10 +31,7 @@ const Header = ({ onAdd }) => (
     </HeaderContainer>
 );
 
-const PanelExtra = ({ style, onRemove}) => {
-    if(!style || !Object.keys(style).length) {
-        return null;
-    }
+const PanelExtra = ({ onRemove}) => {
     return (
         <div onClick={e => e.stopPropagation()}>
             <IconButton type='delete' onClick={onRemove}/>
@@ -48,23 +47,19 @@ export const OptionalStyleModal = ({ vectorStyle, styleTabs, controller, onClose
     // like { image: {shape: 2 }}
     // now editor sets whole style to optStyle
     const save = () => {
-        let invalid = false;
-        const temp = styles.length;
         const optionalStyles = styles.map(optStyle => {
             const { property, AND, OR, ...styleDef } = optStyle;
             const cleaned = cleanFilter({ property, AND, OR }, properties);
-            // TODO: or return null from clean
-            if (!Object.keys(cleaned).length) {
+            if (!cleaned) {
                 // doesn't have valid filter
-                invalid = true;
+                Messaging.error(<Message messageKey='styles.vector.validation.optionalStyles' bundleKey='admin-layereditor'/>);
                 return;
             }
             return { ...cleaned, ...styleDef };
         }).filter(a => a);
-        // TODO: or styles.length !== optional.length
-        if (invalid) {
-            // don't save
-            // TODO: notify to remove invalid or fix
+
+        if (styles.length !== optionalStyles.length) {
+            // don't store and keep editor visible
             return;
         }
         const toSave = {
@@ -102,7 +97,7 @@ export const OptionalStyleModal = ({ vectorStyle, styleTabs, controller, onClose
                     return (
                         <CollapsePanel key={`style_${i}`}
                             header={getDescription(filterDef)}
-                            extra={<PanelExtra onRemove={() => remove(i)} style={optStyle}/>}>
+                            extra={<PanelExtra onRemove={() => remove(i)}/>}>
                             <Divider><Message messageKey='attributes.featureFilter.title' /></Divider>
                             <FeatureFilter filter={filterDef} types={properties} properties={propertyNames}
                                 onChange={ updated => update({ ...styleDef, ...updated }, i)}/>
