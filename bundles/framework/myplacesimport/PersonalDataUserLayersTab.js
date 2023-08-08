@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.PersonalDataUserL
         this.loc = Oskari.getMsg.bind(null, 'MyPlacesImport');
         this.layerMetaType = 'USERLAYER';
         this.visibleFields = [
-            'name', 'description', 'source', 'edit', 'remove'
+            'name', 'desc', 'source', 'edit', 'remove'
         ];
         this.grid = undefined;
         this.container = undefined;
@@ -149,11 +149,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.PersonalDataUserL
                     return;
                 }
                 gridModel.addData({
-                    'id': layer.getId(),
-                    'name': Oskari.util.sanitize(layer.getName()),
-                    'description': Oskari.util.sanitize(layer.getDescription()),
-                    'source': Oskari.util.sanitize(layer.getSource()),
-                    'isBase': layer.isBaseLayer()
+                    id: layer.getId(),
+                    isBase: layer.isBaseLayer(),
+                    ...layer.getLocaleValues()
                 });
                 layersAdded.push(layer.getId());
             });

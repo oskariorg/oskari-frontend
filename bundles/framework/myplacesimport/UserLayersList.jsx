@@ -26,7 +26,7 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
         {
             align: 'left',
             title: <Message messageKey='tab.grid.description' />,
-            dataIndex: 'description',
+            dataIndex: 'desc',
             sorter: getSorterFor('description')
         },
         {
@@ -74,10 +74,8 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
             dataSource={data.map(item => ({
                 ...item,
                 key: item.getId(),
-                name: Oskari.util.sanitize(item.getName()),
-                description: Oskari.util.sanitize(item.getDescription()),
-                source: Oskari.util.sanitize(item.getSource()),
-                created: item.getCreated()
+                created: item.getCreated(),
+                ...item.getLocaleValues()
             }))}
             pagination={false}
             loading={loading}

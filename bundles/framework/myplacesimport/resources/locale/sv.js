@@ -60,7 +60,7 @@ Oskari.registerLocalization(
             "deleteLayer": "Ta bort kartlagret",
             "grid": {
                 "name": "Namn",
-                "description": "Beskrivning",
+                "desc": "Beskrivning",
                 "source": "Datakälla",
                 "edit": "Redigera",
                 "editButton": "Redigera",

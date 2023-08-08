@@ -29,7 +29,7 @@ Oskari.registerLocalization(
             "title": "Gagnasett",
             "grid": {
                 "name": "Nafn",
-                "description": "Lýsing",
+                "desc": "Lýsing",
                 "source": "Gagnagjafi",
                 "remove": "Eyða",
                 "removeButton": "Eyða"
