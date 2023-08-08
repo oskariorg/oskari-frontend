@@ -1,8 +1,7 @@
 /*
 Switch map URL to test other maps
 */
-var mapUrl = 'http://demo.oskari.org/?lang=en&uuid=8016f9be-131b-44ab-bcee-5055628dbd42';
-
+var mapUrl = 'https://kartta.paikkatietoikkuna.fi/?lang=en&uuid=053027f4-91d9-4351-aec4-c6a31dd68c56';
 // sets source
 document.getElementById('map').src = mapUrl;
 // sets domain (localhost is allowed)
