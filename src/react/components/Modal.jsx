@@ -15,7 +15,7 @@ export const Modal = ({ children, title, bodyStyle={}, ...other }) => {
         'overflow': 'auto'
     };
     return (
-        <AntModal zIndex={ 55500 } title={title} bodyStyle={{
+        <AntModal zIndex={ 30005 } title={title} bodyStyle={{
             ...defaultBodyStyle,
             ...bodyStyle
         }} {...other}>
