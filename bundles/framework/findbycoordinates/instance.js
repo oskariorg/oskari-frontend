@@ -311,7 +311,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                         langText = (lang !== '') ? ' (' + lang + ')' : '',
                         color = me.__colors[colorIndex];
 
-
                     var markerData = {
                         x: result.lon,
                         y: result.lat,
