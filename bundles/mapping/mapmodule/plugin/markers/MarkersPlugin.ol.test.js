@@ -169,7 +169,8 @@ describe('MarkersPlugin', () => {
             expect(getTextOnMap(id)).toEqual(marker.msg);
             const style = getImageStyle(id);
             const sizePx = mapModule.getPixelForSize(marker.size);
-            expect(style.getSize()).toEqual([sizePx, sizePx]);
+            const scale = sizePx / 64;
+            expect(style.getScale()).toEqual(scale);
         });
         test('external', () => {
             const id = 'marker2';
