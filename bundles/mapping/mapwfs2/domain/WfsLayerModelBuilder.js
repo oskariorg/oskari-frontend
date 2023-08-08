@@ -54,7 +54,6 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
         parseLayerData: function (layer, mapLayerJson = {}, maplayerService) {
-            mapLayerJson.id === 954 && console.log(mapLayerJson);
             if (this.sandbox.hasHandler('ShowUserStylesRequest')) {
                 this._addUserStyleTool(layer);
             } else {
