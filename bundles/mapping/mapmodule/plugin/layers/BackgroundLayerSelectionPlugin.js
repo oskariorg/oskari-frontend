@@ -199,7 +199,7 @@ Oskari.clazz.define(
             // switch bg layer (no need to call update on ui, we should catch the event)
             // - check if current bottom layer exists & is in our list (if so, remove)
             if (currentBottomId && baseLayers.includes(currentBottomId.toString())) {
-                    sb.postRequestByName('RemoveMapLayerRequest', [currentBottomId]);
+                sb.postRequestByName('RemoveMapLayerRequest', [currentBottomId]);
             }
             // - check if new selection is already selected, remove if so as rearrange doesn't seem to work
             if (sb.isLayerAlreadySelected(newId)) {

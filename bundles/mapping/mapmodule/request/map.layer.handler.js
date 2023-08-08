@@ -102,7 +102,6 @@ Oskari.clazz.define('map.layer.handler',
                 if (typeof opts.toPosition === 'number') {
                     sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, opts.toPosition]);
                 }
-
             };
             this._loadLayerInfo(layer, opts, done);
         },
