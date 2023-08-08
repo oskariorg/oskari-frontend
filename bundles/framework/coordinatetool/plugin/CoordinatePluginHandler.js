@@ -104,11 +104,16 @@ class UIHandler extends StateHandler {
             }
         };
 
-        // Special treatment for these degree format projections to allow coordinates in decimal format as well
-        if (this.state.selectedProjection === 'EPSG:4258' || this.state.selectedProjection === 'LATLON:kkj') {
-            const regexp = /^\d+(\.|,)\d+$/;
-            if (regexp.test(data.lonlat.lon)) data.lonlat.lon = data.lonlat.lon + '°';
-            if (regexp.test(data.lonlat.lat)) data.lonlat.lat = data.lonlat.lat + '°';
+        // Check if format should be degrees and add '°' symbol if needed
+        let isDegrees = false;
+        if (this.config.projectionShowFormat[this.state.selectedProjection]) {
+            isDegrees = this.config.projectionShowFormat[this.state.selectedProjection].format === 'degrees';
+        } else {
+            isDegrees = this.config.projectionShowFormat.format === 'degrees';
+        }
+        if (isDegrees) {
+            if (data.lonlat.lon.indexOf('°') < 0) data.lonlat.lon = data.lonlat.lon + '°';
+            if (data.lonlat.lat.indexOf('°') < 0) data.lonlat.lat = data.lonlat.lat + '°';
         }
 
         const converted = await this.convertCoordinates(data, this.state.selectedProjection, this.originalProjection);
