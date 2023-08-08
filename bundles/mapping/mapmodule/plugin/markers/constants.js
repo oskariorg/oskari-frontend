@@ -14,14 +14,15 @@ export const DEFAULT_DATA = {
     color: 'ffde00',
     msg: '',
     shape: 2,
-    size: 3,
+    size: 1,
     transient: false
 };
 
+// use size 3 for add marker UI
 export const DEFAULT_STYLE = {
     image: {
         shape: DEFAULT_DATA.shape,
-        size: DEFAULT_DATA.size,
+        size: 3,
         fill: {
             color: '#' + DEFAULT_DATA.color
         }
