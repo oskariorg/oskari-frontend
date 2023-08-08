@@ -165,7 +165,7 @@ Oskari.clazz.define('map.layer.handler',
                 done();
             });
         },
-        __handleLayerInfoSuccess: function (layer, describeInfo) {
+        __handleLayerInfoSuccess: function (layer, describeInfo = {}) {
             const sandbox = this.layerService.getSandbox();
             const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             layer.setDescribeLayerStatus(DESCRIBE_LAYER.LOADED);
