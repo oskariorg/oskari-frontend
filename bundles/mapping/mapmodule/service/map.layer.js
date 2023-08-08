@@ -1,3 +1,4 @@
+import { UserDataLayerModelBuilder } from '../../mapuserdatalayer/domain/UserDataLayerModelBuilder';
 /**
  * @class Oskari.mapframework.service.MapLayerService
  *
@@ -1122,6 +1123,22 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         registerLayerModelBuilder: function (type, specHandlerClsInstance) {
             Oskari.log(this.getName()).debug('[MapLayerService] registering handler for type ' + type);
             this.modelBuilderMapping[type] = specHandlerClsInstance;
+        },
+        registerLayerForUserDataModelBuilder: function (options) {
+            if (!options.type) {
+                Oskari.log(this.getName()).error('Type not found for UserDataLayer. Skipping.', options);
+                return;
+            }
+            // Use same model builder for all user own layer types
+            const builderName = 'userdatalayer';
+            let builder = this.modelBuilderMapping[builderName];
+            if (!builder) {
+                builder = new UserDataLayerModelBuilder(this.getSandbox());
+                // store builder
+                this.modelBuilderMapping[builderName] = builder;
+            }
+            this.registerLayerModelBuilder(options.type, builder);
+            builder.registerLayerType(this, options);
         },
         /**
          * @method unregisterLayerModel
