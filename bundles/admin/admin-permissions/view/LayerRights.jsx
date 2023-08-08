@@ -92,7 +92,7 @@ export const LayerRights = ({ controller, state }) => {
                     <PrimaryButton
                         type='search'
                         onClick={() => state.changedIds.size !== 0 ? setSearchConfirmOpen(true) : controller.search(searchValue)}
-                        disabled={!state.permissions?.resource || state.permissions?.resource?.length < 1}
+                        disabled={!state.permissions?.layers || state.permissions?.layers?.length < 1}
                     />
                     
                 </Confirm>
