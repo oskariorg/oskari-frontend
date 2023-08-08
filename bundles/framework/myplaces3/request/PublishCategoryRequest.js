@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.PublishCategor
         },
         /**
          * @method getId
-         * @return {Number} id of category to be edited
+         * @return {Number || String} id or layerId to be edited
          */
         isPublic: function () {
             return this._isPublic;
