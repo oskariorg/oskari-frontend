@@ -5,10 +5,10 @@ const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer
 export class AbstractVectorLayer extends AbstractLayer {
     constructor () {
         super(...arguments);
-        this.hoverOptions = null;
+        this._hoverOptions = null;
         this._storedStyleName = null;
+        this._data = {};
     }
-
     /* override */
     selectStyle (name) {
         // style is seleced on createMapLayer and styles are loaded async for VectorLayer
@@ -45,20 +45,32 @@ export class AbstractVectorLayer extends AbstractLayer {
         return this._currentStyle;
     }
 
+    hasFeatureData () {
+        return true;
+    }
+
+    getGeometryType () {
+        return this._data.geometryType;
+    }
+
+    getIdProperty () {
+        return this._data.idProperty;
+    }
+
     getLegendImage () {
         return null;
     }
 
     setHoverOptions (options) {
-        this.hoverOptions = options;
+        this._hoverOptions = options;
     }
 
     getHoverOptions () {
-        return this.hoverOptions;
+        return this._hoverOptions;
     }
 
     handleDescribeLayer (info) {
-        const { styles = [] } = info;
+        const { styles = [], data = {}, hover } = info;
         const vs = styles.map(s => new VectorStyle(s));
         if (vs.length) {
             // override all styles as create map layer if there were any
@@ -68,6 +80,8 @@ export class AbstractVectorLayer extends AbstractLayer {
             // request notifies change
             Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), this._storedStyleName]);
         }
+        this._data = data;
+        this.setHoverOptions(hover);
     }
 
     // For user data layers
@@ -104,7 +118,7 @@ export class AbstractVectorLayer extends AbstractLayer {
      *  @return {Number} Distance between features in pixels
      */
     getClusteringDistance () {
-        return this.getOptions().clusteringDistance;
+        return this._data.clusteringDistance;
     }
 
     /**
@@ -113,7 +127,7 @@ export class AbstractVectorLayer extends AbstractLayer {
      *  @return {Number} Distance between features in pixels
      */
     setClusteringDistance (distance) {
-        this.getOptions().clusteringDistance = distance;
+        this._data.clusteringDistance = distance;
     }
 }
 
