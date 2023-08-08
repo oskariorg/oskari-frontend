@@ -60,6 +60,8 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
         if (modal === 'featureFilter') {
             const filter = cleanFilter(state.featureFilter, featureProperties);
             controller.setFeatureFilter(filter);
+            // update local state
+            onModalUpdate(filter);
             setModal(null);
             return;
         }

@@ -293,7 +293,7 @@ class UIHandler extends StateHandler {
     setFeatureFilter (filter = {}) {
         const layer = { ...this.getState().layer };
         let attributes = layer.attributes || {};
-        if (Object.keys(filter) === 0) {
+        if (Object.keys(filter).length === 0) {
             delete attributes.filter;
         } else {
             attributes = { ...attributes, filter };
