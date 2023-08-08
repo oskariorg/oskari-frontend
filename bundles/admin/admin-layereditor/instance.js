@@ -2,10 +2,10 @@ import React from 'react';
 import { LayerEditorFlyout } from './view/Flyout';
 import { ShowLayerEditorRequest } from './request/ShowLayerEditorRequest';
 import { ShowLayerEditorRequestHandler } from './request/ShowLayerEditorRequestHandler';
-import { LocalizingFlyout } from './view/LocalizingFlyout';
 import { Messaging } from 'oskari-ui/util';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { getNavigationDimensions } from 'oskari-ui/components/window';
+import { LayerListFormHandler } from './view/LayerListForm/layerListFormHandler';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
@@ -21,6 +21,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             super();
             this.__name = 'admin-layereditor';
             this.loc = Oskari.getMsg.bind(null, this.__name);
+            this.layerListFormHandler = new LayerListFormHandler();
             this.eventHandlers = {
                 'MapLayerEvent': (event) => {
                     if (event.getOperation() !== 'add') {
@@ -83,27 +84,15 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             addLayerTool.setTypes([toolingService.TYPE_CREATE]);
             toolingService.addTool(addLayerTool);
 
-            const offset = {
-                x: -100,
-                y: -200
-            };
-            const createPopupCallback = flyoutKey => {
+            const createPopupCallback = popupKey => {
                 return evt => {
-                    const position = {
-                        left: evt.pageX + offset.x,
-                        top: evt.pageY + offset.y
-                    };
-                    this.showFormPopup(flyoutKey, position);
+                    this.showFormPopup(popupKey);
                 };
             };
 
             const addSubthemeCallback = (evt, parentId, groupMethod, layerCountInGroup) => {
                 let flyoutKey = FLYOUT.THEME;
-                const position = {
-                    left: evt.pageX + offset.x,
-                    top: evt.pageY + offset.y
-                };
-                this.showFormPopup(flyoutKey, position, undefined, layerCountInGroup, parentId);
+                this.showFormPopup(flyoutKey, undefined, layerCountInGroup, parentId);
             };
 
             const addDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
@@ -114,25 +103,20 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             toolingService.addTool(addDataProviderTool);
 
             const editGroupCallBack = (evt, id, groupMethod, layerCountInGroup) => {
-                const position = {
-                    left: evt.pageX + offset.x,
-                    top: evt.pageY + offset.y
-                };
-
-                let flyoutKey;
+                let popupKey;
 
                 switch (groupMethod) {
                 case 'getOrganizationName':
-                    flyoutKey = FLYOUT.DATA_PROVIDER;
+                    popupKey = FLYOUT.DATA_PROVIDER;
                     break;
                 case 'getInspireName':
-                    flyoutKey = FLYOUT.THEME;
+                    popupKey = FLYOUT.THEME;
                     break;
                 default:
                     Oskari.log('admin-layereditor').error('Not supported groupMethod ' + groupMethod);
                     return;
                 }
-                this.showFormPopup(flyoutKey, position, id, layerCountInGroup);
+                this.showFormPopup(popupKey, id, layerCountInGroup);
             };
 
             const addSubthemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
@@ -220,28 +204,17 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         /**
          * @method showFormPopup To show a simple data input form.
          * @param {string} flyoutKey FLYOUT.THEME or FLYOUT.DATA_PROVIDER
-         * @param {object} position where to place the popup
          */
-        showFormPopup (flyoutKey, position, id, layerCountInGroup, parentId) {
-            let flyout = null;
+        showFormPopup (flyoutKey, id, layerCountInGroup, parentId) {
             switch (flyoutKey) {
             case FLYOUT.THEME:
-                flyout = this._getThemeFlyout(id, layerCountInGroup, parentId);
+                this._showThemePopup(id, layerCountInGroup, parentId);
                 break;
             case FLYOUT.DATA_PROVIDER:
-                flyout = this._getDataProviderFlyout(id, layerCountInGroup);
+                this._showDataProviderPopup(id, layerCountInGroup);
                 break;
             default:
-                return;
-            }
-            const { left, top } = position;
-            const flyoutWidth = 330;
-            flyout.setSize(flyoutWidth);
-            flyout.move(left, top, true);
-            if (flyout.isVisible()) {
-                flyout.bringToTop();
-            } else {
-                flyout.show();
+                break;
             }
         }
 
@@ -304,44 +277,14 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         }
 
         /**
-         * @method _getThemeFlyout
+         * @method _showThemePopup
          * Ensures theme flyout exists and returns it.
-         * @return {LocalizingFlyout}
          */
-        _getThemeFlyout (id, layerCountInGroup, parentId) {
-            const me = this;
-            const fetchTheme = (id, setLoading, setValue) => {
-                setLoading(true);
-                jQuery.ajax({
-                    type: 'GET',
-                    dataType: 'json',
-                    contentType: 'application/json; charset=UTF-8',
-                    url: Oskari.urls.getRoute('MapLayerGroups', { id }),
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        setLoading(false);
-                        // TODO: error handling
-                    },
-                    success: function (response) {
-                        setLoading(false);
-                        setValue(response.locale);
-                    }
-                });
-            };
-            const popupTitle = id ? this.loc('editTheme') : this.loc('addTheme');
-            const hasSubgroups = id ? this._getLayerService().findLayerGroupById(id).hasSubgroups() : false;
-            this.themeFlyout = new LocalizingFlyout(this, popupTitle, {
-                headerMessageKey: 'themeName',
-                id,
-                parentId,
-                hasSubgroups,
-                fetch: fetchTheme,
-                layerCountInGroup
-            }, this.loc('deleteGroupLayers'));
-            this.themeFlyout.makeDraggable({
-                handle: '.oskari-flyouttoolbar',
-                scroll: false
-            });
-            this.themeFlyout.setSaveAction((locales, id, parentId) => {
+        _showThemePopup (id, layerCountInGroup, parentId) {
+            const controller = this.layerListFormHandler.getController();
+            controller.setLoading(true);
+
+            controller.setSaveAction((locales, id, parentId) => {
                 const httpMethod = id ? 'PUT' : 'POST';
 
                 const payload = {
@@ -352,6 +295,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     payload.id = id;
                 }
 
+                const me = this;
                 jQuery.ajax({
                     type: httpMethod,
                     dataType: 'json',
@@ -359,9 +303,9 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     url: Oskari.urls.getRoute('MapLayerGroups', { id }),
                     data: JSON.stringify(payload),
                     success: response => {
-                        this.themeFlyout.hide();
                         const group = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', response);
                         const locale = Oskari.getLocalized(response.locale);
+                        this.layerListFormHandler.getController().closePopup();
                         group.setName(locale.name);
                         group.setDescription(locale.desc);
                         if (id) {
@@ -373,7 +317,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         Messaging.success(me.loc('messages.saveSuccess'));
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
-                        this.themeFlyout.setLoading(false);
+                        this.layerListFormHandler.getController().setLoading(false);
                         // Inform user with popup
                         Messaging.error(me.loc('messages.saveFailed'));
                         // Log error
@@ -383,22 +327,22 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 });
             });
             if (id) {
-                // only add a delete action if we have something to delete
-                this.themeFlyout.setDeleteAction((id, deleteLayers) => {
+                controller.setDeleteAction((id, deleteLayers) => {
+                    // only add a delete action if we have something to delete
+                    this.layerListFormHandler.getController().setLoading(true);
                     const me = this;
-                    this.themeFlyout.setLoading(true);
                     jQuery.ajax({
                         type: 'DELETE',
                         url: Oskari.urls.getRoute('MapLayerGroups', { id: id, deleteLayers: deleteLayers }),
                         success: response => {
-                            this.themeFlyout.setLoading(false);
-                            this.themeFlyout.hide();
+                            this.layerListFormHandler.getController().setLoading(false);
+                            this.layerListFormHandler.getController().closePopup();
                             this._getLayerService().deleteLayerGroup(response.id, response.parentId, deleteLayers);
                             // Inform user with popup
                             Messaging.success(me.loc('messages.deleteSuccess'));
                         },
                         error: (jqXHR, textStatus, errorThrown) => {
-                            this.themeFlyout.setLoading(false);
+                            this.layerListFormHandler.getController().setLoading(false);
                             // Inform user with popup
                             Messaging.error(me.loc('messages.deleteFailed'));
                             // Log error
@@ -408,45 +352,54 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     });
                 });
             }
-            return this.themeFlyout;
-        }
 
-        /**
-         * @method _getDataProviderFlyout
-         * Ensures theme flyout exists and returns it.
-         * @return {LocalizingFlyout}
-         */
-        _getDataProviderFlyout (id, layerCountInGroup) {
-            const fetchDataProvider = (id, setLoading, setValue) => {
-                setLoading(true);
+            const popupTitle = id ? Oskari.getMsg('admin-layereditor', 'editTheme') : Oskari.getMsg('admin-layereditor', 'addTheme');
+            const hasSubgroups = id ? this._getLayerService().findLayerGroupById(id).hasSubgroups() : false;
+            if (id) {
                 jQuery.ajax({
                     type: 'GET',
                     dataType: 'json',
                     contentType: 'application/json; charset=UTF-8',
-                    url: Oskari.urls.getRoute('DataProvider', { id }),
+                    url: Oskari.urls.getRoute('MapLayerGroups', { id }),
                     error: function (jqXHR, textStatus, errorThrown) {
-                        setLoading(false);
+                        controller.setLoading(false);
                         // TODO: error handling
                     },
                     success: function (response) {
-                        setLoading(false);
-                        setValue(response.locale);
+                        controller.setLoading(false);
+                        controller.setValue(response.locale);
+
+                        controller.showPopup(popupTitle, {
+                            headerMessageKey: 'themeName',
+                            id,
+                            parentId,
+                            hasSubgroups,
+                            layerCountInGroup
+                        }, Oskari.getMsg('admin-layereditor', 'deleteGroupLayers'));
                     }
                 });
-            };
+            } else {
+                controller.setLoading(false);
+                controller.setValue({});
+                controller.showPopup(popupTitle, {
+                    headerMessageKey: 'themeName',
+                    id,
+                    parentId,
+                    hasSubgroups,
+                    layerCountInGroup
+                }, Oskari.getMsg('admin-layereditor', 'deleteGroupLayers'));
+            }
+        }
 
-            const loc = id ? this.loc('editDataProvider') : this.loc('addDataProvider');
-            this.dataProviderFlyout = new LocalizingFlyout(this, loc, {
-                headerMessageKey: 'dataProviderName',
-                id: id,
-                fetch: fetchDataProvider,
-                layerCountInGroup: layerCountInGroup
-            }, this.loc('deleteGroupLayers'));
-            this.dataProviderFlyout.makeDraggable({
-                handle: '.oskari-flyouttoolbar',
-                scroll: false
-            });
-            this.dataProviderFlyout.setSaveAction(value => {
+        /**
+         * @method _showDataProviderPopup
+         * Ensures theme flyout exists and returns it.
+         */
+        _showDataProviderPopup (id, layerCountInGroup) {
+            const controller = this.layerListFormHandler.getController();
+            controller.setLoading(true);
+
+            controller.setSaveAction(value => {
                 const me = this;
                 const httpMethod = id ? 'PUT' : 'POST';
                 const payload = { locales: value };
@@ -460,7 +413,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     url: Oskari.urls.getRoute('DataProvider', { id }),
                     data: JSON.stringify(payload),
                     success: response => {
-                        this.dataProviderFlyout.hide();
                         const locale = Oskari.getLocalized(response.locale);
                         const dataProvider = {
                             id: response.id,
@@ -473,10 +425,11 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         } else {
                             this._getLayerService().addDataProvider(dataProvider);
                         }
+                        this.layerListFormHandler.getController().closePopup();
                         Messaging.success(me.loc('messages.saveSuccess'));
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
-                        this.dataProviderFlyout.setLoading(false);
+                        this.layerListFormHandler.getController().setLoading(false);
                         // Inform user with popup
                         Messaging.error(me.loc('messages.saveFailed'));
                         // Log error
@@ -487,21 +440,21 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             });
             if (id) {
                 // only add a delete action if we have something to delete
-                this.dataProviderFlyout.setDeleteAction((id, deleteLayers) => {
+                controller.setDeleteAction((id, deleteLayers) => {
                     const me = this;
-                    this.dataProviderFlyout.setLoading(true);
+                    this.layerListFormHandler.setLoading(true);
                     jQuery.ajax({
                         type: 'DELETE',
                         url: Oskari.urls.getRoute('DataProvider', { id: id, deleteLayers: deleteLayers }),
                         success: response => {
-                            this.dataProviderFlyout.setLoading(false);
-                            this.dataProviderFlyout.hide();
+                            this.layerListFormHandler.getController().setLoading(false);
+                            this.layerListFormHandler.getController().closePopup();
                             this._getLayerService().deleteDataProvider(response, deleteLayers);
                             // Inform user with popup
                             Messaging.success(me.loc('messages.deleteSuccess'));
                         },
                         error: (jqXHR, textStatus, errorThrown) => {
-                            this.dataProviderFlyout.setLoading(false);
+                            this.layerListFormHandler.getController().setLoading(false);
                             // Inform user with popup
                             Messaging.error(me.loc('messages.deleteFailed'));
                             // Log error
@@ -511,7 +464,37 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     });
                 });
             }
-            return this.dataProviderFlyout;
+            const loc = id ? this.loc('editDataProvider') : this.loc('addDataProvider');
+
+            if (id) {
+                jQuery.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=UTF-8',
+                    url: Oskari.urls.getRoute('DataProvider', { id }),
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        controller.setLoading(false);
+                        // TODO: error handling
+                    },
+                    success: function (response) {
+                        controller.setLoading(false);
+                        controller.setValue(response.locale);
+                        controller.showPopup(loc, {
+                            headerMessageKey: 'dataProviderName',
+                            id: id,
+                            layerCountInGroup: layerCountInGroup
+                        }, Oskari.getMsg('admin-layereditor', 'deleteGroupLayers'));
+                    }
+                });
+            } else {
+                controller.setLoading(false);
+                controller.setValue({});
+                controller.showPopup(loc, {
+                    headerMessageKey: 'dataProviderName',
+                    id: id,
+                    layerCountInGroup: layerCountInGroup
+                }, Oskari.getMsg('admin-layereditor', 'deleteGroupLayers'));
+            }
         }
     }
 );

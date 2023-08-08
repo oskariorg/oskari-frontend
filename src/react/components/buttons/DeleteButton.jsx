@@ -39,7 +39,8 @@ export const DeleteButton = ({
     type,
     title = <Message messageKey='messages.confirmDelete' bundleKey='oskariui'/>,
     tooltip = <Message messageKey={'buttons.delete'} bundleKey='oskariui'/>,
-    disabled = false
+    disabled = false,
+    ...rest
 }) => {
     const placement = tooltip ? 'bottom' : 'top';
     return (
@@ -53,7 +54,8 @@ export const DeleteButton = ({
             okButtonProps={{className: 't_button t_delete'}}
             cancelButtonProps={{className: 't_button t_cancel'}}
             okType='danger'
-            placement={placement}>
+            placement={placement}
+            {...rest}>
             <Tooltip title={tooltip}>
                 <DisabledWrapper $disabled={disabled}>
                     {getButton(type, disabled)}
