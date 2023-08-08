@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
             input.setHandler(function (checked) {
                 if (checked === 'on') {
                     me.noUI = true;
-                    me.getPlugin().teardownUI();
+                    me.getPlugin().teardownUI(true);
                 // me.getPlugin().toggleIconVisibility(false);
                 } else {
                     me.noUI = null;
