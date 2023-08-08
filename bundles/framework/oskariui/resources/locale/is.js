@@ -13,7 +13,15 @@ Oskari.registerLocalization({
             yes: 'Já',
             no: 'Nei',
             next: 'Næst',
-            previous: 'Fyrri'
+            previous: 'Fyrri',
+            print: 'Prenta',
+            search: 'Leita',
+            reset: 'Hreinsa',
+            copy: 'Afrita á klemmuspjald',
+            clear: 'Hreinsa',
+            accept: 'Samþykkja',
+            reject: 'Hafna',
+            info: 'Sýna frekari upplýsingar'
         },
         messages: {
             confirmDelete: 'Viss um að eyða?'
