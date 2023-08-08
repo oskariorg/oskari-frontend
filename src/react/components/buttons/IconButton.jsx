@@ -26,7 +26,7 @@ const TYPE_COLORS = {
 //  If the font-size of the icon is > 32px it will be clipped by at least Safari
 //  Let the user of this component define the size of the button instead of doing it here.
 const BorderlessButton = styled(Button)`
-    color:  ${props => props.$color};
+    color:  ${props => props.$active || props.$color};
     border: none;
     background: none;
     padding: 0px;
@@ -41,9 +41,10 @@ const BorderlessButton = styled(Button)`
     }
 `;
 const BorderedButton = styled(Button)`
-    color:  ${props => props.$color};
+    color:  ${props => props.$active || props.$color};
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
+    border-color: ${props => props.$active};
     &:hover {
         color: ${props => props.$hover};
         border-color: ${props => props.$hover};
@@ -111,6 +112,7 @@ const ThemeButton = ThemeConsumer(({
     iconSize = 16,
     color = TYPE_COLORS[type],
     className = '',
+    active = false,
     ...rest
 }) => {
     if (type && !className.includes(`t_${type}`)) {
@@ -126,9 +128,10 @@ const ThemeButton = ThemeConsumer(({
         hover = getColorEffect(hover, EFFECT.LIGHTEN);
     }
     const ButtonNode = bordered ? BorderedButton : BorderlessButton;
+    const activeColor = active ? hover : null;
     return (
         <DisabledWrapper $disabled={disabled}>
-            <ButtonNode $hover={hover} $color={color} $iconSize={iconSize} disabled={disabled} className={className} { ...rest }>
+            <ButtonNode $hover={hover} $color={color} $active={activeColor} $iconSize={iconSize} disabled={disabled} className={className} { ...rest }>
                 {icon}
             </ButtonNode>
         </DisabledWrapper>
@@ -175,5 +178,6 @@ IconButton.propTypes = {
     onConfirm: PropTypes.func,
     disabled: PropTypes.bool,
     color: PropTypes.string,
-    iconSize: PropTypes.number
+    iconSize: PropTypes.number,
+    active: PropTypes.bool
 };
