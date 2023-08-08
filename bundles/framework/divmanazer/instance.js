@@ -139,6 +139,16 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 me.requestHandlers.modal
             );
 
+            // Hide navigation if starts in mobile mode
+            const nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
+            if (nav) {
+                if (Oskari.util.isMobile()) {
+                    nav.style.display = 'none';
+                } else {
+                    nav.style.display = 'block';
+                }
+            }
+
             /* removed for some reason or another */
             // sandbox.registerAsStateful(me.mediator.bundleId, me);
         },

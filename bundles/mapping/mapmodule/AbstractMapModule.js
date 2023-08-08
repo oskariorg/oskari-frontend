@@ -27,6 +27,7 @@ import './plugin/realtime/RealtimePlugin';
 import './plugin/mylocation/MyLocationPlugin';
 import './plugin/zoombar/Portti2Zoombar';
 import './plugin/panbuttons/PanButtons';
+import './plugin/togglenavigation/ToggleNavigation';
 
 import './plugin/controls/ControlsPlugin.ol';
 import './plugin/indexmap/IndexMapPlugin.ol';
