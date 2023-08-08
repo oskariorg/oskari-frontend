@@ -11,6 +11,10 @@ export class VectorTileLayer extends AbstractVectorLayer {
         return undefined;
     }
 
+    hasFeatureData () {
+        return false;
+    }
+
     /**
      * @method getTileGrid
      * @return {Object} tile grid configuration
