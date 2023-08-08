@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
         addLayers: function () {
             var sandbox = this.__sandbox;
             this.getNonPublisherLayers().forEach(layer => {
-                sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), true]);
+                sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
             });
         },
 
