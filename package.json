@@ -1,6 +1,6 @@
 {
   "name": "oskari-frontend",
-  "version": "2.11.0",
+  "version": "2.11.1",
   "description": "Oskari frontend",
   "keywords": [
     "oskari",
@@ -38,7 +38,7 @@
     "@babel/preset-react": "7.18.6",
     "@babel/runtime-corejs3": "7.20.0",
     "@storybook/react": "6.3.7",
-    "antd": "^4.24.8",
+    "antd": "4.24.8",
     "babel-loader": "8.1.0",
     "babel-plugin-styled-components": "1.10.7",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
