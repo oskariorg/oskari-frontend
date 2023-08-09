@@ -34,7 +34,7 @@ BlurredMessage.propTypes = {
 
 };
 
-const createOptions = (allColumns) => {
+const createOptions = (allColumns, activeLayerPropertyLabels) => {
     if (!allColumns || !allColumns.length) {
         return;
     }
@@ -43,16 +43,15 @@ const createOptions = (allColumns) => {
         .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key))
         .map(key => {
             return {
-                label: key,
+                label: activeLayerPropertyLabels && activeLayerPropertyLabels[key] ? activeLayerPropertyLabels[key] : key,
                 value: key
             };
         });
 };
 
-
 export const FilterVisibleColumns = (props) => {
-    const { allColumns, visibleColumns, updateVisibleColumns } = props;
-    const options = createOptions(allColumns);
+    const { allColumns, visibleColumns, updateVisibleColumns, activeLayerPropertyLabels } = props;
+    const options = createOptions(allColumns, activeLayerPropertyLabels);
     const [focused, setFocused] = useState();
 
     return <FilterVisibleColumnsContainer>
@@ -74,5 +73,6 @@ export const FilterVisibleColumns = (props) => {
 FilterVisibleColumns.propTypes = {
     allColumns: PropTypes.array,
     visibleColumns: PropTypes.array,
+    activeLayerPropertyLabels: PropTypes.object,
     updateVisibleColumns: PropTypes.func
 };
