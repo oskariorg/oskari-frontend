@@ -1,14 +1,16 @@
-import { AbstractVectorLayer } from '../../mapmodule/domain/AbstractVectorLayer';
+import { WFSLayer } from '../../mapwfs2/domain/WFSLayer';
+import { DESCRIBE_LAYER } from '../../mapmodule/domain/constants';
 
-export class UserDataLayer extends AbstractVectorLayer {
+export class UserDataLayer extends WFSLayer {
     constructor () {
         super(...arguments);
         this._locale = {};
         this.__internalFlagForUsersOwnLayers = false;
+        this._describeLayerStatus = DESCRIBE_LAYER.PREDEFINED;
     }
 
-    handleDescribeLayer () {
-        // not supported
+    isFilterSupported () {
+        return false;
     }
 
     getName (lang) {
@@ -37,40 +39,6 @@ export class UserDataLayer extends AbstractVectorLayer {
             value = this._locale[Oskari.getDefaultLanguage()]?.[key] || '';
         }
         return Oskari.util.sanitize(value);
-    }
-
-    getProperties () {
-        // like DescribeLayer properties for WFS layer
-        // doesn't conatin hidden/filtered properties and rawType
-        const labels = this.getPropertyLabels();
-        const { data = {} } = this.getAttributes();
-        return this.getPropertySelection().map(name => ({
-            name,
-            type: data.types[name],
-            format: data.format[name], 
-            label: labels[name]
-        }));
-
-    }
-
-    getFieldFormatMetadata (field) {
-        if (typeof field !== 'string') {
-            return {};
-        }
-        return this.getAttributes()?.data?.format?.[field] || {};
-    }
-
-    getPropertySelection () {
-        const filter =  this.getAttributes()?.data?.filter || {};
-        return filter[Oskari.getLang()] || filter.default || filter[Oskari.getDefaultLanguage()] || [];
-    }
-
-    getPropertyLabels () {
-        return Oskari.getLocalized(this.getAttributes()?.data?.locale) || {};
-    }
-
-    getPropertyTypes () {
-        return this.getAttributes()?.data?.types || {};
     }
 
     /**
