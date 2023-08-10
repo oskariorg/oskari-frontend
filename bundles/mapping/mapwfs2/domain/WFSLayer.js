@@ -10,9 +10,12 @@ export class WFSLayer extends AbstractVectorLayer {
         super(...arguments);
         /* Layer Type */
         this._layerType = 'WFS';
-        this._properties = {};
+        this._properties = [];
     }
     /* Overriding methods */
+    hasFeatureData () {
+        return true;
+    }
 
     isFilterSupported () {
         return true;
@@ -28,13 +31,20 @@ export class WFSLayer extends AbstractVectorLayer {
 
     handleDescribeLayer (info) {
         super.handleDescribeLayer(info);
-        this._properties = info.properties || {};
+        this._properties = info.properties || [];
     }
 
     /* Layer type specifics */
 
-    getProperties () {
-        return this._properties;
+    getIdProperty () {
+        return this._controlData.idProperty;
+    }
+
+    getProperties (all) {
+        if (all) {
+            return this._properties;
+        }
+        return this._properties.filter(p => p.type !== 'geometry' && !p.hidden);
     }
 
     /**
@@ -55,7 +65,7 @@ export class WFSLayer extends AbstractVectorLayer {
      */
     getLocales () {
         Oskari.log('WFSLayer').deprecated('getLocales()');
-        const labels = this.getProperties().filter(prop => prop.hidden !== true).map(prop => prop.label || prop.name);
+        const labels = this.getProperties().map(prop => prop.label || prop.name);
         return labels.length ? ['ID', ...labels] : [];
     }
 
@@ -84,7 +94,7 @@ export class WFSLayer extends AbstractVectorLayer {
      * @return {String[]} propertySelection
      */
     getPropertySelection () {
-        return this.getProperties().filter(prop => prop.hidden !== true).map(prop => prop.name);
+        return this.getProperties().map(prop => prop.name);
     }
 
     /**
