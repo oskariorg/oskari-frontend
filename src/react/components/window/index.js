@@ -2,7 +2,7 @@ import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import React from 'react';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
-import { Modal, Modalz } from './Modal';
+import { Modal } from './Modal';
 import { MovableContainer } from './MovableContainer';
 import { Banner } from './Banner';
 import { SidePanel } from './SidePanel';
