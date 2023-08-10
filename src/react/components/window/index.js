@@ -2,6 +2,7 @@ import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import React from 'react';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
+import { Modal } from './Modal';
 import { MovableContainer } from './MovableContainer';
 import { Banner } from './Banner';
 import { SidePanel } from './SidePanel';
@@ -154,6 +155,53 @@ export const showPopup = (title, content, onClose, options = {}) => {
         bringToTop
     };
 };
+
+/**
+ * Opens given content as modal
+ * Usage:
+ *
+ *       let modalController = null;
+ *       btn.on('click', (event) => {
+ *           if (modalController) {
+ *               modalController.close();
+ *               return;
+ *           }
+ *           modalController = showModal('Title', 'Content', () => {
+ *               // closed -> cleanup
+ *               modalController = null;
+ *           });
+ *       });
+ *
+ * @param {String} title title for modal
+ * @param {String|ReactElement} content content for modal
+ * @param {Function} onClose callback that is called when the window closes
+ * @param {Object} options (optional) to override default options
+ * @returns {Object} that provides functions that can be used to close/update the modal
+ */
+export const showModal = (title, content, onClose, options = {}) => {
+    validate(options, TYPE.MODAL);
+
+    const element = createTmpContainer();
+    const key = REGISTER.registerWindow(options.id, TYPE.MODAL, createRemoveFn(element, onClose));
+    const removeWindow = () => REGISTER.clear(key);
+    const bringToTop = createBringToTop(element);
+    const opts = { ...options };
+    const render = (content) => {
+        ReactDOM.render(
+            <ThemeProvider value={options.theme}>
+                <Modal title={title} options={opts}>
+                    {content}
+                </Modal>
+            </ThemeProvider>, element);
+    };
+    render(content);
+    return {
+        update: render,
+        close: removeWindow,
+        bringToTop
+    };
+};
+
 
 /**
  * Creates a movable container that is similar to popup and flyout but without any frames on the window.
