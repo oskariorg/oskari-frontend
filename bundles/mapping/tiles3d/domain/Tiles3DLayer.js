@@ -22,10 +22,6 @@ class Tiles3DLayer extends AbstractVectorLayer {
         return undefined;
     }
 
-    hasFeatureData () {
-        return false;
-    }
-
     isSupported () {
         return Oskari.getSandbox().getMap().getSupports3D();
     }
