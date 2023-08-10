@@ -1,4 +1,4 @@
-import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME, parseStylesFromOptions } from './VectorStyle';
+import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME } from './VectorStyle';
 
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
 
@@ -7,8 +7,9 @@ export class AbstractVectorLayer extends AbstractLayer {
         super(...arguments);
         this._hoverOptions = null;
         this._storedStyleName = null;
-        this._data = {};
+        this._controlData = {};
     }
+
     /* override */
     selectStyle (name) {
         // style is seleced on createMapLayer and styles are loaded async for VectorLayer
@@ -45,18 +46,12 @@ export class AbstractVectorLayer extends AbstractLayer {
         return this._currentStyle;
     }
 
-    hasFeatureData () {
-        return true;
+    /* override */
+    getStyleType () {
+        return this._controlData.styleType;
     }
 
-    getGeometryType () {
-        return this._data.geometryType;
-    }
-
-    getIdProperty () {
-        return this._data.idProperty;
-    }
-
+    /* override */
     getLegendImage () {
         return null;
     }
@@ -70,7 +65,7 @@ export class AbstractVectorLayer extends AbstractLayer {
     }
 
     handleDescribeLayer (info) {
-        const { styles = [], data = {}, hover } = info;
+        const { styles = [], controlData = {}, hover } = info;
         const vs = styles.map(s => new VectorStyle(s));
         if (vs.length) {
             // override all styles as create map layer if there were any
@@ -80,18 +75,8 @@ export class AbstractVectorLayer extends AbstractLayer {
             // request notifies change
             Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), this._storedStyleName]);
         }
-        this._data = data;
-        this.setHoverOptions(hover);
-    }
-
-    // For user data layers
-    setStylesFromOptions (options) {
-        const styles = parseStylesFromOptions(options);
-        this.setStyles(styles);
-        // Remove styles from options to be sure that VectorStyle is used
-        delete options.styles;
-        // update current style
-        this.selectStyle(this.getCurrentStyle().getName());
+        this._controlData = controlData;
+        this._hoverOptions = hover;
     }
 
     removeStyle (name) {
@@ -118,7 +103,7 @@ export class AbstractVectorLayer extends AbstractLayer {
      *  @return {Number} Distance between features in pixels
      */
     getClusteringDistance () {
-        return this._data.clusteringDistance;
+        return this._controlData.clusteringDistance;
     }
 
     /**
@@ -127,7 +112,7 @@ export class AbstractVectorLayer extends AbstractLayer {
      *  @return {Number} Distance between features in pixels
      */
     setClusteringDistance (distance) {
-        this._data.clusteringDistance = distance;
+        this._controlData.clusteringDistance = distance;
     }
 }
 
