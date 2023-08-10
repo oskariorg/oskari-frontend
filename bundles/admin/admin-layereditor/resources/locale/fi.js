@@ -111,6 +111,19 @@ Oskari.registerLocalization(
                     "globalWithStyles": "Tasolle on määritetty vain yksi yleinen oletuskarttaselite, vaikka sillä olisi rajapintapalvelusta useita tyylejä käytettävissä. Poista oletuskarttaselite ja määritä mahdolliset tyylikohtaiset karttaselitteet."
                 }
             },
+            "attributes": {
+                "label": "Attribuutit",
+                "geometryType": {
+                    "label": "Geometriatyyppi",
+                    "sourceAttributes": "Lähde: tason attribuutit",
+                    "sourceCapabilities": "Lähde: tason Capabilities-tiedot",
+                    "unknown":"Ei tiedossa",
+                    "point": "Piste",
+                    "line": "Viiva",
+                    "area":"Alue",
+                    "collection":"Kaikki"
+                }
+            },
             "styles": {
                 "default": "Oletustyyli",
                 "desc": "Taso lisätään kartalle oletustyylillä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta.",
@@ -160,7 +173,6 @@ Oskari.registerLocalization(
             "gfiTypeDesc": "Valitse listalta formaatti, jossa kohdetiedot (GFI) haetaan. Mahdolliset formaatit on määritelty WMS-palvelun GetCapabilities-vastausviestissä.",
             "gfiStyle": "GFI-tyyli (XSLT)",
             "gfiStyleDesc": "Määrittele kohdetietojen esitystapa XSLT-muunnoksen avulla.",
-            "attributes": "Attribuutit",
             "clusteringDistance": "Pisteiden etäisyys klusteroidessa",
             "forcedSRS": "Pakotetut projektiot",
             "forcedSRSInfo": "Pakotetut projektiot verrattuna GetCapabilites-määritykseen",
