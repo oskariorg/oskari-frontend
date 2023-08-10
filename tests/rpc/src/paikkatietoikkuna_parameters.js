@@ -298,6 +298,8 @@ var cursorStyles = ["progress", "crosshair", "move", "pointer", "default"];
 // ##### Location ##### //
 // ##################### //
 
+var additionalSearchResultKeys = ['paikkatyyppi'];
+
 var routeRequestParams = {
   'fromlat': '6683840',
   'fromlon': '360448',

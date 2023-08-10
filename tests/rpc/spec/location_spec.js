@@ -49,8 +49,8 @@ describe('Location', function(){
             expect(data.result.locations[0].name).toContain(searchCriteria);
 
             result = Object.keys(data.result.locations[0]);
+            // Common keys
             expect(result).toContain('zoomScale');
-            expect(result).toContain('paikkatyyppi');
             expect(result).toContain('name');
             expect(result).toContain('rank');
             expect(result).toContain('lon');
@@ -60,6 +60,11 @@ describe('Location', function(){
             expect(result).toContain('region');
             expect(result).toContain('lat');
             expect(result).toContain('channelId');
+
+            // Map specific keys
+            additionalSearchResultKeys.forEach((key) => {
+                expect(result).toContain(key);
+            });
 
             counter++;
             done();
