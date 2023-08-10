@@ -541,3 +541,12 @@ So confirm doesn't open behind flyouts (in admin for example)
 .ant-popconfirm {
   z-index: 999998 !important;
 }
+
+/*
+Fixes flickering when tabs reach the right side of the container element AND a scrollbar is shown on the container
+The tabs flicker between showing the last tab name as whole and/or switching it to the "..." icon.
+This seems to only happen on the Firefox browser
+*/
+.ant-tabs .ant-tabs-nav-wrap {
+    padding-right: 2em;
+}
