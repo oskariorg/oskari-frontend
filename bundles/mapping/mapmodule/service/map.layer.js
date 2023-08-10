@@ -1,4 +1,5 @@
 import { UserDataLayerModelBuilder } from '../../mapuserdatalayer/domain/UserDataLayerModelBuilder';
+import { DESCRIBE_LAYER } from '../domain/constants';
 /**
  * @class Oskari.mapframework.service.MapLayerService
  *
@@ -1429,6 +1430,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             // styles have to be populated by this or builder/layer impl before selecting
             layer.selectStyle(mapLayerJson.style);
+
+            if (mapLayerJson.describeLayer) {
+                layer.setDescribeLayerStatus(DESCRIBE_LAYER.PREDEFINED);
+                layer.setDescribeLayerInfo(mapLayerJson.describeLayer);
+            }
 
             return layer;
         },
