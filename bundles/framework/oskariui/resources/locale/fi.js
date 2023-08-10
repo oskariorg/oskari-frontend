@@ -19,7 +19,10 @@ Oskari.registerLocalization({
             search: 'Etsi',
             reset: 'Tyhjennä',
             copy: 'Kopioi leikepöydälle',
-            clear: 'Tyhjennä'
+            clear: 'Tyhjennä',
+            accept: 'Hyväksy',
+            reject: 'Hylkää',
+            info: 'Näytä lisätietoa'
         },
         messages: {
             confirm: 'Haluatko varmasti jatkaa?',

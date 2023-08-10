@@ -9,14 +9,30 @@ import { FilterTwoTone, PlusCircleOutlined } from '@ant-design/icons';
 import { green } from '@ant-design/colors';
 
 export const FilterTypes = {
-    equals: '=',
-    like: '~=',
-    notEquals: '≠',
-    notLike: '~≠',
-    greaterThan: '>',
-    lessThan: '<',
-    greaterThanOrEqualTo: '≥',
-    lessThanOrEqualTo: '≤'
+    string: {
+        equals: '=',
+        like: '~=',
+        notEquals: '≠',
+        notLike: '~≠'
+    },
+    number: {
+        equals: '=',
+        notEquals: '≠',
+        greaterThan: '>',
+        lessThan: '<',
+        greaterThanOrEqualTo: '≥',
+        lessThanOrEqualTo: '≤'
+    },
+    ALL: {
+        equals: '=',
+        like: '~=',
+        notEquals: '≠',
+        notLike: '~≠',
+        greaterThan: '>',
+        lessThan: '<',
+        greaterThanOrEqualTo: '≥',
+        lessThanOrEqualTo: '≤'
+    }
 };
 
 export const LogicalOperators = {
@@ -24,21 +40,29 @@ export const LogicalOperators = {
     OR: 'OR'
 };
 
-const getOptionsFromColumnNames = (columnNames) => {
+const getOptionsFromColumnNames = (columnNames, visibleColumnsSettings) => {
+    const { activeLayerPropertyLabels } = visibleColumnsSettings;
     return columnNames?.map(key => {
         return {
-            label: key,
+            label: activeLayerPropertyLabels && activeLayerPropertyLabels[key] ? activeLayerPropertyLabels[key] : key,
             value: key
         };
     });
 };
 
-const generateFilterTypeOptions = () => {
-    return Object.keys(FilterTypes).map(key => {
+const generateFilterTypeOptions = (filter, activeLayerPropertyTypes) => {
+    const field = filter?.attribute || null;
+    // unlisted type or no known property types -> just offer all filters we've got.
+    let fieldType = 'ALL';
+    if (field && activeLayerPropertyTypes && activeLayerPropertyTypes[field]) {
+        fieldType = activeLayerPropertyTypes[field];
+    }
+
+    return Object.keys(FilterTypes[fieldType]).map(key => {
         const messageKey = 'selectByPropertiesPopup.filterType.' + key;
         return {
             label: <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={messageKey}></Message>,
-            value: FilterTypes[key]
+            value: FilterTypes[fieldType][key]
         };
     });
 };
@@ -138,7 +162,11 @@ const FilterRow = (props) => {
             <StyledSelectMedium
                 options={columnOptions}
                 value={filter.attribute}
-                onChange={((value) => { filter.attribute = value; updateFilters(index, filter); })}/>
+                onChange={((value) => {
+                    filter.attribute = value;
+                    filter.operator = null;
+                    updateFilters(index, filter);
+                })}/>
             <StyledSelectMedium
                 options={filterTypeOptions}
                 value={filter.operator}
@@ -186,7 +214,7 @@ const Container = styled('div')`
 `;
 
 export const SelectByPropertiesPopup = (props) => {
-    const { columnNames, filters, updateFilters, addFilter, removeFilter, applyFilters, closeSelectByPropertiesPopup } = props;
+    const { columnNames, filters, updateFilters, addFilter, removeFilter, applyFilters, closeSelectByPropertiesPopup, visibleColumnsSettings } = props;
     let hasErrors = false;
     const rows = filters.map((filter, index) => {
         if (filter?.error) {
@@ -195,8 +223,8 @@ export const SelectByPropertiesPopup = (props) => {
         return <FilterRow
             key={index}
             index={index}
-            columnOptions={getOptionsFromColumnNames(columnNames)}
-            filterTypeOptions={generateFilterTypeOptions()}
+            columnOptions={getOptionsFromColumnNames(columnNames, visibleColumnsSettings)}
+            filterTypeOptions={generateFilterTypeOptions(filter, visibleColumnsSettings.activeLayerPropertyTypes)}
             filter={filter}
             updateFilters={updateFilters}
             addFilter={addFilter}
@@ -220,7 +248,8 @@ SelectByPropertiesPopup.propTypes = {
     addFilter: PropTypes.func,
     removeFilter: PropTypes.func,
     applyFilters: PropTypes.func,
-    closeSelectByPropertiesPopup: PropTypes.func
+    closeSelectByPropertiesPopup: PropTypes.func,
+    visibleColumnsSettings: PropTypes.object
 };
 
 export const SelectByPropertiesFunnel = (props) => {
@@ -242,9 +271,10 @@ const getActiveLayerName = (activeLayerId, layers) => {
 };
 
 export const showSelectByPropertiesPopup = (state, controller) => {
-    const { activeLayerId, layers, selectByPropertiesSettings } = state;
+    const { activeLayerId, layers, selectByPropertiesSettings, visibleColumnsSettings } = state;
     const content = <SelectByPropertiesPopup
         columnNames={ selectByPropertiesSettings.allColumns }
+        visibleColumnsSettings={visibleColumnsSettings}
         filters = { selectByPropertiesSettings.filters }
         updateFilters={controller.updateFilters}
         addFilter={controller.addFilter}
@@ -261,6 +291,7 @@ export const showSelectByPropertiesPopup = (state, controller) => {
             controls.update(title,
                 <SelectByPropertiesPopup
                     columnNames={ selectByPropertiesSettings.allColumns }
+                    visibleColumnsSettings={visibleColumnsSettings}
                     filters = { selectByPropertiesSettings.filters }
                     updateFilters={controller.updateFilters}
                     addFilter={controller.addFilter}

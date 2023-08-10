@@ -91,7 +91,7 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
             LayerComposingModel.VECTOR_STYLES,
             LayerComposingModel.URL,
             LayerComposingModel.VERSION,
-            LayerComposingModel.WFS_RENDER_MODE
+            LayerComposingModel.WFS_LAYER
         ], ['1.1.0', '2.0.0', '3.0.0']);
 
         const layerClass = 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';

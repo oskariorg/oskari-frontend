@@ -92,13 +92,13 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
 };
 
 const createColumnSettingsFromFeatures = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings) => {
-    const { visibleColumns } = visibleColumnsSettings;
+    const { visibleColumns, activeLayerPropertyLabels } = visibleColumnsSettings;
     return Object.keys(features[0].properties)
         .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns.includes(key))
         .map(key => {
             return {
                 align: 'left',
-                title: key,
+                title: activeLayerPropertyLabels && activeLayerPropertyLabels[key] ? activeLayerPropertyLabels[key] : key,
                 key,
                 dataIndex: key,
                 showSorterTooltip: sorterTooltipOptions,

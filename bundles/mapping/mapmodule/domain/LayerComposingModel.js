@@ -30,7 +30,7 @@ const PROPERTY_FIELDS = [
     'TIMES',
     'URL',
     'VERSION',
-    'WFS_RENDER_MODE',
+    'WFS_LAYER',
     'DECLUTTER'
 ];
 

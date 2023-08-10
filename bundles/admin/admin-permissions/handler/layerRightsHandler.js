@@ -7,9 +7,15 @@ class UIHandler extends StateHandler {
         this.setState({
             roles: [],
             permissions: [],
+            resources: [],
             selectedRole: 0,
             loading: false,
-            changedIds: new Set()
+            changedIds: new Set(),
+            pagination: {
+                pageSize: 50,
+                page: 1,
+                filter: ''
+            }
         });
         this.addStateListener(consumer);
         this.fetchRoles();
@@ -28,6 +34,7 @@ class UIHandler extends StateHandler {
         } else {
             this.updateState({
                 permissions: [],
+                resources: [],
                 changedIds: new Set()
             });
         }
@@ -39,9 +46,68 @@ class UIHandler extends StateHandler {
         });
     }
 
+    setCheckAllForPermission (permissionType, enabled) {
+        let layers = [...this.state.resources];
+        const startIndex = (this.state.pagination.page - 1) * this.state.pagination.pageSize;
+        const endIndex = this.state.pagination.pageSize * this.state.pagination.page;
+        const changedIds = new Set(this.state.changedIds);
+        for (let i = startIndex; i < endIndex && i < layers.length; i++) {
+            let permissions = layers[i]?.permissions[this.state.selectedRole] || [];
+            if (enabled) {
+                if (permissions.findIndex(p => p === permissionType) < 0) {
+                    permissions.push(permissionType);
+                }
+            } else {
+                const permIndex = permissions.findIndex(p => p === permissionType);
+                if (permIndex > -1) permissions.splice(permIndex, 1);
+            }
+            layers[i].permissions[this.state.selectedRole] = permissions;
+            changedIds.add(layers[i].id);
+        }
+
+        this.updateState({
+            resources: layers,
+            changedIds: new Set(changedIds)
+        });
+    }
+
+    setPage (page) {
+        this.updateState({
+            pagination: {
+                ...this.state.pagination,
+                page: page
+            }
+        });
+    }
+
+    search (searchText) {
+        const permissions = structuredClone(this.state.permissions?.layers?.filter(r => r.name.toLowerCase().includes(searchText.toLowerCase())));
+        this.updateState({
+            resources: permissions,
+            changedIds: new Set(),
+            pagination: {
+                ...this.state.pagination,
+                filter: searchText,
+                page: 1
+            }
+        });
+    }
+
+    clearSearch () {
+        this.updateState({
+            resources: structuredClone(this.state.permissions?.layers) || [],
+            changedIds: new Set(),
+            pagination: {
+                ...this.state.pagination,
+                filter: '',
+                page: 1
+            }
+        });
+    }
+
     async fetchRoles () {
         try {
-            const response = await fetch(Oskari.urls.getRoute('GetAllRoles', {
+            const response = await fetch(Oskari.urls.getRoute('ManageRoles', {
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 getExternalIds: 'ROLE'
@@ -58,7 +124,7 @@ class UIHandler extends StateHandler {
             this.updateState({
                 roles: [
                     { id: 0, name: `-- ${Oskari.getMsg('admin-permissions', 'rights.selectValue')} --` },
-                    ...result.external
+                    ...result.rolelist
                 ]
             });
         } catch (e) {
@@ -72,11 +138,8 @@ class UIHandler extends StateHandler {
     async fetchPermissions () {
         try {
             this.setLoading(true);
-            const response = await fetch(Oskari.urls.getRoute('GetPermissionsLayerHandlers', {
-                lang: Oskari.getLang(),
-                timestamp: new Date().getTime(),
-                externalType: 'ROLE',
-                externalId: this.state.selectedRole
+            const response = await fetch(Oskari.urls.getRoute('LayerPermission', {
+                lang: Oskari.getLang()
             }), {
                 method: 'GET',
                 headers: {
@@ -89,13 +152,20 @@ class UIHandler extends StateHandler {
             const result = await response.json();
             this.updateState({
                 permissions: result,
-                changedIds: new Set()
+                resources: structuredClone(result?.layers) || [],
+                changedIds: new Set(),
+                pagination: {
+                    ...this.state.pagination,
+                    page: 1,
+                    filter: ''
+                }
             });
             this.setLoading(false);
         } catch (e) {
             Messaging.error(Oskari.getMsg('admin-permissions', 'rights.error.title'));
             this.updateState({
                 permissions: [],
+                resources: [],
                 changedIds: new Set()
             });
             this.setLoading(false);
@@ -108,18 +178,18 @@ class UIHandler extends StateHandler {
             const changedPermissions = [];
             for (const changed of this.state.changedIds) {
                 changedPermissions.push({
-                    ...this.state.permissions?.resource.find(p => p.id === changed),
+                    ...this.state.resources?.find(p => p.id === changed),
                     roleId: this.state.selectedRole
                 });
             }
             for (let perm of changedPermissions) {
-                perm.permissions = perm.permissions.map(p => ({ key: p.id, value: p.allow }));
+                perm.permissions = perm.permissions[this.state.selectedRole];
             }
             const chunks = this.createChunks(changedPermissions, 100);
             for (const chunk of chunks) {
                 const payload = new URLSearchParams();
-                payload.append('resource', JSON.stringify(chunk));
-                const response = await fetch(Oskari.urls.getRoute('SaveLayerPermission'), {
+                payload.append('layers', JSON.stringify(chunk));
+                const response = await fetch(Oskari.urls.getRoute('LayerPermission'), {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -144,17 +214,25 @@ class UIHandler extends StateHandler {
         }
     }
 
-    togglePermission (id, permissionId) {
-        let permissions = [...this.state.permissions?.resource];
-        const index = permissions.findIndex(p => p.id === id);
-        const permIndex = permissions[index].permissions.findIndex(p => p.id === permissionId);
-        permissions[index].permissions[permIndex].allow = !permissions[index].permissions[permIndex].allow;
-        this.updateState({
-            permissions: {
-                ...this.state.permissions,
-                resource: permissions,
-                changedIds: new Set(this.state.changedIds).add(id)
+    togglePermission (id, permissionId, enabled) {
+        let layers = [...this.state.resources];
+        const index = layers.findIndex(p => p.id === id);
+
+        let permissions = layers[index]?.permissions[this.state.selectedRole] || [];
+        if (enabled) {
+            if (permissions.findIndex(p => p === permissionId) < 0) {
+                permissions.push(permissionId);
             }
+        } else {
+            const permIndex = permissions.findIndex(p => p === permissionId);
+            if (permIndex > -1) permissions.splice(permIndex, 1);
+        }
+
+        layers[index].permissions[this.state.selectedRole] = permissions;
+
+        this.updateState({
+            resources: layers,
+            changedIds: new Set(this.state.changedIds).add(id)
         });
     }
 
@@ -182,7 +260,11 @@ class UIHandler extends StateHandler {
 const wrapped = controllerMixin(UIHandler, [
     'setSelectedRole',
     'togglePermission',
-    'savePermissions'
+    'savePermissions',
+    'setCheckAllForPermission',
+    'setPage',
+    'search',
+    'clearSearch'
 ]);
 
 export { wrapped as LayerRightsHandler };

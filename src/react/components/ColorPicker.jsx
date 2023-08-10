@@ -5,9 +5,6 @@ import { Button, Popover, TextInput, Tooltip, Message } from 'oskari-ui'
 import { constants, SvgRadioButton } from './StyleEditor/index';
 import { BgColorsOutlined } from '@ant-design/icons';
 
-// Use z-index to render popover top of the Modal
-const zIndex = 55500;
-
 // Hide input softly to render color picker to correct place
 const HiddenInput = styled('input')`
     opacity: 0;
@@ -82,7 +79,6 @@ export const ColorPicker = (props) => {
                 trigger="click"
                 placement="bottom"
                 open={visible}
-                zIndex={zIndex}
                 onOpenChange = {setVisible}
                 >
             <Tooltip title={chooseTooltip}>

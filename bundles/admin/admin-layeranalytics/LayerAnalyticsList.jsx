@@ -2,8 +2,8 @@ import React, { Fragment, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { Message, Space, Spin, Tooltip, TextInput, Select, Option, Button } from 'oskari-ui';
-import { DeleteButton, SecondaryButton } from 'oskari-ui/components/buttons';
-import { EditOutlined, SearchOutlined } from '@ant-design/icons';
+import { DeleteButton, SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
+import { SearchOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
 
@@ -204,9 +204,9 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
                     <React.Fragment>
                         <TitleArea>
                             <Space>
-                                <Tooltip title={ <Message messageKey='flyout.editLayerTooltip' /> }>
-                                    <EditOutlined onClick={ () => layerEditorCallback(item.id) } />
-                                </Tooltip>
+                                <IconButton type='edit'
+                                    title={ <Message messageKey='flyout.editLayerTooltip' /> }
+                                    onClick={ () => layerEditorCallback(item.id) } />
                                 <DeleteButton
                                     type='icon'
                                     title={<Message messageKey='flyout.removeAllDataForLayer' />}

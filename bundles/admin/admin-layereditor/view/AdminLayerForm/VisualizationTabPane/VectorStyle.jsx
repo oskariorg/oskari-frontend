@@ -11,6 +11,8 @@ import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { generateBlankStyle } from 'oskari-ui/components/StyleEditor/index';
+import { SUPPORTED_FORMATS } from 'oskari-ui/components/StyleEditor/constants';
+import { getGeometryType } from '../../LayerHelper';
 
 const FullWidthSpace = styled(Space)`
     & {
@@ -109,6 +111,8 @@ export const VectorStyle = ThemeConsumer(LocaleConsumer(({ theme = {}, layer, ge
     };
     const visible = !!state.modal;
     const externalType = external ? getExternalStyleType(layer) : null;
+    const geometryType = getGeometryType(layer);
+    const styleTabs = SUPPORTED_FORMATS.includes(geometryType) ? [geometryType] : SUPPORTED_FORMATS;
     return (
         <FullWidthSpace direction='vertical'>
             <Space direction='horizontal'>
@@ -153,6 +157,7 @@ export const VectorStyle = ThemeConsumer(LocaleConsumer(({ theme = {}, layer, ge
                 { state.modal === 'editor' &&
                     <StyleEditor
                         oskariStyle={ state.style.featureStyle }
+                        tabs={styleTabs}
                         onChange={ (featureStyle) => updateStyle({ featureStyle })}
                     />
                 }
