@@ -30,9 +30,8 @@ const PROPERTY_FIELDS = [
     'TIMES',
     'URL',
     'VERSION',
-    'WFS_RENDER_MODE',
-    'DECLUTTER',
-    'VECTOR_LAYER'
+    'WFS_LAYER',
+    'DECLUTTER'
 ];
 
 // Common fields are enforced on composing model.

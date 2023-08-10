@@ -8,3 +8,4 @@ export { North as NorthIcon } from './North';
 export { Layers as LayersIcon } from './Layers';
 export { MeasureArea as MeasureAreaIcon } from './MeasureArea';
 export { MeasureLine as MeasureLineIcon } from './MeasureLine';
+export { Drag as DragIcon } from './Drag';
