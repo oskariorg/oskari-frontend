@@ -20,14 +20,14 @@ Oskari.clazz.define(
         layertype: 'myplaces',
 
         getLayerTypeSelector: function () {
-            return this.layertype;
+            // WFS plugin handles events
         },
         /**
          * Interface method for the module protocol.
          * @private @method _initImpl
          */
         _initImpl: function () {
-            const type = this.getLayerTypeSelector();
+            const type = this.layertype;
             const options = {
                 type,
                 editRequest: 'MyPlaces.EditCategoryRequest',

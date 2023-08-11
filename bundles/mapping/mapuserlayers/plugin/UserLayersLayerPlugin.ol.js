@@ -18,14 +18,14 @@ Oskari.clazz.define(
         layertype: 'userlayer',
 
         getLayerTypeSelector: function () {
-            return this.layertype;
+            // WFS plugin handles events
         },
         /**
          * @private @method _initImpl
          * Interface method for the module protocol.
          */
         _initImpl: function () {
-            const type = this.getLayerTypeSelector();
+            const type = this.layertype;
             const options = {
                 type,
                 editRequest: 'MyPlacesImport.ShowUserLayerDialogRequest',
