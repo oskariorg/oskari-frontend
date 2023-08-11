@@ -6,7 +6,7 @@ export const getGeometryType = layer => {
     if (attributes?.data?.geometryType) {
         return attributes.data.geometryType;
     }
-    const { geomName, featureProperties = []} = capabilities;
+    const { geomName, featureProperties = [] } = capabilities;
     const capaType = featureProperties.find(prop => prop.name === geomName)?.type.toLowerCase() || '';
     // SurfacePropertyType, GeometryPropertyType, PointPropertyType, MultiLineStringPropertyType, MultiPolygon,...
     if (AREA_TYPES.find(type => capaType.includes(type))) {

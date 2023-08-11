@@ -1,7 +1,6 @@
 export { Mandatory as MandatoryIcon } from './Mandatory';
 export { Info as InfoIcon } from './Info';
 export { Metadata as MetadataIcon } from './Metadata';
-export { Delete as DeleteIcon } from './Delete';
 export { Return as ReturnIcon } from './Return';
 export { Forward as ForwardIcon } from './Forward';
 export { Backward as BackwardIcon } from './Backward';

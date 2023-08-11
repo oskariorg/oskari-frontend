@@ -60,8 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
                     LayerComposingModel.SRS,
                     LayerComposingModel.VECTOR_STYLES,
                     LayerComposingModel.EXTERNAL_VECTOR_STYLES,
-                    LayerComposingModel.URL,
-                    LayerComposingModel.VECTOR_LAYER
+                    LayerComposingModel.URL
                 ]);
                 mapLayerService.registerLayerModel(registerType, clazz, composingModel);
                 mapLayerService.registerLayerModelBuilder(registerType, new Tiles3DModelBuilder());

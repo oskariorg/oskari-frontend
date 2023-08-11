@@ -41,6 +41,7 @@
 
         function (userData) {
             this._loggedIn = false;
+            this._admin = false;
             this._roles = [];
             if (userData) {
                 this._firstName = userData.firstName;
@@ -52,6 +53,9 @@
                 this._roles = userData.roles || [];
                 if (userData.userUUID) {
                     this._loggedIn = true;
+                }
+                if (userData.admin === true) {
+                    this._admin = true;
                 }
                 this._apiKey = userData.apikey;
             }
@@ -144,6 +148,9 @@
              */
             isLoggedIn: function () {
                 return this._loggedIn;
+            },
+            isAdmin: function () {
+                return this._admin;
             },
             /**
              * @method getRoles

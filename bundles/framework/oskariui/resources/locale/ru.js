@@ -12,7 +12,15 @@ Oskari.registerLocalization({
             yes: 'Да',
             no: 'Нет',
             next: 'Следующий',
-            previous: 'Предыдущий'
+            previous: 'Предыдущий',
+            print: 'Распечатать',
+            search: 'Поиск',
+            reset: 'Очистить',
+            copy: 'Скопировать в буфер обмена',
+            clear: 'Очистить',
+            accept: 'Принять',
+            reject: 'Отклонить',
+            info: 'Показать больше информации'
         },
         table: {
             sort: {

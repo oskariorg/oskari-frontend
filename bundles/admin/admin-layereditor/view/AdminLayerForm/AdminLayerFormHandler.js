@@ -768,8 +768,7 @@ class UIHandler extends StateHandler {
         // if layer was found from the selected layers remove it from map and re-add it
         // this handles everything that needs to be updated on the map without separate code to update and potentially changed data separately
         if (originalLayerIndex !== -1) {
-            this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
-            this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, originalLayerIndex]);
+            this.sandbox.postRequestByName('AddMapLayerRequest', [layerId, { toPosition: originalLayerIndex }]);
         }
     }
 

@@ -1,15 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Confirm, Button,Tooltip } from 'oskari-ui';
-import { IconButton } from 'oskari-ui/components/buttons';
-import { SecondaryButton } from './';
-import { DeleteIcon } from '../icons'
+import { Message, Confirm, Tooltip } from 'oskari-ui';
+import { SecondaryButton, IconButton } from './';
 
-const StyledButton = styled(Button)`
-    font-size: 16px;
-    pointer-events: ${props => props.disabled ? 'none' : 'auto'};
-`;
 /**
  * This + pointer-events style on button components are used to fix tooltip
  * not disappearing if the button is disabled. Probably caused by styled-components + antd problem.
@@ -21,16 +15,22 @@ const DisabledWrapper = styled('div')`
 const getButton = (type, disabled) => {
     const props = {
         className: 't_button t_delete',
-        disabled
-    }
+        disabled,
+        type: 'delete',
+        title: null
+    };
     if (type === 'icon') {
-        return <IconButton icon={<DeleteIcon/>} {...props}/>;
+        return <IconButton {...props}/>;
     }
     if (type === 'button') {
-        return <StyledButton {...props}><DeleteIcon/></StyledButton>;
+        return <IconButton bordered {...props}/>;
     }
     if (type === 'label') {
-        return <SecondaryButton {...props} danger type="delete"/>;
+        return (
+            <DisabledWrapper>
+                <SecondaryButton danger {...props}/>;
+            </DisabledWrapper>
+        );
     }
 };
 
@@ -39,7 +39,8 @@ export const DeleteButton = ({
     type,
     title = <Message messageKey='messages.confirmDelete' bundleKey='oskariui'/>,
     tooltip = <Message messageKey={'buttons.delete'} bundleKey='oskariui'/>,
-    disabled = false
+    disabled = false,
+    ...rest
 }) => {
     const placement = tooltip ? 'bottom' : 'top';
     return (
@@ -53,11 +54,10 @@ export const DeleteButton = ({
             okButtonProps={{className: 't_button t_delete'}}
             cancelButtonProps={{className: 't_button t_cancel'}}
             okType='danger'
-            placement={placement}>
+            placement={placement}
+            {...rest}>
             <Tooltip title={tooltip}>
-                <DisabledWrapper $disabled={disabled}>
-                    {getButton(type, disabled)}
-                </DisabledWrapper>
+                {getButton(type, disabled)}
             </Tooltip>
         </Confirm>
     );

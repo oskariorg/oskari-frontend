@@ -71,10 +71,20 @@ class Handler extends StateHandler {
     }
 
     addLayerToMap (layerId, styleId) {
-        this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
-        if (styleId) {
-            this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId, styleId]);
+        const styleName = styleId?.toString();
+        if (this.sandbox.isLayerAlreadySelected(layerId)) {
+            if (styleName) {
+                // use request to trigger event
+                this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId, styleName]);
+            }
+            return;
         }
+        if (styleName) {
+            // AddMapLayerRequest is asynchoronous so style has to be selected before request
+            // ChangeMapLayerStyleRequest doesn't work properly as layer isn't selected immediately
+            this.sandbox.findMapLayerFromAllAvailable(layerId)?.selectStyle(styleName);
+        }
+        this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
     }
 
     showLayerStyles (layerId) {

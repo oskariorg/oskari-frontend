@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { DeleteButton } from 'oskari-ui/components/buttons';
-import { Tooltip, Message } from 'oskari-ui';
-import { EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { DeleteButton, IconButton } from 'oskari-ui/components/buttons';
+import { Message } from 'oskari-ui';
+import { EyeOutlined } from '@ant-design/icons';
 
 const ToolRow = styled.div`
     margin-left: 10px;
@@ -22,14 +22,17 @@ export const CollapseTools = ({ announcementId, toolController }) => {
     return (
         <ToolRow onClick={(event) => event.stopPropagation()}>
             <StyledTool>
-                <Tooltip title={<Message messageKey={'tools.preview'}/>}>
-                    <EyeOutlined className='t_button-preview' onClick = { () => toolController.preview(announcementId) }/>
-                </Tooltip>
+                <IconButton
+                    className='t_preview'
+                    icon={<EyeOutlined/>}
+                    title={<Message messageKey={'tools.preview'}/>}
+                    onClick = { () => toolController.preview(announcementId) }/>
             </StyledTool>
             <StyledTool>
-                <Tooltip title={<Message messageKey={'tools.edit'}/>}>
-                    <EditOutlined className='t_button-edit' onClick = { () => toolController.showEditPopup(announcementId) }/>
-                </Tooltip>
+                <IconButton
+                    type='edit'
+                    title={<Message messageKey={'tools.edit'}/>}
+                    onClick = { () => toolController.showEditPopup(announcementId) }/>
             </StyledTool>
             <StyledTool>
                 <DeleteButton

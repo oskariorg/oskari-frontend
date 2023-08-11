@@ -175,76 +175,42 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
          */
         _getBottomLayer: function () {
-            var bottomIdx = 0,
-                allSelectedLayers =
-                    this.getSandbox().findAllSelectedMapLayers();
-
-            if (allSelectedLayers && allSelectedLayers.length) {
-                return allSelectedLayers[bottomIdx];
-            }
-            return null;
+            return this.getSandbox().findAllSelectedMapLayers()[0];
         },
 
         /**
          * Does the actual layer selection update
-         * @param  {Number} newSelectionId Id of the new base layer
+         * @param  {String} newId Id of the new base layer
          * @private
          */
-        _updateSelection: function (newSelectionId) {
+        _updateSelection: function (newId) {
             if (this.error) {
                 return;
             }
-            var me = this,
-                conf = me.getConfig(),
-                currentBottom = me._getBottomLayer(),
-                currentBottomId = '',
-                currentSelection = me.getElement().find('div.currentSelection'),
-                newSelection =
-                    me.getSandbox().findMapLayerFromSelectedMapLayers(
-                        newSelectionId
-                    );
-
-            if (newSelectionId === currentSelection.attr('data-layerId')) {
+            const currentId = this.getElement().find('div.currentSelection').attr('data-layerId');
+            if (newId === currentId) {
                 // user clicked already selected option, do nothing
                 return;
             }
+            const sb = this.getSandbox();
+            const { baseLayers = [] } = this.getConfig();
+            const currentBottomId = this._getBottomLayer()?.getId();
+
             // switch bg layer (no need to call update on ui, we should catch the event)
             // - check if current bottom layer exists & is in our list (if so, remove)
-            if (currentBottom) {
-                currentBottomId += currentBottom.getId();
-                if (jQuery.inArray(currentBottomId, conf.baseLayers) > -1) {
-                    me.getSandbox().postRequestByName(
-                        'RemoveMapLayerRequest',
-                        [currentBottomId]
-                    );
-                }
+            if (currentBottomId && baseLayers.includes(currentBottomId.toString())) {
+                sb.postRequestByName('RemoveMapLayerRequest', [currentBottomId]);
             }
             // - check if new selection is already selected, remove if so as rearrange doesn't seem to work
-            if (newSelection) {
-                me.getSandbox().postRequestByName(
-                    'RemoveMapLayerRequest',
-                    [newSelectionId]
-                );
-            } else {
-                newSelection =
-                    me.getSandbox().findMapLayerFromAllAvailable(
-                        newSelectionId
-                    );
+            if (sb.isLayerAlreadySelected(newId)) {
+                sb.postRequestByName('RemoveMapLayerRequest', [newId]);
             }
+            // - add to bottom
+            sb.postRequestByName('AddMapLayerRequest', [newId, { toPosition: 0 }]);
 
-            me.getSandbox().postRequestByName(
-                'AddMapLayerRequest',
-                [newSelectionId]
-            );
-
-            // - move new selection to bottom (see layerselection._layerOrderChanged(item))
-            me.getSandbox().postRequestByName(
-                'RearrangeSelectedMapLayerRequest',
-                [newSelectionId, 0]
-            );
             // toggle dropdown open/closed.
             // won't bother with dropdown being on or off here
-            me._toggleSelection();
+            this._toggleSelection();
         },
 
         /**

@@ -7,23 +7,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
         this._log.debug('Add Marker');
 
         // Check debricated data
-        var data = request.getData();
-        var newData = {};
+        const data = request.getData();
 
-        // Request data is allready to new format
-        if (data && !data.iconUrl && (data.shape || typeof data.shape === 'number') && typeof data.shape !== 'object') {
-            newData = data;
+        if (typeof data !== 'object') {
+            this._log.warn('AddMarkerRequest data object is mandatory. Skipping request!');
+            return;
         }
-        // Else format old data to new form and inform user about this
-        else {
+        let newData;
+        // format old data to new form and inform user about this
+        if (data.iconUrl || typeof data.shape === 'object') {
             this._log.warn('AddMarkerRequest data is in deprecated format. Modifying data format before processing request. Please check your request!');
-            var shape;
+            let shape;
             if (data.iconUrl) {
                 shape = data.iconUrl;
             } else if (data.shape && data.shape.data) {
                 shape = data.shape.data;
-            } else if (data.shape) {
-                shape = data.shape;
             }
             newData = {
                 // Allready supported properties
@@ -38,6 +36,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
                 offsetX: (data.shape && data.shape.x && !isNaN(data.shape.x)) ? data.shape.x : undefined,
                 offsetY: (data.shape && data.shape.y && !isNaN(data.shape.y)) ? data.shape.y : undefined
             };
+        } else {
+            // Request data is allready to new format
+            newData = data;
         }
 
         // validations

@@ -5,21 +5,35 @@ import { ThemeConsumer } from '../../util';
 import { getColorEffect, EFFECT } from '../../theme';
 import styled from 'styled-components';
 import { PlusOutlined, EditOutlined, QuestionCircleOutlined, DeleteOutlined, CheckOutlined, StopOutlined} from '@ant-design/icons';
-import { red, green } from '@ant-design/colors'
 import { Forward } from '../icons/Forward'
 import { Backward } from '../icons/Backward'
+
+const COLORS = {
+    red: '#f5222d',
+    green: '#52c41a',
+    blue: '#0290ff',
+    hover: '#ffd400'
+};
+
+const TYPE_COLORS = {
+    accept: COLORS.green,
+    reject: COLORS.red,
+    delete: COLORS.red,
+    info: COLORS.blue
+};
 
 // Note! AntD buttons default at 32x32px
 //  If the font-size of the icon is > 32px it will be clipped by at least Safari
 //  Let the user of this component define the size of the button instead of doing it here.
 const BorderlessButton = styled(Button)`
+    color:  ${props => props.$active || props.$color};
     border: none;
     background: none;
     padding: 0px;
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
     &:hover {
-        color: ${props => props.color};
+        color: ${props => props.$hover};
         background: none;
     }
     &:disabled {
@@ -27,11 +41,13 @@ const BorderlessButton = styled(Button)`
     }
 `;
 const BorderedButton = styled(Button)`
+    color:  ${props => props.$active || props.$color};
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
+    border-color: ${props => props.$active};
     &:hover {
-        color: ${props => props.color};
-        border-color: ${props => props.color};
+        color: ${props => props.$hover};
+        border-color: ${props => props.$hover};
     }
 `;
 
@@ -45,10 +61,10 @@ const DisabledWrapper = styled('div')`
 
 const getPredefinedIcon = (type) => {
     if (type === 'accept') {
-        return <CheckOutlined style={{color: green.primary}}/>;
+        return <CheckOutlined />;
     }
     if (type === 'reject') {
-        return <StopOutlined style={{color: red.primary}} />;
+        return <StopOutlined />;
     }
     if (type === 'add') {
         return <PlusOutlined/>;
@@ -57,7 +73,7 @@ const getPredefinedIcon = (type) => {
         return <EditOutlined/>;
     }
     if (type === 'info') {
-        return <QuestionCircleOutlined style={{ color: '#0290ff', borderRadius: '50%' }}/>;
+        return <QuestionCircleOutlined />;
     }
     if (type === 'next') {
         return <Forward/>;
@@ -66,7 +82,7 @@ const getPredefinedIcon = (type) => {
         return <Backward/>;
     }
     if (type === 'delete') {
-        return <DeleteOutlined style={{color: red.primary}} />
+        return <DeleteOutlined />
     }
     return null;
 }
@@ -87,31 +103,45 @@ const getConfirmProps = (type) => {
     };
 };
 
-const ThemeButton = ThemeConsumer(({ theme, bordered, iconSize, ...rest }) => {
-    let color = theme?.color?.accent;
-    if (color && Oskari.util.isDarkColor(color)) {
-        color = theme?.color?.primary;
+const ThemeButton = ThemeConsumer(({
+    theme,
+    type,
+    bordered = false,
+    disabled = false,
+    icon = type ? getPredefinedIcon(type) : null,
+    iconSize = 16,
+    color = TYPE_COLORS[type],
+    className = '',
+    active = false,
+    ...rest
+}) => {
+    if (type && !className.includes(`t_${type}`)) {
+        className = `${className} t_${type}`;
     }
-    if (!color) {
-        color = '#ffd400';
-    } else if (Oskari.util.isDarkColor(color)) {
-        color = getColorEffect(color, EFFECT.LIGHTEN);
+    let hover = theme?.color?.accent;
+    if (hover && Oskari.util.isDarkColor(hover)) {
+        hover = theme?.color?.primary;
     }
-    if (bordered) {
-        return <BorderedButton color={color} $iconSize={iconSize} { ...rest }/>
+    if (!hover) {
+        hover = COLORS.hover;
+    } else if (Oskari.util.isDarkColor(hover)) {
+        hover = getColorEffect(hover, EFFECT.LIGHTEN);
     }
-    // default
-    return <BorderlessButton color={color} $iconSize={iconSize} { ...rest }/>
+    const ButtonNode = bordered ? BorderedButton : BorderlessButton;
+    const activeColor = active ? hover : null;
+    return (
+        <DisabledWrapper $disabled={disabled}>
+            <ButtonNode $hover={hover} $color={color} $active={activeColor} $iconSize={iconSize} disabled={disabled} className={className} { ...rest }>
+                {icon}
+            </ButtonNode>
+        </DisabledWrapper>
+    );
 });
 
 export const IconButton = ({
     type,
     title = type ? <Message messageKey={`buttons.${type}`} bundleKey='oskariui'/> : '',
-    icon = type ? getPredefinedIcon(type) : null,
-    onClick,
     onConfirm,
-    disabled = false,
-    iconSize = 16,
     ...rest
 }) => {
     if (onConfirm) {
@@ -121,15 +151,11 @@ export const IconButton = ({
                 onConfirm={onConfirm}
                 okButtonProps={{className: `t_button t_${type || 'ok'}`}}
                 cancelButtonProps={{className: 't_button t_cancel'}}
-                disabled={disabled}
+                disabled={rest.disabled === true}
                 placement={title ? 'bottom' : 'top'}
                 { ...getConfirmProps(type) }>
                     <Tooltip title={title}>
-                        <DisabledWrapper $disabled={disabled}>
-                            <ThemeButton disabled={disabled} iconSize={iconSize} onClick={onClick} { ...rest }>
-                                {icon}
-                            </ThemeButton>
-                        </DisabledWrapper>
+                        <ThemeButton type={type} { ...rest }/>
                     </Tooltip>
             </Confirm>
         );
@@ -137,20 +163,11 @@ export const IconButton = ({
     if (title) {
         return (
             <Tooltip title={title}>
-                <DisabledWrapper $disabled={disabled}>
-                    <ThemeButton disabled={disabled} iconSize={iconSize} onClick={onClick} { ...rest }>
-                        {icon}
-                    </ThemeButton>
-                </DisabledWrapper>
+                <ThemeButton type={type} { ...rest }/>
             </Tooltip>
         );
     }
-    return (
-        <ThemeButton onClick={onClick} iconSize={iconSize} { ...rest }>
-            {icon}
-        </ThemeButton>
-    );
-
+    return <ThemeButton type={type} { ...rest }/>;
 };
 
 IconButton.propTypes = {
@@ -158,5 +175,9 @@ IconButton.propTypes = {
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     icon: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
     onClick: PropTypes.func,
-    onConfirm: PropTypes.func
+    onConfirm: PropTypes.func,
+    disabled: PropTypes.bool,
+    color: PropTypes.string,
+    iconSize: PropTypes.number,
+    active: PropTypes.bool
 };

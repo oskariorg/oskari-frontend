@@ -46,14 +46,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             this.addToPluginContainer(this.getElement());
             this.refresh();
         },
-        teardownUI: function () {
+        teardownUI: function (preserveElement) {
             // remove old element
-            this.removeFromPluginContainer(this.getElement());
+            this.removeFromPluginContainer(this.getElement(), preserveElement);
             if (this.handler) {
                 this.handler.getController().popupCleanup();
             }
         },
-
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI
@@ -61,9 +60,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
+            this.addToPluginContainer(this.getElement());
             this.refresh();
         },
-
         hasUI: function () {
             return !this._config.noUI;
         },

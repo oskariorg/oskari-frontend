@@ -23,6 +23,14 @@ const StyledInfoIcon = styled('span')`
     margin-left: 10px;
 `;
 
+const Channel = styled.div`
+    margin-bottom: 24px;
+`
+
+const Heading = styled.h3`
+    padding-bottom: 0px;
+`
+
 const PopupContent = ({ results, onClose }) => {
     const channels = Oskari.getMsg(BUNDLE_NAME, 'channels');
     const channelDescriptions = Oskari.getMsg(BUNDLE_NAME, 'channelDescriptions');
@@ -31,8 +39,8 @@ const PopupContent = ({ results, onClose }) => {
             {Object.keys(results).map(key => {
                 const res = results[key];
                 return (
-                    <div key={`channel-${key}`}>
-                        <h3>{channels[res.channelId] || res.channelId || '' + res.langText}{channelDescriptions[res.channelId] && (<StyledInfoIcon><InfoIcon title={channelDescriptions[res.channelId]} /></StyledInfoIcon>)}</h3>
+                    <Channel key={`channel-${key}`}>
+                        <Heading>{channels[res.channelId] || res.channelId || '' + res.langText}{channelDescriptions[res.channelId] && (<StyledInfoIcon><InfoIcon title={channelDescriptions[res.channelId]} /></StyledInfoIcon>)}</Heading>
                         {res.rows.map((row, index) => (
                             <Row key={index}>
                                 <img src={row.img} />
@@ -43,7 +51,7 @@ const PopupContent = ({ results, onClose }) => {
                                 </Address>
                             </Row>
                         ))}
-                    </div>
+                    </Channel>
                 )
             })}
             <ButtonContainer>

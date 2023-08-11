@@ -19,7 +19,10 @@ Oskari.registerLocalization({
             search: 'Search',
             reset: 'Reset',
             copy: 'Copy to clipboard',
-            clear: 'Clear'
+            clear: 'Clear',
+            accept: 'Accept',
+            reject: 'Reject',
+            info: 'Show more information'
         },
         messages: {
             confirm: 'Are you sure you want to continue?',
