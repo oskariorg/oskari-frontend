@@ -134,18 +134,8 @@ export class WFSLayer extends AbstractVectorLayer {
      * @return {json} wpsLayerParams
      */
     getWpsLayerParams () {
-        const { commonId, wpsInputType, noDataValue } = this._data;
-        const wps = {};
-        if (typeof commonId !== 'undefined') {
-            wps.join_key = commonId;
-        }
-        if (typeof wpsInputType !== 'undefined') {
-            wps.input_type = wpsInputType;
-        }
-        if (typeof noDataValue !== 'undefined') {
-            wps.no_data = noDataValue;
-        }
-        return wps;
+        const { commonId, noDataValue } = this._controlData;
+        return { commonId, noDataValue };
     }
 }
 
