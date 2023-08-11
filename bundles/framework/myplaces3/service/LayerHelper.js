@@ -15,6 +15,6 @@ export const layerToCategory = (layer) => {
         categoryId: getCategoryId(layerId),
         layerId,
         name: layer.getName(),
-        isDefault: !!layer.getOptions().isDefault
+        isDefault: layer.isDefault()
     };
 };
