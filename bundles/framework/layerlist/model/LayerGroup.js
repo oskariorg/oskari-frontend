@@ -9,6 +9,7 @@ export class LayerGroup {
         this.groups = groups || [];
         this.searchIndex = {};
         this.tools = [];
+        this._isAdmin = Oskari.user().isAdmin();
     }
 
     getParentId () {
@@ -104,10 +105,15 @@ export class LayerGroup {
         newLayers.forEach(layer => this.addLayer(layer));
     }
     _getSearchIndex (layer) {
-        var val = layer.getName() + ' ' +
+        let val = layer.getName() + ' ' +
             layer.getInspireName() + ' ' +
             layer.getOrganizationName();
         // TODO: maybe filter out undefined texts
+        if (this._isAdmin) {
+            val = val + ' ' +
+                layer.getId() + ' ' +
+                layer.getLayerName();
+        }
         return val.toLowerCase();
     }
     matchesKeyword (layerId, keyword) {

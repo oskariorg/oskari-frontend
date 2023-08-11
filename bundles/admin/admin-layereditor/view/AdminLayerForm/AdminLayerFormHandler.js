@@ -293,7 +293,7 @@ class UIHandler extends StateHandler {
     setFeatureFilter (filter = {}) {
         const layer = { ...this.getState().layer };
         let attributes = layer.attributes || {};
-        if (Object.keys(filter) === 0) {
+        if (Object.keys(filter).length === 0) {
             delete attributes.filter;
         } else {
             attributes = { ...attributes, filter };
@@ -474,7 +474,7 @@ class UIHandler extends StateHandler {
         }
 
         // Delete missing attibute keys but keep managed attributes
-        const managedAttributes = ['forcedSRS', 'data'];
+        const managedAttributes = ['forcedSRS', 'data', 'filter'];
         Object.keys(layer.attributes)
             .filter(key => !managedAttributes.includes(key))
             .forEach(key => delete layer.attributes[key]);
@@ -768,8 +768,7 @@ class UIHandler extends StateHandler {
         // if layer was found from the selected layers remove it from map and re-add it
         // this handles everything that needs to be updated on the map without separate code to update and potentially changed data separately
         if (originalLayerIndex !== -1) {
-            this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
-            this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, originalLayerIndex]);
+            this.sandbox.postRequestByName('AddMapLayerRequest', [layerId, { toPosition: originalLayerIndex }]);
         }
     }
 

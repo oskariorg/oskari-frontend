@@ -26,7 +26,7 @@ optional parameter is wanted marker id. If marker id is not defined then show/hi
   <td>/* visibility </td><td> Boolean </td><td> is marker visible (true/false)</td><td> </td>
 </tr>
 <tr>
-  <td> id </td><td> String </td><td> id for marker.</td><td> /td>
+  <td> id </td><td> String </td><td> id for marker.</td><td></td>
 </tr>
 </table>
 
@@ -34,22 +34,22 @@ optional parameter is wanted marker id. If marker id is not defined then show/hi
 
 Hide wanted marker from map:
 ```javascript
-channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [false, 'TEST_MARKER_ID']);
+Oskari.getSandbox().postRequestByName('MapModulePlugin.MarkerVisibilityRequest', [false, 'TEST_MARKER_ID']);
 ```
 
 Hide all markers from map:
 ```javascript
-channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [false]);
+Oskari.getSandbox().postRequestByName('MapModulePlugin.MarkerVisibilityRequest', [false]);
 ```
 
 Show wanted marker from map:
 ```javascript
-channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [true, 'TEST_MARKER_ID']);
+Oskari.getSandbox().postRequestByName('MapModulePlugin.MarkerVisibilityRequest', [true, 'TEST_MARKER_ID']);
 ```
 
 Show all markers from map:
 ```javascript
-channel.postRequest('MapModulePlugin.MarkerVisibilityRequest', [true]);
+Oskari.getSandbox().postRequestByName('MapModulePlugin.MarkerVisibilityRequest', [true]);
 ```
 
 ## Related api

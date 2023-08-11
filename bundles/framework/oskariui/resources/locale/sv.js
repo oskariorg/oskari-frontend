@@ -19,7 +19,10 @@ Oskari.registerLocalization({
             search: 'Sök',
             reset: 'Återställa',
             copy: 'Kopiera till klippbordet',
-            clear: 'Rensa'
+            clear: 'Rensa',
+            accept: 'Acceptera',
+            reject: 'Avvisa',
+            info: 'Visa mera information'
         },
         messages: {
             confirm: 'Är du säker på att du vill fortsätta?',

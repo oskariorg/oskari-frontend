@@ -3,7 +3,8 @@ export const TYPE = {
     FLYOUT: 'flyout',
     CONTAINER: 'container',
     BANNER: 'banner',
-    SIDE_PANEL: 'sidePanel'
+    SIDE_PANEL: 'sidePanel',
+    MODAL: 'modal'
 };
 // activeComponents has id + type as key and remove function as value
 let activeComponents = {};

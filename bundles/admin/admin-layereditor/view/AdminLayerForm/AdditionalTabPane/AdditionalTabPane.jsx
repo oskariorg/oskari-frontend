@@ -26,7 +26,7 @@ const {
     GFI_XSLT,
     ATTRIBUTIONS,
     ATTRIBUTES,
-    VECTOR_LAYER
+    WFS_LAYER
 } = LayerComposingModel;
 
 export const AdditionalTabPane = ({ layer, propertyFields, metadata, controller }) => {
@@ -64,7 +64,7 @@ export const AdditionalTabPane = ({ layer, propertyFields, metadata, controller 
             { isQueryable && propertyFields.includes(GFI_XSLT) &&
                 <GfiStyle layer={layer} controller={controller} />
             }
-            { propertyFields.includes(VECTOR_LAYER) &&
+            { propertyFields.includes(WFS_LAYER) &&
                 <VectorLayerAttributes layer={layer} controller={controller} />
             }
             { propertyFields.includes(ATTRIBUTES) &&

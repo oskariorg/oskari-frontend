@@ -103,6 +103,19 @@ class UIHandler extends StateHandler {
                 lat: this.formatNumber(this.state.latField, '.')
             }
         };
+
+        // Check if format should be degrees and add '°' symbol if needed
+        let isDegrees = false;
+        if (this.config.projectionShowFormat[this.state.selectedProjection]) {
+            isDegrees = this.config.projectionShowFormat[this.state.selectedProjection].format === 'degrees';
+        } else {
+            isDegrees = this.config.projectionShowFormat.format === 'degrees';
+        }
+        if (isDegrees) {
+            if (data.lonlat.lon.indexOf('°') < 0) data.lonlat.lon = data.lonlat.lon + '°';
+            if (data.lonlat.lat.indexOf('°') < 0) data.lonlat.lat = data.lonlat.lat + '°';
+        }
+
         const converted = await this.convertCoordinates(data, this.state.selectedProjection, this.originalProjection);
         this.updateLonLat(converted, true, true, true);
     }
