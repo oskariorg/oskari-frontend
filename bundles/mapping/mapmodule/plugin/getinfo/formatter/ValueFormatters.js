@@ -27,6 +27,8 @@ const imgFormatter = (value, params = {}) => {
 // TODO: add decimal precision formatting etc localized formatting
 const numberFormatter = (value) => value;
 
+const phoneNumberFormatter = (value, params = {}) => `<a href="tel:${value}" title="${value}">${params.label || value}</a>`;
+
 // Creates a formatter that takes value and wraps it in the html-element that was given as param when creating the formatter.
 const tagWrapper = (tag) => (value) => `<${tag}>${value}</${tag}>`;
 
@@ -40,7 +42,8 @@ const formatters = {
     [DEFAULT_FORMATTER]: (value) => value,
     link: linkFormatter,
     image: imgFormatter,
-    number: numberFormatter
+    number: numberFormatter,
+    phone: phoneNumberFormatter
 };
 const tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'i', 'b', 'em'];
 tags.forEach(tag => { formatters[tag] = tagWrapper(tag); });

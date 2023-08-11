@@ -212,7 +212,7 @@ export const LocalizationComponent = ({
 };
 
 LocalizationComponent.propTypes = {
-    languages: PropTypes.arrayOf(PropTypes.string).isRequired,
+    languages: PropTypes.arrayOf(PropTypes.string),
     mandatoryLanguages: PropTypes.arrayOf(PropTypes.string),
     onChange: PropTypes.func,
     value: PropTypes.object,

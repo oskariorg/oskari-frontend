@@ -1,3 +1,20 @@
+export const GEOMETRY_TYPES = ['unknown', 'point', 'line', 'area', 'collection'];
+const AREA_TYPES = ['surface', 'polygon'];
+
+export const getGeometryType = layer => {
+    const { attributes, capabilities } = layer;
+    if (attributes?.data?.geometryType) {
+        return attributes.data.geometryType;
+    }
+    const { geomName, featureProperties = [] } = capabilities;
+    const capaType = featureProperties.find(prop => prop.name === geomName)?.type.toLowerCase() || '';
+    // SurfacePropertyType, GeometryPropertyType, PointPropertyType, MultiLineStringPropertyType, MultiPolygon,...
+    if (AREA_TYPES.find(type => capaType.includes(type))) {
+        return 'area';
+    }
+    return GEOMETRY_TYPES.find(type => capaType.includes(type)) || 'unknown';
+};
+
 // keys are the server side expected keys and values are the keys used by frontend
 const APIMapping = {
     dataprovider_id: 'dataProviderId',

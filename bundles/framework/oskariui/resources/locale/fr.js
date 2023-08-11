@@ -13,7 +13,15 @@ Oskari.registerLocalization({
             yes: 'Oui',
             no: 'Non',
             next: 'Suivant',
-            previous: 'Précédent'
+            previous: 'Précédent',
+            print: 'Imprimer',
+            search: 'Recherche',
+            reset: 'Effacer',
+            copy: 'Copier dans le presse-papier',
+            clear: 'Effacer',
+            accept: 'Accepter',
+            reject: 'Refuser',
+            info: 'Afficher plus d\'informations'
         },
         table: {
             sort: {

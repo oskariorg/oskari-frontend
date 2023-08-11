@@ -18,7 +18,7 @@ import { Declutter } from './Declutter';
 const {
     OPACITY,
     CLUSTERING_DISTANCE,
-    WFS_RENDER_MODE,
+    WFS_LAYER,
     CAPABILITIES_STYLES,
     VECTOR_STYLES,
     EXTERNAL_VECTOR_STYLES,
@@ -55,7 +55,7 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
             { propertyFields.includes(CLUSTERING_DISTANCE) &&
                 <ClusteringDistance layer={layer} controller={controller} />
             }
-            { propertyFields.includes(WFS_RENDER_MODE) &&
+            { propertyFields.includes(WFS_LAYER) &&
                 <WfsRenderMode layer={layer} controller={controller} />
             }
             { propertyFields.includes(CAPABILITIES_STYLES) &&
