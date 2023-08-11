@@ -1,4 +1,3 @@
-import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
 /*
  * @class Oskari.mapframework.bundle.mapuserdatalayer.domain.UserDataLayerModelBuilder
  * JSON-parsing for user own layers (myplaces, userlayer, analysis)
@@ -35,7 +34,7 @@ export class UserDataLayerModelBuilder {
      * @param {Object} mapLayerJson JSON presentation of the layer
      */
     parseLayerData (layer, mapLayerJson) {
-        const { locale, type, describeLayer = {} } = mapLayerJson;
+        const { locale, type, describeLayer } = mapLayerJson;
         if (!this.types[type]) {
             // type is not registered
             return;
@@ -43,12 +42,7 @@ export class UserDataLayerModelBuilder {
         const { group, dataProviderId, editRequest, organization, createTools = [] } = this.types[type];
 
         layer.setLocale(locale);
-        // Only styles are needed from DescribeLayer here, others will be handled on add maplayer
-        const { styles = [] } = describeLayer;
-        const vs = styles.map(s => new VectorStyle(s));
-        layer.setStyles(vs);
-        // don't handle styles again on add maplayer
-        delete describeLayer.styles;
+        layer.preHandleDescribeLayer(describeLayer);
 
         layer.setOrganizationName(organization);
         layer.setDataProviderId(dataProviderId);

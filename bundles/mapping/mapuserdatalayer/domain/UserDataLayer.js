@@ -1,4 +1,5 @@
 import { WFSLayer } from '../../mapwfs2/domain/WFSLayer';
+import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
 import { DESCRIBE_LAYER } from '../../mapmodule/domain/constants';
 
 export class UserDataLayer extends WFSLayer {
@@ -39,6 +40,27 @@ export class UserDataLayer extends WFSLayer {
             value = this._locale[Oskari.getDefaultLanguage()]?.[key] || '';
         }
         return Oskari.util.sanitize(value);
+    }
+
+    handleUpdatedLayer ({ locale, describeLayer }) {
+        this.setLocale(locale);
+        // to be sure that layer is updated properly
+        this.preHandleDescribeLayer(describeLayer);
+        // update current style (has only 'default' style)
+        this.selectStyle();
+    }
+
+    preHandleDescribeLayer (describeLayer = {}) {
+        // Only styles and controlData are needed from DescribeLayer here
+        // others will be handled on add maplayer
+        const { styles = [], controlData = {}, ...toStore } = describeLayer;
+        this._controlData = controlData;
+        this.setStyles(styles.map(s => new VectorStyle(s)));
+
+        if (this.getDescribeLayerStatus() !== DESCRIBE_LAYER.LOADED) {
+            // describe layer isn't processed, update predifened info
+            this.setDescribeLayerInfo(toStore);
+        }
     }
 
     /**
