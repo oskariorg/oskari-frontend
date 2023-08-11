@@ -125,7 +125,7 @@ Oskari.clazz.define('map.layer.handler',
             const layerId = layer.getId();
             const status = layer.getDescribeLayerStatus();
             if (status === DESCRIBE_LAYER.PREDEFINED) {
-                this.__handleLayerInfoSuccess(layer, layer.getPredefinedDescribeLayerInfo());
+                this.__handleLayerInfoSuccess(layer, layer.getDescribeLayerInfo());
                 done();
                 return;
             }
