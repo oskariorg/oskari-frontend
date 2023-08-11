@@ -13,6 +13,9 @@ export class MyPlacesLayer extends UserDataLayer {
         this._layerType = 'MYPLACES';
         this._metaType = 'MYPLACES';
     }
+    isDefault () {
+        return this._controlData.isDefault === true
+    }
 }
 
 Oskari.clazz.defineES('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer', MyPlacesLayer);
