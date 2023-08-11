@@ -25,7 +25,7 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
         },
         {
             align: 'left',
-            title: <Message messageKey='tab.grid.description' />,
+            title: <Message messageKey='tab.grid.desc' />,
             dataIndex: 'desc',
             sorter: getSorterFor('description')
         },
@@ -72,7 +72,6 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
         <Table
             columns={columnSettings}
             dataSource={data.map(item => ({
-                ...item,
                 key: item.getId(),
                 created: item.getCreated(),
                 ...item.getLocaleValues()
