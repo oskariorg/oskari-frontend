@@ -81,7 +81,7 @@ const SelectedProperty = ({name, label, index, reorder, toggle}) => {
     );
 };
 
-export const PropertiesFilter = ({ filter, update, properties, labels }) => {
+export const PropertiesFilter = ({ filter = {}, update, properties, labels }) => {
     const [lang, setLang] = useState('default');
     const options = ['default', ...Oskari.getSupportedLanguages()];
     const selectedProps = filter[lang] || filter.default || properties;
@@ -127,7 +127,7 @@ export const PropertiesFilter = ({ filter, update, properties, labels }) => {
                         </Option>)) 
                     }
                 </Select>
-                { !!filter[lang] && <IconButton type='delete' bordered onConfirm={() => deleteFilter()}/> }
+                { !!filter[lang] && <IconButton type='delete' bordered onClick={() => deleteFilter()}/> }
             </SelectRow>
             { showFromDefault && <Italic><Message messageKey='attributes.filter.fromDefault'/></Italic> }
             <DragDropContext onDragEnd={result => reorder(result.source.index, result.destination?.index)}>
@@ -151,7 +151,7 @@ export const PropertiesFilter = ({ filter, update, properties, labels }) => {
 };
 
 PropertiesFilter.propTypes = {
-    filter: PropTypes.object.isRequired,
+    filter: PropTypes.object,
     update: PropTypes.func.isRequired,
     properties: PropTypes.array.isRequired,
     labels: PropTypes.object.isRequired

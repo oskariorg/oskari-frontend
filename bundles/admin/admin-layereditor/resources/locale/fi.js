@@ -115,6 +115,8 @@ Oskari.registerLocalization(
                 "label": "Attribuutit",
                 "properties": "Kohteiden ominaisuustiedot",
                 "showAll": "Näytä kaikki ominaisuustiedot",
+                "idProperty": "Käytä ominaisuustietoa kohteiden yksilöimiseen",
+                "idPropertyTooltip": "Rajapinnan tulee palauttaa yksilöivä tunniste kohteille. Pyydä ensisijaisesti palveluntarjoajaa ottamaan käyttöön yksilöivät tunnisteet.",
                 "geometryType": {
                     "label": "Geometriatyyppi",
                     "sourceAttributes": "Lähde: tason attribuutit",
@@ -124,6 +126,11 @@ Oskari.registerLocalization(
                     "line": "Viiva",
                     "area":"Alue",
                     "collection":"Kaikki"
+                },
+                "featureFilter": {
+                    "title": "Kohteiden suodatus",
+                    "add": "Lisää kohteiden suodatus",
+                    "edit": "Muokkaa kohteiden suodatusta"
                 },
                 "filter": {
                     "title": "Ominaisuustietojen näyttäminen",

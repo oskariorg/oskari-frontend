@@ -290,6 +290,17 @@ class UIHandler extends StateHandler {
         this.updateLayerAttributes(attributes, layer);
     }
 
+    setFeatureFilter (filter = {}) {
+        const layer = { ...this.getState().layer };
+        let attributes = layer.attributes || {};
+        if (Object.keys(filter).length === 0) {
+            delete attributes.filter;
+        } else {
+            attributes = { ...attributes, filter };
+        }
+        this.updateLayerAttributes(attributes, layer);
+    }
+
     setAttributesData (key, value) {
         const layer = { ...this.getState().layer };
         const { data = {} } = layer.attributes || {};
@@ -463,7 +474,7 @@ class UIHandler extends StateHandler {
         }
 
         // Delete missing attibute keys but keep managed attributes
-        const managedAttributes = ['forcedSRS', 'data'];
+        const managedAttributes = ['forcedSRS', 'data', 'filter'];
         Object.keys(layer.attributes)
             .filter(key => !managedAttributes.includes(key))
             .forEach(key => delete layer.attributes[key]);
@@ -1201,6 +1212,7 @@ const wrapped = controllerMixin(UIHandler, [
     'saveVectorStyleToLayer',
     'setAttributes',
     'setAttributesData',
+    'setFeatureFilter',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
     'setClusteringDistance',

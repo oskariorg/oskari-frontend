@@ -114,6 +114,8 @@ Oskari.registerLocalization(
                 "label": "Attributes",
                 "properties": "Feature properties",
                 "showAll": "Show all properties",
+                "idProperty": "Use feature property as identifier",
+                "idPropertyTooltip": "Service should return unique identifier for features. Firstly ask service provider to use unique identifiers.",
                 "geometryType": {
                     "label": "Geometry type",
                     "sourceAttributes": "Source: layer attributes",
@@ -123,6 +125,11 @@ Oskari.registerLocalization(
                     "line": "Line",
                     "area":"Area",
                     "collection":"Collection"
+                },
+                "featureFilter": {
+                    "title": "Feature filter",
+                    "add": "Add feature filter",
+                    "edit": "Edit feature filter"
                 },
                 "filter": {
                     "title": "Properties filter",
