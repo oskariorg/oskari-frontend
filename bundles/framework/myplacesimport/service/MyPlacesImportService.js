@@ -199,15 +199,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {Object} updatedLayer
      */
     updateLayer: function (updatedLayer) {
-        const { id, locale, options } = updatedLayer;
+        const { id } = updatedLayer;
         const layer = this.instance.getMapLayerService().findMapLayer(id);
         if (!layer) {
             this.log.error('Could not find layer for update with id:' + id);
             return;
         }
-        layer.setLocale(locale);
-        layer.setOptions(options);
-        layer.setStylesFromOptions(options);
+        layer.handleUpdatedLayer(updatedLayer);
         const sandbox = this.instance.getSandbox();
         const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
         sandbox.notifyAll(evt);
