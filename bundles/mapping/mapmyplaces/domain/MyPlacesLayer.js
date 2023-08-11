@@ -14,7 +14,7 @@ export class MyPlacesLayer extends UserDataLayer {
         this._metaType = 'MYPLACES';
     }
     isDefault () {
-        return this._controlData.isDefault === true
+        return this._controlData.isDefault === true;
     }
 }
 
