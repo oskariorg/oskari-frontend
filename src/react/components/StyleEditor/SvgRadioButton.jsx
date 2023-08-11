@@ -22,36 +22,28 @@ const RadioIcon = styled(Radio.Button)`
     }
 `;
 
-/**
- * @class SvgRadioButton
- * @calssdesc <SvgRadioButton>
- * @memberof module:oskari-ui
- * @see {@link module:oskari-ui/util.LocaleProvider|LocaleProvider}
- * @param {Object} props - { }
- *
- * @example <caption>Basic usage</caption>
- * <SvgRadioButton props={{ ...exampleProps }}/>
- */
-const ButtonVisualization = ({ data }) => {
-    let content = data;
-    if (content.$$typeof == Symbol.for('react.element')) {
+const ButtonVisualization = ({ content, src, data }) => {
+    if (content && content.$$typeof == Symbol.for('react.element')) {
         // assume React-component
         return content;
     }
-    if (typeof content === 'function') {
-        content = content(uniqueIdCounter++);
+    if (src) {
+        return (<img src={src}/>);
     }
-    return (<span dangerouslySetInnerHTML={ {__html: content }} />);
+    if (data) {
+        return (<span dangerouslySetInnerHTML={{__html: data }}/>)
+    }
+    return null;
 };
 
-export const SvgRadioButton = (props) => {
+export const SvgRadioButton = ({id, options, onChange, formLayout, value}) => {
     return (
-        <Radio.Group name={ props.id + '.radio' } { ...props.formLayout } onChange={ props.onChange } value={ props.value }>
-            { props.options.map((singleOption, index) => {
-                const value = typeof singleOption.name === 'undefined' ? index : singleOption.name;
+        <Radio.Group name={ `${id}.radio` } { ...formLayout } onChange={ onChange } value={ value }>
+            { options.map((opt, index) => {
+                const value = typeof opt.name === 'undefined' ? index : opt.name;
                 return(
-                    <RadioIcon key={ props.id + '-' + value } value={ value }>
-                        <ButtonVisualization data={singleOption.data} />
+                    <RadioIcon key={ `${id}-${value}` } value={ value }>
+                        <ButtonVisualization {...opt} />
                     </RadioIcon>
                 );
             })}
@@ -60,17 +52,11 @@ export const SvgRadioButton = (props) => {
 };
 
 SvgRadioButton.propTypes = {
-    defaultValue: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string
-    ]),
     options: PropTypes.arrayOf(
         PropTypes.shape({
-            data: PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.node,
-                PropTypes.func
-            ]).isRequired,
+            data: PropTypes.string,
+            content: PropTypes.node,
+            src: PropTypes.string,
             name: PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.number

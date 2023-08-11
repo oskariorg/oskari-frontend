@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, Divider, LabeledInput, Tooltip } from 'oskari-ui';
 import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
-import { LocaleProvider, ThemeConsumer, ThemeProvider } from 'oskari-ui/util';
+import { LocaleProvider} from 'oskari-ui/util';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { showPopup } from 'oskari-ui/components/window';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
-import { generateBlankStyle } from 'oskari-ui/components/StyleEditor/index';
 import { LOCALE_KEY, LAYER_FORM } from './constants';
 
 const Content = styled.div`
@@ -15,10 +14,9 @@ const Content = styled.div`
     width: 500px;
 `;
 
-const MyPlacesLayerForm = ThemeConsumer(({ theme, locale: initLocale, style: initStyle, onSave, onCancel }) => {
-    const defaultStyle = generateBlankStyle(theme);
+const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave, onCancel }) => {
     const [editorState, setEditorState] = useState({
-        style: initStyle || defaultStyle,
+        style: initStyle || Oskari.custom.generateBlankStyle(),
         locale: initLocale || {}
     });
     const { locale, style } = editorState;
@@ -51,7 +49,7 @@ const MyPlacesLayerForm = ThemeConsumer(({ theme, locale: initLocale, style: ini
             </ButtonContainer>
         </Content>
     );
-});
+};
 
 MyPlacesLayerForm.propTypes = {
     locale: PropTypes.object,
@@ -63,9 +61,7 @@ export const showLayerPopup = (locale, style, saveLayer, onClose) => {
     return showPopup(
         <Message messageKey={ 'categoryform.title' } bundleKey = {LOCALE_KEY}/>,
         (<LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
-            <ThemeProvider>
-                <MyPlacesLayerForm style={style} locale={locale} onSave={saveLayer} onCancel={onClose}/>
-            </ThemeProvider>
+            <MyPlacesLayerForm style={style} locale={locale} onSave={saveLayer} onCancel={onClose}/>
         </LocaleProvider>),
         onClose,
         { id: LAYER_FORM }
