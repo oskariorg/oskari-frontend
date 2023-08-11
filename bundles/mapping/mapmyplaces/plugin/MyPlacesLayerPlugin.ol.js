@@ -39,7 +39,7 @@ Oskari.clazz.define(
             const wfsPlugin = this.getMapModule().getLayerPlugins('wfs');
             wfsPlugin.registerLayerType(type, 'Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer');
             this.unregister();
-        },
+        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**

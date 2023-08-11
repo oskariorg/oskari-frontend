@@ -1,4 +1,4 @@
-import { VectorStyle } from "../../mapmodule/domain/VectorStyle";
+import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
 /*
  * @class Oskari.mapframework.bundle.mapuserdatalayer.domain.UserDataLayerModelBuilder
  * JSON-parsing for user own layers (myplaces, userlayer, analysis)
@@ -25,7 +25,7 @@ export class UserDataLayerModelBuilder {
         };
         layerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
 
-        this.types[type] = { group, dataProviderId, ...toStore};
+        this.types[type] = { group, dataProviderId, ...toStore };
     }
 
     /**
@@ -35,12 +35,12 @@ export class UserDataLayerModelBuilder {
      * @param {Object} mapLayerJson JSON presentation of the layer
      */
     parseLayerData (layer, mapLayerJson) {
-        const { locale,  type, describeLayer = {} } = mapLayerJson;
+        const { locale, type, describeLayer = {} } = mapLayerJson;
         if (!this.types[type]) {
             // type is not registered
             return;
         }
-        const { group, dataProviderId, editRequest, organization, createTools = []} = this.types[type];
+        const { group, dataProviderId, editRequest, organization, createTools = [] } = this.types[type];
 
         layer.setLocale(locale);
         // Only styles are needed from DescribeLayer here, others will be handled on add maplayer
@@ -48,8 +48,8 @@ export class UserDataLayerModelBuilder {
         const vs = styles.map(s => new VectorStyle(s));
         layer.setStyles(vs);
         // don't handle styles again on add maplayer
-        delete describeLayer.styles
-        
+        delete describeLayer.styles;
+
         layer.setOrganizationName(organization);
         layer.setDataProviderId(dataProviderId);
         layer.setGroups([group]);
