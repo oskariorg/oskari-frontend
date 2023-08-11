@@ -39,7 +39,8 @@ export const VectorStyleJson = ({ style, type, onChange }) => {
     const template = TEMPLATES[type];
     return (
         <Fragment>
-            <Message messageKey={`styles.vector.json.${type}`}/>
+            <Message messageKey={`styles.vector.${type}`}/>
+            <span> (JSON)</span>
             <InfoTooltip message={<pre>{template}</pre>} />
             <StyledFormField>
                 <JsonInput

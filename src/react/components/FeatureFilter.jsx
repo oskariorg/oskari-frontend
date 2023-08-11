@@ -53,20 +53,23 @@ const cleanFilterValues = (filter, types) => {
     const isNumber = isNumberType(key, types);
 
     const operators = Object.keys(operatorsObj).reduce((obj, op) => {
-        const value = filter[op];
+        let value = filter[op];
         if(!value) {
             return obj;
         }
         if ((op === 'in' || op === 'notIn') && typeof value === 'string') {
             const arr = value.split(SEPARATOR);
-            const modified = isNumber ? arr.map(toNumber) : arr.map(s => s.trim());
+            const modified = isNumber ? arr.map(toNumber) : arr.map(s => s.trim()).filter(s=>s);
             if (modified.length) {
-                obj[op] = modified;
+                value = modified;
             }
         } else if (isNumber) {
-            obj[op] = toNumber(value);
-        } else if (value && value.trim().length) {
-            obj[op] = value.trim();
+            value = toNumber(value);
+        } else if (typeof value === 'string') {
+            value = value.trim();
+        }
+        if (value) {
+            obj[op] = value;
         }
         return obj;
     }, {});
@@ -81,24 +84,28 @@ const cleanFilterValues = (filter, types) => {
     return cleaned;
 };
 
+// used to clean values after editor to get valid filter
 export const cleanFilter = (filter, types) => {
     if (!filter) {
-        return {};
+        return;
     }
     const AND = filter.AND?.map(f => cleanFilterValues(f, types)).filter(a => a) || [];
     const OR = filter.OR?.map(f => cleanFilterValues(f, types)).filter(a => a) || [];
-    const property = cleanFilterValues(filter.property);
-    if (property && AND.length < 2  && OR.length < 2) {
+    const property = cleanFilterValues(filter.property, types);
+    const validAND = AND.length >= 2;
+    const validOR = OR.length >= 2;
+    if (property && !validAND && !validOR) {
         return { property };
     } 
-    const cleaned = {};
-    if (AND.length >= 2) {
-        cleaned.AND = AND;
+    if (validAND && validOR) {
+        return { AND, OR };
     }
-    if (OR.length >= 2) {
-        cleaned.OR = OR;
+    if (validAND) {
+        return { AND };
     }
-    return cleaned;
+    if (validOR) {
+        return { OR };
+    }
 };
 
 export const getDescription = filter => {
