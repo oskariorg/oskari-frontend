@@ -33,7 +33,8 @@ export class UserDataLayer extends WFSLayer {
         }, {});
     }
 
-    getValueFromLocale = (key, lang = Oskari.getLang()) => {
+    getValueFromLocale = (key, optLang) => {
+        const lang = optLang || Oskari.getLang();
         let value = this._locale[lang]?.[key];
         if (!value || !value.trim().length) {
             value = this._locale[Oskari.getDefaultLanguage()]?.[key] || '';
