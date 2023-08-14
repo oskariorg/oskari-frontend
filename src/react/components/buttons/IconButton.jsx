@@ -107,7 +107,6 @@ const ThemeButton = ThemeConsumer(({
     theme,
     type,
     bordered = false,
-    disabled = false,
     icon = type ? getPredefinedIcon(type) : null,
     iconSize = 16,
     color = TYPE_COLORS[type],
@@ -130,17 +129,16 @@ const ThemeButton = ThemeConsumer(({
     const ButtonNode = bordered ? BorderedButton : BorderlessButton;
     const activeColor = active ? hover : null;
     return (
-        <DisabledWrapper $disabled={disabled}>
-            <ButtonNode $hover={hover} $color={color} $active={activeColor} $iconSize={iconSize} disabled={disabled} className={className} { ...rest }>
-                {icon}
-            </ButtonNode>
-        </DisabledWrapper>
+        <ButtonNode $hover={hover} $color={color} $active={activeColor} $iconSize={iconSize} className={className} { ...rest }>
+            {icon}
+        </ButtonNode>
     );
 });
 
 export const IconButton = ({
     type,
     title = type ? <Message messageKey={`buttons.${type}`} bundleKey='oskariui'/> : '',
+    disabled = false,
     onConfirm,
     ...rest
 }) => {
@@ -151,11 +149,13 @@ export const IconButton = ({
                 onConfirm={onConfirm}
                 okButtonProps={{className: `t_button t_${type || 'ok'}`}}
                 cancelButtonProps={{className: 't_button t_cancel'}}
-                disabled={rest.disabled === true}
+                disabled={disabled}
                 placement={title ? 'bottom' : 'top'}
                 { ...getConfirmProps(type) }>
                     <Tooltip title={title}>
-                        <ThemeButton type={type} { ...rest }/>
+                        <DisabledWrapper $disabled={disabled}>
+                            <ThemeButton type={type} disabled={disabled} { ...rest }/>
+                        </DisabledWrapper>
                     </Tooltip>
             </Confirm>
         );
@@ -163,11 +163,13 @@ export const IconButton = ({
     if (title) {
         return (
             <Tooltip title={title}>
-                <ThemeButton type={type} { ...rest }/>
+                <DisabledWrapper $disabled={disabled}>
+                    <ThemeButton type={type} disabled={disabled} { ...rest }/>
+                </DisabledWrapper>
             </Tooltip>
         );
     }
-    return <ThemeButton type={type} { ...rest }/>;
+    return <ThemeButton type={type} disabled={disabled} { ...rest }/>;
 };
 
 IconButton.propTypes = {
