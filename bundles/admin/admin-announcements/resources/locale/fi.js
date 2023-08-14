@@ -52,6 +52,9 @@ Oskari.registerLocalization(
                 },
                 "announcementsName": "Otsikko",
                 "announcementsTime": "Voimasssa"
+            },
+            "publisher": {
+                "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
             }
         }
     });

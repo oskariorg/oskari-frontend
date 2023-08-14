@@ -52,6 +52,9 @@ Oskari.registerLocalization(
             },
             "announcementsName": "Title",
             "announcementsTime": "Valid"
+        },
+        "publisher": {
+            "noUI": "Hide user interface (Use RPC interface)"
         }
     }
 });
