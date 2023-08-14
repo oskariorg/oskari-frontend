@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             });
 
             input.setChecked(me.noUI);
-            
+
             var inputEl = input.getElement();
             if (inputEl.style) {
                 inputEl.style.width = 'auto';
