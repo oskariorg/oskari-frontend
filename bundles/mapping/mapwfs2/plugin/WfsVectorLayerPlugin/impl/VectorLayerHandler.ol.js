@@ -190,7 +190,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                                 ftr.setId(id);
                             }
                         }
-                        ftr.set(WFS_ID_KEY, ftr.getId())
+                        ftr.set(WFS_ID_KEY, ftr.getId());
                     });
                     source.addFeatures(features);
                     updateLoadingStatus(LOADING_STATUS_VALUE.COMPLETE);
