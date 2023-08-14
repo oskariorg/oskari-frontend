@@ -35,8 +35,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 '</div>'),
             inputCheckbox: jQuery('<div><input type="checkbox" name="announcement"/><label></label></div>')
         };
-        this.noUI = true;
-        this.noUiIsCheckedInModifyMode = true;
+        this.noUI = false;
     }, {
 
         init: function (data) {
@@ -44,7 +43,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             me.data = data;
             me.selectedAnnouncements = [];
 
-            me.noUiIsCheckedInModifyMode = (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf && data.configuration.announcements.conf.plugin && data.configuration.announcements.conf.plugin.config && data.configuration.announcements.conf.plugin.config.noUI === true);
+            me.noUI = data?.configuration?.announcements?.conf?.plugin?.config?.noUI === true;
 
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
 
@@ -141,15 +140,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     me.noUI = true;
                     me.getPlugin().teardownUI();
                 } else {
-                    me.noUI = null;
+                    me.noUI = false;
                     me.getPlugin().redrawUI(Oskari.util.isMobile());
                 }
             });
 
-            if (me.noUiIsCheckedInModifyMode) {
-                input.setChecked(true);
-                me.noUI = true;
-            }
+            input.setChecked(me.noUI);
+            
             var inputEl = input.getElement();
             if (inputEl.style) {
                 inputEl.style.width = 'auto';
