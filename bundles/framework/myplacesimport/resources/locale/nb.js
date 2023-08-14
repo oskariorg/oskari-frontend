@@ -45,7 +45,7 @@ Oskari.registerLocalization(
             "title": "Datasett",
             "grid": {
                 "name": "Navn",
-                "description": "Beskrivelse",
+                "desc": "Beskrivelse",
                 "source": "Datakilde",
                 "remove": "Slett",
                 "removeButton": "Slett"

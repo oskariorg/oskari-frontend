@@ -45,7 +45,7 @@ Oskari.registerLocalization(
             "title": "Nabor podatkov",
             "grid": {
                 "name": "Ime",
-                "description": "Opis",
+                "desc": "Opis",
                 "source": "Vir podatkov",
                 "remove": "Briši",
                 "removeButton": "Briši"

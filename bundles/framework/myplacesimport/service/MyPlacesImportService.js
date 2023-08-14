@@ -199,15 +199,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {Object} updatedLayer
      */
     updateLayer: function (updatedLayer) {
-        const { id, locale, options } = updatedLayer;
+        const { id } = updatedLayer;
         const layer = this.instance.getMapLayerService().findMapLayer(id);
         if (!layer) {
             this.log.error('Could not find layer for update with id:' + id);
             return;
         }
-        layer.setLocale(locale);
-        layer.setOptions(options);
-        layer.setStylesFromOptions(options);
+        layer.handleUpdatedLayer(updatedLayer);
         const sandbox = this.instance.getSandbox();
         const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
         sandbox.notifyAll(evt);
@@ -287,12 +285,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.
         // This is used to filter out other users shared layers when listing layers on the My Data functionality.
         mapLayer.markAsInternalDownloadSource();
-        // Add organization and groups for users own datasets (otherwise left empty/data from baselayer)
-        mapLayer.setOrganizationName(this.instance.loc('layer.organization'));
-        mapLayer.setGroups([{
-            id: this.groupId,
-            name: this.instance.loc('layer.inspire')
-        }]);
         // Add the layer to the map layer service
         mapLayerService.addLayer(mapLayer, skipEvent);
         if (typeof cb === 'function') {

@@ -30,7 +30,7 @@ const Content = styled('div')`
     max-width: 500px;
 `;
 
-const getDefaultCategoryId = categories => categories.find(cat => cat.isDefault).categoryId;
+const getDefaultCategoryId = categories => categories.find(cat => cat.isDefault)?.categoryId;
 const DeletePlaces = ({
     categories,
     selectedCategoryId,
