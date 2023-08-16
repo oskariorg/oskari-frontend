@@ -61,7 +61,7 @@ Oskari.clazz.define(
                     this._pendingUserStyleTools.push(layer);
                 }
             }
-            layer.setHoverOptions(mapLayerJson.options.hover);
+            layer.setHoverOptions(mapLayerJson?.options?.hover);
             this.parseLayerAttributes(layer);
         },
         parseLayerAttributes: function (layer) {
