@@ -28,7 +28,7 @@ const getButton = (type, disabled) => {
     if (type === 'label') {
         return (
             <DisabledWrapper>
-                <SecondaryButton danger {...props}/>;
+                <SecondaryButton danger {...props}/>
             </DisabledWrapper>
         );
     }
