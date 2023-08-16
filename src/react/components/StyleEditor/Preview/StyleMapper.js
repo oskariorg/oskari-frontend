@@ -3,7 +3,8 @@
  * @param {String} format point, line or area
  * @param {Object} props flags for style selection based on format
  */
-const getAsDataAttributes = (format, props) => {
+export const getAsDataAttributes = (format, style) => {
+    const props = getPropsForFormat(format, style);
     const testAttrs = {
         'data-format': format
     };
@@ -60,9 +61,4 @@ const getPointPropsFromStyle = (style = {}) => {
         size: image.size,
         shape: image.shape
     };
-};
-
-export const StyleMapper = {
-    getPropsForFormat,
-    getAsDataAttributes
 };

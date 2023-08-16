@@ -36,6 +36,7 @@ Oskari.registerLocalization(
                 "openButtonLabel": "Aineiston vienti",
                 "exportButtonLabel": "Vie",
                 "exportFailed": "Aineiston vienti epäonnistui.",
+                "datasetTooLargeForExcel": "Dataset is too large for generating an excel file. Limit the number of features or choose csv as format.",
                 "fileFormat": {
                     "title": "Tiedostomuoto",
                     "excel": "Excel",

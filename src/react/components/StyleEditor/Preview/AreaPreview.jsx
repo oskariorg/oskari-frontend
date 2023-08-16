@@ -8,22 +8,23 @@ const ID_PREFIX = 'preview-fill-pattern-';
 const PATH = 'M10,25L70,15L50,70Z';
 
 let patternIdCounter = 1;
-export const AreaPreview = ({ previewSize, propsForSVG }) => {
-    const { color, pattern, strokecolor, size, linejoin, strokestyle  } = propsForSVG;
+export const AreaPreview = ({ previewSize, strokeDef, fillDef }) => {
+    const { color: strokeColor, width, lineDash, lineJoin  } = strokeDef;
+    const { color: fillColor, area: { pattern } } = fillDef;
 
-    const dashArray = strokestyle === 'dash' ? `5, ${4 + size}`: ''
+    const dashArray = lineDash === 'dash' ? `5, ${4 + width}`: ''
     const id = ID_PREFIX + patternIdCounter++;
 
     const solid = isSolid(pattern);
-    const fillPattern = solid ? color : `url(#${id})`;
+    const fillPattern = solid ? fillColor : `url(#${id})`;
     return (
         <svg width={previewSize} height={previewSize}>
-            { !solid && <FillPattern id={id} fillCode={pattern} color={color} size={previewSize}/> }
+            { !solid && <FillPattern id={id} fillCode={pattern} color={fillColor} size={previewSize}/> }
             <path d={PATH}
-                stroke={strokecolor}
-                strokeWidth={size}
+                stroke={strokeColor}
+                strokeWidth={width}
                 fill={fillPattern}
-                strokeLinejoin={linejoin}
+                strokeLinejoin={lineJoin}
                 strokeLinecap={CAP}
                 strokeDasharray={dashArray}/>
         </svg>
@@ -32,5 +33,6 @@ export const AreaPreview = ({ previewSize, propsForSVG }) => {
 
 AreaPreview.propTypes = {
     previewSize: PropTypes.number.isRequired,
-    propsForSVG: PropTypes.object.isRequired
+    strokeDef: PropTypes.object.isRequired,
+    fillDef: PropTypes.object.isRequired
 };

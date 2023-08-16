@@ -8,8 +8,8 @@ const StyledSwitch = styled(Switch)`
     margin-bottom: 24px;
 `;
 
-export const PropertiesLocale = ({ locale, update, properties, selected }) => {
-    const allSelected = properties.length === selected.length;
+export const PropertiesLocale = ({ locale = {}, update, properties, selected }) => {
+    const allSelected = selected.length === 0 || properties.length === selected.length;
     const [showAll, setShowAll] = useState(allSelected);
     const propNames = showAll ? properties : selected;
     return (
@@ -25,7 +25,7 @@ export const PropertiesLocale = ({ locale, update, properties, selected }) => {
 };
 
 PropertiesLocale.propTypes = {
-    locale: PropTypes.object.isRequired,
+    locale: PropTypes.object,
     update: PropTypes.func.isRequired,
     properties: PropTypes.array.isRequired,
     selected: PropTypes.array.isRequired

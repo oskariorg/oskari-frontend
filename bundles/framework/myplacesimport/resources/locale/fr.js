@@ -50,7 +50,7 @@ Oskari.registerLocalization(
             "deleteLayer": "Supprimer la couche cartographique",
             "grid": {
                 "name": "Nom",
-                "description": "Description",
+                "desc": "Description",
                 "source": "Source des données",
                 "edit": "Modifier",
                 "editButton": "Modifier",

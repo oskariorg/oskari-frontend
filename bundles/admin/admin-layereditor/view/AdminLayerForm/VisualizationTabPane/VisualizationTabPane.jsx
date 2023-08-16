@@ -14,7 +14,6 @@ import { TimeSeries } from './TimeSeries';
 import { VectorStyle } from './VectorStyle';
 import { LayerTypeNotSupported } from '../LayerTypeNotSupported';
 import { Declutter } from './Declutter';
-import { ThemeProvider } from 'oskari-ui/util';
 
 const {
     OPACITY,
@@ -63,9 +62,7 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
                 <RasterStyle layer={layer} controller={controller} />
             }
             { showVectorStyle &&
-                <ThemeProvider>
-                    <VectorStyle layer={layer} controller={controller} external={showExternalVectorStyle}/>
-                </ThemeProvider>
+                <VectorStyle layer={layer} controller={controller} external={showExternalVectorStyle}/>
             }
             { propertyFields.includes(HOVER) &&
                 <Hover layer={layer} controller={controller} />

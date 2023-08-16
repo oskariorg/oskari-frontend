@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleMapper, PointPreview, LinePreview, AreaPreview } from './Preview/';
+import { getAsDataAttributes, PointPreview, LinePreview, AreaPreview } from './Preview/';
 
 // Size for preview svg
 const previewSize = 80;
@@ -25,15 +25,15 @@ const previewWrapperStyle = {
  * <Preview }/>
  */
 export const Preview = ({format, oskariStyle, style = {}}) => {
-    const propsForSVG = StyleMapper.getPropsForFormat(format, oskariStyle);
-    const flagsForSelenium = StyleMapper.getAsDataAttributes(format, propsForSVG);
+    const { fill, stroke, image } = oskariStyle;
+    const flagsForSelenium = getAsDataAttributes(format, oskariStyle);
     const mergedStyle = { ...previewWrapperStyle, ...style };
 
     return (
         <div style={ mergedStyle } className="t_preview" { ...flagsForSelenium } >
-            { format === 'point' && <PointPreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
-            { format === 'line' && <LinePreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
-            { format === 'area' && <AreaPreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
+            { format === 'point' && <PointPreview imageDef={ image } /> }
+            { format === 'line' && <LinePreview previewSize={ previewSize } strokeDef={ stroke } /> }
+            { format === 'area' && <AreaPreview previewSize={ previewSize } strokeDef={ stroke.area } fillDef = { fill } /> }
         </div>
     );
 };

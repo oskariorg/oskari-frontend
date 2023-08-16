@@ -114,6 +114,8 @@ Oskari.registerLocalization(
                 "label": "Attributes",
                 "properties": "Feature properties",
                 "showAll": "Show all properties",
+                "idProperty": "Use feature property as identifier",
+                "idPropertyTooltip": "Service should return unique identifier for features. Firstly ask service provider to use unique identifiers.",
                 "geometryType": {
                     "label": "Geometry type",
                     "sourceAttributes": "Source: layer attributes",
@@ -123,6 +125,11 @@ Oskari.registerLocalization(
                     "line": "Line",
                     "area":"Area",
                     "collection":"Collection"
+                },
+                "featureFilter": {
+                    "title": "Feature filter",
+                    "add": "Add feature filter",
+                    "edit": "Edit feature filter"
                 },
                 "filter": {
                     "title": "Properties filter",
@@ -178,6 +185,10 @@ Oskari.registerLocalization(
                     "name": "Style name",
                     "selectDefault": "Select default style",
                     "deleteStyle": "Delete style",
+                    "featureStyle": "Style definitions",
+                    "optionalStyles": "Property based style definitions",
+                    "cesium": "3D Tiles/Cesium style definitions",
+                    "mapbox": "Mapbox style definitions",
                     "edit": {
                         "editor": "Edit by using editor",
                         "json": "Edit JSON"
@@ -191,13 +202,8 @@ Oskari.registerLocalization(
                     "validation": {
                         "name": "Please enter a name for the style",
                         "noStyles": "No saved styles",
-                        "json": "Invalid JSON syntax in Style definitions."
-                    },
-                    "json": {
-                        "featureStyle": "Style definitions (JSON)",
-                        "optionalStyles": "Property based style definitions (JSON)",
-                        "cesium": "3D Tiles/Cesium style definitions (JSON)",
-                        "mapbox": "Mapbox style definitions (JSON)"
+                        "json": "Invalid JSON syntax in Style definitions.",
+                        "optionalStyles": "Optional style doesn't have valid filter."
                     }
                 }
             },

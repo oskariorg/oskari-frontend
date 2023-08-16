@@ -63,7 +63,7 @@ const PanelExtra = ({ noValues, onRemove}) => {
 
     return (
         <div onClick={e => e.stopPropagation()}>
-            <IconButton type='delete' onConfirm={onRemove}/>
+            <IconButton type='delete' onClick={onRemove}/>
         </div>
     );
 };
@@ -97,8 +97,8 @@ const CollapseContent = ({values = {}, onChange }) => {
     );
 };
 
-export const PropertiesFormat = ({ properties, selected, labels, format, update }) => {
-    const allSelected = properties.length === selected.length;
+export const PropertiesFormat = ({ format = {}, properties, selected, labels, update }) => {
+    const allSelected = selected.length === 0 || properties.length === selected.length;
     const [showAll, setShowAll] = useState(allSelected);
     const propNames = showAll ? properties : selected;
 
@@ -135,7 +135,7 @@ export const PropertiesFormat = ({ properties, selected, labels, format, update 
 };
 
 PropertiesFormat.propTypes = {
-    format: PropTypes.object.isRequired,
+    format: PropTypes.object,
     update: PropTypes.func.isRequired,
     properties: PropTypes.array.isRequired,
     labels: PropTypes.object.isRequired,

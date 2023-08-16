@@ -45,7 +45,7 @@ Oskari.registerLocalization(
             "title": "Andmestikud",
             "grid": {
                 "name": "Nimi",
-                "description": "Kirjeldus",
+                "desc": "Kirjeldus",
                 "source": "Andmeallikas",
                 "remove": "Kustuta",
                 "removeButton": "Kustuta"

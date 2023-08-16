@@ -45,8 +45,7 @@ const ColumnHeader = styled('h3')`
     padding-bottom: 0.25em;
 `;
 
-
-const SEPARATORS = {
+export const SEPARATORS = {
     semicolon: ';',
     comma: ',',
     tabulator: 'tab'
