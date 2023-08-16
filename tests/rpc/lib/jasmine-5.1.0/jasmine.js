@@ -809,14 +809,6 @@ getJasmineRequireObj().Spec = function(j$) {
     this.result.properties[key] = value;
   };
 
-  Spec.prototype.expect = function(actual) {
-    return this.expectationFactory(actual, this);
-  };
-
-  Spec.prototype.expectAsync = function(actual) {
-    return this.asyncExpectationFactory(actual, this);
-  };
-
   Spec.prototype.execute = function(
     queueRunnerFactory,
     onComplete,
@@ -1401,6 +1393,49 @@ getJasmineRequireObj().Env = function(j$) {
       }
     };
 
+    const handleThrowUnlessFailure = function(passed, result) {
+      if (!passed) {
+        /**
+         * @interface
+         * @name ThrowUnlessFailure
+         * @extends Error
+         * @description Represents a failure of an expectation evaluated with
+         * {@link throwUnless}. Properties of this error are a subset of the
+         * properties of {@link Expectation} and have the same values.
+         * @property {String} matcherName - The name of the matcher that was executed for this expectation.
+         * @property {String} message - The failure message for the expectation.
+         * @property {Boolean} passed - Whether the expectation passed or failed.
+         * @property {Object} expected - If the expectation failed, what was the expected value.
+         * @property {Object} actual - If the expectation failed, what actual value was produced.
+         */
+        const error = new Error(result.message);
+        error.passed = result.passed;
+        error.message = result.message;
+        error.expected = result.expected;
+        error.actual = result.actual;
+        error.matcherName = result.matcherName;
+        throw error;
+      }
+    };
+
+    const throwUnlessFactory = function(actual, spec) {
+      return j$.Expectation.factory({
+        matchersUtil: runableResources.makeMatchersUtil(),
+        customMatchers: runableResources.customMatchers(),
+        actual: actual,
+        addExpectationResult: handleThrowUnlessFailure
+      });
+    };
+
+    const throwUnlessAsyncFactory = function(actual, spec) {
+      return j$.Expectation.asyncFactory({
+        matchersUtil: runableResources.makeMatchersUtil(),
+        customAsyncMatchers: runableResources.customAsyncMatchers(),
+        actual: actual,
+        addExpectationResult: handleThrowUnlessFailure
+      });
+    };
+
     // TODO: Unify recordLateError with recordLateExpectation? The extra
     // diagnostic info added by the latter is probably useful in most cases.
     function recordLateError(error) {
@@ -1904,23 +1939,37 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     this.expect = function(actual) {
-      if (!runner.currentRunable()) {
+      const runable = runner.currentRunable();
+
+      if (!runable) {
         throw new Error(
           "'expect' was used when there was no current spec, this could be because an asynchronous test timed out"
         );
       }
 
-      return runner.currentRunable().expect(actual);
+      return runable.expectationFactory(actual, runable);
     };
 
     this.expectAsync = function(actual) {
-      if (!runner.currentRunable()) {
+      const runable = runner.currentRunable();
+
+      if (!runable) {
         throw new Error(
           "'expectAsync' was used when there was no current spec, this could be because an asynchronous test timed out"
         );
       }
 
-      return runner.currentRunable().expectAsync(actual);
+      return runable.asyncExpectationFactory(actual, runable);
+    };
+
+    this.throwUnless = function(actual) {
+      const runable = runner.currentRunable();
+      return throwUnlessFactory(actual, runable);
+    };
+
+    this.throwUnlessAsync = function(actual) {
+      const runable = runner.currentRunable();
+      return throwUnlessAsyncFactory(actual, runable);
     };
 
     this.beforeEach = function(beforeEachFunction, timeout) {
@@ -3531,7 +3580,7 @@ getJasmineRequireObj().ExceptionFormatter = function(j$) {
         lines.unshift(stackTrace.message);
       }
 
-      if (error.cause) {
+      if (error.cause && error.cause instanceof Error) {
         const substack = this.stack_(error.cause, {
           messageHandling: 'require'
         });
@@ -3566,7 +3615,7 @@ getJasmineRequireObj().ExceptionFormatter = function(j$) {
       const result = {};
       let empty = true;
 
-      for (const prop in error) {
+      for (const prop of Object.keys(error)) {
         if (ignoredProperties.includes(prop)) {
           continue;
         }
@@ -8233,6 +8282,54 @@ getJasmineRequireObj().interface = function(jasmine, env) {
     },
 
     /**
+     * Create an asynchronous expectation for a spec and throw an error if it fails.
+     *
+     * This is intended to allow Jasmine matchers to be used with tools like
+     * testing-library's `waitFor`, which expect matcher failures to throw
+     * exceptions and not trigger a spec failure if the exception is caught.
+     * It can also be used to integration-test custom matchers.
+     *
+     * If the resulting expectation fails, a {@link ThrowUnlessFailure} will be
+     * thrown. A failed expectation will not result in a spec failure unless the
+     * exception propagates back to Jasmine, either via the call stack or via
+     * the global unhandled exception/unhandled promise rejection events.
+     * @name throwUnlessAsync
+     * @since 5.1.0
+     * @function
+     * @param actual
+     * @global
+     * @param {Object} actual - Actual computed value to test expectations against.
+     * @return {matchers}
+     */
+    throwUnlessAsync: function(actual) {
+      return env.throwUnless(actual);
+    },
+
+    /**
+     * Create an expectation for a spec and throw an error if it fails.
+     *
+     * This is intended to allow Jasmine matchers to be used with tools like
+     * testing-library's `waitFor`, which expect matcher failures to throw
+     * exceptions and not trigger a spec failure if the exception is caught.
+     * It can also be used to integration-test custom matchers.
+     *
+     * If the resulting expectation fails, a {@link ThrowUnlessFailure} will be
+     * thrown. A failed expectation will not result in a spec failure unless the
+     * exception propagates back to Jasmine, either via the call stack or via
+     * the global unhandled exception/unhandled promise rejection events.
+     * @name throwUnless
+     * @since 5.1.0
+     * @function
+     * @param actual
+     * @global
+     * @param {Object} actual - Actual computed value to test expectations against.
+     * @return {matchers}
+     */
+    throwUnless: function(actual) {
+      return env.throwUnless(actual);
+    },
+
+    /**
      * Mark a spec as pending, expectation results will be ignored.
      * @name pending
      * @since 2.0.0
@@ -9755,14 +9852,6 @@ getJasmineRequireObj().Suite = function(j$) {
     this.result.properties[key] = value;
   };
 
-  Suite.prototype.expect = function(actual) {
-    return this.expectationFactory(actual, this);
-  };
-
-  Suite.prototype.expectAsync = function(actual) {
-    return this.asyncExpectationFactory(actual, this);
-  };
-
   Suite.prototype.getFullName = function() {
     const fullName = [];
     for (
@@ -10713,5 +10802,5 @@ getJasmineRequireObj().UserContext = function(j$) {
 };
 
 getJasmineRequireObj().version = function() {
-  return '5.0.1';
+  return '5.1.0';
 };
