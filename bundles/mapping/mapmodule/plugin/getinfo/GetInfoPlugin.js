@@ -302,6 +302,30 @@ Oskari.clazz.define(
         },
 
         /**
+         * @method getFeatureInfoUrl
+         * Get URL using openlayers getFeatureInfoUrl
+         * @param {Object} coordinate pixel coordinates
+         * @returns 
+         */
+        _getFeatureInfoUrl: function (coordinate) {
+            const map = this.getSandbox().getMap();
+            const projection = this.getMapModule().getProjection();
+            const resolution = this.getMapModule().getResolution();
+            for (const layer of this.getSandbox().getMap().getLayers()) {
+                for (const olLayer of this.getMapModule().getOLMapLayers(layer.getId())) {
+                    if (olLayer.getSource()['getFeatureInfoUrl'] !== undefined) {
+                        return olLayer.getSource().getFeatureInfoUrl([coordinate.x, coordinate.y], resolution, projection, {
+                            'INFO_FORMAT': 'text/html',
+                            'QUERY_LAYERS': olLayer.getSource().getParams()['LAYERS'],
+                            'WIDTH': map.getWidth,
+                            'HEIGHT': map.getHeight
+                        });
+                    }
+                }
+            }
+        },
+
+        /**
          * @method handleGetInfo
          * Send ajax request to get feature info for given location for any
          * visible/valid/queryable layers.
@@ -318,6 +342,12 @@ Oskari.clazz.define(
             let layerIds = me._buildLayerIdList(requestedLayers);
             const mapVO = me.getSandbox().getMap();
             const px = me.getMapModule().getPixelFromCoordinate(lonlat);
+
+            let featureInfoUrl = this._getFeatureInfoUrl(px);
+            let url;
+            if (featureInfoUrl) {
+                url = new URL(featureInfoUrl);
+            }
 
             if (this._swipeStatus.cropX && this._swipeStatus.layerId) {
                 layerIds = layerIds.filter(l => l !== this._swipeStatus.layerId || px.x < this._swipeStatus.cropX);
@@ -353,7 +383,23 @@ Oskari.clazz.define(
 
             me._cancelAjaxRequest();
             me._startAjaxRequest(dteMs);
-
+            
+            const d = {
+                layerIds: layerIds.join(','),
+                projection: me.getMapModule().getProjection(),
+                x: url ? Number.parseInt(url.searchParams.get('I'), 10) : Math.round(px.x),
+                y: url ? Number.parseInt(url.searchParams.get('J'), 10) : Math.round(px.y),
+                lon: lonlat.lon,
+                lat: lonlat.lat,
+                width: url ? Number.parseInt(url.searchParams.get('WIDTH'), 10) : mapVO.getWidth(),
+                height: url ? Number.parseInt(url.searchParams.get('HEIGHT'), 10) : mapVO.getHeight(),
+                bbox: url ? url.searchParams.get('BBOX') : mapVO.getBboxAsString(),
+                zoom: mapVO.getZoom(),
+                srs: mapVO.getSrsName(),
+                params: JSON.stringify(additionalParams)
+            }
+            console.log(d)
+            
             jQuery.ajax({
                 beforeSend: function (x) {
                     // save ref to pending request
@@ -387,18 +433,7 @@ Oskari.clazz.define(
                     me._finishAjaxRequest();
                 },
                 data: {
-                    layerIds: layerIds.join(','),
-                    projection: me.getMapModule().getProjection(),
-                    x: Math.round(px.x),
-                    y: Math.round(px.y),
-                    lon: lonlat.lon,
-                    lat: lonlat.lat,
-                    width: mapVO.getWidth(),
-                    height: mapVO.getHeight(),
-                    bbox: mapVO.getBboxAsString(),
-                    zoom: mapVO.getZoom(),
-                    srs: mapVO.getSrsName(),
-                    params: JSON.stringify(additionalParams)
+                    ...d
                 },
                 type: 'POST',
                 dataType: 'json',
