@@ -267,13 +267,15 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
         }
         // options is used to store tile grid and all sorts of other flags so only get the
         //  declutter option here instead of spreading the object to layer directly
-        const { declutter } = layer.getOptions() || {};
+        //  className -> to get decluttered labels rendered in layer order (https://github.com/openlayers/openlayers/issues/13235)
+        const { declutter, className = 'ol-layer' } = layer.getOptions() || {};
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
             renderMode: 'hybrid',
             source: this.createSource(layer, sourceOpts),
-            declutter
+            declutter,
+            className
         });
 
         const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
