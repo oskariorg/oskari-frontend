@@ -23,7 +23,7 @@ var eventCounter;
 // ##################### //
 
 var general = {
-  ExpectedOskariVersion: "2.11.0",
+  ExpectedOskariVersion: "2.11.1",
   ExpectedRPCVersion: "2.0.4",
   IsSupported: true,
   srsName: "EPSG:3067",
