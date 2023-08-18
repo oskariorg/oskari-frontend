@@ -14,12 +14,11 @@ import { TimeSeries } from './TimeSeries';
 import { VectorStyle } from './VectorStyle';
 import { LayerTypeNotSupported } from '../LayerTypeNotSupported';
 import { Declutter } from './Declutter';
-import { ThemeProvider } from 'oskari-ui/util';
 
 const {
     OPACITY,
     CLUSTERING_DISTANCE,
-    WFS_RENDER_MODE,
+    WFS_LAYER,
     CAPABILITIES_STYLES,
     VECTOR_STYLES,
     EXTERNAL_VECTOR_STYLES,
@@ -56,16 +55,14 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
             { propertyFields.includes(CLUSTERING_DISTANCE) &&
                 <ClusteringDistance layer={layer} controller={controller} />
             }
-            { propertyFields.includes(WFS_RENDER_MODE) &&
+            { propertyFields.includes(WFS_LAYER) &&
                 <WfsRenderMode layer={layer} controller={controller} />
             }
             { propertyFields.includes(CAPABILITIES_STYLES) &&
                 <RasterStyle layer={layer} controller={controller} />
             }
             { showVectorStyle &&
-                <ThemeProvider>
-                    <VectorStyle layer={layer} controller={controller} external={showExternalVectorStyle}/>
-                </ThemeProvider>
+                <VectorStyle layer={layer} controller={controller} external={showExternalVectorStyle}/>
             }
             { propertyFields.includes(HOVER) &&
                 <Hover layer={layer} controller={controller} />

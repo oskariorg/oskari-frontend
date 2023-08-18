@@ -54,33 +54,13 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
         parseLayerData: function (layer, mapLayerJson = {}, maplayerService) {
-            if (layer.isLayerOfType('WFS')) {
-                if (this.sandbox.hasHandler('ShowUserStylesRequest')) {
-                    this._addUserStyleTool(layer);
-                } else {
-                    this._pendingUserStyleTools.push(layer);
-                }
+            if (isNaN(layer.getId())) {
+                return;
             }
-            layer.setHoverOptions(mapLayerJson.options.hover);
-            this.parseLayerAttributes(layer);
-        },
-        parseLayerAttributes: function (layer) {
-            const { data = {} } = layer.getAttributes();
-            const { filter, locale = {}, types } = data;
-            const lang = Oskari.getLang();
-
-            if (Array.isArray(filter)) {
-                layer.setPropertySelection(filter);
-            } else if (typeof filter === 'object') {
-                const filterArray = filter[lang] || filter.default || [];
-                layer.setPropertySelection(filterArray);
-            }
-            const localized = locale[lang];
-            if (localized) {
-                layer.setPropertyLabels(localized);
-            }
-            if (types) {
-                layer.setPropertyTypes(types);
+            if (this.sandbox.hasHandler('ShowUserStylesRequest')) {
+                this._addUserStyleTool(layer);
+            } else {
+                this._pendingUserStyleTools.push(layer);
             }
         }
     });

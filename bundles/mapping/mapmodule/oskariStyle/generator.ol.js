@@ -460,6 +460,21 @@ const getStrokeStyle = styleDef => {
  * @return {ol/style/Circle}
  */
 const getImageStyle = (mapModule, styleDef, requestedStyle) => {
+    const opacity = styleDef.image.opacity || 1;
+    // Oskari marker
+    if (!isNaN(styleDef.image.shape)) {
+        const { src, scale, offsetX, offsetY } = Oskari.custom.getSvg(styleDef.image);
+        return new olStyleIcon({
+            src,
+            scale,
+            anchorYUnits: 'pixels',
+            anchorXUnits: 'pixels',
+            anchorOrigin: 'bottom-left',
+            anchor: [offsetX, offsetY],
+            opacity
+        });
+    }
+
     const image = {};
     let size = mapModule.getDefaultMarkerSize();
 
@@ -477,8 +492,6 @@ const getImageStyle = (mapModule, styleDef, requestedStyle) => {
 
     let fillColor = styleDef.image.fill ? styleDef.image.fill.color : undefined;
     fillColor = getColorEffect(styleDef.effect, fillColor) || fillColor;
-
-    const opacity = styleDef.image.opacity || 1;
 
     if (mapModule.isSvg(styleDef.image)) {
         styleDef.image.color = fillColor;

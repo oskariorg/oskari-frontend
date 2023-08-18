@@ -99,7 +99,7 @@ const ThemedSlider = ThemeConsumer(({theme = {}, ...rest}) => {
             opacity={opacity}
             {...rest}
         />
-    )
+    );
 });
 
 export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ...rest }) => {
@@ -112,17 +112,17 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
         return (
             <MobileContainer>
                 <MapModuleButton
-                    icon={<PlusIcon />}
+                    icon={<PlusOutlined />}
                     onClick={() => {
-                        changeZoom(zoom < 100 ? zoom + 1 : 100)
+                        changeZoom(zoom < 100 ? zoom + 1 : 100);
                     }}
                     size='32px'
                     className='t_plus'
                 />
                 <MapModuleButton
-                    icon={<MinusIcon />}
+                    icon={<MinusOutlined />}
                     onClick={() => {
-                        changeZoom(zoom > 0 ? zoom - 1 : 0)
+                        changeZoom(zoom > 0 ? zoom - 1 : 0);
                     }}
                     size='32px'
                     className='t_minus'
@@ -138,7 +138,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
                 icon={<PlusIcon />}
                 className='t_plus'
                 onClick={() => {
-                    changeZoom(zoom < 100 ? zoom + 1 : 100)
+                    changeZoom(zoom < 100 ? zoom + 1 : 100);
                 }}
                 size='18px'
                 noMargin
@@ -164,11 +164,11 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
                 icon={<MinusIcon />}
                 className='t_minus'
                 onClick={() => {
-                    changeZoom(zoom > 0 ? zoom - 1 : 0)
+                    changeZoom(zoom > 0 ? zoom - 1 : 0);
                 }}
                 size='18px'
                 noMargin
             />
         </Container>
     );
-}
+};

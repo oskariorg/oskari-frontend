@@ -112,6 +112,10 @@ Oskari.registerLocalization(
             },
             "attributes": {
                 "label": "Attributes",
+                "properties": "Feature properties",
+                "showAll": "Show all properties",
+                "idProperty": "Use feature property as identifier",
+                "idPropertyTooltip": "Service should return unique identifier for features. Firstly ask service provider to use unique identifiers.",
                 "geometryType": {
                     "label": "Geometry type",
                     "sourceAttributes": "Source: layer attributes",
@@ -121,6 +125,47 @@ Oskari.registerLocalization(
                     "line": "Line",
                     "area":"Area",
                     "collection":"Collection"
+                },
+                "featureFilter": {
+                    "title": "Feature filter",
+                    "add": "Add feature filter",
+                    "edit": "Edit feature filter"
+                },
+                "filter": {
+                    "title": "Properties filter",
+                    "lang": "Choose shown feature properties and ordering",
+                    "default": "for default filter",
+                    "fromDefault": "Selected language doesn't have filter. Default filter is used for selected language. Edit values to create new filter for language.",
+                    "add": "Add filter",
+                    "edit": "Edit filter"
+                },
+                "locale": {
+                    "title": "Labels for feature properties",
+                    "add": "Add labels",
+                    "edit": "Edit labels"
+                },
+                "format": {
+                    "title": "Feature properties value formatting",
+                    "add": "Add formatting",
+                    "edit": "Edit formatting",
+                    "type": {
+                        "label": "Type",
+                        "typeFormats": "Value type",
+                        "textFormats": "Text formatting",
+                        "link": "Link",
+                        "image": "Image",
+                        "number": "Number",
+                        "phone": "Phone number"
+                    },
+                    "options": {
+                        "noLabel": "Don't show label",
+                        "skipEmpty": "Skip empty value"
+                    },
+                    "params": {
+                        "link": "Show as link",
+                        "fullUrl": "Show full url",
+                        "label": "Label for link"
+                    }
                 }
             },
             "styles": {
@@ -140,6 +185,10 @@ Oskari.registerLocalization(
                     "name": "Style name",
                     "selectDefault": "Select default style",
                     "deleteStyle": "Delete style",
+                    "featureStyle": "Style definitions",
+                    "optionalStyles": "Property based style definitions",
+                    "cesium": "3D Tiles/Cesium style definitions",
+                    "mapbox": "Mapbox style definitions",
                     "edit": {
                         "editor": "Edit by using editor",
                         "json": "Edit JSON"
@@ -153,13 +202,8 @@ Oskari.registerLocalization(
                     "validation": {
                         "name": "Please enter a name for the style",
                         "noStyles": "No saved styles",
-                        "json": "Invalid JSON syntax in Style definitions."
-                    },
-                    "json": {
-                        "featureStyle": "Style definitions (JSON)",
-                        "optionalStyles": "Property based style definitions (JSON)",
-                        "cesium": "3D Tiles/Cesium style definitions (JSON)",
-                        "mapbox": "Mapbox style definitions (JSON)"
+                        "json": "Invalid JSON syntax in Style definitions.",
+                        "optionalStyles": "Optional style doesn't have valid filter."
                     }
                 }
             },
@@ -230,7 +274,8 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first.",
                 "errorFetchCoverage": "Failed to get the map layer coverage from the service.",
                 "noCoverage": "The map layer coverage isn't restricted.",
-                "invalidScale": "Check the layer scale limits."
+                "invalidScale": "Check the layer scale limits.",
+                "noFeatureProperties": "Layer doesn't have feature properties information."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

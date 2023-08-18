@@ -127,27 +127,14 @@ Oskari.clazz.define('map.layer.handler',
             }
             const layerId = layer.getId();
             const status = layer.getDescribeLayerStatus();
-            if (status === DESCRIBE_LAYER.LOADED) {
-                // already processed, we can proceed with adding the layer to map
+            if (status === DESCRIBE_LAYER.PREDEFINED) {
+                this.__handleLayerInfoSuccess(layer, layer.getDescribeLayerInfo());
                 done();
                 return;
             }
-            if (typeof layerId === 'string' && layerId.startsWith('userlayer')) {
-                // process coverage WKT for userlayers
-                // it is included in the layer data for userlayers and DescribeLayer is not used
-                this.__handleLayerInfoSuccess(layer, {
-                    coverage: layer.getGeometryWKT()
-                });
-            }
-            if (typeof layerId === 'string' && layerId.startsWith('myplaces')) {
-                // myplaces layer in embedded maps/links has the type wfslayer
-                // since they have their style in options but are NOT run through the myplaces modelbuilder
-                // we need to parse the styles here...
-                layer.setStylesFromOptions(layer.getOptions());
-                this.__handleLayerInfoSuccess(layer, {});
-            }
-            // only layers that have numeric ids can have reasonable response for DescribeLayer
-            if (isNaN(layerId)) {
+            if (status === DESCRIBE_LAYER.LOADED || isNaN(layerId)) {
+                // only layers that have numeric ids can have reasonable response for DescribeLayer
+                // already processed, we can proceed with adding the layer to map
                 done();
                 return;
             }
@@ -168,7 +155,7 @@ Oskari.clazz.define('map.layer.handler',
                 done();
             });
         },
-        __handleLayerInfoSuccess: function (layer, describeInfo) {
+        __handleLayerInfoSuccess: function (layer, describeInfo = {}) {
             const sandbox = this.layerService.getSandbox();
             const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             layer.setDescribeLayerStatus(DESCRIBE_LAYER.LOADED);

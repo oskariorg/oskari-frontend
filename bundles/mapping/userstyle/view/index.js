@@ -7,7 +7,6 @@ import { UserStyleEditor } from './UserStyles/UserStyleEditor';
 import { UserStylesContent } from './UserStyles/UserStylesContent';
 import { BUNDLE_KEY } from '../constants';
 import { VECTOR_STYLE } from '../../mapmodule/domain/constants';
-import { ThemeProvider } from 'oskari-ui/util';
 
 const Content = styled.div`
     padding: 24px;
@@ -33,7 +32,7 @@ const getContent = (service, options, onClose) => {
             });
             onClose(wasEditor);
         };
-        content = <ThemeProvider><UserStyleEditor style={ style } onAdd={ onAdd } onCancel={ () => onClose(wasEditor) }/></ThemeProvider>;
+        content = <UserStyleEditor style={ style } onAdd={ onAdd } onCancel={ () => onClose(wasEditor) }/>;
     } else {
         const styles = service.getStylesByLayer(layerId);
         const onDelete = (id) => service.removeUserStyle(id);

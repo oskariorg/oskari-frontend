@@ -45,10 +45,12 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         this.layertypes.add(layertype);
         this.getMapModule().setLayerPlugin(layertype, this);
         this.getMapModule().registerDefaultFeatureStyle(layertype, DEFAULT_STYLES.style);
-        this.mapLayerService.registerLayerModel(layertype, modelClass);
-        this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
         this.vectorFeatureService.registerLayerType(layertype, this);
         this.vectorFeatureService.registerDefaultStyles(layertype, DEFAULT_STYLES);
+        this.mapLayerService.registerLayerModel(layertype, modelClass);
+        if (modelBuilder) {
+            this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
+        }
         this._registerEventHandlers(eventHandlers);
     }
 
@@ -91,8 +93,7 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
             LayerComposingModel.VECTOR_STYLES,
             LayerComposingModel.URL,
             LayerComposingModel.VERSION,
-            LayerComposingModel.WFS_RENDER_MODE,
-            LayerComposingModel.VECTOR_LAYER
+            LayerComposingModel.WFS_LAYER
         ], ['1.1.0', '2.0.0', '3.0.0']);
 
         const layerClass = 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';
@@ -365,14 +366,6 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         layersImpls.forEach(olLayer => {
             handler.applyZoomBounds(layer, olLayer);
         });
-    }
-
-    _handleDescribeLayerImpl (layer, info) {
-        const propTypes = info?.properties?.reduce((types, prop) => {
-            types[prop.name] = prop.type;
-            return types;
-        }, {});
-        layer.setPropertyTypes(propTypes);
     }
 };
 

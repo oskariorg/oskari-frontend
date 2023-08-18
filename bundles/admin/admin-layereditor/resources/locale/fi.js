@@ -113,6 +113,10 @@ Oskari.registerLocalization(
             },
             "attributes": {
                 "label": "Attribuutit",
+                "properties": "Kohteiden ominaisuustiedot",
+                "showAll": "Näytä kaikki ominaisuustiedot",
+                "idProperty": "Käytä ominaisuustietoa kohteiden yksilöimiseen",
+                "idPropertyTooltip": "Rajapinnan tulee palauttaa yksilöivä tunniste kohteille. Pyydä ensisijaisesti palveluntarjoajaa ottamaan käyttöön yksilöivät tunnisteet.",
                 "geometryType": {
                     "label": "Geometriatyyppi",
                     "sourceAttributes": "Lähde: tason attribuutit",
@@ -122,6 +126,47 @@ Oskari.registerLocalization(
                     "line": "Viiva",
                     "area":"Alue",
                     "collection":"Kaikki"
+                },
+                "featureFilter": {
+                    "title": "Kohteiden suodatus",
+                    "add": "Lisää kohteiden suodatus",
+                    "edit": "Muokkaa kohteiden suodatusta"
+                },
+                "filter": {
+                    "title": "Ominaisuustietojen näyttäminen",
+                    "lang": "Valitse tason kohteille näytettävät ominaisuustiedot ja niiden järjestys",
+                    "default": "oletussuodattimelle",
+                    "fromDefault": "Valitulle kielelle ei ole lisätty suodatinta. Valitulla kielellä käytetään oletussuodatinta. Muokkaa valintoja luodaksesi kielelle oman suodattimen.",
+                    "add": "Lisää suodatin",
+                    "edit": "Muokkaa suodatinta"
+                },
+                "locale": {
+                    "title": "Käyttöliittymässä näytettävät nimet ominaisuustiedoille",
+                    "add": "Lisää nimet",
+                    "edit": "Muokkaa nimiä"
+                },
+                "format": {
+                    "title": "Kohteiden ominaisuustietojen arvon muotoilu",
+                    "add": "Lisää muotoilu",
+                    "edit": "Muokkaa muotoilua",
+                    "type": {
+                        "label": "Tyyppi",
+                        "typeFormats": "Arvon tyyppi",
+                        "textFormats": "Tekstin muotoilu",
+                        "link": "Linkki",
+                        "image": "Kuva",
+                        "number": "Numero",
+                        "phone": "Puhelinnumero"
+                    },
+                    "options": {
+                        "noLabel": "Näytä vain arvo",
+                        "skipEmpty": "Älä näytä tyhjää"
+                    },
+                    "params": {
+                        "link": "Näytä linkkinä",
+                        "fullUrl": "Näytä koko osoite",
+                        "label": "Linkin label"
+                    }
                 }
             },
             "styles": {
@@ -141,6 +186,10 @@ Oskari.registerLocalization(
                     "name": "Tyylin nimi",
                     "selectDefault": "Valitse oletustyyli",
                     "deleteStyle": "Poista tyyli",
+                    "optionalStyles": "Tyylittely ominaisuustietojen mukaan",
+                    "featureStyle": "Tyylimääritykset",
+                    "cesium": "3D Tiles/Cesium tyylimääritykset",
+                    "mapbox": "Mapbox tyylimääritykset",
                     "edit": {
                         "editor": "Muokkaa editorilla",
                         "json": "Muokkaa JSON"
@@ -154,13 +203,8 @@ Oskari.registerLocalization(
                     "validation": {
                         "name": "Täytä nimi tyylille",
                         "noStyles": "Ei tallennettuja tyylejä",
-                        "json": "Tyylimääritysten JSON-syntaksi on virheellinen."
-                    },
-                    "json": {
-                        "featureStyle": "Tyylimääritykset (JSON)",
-                        "optionalStyles": "Tyylittely ominaisuustietojen mukaan (JSON)",
-                        "cesium": "3D Tiles/Cesium tyylimääritykset (JSON)",
-                        "mapbox": "Mapbox tyylimääritykset (JSON)"
+                        "json": "Tyylimääritysten JSON-syntaksi on virheellinen.",
+                        "optionalStyles": "Tyylimäärityksellä ei ole sopivaa suodatinta."
                     }
                 }
             },
@@ -231,7 +275,8 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
                 "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
                 "noCoverage": "Karttatason kattavuutta ei ole rajoitettu.",
-                "invalidScale": "Tarkista tason mittakaavarajat."
+                "invalidScale": "Tarkista tason mittakaavarajat.",
+                "noFeatureProperties": "Kohteiden ominaisuustietoja ei ole saatavilla tasolle."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

@@ -52,6 +52,9 @@ Oskari.registerLocalization(
                 },
                 "announcementsName": "Titel",
                 "announcementsTime": "Datumintervall"
+            },
+            "publisher": {
+                "noUI": "Dölj användargränsnittet (Använd via RPC gränssnitt)"
             }
         }
     });

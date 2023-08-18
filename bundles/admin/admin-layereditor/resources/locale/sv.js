@@ -138,6 +138,10 @@ Oskari.registerLocalization(
                     "name": "Stilnamn",
                     "selectDefault": "Välj förvalt stil",
                     "deleteStyle": "Ta bort stilen",
+                    "featureStyle": "Stildefinitioner",
+                    "optionalStyles": "",
+                    "cesium": "Stildefinitioner av 3D Tiles/Cesium",
+                    "mapbox": "Stildefinitioner av Mapbox",
                     "edit": {
                         "editor": "Redigera",
                         "json": "Redigera JSON"
@@ -152,12 +156,6 @@ Oskari.registerLocalization(
                         "name": "Fyll i namnet på stilen",
                         "noStyles": "Inga sparade stilar",
                         "json": "Stildefinitioner JSON-syntaxen är ogiltig."
-                    },
-                    "json": {
-                        "featureStyle": "Stildefinitioner (JSON)",
-                        "optionalStyles": "",
-                        "cesium": "Stildefinitioner av 3D Tiles/Cesium (JSON)",
-                        "mapbox": "Stildefinitioner av Mapbox (JSON)"
                     }
                 }
             },

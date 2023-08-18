@@ -1775,20 +1775,14 @@ Oskari.clazz.define(
             var isWellknownMarker = false;
             // marker shape is number --> find it from Oskari.getMarkers()
             if (!isNaN(style.shape)) {
-                var markers = Oskari.getMarkers();
-                if (markers[style.shape]) {
-                    svgObject = { ...markers[style.shape] };
-                } else {
-                    this.log.warn('Requested marker:', style.shape, 'does not exist. Using default marker instead.');
-                    svgObject = { ...Oskari.getDefaultMarker() };
-                }
-
-                if (style.color) {
-                    svgObject.data = this.__changePathAttribute(svgObject.data, 'fill', style.color);
-                }
-                if (style.stroke) {
-                    svgObject.data = this.__changePathAttribute(svgObject.data, 'stroke', style.stroke);
-                }
+                this.log.deprecated('getSvg', 'Use Oskari.custom.getSvg()');
+                svgObject = Oskari.custom.getMarker(style.shape);
+                const svg = jQuery(svgObject.data);
+                svg.find('path').attr({
+                    'fill': style.color || '#000000',
+                    'stroke': style.stroke || '#000000'
+                });
+                svgObject.data = svg.outerHTML();
             } else if ((typeof style.shape === 'object' && style.shape !== null &&
                 style.shape.data) || (typeof style.shape === 'string' && style.shape.indexOf('<svg') > -1)) {
                 // marker shape is svg
@@ -1853,7 +1847,6 @@ Oskari.clazz.define(
             marker.attr('width', style.size || this._defaultMarker.size);
 
             var svgSrc = 'data:image/svg+xml,' + encodeURIComponent(marker.outerHTML());
-
             return svgSrc;
         },
 
@@ -1954,30 +1947,6 @@ Oskari.clazz.define(
                 return htmlObject;
             }
             // if string was given, return string as well
-            return htmlObject.outerHTML();
-        },
-        /**
-         * Changes svg path attributes
-         * @method  @private __changePathAttribute description]
-         * @param  {String|jQuery} svg   svg format
-         * @param  {String} attr  attribute name
-         * @param  {String} value attribute value
-         * @return {String|jQuery} svg string or jQuery object if parameter was jQuery object
-         */
-        __changePathAttribute: function (svg, attr, value) {
-            if (typeof svg === 'object') {
-                // assume jQuery object
-                svg.find('path').attr(attr, value);
-                return svg;
-            }
-            // assume svg is string
-            var htmlObject = jQuery(svg);
-            htmlObject.find('path').attr(attr, value);
-
-            if (htmlObject.find('path').length > 1) {
-                this.log.warn(`Found more than one <path> in SVG. Replaced all ${attr} attributes in SVG paths to ${value}.`);
-            }
-
             return htmlObject.outerHTML();
         },
         /**

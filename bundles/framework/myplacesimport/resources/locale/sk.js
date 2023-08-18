@@ -45,7 +45,7 @@ Oskari.registerLocalization(
             "title": "Datasety",
             "grid": {
                 "name": "Názov",
-                "description": "Popis",
+                "desc": "Popis",
                 "source": "Zdroj údajov",
                 "remove": "Vymazať",
                 "removeButton": "Vymazať"

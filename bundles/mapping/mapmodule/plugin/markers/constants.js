@@ -18,10 +18,11 @@ export const DEFAULT_DATA = {
     transient: false
 };
 
+// use size 3 for add marker UI
 export const DEFAULT_STYLE = {
     image: {
         shape: DEFAULT_DATA.shape,
-        size: DEFAULT_DATA.size,
+        size: 3,
         fill: {
             color: '#' + DEFAULT_DATA.color
         }

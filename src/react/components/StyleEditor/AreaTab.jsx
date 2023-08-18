@@ -36,7 +36,7 @@ const getFillOptions = () => {
             const fillCode = FILLS[name];
             return {
                 name: fillCode,
-                data: getFillIcon(name, fillCode)
+                content: getFillIcon(name, fillCode)
             };
         });
     }

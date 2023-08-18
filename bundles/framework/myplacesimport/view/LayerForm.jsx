@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
-import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { showPopup } from 'oskari-ui/components/window';
 import { LayerFormContent } from './LayerForm/';
 import { BUNDLE_NAME } from '../constants';
@@ -29,9 +29,7 @@ export const showLayerForm = (values, config, onOk, onClose) => {
         update: (error, prevValues) => {
             controls.update(getTitle(config),
                 (<LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
-                    <ThemeProvider>
-                        <LayerFormContent values={prevValues} config={config} onOk={onOk} onCancel={onClose} error={error}/>
-                    </ThemeProvider>
+                    <LayerFormContent values={prevValues} config={config} onOk={onOk} onCancel={onClose} error={error}/>
                 </LocaleProvider>));
         }
     };
