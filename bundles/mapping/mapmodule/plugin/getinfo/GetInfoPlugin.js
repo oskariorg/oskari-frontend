@@ -46,7 +46,7 @@ Oskari.clazz.define(
         };
         me._location = null;
 
-        /* templates */
+        /* templates (from formatter/GetFeatureInfoFormatter.js) */
         me.template = {};
         var p;
         for (p in me.__templates) {
@@ -302,6 +302,25 @@ Oskari.clazz.define(
         },
 
         /**
+         * @method getFeatureInfoUrl
+         * Get URL using openlayers getFeatureInfoUrl
+         * This handles x and y correctly when the map is rotated etc
+         * @param {Object} coordinates to query
+         * @returns {String} url for GFI queries
+         */
+        _getFeatureInfoUrl: function (coordinate) {
+            const projection = this.getMapModule().getProjection();
+            const resolution = this.getMapModule().getResolution();
+            for (const layer of this.getSandbox().getMap().getLayers()) {
+                for (const olLayer of this.getMapModule().getOLMapLayers(layer.getId())) {
+                    if (olLayer.getSource()['getFeatureInfoUrl'] !== undefined) {
+                        return olLayer.getSource().getFeatureInfoUrl([coordinate.lon, coordinate.lat], resolution, projection);
+                    }
+                }
+            }
+        },
+
+        /**
          * @method handleGetInfo
          * Send ajax request to get feature info for given location for any
          * visible/valid/queryable layers.
@@ -353,6 +372,43 @@ Oskari.clazz.define(
 
             me._cancelAjaxRequest();
             me._startAjaxRequest(dteMs);
+            const featureInfoUrl = this._getFeatureInfoUrl(lonlat);
+            let x = Math.round(px.x);
+            let y = Math.round(px.y);
+            let width = mapVO.getWidth();
+            let height = mapVO.getHeight();
+            let bbox = mapVO.getBboxAsString();
+            if (featureInfoUrl) {
+                const url = new URL(featureInfoUrl);
+                if (url.searchParams.get('I')) {
+                    x = Number.parseInt(url.searchParams.get('I'), 10);
+                } else if (url.searchParams.get('X')) {
+                    x = Number.parseInt(url.searchParams.get('X'), 10);
+                }
+                if (url.searchParams.get('J')) {
+                    y = Number.parseInt(url.searchParams.get('J'), 10);
+                } else if (url.searchParams.get('Y')) {
+                    y = Number.parseInt(url.searchParams.get('Y'), 10);
+                }
+                width = Number.parseInt(url.searchParams.get('WIDTH'), 10);
+                height = Number.parseInt(url.searchParams.get('HEIGHT'), 10);
+                bbox = url.searchParams.get('BBOX');
+            }
+
+            const payload = {
+                layerIds: layerIds.join(','),
+                projection: me.getMapModule().getProjection(),
+                x,
+                y,
+                lon: lonlat.lon,
+                lat: lonlat.lat,
+                width,
+                height,
+                bbox,
+                zoom: mapVO.getZoom(),
+                srs: mapVO.getSrsName(),
+                params: JSON.stringify(additionalParams)
+            };
 
             jQuery.ajax({
                 beforeSend: function (x) {
@@ -368,7 +424,7 @@ Oskari.clazz.define(
                         data.forEach((datum) => {
                             me._handleInfoResult({
                                 features: [datum],
-                                lonlat: lonlat,
+                                lonlat,
                                 via: 'ajax'
                             });
                         });
@@ -387,18 +443,7 @@ Oskari.clazz.define(
                     me._finishAjaxRequest();
                 },
                 data: {
-                    layerIds: layerIds.join(','),
-                    projection: me.getMapModule().getProjection(),
-                    x: Math.round(px.x),
-                    y: Math.round(px.y),
-                    lon: lonlat.lon,
-                    lat: lonlat.lat,
-                    width: mapVO.getWidth(),
-                    height: mapVO.getHeight(),
-                    bbox: mapVO.getBboxAsString(),
-                    zoom: mapVO.getZoom(),
-                    srs: mapVO.getSrsName(),
-                    params: JSON.stringify(additionalParams)
+                    ...payload
                 },
                 type: 'POST',
                 dataType: 'json',
@@ -407,8 +452,7 @@ Oskari.clazz.define(
         },
 
         addInfoResultHandler: function (callback) {
-            var me = this;
-            me._showGfiInfo = callback;
+            this._showGfiInfo = callback;
         },
 
         setSwipeStatus: function (layerId, cropX) {
