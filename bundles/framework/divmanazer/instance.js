@@ -141,18 +141,14 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             );
 
             // Hide navigation if starts in mobile mode
-            const nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
+            const nav = Oskari.dom.getNavigationEl();
+            Oskari.dom.showNavigation(!Oskari.util.isMobile());
             if (nav) {
-                if (Oskari.util.isMobile()) {
-                    nav.style.display = 'none';
-                } else {
-                    nav.style.display = 'block';
-                }
+                const mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                const ToggleNavigationPlugin = Oskari.clazz.create('Oskari.userinterface.plugin.ToggleNavigationPlugin');
+                mapModule.registerPlugin(ToggleNavigationPlugin);
+                mapModule.startPlugin(ToggleNavigationPlugin);
             }
-            const mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-            const ToggleNavigationPlugin = Oskari.clazz.create('Oskari.userinterface.plugin.ToggleNavigationPlugin');
-            mapModule.registerPlugin(ToggleNavigationPlugin);
-            mapModule.startPlugin(ToggleNavigationPlugin);
 
             /* removed for some reason or another */
             // sandbox.registerAsStateful(me.mediator.bundleId, me);

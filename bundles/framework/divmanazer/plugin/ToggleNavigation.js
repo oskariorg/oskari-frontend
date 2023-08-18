@@ -74,11 +74,11 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
          */
         refresh: function () {
             const el = this.getElement();
-            const nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
+            const nav = Oskari.dom.getNavigationEl();
             if (!el || !nav) {
                 return;
             }
-            const isToggled = Oskari.dom.isNavigationVisible();
+            const isToggled = !!Oskari.dom.isNavigationVisible();
             ReactDOM.render(
                 <StyledButton
                     className='t_navigationtoggle'

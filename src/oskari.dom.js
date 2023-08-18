@@ -114,14 +114,18 @@ const isEmbedded = () => {
 };
 
 const showNavigation = (show) => {
-    const nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
+    const nav = getNavigationEl();
     nav.style.display = show ? 'block' : 'none';
 };
 
 const isNavigationVisible = () => {
-    const nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
+    const nav = getNavigationEl();
     const style = window.getComputedStyle(nav);
     return style.getPropertyValue('display') !== 'none';
+}
+
+const getNavigationEl = () => {
+    return [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
 }
 
 export const DOMHelper = {
@@ -134,5 +138,6 @@ export const DOMHelper = {
     getHeight,
     showNavigation,
     isNavigationVisible,
+    getNavigationEl,
     APP_EMBEDDED_CLASS
 };
