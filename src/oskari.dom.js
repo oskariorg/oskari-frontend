@@ -115,7 +115,9 @@ const isEmbedded = () => {
 
 const showNavigation = (show) => {
     const nav = getNavigationEl();
-    nav.style.display = show ? 'block' : 'none';
+    if (nav) {
+        nav.style.display = show ? 'block' : 'none';
+    }
 };
 
 const isNavigationVisible = () => {

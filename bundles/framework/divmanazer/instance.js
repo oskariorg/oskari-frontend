@@ -142,8 +142,8 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
 
             // Hide navigation if starts in mobile mode
             const nav = Oskari.dom.getNavigationEl();
-            Oskari.dom.showNavigation(!Oskari.util.isMobile());
             if (nav) {
+                Oskari.dom.showNavigation(!Oskari.util.isMobile());
                 const mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 const ToggleNavigationPlugin = Oskari.clazz.create('Oskari.userinterface.plugin.ToggleNavigationPlugin');
                 mapModule.registerPlugin(ToggleNavigationPlugin);
