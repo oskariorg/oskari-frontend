@@ -122,6 +122,7 @@ const showNavigation = (show) => {
 
 const isNavigationVisible = () => {
     const nav = getNavigationEl();
+    if (!nav) return false;
     const style = window.getComputedStyle(nav);
     return style.getPropertyValue('display') !== 'none';
 }
