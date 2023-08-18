@@ -113,6 +113,17 @@ const isEmbedded = () => {
     return getMapContainerEl().classList.contains(APP_EMBEDDED_CLASS);
 };
 
+const showNavigation = (show) => {
+    const nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
+    nav.style.display = show ? 'block' : 'none';
+};
+
+const isNavigationVisible = () => {
+    const nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
+    const style = window.getComputedStyle(nav);
+    return style.getPropertyValue('display') !== 'none';
+}
+
 export const DOMHelper = {
     setRootEl,
     getRootEl,
@@ -121,5 +132,7 @@ export const DOMHelper = {
     isEmbedded,
     getWidth,
     getHeight,
+    showNavigation,
+    isNavigationVisible,
     APP_EMBEDDED_CLASS
 };

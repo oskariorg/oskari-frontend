@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MenuOutlined } from '@ant-design/icons';
-import { MapModuleButton } from '../../MapModuleButton';
+import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
 import styled from 'styled-components';
-
-import './request/ToggleNavigationRequest';
 
 // Icon is too small with defaults (18x18px)
 const StyledButton = styled(MapModuleButton)`
@@ -20,10 +18,10 @@ const StyledButton = styled(MapModuleButton)`
 `;
 
 /**
- * @class Oskari.mapframework.bundle.mapmodule.plugin.ToggleNavigationPlugin
+ * @class Oskari.userinterface.plugin.ToggleNavigationPlugin
  * Displays a full screen toggle button on the map.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ToggleNavigationPlugin',
+Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
     /**
      * @static @method create called automatically on construction
      *
@@ -31,15 +29,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ToggleNavigatio
     function () {
         var me = this;
         me._clazz =
-            'Oskari.mapframework.bundle.mapmodule.plugin.ToggleNavigationPlugin';
+            'Oskari.userinterface.plugin.ToggleNavigationPlugin';
         me._defaultLocation = 'top left';
         me._index = 2;
         me._name = 'ToggleNavigationPlugin';
         me._element = null;
         const isMobile = Oskari.util.isMobile();
-        me.state = {
-            navigationVisible: !isMobile
-        };
         me._sandbox = null;
         this._isVisible = isMobile;
         me._templates = {
@@ -83,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ToggleNavigatio
             if (!el || !nav) {
                 return;
             }
-            const isToggled = !!this.state.navigationVisible;
+            const isToggled = Oskari.dom.isNavigationVisible();
             ReactDOM.render(
                 <StyledButton
                     className='t_navigationtoggle'
@@ -91,11 +86,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ToggleNavigatio
                     icon={<MenuOutlined />}
                     iconActive={isToggled}
                     onClick={() => {
-                        this.setState({
-                            navigationVisible: !isToggled
-                        });
+                        Oskari.dom.showNavigation(!isToggled);
+                        this.redrawUI();
                     }}
                     position={this.getLocation()}
+                    isNav={true}
                 />
                 ,
                 el[0]
@@ -113,53 +108,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ToggleNavigatio
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
         },
-
-        /**
-         * @private @method  createRequestHandlers
-         *
-         * @return {Object} Request handler map
-         */
-        createRequestHandlers: function () {
-            return {
-                'MapModulePlugin.ToggleNavigationRequest': this
-            };
-        },
-        /**
-         * Handler for MapModulePlugin.ToggleNavigationRequest
-         *
-         * Oskari.getSandbox().postRequestByName('MapModulePlugin.ToggleNavigationRequest', [true/false]);
-         *
-         * @param {Oskari.mapframework.core.Core} core
-         *      Reference to the application core (reference sandbox core.getSandbox())
-         * @param {Oskari.mapframework.bundle.mapmodule.request.ToggleNavigationRequest} request
-         *      Request to handle
-         */
-        handleRequest: function (core, request) {
-            this._isVisible = request.isVisible();
-            this.refresh();
-        },
         isVisible: function () {
             return this._isVisible;
-        },
-        setState: function (state) {
-            this.state = state || {};
-            if (state.navigationVisible) {
-                this._hideNavigation();
-            } else {
-                this._showNavigation();
-            }
-            this.refresh();
-        },
-        getState: function () {
-            return this.state;
-        },
-        _showNavigation: function () {
-            const nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
-            nav.style.display = 'block';
-        },
-        _hideNavigation: function () {
-            const nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
-            nav.style.display = 'none';
         }
     },
     {

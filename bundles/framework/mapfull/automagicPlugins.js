@@ -3,6 +3,5 @@
  */
 export const automagicPlugins = [
     'Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
-    'Oskari.mapframework.mapmodule.BingMapsLayerPlugin',
-    'Oskari.mapframework.bundle.mapmodule.plugin.ToggleNavigationPlugin'
+    'Oskari.mapframework.mapmodule.BingMapsLayerPlugin'
 ];

@@ -1,4 +1,5 @@
 import { getNavigationDimensions, getPositionForCentering, PLACEMENTS } from 'oskari-ui/components/window';
+import './plugin/ToggleNavigation';
 /**
  * @class Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance
  *
@@ -148,6 +149,10 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     nav.style.display = 'block';
                 }
             }
+            const mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+            const ToggleNavigationPlugin = Oskari.clazz.create('Oskari.userinterface.plugin.ToggleNavigationPlugin');
+            mapModule.registerPlugin(ToggleNavigationPlugin);
+            mapModule.startPlugin(ToggleNavigationPlugin);
 
             /* removed for some reason or another */
             // sandbox.registerAsStateful(me.mediator.bundleId, me);
