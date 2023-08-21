@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
          */
         refresh: function () {
             const el = this.getElement();
-            if (!el) {
+            if (!el || Oskari.util.isMobile()) {
                 return;
             }
             const isFullscreen = !!this.state.fullscreen;
