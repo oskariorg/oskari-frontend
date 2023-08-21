@@ -79,13 +79,17 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
                 return;
             }
             const isToggled = !!Oskari.dom.isNavigationVisible();
+
+            // Fixes button staying active or hovered after click
+            ReactDOM.unmountComponentAtNode(el[0]);
+
             ReactDOM.render(
                 <StyledButton
                     className='t_navigationtoggle'
                     visible={this.isVisible()}
                     icon={<MenuOutlined />}
                     iconActive={isToggled}
-                    onClick={() => {
+                    onClick={(e) => {
                         Oskari.dom.showNavigation(!isToggled);
                         this.redrawUI();
                     }}
