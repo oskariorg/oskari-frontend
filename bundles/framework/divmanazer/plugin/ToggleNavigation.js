@@ -14,15 +14,6 @@ const StyledButton = styled(MapModuleButton)`
         max-height: 22px;
         max-width: 22px;
     }
-    &:hover {
-        color: none;
-    }
-    &:focus {
-        color: none;
-    }
-    &:active {
-        color: none;
-    }
 }
 `;
 
