@@ -425,7 +425,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 '</div>');
             var dateTime = template.find('.timeseries-datetime');
             me._updateTimeDisplay = function () {
-                dateTime.text(me.loc('dateRender', { val: new Date(me._uiState.currentTime) }));
+                const date = new Date(me._uiState.currentTime);
+                const diff = date.getTimezoneOffset() * 60000;
+                dateTime.text(me.loc('dateRender', { val: new Date(date.valueOf() + diff) }));
             };
             template.find('.timeseries-playpause').on('click', function (e) {
                 if (me._uiState.isAnimating) {
