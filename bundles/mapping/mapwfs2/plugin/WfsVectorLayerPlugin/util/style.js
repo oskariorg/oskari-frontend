@@ -31,7 +31,8 @@ export const DEFAULT_STYLES = { ...defaults };
 
 const isClusteredLayer = (mapmodule, layer) => {
     // mvt rendering isn't supported in 3D, no need to check layer's render mode
-    return !mapmodule.getSupports3D() && typeof layer.getClusteringDistance() !== 'undefined';
+    // TODO: should we check for -1 or undefined type? Seems it defaults to -1 and not 'undefined'
+    return !mapmodule.getSupports3D() && layer.getClusteringDistance() !== -1 && typeof layer.getClusteringDistance() !== 'undefined';
 };
 
 const defaultStyleGenerator = (mapmodule, layer) => {
