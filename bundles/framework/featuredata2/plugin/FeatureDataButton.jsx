@@ -30,6 +30,7 @@ const StyledButton = styled(Button)`
     justify-content: center;
     margin-right: ${props => props.$marginRight};
     margin-left: ${props => props.$marginLeft};
+    margin-top: 10px;
 `;
 
 const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
