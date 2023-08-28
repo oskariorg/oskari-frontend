@@ -36,7 +36,6 @@ const StyledButton = styled(Button)`
 const ButtonsContainer = styled('div')`
     display: flex;
     flex-direction: row;
-    height: 48px;
     align-items: center;
 `;
 
@@ -70,7 +69,7 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
 export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ...rest }) => {
     if (isMobile) {
         return (
-            <ButtonsContainer>
+            <ButtonsContainer className='layerSelection'>
                 <Dropdown items={getDropDownItems(layers)}>
                     <ThemedButton
                         icon={<MenuOutlined />}
@@ -84,7 +83,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ..
     }
 
     return (
-        <ButtonsContainer>
+        <ButtonsContainer className='layerSelection'>
             {layers.map(layer => (
                 <ThemedButton
                     key={layer.id}

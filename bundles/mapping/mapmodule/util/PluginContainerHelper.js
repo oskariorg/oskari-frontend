@@ -1,4 +1,9 @@
 
+export const TOP_LEVEL_CONTAINER_CLASSES = [
+    'top',
+    ''
+];
+
 export const PLUGIN_CONTAINER_CLASSES = [
     'bottom center',
     'center top',
@@ -25,7 +30,18 @@ export const createPluginContainerElement = (containerClasses) => {
 
 // assumes jQuery is present and mapEl is a jQuery object to #mapdiv
 export const generatePluginContainers = (mapEl) => {
+    const bottomContainer = jQuery(`
+        <div class="plugins-bottom">
+        </div>
+    `);
     PLUGIN_CONTAINER_CLASSES
         .map(cssClasses => createPluginContainerElement(cssClasses))
-        .forEach(jQueryEl => mapEl.append(jQueryEl));
+        .forEach(jQueryEl => {
+            if (jQueryEl.hasClass('bottom')) {
+                bottomContainer.append(jQueryEl);
+            } else {
+                mapEl.append(jQueryEl);
+            }
+        });
+    mapEl.append(bottomContainer);
 };
