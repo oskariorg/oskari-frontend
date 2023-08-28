@@ -1,9 +1,3 @@
-
-export const TOP_LEVEL_CONTAINER_CLASSES = [
-    'top',
-    ''
-];
-
 export const PLUGIN_CONTAINER_CLASSES = [
     'bottom center',
     'center top',
