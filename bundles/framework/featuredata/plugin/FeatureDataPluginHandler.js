@@ -64,6 +64,12 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     setActiveTab (layerId) {
+        // when clicking on a tab directly, layerId will be a number.
+        // When clicked in the "show more" menu of the tablist, it will be a String and no features are found.
+        // so we gotta make a conversion for a numeric layerid just in case. :(
+        if (Oskari.util.isNumber(layerId)) {
+            layerId = +layerId;
+        }
         const features = layerId ? this.getFeaturesByLayerId(layerId) : null;
         const selectedFeatureIds = layerId ? this.getSelectedFeatureIdsByLayerId(layerId) : null;
         const visibleColumnsSettings = features && features.length ? this.createVisibleColumnsSettings(layerId, features) : null;
@@ -164,6 +170,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     toggleFeature (featureId) {
         this.selectionService.toggleFeatureSelection(this.getState().activeLayerId, featureId);
+    }
+
+    isFlyoutOpen () {
+        return this.getState().flyoutOpen;
     }
 
     openFlyout () {
@@ -561,6 +571,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
+    'isFlyoutOpen',
     'openFlyout',
     'closeFlyout',
     'setActiveTab',

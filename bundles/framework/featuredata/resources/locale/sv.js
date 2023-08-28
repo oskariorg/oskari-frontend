@@ -5,7 +5,8 @@ Oskari.registerLocalization(
         "value": {
             "title": "Objektuppgifter",
             "layer": {
-                "outOfContentArea": "Detta kartlager saknar innehåll vid dessa koordinater."
+                "outOfContentArea": "Detta kartlager saknar innehåll vid dessa koordinater.",
+                "featureData": "Objektdata",
             },
             "flyout": {
                 "sorterTooltip": "Sortera fallande / stigande",

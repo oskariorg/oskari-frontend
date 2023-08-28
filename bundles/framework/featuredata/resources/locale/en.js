@@ -5,7 +5,8 @@ Oskari.registerLocalization(
         "value": {
             "title": "Feature Data",
             "layer": {
-                "outOfContentArea": "The map layer has no features at the map view area."
+                "outOfContentArea": "The map layer has no features at the map view area.",
+                "featureData": "Feature data",
             },
             "flyout": {
                 "sorterTooltip": "Click to sort descending/ascending",
