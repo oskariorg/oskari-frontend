@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Dropdown } from 'oskari-ui';
-import { MenuOutlined } from '@ant-design/icons';
+import { LayersIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
@@ -16,17 +16,29 @@ const StyledButton = styled(Button)`
     color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
     background: ${props => props.$backgroundColor};
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
+    path {
+        fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+    }
     &:hover {
         color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
         background: ${props => props.$backgroundColor};
+        path {
+            fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        }
     }
     &:active {
         color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
         background: ${props => props.$backgroundColor};
+        path {
+            fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        }
     }
     &:focus {
         color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
         background: ${props => props.$backgroundColor};
+        path {
+            fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        }
     }
     display: flex;
     align-items: center;
@@ -66,13 +78,17 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     );
 });
 
-export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ...rest }) => {
-    if (isMobile) {
+const isWiderThanMap = (mapWidth, numberOfLayers) => {
+    return (numberOfLayers * 133) >= mapWidth;
+}
+
+export const BackgroundLayerSelection = ({ isMobile = false, layers, current, mapWidth, ...rest }) => {
+    if (isMobile || (mapWidth && isWiderThanMap(mapWidth, layers.length))) {
         return (
             <ButtonsContainer className='layerSelection'>
                 <Dropdown items={getDropDownItems(layers)}>
                     <ThemedButton
-                        icon={<MenuOutlined />}
+                        icon={<LayersIcon />}
                         {...rest}
                     >
                         {current?.getName()}
@@ -88,6 +104,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ..
                 <ThemedButton
                     key={layer.id}
                     onClick={() => layer.onClick(layer.id)}
+                    active={Number.parseInt(layer.id, 10) === current?.getId()}
                     {...rest}
                 >
                     {layer.title}
