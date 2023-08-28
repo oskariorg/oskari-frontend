@@ -96,6 +96,27 @@ div.olMap {
   background-color: rgba(255,255,255,0.4);
 }
 
+.plugins-bottom {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.plugins-bottom::after {
+    display: block;
+    background-color: #000000;
+    opacity: 0.3;
+    width: 100%;
+    height: 48px;
+    position: absolute;
+    bottom: 0;
+    left: 0; 
+    content: "";
+}
+
 div.mapplugins {
     pointer-events: none;
     position: absolute;
@@ -274,45 +295,44 @@ div.mapplugins {
     }
 
     &.bottom {
-        bottom: 0;
-
+        position: relative;
         .mappluginsContainer .mappluginsContent {
             margin-bottom: $pluginMargin;
             align-items: center;
         }
 
+
         &.center {
-            width: 100%;
+            display: flex;
+            order: 2;
+            align-self: self-end;
+            align-self: flex-end;
 
             .mappluginsContainer .mappluginsContent {
-                margin-right: auto;
-                margin-left: auto;
-                display: inline-block;
+                display: flex;
 
                 &.ui-droppable {
                     min-height: 120px;
                 }
 
                 .mapplugin {
-                    display: inline-block;
-                    vertical-align: top;
-                    margin: 0 $pluginMargin / 2;
-
+                    z-index: 15001;
                     &.layerselection,
                     &.search {
                         float: right;
                     }
-
                 }
-
             }
 
         }
 
         &.right {
-            .mappluginsContainer .mappluginsContent {
-                margin-top: $pluginMargin;
-            }
+            display: flex;
+            order: 3;
+            flex: 1;
+            justify-content: flex-end;
+            align-self: flex-end;
+
             .mapplugin {
 
                 &.logoplugin {
@@ -337,6 +357,11 @@ div.mapplugins {
         }
 
         &.left {
+            display: flex;
+            order: 1;
+            flex: 1;
+            justify-content: flex-start;
+            align-self: flex-end;
 
             .mapplugin {
 
