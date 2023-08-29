@@ -7,7 +7,7 @@ const Container = styled('div')`
     width: 32px;
     height: 32px;
     position: relative;
-    ${props => props.noMargin ? 'margin: 0' : 'margin: 0 10px 10px 10px'};
+    ${props => props.noMargin ? 'margin: 0' : 'margin: 10px 10px 0 10px'};
     ${props => props.withToolbar && props.toolbarOpen && props.toolbarMargin};
     display: flex;
     justify-content: center;

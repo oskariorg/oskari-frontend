@@ -202,12 +202,15 @@ Oskari.clazz.define(
                 }
             }
 
+            const mapWidth = this.getSandbox().getMap().getWidth();
+
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <BackgroundLayerSelection
                         isMobile={Oskari.util.isMobile()}
                         layers={layers}
                         current={this._getBottomLayer()}
+                        mapWidth={mapWidth}
                     />
                 </ThemeProvider>,
                 element[0]
