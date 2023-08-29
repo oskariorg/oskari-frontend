@@ -125,6 +125,9 @@ Oskari.clazz.define(
                     // TODO add check for event.getMapLayer().getId() here?
                     // this._createLayerSelectionElements();
                     this.refresh();
+                },
+                MapSizeChangedEvent: function (evt) {
+                    this.refresh();
                 }
             };
         },
