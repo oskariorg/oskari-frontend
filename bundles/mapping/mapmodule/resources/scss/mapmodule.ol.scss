@@ -105,18 +105,6 @@ div.olMap {
     flex-wrap: wrap;
 }
 
-.plugins-bottom::after {
-    display: block;
-    background-color: #000000;
-    opacity: 0.3;
-    width: 100%;
-    height: 48px;
-    position: absolute;
-    bottom: 0;
-    left: 0; 
-    content: "";
-}
-
 div.mapplugins {
     pointer-events: none;
     position: absolute;
@@ -175,7 +163,7 @@ div.mapplugins {
                 }
 
                 &.logoplugin {
-                    margin-top: $pluginMargin * 2;
+                    margin-top: $pluginMargin;
                 }
 
                 &.zoombar {
@@ -306,6 +294,8 @@ div.mapplugins {
 
             .mappluginsContainer .mappluginsContent {
                 display: flex;
+                margin-left: 10px;
+                margin-right: 10px;
 
                 &.ui-droppable {
                     min-height: 120px;

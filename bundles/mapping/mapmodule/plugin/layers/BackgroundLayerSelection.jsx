@@ -43,12 +43,21 @@ const StyledButton = styled(Button)`
     display: flex;
     align-items: center;
     justify-content: center;
+    svg {
+        margin-right: 5px;
+        font-size: 16px;
+    }
 `;
 
 const ButtonsContainer = styled('div')`
     display: flex;
     flex-direction: row;
     align-items: center;
+`;
+
+const ButtonText = styled('span')`
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const getDropDownItems = (layers = []) => {
@@ -91,7 +100,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
                         icon={<LayersIcon />}
                         {...rest}
                     >
-                        {current?.getName()}
+                        <ButtonText>{current?.getName()}</ButtonText>
                     </ThemedButton>
                 </Dropdown>
             </ButtonsContainer>
@@ -107,7 +116,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
                     active={Number.parseInt(layer.id, 10) === current?.getId()}
                     {...rest}
                 >
-                    {layer.title}
+                    <ButtonText>{layer.title}</ButtonText>
                 </ThemedButton>
             ))}
         </ButtonsContainer>
