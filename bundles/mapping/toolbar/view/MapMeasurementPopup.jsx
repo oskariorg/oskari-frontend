@@ -36,11 +36,9 @@ const PopupContent = ({ text, clearMeasurements, onClose }) => {
 export const showMapMeasurementPopup = (text, clearMeasurements, onClose) => {
     const dimensions = getNavigationDimensions();
     let placement = PLACEMENTS.BL;
-
     if (dimensions?.placement === 'right') {
         placement = PLACEMENTS.BR;
     }
-    
     const options = {
         id: 'oskari-measurements',
         placement
