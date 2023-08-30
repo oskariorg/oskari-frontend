@@ -20,24 +20,24 @@ const StyledButton = styled(Button)`
         fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
     }
     &:hover {
-        color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
         path {
-            fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+            fill: ${props => props.$hoverColor};
         }
     }
     &:active {
-        color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
         path {
             fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
         }
     }
     &:focus {
-        color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
         path {
-            fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+            fill: ${props => props.$hoverColor};
         }
     }
     display: flex;
