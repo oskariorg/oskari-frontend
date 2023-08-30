@@ -28,7 +28,7 @@ const StyledButton = styled(Button)`
     }
     &:active {
         color: ${props => props.$hoverColor};
-        background: ${props => props.$hoverColor};
+        background: ${props => props.$backgroundColor};
         path {
             fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
         }
