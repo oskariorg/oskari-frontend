@@ -71,7 +71,7 @@ const getSvgIcons = () => {
 const getSvg = ({ shape, size, fill, stroke }) => {
     const { data, ...offsets } = getMarker(shape);
     const svg = data
-        .replace(PLACEHOLDER_FILL, fill?.color || getDefaultColor())
+        .replace(PLACEHOLDER_FILL, fill?.color || FILL_COLOR)
         .replace(PLACEHOLDER_STROKE, stroke?.color || STROKE_COLOR);
     return {
         ...offsets,
