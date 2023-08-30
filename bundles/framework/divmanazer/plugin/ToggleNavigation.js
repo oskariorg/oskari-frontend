@@ -125,8 +125,10 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
         _createEventHandlers: function () {
             return {
                 MapSizeChangedEvent: function (evt) {
-                    if (Oskari.util.isMobile()) {
+                    // Hide navigation when moving from desktop to mobile
+                    if (Oskari.dom.isNavigationVisible() && !this._isVisible && Oskari.util.isMobile()) {
                         this._isVisible = true;
+                        Oskari.dom.showNavigation(false);
                         this.refresh();
                     }
                 }
