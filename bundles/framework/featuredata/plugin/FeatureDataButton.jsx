@@ -14,15 +14,15 @@ const StyledButton = styled(Button)`
     background: ${props => props.$backgroundColor};
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
     &:hover {
-        color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
     }
     &:active {
-        color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
     }
     &:focus {
-        color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
     }
     display: flex;

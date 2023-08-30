@@ -20,24 +20,24 @@ const StyledButton = styled(Button)`
         fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
     }
     &:hover {
-        color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
         path {
-            fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+            fill: ${props => props.$hoverColor};
         }
     }
     &:active {
-        color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
-        background: ${props => props.$backgroundColor};
+        color: ${props => props.$hoverColor};
+        background: ${props => props.$hoverColor};
         path {
             fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
         }
     }
     &:focus {
-        color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
         path {
-            fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+            fill: ${props => props.$hoverColor};
         }
     }
     display: flex;
@@ -74,6 +74,7 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     const background = helper.getButtonColor();
     const hover = helper.getButtonHoverColor();
     const opacity = helper.getButtonOpacity();
+    console.log()
     return (
         <StyledButton
             $rounding={rounding}
