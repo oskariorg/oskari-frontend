@@ -74,7 +74,6 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     const background = helper.getButtonColor();
     const hover = helper.getButtonHoverColor();
     const opacity = helper.getButtonOpacity();
-    console.log()
     return (
         <StyledButton
             $rounding={rounding}
