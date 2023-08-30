@@ -114,6 +114,25 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
         },
         isVisible: function () {
             return this._isVisible;
+        },
+        /**
+         * @method _createEventHandlers
+         * Create eventhandlers.
+         *
+         *
+         * @return {Object.<string, Function>} EventHandlers
+         */
+        _createEventHandlers: function () {
+            return {
+                MapSizeChangedEvent: function (evt) {
+                    // Hide navigation when moving from desktop to mobile
+                    if (Oskari.dom.isNavigationVisible() && !this._isVisible && Oskari.util.isMobile()) {
+                        this._isVisible = true;
+                        Oskari.dom.showNavigation(false);
+                        this.refresh();
+                    }
+                }
+            };
         }
     },
     {
