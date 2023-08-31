@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Select, Option, Space, Button, Link } from 'oskari-ui';
+import styled from 'styled-components';
+import { Message, Select, Option, Button, Link, Badge } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
 import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
 import { Controller, Messaging } from 'oskari-ui/util';
@@ -8,6 +9,14 @@ import { PropertiesFilter, PropertiesLocale, PropertiesFormat } from './VectorLa
 import { StyledFormField } from '../styled';
 import { InfoTooltip } from '../InfoTooltip';
 import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
+
+const Buttons = styled.div`
+    display: inline-flex;
+    margin-top: 10px;
+    > * {
+        margin-right: 20px;
+    }
+`;
 
 // Clean empty objects and values that doesn't need to store
 // data.format: false options
@@ -34,18 +43,20 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     const { geomName, featureProperties = []} = layer.capabilities;
     const [modal, setModal] = useState(null);
     const [state, setState] = useState({
-        filter: data.filter,
-        locale: data.locale,
-        format: data.format,
+        filter: data.filter || {},
+        locale: data.locale || {},
+        format: data.format || {},
         featureFilter
     });
-
     const getButtonForModal = type => {
-        const btn = state[type] ? 'edit' : 'add';
+        const value = state[type] || {};
+        const count = Object.keys(value).length;
         return (
-            <Button onClick={() => onButtonClick(type)}>
-                <Message messageKey={`attributes.${type}.${btn}`} />
-            </Button>
+            <Badge count={count} themed showZero={false}>
+                <Button onClick={() => onButtonClick(type)}>
+                    <Message messageKey={`attributes.${type}.button`} />
+                </Button>
+            </Badge>
         );
     };
 
@@ -127,11 +138,11 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
             </StyledFormField>
             <Message messageKey='attributes.properties' />
             <StyledFormField>
-                <Space direction='horizontal'>
+                <Buttons>
                     { getButtonForModal('filter') }
                     { getButtonForModal('locale') }
                     { getButtonForModal('format') }
-                </Space>
+                </Buttons>
             </StyledFormField>
             <Modal
                 mask={ false }
