@@ -435,6 +435,13 @@ Oskari.util = (function () {
         return this.getColorBrightness(color) === 'light';
     };
 
+    util.hexToRgb = (hex) => {
+        return hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+                 ,(m, r, g, b) => '#' + r + r + g + g + b + b)
+        .substring(1).match(/.{2}/g)
+        .map(x => parseInt(x, 16));
+    };
+
     util.isSmallScreen = function () {
         const rootEl = Oskari.dom.getRootEl();
         return Oskari.dom.getWidth(rootEl) <= mobileDefs.width || Oskari.dom.getHeight(rootEl) <= mobileDefs.height;
