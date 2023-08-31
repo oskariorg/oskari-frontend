@@ -22,7 +22,7 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
  * @param {Object} style Additional styles
  * @returns 
  */
-export const Info = ({ children, title, size = 16, style, space = false }) => {
+export const Info = ({ children, title, size = 16, style, space = true }) => {
 
     return (
         <Tooltip title={title || children}>
@@ -36,7 +36,7 @@ export const Info = ({ children, title, size = 16, style, space = false }) => {
 };
 
 Info.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     size: PropTypes.number,
     style: PropTypes.object,
     space: PropTypes.bool,
