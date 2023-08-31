@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AdminLayerForm, AdminLayerFormHandler } from './AdminLayerForm';
 import { LayerWizard } from './LayerWizard';
-import { LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -77,38 +77,40 @@ export class LayerEditorFlyout extends ExtraFlyout {
         const controller = this.uiHandler.getController();
         return (
             <LocaleProvider value={{ bundleKey: 'admin-layereditor' }}>
-                <LayerWizard
-                    layer={layer}
-                    controller={controller}
-                    capabilities={capabilities}
-                    propertyFields={propertyFields}
-                    loading={loading}
-                    layerTypes={layerTypes}
-                    versions={versions}
-                    credentialsCollapseOpen={credentialsCollapseOpen}
-                    onCancel={() => {
-                        this.uiHandler.clearCredentialsCollapse();
-                    }}>
-                    <AdminLayerForm
+                <ThemeProvider>
+                    <LayerWizard
                         layer={layer}
                         controller={controller}
                         capabilities={capabilities}
                         propertyFields={propertyFields}
-                        mapLayerGroups={this.mapLayerGroups}
-                        dataProviders={this.dataProviders}
+                        loading={loading}
+                        layerTypes={layerTypes}
                         versions={versions}
-                        rolesAndPermissionTypes={this.uiHandler.getAdminMetadata()}
-                        validators={this.uiHandler.getValidatorFunctions(layer.type)}
-                        validationErrors={this.uiHandler.validateUserInputValues(layer)}
-                        tab={tab}
-                        scales={scales}
-                        metadata={metadata}
-                        onDelete={() => this.uiHandler.deleteLayer()}
-                        onSave={() => this.uiHandler.saveLayer()}
+                        credentialsCollapseOpen={credentialsCollapseOpen}
                         onCancel={() => {
-                            this.hide();
-                        }} />
-                </LayerWizard>
+                            this.uiHandler.clearCredentialsCollapse();
+                        }}>
+                        <AdminLayerForm
+                            layer={layer}
+                            controller={controller}
+                            capabilities={capabilities}
+                            propertyFields={propertyFields}
+                            mapLayerGroups={this.mapLayerGroups}
+                            dataProviders={this.dataProviders}
+                            versions={versions}
+                            rolesAndPermissionTypes={this.uiHandler.getAdminMetadata()}
+                            validators={this.uiHandler.getValidatorFunctions(layer.type)}
+                            validationErrors={this.uiHandler.validateUserInputValues(layer)}
+                            tab={tab}
+                            scales={scales}
+                            metadata={metadata}
+                            onDelete={() => this.uiHandler.deleteLayer()}
+                            onSave={() => this.uiHandler.saveLayer()}
+                            onCancel={() => {
+                                this.hide();
+                            }} />
+                    </LayerWizard>
+                </ThemeProvider>
             </LocaleProvider>
         );
     }
