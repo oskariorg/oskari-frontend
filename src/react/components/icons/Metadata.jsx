@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { ThemeConsumer } from 'oskari-ui/util';
+import { ThemeProvider, ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
 
 
@@ -49,11 +49,13 @@ export const Metadata = ({ metadataId, size = 16, style }) => {
     };
 
     return (
-        <ThemedMetadata
-            size={size}
-            style={style}
-            onClick={onClick}
-        />
+        <ThemeProvider>
+            <ThemedMetadata
+                size={size}
+                style={style}
+                onClick={onClick}
+            />
+        </ThemeProvider>
     );
 };
 

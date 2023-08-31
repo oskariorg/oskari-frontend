@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
-import { ThemeConsumer } from 'oskari-ui/util';
+import { ThemeProvider, ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
 
 
@@ -44,12 +44,14 @@ const ThemedInfo = ThemeConsumer(({ theme = {}, title, children, size, style }) 
 export const Info = ({ children, title, size = 16, style }) => {
 
     return (
-        <ThemedInfo
-            children={children}
-            title={title}
-            size={size}
-            style={style}
-        />
+        <ThemeProvider>
+            <ThemedInfo
+                children={children}
+                title={title}
+                size={size}
+                style={style}
+            />
+        </ThemeProvider>
     );
 };
 
