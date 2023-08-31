@@ -128,7 +128,7 @@ Oskari.registerLocalization(
                     "collection":"Kaikki"
                 },
                 "featureFilter": {
-                    "title": "Kohteiden suodatus",
+                    "title": "Suodata rajapinnasta haettavia kohteita ominaisuustietojen mukaan",
                     "button": "Kohteiden suodatus"
                 },
                 "filter": {
