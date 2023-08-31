@@ -23,10 +23,6 @@ const RadioGroup = styled(Radio.Group)`
     flex-direction: column;
 `;
 
-const Info = styled('div')`
-    margin-left: 10px;
-`;
-
 const PreviewImage = styled('img')`
     margin: 8px;
     padding: 5px;
@@ -50,11 +46,7 @@ const PanelHeader = ({ headerMsg, infoMsg }) => {
     return (
         <StyledPanelHeader>
             <Message bundleKey={BUNDLE_KEY} messageKey={headerMsg} />
-            {infoMsg && (
-                <Info>  
-                    <InfoIcon title={<Message bundleKey={BUNDLE_KEY} messageKey={infoMsg} />} />
-                </Info>
-            )}
+            {infoMsg && <InfoIcon title={<Message bundleKey={BUNDLE_KEY} messageKey={infoMsg} />} /> }
         </StyledPanelHeader>
     );
 }
