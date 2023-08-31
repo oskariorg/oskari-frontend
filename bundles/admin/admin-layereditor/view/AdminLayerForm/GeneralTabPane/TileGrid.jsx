@@ -4,7 +4,7 @@ import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../VisualizationTabPane/styled';
 import { JsonInput } from '../JsonInput';
-import { InfoTooltip } from '../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 
 const template =
 `{
@@ -15,7 +15,9 @@ const template =
 export const TileGrid = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='fields.options.tileGrid'/>
-        <InfoTooltip message={<pre>{template}</pre>} />
+        <InfoIcon>
+            <pre>{template}</pre>
+        </InfoIcon>
         <StyledFormField>
             <JsonInput
                 rows={6}

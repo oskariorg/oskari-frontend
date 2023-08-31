@@ -102,7 +102,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     return (
         <Fragment>
             <Message messageKey='attributes.geometryType.label'/>
-            <InfoIcon space title={<Message messageKey={`attributes.geometryType.source${geometryTypeSource}`}/>}/>
+            <InfoIcon title={<Message messageKey={`attributes.geometryType.source${geometryTypeSource}`}/>}/>
             <StyledFormField>
                 <Select
                     value={getGeometryType(layer)}
@@ -115,7 +115,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 </Select>
             </StyledFormField>
             <Message messageKey='attributes.idProperty'/>
-            <InfoIcon space title={<Message messageKey='attributes.idPropertyTooltip'/>}/>
+            <InfoIcon title={<Message messageKey='attributes.idPropertyTooltip'/>}/>
             <StyledFormField>
                 <Select allowClear value={data.idProperty}
                     onChange={value => controller.setAttributesData('idProperty', value)}
@@ -125,7 +125,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 { getButtonForModal('featureFilter') }
             </StyledFormField>
             <Message messageKey='attributes.properties' />
-            <InfoIcon space title={<Message messageKey='attributes.propertiesTooltip'/>}/>
+            <InfoIcon title={<Message messageKey='attributes.propertiesTooltip'/>}/>
             <StyledFormField>
                 <Space direction='horizontal'>
                     { getButtonForModal('filter') }
