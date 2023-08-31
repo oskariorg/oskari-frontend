@@ -1,12 +1,12 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Select, Option, Space, Button, Link } from 'oskari-ui';
+import { Message, Select, Option, Space, Button } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
 import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { Controller, Messaging } from 'oskari-ui/util';
 import { PropertiesFilter, PropertiesLocale, PropertiesFormat } from './VectorLayerAttributes/';
 import { StyledFormField } from '../styled';
-import { InfoTooltip } from '../InfoTooltip';
 import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
 
 // Clean empty objects and values that doesn't need to store
@@ -39,7 +39,6 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
         format: data.format,
         featureFilter
     });
-
     const getButtonForModal = type => {
         const btn = state[type] ? 'edit' : 'add';
         return (
@@ -103,7 +102,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     return (
         <Fragment>
             <Message messageKey='attributes.geometryType.label'/>
-            <InfoTooltip messageKeys={`attributes.geometryType.source${geometryTypeSource}`}/>
+            <InfoIcon space title={<Message messageKey={`attributes.geometryType.source${geometryTypeSource}`}/>}/>
             <StyledFormField>
                 <Select
                     value={getGeometryType(layer)}
@@ -116,7 +115,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 </Select>
             </StyledFormField>
             <Message messageKey='attributes.idProperty'/>
-            <Link url={''} tooltip={<Message messageKey='attributes.idPropertyTooltip'/>}/>
+            <InfoIcon space title={<Message messageKey='attributes.idPropertyTooltip'/>}/>
             <StyledFormField>
                 <Select allowClear value={data.idProperty}
                     onChange={value => controller.setAttributesData('idProperty', value)}
@@ -126,6 +125,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 { getButtonForModal('featureFilter') }
             </StyledFormField>
             <Message messageKey='attributes.properties' />
+            <InfoIcon space title={<Message messageKey='attributes.propertiesTooltip'/>}/>
             <StyledFormField>
                 <Space direction='horizontal'>
                     { getButtonForModal('filter') }
