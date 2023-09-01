@@ -642,7 +642,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             me._tabContainer.insertTo(me.getContainer());
             /* let's create view selector tabs */
             var additionalTabsFound = false;
+
+            const isEmbedded = Oskari.dom.isEmbedded();
+
             for (tabId in me._templates.tabs) {
+                if (isEmbedded && tabId === 'actions') {
+                    continue;
+                }
                 if (me._templates.tabs.hasOwnProperty(tabId)) {
                     entry = Oskari.clazz.create(
                         'Oskari.userinterface.component.TabPanel'
@@ -689,8 +695,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 images[i] = new Image();
                 images[i].src = identification.browseGraphics[i].fileName;
             }
-            me.addActionLinks();
-            me.renderMapLayerList();
+
+            if (!isEmbedded) {
+                me.addActionLinks();
+                me.renderMapLayerList();
+            }
+
             me.setTitle(me._model.identification.citation.title);
             if (open) {
                 me.open();
@@ -759,30 +769,32 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
         },
 
         renderMapLayerList: function () {
-            var me = this,
-                container = me._tabs['actions'].getContainer(),
-                layers = me._maplayerService.getLayersByMetadataId(me._model.uuid);
+            if (!Oskari.dom.isEmbedded()) {
+                var me = this,
+                    container = me._tabs['actions'].getContainer(),
+                    layers = me._maplayerService.getLayersByMetadataId(me._model.uuid);
 
-            container.find('table.metadataSearchResult').remove();
-            container.append(me._templates['layerList']());
+                container.find('table.metadataSearchResult').remove();
+                container.append(me._templates['layerList']());
 
-            var layerListHeader = (layers && layers.length > 0) ? me.locale.layerList.title : '';
-            container.find('h2').html(layerListHeader);
+                var layerListHeader = (layers && layers.length > 0) ? me.locale.layerList.title : '';
+                container.find('h2').html(layerListHeader);
 
-            var layerListElement = container.find('ul.layerList');
-            _.each(layers, function (layer) {
-                var layerListItem = jQuery(me._templates['layerItem']({
-                    layer: layer,
-                    hidden: (!me.isLayerSelected(layer) || !layer.isVisible()),
-                    locale: me.locale
-                }));
-                layerListElement.append(layerListItem);
+                var layerListElement = container.find('ul.layerList');
+                _.each(layers, function (layer) {
+                    var layerListItem = jQuery(me._templates['layerItem']({
+                        layer: layer,
+                        hidden: (!me.isLayerSelected(layer) || !layer.isVisible()),
+                        locale: me.locale
+                    }));
+                    layerListElement.append(layerListItem);
 
-                jQuery(layerListItem).find('a.layerLink').on('click', function () {
-                    var labelText = me._toggleMapLayerVisibility(layer);
-                    jQuery(this).html(labelText);
+                    jQuery(layerListItem).find('a.layerLink').on('click', function () {
+                        var labelText = me._toggleMapLayerVisibility(layer);
+                        jQuery(this).html(labelText);
+                    });
                 });
-            });
+            }
         },
         /**
          * @method @private _toggleMapLayerVisibility
