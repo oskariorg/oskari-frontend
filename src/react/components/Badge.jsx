@@ -12,28 +12,23 @@ const STYLE = {
     textShadow: '0 -1px 0 rgba(0,0,0,.25)'
 };
 
+const ZERO = {
+    badge: '#999',
+    text: '#fff'
+};
+
 export const Badge = ThemeConsumer(({
     theme,
     count,
-    themed,
-    inversed,
     showZero = true,
     overflowCount = 999,
-    color: propsColor,
+    color = getHeaderTheme(theme).getAccentColor(theme),
     ...rest
 }) => {
-    const useTheme = themed && theme;
-    let color = propsColor;
-    if (useTheme) {
-        color = getHeaderTheme(theme).getAccentColor(theme);
-    } else if (inversed) {
-        color = '#333';
-    } else if (!propsColor) {
-        color = '#999';
-    }
-    // use always white for #333 and #999
-    const textColor = useTheme || propsColor ? getTextColor(color) : '#fff';
-    return <AntBadge count={count} color={color} showZero={showZero}
+    const badgeColor = count ? color : ZERO.badge;
+    const textColor = count ? getTextColor(color) : ZERO.text;
+
+    return <AntBadge count={count} color={badgeColor} showZero={showZero}
         style={{ ...STYLE, color: textColor }}
         overflowCount={overflowCount} {...rest} />;
 });
@@ -43,7 +38,7 @@ Badge.propTypes = {
         PropTypes.string,
         PropTypes.number
     ]),
-    inversed: PropTypes.bool,
+    color: PropTypes.string,
     showZero: PropTypes.bool,
-    themed: PropTypes.bool
+    overflowCount: PropTypes.number
 };
