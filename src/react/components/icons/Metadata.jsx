@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { ThemeProvider, ThemeConsumer } from 'oskari-ui/util';
+import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
 
 
@@ -12,14 +12,29 @@ const StyledMetadataIcon = styled(InfoCircleOutlined)`
     border-radius: 50%;
     &:hover {
         color: ${props => props.$hoverColor};
-        background-color: rgba(${props => props.$bgColor[0]}, ${props => props.$bgColor[1]}, ${props => props.$bgColor[2]}, 0.25);
+        background-color: rgba(${props => props.$bgColor.r}, ${props => props.$bgColor.g}, ${props => props.$bgColor.b}, 0.25);
     }
 `;
 
-const ThemedMetadata = ThemeConsumer(({ theme = {}, size, style, onClick }) => {
+/**
+ * @param {Number} metadataId Metadata ID
+ * @param {Number} size Font size in pixels
+ * @param {Object} style Additional styles
+ * @returns 
+ */
+export const Metadata = ThemeConsumer(({ theme = {}, metadataId, size = 16, style }) => {
+
+    if (!metadataId) return null;
+
     const helper = getNavigationTheme(theme);
     const hover = helper.getButtonHoverColor();
     const bgColor = Oskari.util.hexToRgb(hover);
+
+    const onClick = () => {
+        Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
+            {uuid: metadataId}
+    ]);
+    };
 
     return (
         <StyledMetadataIcon
@@ -31,33 +46,6 @@ const ThemedMetadata = ThemeConsumer(({ theme = {}, size, style, onClick }) => {
         />
     );
 });
-
-/**
- * @param {Number} metadataId Metadata ID
- * @param {Number} size Font size in pixels
- * @param {Object} style Additional styles
- * @returns 
- */
-export const Metadata = ({ metadataId, size = 16, style }) => {
-
-    if (!metadataId) return null;
-
-    const onClick = () => {
-        Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
-            {uuid: metadataId}
-    ]);
-    };
-
-    return (
-        <ThemeProvider>
-            <ThemedMetadata
-                size={size}
-                style={style}
-                onClick={onClick}
-            />
-        </ThemeProvider>
-    );
-};
 
 Metadata.propTypes = {
     metadataId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
