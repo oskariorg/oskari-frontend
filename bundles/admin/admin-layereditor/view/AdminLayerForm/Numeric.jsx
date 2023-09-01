@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, NumberInput } from 'oskari-ui';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { InlineFlex } from './InlineFlex';
 import { StyledFormField } from '../styled';
-import { InfoTooltip } from './InfoTooltip';
 
 const defaultOptions = {
     allowNegative: true,
@@ -31,7 +31,7 @@ const validationFilter = (onChange, options = {}) => {
 };
 export const Numeric = ({
     messageKey,
-    infoKeys,
+    info,
     suffix = '',
     prefix = '',
     allowNegative = defaultOptions.allowNegative,
@@ -65,7 +65,7 @@ export const Numeric = ({
             parser={parseNumber}
             {...rest} />;
 
-    if (messageKey || infoKeys) {
+    if (messageKey || info) {
         input =
             <StyledFormField>
                 <InlineFlex growLastChild={!!children}>
@@ -77,7 +77,7 @@ export const Numeric = ({
     return (
         <Fragment>
             { messageKey && <Message messageKey={messageKey}/> }
-            { infoKeys && <InfoTooltip messageKeys={infoKeys}/> }
+            { info && <InfoIcon>{info}</InfoIcon>}
             { input }
         </Fragment>
     );
@@ -85,7 +85,7 @@ export const Numeric = ({
 Numeric.propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     messageKey: PropTypes.string,
-    infoKeys: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string, PropTypes.any]),
+    info: PropTypes.node,
     suffix: PropTypes.string,
     prefix: PropTypes.string,
     allowNegative: PropTypes.bool,

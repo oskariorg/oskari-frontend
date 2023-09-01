@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Radio, Tag } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { InfoTooltip } from '../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { StyledFormField } from '../../styled';
 import { MandatoryIcon } from '../Mandatory';
 
@@ -27,7 +27,7 @@ export const Version = ({ versions = [], layer = {}, controller }) => {
     return (
         <Fragment>
             <Message messageKey='fields.version'/> <MandatoryIcon />
-            { !readonly && <InfoTooltip messageKeys='interfaceVersionDesc'/> }
+            { !readonly && <InfoIcon title={<Message messageKey='interfaceVersionDesc'/> } /> }
             <StyledFormField>{ versionInfo }</StyledFormField>
         </Fragment>
     );

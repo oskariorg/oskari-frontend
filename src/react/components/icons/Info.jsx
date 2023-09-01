@@ -11,6 +11,7 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
     cursor: pointer;
     color: #0290ff;
     border-radius: 50%;
+    margin-left: ${props => props.$space ? '10px' : '0px'};
     &:hover {
         color: ${props => props.$hoverColor};
         background-color: rgba(${props => props.$bgColor.r}, ${props => props.$bgColor.g}, ${props => props.$bgColor.b}, 0.25);
@@ -24,7 +25,7 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
  * @param {Object} style Additional styles
  * @returns 
  */
-export const Info = ThemeConsumer(({ theme = {}, children, title, size = 16, style }) => {
+export const Info = ThemeConsumer(({ theme = {}, children, title, size = 16, style, space = true }) => {
     const helper = getNavigationTheme(theme);
     const hover = helper.getButtonHoverColor();
     const bgColor = Oskari.util.hexToRgb(hover);
@@ -33,6 +34,7 @@ export const Info = ThemeConsumer(({ theme = {}, children, title, size = 16, sty
         <Tooltip title={title || children}>
             <StyledInfoIcon
                 className='t_icon t_info'
+                $space={space}
                 style={{ fontSize: `${size}px`, ...style }}
                 $hoverColor={hover}
                 $bgColor={bgColor}
@@ -42,7 +44,8 @@ export const Info = ThemeConsumer(({ theme = {}, children, title, size = 16, sty
 });
 
 Info.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     size: PropTypes.number,
-    style: PropTypes.object
+    style: PropTypes.object,
+    space: PropTypes.bool,
 };

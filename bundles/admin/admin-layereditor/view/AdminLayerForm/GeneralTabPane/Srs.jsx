@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Select, Option, Message, Tag } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
-import { InfoTooltip } from '../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -49,7 +49,7 @@ const MissingSRS = ({ epsgCodes }) => {
     return (
         <div>
             <Message messageKey='missingSRS' />
-            <InfoTooltip messageKeys='missingSRSInfo' />
+            <InfoIcon title={<Message messageKey='missingSRSInfo' />} />
             <EpsgCodeTags codes={epsgCodes} />
         </div>
     );
@@ -78,7 +78,7 @@ export const Srs = ({ layer, propertyFields, controller }) => {
                 </FlexRow>
             }
             <Message messageKey='forcedSRS' />
-            <InfoTooltip messageKeys='forcedSRSInfo' />
+            <InfoIcon title={<Message messageKey='forcedSRSInfo' />} />
             <StyledFormField>
                 <Select mode='tags' value={forced} onChange={forcedSRS => controller.setForcedSRS(forcedSRS)}>
                     { systemProjections.map(cur => <Option key={cur}>{cur}</Option>) }
