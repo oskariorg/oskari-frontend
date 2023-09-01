@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
+import { ThemeConsumer } from 'oskari-ui/util';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 
 const StyledInfoIcon = styled(QuestionCircleOutlined)`
@@ -11,7 +13,8 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
     border-radius: 50%;
     margin-left: ${props => props.$space ? '10px' : '0px'};
     &:hover {
-        background-color: rgba(24,144,255, 0.25);
+        color: ${props => props.$hoverColor};
+        background-color: rgba(${props => props.$bgColor.r}, ${props => props.$bgColor.g}, ${props => props.$bgColor.b}, 0.25);
     }
 `;
 
@@ -22,7 +25,10 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
  * @param {Object} style Additional styles
  * @returns 
  */
-export const Info = ({ children, title, size = 16, style, space = true }) => {
+export const Info = ThemeConsumer(({ theme = {}, children, title, size = 16, style, space = true }) => {
+    const helper = getNavigationTheme(theme);
+    const hover = helper.getButtonHoverColor();
+    const bgColor = Oskari.util.hexToRgb(hover);
 
     return (
         <Tooltip title={title || children}>
@@ -30,10 +36,12 @@ export const Info = ({ children, title, size = 16, style, space = true }) => {
                 className='t_icon t_info'
                 $space={space}
                 style={{ fontSize: `${size}px`, ...style }}
+                $hoverColor={hover}
+                $bgColor={bgColor}
             />
         </Tooltip>
     );
-};
+});
 
 Info.propTypes = {
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),

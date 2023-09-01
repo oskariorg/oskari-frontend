@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import { ThemeConsumer } from 'oskari-ui/util';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 
 const StyledMetadataIcon = styled(InfoCircleOutlined)`
@@ -9,7 +11,8 @@ const StyledMetadataIcon = styled(InfoCircleOutlined)`
     color: #0290ff;
     border-radius: 50%;
     &:hover {
-        background-color: rgba(24,144,255, 0.25);
+        color: ${props => props.$hoverColor};
+        background-color: rgba(${props => props.$bgColor.r}, ${props => props.$bgColor.g}, ${props => props.$bgColor.b}, 0.25);
     }
 `;
 
@@ -19,9 +22,13 @@ const StyledMetadataIcon = styled(InfoCircleOutlined)`
  * @param {Object} style Additional styles
  * @returns 
  */
-export const Metadata = ({ metadataId, size = 16, style }) => {
+export const Metadata = ThemeConsumer(({ theme = {}, metadataId, size = 16, style }) => {
 
     if (!metadataId) return null;
+
+    const helper = getNavigationTheme(theme);
+    const hover = helper.getButtonHoverColor();
+    const bgColor = Oskari.util.hexToRgb(hover);
 
     const onClick = () => {
         Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
@@ -34,9 +41,11 @@ export const Metadata = ({ metadataId, size = 16, style }) => {
             className='t_icon t_metadata'
             style={{ fontSize: `${size}px`, ...style }}
             onClick={onClick}
+            $hoverColor={hover}
+            $bgColor={bgColor}
         />
     );
-};
+});
 
 Metadata.propTypes = {
     metadataId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
