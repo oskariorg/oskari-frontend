@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { GeneralInfoForm } from './form/GeneralInfoForm';
+import { ThemeProvider } from 'oskari-ui/util';
 
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
@@ -114,7 +115,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             const contentPanel = panel.getContainer();
 
             ReactDOM.render(
-                <GeneralInfoForm onChange={(key, value) => this.onChange(key, value)} data={this.fields} />,
+                <ThemeProvider>
+                    <GeneralInfoForm onChange={(key, value) => this.onChange(key, value)} data={this.fields} />
+                </ThemeProvider>,
                 contentPanel[0]
             );
 

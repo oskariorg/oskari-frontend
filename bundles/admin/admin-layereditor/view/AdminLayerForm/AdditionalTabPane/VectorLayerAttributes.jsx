@@ -1,13 +1,13 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Select, Option, Button, Link, Badge } from 'oskari-ui';
+import { Message, Select, Option, Button, Badge } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
 import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { Controller, Messaging } from 'oskari-ui/util';
 import { PropertiesFilter, PropertiesLocale, PropertiesFormat } from './VectorLayerAttributes/';
 import { StyledFormField, Border } from '../styled';
-import { InfoTooltip } from '../InfoTooltip';
 import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
 
 const Buttons = styled.div`
@@ -113,7 +113,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     return (
         <Fragment>
             <Message messageKey='attributes.geometryType.label'/>
-            <InfoTooltip messageKeys={`attributes.geometryType.source${geometryTypeSource}`}/>
+            <InfoIcon title={<Message messageKey={`attributes.geometryType.source${geometryTypeSource}`}/>}/>
             <StyledFormField>
                 <Select
                     value={getGeometryType(layer)}
@@ -131,6 +131,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                     { getButtonForModal('featureFilter') }
                 </StyledFormField>
                 <Message messageKey='attributes.presentation' />
+                <InfoIcon title={<Message messageKey='attributes.presentationTooltip'/>}/>
                 <StyledFormField>
                     <Buttons>
                         { getButtonForModal('filter') }
@@ -139,7 +140,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                     </Buttons>
                 </StyledFormField>
                 <Message messageKey='attributes.idProperty'/>
-                <Link url={''} tooltip={<Message messageKey='attributes.idPropertyTooltip'/>}/>
+                <InfoIcon title={<Message messageKey='attributes.idPropertyTooltip'/>}/>
                 <StyledFormField>
                     <Select allowClear value={data.idProperty}
                         onChange={value => controller.setAttributesData('idProperty', value)}

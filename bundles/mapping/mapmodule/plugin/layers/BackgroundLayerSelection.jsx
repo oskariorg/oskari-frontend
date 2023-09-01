@@ -1,13 +1,16 @@
 import React from 'react';
-import { Button, Dropdown } from 'oskari-ui';
+import { Button, Dropdown, Tooltip } from 'oskari-ui';
 import { LayersIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
 
+const BUTTON_WIDTH = 150;
+
 const StyledButton = styled(Button)`
     height: 28px;
-    width: 133px;
+    min-width: ${BUTTON_WIDTH}px;
+    max-width: ${props => props.$isDropdown ? '250' : BUTTON_WIDTH}px;
     font-size: 14px;
     margin: 0 2px;
     border: none;
@@ -88,7 +91,7 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
 });
 
 const isWiderThanMap = (mapWidth, numberOfLayers) => {
-    return (numberOfLayers * 133) >= mapWidth;
+    return (numberOfLayers * BUTTON_WIDTH) >= mapWidth;
 }
 
 export const BackgroundLayerSelection = ({ isMobile = false, layers, current, mapWidth, ...rest }) => {
@@ -96,12 +99,15 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
         return (
             <ButtonsContainer className='layerSelection'>
                 <Dropdown items={getDropDownItems(layers)}>
-                    <ThemedButton
-                        icon={<LayersIcon />}
-                        {...rest}
-                    >
-                        <ButtonText>{current?.getName()}</ButtonText>
-                    </ThemedButton>
+                    <Tooltip title={current?.getName()}>
+                        <ThemedButton
+                            icon={<LayersIcon />}
+                            $isDropdown={true}
+                            {...rest}
+                        >
+                            <ButtonText>{current?.getName()}</ButtonText>
+                        </ThemedButton>
+                    </Tooltip>
                 </Dropdown>
             </ButtonsContainer>
         );
@@ -110,14 +116,16 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
     return (
         <ButtonsContainer className='layerSelection'>
             {layers.map(layer => (
-                <ThemedButton
-                    key={layer.id}
-                    onClick={() => layer.onClick(layer.id)}
-                    active={Number.parseInt(layer.id, 10) === current?.getId()}
-                    {...rest}
-                >
-                    <ButtonText>{layer.title}</ButtonText>
-                </ThemedButton>
+                <Tooltip key={layer.id} title={layer.title}>
+                    <ThemedButton
+                        onClick={() => layer.onClick(layer.id)}
+                        active={Number.parseInt(layer.id, 10) === current?.getId()}
+                        $isDropdown={false}
+                        {...rest}
+                    >
+                        <ButtonText>{layer.title}</ButtonText>
+                    </ThemedButton>
+                </Tooltip>
             ))}
         </ButtonsContainer>
     );

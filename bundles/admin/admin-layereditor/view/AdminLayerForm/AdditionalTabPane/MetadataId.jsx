@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Message, TextInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField, Border } from '../styled';
-import { InfoTooltip } from '../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { ServiceMetadata } from './ServiceMetadata';
 import { MetadataButton } from './styled';
 
@@ -13,7 +13,7 @@ export const MetadataId = ({ layer, controller }) => {
     return (
         <Fragment>
             <Message messageKey='metadata.title'/>
-            <InfoTooltip messageKeys='metadata.desc'/>
+            <InfoIcon title={<Message messageKey='metadata.desc'/>} />
             <Border>
                 <StyledFormField>
                     <ServiceMetadata capabilities={layer.capabilities} controller={controller} hasHandler={hasHandler} />

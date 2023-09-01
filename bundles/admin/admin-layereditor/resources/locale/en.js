@@ -114,6 +114,7 @@ Oskari.registerLocalization(
                 "label": "Attributes",
                 "properties": "Using feature properties",
                 "presentation": "Presentation",
+                "presentationTooltip": "Presentation affects GetFeatureInfo request and feature data table.",
                 "showAll": "Show all properties",
                 "idProperty": "Use feature property as identifier",
                 "idPropertyTooltip": "Service should return unique identifier for features. Firstly ask service provider to use unique identifiers.",

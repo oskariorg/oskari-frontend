@@ -4,6 +4,7 @@ import { Checkbox, Message, Pagination, Link } from 'oskari-ui';
 import { BUNDLE_KEY } from '../constants';
 import styled from 'styled-components';
 import { InfoCircleOutlined, SelectOutlined } from '@ant-design/icons';
+import { ThemeProvider } from 'oskari-ui/util';
 
 const LinkIcon = styled(SelectOutlined)`
     margin-left: 6px;
@@ -74,25 +75,27 @@ const getContent = (state, controller, renderDescriptionPopup) => {
         );
     }
     return (
-        <Row>
-            <InfoContainer>
-                <InfoIcon/>
-                <Column>
-                    <StyledTitle>{title}</StyledTitle>
-                    <span>
-                        {description}
-                        <Margin/>
-                    </span>
+        <ThemeProvider>
+            <Row>
+                <InfoContainer>
+                    <InfoIcon/>
+                    <Column>
+                        <StyledTitle>{title}</StyledTitle>
+                        <span>
+                            {description}
+                            <Margin/>
+                        </span>
+                    </Column>
+                </InfoContainer>
+                <Margin/>
+                <Column style={{ whiteSpace: 'nowrap' }}>
+                    <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
+                        <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
+                    </StyledCheckbox>
+                    <Pagination simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
                 </Column>
-            </InfoContainer>
-            <Margin/>
-            <Column style={{ whiteSpace: 'nowrap' }}>
-                <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
-                    <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
-                </StyledCheckbox>
-                <Pagination simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
-            </Column>
-        </Row>
+            </Row>
+        </ThemeProvider>
     );
 };
 

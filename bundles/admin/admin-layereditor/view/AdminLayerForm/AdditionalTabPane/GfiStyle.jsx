@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Message, TextAreaInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
-import { InfoTooltip } from '../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 
 export const GfiStyle = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='gfiStyle'/>
-        <InfoTooltip messageKeys='gfiStyleDesc'/>
+        <InfoIcon title={<Message messageKey='gfiStyleDesc'/>} />
         <StyledFormField>
             <TextAreaInput
                 rows={4}

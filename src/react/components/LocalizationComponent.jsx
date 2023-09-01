@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Collapse, CollapsePanel, Message, Divider, Tooltip } from 'oskari-ui';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { Label } from './Label';
 import { getMandatoryIcon } from '../util/validators';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const BUNDLE_KEY = 'oskariui';
 const COMPONENT_KEY = 'LocalizationComponent';
 
-const StyledTooltip = styled(Tooltip)`
-    float: right;
+const HeaderWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
 `;
 
 const getMsg = path => <Message messageKey={`${COMPONENT_KEY}.${path}`} bundleKey={BUNDLE_KEY}/>;
@@ -73,12 +74,10 @@ const renderDivider = lang => {
 
 const getCollapseHeader = () => {
     return (
-        <React.Fragment>
+        <HeaderWrapper>
             {getMsg('otherLanguages')}
-            <StyledTooltip title={ getMsg('othersTip') }>
-                <QuestionCircleOutlined/>
-            </StyledTooltip>
-        </React.Fragment>
+            <InfoIcon title={ getMsg('othersTip') }/>
+        </HeaderWrapper>
     );
 };
 

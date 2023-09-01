@@ -79,7 +79,7 @@ const LayerList = React.forwardRef((props, ref) => {
                     <SearchRow spacing={'8px'}>
                         <Search ref={ref} searchText={searchText} controller={filter.controller} />
                         <InfoContainer>
-                            <InfoIcon size={20}>
+                            <InfoIcon space={false} size={20}>
                                 <Message messageKey='filter.search.tooltip'/>
                             </InfoIcon>
                         </InfoContainer>
