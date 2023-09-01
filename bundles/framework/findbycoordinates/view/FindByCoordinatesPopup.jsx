@@ -19,9 +19,6 @@ const Address = styled('div')`
     display: flex;
     flex-direction: column;
 `;
-const StyledInfoIcon = styled('span')`
-    margin-left: 10px;
-`;
 
 const Channel = styled.div`
     margin-bottom: 24px;
@@ -40,7 +37,7 @@ const PopupContent = ({ results, onClose }) => {
                 const res = results[key];
                 return (
                     <Channel key={`channel-${key}`}>
-                        <Heading>{channels[res.channelId] || res.channelId || '' + res.langText}{channelDescriptions[res.channelId] && (<StyledInfoIcon><InfoIcon title={channelDescriptions[res.channelId]} /></StyledInfoIcon>)}</Heading>
+                        <Heading>{channels[res.channelId] || res.channelId || '' + res.langText}{channelDescriptions[res.channelId] && (<InfoIcon title={channelDescriptions[res.channelId]} />)}</Heading>
                         {res.rows.map((row, index) => (
                             <Row key={index}>
                                 <img src={row.img} />

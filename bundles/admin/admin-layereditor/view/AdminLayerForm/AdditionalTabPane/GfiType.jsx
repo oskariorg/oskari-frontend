@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Select, Option } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { InfoTooltip } from '../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { StyledFormField } from '../styled';
 
 export const GfiType = ({ layer, controller }) => {
@@ -15,7 +15,7 @@ export const GfiType = ({ layer, controller }) => {
     return (
         <Fragment>
             <Message messageKey='fields.gfiType'/>
-            <InfoTooltip messageKeys='gfiTypeDesc'/>
+            <InfoIcon  title={<Message messageKey='gfiTypeDesc'/>} />
             <StyledFormField>
                 <Select
                     value={value}

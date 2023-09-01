@@ -30,6 +30,13 @@ ParsedCapabilities.propTypes = {
     capabilities: PropTypes.object.isRequired
 };
 
+const Info = ({ cron }) => (
+    <Fragment>
+        <Message messageKey='capabilities.updateRateDesc'/>
+        { cron && <Message messageKey='capabilities.updateRateCronMsg' messageArgs={{ cron }}/> }
+    </Fragment>
+);
+
 export const Capabilities = ({ layer, metadata, controller }) => {
     const { id } = layer;
     return (
@@ -37,7 +44,7 @@ export const Capabilities = ({ layer, metadata, controller }) => {
             <StyledNumeric
                 value={layer.capabilitiesUpdateRate / 60}
                 messageKey='capabilities.updateRate'
-                infoKeys={metadata?.capabilitiesCron ? ['capabilities.updateRateDesc', ['capabilities.updateRateCronMsg', {"cron": metadata.capabilitiesCron}]] : 'capabilities.updateRateDesc'}
+                info={<Info cron={metadata?.capabilitiesCron} /> }
                 suffix='min'
                 allowNegative={false}
                 allowZero={false}

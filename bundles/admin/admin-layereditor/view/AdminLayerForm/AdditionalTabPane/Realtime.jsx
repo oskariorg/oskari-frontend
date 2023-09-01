@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Message } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { InfoTooltip } from '../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { InlineFlex } from '../InlineFlex';
 import { StyledFormField, SpacedLabel } from '../styled';
 import { Numeric } from '../Numeric';
@@ -24,7 +24,7 @@ export const Realtime = LocaleConsumer(({ layer, controller, getMessage }) => (
                 <Switch size='small' checked={layer.realtime} onChange={checked => controller.setRealtime(checked)} />
                 <Message messageKey='fields.realtime' LabelComponent={SpacedLabel} />
             </label>
-            <InfoTooltip messageKeys='realtimeDesc'/>
+            <InfoIcon title={<Message messageKey='realtimeDesc'/>} />
             { layer.realtime &&
                 <RefreshRate>
                     <Numeric

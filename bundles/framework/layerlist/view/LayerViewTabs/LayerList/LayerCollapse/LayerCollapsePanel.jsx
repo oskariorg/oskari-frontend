@@ -35,6 +35,7 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
         <StyledCollapsePanelTools>
             {group.description && (
                 <InfoIcon
+                    space={false}
                     title={group.description}
                     size={20}
                     style={{ marginRight: '5px', marginTop: '3px' }}

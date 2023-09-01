@@ -9,6 +9,7 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
     cursor: pointer;
     color: #0290ff;
     border-radius: 50%;
+    margin-left: ${props => props.$space ? '10px' : '0px'};
     &:hover {
         background-color: rgba(24,144,255, 0.25);
     }
@@ -21,12 +22,13 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
  * @param {Object} style Additional styles
  * @returns 
  */
-export const Info = ({ children, title, size = 16, style }) => {
+export const Info = ({ children, title, size = 16, style, space = true }) => {
 
     return (
         <Tooltip title={title || children}>
             <StyledInfoIcon
                 className='t_icon t_info'
+                $space={space}
                 style={{ fontSize: `${size}px`, ...style }}
             />
         </Tooltip>
@@ -34,7 +36,8 @@ export const Info = ({ children, title, size = 16, style }) => {
 };
 
 Info.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     size: PropTypes.number,
-    style: PropTypes.object
+    style: PropTypes.object,
+    space: PropTypes.bool,
 };
