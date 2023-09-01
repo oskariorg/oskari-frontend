@@ -125,7 +125,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 { getButtonForModal('featureFilter') }
             </StyledFormField>
             <Message messageKey='attributes.properties' />
-            <InfoIcon title={<Message messageKey='attributes.propertiesTooltip'/>}/>
+            <InfoIcon title={<Message messageKey='attributes.presentationTooltip'/>}/>
             <StyledFormField>
                 <Space direction='horizontal'>
                     { getButtonForModal('filter') }

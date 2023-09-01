@@ -114,7 +114,7 @@ Oskari.registerLocalization(
             "attributes": {
                 "label": "Attribuutit",
                 "properties": "Kohteiden ominaisuustiedot",
-                "propertiesTooltip": "Esitystapa vaikuttaa kohdetietojen kyselyyn ja kohdetietotaulukkoon.",
+                "presentationTooltip": "Esitystapa vaikuttaa kohdetietojen kyselyyn ja kohdetietotaulukkoon.",
                 "showAll": "Näytä kaikki ominaisuustiedot",
                 "idProperty": "Käytä ominaisuustietoa kohteiden yksilöimiseen",
                 "idPropertyTooltip": "Rajapinnan tulee palauttaa yksilöivä tunniste kohteille. Pyydä ensisijaisesti palveluntarjoajaa ottamaan käyttöön yksilöivät tunnisteet.",
