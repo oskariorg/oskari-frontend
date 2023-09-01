@@ -17,6 +17,7 @@ Oskari.registerLocalization({
             "inspire": "Inspire metadata",
             "jhs": "ISO 19115 metadata",
             "quality": "Data kvalität",
+            "actions": "Handlingar",
             "xml": "ISO 19139 XML fil",
             "coverage": {
                 "removeBBOX": "Göm geografisk datatäckning",
