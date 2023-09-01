@@ -116,9 +116,8 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
     return (
         <ButtonsContainer className='layerSelection'>
             {layers.map(layer => (
-                <Tooltip title={layer.title}>
+                <Tooltip key={layer.id} title={layer.title}>
                     <ThemedButton
-                        key={layer.id}
                         onClick={() => layer.onClick(layer.id)}
                         active={Number.parseInt(layer.id, 10) === current?.getId()}
                         $isDropdown={false}
