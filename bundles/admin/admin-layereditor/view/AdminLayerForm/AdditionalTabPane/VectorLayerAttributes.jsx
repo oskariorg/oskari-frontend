@@ -6,13 +6,12 @@ import { Modal } from 'oskari-ui/components/Modal';
 import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
 import { Controller, Messaging } from 'oskari-ui/util';
 import { PropertiesFilter, PropertiesLocale, PropertiesFormat } from './VectorLayerAttributes/';
-import { StyledFormField } from '../styled';
+import { StyledFormField, Border } from '../styled';
 import { InfoTooltip } from '../InfoTooltip';
 import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
 
 const Buttons = styled.div`
     display: inline-flex;
-    margin-top: 10px;
     > * {
         margin-right: 20px;
     }
@@ -126,24 +125,27 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                     )) }
                 </Select>
             </StyledFormField>
-            <Message messageKey='attributes.idProperty'/>
-            <Link url={''} tooltip={<Message messageKey='attributes.idPropertyTooltip'/>}/>
-            <StyledFormField>
-                <Select allowClear value={data.idProperty}
-                    onChange={value => controller.setAttributesData('idProperty', value)}
-                    options={propNames.map(value => ({value}))}/>
-            </StyledFormField>
-            <StyledFormField>
-                { getButtonForModal('featureFilter') }
-            </StyledFormField>
-            <Message messageKey='attributes.properties' />
-            <StyledFormField>
-                <Buttons>
-                    { getButtonForModal('filter') }
-                    { getButtonForModal('locale') }
-                    { getButtonForModal('format') }
-                </Buttons>
-            </StyledFormField>
+            <Message messageKey='attributes.properties'/>
+            <Border>
+                <StyledFormField>
+                    { getButtonForModal('featureFilter') }
+                </StyledFormField>
+                <Message messageKey='attributes.presentation' />
+                <StyledFormField>
+                    <Buttons>
+                        { getButtonForModal('filter') }
+                        { getButtonForModal('locale') }
+                        { getButtonForModal('format') }
+                    </Buttons>
+                </StyledFormField>
+                <Message messageKey='attributes.idProperty'/>
+                <Link url={''} tooltip={<Message messageKey='attributes.idPropertyTooltip'/>}/>
+                <StyledFormField>
+                    <Select allowClear value={data.idProperty}
+                        onChange={value => controller.setAttributesData('idProperty', value)}
+                        options={propNames.map(value => ({value}))}/>
+                </StyledFormField>
+            </Border>
             <Modal
                 mask={ false }
                 maskClosable= { false }

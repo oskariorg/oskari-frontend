@@ -113,7 +113,8 @@ Oskari.registerLocalization(
             },
             "attributes": {
                 "label": "Attribuutit",
-                "properties": "Kohteiden ominaisuustietojen esitystapa",
+                "properties": "Kohteiden ominaisuustietojen käyttö",
+                "presentation": "Esitystapa",
                 "showAll": "Näytä kaikki ominaisuustiedot",
                 "idProperty": "Käytä ominaisuustietoa kohteiden yksilöimiseen",
                 "idPropertyTooltip": "Rajapinnan tulee palauttaa yksilöivä tunniste kohteille. Pyydä ensisijaisesti palveluntarjoajaa ottamaan käyttöön yksilöivät tunnisteet.",
