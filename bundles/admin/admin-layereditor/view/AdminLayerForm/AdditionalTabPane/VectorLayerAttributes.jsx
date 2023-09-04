@@ -51,7 +51,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
         const value = state[type] || {};
         const count = Object.keys(value).length;
         return (
-            <Badge count={count} themed showZero={false}>
+            <Badge count={count} showZero={false}>
                 <Button onClick={() => onButtonClick(type)}>
                     <Message messageKey={`attributes.${type}.button`} />
                 </Button>
