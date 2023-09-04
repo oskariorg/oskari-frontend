@@ -103,6 +103,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
                         <ThemedButton
                             icon={<LayersIcon />}
                             $isDropdown={true}
+                            data-layerid={current?.getId()}
                             {...rest}
                         >
                             <ButtonText>{current?.getName()}</ButtonText>
@@ -121,6 +122,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
                         onClick={() => layer.onClick(layer.id)}
                         active={Number.parseInt(layer.id, 10) === current?.getId()}
                         $isDropdown={false}
+                        data-layerid={layer.id}
                         {...rest}
                     >
                         <ButtonText>{layer.title}</ButtonText>
