@@ -6,8 +6,6 @@ import { ERRORS } from '../constants';
 Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService', function (instance) {
     this.instance = instance;
     this.srs = instance.getSandbox().getMap().getSrsName();
-    // negative value for group id means that admin isn't presented with tools for it (-1 is reserved for default group)
-    this.groupId = -10 * Oskari.getSeq('usergeneratedGroup').nextVal();
     this.log = Oskari.log('MyPlacesImportService');
     Oskari.makeObservable(this);
 }, {
@@ -243,17 +241,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {Function} cb
      */
     _addLayersToService: function (layers = []) {
-        // initialize the group these layers will be in:
-        const mapLayerService = this.instance.getMapLayerService();
-        const mapLayerGroup = mapLayerService.findLayerGroupById(this.groupId);
-        if (!mapLayerGroup) {
-            const group = {
-                id: this.groupId,
-                name: this.instance.loc('layer.inspire')
-            };
-            mapLayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
-        }
-
         layers.forEach((layerJson) => {
             this.addLayerToService(layerJson, true);
         });
