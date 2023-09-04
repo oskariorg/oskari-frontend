@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FilterOutlined, BgColorsOutlined } from '@ant-design/icons';
-import { Message, List, ListItem, Radio, Tooltip } from 'oskari-ui';
+import { Message, List, ListItem, Radio, Tooltip, Badge } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
@@ -88,9 +88,11 @@ export const VectorStyleSelect = ({ layer, controller, editStyle, editOptional }
                         <ButtonContainer>
                             { style.type === 'oskari' && (
                                 <Fragment>
-                                    <IconButton { ...btnProps } icon={<FilterOutlined />}
-                                        title={ <Message messageKey='styles.vector.optionalStyles' /> }
-                                        onClick={ () => editOptional(style) } />
+                                    <Badge themed count={style.style.optionalStyles?.length || 0} showZero={false}>
+                                        <IconButton { ...btnProps } icon={<FilterOutlined />}
+                                            title={ <Message messageKey='styles.vector.optionalStyles' /> }
+                                            onClick={ () => editOptional(style) } />
+                                    </Badge>
                                     <IconButton { ...btnProps } icon={<BgColorsOutlined />}
                                         title={ <Message messageKey='styles.vector.edit.editor' /> }
                                         onClick={ () => editStyle('editor', style) } />

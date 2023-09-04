@@ -113,7 +113,8 @@ Oskari.registerLocalization(
             },
             "attributes": {
                 "label": "Attribuutit",
-                "properties": "Kohteiden ominaisuustiedot",
+                "properties": "Kohteiden ominaisuustietojen käyttö",
+                "presentation": "Esitystapa",
                 "presentationTooltip": "Esitystapa vaikuttaa kohdetietojen kyselyyn ja kohdetietotaulukkoon.",
                 "showAll": "Näytä kaikki ominaisuustiedot",
                 "idProperty": "Käytä ominaisuustietoa kohteiden yksilöimiseen",
@@ -129,27 +130,23 @@ Oskari.registerLocalization(
                     "collection":"Kaikki"
                 },
                 "featureFilter": {
-                    "title": "Kohteiden suodatus",
-                    "add": "Lisää kohteiden suodatus",
-                    "edit": "Muokkaa kohteiden suodatusta"
+                    "title": "Suodata rajapinnasta haettavia kohteita ominaisuustietojen mukaan",
+                    "button": "Kohteiden suodatus"
                 },
                 "filter": {
-                    "title": "Ominaisuustietojen näyttäminen",
+                    "title": "Kohteiden ominaisuustietojen näyttäminen",
                     "lang": "Valitse tason kohteille näytettävät ominaisuustiedot ja niiden järjestys",
                     "default": "oletussuodattimelle",
                     "fromDefault": "Valitulle kielelle ei ole lisätty suodatinta. Valitulla kielellä käytetään oletussuodatinta. Muokkaa valintoja luodaksesi kielelle oman suodattimen.",
-                    "add": "Lisää suodatin",
-                    "edit": "Muokkaa suodatinta"
+                    "button": "Valitse kentät"
                 },
                 "locale": {
                     "title": "Käyttöliittymässä näytettävät nimet ominaisuustiedoille",
-                    "add": "Lisää nimet",
-                    "edit": "Muokkaa nimiä"
+                    "button": "Nimeäminen"
                 },
                 "format": {
                     "title": "Kohteiden ominaisuustietojen arvon muotoilu",
-                    "add": "Lisää muotoilu",
-                    "edit": "Muokkaa muotoilua",
+                    "button": "Muotoilu",
                     "type": {
                         "label": "Tyyppi",
                         "typeFormats": "Arvon tyyppi",

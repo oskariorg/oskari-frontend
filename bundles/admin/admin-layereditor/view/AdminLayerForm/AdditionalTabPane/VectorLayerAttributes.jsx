@@ -1,13 +1,21 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Select, Option, Space, Button } from 'oskari-ui';
+import styled from 'styled-components';
+import { Message, Select, Option, Button, Badge } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
 import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
 import { InfoIcon } from 'oskari-ui/components/icons';
 import { Controller, Messaging } from 'oskari-ui/util';
 import { PropertiesFilter, PropertiesLocale, PropertiesFormat } from './VectorLayerAttributes/';
-import { StyledFormField } from '../styled';
+import { StyledFormField, Border } from '../styled';
 import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
+
+const Buttons = styled.div`
+    display: inline-flex;
+    > * {
+        margin-right: 20px;
+    }
+`;
 
 // Clean empty objects and values that doesn't need to store
 // data.format: false options
@@ -34,17 +42,20 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     const { geomName, featureProperties = []} = layer.capabilities;
     const [modal, setModal] = useState(null);
     const [state, setState] = useState({
-        filter: data.filter,
-        locale: data.locale,
-        format: data.format,
+        filter: data.filter || {},
+        locale: data.locale || {},
+        format: data.format || {},
         featureFilter
     });
     const getButtonForModal = type => {
-        const btn = state[type] ? 'edit' : 'add';
+        const value = state[type] || {};
+        const count = Object.keys(value).length;
         return (
-            <Button onClick={() => onButtonClick(type)}>
-                <Message messageKey={`attributes.${type}.${btn}`} />
-            </Button>
+            <Badge count={count} showZero={false}>
+                <Button onClick={() => onButtonClick(type)}>
+                    <Message messageKey={`attributes.${type}.button`} />
+                </Button>
+            </Badge>
         );
     };
 
@@ -114,25 +125,28 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                     )) }
                 </Select>
             </StyledFormField>
-            <Message messageKey='attributes.idProperty'/>
-            <InfoIcon title={<Message messageKey='attributes.idPropertyTooltip'/>}/>
-            <StyledFormField>
-                <Select allowClear value={data.idProperty}
-                    onChange={value => controller.setAttributesData('idProperty', value)}
-                    options={propNames.map(value => ({value}))}/>
-            </StyledFormField>
-            <StyledFormField>
-                { getButtonForModal('featureFilter') }
-            </StyledFormField>
-            <Message messageKey='attributes.properties' />
-            <InfoIcon title={<Message messageKey='attributes.presentationTooltip'/>}/>
-            <StyledFormField>
-                <Space direction='horizontal'>
-                    { getButtonForModal('filter') }
-                    { getButtonForModal('locale') }
-                    { getButtonForModal('format') }
-                </Space>
-            </StyledFormField>
+            <Message messageKey='attributes.properties'/>
+            <Border>
+                <StyledFormField>
+                    { getButtonForModal('featureFilter') }
+                </StyledFormField>
+                <Message messageKey='attributes.presentation' />
+                <InfoIcon title={<Message messageKey='attributes.presentationTooltip'/>}/>
+                <StyledFormField>
+                    <Buttons>
+                        { getButtonForModal('filter') }
+                        { getButtonForModal('locale') }
+                        { getButtonForModal('format') }
+                    </Buttons>
+                </StyledFormField>
+                <Message messageKey='attributes.idProperty'/>
+                <InfoIcon title={<Message messageKey='attributes.idPropertyTooltip'/>}/>
+                <StyledFormField>
+                    <Select allowClear value={data.idProperty}
+                        onChange={value => controller.setAttributesData('idProperty', value)}
+                        options={propNames.map(value => ({value}))}/>
+                </StyledFormField>
+            </Border>
             <Modal
                 mask={ false }
                 maskClosable= { false }

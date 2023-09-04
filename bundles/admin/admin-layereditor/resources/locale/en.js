@@ -112,7 +112,8 @@ Oskari.registerLocalization(
             },
             "attributes": {
                 "label": "Attributes",
-                "properties": "Feature properties",
+                "properties": "Using feature properties",
+                "presentation": "Presentation",
                 "presentationTooltip": "Presentation affects GetFeatureInfo request and feature data table.",
                 "showAll": "Show all properties",
                 "idProperty": "Use feature property as identifier",
@@ -128,27 +129,23 @@ Oskari.registerLocalization(
                     "collection":"Collection"
                 },
                 "featureFilter": {
-                    "title": "Feature filter",
-                    "add": "Add feature filter",
-                    "edit": "Edit feature filter"
+                    "title": "Filter requested features by properties",
+                    "button": "Feature filter"
                 },
                 "filter": {
                     "title": "Properties filter",
                     "lang": "Choose shown feature properties and ordering",
                     "default": "for default filter",
                     "fromDefault": "Selected language doesn't have filter. Default filter is used for selected language. Edit values to create new filter for language.",
-                    "add": "Add filter",
-                    "edit": "Edit filter"
+                    "button": "Select properties"
                 },
                 "locale": {
                     "title": "Labels for feature properties",
-                    "add": "Add labels",
-                    "edit": "Edit labels"
+                    "button": "Labeling"
                 },
                 "format": {
                     "title": "Feature properties value formatting",
-                    "add": "Add formatting",
-                    "edit": "Edit formatting",
+                    "button": "Formatting",
                     "type": {
                         "label": "Type",
                         "typeFormats": "Value type",

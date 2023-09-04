@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Select, Option, Switch, Divider } from 'oskari-ui';
+import { Message, Select, Option, Switch, Divider, Badge } from 'oskari-ui';
 import { Draggable, DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { DragIcon } from 'oskari-ui/components/icons';
 import { IconButton } from 'oskari-ui/components/buttons';
@@ -52,6 +52,10 @@ const Label = styled.span`
 
 const Italic = styled.div`
     font-style: italic;
+`;
+
+const StyledBadge = styled(Badge)`
+    margin-left: 10px;
 `;
 
 const FilteredProperty = ({name, label, toggle}) => {
@@ -123,7 +127,8 @@ export const PropertiesFilter = ({ filter = {}, update, properties, labels }) =>
                             { opt === 'default'
                                 ? <Message messageKey='attributes.filter.default'/>
                                 : <Message messageKey={`LocalizationComponent.locale.${opt}`} bundleKey='oskariui' />
-                            } 
+                            }
+                            { Array.isArray(filter[opt]) && <StyledBadge count={filter[opt].length} themed showZero={false} /> }
                         </Option>)) 
                     }
                 </Select>
