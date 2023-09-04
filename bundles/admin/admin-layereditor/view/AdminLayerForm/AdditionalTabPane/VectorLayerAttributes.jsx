@@ -100,7 +100,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
         setState({ ...state, [modal]: value });
     };
     const onModalCancel = () => {
-        const attr = modal === 'featureFilter' ? featureFilter : data[modal];
+        const attr = modal === 'featureFilter' ? featureFilter : data[modal] || {};
         setState({ ...state, [modal]: attr });
         setModal(null);
     };
