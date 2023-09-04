@@ -467,7 +467,12 @@ const getImageStyle = (mapModule, styleDef, requestedStyle) => {
     const opacity = styleDef.image.opacity || 1;
     // Oskari marker
     if (!isNaN(styleDef.image.shape)) {
-        const { src, scale, offsetX = 16, offsetY = 16 } = Oskari.custom.getSvg(styleDef.image);
+        const effect = getColorEffect(styleDef.effect, styleDef.image.fill?.color);
+        const imageDef = { ...styleDef.image };
+        if (effect) {
+            imageDef.fill = { color: effect };
+        }
+        const { src, scale, offsetX = 16, offsetY = 16 } = Oskari.custom.getSvg(imageDef);
         return new olStyleIcon({
             src,
             scale,
