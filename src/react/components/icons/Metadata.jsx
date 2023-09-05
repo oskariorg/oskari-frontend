@@ -24,7 +24,7 @@ const StyledMetadataIcon = styled(InfoCircleOutlined)`
  */
 export const Metadata = ThemeConsumer(({ theme = {}, metadataId, size = 16, style }) => {
 
-    if (!metadataId) return null;
+    if (!metadataId || !Oskari.getSandbox().hasHandler('catalogue.ShowMetadataRequest')) return null;
 
     const helper = getNavigationTheme(theme);
     const hover = helper.getButtonHoverColor();
