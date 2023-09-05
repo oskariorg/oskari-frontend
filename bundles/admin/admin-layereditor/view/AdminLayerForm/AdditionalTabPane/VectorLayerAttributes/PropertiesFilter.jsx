@@ -128,7 +128,7 @@ export const PropertiesFilter = ({ filter = {}, update, properties, labels }) =>
                                 ? <Message messageKey='attributes.filter.default'/>
                                 : <Message messageKey={`LocalizationComponent.locale.${opt}`} bundleKey='oskariui' />
                             }
-                            { Array.isArray(filter[opt]) && <StyledBadge count={filter[opt].length} themed showZero={false} /> }
+                            { Array.isArray(filter[opt]) && <StyledBadge count={filter[opt].length} showZero={false} /> }
                         </Option>)) 
                     }
                 </Select>
