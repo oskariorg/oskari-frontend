@@ -61,7 +61,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             .filter((layer, index) => index >= startIndex && index < endIndex)
             .forEach(layer => {
                 if (!hasPermission(layer, permissionType)) {
-                    checked = false
+                    checked = false;
                 }
             });
         return checked;

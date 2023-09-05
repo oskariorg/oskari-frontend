@@ -10,7 +10,8 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Map Layer Rights",
-            "message": "Layer Rights Management"
+            "message": "Layer Rights Management",
+            "instructionText": "Start by selecting a role"
         },
         "rights": {
             "name": "Map Layer",

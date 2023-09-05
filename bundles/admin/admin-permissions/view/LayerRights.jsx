@@ -31,6 +31,7 @@ export const LayerRights = ({ controller, state }) => {
     const [searchValue, setSearchValue] = useState(state.pagination.filter);
     return (
         <div>
+            { !state.selectedRole && <b><Message messageKey={`flyout.instructionText`} bundleKey='admin-permissions' /></b> }
             <SelectContainer>
                 <Message messageKey='selectRole' />
                 <ConfirmWrapper
@@ -69,50 +70,54 @@ export const LayerRights = ({ controller, state }) => {
                     </StyledSelect>
                 </ConfirmWrapper>
             </SelectContainer>
-            <SearchContainer>
-                <TextInput
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                />
-                <Confirm
-                    title={<Message messageKey='unsavedChangesConfirm'/>}
-                    open={searchConfirmOpen}
-                    onConfirm={() => {
-                        setSearchConfirmOpen(false);
-                        controller.search(searchValue);
-                    }}
-                    onCancel={() => {
-                        setSearchConfirmOpen(false);
-                    }}
-                    okText={<Message bundleKey='oskariui' messageKey='buttons.yes'/>}
-                    cancelText={<Message bundleKey='oskariui' messageKey='buttons.cancel'/>}
-                    placement='top'
-                    popupStyle={{zIndex: '999999'}}
-                >
-                    <PrimaryButton
-                        type='search'
-                        onClick={() => state.changedIds.size !== 0 ? setSearchConfirmOpen(true) : controller.search(searchValue)}
-                        disabled={!state.permissions?.layers || state.permissions?.layers?.length < 1}
+            { !!state.selectedRole &&
+                <React.Fragment>
+                    <SearchContainer>
+                        <TextInput
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                        />
+                        <Confirm
+                            title={<Message messageKey='unsavedChangesConfirm'/>}
+                            open={searchConfirmOpen}
+                            onConfirm={() => {
+                                setSearchConfirmOpen(false);
+                                controller.search(searchValue);
+                            }}
+                            onCancel={() => {
+                                setSearchConfirmOpen(false);
+                            }}
+                            okText={<Message bundleKey='oskariui' messageKey='buttons.yes'/>}
+                            cancelText={<Message bundleKey='oskariui' messageKey='buttons.cancel'/>}
+                            placement='top'
+                            popupStyle={{zIndex: '999999'}}
+                        >
+                            <PrimaryButton
+                                type='search'
+                                onClick={() => state.changedIds.size !== 0 ? setSearchConfirmOpen(true) : controller.search(searchValue)}
+                                disabled={!state.permissions?.layers || state.permissions?.layers?.length < 1}
+                            />
+
+                        </Confirm>
+                        {state.pagination.filter && state.pagination.filter !== '' && (
+                            <SecondaryButton
+                                type='clear'
+                                onClick={controller.clearSearch}
+                            />
+                        )}
+                    </SearchContainer>
+                    <LayerRightsTable
+                        controller={controller}
+                        state={state}
                     />
-                    
-                </Confirm>
-                {state.pagination.filter && state.pagination.filter !== '' && (
-                    <SecondaryButton
-                        type='clear'
-                        onClick={controller.clearSearch}
-                    />
-                )}
-            </SearchContainer>
-            <LayerRightsTable
-                controller={controller}
-                state={state}
-            />
-            <ButtonContainer>
-                <PrimaryButton
-                    type='save'
-                    onClick={controller.savePermissions}
-                />
-            </ButtonContainer>
+                    <ButtonContainer>
+                        <PrimaryButton
+                            type='save'
+                            onClick={controller.savePermissions}
+                        />
+                    </ButtonContainer>
+                </React.Fragment>
+            }
         </div>
     );
 };

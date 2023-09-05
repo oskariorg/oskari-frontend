@@ -10,7 +10,8 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Rätter för kartlager",
-            "message": "Rätter för kartlager"
+            "message": "Rätter för kartlager",
+            "instructionText": ""
         },
         "rights": {
             "name": "Namn",
