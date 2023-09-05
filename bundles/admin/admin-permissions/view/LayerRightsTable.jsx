@@ -21,6 +21,17 @@ const CheckAllCheckbox = styled(Checkbox)`
     margin-top: 10px;
 `;
 
+const preferredOrder = ['VIEW_LAYER', 'VIEW_PUBLISHED', 'PUBLISH', 'DOWNLOAD'];
+const getPermissionNames = (nameToLabel) => {
+    if (!nameToLabel) {
+        return [];
+    }
+    // move the recognized permissionTypes to the front with additional styles in random order
+    const names = preferredOrder.filter(type => !!nameToLabel[type]);
+    const additionalNames = Object.keys(nameToLabel).filter(type => !names.includes(type));
+    return [...names, ...additionalNames];
+};
+
 const getPermissionTableHeader = (permissionType, permissionName) => {
     const translation = <Message messageKey={`rights.${permissionType}`} defaultMsg={permissionName} bundleKey='admin-permissions' />;
     switch (permissionType) {
@@ -56,14 +67,15 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
         return checked;
     };
     const columnSettings = [];
-    if (state.permissions?.names) {
+    const permissionNames = getPermissionNames(state.permissions?.names);
+    if (permissionNames.length) {
         columnSettings.push({
             align: 'left',
             title: <Message messageKey='rights.name' />,
             dataIndex: 'name',
             sorter: getSorterFor('name')
         });
-        Object.keys(state.permissions.names).forEach((permissionType, index) => {
+        permissionNames.forEach((permissionType, index) => {
             columnSettings.push({
                 align: 'left',
                 title: () => {
