@@ -95,8 +95,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                     // if we get data as param -> use lang from it, otherwise use Oskari.getLang()
                     selectedLang = pData.metadata.language;
                 }
-                me.fields.language.value = selectedLang;
             }
+            me.fields.language.value = selectedLang;
         },
         onChange: function (key, value) {
             this.fields[key].value = value;
