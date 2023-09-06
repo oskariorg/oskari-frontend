@@ -60,15 +60,7 @@ class UIHandler extends StateHandler {
     }
 
     cancel () {
-        this.updateState({
-            resources: structuredClone(this.state.permissions?.layers) || [],
-            changedIds: new Set(),
-            pagination: {
-                ...this.state.pagination,
-                filter: '',
-                page: 1
-            }
-        });
+        this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'admin-permissions']);
     }
 
     setCheckAllForPermission (permissionType, enabled) {
