@@ -121,39 +121,6 @@ img::-moz-selection {
   background: transparent;
 }
 
-/* Content is only in the portal version afaik so this could be moved there? */
-/*
-#content {
-  width: 760px;
-  padding-left: 20px;
-}
-*/
-/* Portal version */
-/*
-.mml-map #logo.no-hover {
-  display: block !important;
-}
-.mml-map #logo.no-hover p {
-  display: none;
-}
-.mml-map #logo.no-hover #logo-only {
-  float: right;
-  margin: 0 5px 0 0;
-}
-.mml-map #sidebar.hover .sign-in, .mml-map #sidebar.hover section {
-  display: block;
-}
-.mml-map #sidebar .sign-in, .mml-map #sidebar section {
-  display: none;
-}
-.mml-map #content {
-  padding-left: 0;
-  width: 100%;
-  margin-left: 0;
-}
-*/
-
-
 .oskariui-left {
   float: left;
 }
@@ -244,7 +211,9 @@ h5 {
   content: "\00BB\0020";
 }
 
-
+div.ant-table-header table {
+  margin: 0px;
+}
 table:not([class*="ant-"]) {
   /* Cells should have 10px of vertical padding so we reach 28px in total */
   font-size: 12px;
