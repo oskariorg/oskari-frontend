@@ -46,6 +46,23 @@ class UIHandler extends StateHandler {
         });
     }
 
+    resetTable () {
+        this.updateState({
+            resources: structuredClone(this.state.permissions?.layers) || [],
+            changedIds: new Set(),
+            selectedRole: 0,
+            pagination: {
+                ...this.state.pagination,
+                filter: '',
+                page: 1
+            }
+        });
+    }
+
+    cancel () {
+        this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'admin-permissions']);
+    }
+
     setCheckAllForPermission (permissionType, enabled) {
         let layers = [...this.state.resources];
         const startIndex = (this.state.pagination.page - 1) * this.state.pagination.pageSize;
@@ -264,7 +281,9 @@ const wrapped = controllerMixin(UIHandler, [
     'setCheckAllForPermission',
     'setPage',
     'search',
-    'clearSearch'
+    'clearSearch',
+    'resetTable',
+    'cancel'
 ]);
 
 export { wrapped as LayerRightsHandler };

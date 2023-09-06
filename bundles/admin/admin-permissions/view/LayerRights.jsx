@@ -111,6 +111,10 @@ export const LayerRights = ({ controller, state }) => {
                         state={state}
                     />
                     <ButtonContainer>
+                        <SecondaryButton
+                            type='cancel'
+                            onClick={() => controller.cancel()}
+                        />
                         <PrimaryButton
                             type='save'
                             onClick={controller.savePermissions}
