@@ -99,16 +99,14 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
         return (
             <ButtonsContainer className='layerSelection'>
                 <Dropdown items={getDropDownItems(layers)}>
-                    <Tooltip title={current?.getName()}>
-                        <ThemedButton
-                            icon={<LayersIcon />}
-                            $isDropdown={true}
-                            data-layerid={current?.getId()}
-                            {...rest}
-                        >
-                            <ButtonText>{current?.getName()}</ButtonText>
-                        </ThemedButton>
-                    </Tooltip>
+                    <ThemedButton
+                        icon={<LayersIcon />}
+                        $isDropdown={true}
+                        data-layerid={current?.getId()}
+                        {...rest}
+                    >
+                        <ButtonText>{current?.getName()}</ButtonText>
+                    </ThemedButton>
                 </Dropdown>
             </ButtonsContainer>
         );
