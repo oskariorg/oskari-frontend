@@ -9,7 +9,6 @@ import { PLUGIN_NAME, BUNDLE_KEY, DEFAULT_STYLE, STYLE_TYPE } from '../constants
 
 const Content = styled('div')`
     padding: 24px;
-    width: 400px;
 `;
 
 const getMessage = path => <Message messageKey={ `plugin.${PLUGIN_NAME}.${path}` } bundleKey={BUNDLE_KEY} />;
