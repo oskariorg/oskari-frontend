@@ -184,6 +184,40 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
         createUi: function () {
             var me = this;
             me.plugins['Oskari.userinterface.Flyout'].renderContent();
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event
+         * object
+         * Event is handled forwarded to correct #eventHandlers if found
+         * or discarded if not.
+         */
+        onEvent: function (event) {
+            const handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+
+            return handler.apply(this, [event]);
+        },
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            /**
+             * @method userinterface.ExtensionUpdatedEvent
+             * Reset flyout when closed
+             */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                if (event.getExtension().getName() !== this.getName()) {
+                    // not me -> do nothing
+                    return;
+                }
+                if (event.getViewState() === 'close') {
+                    this.plugins['Oskari.userinterface.Flyout'].resetFlyout();
+                }
+            }
         }
     }, {
 
