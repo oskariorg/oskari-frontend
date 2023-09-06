@@ -294,7 +294,7 @@ class UIHandler extends StateHandler {
 
     async saveUser () {
         this.validateUserForm();
-        const { errors, passwordErrors, roles, ...userParams } = this.state.userFormState;
+        const { errors, passwordErrors = {}, roles, ...userParams } = this.state.userFormState;
         if (errors.length > 0 || Object.keys(passwordErrors).length > 0) {
             return;
         }
