@@ -10,7 +10,8 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Karttatasojen oikeuksien hallinta",
-            "message": "Karttatasojen oikeuksien hallinta"
+            "message": "Karttatasojen oikeuksien hallinta",
+            "instructionText": "Aloita valitsemalla rooli"
         },
         "rights": {
             "name": "Karttataso",

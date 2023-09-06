@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Rätter för kartlager",
             "message": "Rätter för kartlager",
-            "instructionText": ""
+            "instructionText": "Börja med att välja en roll"
         },
         "rights": {
             "name": "Namn",
@@ -30,6 +30,6 @@ Oskari.registerLocalization(
             "selectValue": "Markera värdet"
         },
         "save": "Lagra",
-        "selectRole": "Rol"
+        "selectRole": "Roll"
     }
 });
