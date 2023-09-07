@@ -37,7 +37,7 @@ All of these could already be done with a JSON config, but it was previously har
 The admin can also select geometry type for a layer so for example style editor can show only relevant parts of the form based on the geometry type and the value is defaulted based on layer capabilities.
 
 There is also a new implementation for the admin bundle for settings layer permissions (`admin-permissions` bundle replacing `admin-layerrights`).
-This is a React.js based UI with similar look and feel to the map layer admin that offers a different way of setting permissions for multiple layers at once.
+This is a React.js based UI with similar look and feel to the permission settings on map layer admin, but offers a way of setting permissions for multiple layers at once.
 The new UI provides paged results instead of a long list and has built-in search functionality.
 
 The regular layer listing functionality (`layerlist` bundle) now allows admin users to search layers by layer id and technical name in addition to the name, data provider and group name accessible by other users.
