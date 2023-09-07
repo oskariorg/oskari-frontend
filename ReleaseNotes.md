@@ -13,7 +13,7 @@ In general the UI has seen a number of improvements for users with small screens
 
 The specifics:
 - `GetAppSetup` route now accepts a new parameter than can be used to fine-tune mobile functionalities (`mobile=Oskari.util.isMobile()`). This triggers handling of server-side configuration as described here: https://github.com/oskariorg/oskari-server/pull/995
-- The `divmanazer` bundle now initializes a new plugin on the map when it is started on "mobile mode" that allows the user to toggle the navigation on and off. This helps users to work with the UI on mobile devices and small screens in general.
+- The `divmanazer` bundle now initializes a new plugin/button on the map on small screens that allows the user to toggle the navigation on and off. This helps users to work with the UI on mobile devices and small screens in general.
 - New functions in Oskari.dom -> `showNavigation(bln)`, `isNavigationVisible()` and `getNavigationEl()` that can be used to toggle and query the main navigation state.
 - The `FullScreenPlugin` that does a similar thing to the new plugin also detects mobile mode and removes itself from the screen on "mobile mode" to prevent having two very similar functionalities on the map at the same time. The FullScreenPlugin does more to hide any additional elements on the page, but hiding such elements on small screens should be the responsibility of the page Oskari is rendered to.
 - Plugins at the bottom part of the map now flow a bit better on smaller screens (layout improvement so plugins don't overlap each other).
