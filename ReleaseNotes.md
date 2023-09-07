@@ -24,7 +24,7 @@ The specifics:
 - The `zoombox` tool is no longer shown when the geoportal is started on a small screen/"mobile mode"
 - The marker form now works better on small screens
 
-### Map layer management / admin stuff
+### Map layer management and admin improvements
 
 We now have a very nice UI for fine-tuning how WFS-layers should be presented for the end-users! Admins now have an actual UI to:
 - select what properties to show/hide and in which order (even based on end-user language)
@@ -63,7 +63,7 @@ Improvements to user management:
 - `Badge` now defaults to showing even with zero value (override with prop `showZero=false` ).
 - `ThemedBadge` component removed as the `Badge` can be used as a drop-in replacement.
 - Added `accept` and `reject` to common icons
-- Added theme based hover effect for IconButton
+- Added theme based hover effect for `IconButton`
 - `InfoIcon` now adds margins by default (and has a new prop `space=false` to prevent margins)
 - `MetadataIcon` now checks if the `catalogue.ShowMetadataRequest` is available in addition to metadata identifier being passed to it to decide if it should render itself.
 
@@ -73,8 +73,8 @@ Improvements to user management:
 - Fixed issues when programmatically hiding/showing markers that were already showing or hidden. Mostly concerns RPC usage.
 - Fixed GetFeatureInfo functionality when the map has been rotated (previously didn't take rotation in to account when querying for data).
 - Revised tests for RPC-functionalities and updated the `Jasmine` test library 2.5.2 -> 5.1.0
-- Fixed issues on coordinate tool configuration on publisher
-- Fixed an issue with language selection on publisher
+- Fixed issues on coordinate tool configuration on the publisher functionality
+- Fixed an issue with language selection on the publisher functionality
 - The admin UI for selecting announcements for an embedded map on the publisher functionality now has the option to hide the announcements UI on the embedded map (for using announcements programmatically).
 
 ## 2.11.1
