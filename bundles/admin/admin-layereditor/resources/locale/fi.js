@@ -203,7 +203,7 @@ Oskari.registerLocalization(
                         "name": "Täytä nimi tyylille",
                         "noStyles": "Ei tallennettuja tyylejä",
                         "json": "Tyylimääritysten JSON-syntaksi on virheellinen.",
-                        "optionalStyles": "Tyylimäärityksellä ei ole sopivaa suodatinta."
+                        "optionalStyles": "Tyylille ei ole sopivaa suodatinta."
                     }
                 }
             },

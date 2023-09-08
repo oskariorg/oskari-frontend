@@ -202,7 +202,7 @@ Oskari.registerLocalization(
                         "name": "Please enter a name for the style",
                         "noStyles": "No saved styles",
                         "json": "Invalid JSON syntax in Style definitions.",
-                        "optionalStyles": "Optional style doesn't have valid filter."
+                        "optionalStyles": "Style doesn't have valid filter."
                     }
                 }
             },

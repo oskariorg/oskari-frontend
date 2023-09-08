@@ -199,7 +199,8 @@ Oskari.registerLocalization(
                     "validation": {
                         "name": "Fyll i namnet på stilen",
                         "noStyles": "Inga sparade stilar",
-                        "json": "Stildefinitioner JSON-syntaxen är ogiltig."
+                        "json": "Stildefinitioner JSON-syntaxen är ogiltig.",
+                        "optionalStyles": "Stilen har inte ett giltigt filter."
                     }
                 }
             },
