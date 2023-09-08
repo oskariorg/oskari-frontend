@@ -157,6 +157,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             counter.update(status);
             this.tileLoadingStateChanged(layer.getId(), counter);
         };
+        const replaceId = layer.replaceFeatureId();
         return (extent, resolution, projection) => {
             updateLoadingStatus(LOADING_STATUS_VALUE.LOADING);
             jQuery.ajax({
@@ -183,14 +184,13 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                     features.forEach(ftr => {
                         // workaround for layers which returns generated id for features.
                         // "The feature id is considered stable and may be used when requesting features or comparing identifiers returned from a remote source."
-                        const idProperty = layer.getIdProperty();
-                        if (idProperty) {
-                            const id = ftr.getProperties()[idProperty];
+                        if (replaceId) {
+                            const id = ftr.getProperties()[replaceId];
                             if (id) {
                                 ftr.setId(id);
                             }
                         }
-                        ftr.set(WFS_ID_KEY, ftr.getId())
+                        ftr.set(WFS_ID_KEY, ftr.getId());
                     });
                     source.addFeatures(features);
                     updateLoadingStatus(LOADING_STATUS_VALUE.COMPLETE);
