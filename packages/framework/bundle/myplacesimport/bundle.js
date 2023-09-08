@@ -20,9 +20,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             "src": "../../../../bundles/framework/myplacesimport/service/MyPlacesImportService.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/myplacesimport/PersonalDataUserLayersTab.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/myplacesimport/request/ShowUserLayerDialogRequest.js"
         }, {
             "type": "text/javascript",
