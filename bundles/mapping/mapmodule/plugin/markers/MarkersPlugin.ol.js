@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this._showAddMarkerPopupOnMapClick = true;
             }
             this.popupControls = null;
-            if (Oskari.util.isMobile() && !this.markerPopupControls && restartTool) {
+            if (!this.markerPopupControls && restartTool) {
                 this.startMarkerAdd();
             }
         };
@@ -162,13 +162,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event map click
          */
         _mapClick: function (event) {
-            if (Oskari.util.isMobile()) {
-                this.keepToolActive = true;
-                if (this.markerPopupControls) {
-                    this.closeMarkerPopup();
-                }
-                this.keepToolActive = false;
+            this.keepToolActive = true;
+            if (this.markerPopupControls) {
+                this.closeMarkerPopup();
             }
+            this.keepToolActive = false;
             if (!this._showAddMarkerPopupOnMapClick) {
                 // get markers from layer by pixel so we get result based on visualization and not the coordinate for the point
                 const pixels = [event.getMouseX(), event.getMouseY()];
