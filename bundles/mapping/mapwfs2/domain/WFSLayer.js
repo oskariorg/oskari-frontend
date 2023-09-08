@@ -43,7 +43,7 @@ export class WFSLayer extends AbstractVectorLayer {
     /* Layer type specifics */
 
     replaceFeatureId () {
-        return this._controlData.idProperty;
+        return this._controlData.replaceFeatureId;
     }
 
     getProperties (all) {
