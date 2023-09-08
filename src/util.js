@@ -801,5 +801,14 @@ Oskari.util = (function () {
         return `${localeDate} ${localeTime}`;
     };
 
+    util.mouseExists = () => {
+        if (window.matchMedia("(pointer: fine)").matches) {
+            // Has a mouse-like device
+            return true;
+        }
+        // Probably mobile
+        return false;
+    };
+
     return util;
 }());
