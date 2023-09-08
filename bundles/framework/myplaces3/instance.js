@@ -144,8 +144,6 @@ Oskari.clazz.define(
             // back end communication
             this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService', sandbox);
             this.myPlacesService.init();
-            // register service so personal data can access it
-            this.sandbox.registerService(this.myPlacesService);
             // init handlers
             this.myPlacesHandler = new MyPlacesHandler(this);
             this.drawHandler = new DrawHandler(this);
