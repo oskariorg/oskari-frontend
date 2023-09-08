@@ -8,6 +8,7 @@ import './request/MapMoveByLayerContentRequest';
 import './request/MapMoveByLayerContentRequestHandler';
 
 import olFormatWKT from 'ol/format/WKT';
+import { CoverageHelper } from './CoverageHelper';
 
 const WKT_READER = new olFormatWKT();
 const AbstractMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin');
@@ -34,6 +35,7 @@ export class LayersPlugin extends AbstractMapModulePlugin {
         this._visibilityCheckOrder = 0;
         this._previousTimer = null;
         this._supportedTimer = null;
+        this.coverageHelper = new CoverageHelper();
     }
 
     _createEventHandlers () {
@@ -111,6 +113,7 @@ export class LayersPlugin extends AbstractMapModulePlugin {
             if (geometry) {
                 layer.setGeometryWKT(coverage);
                 layer.setGeometry([geometry]);
+                this.coverageHelper.addCoverageTool(layer);
             }
         }
         // set visibility info
