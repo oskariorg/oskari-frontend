@@ -44,12 +44,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this._layer = undefined;
         this.log = Oskari.log(PLUGIN_NAME);
         this.popupControls = null;
-        this.popupCleanup = () => {
+        this.popupCleanup = (restartTool = true) => {
             if (this.popupControls) {
                 this.popupControls.close();
                 this._showAddMarkerPopupOnMapClick = true;
             }
             this.popupControls = null;
+            if (Oskari.util.isMobile() && !this.markerPopupControls && restartTool) {
+                this.startMarkerAdd();
+            }
         };
     }, {
 
@@ -68,6 +71,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 'Toolbar.ToolbarLoadedEvent': () => this._registerTools(),
                 'Toolbar.ToolSelectedEvent': event => {
                     if (event.getToolId() !== 'addMarker' && event.getSticky()) {
+                        if (this.popupControls) {
+                            this.popupCleanup(false);
+                        }
                         this.stopMarkerAdd(false);
                     }
                 }
@@ -156,6 +162,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event map click
          */
         _mapClick: function (event) {
+            if (Oskari.util.isMobile()) {
+                this.keepToolActive = true;
+                if (this.markerPopupControls) {
+                    this.closeMarkerPopup();
+                }
+                this.keepToolActive = false;
+            }
             if (!this._showAddMarkerPopupOnMapClick) {
                 // get markers from layer by pixel so we get result based on visualization and not the coordinate for the point
                 const pixels = [event.getMouseX(), event.getMouseY()];
@@ -203,6 +216,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this.markerPopupControls.close();
             }
             this.markerPopupControls = null;
+            if (!this.keepToolActive) {
+                this.stopMarkerAdd();
+            }
         },
         /**
          * Activate the "add marker mode" on map.
@@ -212,7 +228,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             this._showAddMarkerPopupOnMapClick = true;
 
             if (!this.markerPopupControls) {
-                this.markerPopupControls = showMarkerPopup(() => this.removeMarkers(), () => this.stopMarkerAdd(true));
+                this.markerPopupControls = showMarkerPopup(() => this.removeMarkers(), () => this.closeMarkerPopup());
             }
 
             this.getMapModule().setCursorStyle('crosshair');
@@ -220,11 +236,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         /**
          * Stops the marker location selector
          */
-        stopMarkerAdd: function (selectDefault) {
+        stopMarkerAdd: function (selectDefault = true) {
             this.enableGfi(true);
             this._showAddMarkerPopupOnMapClick = false;
-            this.closeMarkerPopup();
-            this.popupCleanup();
+            if (this.markerPopupControls) {
+                this.closeMarkerPopup();
+            }
+            if (this.popupControls) {
+                this.popupCleanup();
+            }
             this.getMapModule().setCursorStyle('');
             if (!selectDefault) {
                 return;
