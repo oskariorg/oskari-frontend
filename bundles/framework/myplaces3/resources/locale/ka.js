@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "რუკის ფენის წაშლა",
-                "deleteConfirmMove": "რუკის ფენა {0} შეიცავს {1} ობიექტებს. გსურთ რუკის ფენის წაშლა და მასზე არსებული ადგილების გადაადგილება რუკის დეფოლტ ფენაზე  {2}?",
                 "deleteConfirm": "წაიშალოს რუკის ფენა {0} ?",
                 "deleted": "რუკის ფენა წაშლილია"
             },

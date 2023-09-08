@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Mjesta",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Izbriši sloj karte",
-                "deleteConfirmMove": "Sloj karte {0} sadrži {1} objekt. Želite li izbristati sloj karte i prebaciti mjesta na njemu na zadani sloj karte {2}?",
                 "deleteConfirm": "Brisanje sloja karte {0}?",
                 "deleted": "Sloj karte je izbrisan"
             },

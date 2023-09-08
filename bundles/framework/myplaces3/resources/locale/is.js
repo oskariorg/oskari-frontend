@@ -10,13 +10,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Staðir",
-            "nocategories": "Þú hefur ekki vistað staði.", // PersonalData removal
-            "maxFeaturesExceeded": "Hámarksfjölda staðarmerkinga náð. Það er ekki hægt að hlaða öllum stöðunum inn.", // PersonalData removal
             "publishCategory": {
                 "privateTooltip": "Þetta kortalag er lokað. Smelltu hér til að birta það.",
                 "publicTooltip": "Þetta kortalag er opið. Smelltu hér til að afturkalla birtingu."
             },
-            "addCategoryFormButton": "Nýtt kortalag", // PersonalData removal
             "addCategory": "Bæta kortalaginu við",
             "editCategory": "Breyta kortalaginu",
             "deleteCategory": "Eyða kortalagi",
@@ -32,7 +29,6 @@ Oskari.registerLocalization(
             },
             "confirm": {
                 "deleteConfirm": "Eyða kortalagi {name}?",
-                "deleteConfirmMove": "Kortalag {0} inniheldur {1} hluti. Viltu eyða kortalaginu og færa staðina á því í sjálfgefna kortalagið {2}?", // PersonalData removal
                 "categoryToPrivate": "Þú ert að gera kortalag {name} að einkakortalagi. Eftir þetta mun ekki lengur vera mögulegt að deila því með öðrum notendum eða fella það inn í aðra vefsíðu. Aðrir notendur geta ekki lengur skoðað kortalagið.",
                 "categoryToPublic": "Þú ert að gera kortalag {name} opinbert. Þú getur deilt hlekkjum á opinbert kortalag með öðrum netnotendum eða fellt kortalagið inn í eins og kortasjá á annarri vefsíðu. Aðrir notendur geta líka séð kortalagið.",
                 "deletePlace": "Viltu eyða þessum stað \"{name}\"?"

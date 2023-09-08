@@ -10,13 +10,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Lieux",
-            "nocategories": "Vous n’avez pas encore de lieux sauvegardés", // PersonalData removal
-            "maxFeaturesExceeded": "Vous avez dépassé le nombre maximum de lieux. Tous les lieux n’ont pas été chargés", // PersonalData removal
             "publishCategory": {
                 "privateTooltip": "Cette couche cartographique est privée. Cliquez ici pour la publier.",
                 "publicTooltip": "Cette couche cartographique est publique. Cliquez ici pour la dépublier."
             },
-            "addCategoryFormButton": "Nouvelle couche cartographique", // PersonalData removal
             "addCategory": "Ajouter la couche cartographique",
             "editCategory": "Modifier la couche cartographique",
             "deleteCategory": "Supprimer la couche cartographique",
@@ -32,7 +29,6 @@ Oskari.registerLocalization(
             },
             "confirm": {
                 "deleteConfirm": "Souhaitez-vous supprimer la couche cartographique {name}?",
-                "deleteConfirmMove": "La couche cartographique « {0} » contient {1} lieu(x). Souhaitez-vous supprimer la couche cartographique et déplacer ses lieux vers la couche cartographique par défaut « {2} » ou souhaitez-vous supprimer la couche cartographique et ses lieux.", // PersonalData removal
                 "categoryToPrivate": "Vous êtes en train de dépublier la couche cartographique « {name} ». Vous ne pourrez plus partager la couche cartographique sur internet ni l’intégrer sur un autre site internet. Les autres utilisateurs de Paikkatietoikkuna ne peuvent plus visualiser la couche cartographique.",
                 "categoryToPublic": "Vous êtes en train de publier la couche cartographique {name}. Puis, vous pouvez partager la couche cartographique sur internet ou l’intégrer sous la forme d’une couche cartographique sur un autre service web. De plus, d’autres utilisateurs de Paikkatietoikkuna peuvent visualiser la couche cartographique.",
                 "deletePlace": "Souhaitez-vous supprimer ce lieu \"{name}\"?"
