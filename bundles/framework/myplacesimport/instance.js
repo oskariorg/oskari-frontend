@@ -1,3 +1,5 @@
+import './service/MyPlacesImportService';
+import './request/ShowUserLayerDialogRequestHandler';
 import { UserLayersTab } from './UserLayersTab';
 import { UserLayersHandler } from './handler/UserLayersHandler';
 import { TOOL, BUNDLE_NAME } from './constants';
