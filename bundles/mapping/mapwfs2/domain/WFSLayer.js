@@ -33,10 +33,16 @@ export class WFSLayer extends AbstractVectorLayer {
         super.handleDescribeLayer(info);
         this._properties = info.properties || [];
     }
+    getGeometryType (raw) {
+        if (raw) {
+            return this._properties.find(p => p.type === 'geometry')?.rawType;
+        }
+        return super.getGeometryType();
+    }
 
     /* Layer type specifics */
 
-    getIdProperty () {
+    replaceFeatureId () {
         return this._controlData.idProperty;
     }
 
