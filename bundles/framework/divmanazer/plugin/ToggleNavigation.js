@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
         const isMobile = Oskari.util.isMobile();
         me._sandbox = null;
         this._isVisible = isMobile;
-        this._active = !isMobile;
+        this._active = this._isVisible && Oskari.dom.isNavigationVisible();
         me._templates = {
             plugin: jQuery('<div class="mapplugin togglenavigation"></div>')
         };
@@ -131,6 +131,7 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
                     if (Oskari.dom.isNavigationVisible() && !this._isVisible && Oskari.util.isMobile()) {
                         this._isVisible = true;
                         Oskari.dom.showNavigation(false);
+                        this.refresh();
                     }
                     if (this._active !== Oskari.dom.isNavigationVisible()) {
                         this.refresh();
