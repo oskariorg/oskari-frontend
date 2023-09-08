@@ -117,7 +117,7 @@ Oskari.registerLocalization(
                 "presentationTooltip": "Presentation affects GetFeatureInfo request and feature data table.",
                 "showAll": "Show all properties",
                 "idProperty": "Use feature property as identifier",
-                "idPropertyTooltip": "Service should return unique identifier for features. Firstly ask service provider to use unique identifiers.",
+                "idPropertyTooltip": "Service should return unique identifier for features. Firstly ask service provider to use unique identifiers. Works only for 'Big objects' type (GeoJSON).",
                 "geometryType": {
                     "label": "Geometry type",
                     "sourceAttributes": "Source: layer attributes",
