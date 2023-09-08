@@ -1,3 +1,14 @@
+import './model/MyPlace';
+// event is not listened anywhere
+// TODO: we should remove the event since it was previously added to update personaldata listing
+import './event/MyPlacesChangedEvent';
+
+import './request/EditRequestHandler';
+import './request/OpenAddLayerDialogHandler';
+
+import './service/MyPlacesService';
+import './ButtonHandler';
+
 import { LOCALE_KEY } from './constants';
 import { MyPlacesTab } from './MyPlacesTab';
 import { MyPlacesHandler } from './handler/MyPlacesHandler';

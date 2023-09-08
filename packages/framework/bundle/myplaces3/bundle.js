@@ -14,53 +14,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.MyPlacesBundle", funct
     "protocol": ["Oskari.bundle.Bundle"],
     "source": {
         "scripts": [
-            /* event */
-
             {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/event/MyPlacesChangedEvent.js"
-            }, 
-            /* model */
-            {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/model/MyPlace.js"
-            },
-            /* request */
-            {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/request/EditPlaceRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/request/DeletePlaceRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/request/EditCategoryRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/request/DeleteCategoryRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/request/PublishCategoryRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/request/EditRequestHandler.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/request/OpenAddLayerDialogRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/request/OpenAddLayerDialogHandler.js"
-            },
-            /* service */
-            {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/service/MyPlacesService.js"
-            },
-            /* ui */
-            {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/ButtonHandler.js"
-            }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/myplaces3/instance.js"
             },
