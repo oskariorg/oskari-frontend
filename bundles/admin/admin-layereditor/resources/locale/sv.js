@@ -178,6 +178,7 @@ Oskari.registerLocalization(
                     "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten"
                 },
                 "vector": {
+                    "newStyleName": "Ny stil",
                     "name": "Stilnamn",
                     "selectDefault": "Välj förvalt stil",
                     "deleteStyle": "Ta bort stilen",
