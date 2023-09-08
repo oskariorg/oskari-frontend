@@ -118,7 +118,7 @@ Oskari.registerLocalization(
                 "presentationTooltip": "Esitystapa vaikuttaa kohdetietojen kyselyyn ja kohdetietotaulukkoon.",
                 "showAll": "Näytä kaikki ominaisuustiedot",
                 "idProperty": "Käytä ominaisuustietoa kohteiden yksilöimiseen",
-                "idPropertyTooltip": "Rajapinnan tulee palauttaa yksilöivä tunniste kohteille. Pyydä ensisijaisesti palveluntarjoajaa ottamaan käyttöön yksilöivät tunnisteet.",
+                "idPropertyTooltip": "Rajapinnan tulee palauttaa yksilöivä tunniste kohteille. Pyydä ensisijaisesti palveluntarjoajaa ottamaan käyttöön yksilöivät tunnisteet. Toimii vain 'Suuria kohteita' tyypille (GeoJSON).",
                 "geometryType": {
                     "label": "Geometriatyyppi",
                     "sourceAttributes": "Lähde: tason attribuutit",
