@@ -112,8 +112,8 @@ Oskari.registerLocalization({
             loading: 'Ladataan...'
         },
         FeatureFilter: {
-            single: 'Yksi ominaisuustieto',
-            list: 'Monta ominaisuustietoa',
+            single: 'Yksi ominaisuus',
+            list: 'Monta ominaisuutta',
             range: 'Käytä arvoaluetta',
             caseSensitive: {
                 true: 'Kirjainkoko vaikuttaa',

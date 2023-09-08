@@ -113,7 +113,7 @@ Oskari.registerLocalization(
             },
             "attributes": {
                 "label": "Attribuutit",
-                "properties": "Kohteiden ominaisuustietojen käyttö",
+                "properties": "Kohteiden ominaisuuksien käyttö",
                 "presentation": "Esitystapa",
                 "presentationTooltip": "Esitystapa vaikuttaa kohdetietojen kyselyyn ja kohdetietotaulukkoon.",
                 "showAll": "Näytä kaikki ominaisuustiedot",
@@ -130,22 +130,22 @@ Oskari.registerLocalization(
                     "collection":"Kaikki"
                 },
                 "featureFilter": {
-                    "title": "Suodata rajapinnasta haettavia kohteita ominaisuustietojen mukaan",
+                    "title": "Suodata rajapinnasta haettavia kohteita ominaisuuksien mukaan",
                     "button": "Kohteiden suodatus"
                 },
                 "filter": {
-                    "title": "Kohteiden ominaisuustietojen näyttäminen",
-                    "lang": "Valitse tason kohteille näytettävät ominaisuustiedot ja niiden järjestys",
+                    "title": "Kohteiden ominaisuuksien näyttäminen",
+                    "lang": "Valitse tason kohteille näytettävät ominaisuudet ja niiden järjestys",
                     "default": "oletussuodattimelle",
                     "fromDefault": "Valitulle kielelle ei ole lisätty suodatinta. Valitulla kielellä käytetään oletussuodatinta. Muokkaa valintoja luodaksesi kielelle oman suodattimen.",
                     "button": "Valitse kentät"
                 },
                 "locale": {
-                    "title": "Käyttöliittymässä näytettävät nimet ominaisuustiedoille",
+                    "title": "Nimet käyttöliittymässä ominaisuuksille",
                     "button": "Nimeäminen"
                 },
                 "format": {
-                    "title": "Kohteiden ominaisuustietojen arvon muotoilu",
+                    "title": "Kohteiden ominaisuuksien arvojen muotoilu",
                     "button": "Muotoilu",
                     "type": {
                         "label": "Tyyppi",
@@ -184,7 +184,8 @@ Oskari.registerLocalization(
                     "name": "Tyylin nimi",
                     "selectDefault": "Valitse oletustyyli",
                     "deleteStyle": "Poista tyyli",
-                    "optionalStyles": "Tyylittely ominaisuustietojen mukaan",
+                    "optionalStyles": "Tyylittely ominaisuuksien mukaan",
+                    "optionalStylesFilter": "Valitse tyyliä käyttävät kohteet ominaisuuksien mukaan",
                     "featureStyle": "Tyylimääritykset",
                     "cesium": "3D Tiles/Cesium tyylimääritykset",
                     "mapbox": "Mapbox tyylimääritykset",

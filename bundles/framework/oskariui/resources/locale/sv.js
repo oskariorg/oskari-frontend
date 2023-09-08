@@ -110,6 +110,26 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading:'Laddar...'
+        },
+        FeatureFilter: {
+            single: 'Ett attribut',
+            list: 'Många attribut',
+            range: 'Använd värdeintervall',
+            caseSensitive: {
+                true: 'Skiftlägeskänsligt',
+                false: 'Skiftlägesokänsligt'
+            },
+            operators: {
+                value: 'är',
+                in: 'i',
+                notIn: 'inte i',
+                like: 'som',
+                notLike: 'inte som',
+                greaterThan: 'större än',
+                atLeast: 'minst',
+                lessThan: 'mindre än',
+                atMost: 'som mest'
+            }
         }
     }
 });
