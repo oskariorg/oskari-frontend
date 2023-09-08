@@ -110,6 +110,62 @@ Oskari.registerLocalization(
                     "globalWithStyles": "The layer has more than one style available in the service. However, the layer has been defined with a single default legend. Consider removing the current default legend to be able to use the style based legends."
                 }
             },
+            "attributes": {
+                "label": "Attributes",
+                "properties": "Using feature properties",
+                "presentation": "Presentation",
+                "presentationTooltip": "Presentation affects GetFeatureInfo request and feature data table.",
+                "showAll": "Show all properties",
+                "idProperty": "Use feature property as identifier",
+                "idPropertyTooltip": "Service should return unique identifier for features. Firstly ask service provider to use unique identifiers.",
+                "geometryType": {
+                    "label": "Geometry type",
+                    "sourceAttributes": "Source: layer attributes",
+                    "sourceCapabilities": "Source: layer capabilities",
+                    "unknown":"Unknown",
+                    "point": "Point",
+                    "line": "Line",
+                    "area":"Area",
+                    "collection":"Collection"
+                },
+                "featureFilter": {
+                    "title": "Filter requested features by properties",
+                    "button": "Feature filter"
+                },
+                "filter": {
+                    "title": "Properties filter",
+                    "lang": "Choose shown feature properties and ordering",
+                    "default": "for default filter",
+                    "fromDefault": "Selected language doesn't have filter. Default filter is used for selected language. Edit values to create new filter for language.",
+                    "button": "Select properties"
+                },
+                "locale": {
+                    "title": "Labels for feature properties",
+                    "button": "Labeling"
+                },
+                "format": {
+                    "title": "Feature properties value formatting",
+                    "button": "Formatting",
+                    "type": {
+                        "label": "Type",
+                        "typeFormats": "Value type",
+                        "textFormats": "Text formatting",
+                        "link": "Link",
+                        "image": "Image",
+                        "number": "Number",
+                        "phone": "Phone number"
+                    },
+                    "options": {
+                        "noLabel": "Don't show label",
+                        "skipEmpty": "Skip empty value"
+                    },
+                    "params": {
+                        "link": "Show as link",
+                        "fullUrl": "Show full url",
+                        "label": "Label for link"
+                    }
+                }
+            },
             "styles": {
                 "default": "Default style",
                 "desc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
@@ -127,6 +183,10 @@ Oskari.registerLocalization(
                     "name": "Style name",
                     "selectDefault": "Select default style",
                     "deleteStyle": "Delete style",
+                    "featureStyle": "Style definitions",
+                    "optionalStyles": "Property based style definitions",
+                    "cesium": "3D Tiles/Cesium style definitions",
+                    "mapbox": "Mapbox style definitions",
                     "edit": {
                         "editor": "Edit by using editor",
                         "json": "Edit JSON"
@@ -140,13 +200,8 @@ Oskari.registerLocalization(
                     "validation": {
                         "name": "Please enter a name for the style",
                         "noStyles": "No saved styles",
-                        "json": "Invalid JSON syntax in Style definitions."
-                    },
-                    "json": {
-                        "featureStyle": "Style definitions (JSON)",
-                        "optionalStyles": "Property based style definitions (JSON)",
-                        "cesium": "3D Tiles/Cesium style definitions (JSON)",
-                        "mapbox": "Mapbox style definitions (JSON)"
+                        "json": "Invalid JSON syntax in Style definitions.",
+                        "optionalStyles": "Optional style doesn't have valid filter."
                     }
                 }
             },
@@ -159,7 +214,6 @@ Oskari.registerLocalization(
             "gfiTypeDesc": "Select a format for Get Feature Information (GFI). Possible formats are fetched automatically from the GetCapabilities response.",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",
-            "attributes": "Attributes",
             "clusteringDistance": "Point distance in cluster",
             "forcedSRS": "Forced SRS",
             "forcedSRSInfo": "View projections override compared to capabilities",
@@ -218,7 +272,8 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first.",
                 "errorFetchCoverage": "Failed to get the map layer coverage from the service.",
                 "noCoverage": "The map layer coverage isn't restricted.",
-                "invalidScale": "Check the layer scale limits."
+                "invalidScale": "Check the layer scale limits.",
+                "noFeatureProperties": "Layer doesn't have feature properties information."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

@@ -53,7 +53,8 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         const olLayers = [vectorLayer];
 
         // Setup clustering
-        if (this._isClusteringSupported() && layer.getClusteringDistance()) {
+        const hasClusterDist = layer.getClusteringDistance() !== -1 && typeof layer.getClusteringDistance() !== 'undefined';
+        if (this._isClusteringSupported() && hasClusterDist) {
             const clusterSource = new olCluster({
                 distance: layer.getClusteringDistance(),
                 source,

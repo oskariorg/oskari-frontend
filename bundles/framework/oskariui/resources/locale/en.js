@@ -19,7 +19,10 @@ Oskari.registerLocalization({
             search: 'Search',
             reset: 'Reset',
             copy: 'Copy to clipboard',
-            clear: 'Clear'
+            clear: 'Clear',
+            accept: 'Accept',
+            reject: 'Reject',
+            info: 'Show more information'
         },
         messages: {
             confirm: 'Are you sure you want to continue?',
@@ -107,6 +110,26 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading: 'Loading...'
+        },
+        FeatureFilter: {
+            single: 'Single property',
+            list: 'More properties',
+            range: 'Use value range',
+            caseSensitive: {
+                true: 'Case sensitive',
+                false: 'Case insensitive'
+            },
+            operators: {
+                value: 'is',
+                in: 'in',
+                notIn: 'not in',
+                like: 'like',
+                notLike: 'not like',
+                greaterThan: 'greater than',
+                atLeast: 'at least',
+                lessThan: 'less than',
+                atMost: 'at most'
+            }
         }
     }
 });

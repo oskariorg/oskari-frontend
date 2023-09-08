@@ -482,7 +482,6 @@ Oskari.clazz.define(
         _setMapState: function (mapmodule, state, currentState) {
             var sandbox = this.getSandbox(),
                 cmpResult = this._compareState(currentState, state, false);
-
             // setting state
             if (state.selectedLayers && cmpResult.rulesMatched.layers) {
                 this._log.debug('restoring LAYER state');
@@ -497,7 +496,7 @@ Oskari.clazz.define(
                     layer;
                 for (i = 0; i < len; i += 1) {
                     layer = state.selectedLayers[i];
-                    sandbox.request(mapmodule.getName(), rbAdd(layer.id, true));
+                    sandbox.request(mapmodule.getName(), rbAdd(layer.id));
                     if (layer.hidden) {
                         sandbox.request(mapmodule.getName(), visibilityRequestBuilder(layer.id, false));
                     } else {

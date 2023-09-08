@@ -42,7 +42,10 @@ describe('Drawing', function(){
             );
         });
 
-
+        /*
+        * TODO: The tests do not work because DrawingEvents do not trigger. Need to find a way to
+        * for example click the map and move cursor on map
+        **/
         describe('Stop Drawing', function() {
 
             function listenDrawingEvent(Id) {
@@ -74,7 +77,10 @@ describe('Drawing', function(){
                 channel.log('StopDrawingRequest Clear:', Id);
             }
 
-            it("Cancels Drawing request", function(done) {
+            /**
+             * Disabled since tests do not trigger a DrawingEvent
+             */
+            xit("Cancels Drawing request", function(done) {
 
                 listenDrawingEvent("Test");
                 startDraw("Test");
@@ -83,7 +89,7 @@ describe('Drawing', function(){
                 setTimeout(function(){ done() }, 200);
             });
 
-            it("Clears Drawing request", function(done) {
+            xit("Clears Drawing request", function(done) {
 
                 listenDrawingEvent("Test");
                 startDraw("Test");

@@ -24,11 +24,9 @@ describe("General", function() {
     });
 
     it("has expected RPC version", function(done) {
-        channel.getInfo(function(oskariInfo) {
-            expect(OskariRPC.VERSION).toBe(general.ExpectedRPCVersion);
-            channel.log('RPC version is', OskariRPC.VERSION, '/', general.ExpectedRPCVersion);
-            done();
-        });
+        expect(OskariRPC.VERSION).toBe(general.ExpectedRPCVersion);
+        channel.log('RPC version is', OskariRPC.VERSION, '/', general.ExpectedRPCVersion);
+        done();
     });
 
     it("has expected SRS", function(done) {

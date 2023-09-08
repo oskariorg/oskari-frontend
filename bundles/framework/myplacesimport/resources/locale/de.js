@@ -45,7 +45,7 @@ Oskari.registerLocalization(
             "title": "Datensatz",
             "grid": {
                 "name": "Name",
-                "description": "Beschreibung",
+                "desc": "Beschreibung",
                 "source": "Datenquelle",
                 "remove": "Löschen",
                 "removeButton": "Löschen"

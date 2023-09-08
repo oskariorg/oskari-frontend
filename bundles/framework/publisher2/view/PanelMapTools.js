@@ -84,6 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         if (enabled) {
                             ui.find('.extraOptions').show();
                         } else {
+                            ui.find('.extraOptions').find('input').prop('checked', false);
                             ui.find('.extraOptions').hide();
                         }
                     });

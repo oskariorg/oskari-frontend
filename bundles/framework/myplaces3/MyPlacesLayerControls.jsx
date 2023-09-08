@@ -7,9 +7,6 @@ import { SecondaryButton, ButtonContainer, DeleteButton, IconButton } from 'oska
 import { PlusCircleOutlined, ExportOutlined } from '@ant-design/icons';
 import { green } from '@ant-design/colors';
 
-const AddIcon = styled(PlusCircleOutlined)`
-    color: ${green.primary}
-`;
 const StyledControls = styled('div')`
     display: flex;
     width: 100%;
@@ -33,7 +30,7 @@ const Content = styled('div')`
     max-width: 500px;
 `;
 
-const getDefaultCategoryId = categories => categories.find(cat => cat.isDefault).categoryId;
+const getDefaultCategoryId = categories => categories.find(cat => cat.isDefault)?.categoryId;
 const DeletePlaces = ({
     categories,
     selectedCategoryId,
@@ -122,7 +119,8 @@ export const MyPlacesLayerControls = (props) => {
                 <StyledActions className='t_layer'>
                     <IconButton
                         bordered={true}
-                        icon={<AddIcon />}
+                        icon={<PlusCircleOutlined />}
+                        color={green.primary}
                         title={<Message messageKey='tab.addCategory' />}
                         className='t_add'
                         onClick={() => controller.openLayerDialog()}

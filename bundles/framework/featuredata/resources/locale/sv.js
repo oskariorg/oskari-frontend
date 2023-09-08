@@ -5,7 +5,8 @@ Oskari.registerLocalization(
         "value": {
             "title": "Objektuppgifter",
             "layer": {
-                "outOfContentArea": "Detta kartlager saknar innehåll vid dessa koordinater."
+                "outOfContentArea": "Detta kartlager saknar innehåll vid dessa koordinater.",
+                "featureData": "Objektdata",
             },
             "flyout": {
                 "sorterTooltip": "Sortera fallande / stigande",
@@ -36,6 +37,7 @@ Oskari.registerLocalization(
                 "openButtonLabel": "Exportera data",
                 "exportButtonLabel": "Exportera",
                 "exportFailed": "Exporting the data failed.",
+                "datasetTooLargeForExcel": "Dataset is too large for generating an excel file. Limit the number of features or choose csv as format.",
                 "fileFormat": {
                     "title": "Filformat",
                     "excel": "Excel",

@@ -1,5 +1,17 @@
 # Release Notes
 
+# 2.11.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/44?closed=1
+
+- Fixed timing issue with functionalities using AddMapLayerRequest and expecting the layer to be immediately on the map. This fixes for example the background map layer selector that tried to rearrange layers on map immediately after changing the layers on the map.
+- Fixed some issues for users with Firefox as browser.
+- Fixed an issue where the correct style for vector layers were not always selected when opening the map with a link or when using an embedded map.
+- Fixed an issue with publisher/statsgrid when LogoPlugin is NOT part of the appsetup.
+- Fixed an issue with spammy notification on map layer admin UI.
+- Tuned delay when searching map layers.
+
 # 2.11.0
 
 For a full list of changes see:

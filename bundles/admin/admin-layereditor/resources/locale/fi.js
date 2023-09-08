@@ -111,6 +111,62 @@ Oskari.registerLocalization(
                     "globalWithStyles": "Tasolle on määritetty vain yksi yleinen oletuskarttaselite, vaikka sillä olisi rajapintapalvelusta useita tyylejä käytettävissä. Poista oletuskarttaselite ja määritä mahdolliset tyylikohtaiset karttaselitteet."
                 }
             },
+            "attributes": {
+                "label": "Attribuutit",
+                "properties": "Kohteiden ominaisuustietojen käyttö",
+                "presentation": "Esitystapa",
+                "presentationTooltip": "Esitystapa vaikuttaa kohdetietojen kyselyyn ja kohdetietotaulukkoon.",
+                "showAll": "Näytä kaikki ominaisuustiedot",
+                "idProperty": "Käytä ominaisuustietoa kohteiden yksilöimiseen",
+                "idPropertyTooltip": "Rajapinnan tulee palauttaa yksilöivä tunniste kohteille. Pyydä ensisijaisesti palveluntarjoajaa ottamaan käyttöön yksilöivät tunnisteet.",
+                "geometryType": {
+                    "label": "Geometriatyyppi",
+                    "sourceAttributes": "Lähde: tason attribuutit",
+                    "sourceCapabilities": "Lähde: tason Capabilities-tiedot",
+                    "unknown":"Ei tiedossa",
+                    "point": "Piste",
+                    "line": "Viiva",
+                    "area":"Alue",
+                    "collection":"Kaikki"
+                },
+                "featureFilter": {
+                    "title": "Suodata rajapinnasta haettavia kohteita ominaisuustietojen mukaan",
+                    "button": "Kohteiden suodatus"
+                },
+                "filter": {
+                    "title": "Kohteiden ominaisuustietojen näyttäminen",
+                    "lang": "Valitse tason kohteille näytettävät ominaisuustiedot ja niiden järjestys",
+                    "default": "oletussuodattimelle",
+                    "fromDefault": "Valitulle kielelle ei ole lisätty suodatinta. Valitulla kielellä käytetään oletussuodatinta. Muokkaa valintoja luodaksesi kielelle oman suodattimen.",
+                    "button": "Valitse kentät"
+                },
+                "locale": {
+                    "title": "Käyttöliittymässä näytettävät nimet ominaisuustiedoille",
+                    "button": "Nimeäminen"
+                },
+                "format": {
+                    "title": "Kohteiden ominaisuustietojen arvon muotoilu",
+                    "button": "Muotoilu",
+                    "type": {
+                        "label": "Tyyppi",
+                        "typeFormats": "Arvon tyyppi",
+                        "textFormats": "Tekstin muotoilu",
+                        "link": "Linkki",
+                        "image": "Kuva",
+                        "number": "Numero",
+                        "phone": "Puhelinnumero"
+                    },
+                    "options": {
+                        "noLabel": "Näytä vain arvo",
+                        "skipEmpty": "Älä näytä tyhjää"
+                    },
+                    "params": {
+                        "link": "Näytä linkkinä",
+                        "fullUrl": "Näytä koko osoite",
+                        "label": "Linkin label"
+                    }
+                }
+            },
             "styles": {
                 "default": "Oletustyyli",
                 "desc": "Taso lisätään kartalle oletustyylillä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta.",
@@ -128,6 +184,10 @@ Oskari.registerLocalization(
                     "name": "Tyylin nimi",
                     "selectDefault": "Valitse oletustyyli",
                     "deleteStyle": "Poista tyyli",
+                    "optionalStyles": "Tyylittely ominaisuustietojen mukaan",
+                    "featureStyle": "Tyylimääritykset",
+                    "cesium": "3D Tiles/Cesium tyylimääritykset",
+                    "mapbox": "Mapbox tyylimääritykset",
                     "edit": {
                         "editor": "Muokkaa editorilla",
                         "json": "Muokkaa JSON"
@@ -141,13 +201,8 @@ Oskari.registerLocalization(
                     "validation": {
                         "name": "Täytä nimi tyylille",
                         "noStyles": "Ei tallennettuja tyylejä",
-                        "json": "Tyylimääritysten JSON-syntaksi on virheellinen."
-                    },
-                    "json": {
-                        "featureStyle": "Tyylimääritykset (JSON)",
-                        "optionalStyles": "Tyylittely ominaisuustietojen mukaan (JSON)",
-                        "cesium": "3D Tiles/Cesium tyylimääritykset (JSON)",
-                        "mapbox": "Mapbox tyylimääritykset (JSON)"
+                        "json": "Tyylimääritysten JSON-syntaksi on virheellinen.",
+                        "optionalStyles": "Tyylimäärityksellä ei ole sopivaa suodatinta."
                     }
                 }
             },
@@ -160,7 +215,6 @@ Oskari.registerLocalization(
             "gfiTypeDesc": "Valitse listalta formaatti, jossa kohdetiedot (GFI) haetaan. Mahdolliset formaatit on määritelty WMS-palvelun GetCapabilities-vastausviestissä.",
             "gfiStyle": "GFI-tyyli (XSLT)",
             "gfiStyleDesc": "Määrittele kohdetietojen esitystapa XSLT-muunnoksen avulla.",
-            "attributes": "Attribuutit",
             "clusteringDistance": "Pisteiden etäisyys klusteroidessa",
             "forcedSRS": "Pakotetut projektiot",
             "forcedSRSInfo": "Pakotetut projektiot verrattuna GetCapabilites-määritykseen",
@@ -219,7 +273,8 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
                 "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
                 "noCoverage": "Karttatason kattavuutta ei ole rajoitettu.",
-                "invalidScale": "Tarkista tason mittakaavarajat."
+                "invalidScale": "Tarkista tason mittakaavarajat.",
+                "noFeatureProperties": "Kohteiden ominaisuustietoja ei ole saatavilla tasolle."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

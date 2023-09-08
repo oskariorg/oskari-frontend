@@ -7,6 +7,7 @@ import { Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import { getPopupOptions } from '../pluginPopupHelper';
 import styled from 'styled-components';
+import { ThemeProvider } from 'oskari-ui/util';
 
 const BUNDLE_NAME = 'MapModule';
 
@@ -19,24 +20,26 @@ const Content = styled('div')`
 const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, styleSelectable, setLayerVisibility, selectStyle }) => {
     const selectBaseLayer = (layer) => setLayerVisibility(layer, true, true);
     return (
-        <LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
-            <Content>
-                <BaseLayerList
-                    layers={baseLayers}
-                    showHeading={layers && layers.length > 0}
-                    showMetadata={showMetadata}
-                    styleSelectable={styleSelectable}
-                    selectLayer={selectBaseLayer}
-                    selectStyle={selectStyle} />
-                <LayerList
-                    layers={layers}
-                    showHeading={baseLayers && baseLayers.length > 0}
-                    showMetadata={showMetadata}
-                    styleSelectable={styleSelectable}
-                    setLayerVisibility={setLayerVisibility}
-                    selectStyle={selectStyle} />
-            </Content>
-        </LocaleProvider>
+        <ThemeProvider>
+            <LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
+                <Content>
+                    <BaseLayerList
+                        layers={baseLayers}
+                        showHeading={layers && layers.length > 0}
+                        showMetadata={showMetadata}
+                        styleSelectable={styleSelectable}
+                        selectLayer={selectBaseLayer}
+                        selectStyle={selectStyle} />
+                    <LayerList
+                        layers={layers}
+                        showHeading={baseLayers && baseLayers.length > 0}
+                        showMetadata={showMetadata}
+                        styleSelectable={styleSelectable}
+                        setLayerVisibility={setLayerVisibility}
+                        selectStyle={selectStyle} />
+                </Content>
+            </LocaleProvider>
+        </ThemeProvider>
     );
 };
 

@@ -101,17 +101,22 @@ describe('MarkersPlugin', () => {
             plugin.addMapMarker(markers[0]);
             expect(plugin.getState().markers.length).toEqual(2);
             expect(plugin.getStateParameters()).toEqual('&markers=2|1|ffde00|100_200|___2|1|ffde00|1_1|');
+            // hide/show single marker
             plugin.changeMapMarkerVisibility(false, 'my marker');
             expect(plugin.getState().markers.length).toEqual(1);
             expect(plugin.getStateParameters()).toEqual('&markers=2|1|ffde00|1_1|');
             plugin.changeMapMarkerVisibility(true, 'my marker');
             // looks like marker order is changed when toggling visibility. Probably not a problem but something to note
             expect(plugin.getStateParameters()).toEqual('&markers=2|1|ffde00|1_1|___2|1|ffde00|100_200|');
-            // hide all
-            expect(plugin.getMarkersLayer().getVisible()).toBe(true);
+            // hide all and show single marker
             plugin.changeMapMarkerVisibility(false);
             expect(plugin.getStateParameters()).toEqual('');
-            expect(plugin.getMarkersLayer().getVisible()).toBe(false);
+            plugin.changeMapMarkerVisibility(true, 'my marker');
+            expect(plugin.getStateParameters()).toEqual('&markers=2|1|ffde00|100_200|');
+            // hide single marker and show all
+            plugin.changeMapMarkerVisibility(false, 'my marker');
+            plugin.changeMapMarkerVisibility(true);
+            expect(plugin.getState().markers.length).toEqual(2);
         });
         afterAll(() => {
             // remove markers to normalize state for other tests
@@ -169,7 +174,8 @@ describe('MarkersPlugin', () => {
             expect(getTextOnMap(id)).toEqual(marker.msg);
             const style = getImageStyle(id);
             const sizePx = mapModule.getPixelForSize(marker.size);
-            expect(style.getSize()).toEqual([sizePx, sizePx]);
+            const scale = sizePx / 64;
+            expect(style.getScale()).toEqual(scale);
         });
         test('external', () => {
             const id = 'marker2';

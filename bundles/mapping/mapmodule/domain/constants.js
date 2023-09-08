@@ -39,5 +39,6 @@ export const DESCRIBE_LAYER = {
     UNDEFINED: 'undefined',
     PENDING: 'pending',
     LOADED: 'loaded',
-    ERROR: 'error'
+    ERROR: 'error',
+    PREDEFINED: 'predefined'
 };

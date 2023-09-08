@@ -1,6 +1,15 @@
 import React from 'react';
 import { Tooltip as AntTooltip } from 'antd';
 import 'antd/es/tooltip/style/index.js';
+import { createGlobalStyle } from 'styled-components';
+
+const TooltipStyle = createGlobalStyle`
+    body {
+        .ant-tooltip {
+            max-width: 80%;
+        }
+    }
+`;
 
 /*
 Note! The same span-wrapper is done in Confirm.jsx and it has the same issue.
@@ -31,6 +40,7 @@ export const Tooltip = ({children, ...restOfProps}) => {
             overlayStyle={{ pointerEvents: 'none' }}
             {...restOfProps}
         >
+            <TooltipStyle />
             <span>{children}</span>
         </AntTooltip>
     );

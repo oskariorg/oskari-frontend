@@ -1,7 +1,7 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
-import { COLUMN_SELECTION, FILETYPES, showExportDataPopup } from '../view/ExportData';
+import { COLUMN_SELECTION, FILETYPES, SEPARATORS, showExportDataPopup } from '../view/ExportData';
 import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
 import { FilterSelector } from '../FilterSelector';
 
@@ -9,6 +9,7 @@ export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__cente
 
 export const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
 const EXPORT_FEATUREDATA_ROUTE = 'ExportTableFile';
+const EXPORT_FEATUREDATA_EXCEL_MAX_LENGTH = 120000;
 
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
@@ -63,23 +64,30 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     setActiveTab (layerId) {
+        // when clicking on a tab directly, layerId will be a number.
+        // When clicked in the "show more" menu of the tablist, it will be a String and no features are found.
+        // so we gotta make a conversion for a numeric layerid just in case. :(
+        if (Oskari.util.isNumber(layerId)) {
+            layerId = +layerId;
+        }
         const features = layerId ? this.getFeaturesByLayerId(layerId) : null;
         const selectedFeatureIds = layerId ? this.getSelectedFeatureIdsByLayerId(layerId) : null;
+        const visibleColumnsSettings = features && features.length ? this.createVisibleColumnsSettings(layerId, features) : null;
         this.updateState({
             activeLayerId: layerId,
             activeLayerFeatures: features,
             selectedFeatureIds,
-            visibleColumnsSettings: this.createVisibleColumnsSettings(features),
-            selectByPropertiesSettings: this.createSelectByPropertiesSettings(features),
-            sorting: this.determineSortingColumn(features)
+            visibleColumnsSettings,
+            selectByPropertiesSettings: this.createSelectByPropertiesSettings(visibleColumnsSettings),
+            sorting: this.determineSortingColumn(layerId, features)
         });
     }
 
     toggleShowSelectedFirst () {
-        const { activeLayerFeatures, sorting } = this.getState();
+        const { activeLayerId, activeLayerFeatures, sorting } = this.getState();
         const newState = { showSelectedFirst: !this.getState().showSelectedFirst };
         if (newState.showSelectedFirst && !sorting?.order) {
-            newState.sorting = this.determineSortingColumn(activeLayerFeatures);
+            newState.sorting = this.determineSortingColumn(activeLayerId, activeLayerFeatures);
         }
         this.updateState(newState);
     }
@@ -99,10 +107,11 @@ class FeatureDataPluginUIHandler extends StateHandler {
         let activeLayerFeatures = null;
         let selectedFeatureIds = null;
         let visibleColumnsSettings = null;
+
         if (activeLayerId && this.getState().flyoutOpen) {
             activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
             selectedFeatureIds = activeLayerFeatures && activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
-            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerFeatures);
+            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, activeLayerFeatures);
         };
 
         return {
@@ -123,9 +132,9 @@ class FeatureDataPluginUIHandler extends StateHandler {
     updateSorting (sorting) {
         // if show selected first - is checked but sorting is cancelled we need to set default sorting to keep the selected items first.
         const newState = { sorting };
-        const { showSelectedFirst, activeLayerFeatures } = this.getState();
+        const { showSelectedFirst, activeLayerFeatures, activeLayerId } = this.getState();
         if (showSelectedFirst && !sorting.order) {
-            newState.sorting = this.determineSortingColumn(activeLayerFeatures);
+            newState.sorting = this.determineSortingColumn(activeLayerId, activeLayerFeatures);
         }
         this.updateState(newState);
     }
@@ -141,7 +150,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     updateVisibleColumns (value) {
-        const { visibleColumnsSettings, activeLayerFeatures, sorting } = this.getState();
+        const { visibleColumnsSettings, activeLayerFeatures, activeLayerId, sorting } = this.getState();
 
         // Always have to have at least one column selected - don't allow setting this empty.
         if (value && value.length) {
@@ -153,7 +162,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         };
 
         if (!value.includes(sorting?.columnKey)) {
-            newState.sorting = this.determineSortingColumn(activeLayerFeatures);
+            newState.sorting = this.determineSortingColumn(activeLayerId, activeLayerFeatures);
         }
 
         this.updateState(newState);
@@ -161,6 +170,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     toggleFeature (featureId) {
         this.selectionService.toggleFeatureSelection(this.getState().activeLayerId, featureId);
+    }
+
+    isFlyoutOpen () {
+        return this.getState().flyoutOpen;
     }
 
     openFlyout () {
@@ -175,7 +188,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             activeLayerFeatures,
             visibleColumnsSettings,
             selectByPropertiesSettings,
-            sorting: activeLayerFeatures ? this.determineSortingColumn(activeLayerFeatures) : null
+            sorting: activeLayerFeatures ? this.determineSortingColumn(activeLayerId, activeLayerFeatures) : null
         };
 
         if (!activeLayerFeatures) {
@@ -183,10 +196,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
             // empty should mean there is no features on viewport to list
             const newActiveLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
             newState.activeLayerFeatures = newActiveLayerFeatures;
-            newState.sorting = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.determineSortingColumn(newActiveLayerFeatures) : null;
+            newState.sorting = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.determineSortingColumn(activeLayerId, newActiveLayerFeatures) : null;
             newState.selectedFeatureIds = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
-            newState.visibleColumnsSettings = this.createVisibleColumnsSettings(newActiveLayerFeatures);
-            newState.selectByPropertiesSettings = this.createSelectByPropertiesSettings(newActiveLayerFeatures);
+            newState.visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, newActiveLayerFeatures);
+            newState.selectByPropertiesSettings = this.createSelectByPropertiesSettings(newState.visibleColumnsSettings);
         }
 
         this.updateState(newState);
@@ -223,28 +236,35 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
     }
 
-    createVisibleColumnsSettings (features) {
+    createVisibleColumnsSettings (activeLayerId, features) {
         if (!features || !features.length) {
             return {
                 allColumns: [],
-                visibleColumns: []
+                visibleColumns: [],
+                activeLayerPropertyLabels: null,
+                activeLayerPropertyTypes: null
             };
         }
         const allColumns = Object.keys(features[0].properties).filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key));
         const visibleColumns = [].concat(allColumns);
+        const activeLayer = this.mapModule.getSandbox().findMapLayerFromSelectedMapLayers(activeLayerId) || null;
+        const activeLayerPropertyLabels = activeLayer?.getPropertyLabels() || null;
+        const activeLayerPropertyTypes = activeLayer?.getPropertyTypes() || null;
+
         return {
             allColumns,
-            visibleColumns
+            visibleColumns,
+            activeLayerPropertyLabels,
+            activeLayerPropertyTypes
         };
     }
 
-    createSelectByPropertiesSettings (features) {
-        const settings = this.createVisibleColumnsSettings(features);
+    createSelectByPropertiesSettings (visibleColumnsSettings) {
         let filters;
-        if (settings?.allColumns && settings?.allColumns.length) {
-            filters = [this.initEmptyFilter(settings.allColumns[0])];
+        if (visibleColumnsSettings?.allColumns && visibleColumnsSettings?.allColumns.length) {
+            filters = [this.initEmptyFilter(visibleColumnsSettings.allColumns[0])];
         }
-        return settings?.allColumns ? { allColumns: settings.allColumns, filters, errors: null } : null;
+        return visibleColumnsSettings?.allColumns ? { allColumns: visibleColumnsSettings.allColumns, filters, errors: null } : null;
     }
 
     closeFlyout (resetLayers) {
@@ -287,7 +307,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
     applyFilters () {
         const { selectByPropertiesSettings } = this.getState();
         const { filters } = selectByPropertiesSettings;
-
         let hasErrors = false;
         filters.forEach((filter) => {
             if (!filter?.value?.length) {
@@ -316,13 +335,13 @@ class FeatureDataPluginUIHandler extends StateHandler {
                 filterArray.push({ boolean: filter.logicalOperator });
             }
         });
-        this.filterSelector.selectWithProperties(filters, activeLayerId);
+        this.filterSelector.selectWithProperties(filterArray, activeLayerId);
     }
 
     initEmptyFilter (columnName) {
         return {
             attribute: columnName,
-            operator: FilterTypes.equals,
+            operator: FilterTypes.ALL.equals,
             value: '',
             error: null,
             logicalOperator: LogicalOperators.AND,
@@ -378,13 +397,16 @@ class FeatureDataPluginUIHandler extends StateHandler {
         return currentLayer ? currentLayer.getId() : null;
     }
 
-    determineSortingColumn (features) {
+    determineSortingColumn (activeLayerId, features) {
         if (!features || !features.length) {
             return null;
         }
         // this might not be set to state yet, if this is the first time flyout is opened
-        // so we're (re)creating this each time
-        const visibleColumnsSettings = this.createVisibleColumnsSettings(features);
+        // so we're creating this in that case
+        let { visibleColumnsSettings } = this.getState();
+        if (!visibleColumnsSettings) {
+            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, features);
+        }
 
         // get the first property that isn't in the default hidden fields and use that as default.
         const defaultSortingColumn = Object.keys(features[0]?.properties).find((key) => this.columnShouldBeVisible(key, visibleColumnsSettings));
@@ -409,17 +431,68 @@ class FeatureDataPluginUIHandler extends StateHandler {
         const layer = layers?.find(layer => layer.getId() === activeLayerId);
 
         params.filename = layer.getName();
-        params.data = JSON.stringify(this.gatherExportData(exportOnlySelected, columns === COLUMN_SELECTION.opened));
-        params.additionalData = JSON.stringify(
-            this.gatherAdditionalInfo(
-                exportDataSource,
-                exportMetadataLink,
-                layer));
+        params.data = this.gatherExportData(exportOnlySelected, columns === COLUMN_SELECTION.opened);
+        params.additionalData = this.gatherAdditionalInfo(
+            exportDataSource,
+            exportMetadataLink,
+            layer
+        );
+
+        if (format === FILETYPES.excel) {
+            this.exportAsExcel(params);
+            return;
+        }
+
+        this.exportAsCsv(params);
+    }
+
+    exportAsExcel (params) {
+        params.data = JSON.stringify(params.data);
+        params.additionalData = JSON.stringify(params.additionalData);
+        let contentLength = 0;
+        Object.keys(params).forEach((key) => {
+            if (params[key]?.length) {
+                contentLength += params[key].length;
+            }
+        });
+
+        if (contentLength >= EXPORT_FEATUREDATA_EXCEL_MAX_LENGTH) {
+            Messaging.error(Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'exportDataPopup.datasetTooLargeForExcel'));
+            return;
+        }
 
         const payload = new URLSearchParams();
         Object.keys(params).forEach(key => payload.append(key, params[key]));
-        const extension = format === FILETYPES.csv ? '.csv' : '.xlsx';
+        const extension = '.xlsx';
         this.sendData(payload, params.filename + extension);
+    }
+
+    exportAsCsv (params) {
+        if (params?.delimiter === SEPARATORS.tabulator) {
+            params.delimiter = '\t';
+        }
+        const replacer = (value) => !value ? '' : value;
+        const headers = params.data.splice(0, 1)[0];
+        const headerRow = headers.join(params.delimiter);
+        const dataRows = params.data
+            .map((values) => values.map((value) => replacer(value)).join(params.delimiter))
+            .join('\r\n');
+
+        const additionalDataRows = params.additionalData.map((value) => {
+            // TODO: case metadata - we should dig up the metadata service url from someplace
+            // not currently available in fe
+            return [value.name, value.value].join(params.delimiter);
+        }).join('\r\n');
+        const emptyRow = null;
+        const csv = [headerRow, dataRows, emptyRow, additionalDataRows].join('\r\n');
+
+        const link = document.createElement('a');
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(csv));
+        link.setAttribute('download', params.filename + '.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     sendData (payload, filename) {
@@ -498,6 +571,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
+    'isFlyoutOpen',
     'openFlyout',
     'closeFlyout',
     'setActiveTab',

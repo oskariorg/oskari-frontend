@@ -5,7 +5,7 @@ import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 import 'antd/es/form/style/index.js';
 
-import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE, PreviewButton } from './StyleEditor/';
+import { constants, PointTab, LineTab, AreaTab, PreviewButton } from './StyleEditor/';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
 const { TRANSPARENT, SOLID } = constants.FILLS;
@@ -58,7 +58,7 @@ const styleExceptionHandler = (exceptionStyle, oldStyle) => {
             exceptionStyle.fill.color = '';
         }
     } else if (!isTransparent && !hasColor) {
-        exceptionStyle.fill.color = tempFillColor || OSKARI_BLANK_STYLE.fill.color;
+        exceptionStyle.fill.color = tempFillColor || Oskari.custom.getFillColor();
         tempFillColor = null;
     }
 
@@ -70,7 +70,7 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
     // if we don't clone the input here the mappings
     //  between form <> style, the values can get mixed up due to mutability
     const style = {
-        ...OSKARI_BLANK_STYLE,
+        ...Oskari.custom.getDefaultStyle(),
         ...oskariStyle
     };
 

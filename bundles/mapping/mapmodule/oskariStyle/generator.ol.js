@@ -34,7 +34,8 @@ export const useStyleFunction = layer => {
     const styleType = geometryTypeToStyleType(layer.getGeometryType());
     const hasPropertyLabel = Oskari.util.keyExists(current.getFeatureStyle(), 'text.labelProperty');
     const hasOptionalStyles = current.getOptionalStyles().length > 0;
-    const hasCluster = typeof layer.getClusteringDistance() !== 'undefined';
+    // TODO: should we check for -1 or undefined type? Seems it defaults to -1 and not 'undefined'
+    const hasCluster = layer.getClusteringDistance() !== -1 && typeof layer.getClusteringDistance() !== 'undefined';
     return hasOptionalStyles || hasCluster || hasPropertyLabel ||
         !styleType || styleType === STYLE_TYPE.COLLECTION;
 };
@@ -53,7 +54,10 @@ export const geometryTypeToStyleType = type => {
         styleType = STYLE_TYPE.POINT; break;
     case 'GeometryCollection':
         styleType = STYLE_TYPE.COLLECTION; break;
+    default:
+        styleType = STYLE_TYPE.COLLECTION;
     }
+
     return styleType;
 };
 
@@ -460,6 +464,26 @@ const getStrokeStyle = styleDef => {
  * @return {ol/style/Circle}
  */
 const getImageStyle = (mapModule, styleDef, requestedStyle) => {
+    const opacity = styleDef.image.opacity || 1;
+    // Oskari marker
+    if (!isNaN(styleDef.image.shape)) {
+        const effect = getColorEffect(styleDef.effect, styleDef.image.fill?.color);
+        const imageDef = { ...styleDef.image };
+        if (effect) {
+            imageDef.fill = { color: effect };
+        }
+        const { src, scale, offsetX = 16, offsetY = 16 } = Oskari.custom.getSvg(imageDef);
+        return new olStyleIcon({
+            src,
+            scale,
+            anchorYUnits: 'pixels',
+            anchorXUnits: 'pixels',
+            anchorOrigin: 'bottom-left',
+            anchor: [offsetX, offsetY],
+            opacity
+        });
+    }
+
     const image = {};
     let size = mapModule.getDefaultMarkerSize();
 
@@ -477,8 +501,6 @@ const getImageStyle = (mapModule, styleDef, requestedStyle) => {
 
     let fillColor = styleDef.image.fill ? styleDef.image.fill.color : undefined;
     fillColor = getColorEffect(styleDef.effect, fillColor) || fillColor;
-
-    const opacity = styleDef.image.opacity || 1;
 
     if (mapModule.isSvg(styleDef.image)) {
         styleDef.image.color = fillColor;

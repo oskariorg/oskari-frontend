@@ -151,7 +151,7 @@ Oskari.clazz.define(
                 me._updatePreview(dialogContent);
             };
 
-            var markers = Oskari.getMarkers();
+            const markers = Oskari.custom.getMarkers();
 
             for (var i = 0; i < markers.length; i++) {
                 btnContainer = this.templateSymbolButton.clone();
@@ -350,14 +350,7 @@ Oskari.clazz.define(
             var previewTemplate = me._previewTemplate.clone();
             var marker = previewTemplate.find('#marker');
 
-            var iconObj = Oskari.getMarkers()[me.values.shape];
-            if (!iconObj) {
-                iconObj = Oskari.getDefaultMarker();
-            }
-            if (!iconObj) {
-                preview.empty();
-                return;
-            }
+            const iconObj = Oskari.custom.getMarker(me.values.shape);
 
             var size = 20 + this.values.size * 5;
 

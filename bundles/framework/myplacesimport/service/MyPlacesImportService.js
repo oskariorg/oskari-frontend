@@ -6,8 +6,6 @@ import { ERRORS } from '../constants';
 Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService', function (instance) {
     this.instance = instance;
     this.srs = instance.getSandbox().getMap().getSrsName();
-    // negative value for group id means that admin isn't presented with tools for it (-1 is reserved for default group)
-    this.groupId = -10 * Oskari.getSeq('usergeneratedGroup').nextVal();
     this.log = Oskari.log('MyPlacesImportService');
     Oskari.makeObservable(this);
 }, {
@@ -199,15 +197,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {Object} updatedLayer
      */
     updateLayer: function (updatedLayer) {
-        const { id, locale, options } = updatedLayer;
+        const { id } = updatedLayer;
         const layer = this.instance.getMapLayerService().findMapLayer(id);
         if (!layer) {
             this.log.error('Could not find layer for update with id:' + id);
             return;
         }
-        layer.setLocale(locale);
-        layer.setOptions(options);
-        layer.setStylesFromOptions(options);
+        layer.handleUpdatedLayer(updatedLayer);
         const sandbox = this.instance.getSandbox();
         const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
         sandbox.notifyAll(evt);
@@ -245,17 +241,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {Function} cb
      */
     _addLayersToService: function (layers = []) {
-        // initialize the group these layers will be in:
-        const mapLayerService = this.instance.getMapLayerService();
-        const mapLayerGroup = mapLayerService.findLayerGroupById(this.groupId);
-        if (!mapLayerGroup) {
-            const group = {
-                id: this.groupId,
-                name: this.instance.loc('layer.inspire')
-            };
-            mapLayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
-        }
-
         layers.forEach((layerJson) => {
             this.addLayerToService(layerJson, true);
         });
@@ -287,12 +272,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.
         // This is used to filter out other users shared layers when listing layers on the My Data functionality.
         mapLayer.markAsInternalDownloadSource();
-        // Add organization and groups for users own datasets (otherwise left empty/data from baselayer)
-        mapLayer.setOrganizationName(this.instance.loc('layer.organization'));
-        mapLayer.setGroups([{
-            id: this.groupId,
-            name: this.instance.loc('layer.inspire')
-        }]);
         // Add the layer to the map layer service
         mapLayerService.addLayer(mapLayer, skipEvent);
         if (typeof cb === 'function') {

@@ -1,50 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-const PARSER = new DOMParser();
+const Centered = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+`;
 
-const getPointSVG = (pointParams) => {
-    const { color, shape } = pointParams;
-    const baseSvg = Oskari.getMarkers()[shape].data;
-    const parsed = PARSER.parseFromString(baseSvg, 'image/svg+xml');
-    const path = parsed.getElementsByTagName('path')[0];
-    path.setAttribute('fill', color);
-    return path.outerHTML;
-};
-
-// Viewbox settings for preview svg
-const previewViewbox = {
-    minX: 0,
-    minY: 0,
-    width: 60,
-    height: 60
-};
-
-const maxSize = 5;
-const multiplier = 2.5;
-
-const _composePreviewViewbox = (size) => {
-    // calculate viewbox for centering point symbols
-    const minX = previewViewbox.minX - (multiplier * (maxSize-size));
-    const minY = previewViewbox.minY - (multiplier * (maxSize-size));
-    const widthV = previewViewbox.width - (2 * multiplier * size) - multiplier; // multiply by negative to shrink viewbox
-    const heightV = previewViewbox.height - (2 * multiplier * size) - multiplier; // multiply by negative to shrink viewbox
-    return minX + ' ' + minY + ' ' +  widthV + ' ' + heightV;
-};
-
-export const PointPreview = ({ previewSize, propsForSVG }) => {
-    const { size } = propsForSVG;
-    return (<svg
-        viewBox={ _composePreviewViewbox(size) }
-        width={ previewSize }
-        height={ previewSize }
-        xmlns="http://www.w3.org/2000/svg"
-        dangerouslySetInnerHTML={ { __html: getPointSVG(propsForSVG) } }
-    >
-    </svg>);
+export const PointPreview = ({ imageDef }) => {
+    const { src, scale } = Oskari.custom.getSvg(imageDef);
+    const size = Oskari.custom.SVG_SIZE * scale;
+    return (
+        <Centered>
+            <img src={src} width={size} height={size} />
+        </Centered>
+    );
 };
 
 PointPreview.propTypes = {
-    previewSize: PropTypes.number.isRequired,
-    propsForSVG: PropTypes.object.isRequired
+    imageDef: PropTypes.object.isRequired
 };

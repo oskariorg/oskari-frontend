@@ -169,8 +169,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             // supported by default
             const supportedProjections = {
                 'EPSG:3067': '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
-                'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+                'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs',
+                'EPSG:3857': '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs'
             };
+            supportedProjections['EPSG:900913'] = supportedProjections['EPSG:3857'];
             // shovel in additional projections
             Object.keys(defs).forEach(projection => {
                 if (!supportedProjections[projection]) {
@@ -309,19 +311,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             const sandbox = this.getSandbox();
             const mapModuleName = this.getMapModule().getName();
             const rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
-            const rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
-            const rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
             const isGuest = !Oskari.user().isLoggedIn();
-            const layersNotAvailable = [];
-            selectedLayers.forEach(layer => {
-                const oskariLayer = sandbox.findMapLayerFromAllAvailable(layer.id);
+
+            const addMapLayer = layer => {
+                const { id, style, hidden, opacity } = layer;
+                const oskariLayer = sandbox.findMapLayerFromAllAvailable(id);
                 if (!oskariLayer) {
-                    layersNotAvailable.push(layer);
-                    return;
+                    return layer;
                 }
-                oskariLayer.setVisible(!layer.hidden);
-                if (layer.style) {
-                    oskariLayer.selectStyle(layer.style);
+                oskariLayer.setVisible(!hidden);
+                if (style) {
+                    oskariLayer.selectStyle(style);
+                }
+                if (!isNaN(opacity)) {
+                    oskariLayer.setOpacity(Number.parseInt(opacity));
                 }
                 const options = {};
                 if (isGuest) {
@@ -331,32 +334,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     options.userStyles = layer.userStyles;
                 }
                 sandbox.request(mapModuleName, rbAdd(layer.id, options));
-                sandbox.request(mapModuleName, rbVisible(layer.id, !layer.hidden));
-                if (layer.opacity || layer.opacity === 0) {
-                    sandbox.request(mapModuleName, rbOpacity(layer.id, layer.opacity));
-                }
-            });
+            };
+            // add available layers and store unavailable
+            const layersNotAvailable = selectedLayers.filter(addMapLayer);
 
             if (!this._initialStateInit || !layersNotAvailable.length) {
                 return;
             }
             // only register this when starting the app to work around timing issues with some dynamically registered layers
-            Oskari.on('app.start', function () {
-                layersNotAvailable.forEach(({ id, style, hidden, opacity }) => {
-                    const oskariLayer = sandbox.findMapLayerFromAllAvailable(id);
-                    if (!oskariLayer) {
-                        return;
-                    }
-                    if (style) {
-                        oskariLayer.selectStyle(style);
-                    }
-                    sandbox.postRequestByName('AddMapLayerRequest', [id]);
-                    sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [id, !hidden]);
-                    if (!isNaN(opacity)) {
-                        sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [id, Number.parseInt(opacity)]);
-                    }
-                });
-            });
+            Oskari.on('app.start', () => layersNotAvailable.forEach(addMapLayer));
         },
         // TODO: maybe style.getName() could return '' if name === '!default!', so we get rid of this
         _getCurrentStyleName: function (layer) {

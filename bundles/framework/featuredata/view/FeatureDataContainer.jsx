@@ -19,6 +19,9 @@ const sorterTooltipOptions = {
     title: <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey='flyout.sorterTooltip' />
 };
 
+// max-height: 50vh;
+// max-width: 50vw;
+
 const StyledTable = styled(Table)`
     .ant-table-tbody > tr.ant-table-row-selected > td {
         background-color: ${theme.getBgColor()};
@@ -29,8 +32,6 @@ const StyledTable = styled(Table)`
         display: none;
     }
 
-    max-height: 50vh;
-    max-width: 50vw;
     overflow-y: auto;
 
 `;
@@ -92,13 +93,13 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
 };
 
 const createColumnSettingsFromFeatures = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings) => {
-    const { visibleColumns } = visibleColumnsSettings;
+    const { visibleColumns, activeLayerPropertyLabels } = visibleColumnsSettings;
     return Object.keys(features[0].properties)
         .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns.includes(key))
         .map(key => {
             return {
                 align: 'left',
-                title: key,
+                title: activeLayerPropertyLabels && activeLayerPropertyLabels[key] ? activeLayerPropertyLabels[key] : key,
                 key,
                 dataIndex: key,
                 showSorterTooltip: sorterTooltipOptions,
@@ -146,8 +147,10 @@ const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSele
 };
 
 const ContainerDiv = styled('div')`
-    padding: 1em;
-    min-width: 35em; //prevents ant-tabs from entering flickering mode
+    margin: 1em;
+    min-width: 20vw;
+    max-width: 100vw;
+
     .ant-table-selection-col, .ant-table-selection-column {
         display: none;
     }
@@ -160,7 +163,8 @@ export const FeatureDataContainer = ({ state, controller }) => {
             <Tabs
                 activeKey = { activeLayerId }
                 items={ tabs }
-                onChange={(key) => controller.setActiveTab(key)}/>
+                onChange={(key) => controller.setActiveTab(key) }
+            />
         </ContainerDiv>
     );
 };

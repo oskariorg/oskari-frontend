@@ -6,6 +6,7 @@ import { monitorResize, unmonitorResize } from './WindowWatcher';
 import { ThemeConsumer } from '../../util/contexts';
 import { getFontClass } from '../../theme/ThemeHelper';
 import { Header } from './Header';
+import { PLACEMENTS } from './';
 
 const Container = styled.div`
     position: absolute;
@@ -86,8 +87,17 @@ export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop,
             return handleUnmounting;
         }
         // center after content has been rendered
+        let placement = options.placement;
+        // Open on bottom/top on mobile to prevent popup overflowing the screen
+        if (Oskari.util.isMobile()) {
+            if (placement && placement.indexOf('bottom') > -1) {
+                placement = PLACEMENTS.BOTTOM;
+            } else {
+                placement = PLACEMENTS.TOP;
+            }
+        }
         setPosition({
-            ...getPositionForCentering(elementRef, options.placement),
+            ...getPositionForCentering(elementRef, placement),
             centered: true
         });
         return handleUnmounting;

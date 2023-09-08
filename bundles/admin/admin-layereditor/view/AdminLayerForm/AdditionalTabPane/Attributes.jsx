@@ -1,20 +1,22 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
-import { InfoTooltip } from '../InfoTooltip';
 import { JsonInput } from '../JsonInput';
 
 const AttributeInfo = ({ attributes }) => {
     if (!attributes) {
         return null;
     }
-    const info =
-        <div>
-            <pre>{JSON.stringify(attributes, null, 2)}</pre>
-        </div>;
-    return <InfoTooltip message={info} />;
+    return (
+        <InfoIcon>
+            <div>
+                <pre>{JSON.stringify(attributes, null, 2)}</pre>
+            </div>;
+        </InfoIcon>
+    );
 };
 AttributeInfo.propTypes = {
     attributes: PropTypes.object
@@ -31,7 +33,7 @@ export const Attributes = ({ layer, controller }) => {
     }
     return (
         <Fragment>
-            <Message messageKey='attributes'/>
+            <Message messageKey='attributes.label'/>
             { !isValid && <AttributeInfo attributes={layer.attributes} /> }
             <StyledFormField>
                 <JsonInput

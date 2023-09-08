@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
-import { Collapse, CollapsePanel, Message, Switch, ThemedBadge, Tooltip } from 'oskari-ui';
+import { Collapse, CollapsePanel, Message, Switch, Badge, Tooltip } from 'oskari-ui';
 import { ThemeConsumer, ThemeProvider } from 'oskari-ui/util';
 import { getHeaderTheme } from 'oskari-ui/theme';
 import { getPopupOptions } from '../pluginPopupHelper';
@@ -112,10 +112,10 @@ const Header = ({ channel, showGeneric = false, count, hasMore = false }) => {
         <ChannelTitle channel={channel} showGeneric={showGeneric} />
         <BadgeFloater data-count={count}>
             { !hasMore && <Tooltip title={<Message messageKey='plugin.SearchPlugin.searchResultCount' messageArgs={{ count }} bundleKey='MapModule' />}>
-                <ThemedBadge count={count} showZero />
+                <Badge count={count} />
             </Tooltip> }
             { hasMore && <Tooltip title={<Message messageKey='plugin.SearchPlugin.searchMoreResults' messageArgs={{ count }} bundleKey='MapModule' />}>
-                <ThemedBadge count={count + '+'} showZero className='t_more'/>
+                <Badge count={count + '+'} className='t_more'/>
             </Tooltip>
             }
         </BadgeFloater>

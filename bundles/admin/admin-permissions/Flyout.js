@@ -87,6 +87,14 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
         },
 
         /**
+         * Reset flyout to clear unsaved changes etc.
+         */
+        resetFlyout: function () {
+            if (this.handler) {
+                this.handler.resetTable();
+            }
+        },
+        /**
          * @method renderContent
          * Renders flyout content
          */

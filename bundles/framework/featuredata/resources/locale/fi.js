@@ -5,7 +5,8 @@ Oskari.registerLocalization(
         "value": {
             "title": "Kohdetiedot",
             "layer": {
-                "outOfContentArea": "Karttatasolla ei ole kohteita karttanäkymän alueella."
+                "outOfContentArea": "Karttatasolla ei ole kohteita karttanäkymän alueella.",
+                "featureData": "Kohdetiedot",
             },
             "flyout": {
                 "sorterTooltip": "Järjestä laskevasti/nousevasti",
@@ -36,6 +37,7 @@ Oskari.registerLocalization(
                 "openButtonLabel": "Aineiston vienti",
                 "exportButtonLabel": "Vie",
                 "exportFailed": "Aineiston vienti epäonnistui.",
+                "datasetTooLargeForExcel": "Dataset is too large for generating an excel file. Limit the number of features or choose csv as format.",
                 "fileFormat": {
                     "title": "Tiedostomuoto",
                     "excel": "Excel",

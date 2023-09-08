@@ -109,6 +109,19 @@ Oskari.registerLocalization(
                     "globalWithStyles": "Till kartlagret har endast en standard teckenförklaring fastställts, men det finns ytterliga stilar med förklaringar tillgängliga på gränssnittet. Du kan ta bort standardvalet för att kunna utnyttja dessa."
                 }
             },
+            "attributes": {
+                "label": "Attribut",
+                "geometryType": {
+                    "label": "Typ av geometri",
+                    "sourceAttributes": "Källa: kartlagrets attribut",
+                    "sourceCapabilities": "Källa: kartlagrets capabilities",
+                    "unknown":"Okänd",
+                    "point": "Punkten",
+                    "line": "Linje",
+                    "area":"Området",
+                    "collection":"All"
+                }
+            },
             "styles": {
                 "default": "Förvald utseende",
                 "desc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'.",
@@ -125,6 +138,10 @@ Oskari.registerLocalization(
                     "name": "Stilnamn",
                     "selectDefault": "Välj förvalt stil",
                     "deleteStyle": "Ta bort stilen",
+                    "featureStyle": "Stildefinitioner",
+                    "optionalStyles": "",
+                    "cesium": "Stildefinitioner av 3D Tiles/Cesium",
+                    "mapbox": "Stildefinitioner av Mapbox",
                     "edit": {
                         "editor": "Redigera",
                         "json": "Redigera JSON"
@@ -139,12 +156,6 @@ Oskari.registerLocalization(
                         "name": "Fyll i namnet på stilen",
                         "noStyles": "Inga sparade stilar",
                         "json": "Stildefinitioner JSON-syntaxen är ogiltig."
-                    },
-                    "json": {
-                        "featureStyle": "Stildefinitioner (JSON)",
-                        "optionalStyles": "",
-                        "cesium": "Stildefinitioner av 3D Tiles/Cesium (JSON)",
-                        "mapbox": "Stildefinitioner av Mapbox (JSON)"
                     }
                 }
             },
@@ -157,7 +168,6 @@ Oskari.registerLocalization(
             "gfiTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
-            "attributes": "Attribut",
             "clusteringDistance": "Punktavstånd i kluster",
             "forcedSRS": "Tvingade SRS",
             "forcedSRSInfo": "Tvångs SRS jämfört med GetCapabilites",

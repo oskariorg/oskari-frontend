@@ -50,7 +50,7 @@ Oskari.registerLocalization(
             "deleteLayer": "Стереть слой карты",
             "grid": {
                 "name": "Название",
-                "description": "Описание",
+                "desc": "Описание",
                 "source": "Источник данных",
                 "edit": "Редактировать",
                 "editButton": "Редактировать",

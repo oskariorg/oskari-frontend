@@ -12,6 +12,8 @@ div.mapplugin.scalebar {
     border-left: 1px solid black;
     border-right: 1px solid black;
 
+    margin: 10px 0;
+
     div {
         // Add a slight brightening to the bg so the scale is visible on dark backgrounds
         background-color: rgba(255, 255, 255, 0.2);

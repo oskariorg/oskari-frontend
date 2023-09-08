@@ -40,6 +40,7 @@ body {
 .oskari-flyout-title {
     float: left;
     margin-left: 20px;
+    margin-right: 20px;
     margin-top: 12px;
     height: 20px;
     display: inline-block;
@@ -398,60 +399,4 @@ body {
         overflow: auto;
         max-height: 1300px;
     }
-}
-
-/* IE8 TEMP fixes */
-/* FIXME remove these, check that IE9+ doesn't blow up */
-.oskari-flyoutcontentcontainer_IE_400_599 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 300px;
-}
-
-.oskari-flyoutcontentcontainer_IE_600_799 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 500px;
-}
-
-.oskari-flyoutcontentcontainer_IE_800_999 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 700px;
-}
-
-.oskari-flyoutcontentcontainer_IE_1000_1199 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 900px;
-}
-
-.oskari-flyoutcontentcontainer_IE_1200_1399 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 1100px;
-}
-
-.oskari-flyoutcontentcontainer_IE_1400 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 1300px;
 }

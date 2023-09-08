@@ -7,7 +7,7 @@ export const LayerCountBadge = ({ layerCount = 0, unfilteredLayerCount }) => {
     const badgeText = unfilteredLayerCount
         ? layerCount + ' / ' + unfilteredLayerCount
         : layerCount;
-    return (<Badge inversed={ layerCount > 0 } count={badgeText} />);
+    return <Badge color='#333' count={badgeText} />;
 };
 
 LayerCountBadge.propTypes = {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker } from '../ColorPicker';
 import { Message } from '../Message';
-import { Form, FormItem } from '../Form';
+import { FormItem } from '../Form';
 import { SvgRadioButton, SizeControl, PreviewCol, constants } from './index';
 import { Row, Col } from 'antd';
 
@@ -28,7 +28,7 @@ export const PointTab = ({ oskariStyle, showPreview }) => {
                     name='image.shape'
                     label={ <Message messageKey='StyleEditor.image.shape' /> }
                 >
-                    <SvgRadioButton options={ Oskari.getMarkers() } />
+                    <SvgRadioButton options={ Oskari.custom.getSvgIcons() } />
                 </FormItem>
             </Row>
 

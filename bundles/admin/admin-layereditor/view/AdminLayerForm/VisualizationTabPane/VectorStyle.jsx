@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import { VectorStyleSelect } from './VectorStyle/VectorStyleSelect';
 import { VectorNameInput } from './VectorStyle/VectorNameInput';
 import { VectorStyleJson } from './VectorStyle/VectorStyleJson';
+import { OptionalStyleModal } from './VectorStyle/OptionalStyleModal';
 import { LocaleConsumer, Messaging, Controller } from 'oskari-ui/util';
 import { Button, Message, Space } from 'oskari-ui';
 import { EditOutlined, BgColorsOutlined } from '@ant-design/icons';
 import { Modal } from 'oskari-ui/components/Modal';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import styled from 'styled-components';
-import { ThemeConsumer } from 'oskari-ui/util';
-import { generateBlankStyle } from 'oskari-ui/components/StyleEditor/index';
+import { SUPPORTED_FORMATS } from 'oskari-ui/components/StyleEditor/constants';
+import { getGeometryType } from '../../LayerHelper';
+
 
 const FullWidthSpace = styled(Space)`
     & {
@@ -61,11 +63,12 @@ const stringify = (json) => {
 };
 const getRuntimeId = () => Date.now().valueOf(); // Long in backend
 
-export const VectorStyle = ThemeConsumer(LocaleConsumer(({ theme = {}, layer, getMessage, controller, external }) => {
+export const VectorStyle = LocaleConsumer(({ layer, getMessage, controller, external }) => {
     const newStyleName = getMessage('styles.vector.newStyleName');
     const [state, setState] = useState({
         modal: null
     });
+    const [styleForOptional, setStyleForOptional] = useState();
     const hasValidName = () => typeof state.name === 'string' && state.name.trim().length > 0;
 
     const onModalClose = () => setState({ modal: null });
@@ -107,17 +110,16 @@ export const VectorStyle = ThemeConsumer(LocaleConsumer(({ theme = {}, layer, ge
         controller.saveVectorStyleToLayer(toSave, state.isEdit);
         onModalClose();
     };
+
     const visible = !!state.modal;
     const externalType = external ? getExternalStyleType(layer) : null;
+    const geometryType = getGeometryType(layer);
+    const styleTabs = SUPPORTED_FORMATS.includes(geometryType) ? [geometryType] : SUPPORTED_FORMATS;
     return (
         <FullWidthSpace direction='vertical'>
             <Space direction='horizontal'>
                 <Button
-                    onClick={ () => {
-                        const style = generateBlankStyle(theme);
-                        addStyle('editor', { featureStyle: style }) }
-                    }
-                >
+                    onClick={ () => addStyle('editor', { featureStyle: Oskari.custom.generateBlankStyle() }) }>
                     <BgColorsOutlined/>&nbsp;
                     <Message messageKey="styles.vector.add.editor" />
                 </Button>
@@ -153,6 +155,7 @@ export const VectorStyle = ThemeConsumer(LocaleConsumer(({ theme = {}, layer, ge
                 { state.modal === 'editor' &&
                     <StyleEditor
                         oskariStyle={ state.style.featureStyle }
+                        tabs={styleTabs}
                         onChange={ (featureStyle) => updateStyle({ featureStyle })}
                     />
                 }
@@ -181,10 +184,16 @@ export const VectorStyle = ThemeConsumer(LocaleConsumer(({ theme = {}, layer, ge
                 layer={ layer }
                 controller={ controller }
                 editStyle={ editStyle }
+                editOptional={setStyleForOptional}
             />
+            { styleForOptional &&
+                <OptionalStyleModal vectorStyle={styleForOptional} controller={controller} styleTabs={styleTabs}
+                    properties={layer.capabilities.featureProperties}
+                    onClose={() => setStyleForOptional()} />
+            }
         </FullWidthSpace>
     );
-}));
+});
 
 VectorStyle.propTypes = {
     layer: PropTypes.object.isRequired,
