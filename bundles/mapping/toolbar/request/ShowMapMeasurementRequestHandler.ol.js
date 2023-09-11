@@ -28,6 +28,9 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function (core, request) {
+            if (Oskari.util.isMobile()) {
+                Oskari.dom.showNavigation(false);
+            }
             this._showMeasurementResults(request.getValue());
         },
         getValue: function () {

@@ -222,6 +222,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * Activate the "add marker mode" on map.
          */
         startMarkerAdd: function () {
+            if (Oskari.util.isMobile()) {
+                Oskari.dom.showNavigation(false);
+            }
             this.enableGfi(false);
             this._showAddMarkerPopupOnMapClick = true;
 
