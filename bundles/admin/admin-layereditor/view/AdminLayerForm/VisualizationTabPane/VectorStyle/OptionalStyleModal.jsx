@@ -98,7 +98,7 @@ export const OptionalStyleModal = ({ vectorStyle, styleTabs, controller, onClose
                         <CollapsePanel key={`style_${i}`}
                             header={getDescription(filterDef)}
                             extra={<PanelExtra onRemove={() => remove(i)}/>}>
-                            <Divider><Message messageKey='attributes.featureFilter.title' /></Divider>
+                            <Divider><Message messageKey='styles.vector.optionalStylesFilter' /></Divider>
                             <FeatureFilter filter={filterDef} types={properties} properties={propertyNames}
                                 onChange={ updated => update({ ...styleDef, ...updated }, i)}/>
                             <Divider><Message messageKey='styles.vector.featureStyle' /></Divider>

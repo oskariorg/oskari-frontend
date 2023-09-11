@@ -112,7 +112,7 @@ Oskari.registerLocalization(
             },
             "attributes": {
                 "label": "Attributes",
-                "properties": "Using feature properties",
+                "properties": "Using properties of features",
                 "presentation": "Presentation",
                 "presentationTooltip": "Presentation affects GetFeatureInfo request and feature data table.",
                 "showAll": "Show all properties",
@@ -133,18 +133,18 @@ Oskari.registerLocalization(
                     "button": "Feature filter"
                 },
                 "filter": {
-                    "title": "Properties filter",
-                    "lang": "Choose shown feature properties and ordering",
+                    "title": "Display of properties",
+                    "lang": "Select properties displayed and order",
                     "default": "for default filter",
-                    "fromDefault": "Selected language doesn't have filter. Default filter is used for selected language. Edit values to create new filter for language.",
+                    "fromDefault": "No filter added for the selected language. The default filter is used for the selected language. Edit the options to create your own filter for the language.",
                     "button": "Select properties"
                 },
                 "locale": {
-                    "title": "Labels for feature properties",
+                    "title": "Labels for properties",
                     "button": "Labeling"
                 },
                 "format": {
-                    "title": "Feature properties value formatting",
+                    "title": "Formatting values of properties",
                     "button": "Formatting",
                     "type": {
                         "label": "Type",
@@ -156,12 +156,12 @@ Oskari.registerLocalization(
                         "phone": "Phone number"
                     },
                     "options": {
-                        "noLabel": "Don't show label",
+                        "noLabel": "Show only value",
                         "skipEmpty": "Skip empty value"
                     },
                     "params": {
                         "link": "Show as link",
-                        "fullUrl": "Show full url",
+                        "fullUrl": "Show full URL",
                         "label": "Label for link"
                     }
                 }
@@ -185,6 +185,7 @@ Oskari.registerLocalization(
                     "deleteStyle": "Delete style",
                     "featureStyle": "Style definitions",
                     "optionalStyles": "Property based style definitions",
+                    "optionalStylesFilter": "Select features using style based on properties",
                     "cesium": "3D Tiles/Cesium style definitions",
                     "mapbox": "Mapbox style definitions",
                     "edit": {
@@ -201,7 +202,7 @@ Oskari.registerLocalization(
                         "name": "Please enter a name for the style",
                         "noStyles": "No saved styles",
                         "json": "Invalid JSON syntax in Style definitions.",
-                        "optionalStyles": "Optional style doesn't have valid filter."
+                        "optionalStyles": "Style doesn't have valid filter."
                     }
                 }
             },

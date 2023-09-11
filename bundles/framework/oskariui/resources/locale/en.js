@@ -112,8 +112,8 @@ Oskari.registerLocalization({
             loading: 'Loading...'
         },
         FeatureFilter: {
-            single: 'Single property',
-            list: 'More properties',
+            single: 'One property',
+            list: 'Many properties',
             range: 'Use value range',
             caseSensitive: {
                 true: 'Case sensitive',
