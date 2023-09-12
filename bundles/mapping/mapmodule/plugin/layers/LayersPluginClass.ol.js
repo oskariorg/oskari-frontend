@@ -8,7 +8,7 @@ import './request/MapMoveByLayerContentRequest';
 import './request/MapMoveByLayerContentRequestHandler';
 
 import olFormatWKT from 'ol/format/WKT';
-import { CoverageHelper } from './CoverageHelper';
+import { CoverageHelper } from './coveragetool/CoverageHelper';
 
 const WKT_READER = new olFormatWKT();
 const AbstractMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin');
@@ -36,6 +36,13 @@ export class LayersPlugin extends AbstractMapModulePlugin {
         this._previousTimer = null;
         this._supportedTimer = null;
         this.coverageHelper = new CoverageHelper();
+        this.initCoverageToolPlugin();
+    }
+
+    initCoverageToolPlugin() {
+        this.coverageToolPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlugin');
+        const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+        mapModule.registerPlugin(this.coverageToolPlugin);
     }
 
     _createEventHandlers () {

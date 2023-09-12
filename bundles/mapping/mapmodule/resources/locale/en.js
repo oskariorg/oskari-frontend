@@ -154,6 +154,7 @@ Oskari.registerLocalization(
         },
         "layerCoverageTool": {
             "name": "Show coverage area",
+            "removeCoverageFromMap": "Hide coverage area"
         }
     }
 });

@@ -152,7 +152,8 @@ Oskari.registerLocalization(
             }
         },
         "layerCoverageTool": {
-            "name": "Näytä kattavuusalue"
+            "name": "Näytä kattavuusalue",
+            "removeCoverageFromMap": "Piilota kattavuusalue"
         }
     }
 });

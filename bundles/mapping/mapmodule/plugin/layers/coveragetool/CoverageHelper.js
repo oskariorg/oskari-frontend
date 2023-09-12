@@ -1,4 +1,4 @@
-const COVERAGE_LAYER_ID = 'CoverageLayer';
+export const COVERAGE_LAYER_ID = 'LayerListCoverageLayer';
 const COVERAGE_FEATURE_STYLE = {
     stroke: {
         color: 'rgba(211, 187, 27, 0.8)',
