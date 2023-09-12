@@ -23,6 +23,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
         this._visible = false;
         this.coverageHelper = new CoverageHelper();
     }, {
+        /** @static @property __name module name */
+        __name: 'CoverageToolPlugin',
+
+        getName: function () {
+            return this.__name;
+        },
         /**
          * @private @method _createControlElement
          * Creates the DOM element that will be placed on the map

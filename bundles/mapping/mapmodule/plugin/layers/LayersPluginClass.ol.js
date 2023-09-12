@@ -36,13 +36,6 @@ export class LayersPlugin extends AbstractMapModulePlugin {
         this._previousTimer = null;
         this._supportedTimer = null;
         this.coverageHelper = new CoverageHelper();
-        this.initCoverageToolPlugin();
-    }
-
-    initCoverageToolPlugin() {
-        this.coverageToolPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlugin');
-        const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-        mapModule.registerPlugin(this.coverageToolPlugin);
     }
 
     _createEventHandlers () {

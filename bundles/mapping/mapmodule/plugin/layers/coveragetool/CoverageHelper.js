@@ -17,6 +17,22 @@ export class CoverageHelper {
         coverageTool.setTitle(Oskari.getMsg(LOCALIZATION_BUNDLE_ID, 'layerCoverageTool.name'));
         coverageTool.setCallback(() => this.showLayerCoverage(layer));
         layer.addTool(coverageTool);
+
+        this.initCoverageToolPlugin();
+    }
+
+    initCoverageToolPlugin () {
+        const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+        if (!this.pluginAlreadyRegistered(mapModule, 'CoverageToolPlugin')) {
+            const coverageToolPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlugin');
+            mapModule.registerPlugin(coverageToolPlugin);
+            mapModule.startPlugin(coverageToolPlugin);
+        }
+    }
+
+    pluginAlreadyRegistered (mapModule, pluginName) {
+        const allInstances = mapModule.getPluginInstances();
+        return !!allInstances && !!allInstances[pluginName];
     }
 
     clearLayerCoverage () {
