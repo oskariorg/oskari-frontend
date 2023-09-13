@@ -204,6 +204,18 @@ Oskari.registerLocalization(
                         "json": "Tyylimääritysten JSON-syntaksi on virheellinen.",
                         "optionalStyles": "Tyylimäärityksellä ei ole sopivaa suodatinta."
                     }
+                },
+                "hover": {
+                    "title": "Kohteen korostus ja tooltip",
+                    "tooltip": "Kohteelle näytettävät tooltip rivit",
+                    "useStyle": "Käytä tyylimäärityksiä",
+                    "inherit": "Peri tyylimääritykset",
+                    "effect": "Käytä tehostetta",
+                    "fromProperty": "Käytä ominaisuutta labelinä",
+                    "labelTooltip": {
+                        "key": "Label näytetään sellaisenaan",
+                        "keyProperty": "Labelin sisältö haetaan valitusta ominaisuudesta"
+                    }
                 }
             },
             "layerStatus": {

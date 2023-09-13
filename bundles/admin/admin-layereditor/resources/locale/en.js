@@ -203,6 +203,18 @@ Oskari.registerLocalization(
                         "json": "Invalid JSON syntax in Style definitions.",
                         "optionalStyles": "Optional style doesn't have valid filter."
                     }
+                },
+                "hover": {
+                    "title": "Feature highlighting and tooltip",
+                    "tooltip": "Tooltip rows shown for feature",
+                    "useStyle": "Use style definitions",
+                    "inherit": "Inherit style definitions",
+                    "effect": "Use effect",
+                    "fromProperty": "Use property as label",
+                    "labelTooltip": {
+                        "key": "Label is shown as it is",
+                        "keyProperty": "Label content is received from property"
+                    }
                 }
             },
             "layerStatus": {
