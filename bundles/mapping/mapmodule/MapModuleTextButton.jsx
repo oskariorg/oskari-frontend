@@ -54,7 +54,7 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
 });
 
 export const MapModuleTextButton = (props) => {
-    const { visible, onClick, text, active, position } = props;
+    const { visible, onClick, text, active, position, loading } = props;
     if (!visible) {
         return null;
     };
@@ -63,6 +63,7 @@ export const MapModuleTextButton = (props) => {
         onClick={onClick}
         active={active}
         position={position}
+        loading={loading}
     >
         {text}
     </ThemedButton>;
@@ -73,5 +74,6 @@ MapModuleTextButton.propTypes = {
     onClick: PropTypes.func,
     text: PropTypes.any,
     active: PropTypes.bool,
-    position: PropTypes.string
+    position: PropTypes.string,
+    loading: PropTypes.bool
 };
