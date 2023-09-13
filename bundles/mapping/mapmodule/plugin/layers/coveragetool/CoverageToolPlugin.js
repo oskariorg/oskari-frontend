@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Message } from 'oskari-ui';
 import { COVERAGE_LAYER_ID, CoverageHelper } from './CoverageHelper';
 import { ThemeProvider } from 'oskari-ui/util';
-import { CoverageToolButton } from './CoverageToolButton';
+import { MapModuleTextButton } from '../../../MapModuleTextButton';
 
 const FEATURE_EVENT_ADD = 'add';
 const LOCALIZATION_BUNDLE_ID = 'MapModule';
@@ -50,9 +50,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
             }
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
-                    <CoverageToolButton
+                    <MapModuleTextButton
                         visible={this.isVisible()}
-                        icon={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap'/>}
+                        text={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap'/>}
                         onClick={() => {
                             this._coverageButtonClicked();
                         }}

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from 'oskari-ui';
-import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
-
+import { Button } from 'oskari-ui';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 const StyledButton = styled(Button)`
     height: 32px;
     font-size: 14px;
@@ -53,31 +53,27 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     );
 });
 
-export const FeatureDataButton = ({ visible = true, icon, active, onClick, disabled, iconActive, position, loading, ...rest }) => {
+export const MapModuleTextButton = (props) => {
+    const { visible, onClick, text, active, position, loading } = props;
     if (!visible) {
         return null;
-    }
-    let marginRight = '0px';
-    let marginLeft = '0px';
-    if (position.includes('right')) {
-        marginRight = '10px';
-    } else if (position.includes('left')) {
-        marginLeft = '10px';
-    }
+    };
 
-    return (
-        <div>
-            <ThemedButton
-                onClick={onClick}
-                disabled={disabled}
-                active={active}
-                loading={loading}
-                $marginRight={marginRight}
-                $marginLeft={marginLeft}
-                {...rest}
-            >
-                {icon}
-            </ThemedButton>
-        </div>
-    );
+    return <ThemedButton
+        onClick={onClick}
+        active={active}
+        position={position}
+        loading={loading}
+    >
+        {text}
+    </ThemedButton>;
+};
+
+MapModuleTextButton.propTypes = {
+    visible: PropTypes.bool,
+    onClick: PropTypes.func,
+    text: PropTypes.any,
+    active: PropTypes.bool,
+    position: PropTypes.string,
+    loading: PropTypes.bool
 };
