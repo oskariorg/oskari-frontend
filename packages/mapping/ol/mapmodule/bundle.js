@@ -40,13 +40,6 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.ol.js'
                 },
                 /**
-                 * toggle layer coverage button
-                 */
-                {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/layers/coveragetool/CoverageToolPlugin.js'
-                },
-                /**
                  * Styles
                  */
                 {

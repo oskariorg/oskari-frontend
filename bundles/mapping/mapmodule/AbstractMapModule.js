@@ -21,6 +21,7 @@ import './plugin/logo/LogoPlugin';
 import './plugin/datasource/DataSourcePlugin';
 import './plugin/layers/LayerSelectionPlugin';
 import './plugin/layers/BackgroundLayerSelectionPlugin';
+import './plugin/layers/coverageTool/CoverageToolPlugin';
 import './plugin/location/GeoLocationPlugin';
 import './plugin/publishertoolbar/PublisherToolbarPlugin';
 import './plugin/realtime/RealtimePlugin';
