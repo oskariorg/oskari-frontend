@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Message } from 'oskari-ui';
 import { ThemeProvider } from 'oskari-ui/util';
-import { FeatureDataButton } from './FeatureDataButton';
 import { FeatureDataPluginHandler } from './FeatureDataPluginHandler';
 import { FEATUREDATA_WFS_STATUS } from '../view/FeatureDataContainer';
+import { MapModuleTextButton } from '../../../mapping/mapmodule/MapModuleTextButton';
 
 /**
  * @class Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin
@@ -79,9 +79,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
             const { flyoutOpen, layers, loadingStatus } = this.handler.getState();
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
-                    <FeatureDataButton
+                    <MapModuleTextButton
                         visible={layers?.length > 0}
-                        icon={<Message messageKey='title' bundleKey='FeatureData'/>}
+                        text={<Message messageKey='title' bundleKey='FeatureData'/>}
                         onClick={() => this.handler.openFlyout()}
                         active={flyoutOpen}
                         loading={loadingStatus.loading}
