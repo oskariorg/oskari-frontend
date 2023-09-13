@@ -10,6 +10,7 @@ import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
 import { StyledColumn } from './styled';
 import { RasterStyle } from './RasterStyle';
+import { HoverModal } from './VectorStyle/HoverModal';
 import { TimeSeries } from './TimeSeries';
 import { VectorStyle } from './VectorStyle';
 import { LayerTypeNotSupported } from '../LayerTypeNotSupported';
@@ -63,6 +64,9 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
             }
             { showVectorStyle &&
                 <VectorStyle layer={layer} controller={controller} external={showExternalVectorStyle}/>
+            }
+            { propertyFields.includes(HOVER) &&
+                <HoverModal layer={layer} controller={controller} />
             }
             { propertyFields.includes(HOVER) &&
                 <Hover layer={layer} controller={controller} />
