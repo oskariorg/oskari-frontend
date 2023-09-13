@@ -61,6 +61,7 @@ Oskari.registerLocalization(
             "generalTabTitle": "Yleiset",
             "visualizationTabTitle": "Visualisointi",
             "additionalTabTitle": "Lisätiedot",
+            "jsonTabTitle": "Json kentät",
             "permissionsTabTitle": "Oikeudet",
             "interfaceVersionDesc": "Valitse ensisijaisesti uusin rajapinnan tukema versio.",
             "attributions": "Lähdeviitteet",
@@ -110,6 +111,12 @@ Oskari.registerLocalization(
                     "additionalLegend": "Tasolle on tallennettu erikseen rajapintapalvelun oman karttaselitteen yliajava karttaselite, jolle ei löydy tyyliä. Päivitä karttaselitteen tiedot. Poistuneen/ei-toimivan karttaselitteen nimessä on ( ! )-merkki.",
                     "globalWithStyles": "Tasolle on määritetty vain yksi yleinen oletuskarttaselite, vaikka sillä olisi rajapintapalvelusta useita tyylejä käytettävissä. Poista oletuskarttaselite ja määritä mahdolliset tyylikohtaiset karttaselitteet."
                 }
+            },
+            "jsonFields": {
+                "attributes": "Attribuutit",
+                "capabilities": "Tasolle parsitut Capabilities-tiedot",
+                "options": "Options",
+                "params": "Parametrit"
             },
             "attributes": {
                 "label": "Attribuutit",
