@@ -37,6 +37,10 @@ const RowItem = styled.span`
     }
 `;
 
+const hasStyleDefinitions = ( style = {} ) => {
+    return ['fill', 'stroke', 'image', 'text'].some(key => typeof style[key] !== 'undefined');
+};
+
 const effecOptions = Object.values(EFFECT).map(value => ({value, label: value}));
 
 const ContentItem = ({index, item = {}, updateContent, properties = []}) => {
@@ -70,21 +74,21 @@ const ContentItem = ({index, item = {}, updateContent, properties = []}) => {
 
 export const HoverModal = ({ layer, controller }) => {
     const { hover = {} } = layer.options; 
-    const [ content, setContent ] = useState(hover.content);
+    const [ content, setContent ] = useState(hover.content || []);
     const [ featureStyle, setFeatureStyle ] = useState(hover.featureStyle);
     const [ open, setOpen ] = useState(false);
-    const [ useStyle, setUseStyle ] = useState(false);
+    const [ useStyle, setUseStyle ] = useState(hasStyleDefinitions(featureStyle));
 
     const { geomName, featureProperties = []} = layer.capabilities;
     // const labels = Oskari.getLocalized(layer.attributes.data.locale) || {};
     const properties = featureProperties.filter(prop => prop.name !== geomName).map(prop => ({ value: prop.name }));
     const save = () => {
-        if (!content && !featureStyle) {
+        if (content.length === 0 && !featureStyle) {
             // remove hover
             controller.setHover();
             return;
         }
-        const { inherit, effect, ...styleDef } = featureStyle;
+        const { inherit, effect, ...styleDef } = featureStyle || {};
         let style = featureStyle;
         if (!useStyle) {
             style = { inherit, effect };
@@ -100,7 +104,7 @@ export const HoverModal = ({ layer, controller }) => {
     };
     const onClose = () => {
         setFeatureStyle(hover.featureStyle);
-        setContent(hover.content);
+        setContent(hover.content || []);
         setOpen(false);
     };
     const updateContent = (index, updated) => {
