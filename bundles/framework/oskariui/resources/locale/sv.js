@@ -113,8 +113,11 @@ Oskari.registerLocalization({
         },
         FeatureFilter: {
             single: 'Ett attribut',
-            list: 'Många attribut',
+            and: 'AND operatör',
+            or: 'OR operatör',
             range: 'Använd värdeintervall',
+            addTooltip: 'Lägg till ny rad för filter',
+            clearTooltip: 'Rensa filtret',
             caseSensitive: {
                 true: 'Skiftlägeskänsligt',
                 false: 'Skiftlägesokänsligt'

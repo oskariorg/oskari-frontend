@@ -113,8 +113,11 @@ Oskari.registerLocalization({
         },
         FeatureFilter: {
             single: 'Yksi ominaisuus',
-            list: 'Monta ominaisuutta',
+            and: 'AND-operaattori',
+            or: 'OR-operaattori',
             range: 'Käytä arvoaluetta',
+            addTooltip: 'Lisää suodattimeen uusi rivi',
+            clearTooltip: 'Tyhjennä suodatin',
             caseSensitive: {
                 true: 'Kirjainkoko vaikuttaa',
                 false: 'Kirjainkoko ei vaikuta'
