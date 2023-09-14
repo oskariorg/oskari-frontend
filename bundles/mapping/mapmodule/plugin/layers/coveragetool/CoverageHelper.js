@@ -9,7 +9,7 @@ const COVERAGE_FEATURE_STYLE = {
     }
 };
 const LOCALIZATION_BUNDLE_ID = 'MapModule';
-
+const COVERAGE_TOOL_PLUGIN_NAME = 'CoverageToolPlugin';
 export class CoverageHelper {
     addCoverageTool (layer) {
         const coverageTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
@@ -23,7 +23,7 @@ export class CoverageHelper {
 
     initCoverageToolPlugin () {
         const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-        if (!this.pluginAlreadyRegistered(mapModule, 'CoverageToolPlugin')) {
+        if (!this.pluginAlreadyRegistered(mapModule, COVERAGE_TOOL_PLUGIN_NAME)) {
             const coverageToolPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlugin');
             mapModule.registerPlugin(coverageToolPlugin);
             mapModule.startPlugin(coverageToolPlugin);
@@ -35,8 +35,15 @@ export class CoverageHelper {
         return !!allInstances && !!allInstances[pluginName];
     }
 
-    clearLayerCoverage () {
+    clearLayerCoverage (unregisterPlugin) {
         Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, COVERAGE_LAYER_ID]);
+        if (unregisterPlugin) {
+            const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            if (this.pluginAlreadyRegistered(mapModule, COVERAGE_TOOL_PLUGIN_NAME)) {
+                const plugin = mapModule.getPluginInstances()[COVERAGE_TOOL_PLUGIN_NAME];
+                mapModule.unregisterPlugin(plugin);
+            }
+        }
     }
 
     showLayerCoverage (layer) {

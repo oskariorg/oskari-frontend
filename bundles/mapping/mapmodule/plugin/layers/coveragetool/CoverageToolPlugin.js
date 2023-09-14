@@ -97,6 +97,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
                     const isCoverageLayer = features?.some(feature => feature.layerId === COVERAGE_LAYER_ID);
                     this.setVisible(isCoverageLayer && event.getOperation() === FEATURE_EVENT_ADD);
                     this.renderButton();
+                },
+                UIChangeEvent: function (event) {
+                    this.coverageHelper.clearLayerCoverage(true);
                 }
             };
         }
