@@ -156,13 +156,11 @@ Oskari.clazz.define(
                 AfterMapLayerAddEvent: function (event) {
                     const layer = event.getMapLayer();
                     if (!layer.isLayerOfType('VECTOR')) {
-                        console.log('not vector skipping', layer.getId() );
                         return;
                     }
                     const layerId = layer.getId();
                     const olLayer = me._asyncLayers[layerId];
                     if (olLayer) {
-                        console.log('add async layer', layerId );
                         me.getMapModule().addLayer(olLayer);
                         delete me._asyncLayers[layerId];
                     }
@@ -451,7 +449,7 @@ Oskari.clazz.define(
             return 'GeoJSON';
         },
 
-        _getOlLayer: function (layer, showLayer) {
+        _getOlLayer: function (layer) {
             var me = this;
             if (!layer || layer.getLayerType() !== 'vector') {
                 return null;
@@ -471,11 +469,9 @@ Oskari.clazz.define(
                 const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
                 // Set min max zoom levels that layer should be visible in
                 zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
-                if (showLayer) {
-                    console.log('store ol layer for async', layer.getId());
+                if (layer.getOptions().showLayer) {
                     me._asyncLayers[layer.getId()] = olLayer;
                 } else {
-                    console.log('add overlay layer', layer.getId());
                     me.getMapModule().addOverlayLayer(olLayer);
                 }
             }
@@ -556,6 +552,7 @@ Oskari.clazz.define(
                     layer.setOpacity(options.opacity);
                 }
                 layer.setVisible(true);
+                layer.setOptions({ showLayer: options.showLayer });
                 this._setHoverOptions(layer, options);
                 // scale limits
                 const mapModule = this.getMapModule();
@@ -571,7 +568,7 @@ Oskari.clazz.define(
                         }
                     }
                 }
-                this._getOlLayer(layer, options.showLayer);
+                this._getOlLayer(layer);
                 this._oskariLayers[layer.getId()] = layer;
             } else if (this._containsLayerOptions(options)) {
                 layer = this._updateVectorLayer(layer, options);
@@ -650,7 +647,7 @@ Oskari.clazz.define(
             if (typeof options.opacity !== 'undefined') {
                 layer.setOpacity(options.opacity);
                 // Apply changes to ol layer
-                this._getOlLayer(layer, options.showLayer);
+                this._getOlLayer(layer);
             }
             this._setHoverOptions(layer, options);
             var lyrInService = mapLayerService.findMapLayer(layer.getId());
@@ -741,7 +738,7 @@ Oskari.clazz.define(
             const { centerTo, minScale, maxScale, maxZoomLevel, minZoomLevel, minResolution, maxResolution, ...layerOptions } = options;
 
             layer = me.prepareVectorLayer(layerOptions);
-            olLayer = me._getOlLayer(layer, options.showLayer);
+            olLayer = me._getOlLayer(layer);
             vectorSource = olLayer.getSource();
 
             if (!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
