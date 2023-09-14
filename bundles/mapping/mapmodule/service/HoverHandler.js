@@ -124,6 +124,7 @@ export class HoverHandler {
     }
 
     registerLayer (layer) {
+        this.setTooltipContent(layer);
         this._styleCache[layer.getId()] = this._styleGenerator(layer);
     }
 
