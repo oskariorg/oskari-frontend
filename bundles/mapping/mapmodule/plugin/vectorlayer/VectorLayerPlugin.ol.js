@@ -71,6 +71,7 @@ Oskari.clazz.define(
         this._styleCache = {};
         this._animatingFeatures = {};
         this._name = 'VectorLayerPlugin';
+        this._asyncLayers = {};
     }, {
         __name: 'Oskari.mapframework.mapmodule.VectorLayerPlugin',
         /**
@@ -129,7 +130,7 @@ Oskari.clazz.define(
                     olLayer.set(LAYER_ID, layerId, true);
                     olLayer.setOpacity(opacity);
 
-                    me.getMapModule().addLayer(olLayer);
+                    me.getMapModule().addOverlayLayer(olLayer);
                     me._olLayers[layerId] = olLayer;
                     me._layerStyles[layerId] = layerStyle;
                 }
@@ -151,6 +152,20 @@ Oskari.clazz.define(
                 },
                 AfterChangeMapLayerOpacityEvent: function (event) {
                     me._afterChangeMapLayerOpacityEvent(event);
+                },
+                AfterMapLayerAddEvent: function (event) {
+                    const layer = event.getMapLayer();
+                    if (!layer.isLayerOfType('VECTOR')) {
+                        console.log('not vector skipping', layer.getId() );
+                        return;
+                    }
+                    const layerId = layer.getId();
+                    const olLayer = me._asyncLayers[layerId];
+                    if (olLayer) {
+                        console.log('add async layer', layerId );
+                        me.getMapModule().addLayer(olLayer);
+                        delete me._asyncLayers[layerId];
+                    }
                 }
             };
         },
@@ -436,7 +451,7 @@ Oskari.clazz.define(
             return 'GeoJSON';
         },
 
-        _getOlLayer: function (layer) {
+        _getOlLayer: function (layer, showLayer) {
             var me = this;
             if (!layer || layer.getLayerType() !== 'vector') {
                 return null;
@@ -456,7 +471,13 @@ Oskari.clazz.define(
                 const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
                 // Set min max zoom levels that layer should be visible in
                 zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
-                me.getMapModule().addLayer(olLayer);
+                if (showLayer) {
+                    console.log('store ol layer for async', layer.getId());
+                    me._asyncLayers[layer.getId()] = olLayer;
+                } else {
+                    console.log('add overlay layer', layer.getId());
+                    me.getMapModule().addOverlayLayer(olLayer);
+                }
             }
             olLayer.setOpacity(layer.getOpacity() / 100);
             olLayer.setVisible(layer.isVisible());
@@ -550,7 +571,7 @@ Oskari.clazz.define(
                         }
                     }
                 }
-                this._getOlLayer(layer);
+                this._getOlLayer(layer, options.showLayer);
                 this._oskariLayers[layer.getId()] = layer;
             } else if (this._containsLayerOptions(options)) {
                 layer = this._updateVectorLayer(layer, options);
@@ -569,7 +590,6 @@ Oskari.clazz.define(
                         };
                         mapLayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
                     }
-
                     mapLayerService.addLayer(layer);
                 }
                 if (options.showLayer !== 'registerOnly' && !this._sandbox.findMapLayerFromSelectedMapLayers(layer.getId())) {
@@ -630,7 +650,7 @@ Oskari.clazz.define(
             if (typeof options.opacity !== 'undefined') {
                 layer.setOpacity(options.opacity);
                 // Apply changes to ol layer
-                this._getOlLayer(layer);
+                this._getOlLayer(layer, options.showLayer);
             }
             this._setHoverOptions(layer, options);
             var lyrInService = mapLayerService.findMapLayer(layer.getId());
@@ -721,7 +741,7 @@ Oskari.clazz.define(
             const { centerTo, minScale, maxScale, maxZoomLevel, minZoomLevel, minResolution, maxResolution, ...layerOptions } = options;
 
             layer = me.prepareVectorLayer(layerOptions);
-            olLayer = me._getOlLayer(layer);
+            olLayer = me._getOlLayer(layer, options.showLayer);
             vectorSource = olLayer.getSource();
 
             if (!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
