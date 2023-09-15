@@ -108,31 +108,30 @@ export const getStylesForGeometry = (geometry, styleTypes) => {
 
 // Style for cluster circles
 const clusterStyleCache = {};
-const clusterStyleFunc = feature => {
-    const size = feature.get('features').length;
-    const cacheKey = `${size}`;
-    let style = clusterStyleCache[cacheKey];
-    if (!style) {
-        style = new olStyleStyle({
-            image: new olStyleCircle({
-                radius: size > 9 ? 14 : 12,
-                stroke: new olStyleStroke({
-                    color: '#fff'
-                }),
-                fill: new olStyleFill({
-                    color: '#3399CC' // isSelected '#005d90'
-                })
-            }),
-            text: new olStyleText({
-                text: size.toString(),
-                font: 'bold 14px sans-serif',
-                fill: new olStyleFill({
-                    color: '#fff'
-                })
-            })
-        });
-        clusterStyleCache[cacheKey] = style;
+export const getClusterStyle = size => {
+    const cached = clusterStyleCache[size];
+    if (cached) {
+        return cached;
     }
+    const style = new olStyleStyle({
+        image: new olStyleCircle({
+            radius: size > 9 ? 14 : 12,
+            stroke: new olStyleStroke({
+                color: '#fff'
+            }),
+            fill: new olStyleFill({
+                color: '#3399CC' // isSelected '#005d90'
+            })
+        }),
+        text: new olStyleText({
+            text: size.toString(),
+            font: 'bold 14px sans-serif',
+            fill: new olStyleFill({
+                color: '#fff'
+            })
+        })
+    });
+    clusterStyleCache[size] = style;
     return style;
 };
 
@@ -160,7 +159,7 @@ export const wrapClusterStyleFunction = styleFunction => {
         const feats = feature.get('features');
         if (feats) {
             if (feats.length > 1) {
-                return clusterStyleFunc(feature);
+                return getClusterStyle(feats.length);
             } else {
                 // Only single point in cluster. Use it in styling.
                 feature = feature.get('features')[0];
