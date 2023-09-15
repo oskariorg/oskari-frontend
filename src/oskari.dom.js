@@ -116,7 +116,12 @@ const isEmbedded = () => {
 const showNavigation = (show) => {
     const nav = getNavigationEl();
     if (nav) {
-        nav.style.display = show ? 'block' : 'none';
+        if (show) {
+            nav.style.display = 'block';
+            setMenuScrollIndicator();
+        } else {
+            nav.style.display = 'none';
+        }
     }
 };
 
@@ -131,6 +136,42 @@ const getNavigationEl = () => {
     return [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
 }
 
+const setMenuScrollIndicator = () => {
+    const showIndicator = () => {
+        const navEl = Oskari.dom.getNavigationEl();
+        const scrollTop = navEl.scrollTop;
+        const scrollHeight = navEl.scrollHeight;
+        const offsetHeight = navEl.offsetHeight;
+        const contentHeight = scrollHeight - offsetHeight;
+        return contentHeight <= scrollTop;
+    };
+    const setIndicator = (event) => {
+        window.requestAnimationFrame(() => {
+            if (showIndicator()) {
+                getNavigationEl().classList.remove('show-scroll-icon');
+            } else {
+                getNavigationEl().classList.add('show-scroll-icon');
+            }
+        });
+    };
+    const navElement = document.querySelector('nav#maptools');
+    if (navElement) {
+        setIndicator();
+        if (!navElement.querySelector('.scroll-indicator')) {
+            const scrollIndicator = document.createElement('div');
+            scrollIndicator.className = 'scroll-indicator';
+            const scrollIcon = document.createElement('div');
+            scrollIcon.className = 'scroll-icon';
+            scrollIndicator.appendChild(scrollIcon);
+            navElement.appendChild(scrollIndicator);
+            navElement.addEventListener('scroll', setIndicator);
+            if (showIndicator()) {
+                getNavigationEl().classList.remove('show-scroll-icon');
+            }
+        }
+    }
+}
+
 export const DOMHelper = {
     setRootEl,
     getRootEl,
@@ -142,5 +183,6 @@ export const DOMHelper = {
     showNavigation,
     isNavigationVisible,
     getNavigationEl,
+    setMenuScrollIndicator,
     APP_EMBEDDED_CLASS
 };
