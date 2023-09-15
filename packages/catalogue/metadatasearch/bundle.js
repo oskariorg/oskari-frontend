@@ -23,14 +23,6 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatasearch.MetadataSearchBundle
 	"source" : {
 
 		"scripts" : [
-			/* service */
-			{
-	            "type": "text/javascript",
-	            "src": "../../../bundles/catalogue/metadatasearch/service/MetadataOptionService.js"
-	        }, {
-	            "type": "text/javascript",
-	            "src": "../../../bundles/catalogue/metadatasearch/service/MetadataSearchService.js"
-	        },
 	        /* instance */
 	        {
 				"type" : "text/javascript",
