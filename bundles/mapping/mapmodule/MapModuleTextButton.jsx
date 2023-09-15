@@ -12,8 +12,10 @@ const StyledButton = styled(Button)`
     max-width: ${props => props.$isDropdown ? '250' : BUTTON_WIDTH}px;
     font-size: 14px;
     margin: 0 2px;
-    margin-right: ${props => props.$marginRight || 0}px;
-    margin-left: ${props => props.$marginLeft || 0}px;
+    margin-top: ${props => props.$marginTop || 0}px;
+    margin-bottom: ${props => props.$marginBottom || 0}px;
+    margin-right: ${props => props.$marginRight || 2}px;
+    margin-left: ${props => props.$marginLeft || 2}px;
     border: none;
     opacity: ${props => props.$opacity};
     border-radius: calc(${props => props.$rounding ? props.$rounding / 100 : 0} * 32px);
