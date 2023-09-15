@@ -7,9 +7,12 @@ import { Checkbox } from 'oskari-ui';
 export const AdvancedSearchMulti = (props) => {
     const { title, options, onChange, selected } = props;
     const hasOptions = options && options?.values?.length && options.values.length > 0;
+    if (!hasOptions) {
+        return null;
+    }
     return <AdvancedSearchRowContainer>
         <AdvancedSearchInputLabel>{title}</AdvancedSearchInputLabel>
-        { hasOptions &&
+        {
             <AdvancedSearchCheckboxGroupContainer>
                 {options.values.map(value => <Checkbox key={value.val} value={value.val} onChange={onChange} checked={isChecked(selected, value.val)}>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.' + value.val)}</Checkbox>)}
             </AdvancedSearchCheckboxGroupContainer>
