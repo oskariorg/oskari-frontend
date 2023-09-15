@@ -78,8 +78,8 @@ class MetadataStateHandler extends StateHandler {
     }
 
     updateSearchResults (json) {
-        json?.results?.forEach(result => this.updateLayerInfo(result));
-        this.updateState({ loading: false, searchResults: json?.results || null, searchResultsVisible: true, selectedLayers: this.getSelectedLayers() });
+        const searchResults = json?.results?.map(result => this.updateLayerInfo(result));
+        this.updateState({ loading: false, searchResults: searchResults || null, searchResultsVisible: true, selectedLayers: this.getSelectedLayers() });
     }
 
     getSelectedLayers () {
@@ -100,6 +100,7 @@ class MetadataStateHandler extends StateHandler {
         }
 
         searchResult.layers = layers;
+        return searchResult;
     }
 
     showMetadata (uuid) {
