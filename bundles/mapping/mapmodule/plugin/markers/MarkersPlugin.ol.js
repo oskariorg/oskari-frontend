@@ -15,7 +15,7 @@ import '../../event/MarkerClickEvent';
 import '../../event/AfterRemoveMarkersEvent';
 import { showAddMarkerPopup } from './view/MarkersForm';
 import { showMarkerPopup } from './view/MarkerPopup';
-import { ID_PREFIX, PLUGIN_NAME, TOOL_GROUP, DEFAULT_STYLE, STYLE_TYPE, DEFAULT_DATA, SEPARATORS } from './constants';
+import { ID_PREFIX, PLUGIN_NAME, TOOL_GROUP, DEFAULT_STYLE, GEOMETRY_TYPE, DEFAULT_DATA, SEPARATORS } from './constants';
 
 /**
  * @class Oskari.mapframework.mapmodule.MarkersPlugin
@@ -361,7 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
         _addMarkerToMap: function (id, coord, style) {
             const layerSource = this.getMarkersLayer().getSource();
-            const olStyle = this.getMapModule().getStyle(style, STYLE_TYPE);
+            const olStyle = this.getMapModule().getStyle(style, GEOMETRY_TYPE);
 
             const feature = new olFeature(new olGeom.Point(coord));
             feature.setId(id);
