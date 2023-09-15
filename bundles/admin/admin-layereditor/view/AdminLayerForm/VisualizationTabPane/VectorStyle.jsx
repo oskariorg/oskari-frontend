@@ -10,7 +10,6 @@ import { EditOutlined, BgColorsOutlined } from '@ant-design/icons';
 import { Modal } from 'oskari-ui/components/Modal';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import styled from 'styled-components';
-import { SUPPORTED_FORMATS } from 'oskari-ui/components/StyleEditor/constants';
 import { getGeometryType } from '../../LayerHelper';
 
 
@@ -114,7 +113,6 @@ export const VectorStyle = LocaleConsumer(({ layer, getMessage, controller, exte
     const visible = !!state.modal;
     const externalType = external ? getExternalStyleType(layer) : null;
     const geometryType = getGeometryType(layer);
-    const styleTabs = SUPPORTED_FORMATS.includes(geometryType) ? [geometryType] : SUPPORTED_FORMATS;
     return (
         <FullWidthSpace direction='vertical'>
             <Space direction='horizontal'>
@@ -155,7 +153,7 @@ export const VectorStyle = LocaleConsumer(({ layer, getMessage, controller, exte
                 { state.modal === 'editor' &&
                     <StyleEditor
                         oskariStyle={ state.style.featureStyle }
-                        tabs={styleTabs}
+                        geometryType={geometryType}
                         onChange={ (featureStyle) => updateStyle({ featureStyle })}
                     />
                 }
@@ -187,7 +185,7 @@ export const VectorStyle = LocaleConsumer(({ layer, getMessage, controller, exte
                 editOptional={setStyleForOptional}
             />
             { styleForOptional &&
-                <OptionalStyleModal vectorStyle={styleForOptional} controller={controller} styleTabs={styleTabs}
+                <OptionalStyleModal vectorStyle={styleForOptional} controller={controller} geometryType={geometryType}
                     properties={layer.capabilities.featureProperties}
                     onClose={() => setStyleForOptional()} />
             }
