@@ -1,4 +1,5 @@
 import olSourceVector from 'ol/source/Vector';
+import olCluster from 'ol/source/Cluster';
 import olLayerVector from 'ol/layer/Vector';
 import olFeature from 'ol/Feature';
 import * as olGeom from 'ol/geom';
@@ -16,6 +17,7 @@ import '../../event/AfterRemoveMarkersEvent';
 import { showAddMarkerPopup } from './view/MarkersForm';
 import { showMarkerPopup } from './view/MarkerPopup';
 import { ID_PREFIX, PLUGIN_NAME, TOOL_GROUP, DEFAULT_STYLE, STYLE_TYPE, DEFAULT_DATA, SEPARATORS } from './constants';
+import { getClusterStyle } from '../../oskariStyle/generator.ol';
 
 /**
  * @class Oskari.mapframework.mapmodule.MarkersPlugin
@@ -34,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
         this._hiddenMarkers = {}; // id: olFeature
         this._styleData = {}; // store values as it's hard to get them from feature's ol style
-
+        this._olStyles = {};
         this.buttons = null;
         this.markerPopupControls = null;
         this._buttonsAdded = false;
@@ -42,6 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
         // Show the marker button
         this._layer = undefined;
+        this._source = undefined;
         this.log = Oskari.log(PLUGIN_NAME);
         this.popupControls = null;
         this.popupCleanup = (restartTool = true) => {
@@ -198,16 +201,56 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         },
         getMarkersLayer: function () {
             if (!this._layer) {
-                this._layer = new olLayerVector({ title: 'Markers', source: new olSourceVector() });
+                const source = this.getSourceForLayer();
+                const style = this.getStyleFunction();
+                this._layer = new olLayerVector({ title: 'Markers', source, style });
                 this.getMapModule().addOverlayLayer(this._layer);
             }
             return this._layer;
+        },
+        getMarkersSource: function () {
+            if (!this._source) {
+                this._source = new olSourceVector();
+            }
+            return this._source;
+        },
+        getSourceForLayer: function () {
+            const source = this.getMarkersSource();
+            const { clusteringDistance = -1 } = this.getConfig();
+            if (clusteringDistance <= 0) {
+                return source;
+            }
+            // all features have Point geometry
+            return new olCluster({
+                distance: clusteringDistance,
+                source
+            });
+        },
+        getStyleFunction: function () {
+            return feature => {
+                const feats = feature.get('features');
+                if (feats) { // clustered
+                    const size = feats.length;
+                    if (size === 1) {
+                        return this._olStyles[feats[0].getId()];
+                    }
+                    return getClusterStyle(size);
+                }
+                // no cluster
+                return this._olStyles[feature.getId()];
+            };
+        },
+        clearAllMarkers: function () {
+            this.getMarkersSource().clear();
+            this._hiddenMarkers = {};
+            this._styleData = {};
+            this._olStyles = {};
         },
         getOLMapLayers: function () {
             return [];
         },
         getMapMarkerBounds: function () {
-            return this.getMarkersLayer().getSource().getExtent();
+            return this.getMarkersSource().getExtent();
         },
         closeMarkerPopup: function () {
             if (this.markerPopupControls) {
@@ -274,10 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 delete this._styleData[id];
                 this._removeMarkerFromMap(id);
             } else {
-                // remove all
-                this.getMarkersLayer().getSource().clear();
-                this._hiddenMarkers = {};
-                this._styleData = {};
+                this.clearAllMarkers();
             }
             const removeEvent = Oskari.eventBuilder('AfterRemoveMarkersEvent')(id);
             this.getSandbox().notifyAll(removeEvent);
@@ -360,31 +400,28 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         },
 
         _addMarkerToMap: function (id, coord, style) {
-            const layerSource = this.getMarkersLayer().getSource();
-            const olStyle = this.getMapModule().getStyle(style, STYLE_TYPE);
-
+            const source = this.getMarkersSource();
+            this._olStyles[id] = this.getMapModule().getStyle(style, STYLE_TYPE);
             const feature = new olFeature(new olGeom.Point(coord));
             feature.setId(id);
-            feature.setStyle(olStyle);
-
-            if (layerSource.hasFeature(feature)) {
+            if (source.hasFeature(feature)) {
                 // ol doesn't add features with same id, update existing
-                const existing = layerSource.getFeatureById(id);
+                const existing = source.getFeatureById(id);
                 existing.setGeometry(new olGeom.Point(coord));
-                existing.setStyle(olStyle);
             } else {
-                layerSource.addFeature(feature);
+                source.addFeature(feature);
             }
             const data = this._featureToMarkerData(feature);
             const addEvent = Oskari.eventBuilder('AfterAddMarkerEvent')(data, id);
             this.getSandbox().notifyAll(addEvent);
         },
         _removeMarkerFromMap: function (id) {
-            const layerSource = this.getMarkersLayer().getSource();
-            const feature = layerSource.getFeatureById(id);
+            const source = this.getMarkersSource();
+            const feature = source.getFeatureById(id);
             if (feature) {
-                layerSource.removeFeature(feature);
+                source.removeFeature(feature);
             }
+            delete this._olStyles[id];
         },
         _featureToMarkerData: function (feature) {
             const id = feature.getId();
@@ -404,7 +441,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param  {String} id  optional marker id for marker to change it's visibility, all markers visibility changed if not given.
          */
         changeMapMarkerVisibility: function (visible, id) {
-            const layerSource = this.getMarkersLayer().getSource();
+            const source = this.getMarkersSource();
             const update = feature => {
                 if (!feature) {
                     // not found for requested id (invalid id or feature is visible/hidden already)
@@ -412,19 +449,19 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 }
                 const fid = feature.getId();
                 if (visible) {
-                    layerSource.addFeature(feature);
+                    source.addFeature(feature);
                     delete this._hiddenMarkers[fid];
                 } else {
                     this._hiddenMarkers[fid] = feature;
-                    layerSource.removeFeature(feature);
+                    source.removeFeature(feature);
                 }
             };
 
             if (id) {
-                const feature = visible ? this._hiddenMarkers[id] : layerSource.getFeatureById(id);
+                const feature = visible ? this._hiddenMarkers[id] : source.getFeatureById(id);
                 update(feature);
             } else {
-                const features = visible ? Object.values(this._hiddenMarkers) : layerSource.getFeatures();
+                const features = visible ? Object.values(this._hiddenMarkers) : source.getFeatures();
                 features.forEach(f => update(f));
             }
         },
@@ -459,10 +496,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         setState: function (state) {
             // Clear state
-            this.getMarkersLayer().getSource().clear();
-            this._hiddenMarkers = {};
-            this._styleData = {};
-
+            this.clearAllMarkers();
             const { markers } = state || {};
             if (markers) {
                 markers.forEach(marker => this.addMapMarker(marker, null, true));
@@ -520,7 +554,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             if (!this.getMarkersLayer().getVisible()) {
                 return {};
             }
-            const markers = this.getMarkersLayer().getSource().getFeatures()
+            const markers = this.getMarkersSource().getFeatures()
                 .map(feat => this._featureToMarkerData(feat))
                 .filter(markerData => !markerData.transient);
             return { markers };
