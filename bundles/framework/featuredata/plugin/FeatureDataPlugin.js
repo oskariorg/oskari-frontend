@@ -98,6 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                         position={this.getLocation()}
                         $marginRight={marginRight}
                         $marginLeft={marginLeft}
+                        $marginTop={'10'}
                     />
                 </ThemeProvider>,
                 el[0]
