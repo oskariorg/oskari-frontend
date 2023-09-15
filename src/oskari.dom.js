@@ -137,8 +137,9 @@ const getNavigationEl = () => {
 }
 
 const setMenuScrollIndicator = () => {
-    const showIndicator = () => {
+    const indicatorNotNeeded = () => {
         const navEl = Oskari.dom.getNavigationEl();
+        if (!navEl) return true;
         const scrollTop = navEl.scrollTop;
         const scrollHeight = navEl.scrollHeight;
         const offsetHeight = navEl.offsetHeight;
@@ -147,7 +148,7 @@ const setMenuScrollIndicator = () => {
     };
     const setIndicator = (event) => {
         window.requestAnimationFrame(() => {
-            if (showIndicator()) {
+            if (indicatorNotNeeded()) {
                 getNavigationEl().classList.remove('show-scroll-icon');
             } else {
                 getNavigationEl().classList.add('show-scroll-icon');
@@ -165,7 +166,7 @@ const setMenuScrollIndicator = () => {
             scrollIndicator.appendChild(scrollIcon);
             navElement.appendChild(scrollIndicator);
             navElement.addEventListener('scroll', setIndicator);
-            if (showIndicator()) {
+            if (indicatorNotNeeded()) {
                 getNavigationEl().classList.remove('show-scroll-icon');
             }
         }
