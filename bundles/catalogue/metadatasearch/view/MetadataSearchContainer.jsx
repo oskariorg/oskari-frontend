@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from '../instance';
-import { SearchInput, Spin } from 'oskari-ui';
+import { SearchInput, Spin, Message } from 'oskari-ui';
 import { AdvancedSearchContainer } from './advanced-search/AdvancedSearchContainer';
 import { MetadataSearchResultListContainer } from './resultlist/MetadataSearchResultListContainer';
 import { FlexRowCentered } from './advanced-search/AdvancedSearchStyledComponents';
 
 const Description = () => {
-    return <div>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'metadataSearchDescription')}</div>;
+    return <Message bundleKey={METADATA_BUNDLE_LOCALIZATION_ID} messageKey='metadataSearchDescription'/>;
 };
 
 const SearchContainer = (props) => {
