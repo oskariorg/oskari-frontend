@@ -4,33 +4,53 @@ import { getNavigationTheme } from 'oskari-ui/theme';
 import { Button } from 'oskari-ui';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
+const BUTTON_WIDTH = 150;
 const StyledButton = styled(Button)`
-    height: 32px;
+    height: 28px;
+    min-width: ${props => props.$minWidth}px;
+    max-width: ${props => props.$isDropdown ? '250' : BUTTON_WIDTH}px;
     font-size: 14px;
+    margin: 0 2px;
+    margin-right: ${props => props.$marginRight || 0}px;
+    margin-left: ${props => props.$marginLeft || 0}px;
     border: none;
     opacity: ${props => props.$opacity};
     border-radius: calc(${props => props.$rounding ? props.$rounding / 100 : 0} * 32px);
     color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
     background: ${props => props.$backgroundColor};
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
+    path {
+        fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+    }
     &:hover {
         color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
+        path {
+            fill: ${props => props.$hoverColor};
+        }
     }
     &:active {
         color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
+        path {
+            fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
+        }
     }
     &:focus {
         color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
+        path {
+            fill: ${props => props.$hoverColor};
+        }
     }
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: ${props => props.$marginRight};
-    margin-left: ${props => props.$marginLeft};
-    margin-top: 10px;
+    svg {
+        margin-right: 5px;
+        font-size: 16px;
+    }
 `;
 
 const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
@@ -53,17 +73,18 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     );
 });
 
-export const MapModuleTextButton = (props) => {
-    const { visible, onClick, text, active, position, loading } = props;
+export const MapModuleTextButton = ({ visible, onClick, icon, text, active, position, loading, ...rest }) => {
     if (!visible) {
         return null;
     };
 
     return <ThemedButton
+        icon={icon || null}
         onClick={onClick}
         active={active}
         position={position}
         loading={loading}
+        {...rest}
     >
         {text}
     </ThemedButton>;
@@ -72,6 +93,7 @@ export const MapModuleTextButton = (props) => {
 MapModuleTextButton.propTypes = {
     visible: PropTypes.bool,
     onClick: PropTypes.func,
+    icon: PropTypes.any,
     text: PropTypes.any,
     active: PropTypes.bool,
     position: PropTypes.string,
