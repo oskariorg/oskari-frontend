@@ -77,6 +77,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                 return;
             }
             const { flyoutOpen, layers, loadingStatus } = this.handler.getState();
+
+            let marginRight = '0';
+            let marginLeft = '0';
+            const position = this.getLocation();
+            if (position.includes('right')) {
+                marginRight = '10';
+            } else if (position.includes('left')) {
+                marginLeft = '10';
+            }
+
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <MapModuleTextButton
@@ -86,6 +96,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                         active={flyoutOpen}
                         loading={loadingStatus.loading}
                         position={this.getLocation()}
+                        $marginRight={marginRight}
+                        $marginLeft={marginLeft}
+                        $marginTop={'10'}
                     />
                 </ThemeProvider>,
                 el[0]

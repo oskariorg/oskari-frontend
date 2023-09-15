@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
                         onClick={() => {
                             this._coverageButtonClicked();
                         }}
-                        active={this.isVisible()}
+                        active={false}
                         position={this.getLocation()}
                     />
                 </ThemeProvider>,
