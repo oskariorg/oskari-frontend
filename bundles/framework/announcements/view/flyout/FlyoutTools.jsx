@@ -4,7 +4,7 @@ import { Button, Tooltip, Message } from 'oskari-ui';
 import { ButtonContainer } from 'oskari-ui/components/buttons';
 import { PlusOutlined } from '@ant-design/icons';
 
-export const FlyoutFooter = ({
+export const FlyoutTools = ({
     toolController
 }) => {
     return (
@@ -19,6 +19,6 @@ export const FlyoutFooter = ({
         </Fragment>
     );
 };
-FlyoutFooter.propTypes = {
+FlyoutTools.propTypes = {
     toolController: PropTypes.any.isRequired
 };
