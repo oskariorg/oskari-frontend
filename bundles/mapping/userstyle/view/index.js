@@ -17,7 +17,7 @@ const Info = styled(Alert)`
 `;
 
 const getContent = (service, options, onClose) => {
-    const { layerId, id, showEditor } = options;
+    const { layerId, id, showEditor, geometryType } = options;
     let content;
     if (showEditor) {
         const wasEditor = true;
@@ -32,7 +32,8 @@ const getContent = (service, options, onClose) => {
             });
             onClose(wasEditor);
         };
-        content = <UserStyleEditor style={ style } onAdd={ onAdd } onCancel={ () => onClose(wasEditor) }/>;
+        content = <UserStyleEditor style={ style } onAdd={ onAdd }
+            geometryType={geometryType} onCancel={ () => onClose(wasEditor) }/>;
     } else {
         const styles = service.getStylesByLayer(layerId);
         const onDelete = (id) => service.removeUserStyle(id);
