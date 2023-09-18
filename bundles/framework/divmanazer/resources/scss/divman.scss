@@ -23,7 +23,7 @@ body {
 .oskari-root-el > nav {
       &.show-scroll-icon {
         .scroll-indicator {
-            display: block;
+            display: flex;
         }
         .scroll-icon {
           animation:flash 2s 5 linear;

@@ -45,23 +45,20 @@ export const setGlobalStyle = (theme = {}) => {
                 width: ${navigationDimensions.width}px;
                 pointer-events: none;
                 position: absolute;
-                left: ${navigationDimensions.left}px;
                 bottom: -1em;
+                justify-content: center;
+                align-items: center;
             }
             .scroll-icon {
                 border: solid 1em transparent;
                 border-top-color: white;
                 color: ${headerTheme.getTextColor()};
                 height: 0;
-                left: ${navigationDimensions.left + (navigationDimensions.width / 2)}px;
                 opacity: 0.6;
                 pointer-events: none;
-                position: absolute;
                 text-align: center;
-                transform: translate(-50%, 0);
                 transition: all .2s ease-out;
                 width: 0;
-                top: 10px;
             }
         }
     `;
