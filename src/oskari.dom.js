@@ -155,7 +155,7 @@ const setMenuScrollIndicator = () => {
             }
         });
     };
-    const navElement = document.querySelector('nav#maptools');
+    const navElement = getNavigationEl();
     if (navElement) {
         setIndicator();
         if (!navElement.querySelector('.scroll-indicator')) {
