@@ -28,7 +28,7 @@ SearchContainer.propTypes = {
     onSearch: PropTypes.func
 };
 
-const MetadataSearchContainer = ({ state, controller }) => {
+const Container = ({ state, controller }) => {
     const { query,
         advancedSearchExpanded,
         advancedSearchOptions,
@@ -74,19 +74,17 @@ const MetadataSearchContainer = ({ state, controller }) => {
     </div>;
 };
 
-MetadataSearchContainer.propTypes = {
+Container.propTypes = {
     state: PropTypes.object,
     controller: PropTypes.object,
     advancedSearchOptions: PropTypes.object
 };
 
-export const renderMetadataSearchContainer = (state, controller, element) => {
-    const render = (state, controller) => {
-        ReactDOM.render(<MetadataSearchContainer state={state} controller={controller} />, element);
-    };
+export const MetadataSearchContainer = ({ state, controller }) => {
+    return <Container state={state} controller={controller}/>;
+};
 
-    render(state, controller);
-    return {
-        update: render
-    };
+MetadataSearchContainer.propTypes = {
+    state: PropTypes.object,
+    controller: PropTypes.object
 };

@@ -1,5 +1,4 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { renderMetadataSearchContainer } from './view/MetadataSearchContainer';
 import { MetadataOptionService } from './service/MetadataOptionService';
 import { MetadataSearchService } from './service/MetadataSearchService';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from './instance';
@@ -24,7 +23,6 @@ class MetadataStateHandler extends StateHandler {
             coverageFeature: null,
             selectedLayers: null
         });
-        this.addStateListener(() => this.updateMetadataSearch());
     }
 
     getSandbox () {
@@ -33,18 +31,6 @@ class MetadataStateHandler extends StateHandler {
 
     getVectorLayerId () {
         return this.instance.getVectorLayerId();
-    }
-
-    renderMetadataSearch (element) {
-        this.contentController = renderMetadataSearchContainer(this.getState(), this.getController(), element);
-    }
-
-    updateMetadataSearch () {
-        if (!this.contentController) {
-            this.contentController = renderMetadataSearchContainer(this.getState(), this.getController(), document.createElement('div'));
-        }
-
-        this.contentController.update(this.getState(), this.getController());
     }
 
     updateQuery (query) {
