@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from '../instance';
 import { SearchInput, Spin, Message } from 'oskari-ui';
