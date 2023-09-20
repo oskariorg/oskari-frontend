@@ -5,11 +5,9 @@ import { Button } from 'oskari-ui';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const BUTTON_WIDTH = 150;
 const StyledButton = styled(Button)`
     height: 28px;
     min-width: ${props => props.$minWidth}px;
-    max-width: ${props => props.$isDropdown ? '250' : BUTTON_WIDTH}px;
     font-size: 14px;
     margin: 0 2px;
     margin-top: ${props => props.$marginTop || 0}px;
