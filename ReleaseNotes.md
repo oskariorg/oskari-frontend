@@ -1,5 +1,13 @@
 # Release Notes
 
+## 2.11.2
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/46?closed=1
+
+Fixed timing issues with runtime vectorlayers.
+The issue is mainly on RPC-based apps where layers are initialized directly on app startup.
+
 # 2.11.0
 
 For a full list of changes see:
