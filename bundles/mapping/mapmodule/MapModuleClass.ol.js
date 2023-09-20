@@ -660,6 +660,9 @@ export class MapModule extends AbstractMapModule {
      */
     zoomToExtent (bounds, suppressStart, suppressEnd, maxZoomLevel = -1) {
         var extent = this.__boundsToArray(bounds);
+
+        if (olExtent.isEmpty(extent)) return;
+
         const opts = {};
 
         if (maxZoomLevel !== -1) {
