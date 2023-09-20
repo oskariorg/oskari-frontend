@@ -71,6 +71,7 @@ Oskari.clazz.define(
         this._styleCache = {};
         this._animatingFeatures = {};
         this._name = 'VectorLayerPlugin';
+        this._asyncLayers = {};
     }, {
         __name: 'Oskari.mapframework.mapmodule.VectorLayerPlugin',
         /**
@@ -129,7 +130,7 @@ Oskari.clazz.define(
                     olLayer.set(LAYER_ID, layerId, true);
                     olLayer.setOpacity(opacity);
 
-                    me.getMapModule().addLayer(olLayer);
+                    me.getMapModule().addOverlayLayer(olLayer);
                     me._olLayers[layerId] = olLayer;
                     me._layerStyles[layerId] = layerStyle;
                 }
@@ -151,6 +152,18 @@ Oskari.clazz.define(
                 },
                 AfterChangeMapLayerOpacityEvent: function (event) {
                     me._afterChangeMapLayerOpacityEvent(event);
+                },
+                AfterMapLayerAddEvent: function (event) {
+                    const layer = event.getMapLayer();
+                    if (!layer.isLayerOfType('VECTOR')) {
+                        return;
+                    }
+                    const layerId = layer.getId();
+                    const olLayer = me._asyncLayers[layerId];
+                    if (olLayer) {
+                        me.getMapModule().addLayer(olLayer);
+                        delete me._asyncLayers[layerId];
+                    }
                 }
             };
         },
@@ -456,7 +469,11 @@ Oskari.clazz.define(
                 const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
                 // Set min max zoom levels that layer should be visible in
                 zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
-                me.getMapModule().addLayer(olLayer);
+                if (layer.getOptions().showLayer) {
+                    me._asyncLayers[layer.getId()] = olLayer;
+                } else {
+                    me.getMapModule().addOverlayLayer(olLayer);
+                }
             }
             olLayer.setOpacity(layer.getOpacity() / 100);
             olLayer.setVisible(layer.isVisible());
@@ -535,6 +552,7 @@ Oskari.clazz.define(
                     layer.setOpacity(options.opacity);
                 }
                 layer.setVisible(true);
+                layer.setOptions({ showLayer: options.showLayer });
                 this._setHoverOptions(layer, options);
                 // scale limits
                 const mapModule = this.getMapModule();
@@ -569,7 +587,6 @@ Oskari.clazz.define(
                         };
                         mapLayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
                     }
-
                     mapLayerService.addLayer(layer);
                 }
                 if (options.showLayer !== 'registerOnly' && !this._sandbox.findMapLayerFromSelectedMapLayers(layer.getId())) {

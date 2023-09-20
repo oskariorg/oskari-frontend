@@ -30,7 +30,12 @@ import './AbstractMapModule';
 import './plugin/BasicMapModulePlugin';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
-const INTERNAL_LAYER_Z_INDEX = 1;
+const LAYER_Z_INDEX = {
+    normal: 0, // When undefined, a zIndex of 0 is assumed
+    overlay: 1,
+    markers: 2,
+    draw: 3
+};
 
 if (!window.proj4) {
     window.proj4 = proj4;
@@ -977,8 +982,8 @@ export class MapModule extends AbstractMapModule {
      * Orders layers by Z-indexes.
      */
     orderLayersByZIndex () {
-        // getZIndex returns undefined if z indez isn't set even default is 0.
-        const layerZ = l => l.getZIndex() || 0;
+        // When undefined, a zIndex of 0 is assumed
+        const layerZ = l => l.getZIndex() || LAYER_Z_INDEX.normal;
         this.getMap().getLayers().getArray().sort(function (a, b) {
             return layerZ(a) - layerZ(b);
         });
@@ -1153,12 +1158,14 @@ export class MapModule extends AbstractMapModule {
      * Adds overlay layer to map. These layers aren't listed in selected layers and are always above those.
      * @method addOverlayLayer
      * @param {ol/layer/Layer} layer ol specific!
+     * @param {String} type (optional) for reserved z-indexes
      */
-    addOverlayLayer (layerImpl) {
+    addOverlayLayer (layerImpl, type) {
         if (!layerImpl) {
             return;
         }
-        layerImpl.setZIndex(INTERNAL_LAYER_Z_INDEX);
+        const zIndex = LAYER_Z_INDEX[type] || LAYER_Z_INDEX.overlay;
+        layerImpl.setZIndex(zIndex);
         this.getMap().addLayer(layerImpl);
     }
 
