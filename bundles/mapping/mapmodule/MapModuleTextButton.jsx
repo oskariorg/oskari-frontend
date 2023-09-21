@@ -4,10 +4,11 @@ import { getNavigationTheme } from 'oskari-ui/theme';
 import { Button } from 'oskari-ui';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
+const BUTTON_WIDTH = 150;
 const StyledButton = styled(Button)`
     height: 28px;
     min-width: ${props => props.$minWidth}px;
+    max-width: ${props => props.$isDropdown ? '250' : BUTTON_WIDTH}px;
     font-size: 14px;
     margin: 0 2px;
     margin-top: ${props => props.$marginTop || 0}px;
@@ -53,6 +54,11 @@ const StyledButton = styled(Button)`
     }
 `;
 
+const ButtonText = styled('span')`
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
 const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     const helper = getNavigationTheme(theme);
     const rounding = helper.getButtonRoundness();
@@ -86,7 +92,7 @@ export const MapModuleTextButton = ({ visible, onClick, icon, text, active, posi
         loading={loading}
         {...rest}
     >
-        {text}
+        <ButtonText>{text}</ButtonText>
     </ThemedButton>;
 };
 

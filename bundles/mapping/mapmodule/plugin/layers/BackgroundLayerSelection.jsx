@@ -12,11 +12,6 @@ const ButtonsContainer = styled('div')`
     align-items: center;
 `;
 
-const ButtonText = styled('span')`
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
 const getDropDownItems = (layers = []) => {
     return layers.map(layer => ({
         title: layer.title,
@@ -38,7 +33,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
                         icon={<LayersIcon />}
                         $isDropdown={true}
                         data-layerid={current?.getId()}
-                        text={<ButtonText>{current?.getName()}</ButtonText>}
+                        text={current?.getName()}
                         {...rest}
                     />
                 </Dropdown>
@@ -53,7 +48,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
                         visible={true}
                         onClick={() => layer.onClick(layer.id)}
                         icon={null}
-                        text={<ButtonText>{layer.title}</ButtonText>}
+                        text={layer.title}
                         active={Number.parseInt(layer.id, 10) === current?.getId()}
                         loading={false}
                         $isDropdown={false}
