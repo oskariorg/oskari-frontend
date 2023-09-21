@@ -368,36 +368,8 @@ Oskari.clazz.define(
          */
         getPlugins: function () {
             return this.plugins;
-        },
-        /* ----------- /Tile and Flyout ------------- */
-        /**
-        * @method addSearchResultAction
-        * Add search result action.
-        * @public
-        * @param {jQuery} actionElement jQuery action element
-        * @param {Function} callback the callback function
-        * @param {String} bindCallbackTo the jQuery selector where to bind click operation
-        * @param {String} actionTextElement action text jQuery selector. If it's null then text showed on main element
-        * @param {String} actionText action text
-        * @param {Function} showAction function. If return true then shows action text. Optional.
-        */
-        addSearchResultAction: function (actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction) {
-            // TODO: implement search result actions if these are actually used someplace
-            const status = {
-                actionElement: actionElement,
-                actionTextElement: actionTextElement,
-                callback: callback,
-                bindCallbackTo: bindCallbackTo,
-                actionText: actionText,
-                showAction: function (metadata) { return true; }
-            };
-
-            if (showAction && showAction !== null) {
-                status.showAction = showAction;
-            }
-
-            this.searchResultActions.push(status);
         }
+        /* ----------- /Tile and Flyout ------------- */
     }, {
         /**
          * @property {String[]} protocol
