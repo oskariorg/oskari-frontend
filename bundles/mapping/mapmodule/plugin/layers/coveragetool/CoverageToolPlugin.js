@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Message } from 'oskari-ui';
+import { Message, Tooltip } from 'oskari-ui';
 import { COVERAGE_LAYER_ID, CoverageHelper } from './CoverageHelper';
 import { ThemeProvider } from 'oskari-ui/util';
 import { MapModuleTextButton } from '../../../MapModuleTextButton';
-
 const FEATURE_EVENT_ADD = 'add';
 const LOCALIZATION_BUNDLE_ID = 'MapModule';
 
@@ -48,17 +47,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
             if (!el) {
                 return;
             }
+
+            // clear all content from element so the tooltip gets cleared as well
+            if (!this.isVisible()) {
+                ReactDOM.render(null, el[0]);
+                return;
+            }
+
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
-                    <MapModuleTextButton
-                        visible={this.isVisible()}
-                        text={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap'/>}
-                        onClick={() => {
-                            this._coverageButtonClicked();
-                        }}
-                        active={false}
-                        position={this.getLocation()}
-                    />
+                    <Tooltip key={'FeatureDataPluginButtonTooltip'} title={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap'/>}>
+                        <MapModuleTextButton
+                            visible={this.isVisible()}
+                            text={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap'/>}
+                            onClick={() => {
+                                this._coverageButtonClicked();
+                            }}
+                            active={false}
+                            position={this.getLocation()}
+                        />
+                    </Tooltip>
                 </ThemeProvider>,
                 el[0]);
         },
