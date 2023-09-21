@@ -5,7 +5,6 @@ import { ThemeProvider } from 'oskari-ui/util';
 import { FeatureDataPluginHandler } from './FeatureDataPluginHandler';
 import { FEATUREDATA_WFS_STATUS } from '../view/FeatureDataContainer';
 import { MapModuleTextButton } from '../../../mapping/mapmodule/MapModuleTextButton';
-import { Tooltip } from 'oskari-ui';
 
 /**
  * @class Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin
