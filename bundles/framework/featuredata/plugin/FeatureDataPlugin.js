@@ -90,19 +90,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
 
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
-                    <Tooltip key={'FeatureDataPluginButtonTooltip'} title={<Message messageKey='title' bundleKey='FeatureData'/>}>
-                        <MapModuleTextButton
-                            visible={layers?.length > 0}
-                            text={<Message messageKey='title' bundleKey='FeatureData'/>}
-                            onClick={() => this.handler.openFlyout()}
-                            active={flyoutOpen}
-                            loading={loadingStatus.loading}
-                            position={this.getLocation()}
-                            $marginRight={marginRight}
-                            $marginLeft={marginLeft}
-                            $marginTop={'10'}
-                        />
-                    </Tooltip>
+                    <MapModuleTextButton
+                        visible={layers?.length > 0}
+                        text={<Message messageKey='title' bundleKey='FeatureData'/>}
+                        onClick={() => this.handler.openFlyout()}
+                        active={flyoutOpen}
+                        loading={loadingStatus.loading}
+                        position={this.getLocation()}
+                        $marginRight={marginRight}
+                        $marginLeft={marginLeft}
+                        $marginTop={'10'}
+                    />
                 </ThemeProvider>,
                 el[0]
             );
