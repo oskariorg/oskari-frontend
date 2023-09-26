@@ -1,6 +1,6 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
-import { FilterTypes, LogicalOperators, showSelectByPropertiesPopup } from '../view/SelectByProperties';
+import { showSelectByPropertiesPopup } from '../view/SelectByProperties';
 import { COLUMN_SELECTION, FILETYPES, SEPARATORS, showExportDataPopup } from '../view/ExportData';
 import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
 import { FilterSelector } from '../FilterSelector';
@@ -37,10 +37,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
             visibleColumnsSettings: {
                 allColumns: [],
                 visibleColumns: []
-            },
-            selectByPropertiesSettings: {
-                allColumns: [],
-                filters: []
             }
         };
     }
@@ -260,11 +256,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     createSelectByPropertiesSettings (visibleColumnsSettings) {
-        let filters;
-        if (visibleColumnsSettings?.allColumns && visibleColumnsSettings?.allColumns.length) {
-            filters = [this.initEmptyFilter(visibleColumnsSettings.allColumns[0])];
-        }
-        return visibleColumnsSettings?.allColumns ? { allColumns: visibleColumnsSettings.allColumns, filters, errors: null } : null;
+        return {};
     }
 
     closeFlyout (resetLayers) {
@@ -297,30 +289,17 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
     }
 
-    updateFilters (index, filter) {
-        const { selectByPropertiesSettings } = this.getState();
-        selectByPropertiesSettings.filters[index] = filter;
-        filter.error = null;
-        this.updateState({ selectByPropertiesSettings });
+    updateFilter (selectByPropertiesFilter) {
+        this.updateState({ selectByPropertiesFilter });
     }
 
-    applyFilters () {
-        const { selectByPropertiesSettings } = this.getState();
-        const { filters } = selectByPropertiesSettings;
-        let hasErrors = false;
-        filters.forEach((filter) => {
-            if (!filter?.value?.length) {
-                hasErrors = true;
-                filter.error = true;
-            }
-        });
+    resetFilter () {
+        this.updateState({ selectByPropertiesFilter: {} });
+    }
 
-        if (hasErrors) {
-            this.updateState({ selectByPropertiesSettings });
-            return;
-        }
-
-        this.selectFeaturesByProperties();
+    applyFilter () {
+        const { selectByPropertiesFilter } = this.getState();
+        console.log('apply', selectByPropertiesFilter);
     }
 
     selectFeaturesByProperties () {
@@ -336,57 +315,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
             }
         });
         this.filterSelector.selectWithProperties(filterArray, activeLayerId);
-    }
-
-    initEmptyFilter (columnName) {
-        return {
-            attribute: columnName,
-            operator: FilterTypes.ALL.equals,
-            value: '',
-            error: null,
-            logicalOperator: LogicalOperators.AND,
-            caseSensitive: false
-        };
-    }
-
-    addFilter () {
-        const { selectByPropertiesSettings } = this.getState();
-        if (selectByPropertiesSettings && selectByPropertiesSettings.filters && selectByPropertiesSettings.allColumns) {
-            selectByPropertiesSettings.filters.push(this.initEmptyFilter(selectByPropertiesSettings.allColumns[0]));
-        }
-        this.updateState({
-            selectByPropertiesSettings
-        });
-    }
-
-    /**
-     *
-     * @param {*} index Index of a single filter to remove
-     * @param {*} clearAll When true and no index is provided, clear all filters.
-     * @returns void
-     */
-    removeFilter (index, clearAll) {
-        if (index) {
-            return this.removeFilterByIndex(index);
-        }
-
-        if (clearAll) {
-            const { selectByPropertiesSettings } = this.getState();
-            selectByPropertiesSettings.filters = [this.initEmptyFilter(selectByPropertiesSettings.allColumns[0])];
-            this.updateState({
-                selectByPropertiesSettings
-            });
-        }
-    }
-
-    removeFilterByIndex (index) {
-        const { selectByPropertiesSettings } = this.getState();
-        if (selectByPropertiesSettings && selectByPropertiesSettings.filters && selectByPropertiesSettings.allColumns) {
-            selectByPropertiesSettings.filters.splice(index, 1);
-        }
-        this.updateState({
-            selectByPropertiesSettings
-        });
     }
 
     determineActiveLayerId (featureDataLayers) {
@@ -587,11 +515,9 @@ const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
     'openExportDataPopup',
     'closeExportDataPopup',
     'sendExportDataForm',
-    'updateFilters',
-    'addFilter',
-    'removeFilter',
-    'applyFilters'
-
+    'updateFilter',
+    'resetFilter',
+    'applyFilter'
 ]);
 
 export { wrapped as FeatureDataPluginHandler };
