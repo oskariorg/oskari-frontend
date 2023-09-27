@@ -302,8 +302,11 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     applyFilter () {
         const { selectByPropertiesFilter, activeLayerFeatures, activeLayerId } = this.getState();
-        const selectedFeatureIds = filterFeaturesByPropertyFilter(selectByPropertiesFilter, activeLayerFeatures).map(feature => feature.id);
-        this.selectionService.setSelectedFeatureIds(activeLayerId, selectedFeatureIds);
+        const selectedFeatures = filterFeaturesByPropertyFilter(selectByPropertiesFilter, activeLayerFeatures);
+        const selectedFeatureIds = selectedFeatures?.map(feature => feature.id) || null;
+        if (selectedFeatureIds) {
+            this.selectionService.setSelectedFeatureIds(activeLayerId, selectedFeatureIds);
+        }
     }
 
     createSelectByPropertiesFeatureTypes (visibleColumnsSettings) {
