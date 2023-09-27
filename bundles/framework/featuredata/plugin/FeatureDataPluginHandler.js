@@ -3,7 +3,9 @@ import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { showSelectByPropertiesPopup } from '../view/SelectByProperties';
 import { COLUMN_SELECTION, FILETYPES, SEPARATORS, showExportDataPopup } from '../view/ExportData';
 import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
+import { cleanFilter } from 'oskari-ui/components/FeatureFilter';
 import { FilterSelector } from '../FilterSelector';
+import { filterFeaturesByPropertyFilter } from '../../../mapping/mapmodule/oskariStyle/filter';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
@@ -19,8 +21,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
         this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
         this.flyoutController = null;
         this.selectByPropertiespopupController = null;
-        const featureQueryFn = (geojson, opts) => this.mapModule.getVectorFeatures(geojson, opts);
-        this.filterSelector = new FilterSelector(featureQueryFn, this.selectionService);
+//        const featureQueryFn = (geojson, opts) => this.mapModule.getVectorFeatures(geojson, opts);
+//        this.filterSelector = new FilterSelector(featureQueryFn, this.selectionService);
         this.addStateListener(() => this.updateFlyout());
     }
 
@@ -37,7 +39,9 @@ class FeatureDataPluginUIHandler extends StateHandler {
             visibleColumnsSettings: {
                 allColumns: [],
                 visibleColumns: []
-            }
+            },
+            selectByPropertiesFilter: {},
+            selectByPropertiesFeatureTypes: {}
         };
     }
 
@@ -74,7 +78,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
             activeLayerFeatures: features,
             selectedFeatureIds,
             visibleColumnsSettings,
-            selectByPropertiesSettings: this.createSelectByPropertiesSettings(visibleColumnsSettings),
+            selectByPropertiesFilter: {},
+            selectByPropertiesFeatureTypes: this.createSelectByPropertiesFeatureTypes(visibleColumnsSettings),
             sorting: this.determineSortingColumn(layerId, features)
         });
     }
@@ -178,12 +183,13 @@ class FeatureDataPluginUIHandler extends StateHandler {
             return;
         }
 
-        const { activeLayerId, activeLayerFeatures, visibleColumnsSettings, selectByPropertiesSettings } = this.getState();
+        const { activeLayerId, activeLayerFeatures, visibleColumnsSettings, selectByPropertiesFilter, selectByPropertiesFeatureTypes } = this.getState();
         const newState = {
             flyoutOpen: true,
             activeLayerFeatures,
             visibleColumnsSettings,
-            selectByPropertiesSettings,
+            selectByPropertiesFilter,
+            selectByPropertiesFeatureTypes,
             sorting: activeLayerFeatures ? this.determineSortingColumn(activeLayerId, activeLayerFeatures) : null
         };
 
@@ -195,7 +201,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
             newState.sorting = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.determineSortingColumn(activeLayerId, newActiveLayerFeatures) : null;
             newState.selectedFeatureIds = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
             newState.visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, newActiveLayerFeatures);
-            newState.selectByPropertiesSettings = this.createSelectByPropertiesSettings(newState.visibleColumnsSettings);
+            newState.selectByPropertiesFilter = {};
+            newState.selectByPropertiesFeatureTypes = this.createSelectByPropertiesFeatureTypes(newState.visibleColumnsSettings);
         }
 
         this.updateState(newState);
@@ -255,10 +262,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
         };
     }
 
-    createSelectByPropertiesSettings (visibleColumnsSettings) {
-        return {};
-    }
-
     closeFlyout (resetLayers) {
         if (this.flyoutController) {
             this.flyoutController.close();
@@ -298,24 +301,30 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     applyFilter () {
-        const { selectByPropertiesFilter } = this.getState();
-        console.log('apply', selectByPropertiesFilter);
+        const { selectByPropertiesFilter, activeLayerFeatures, activeLayerId } = this.getState();
+        const selectedFeatureIds = filterFeaturesByPropertyFilter(selectByPropertiesFilter, activeLayerFeatures).map(feature => feature.id);
+        this.selectionService.setSelectedFeatureIds(activeLayerId, selectedFeatureIds);
     }
 
-    selectFeaturesByProperties () {
-        const { selectByPropertiesSettings, activeLayerId } = this.getState();
-        const filters = selectByPropertiesSettings.filters;
+    createSelectByPropertiesFeatureTypes (visibleColumnsSettings) {
+        if (!visibleColumnsSettings) {
+            return {};
+        }
 
-        // separate the logical operators from the original filter and form a single array
-        const filterArray = [];
-        filters.forEach((filter) => {
-            filterArray.push(filter);
-            if (filters.length > 1) {
-                filterArray.push({ boolean: filter.logicalOperator });
-            }
+        const { activeLayerPropertyTypes } = visibleColumnsSettings;
+        if (!activeLayerPropertyTypes) {
+            return null;
+        };
+
+        const featureProperties = Object.keys(activeLayerPropertyTypes).map(key => {
+            return {
+                name: key,
+                type: activeLayerPropertyTypes[key]
+            };
         });
-        this.filterSelector.selectWithProperties(filterArray, activeLayerId);
-    }
+
+        return featureProperties;
+    };
 
     determineActiveLayerId (featureDataLayers) {
         let currentLayer = featureDataLayers?.find(layer => layer.getId() === this.getState().activeLayerId);

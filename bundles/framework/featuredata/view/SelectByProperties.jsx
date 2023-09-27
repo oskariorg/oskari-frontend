@@ -93,27 +93,10 @@ const getActiveLayerName = (activeLayerId, layers) => {
     return layers.find((layer) => layer.getId() === activeLayerId).getName() || null;
 };
 
-const getFeatureProperties = (visibleColumnsSettings) => {
-    const { activeLayerPropertyTypes } = visibleColumnsSettings;
-    if (!activeLayerPropertyTypes) {
-        return null;
-    };
-
-    const featureProperties = Object.keys(activeLayerPropertyTypes).map(key => {
-        return {
-            name: key,
-            type: activeLayerPropertyTypes[key]
-        };
-    });
-
-    return featureProperties;
-};
-
 export const showSelectByPropertiesPopup = (state, controller) => {
-    const { activeLayerId, layers, selectByPropertiesFilter, visibleColumnsSettings } = state;
-    const featureProperties = getFeatureProperties(visibleColumnsSettings);
+    const { activeLayerId, layers, selectByPropertiesFilter, selectByPropertiesFeatureTypes, visibleColumnsSettings } = state;
     const content = <SelectByPropertiesPopup
-        featureProperties= { featureProperties }
+        featureProperties= { selectByPropertiesFeatureTypes }
         columnNames={ visibleColumnsSettings.allColumns }
         labels={visibleColumnsSettings.activeLayerPropertyLabels}
         filter={selectByPropertiesFilter}
@@ -129,12 +112,13 @@ export const showSelectByPropertiesPopup = (state, controller) => {
     return {
         ...controls,
         update: (state) => {
+            const { selectByPropertiesFilter, selectByPropertiesFeatureTypes, visibleColumnsSettings } = state;
             controls.update(title,
                 <SelectByPropertiesPopup
-                    featureProperties= { featureProperties }
+                    featureProperties= { selectByPropertiesFeatureTypes }
                     columnNames={ visibleColumnsSettings.allColumns }
                     labels={visibleColumnsSettings.activeLayerPropertyLabels}
-                    filter={state.selectByPropertiesFilter}
+                    filter={selectByPropertiesFilter}
                     updateFilter={controller.updateFilter}
                     resetFilter={controller.resetFilter}
                     applyFilter={controller.applyFilter}
