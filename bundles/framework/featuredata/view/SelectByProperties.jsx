@@ -46,6 +46,7 @@ Buttons.propTypes = {
 
 const Container = styled('div')`
     padding: 1em;
+    min-width: 25vw;
 `;
 
 export const SelectByPropertiesPopup = (props) => {
