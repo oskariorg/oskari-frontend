@@ -159,7 +159,9 @@ Oskari.clazz.define(
                         return;
                     }
                     const layerId = layer.getId();
-                    const olLayer = me._asyncLayers[layerId];
+                    // registered layer can be added without request
+                    // create/get ol layer if async isn't stored
+                    const olLayer = me._asyncLayers[layerId] || me._getOlLayer(layer);
                     if (olLayer) {
                         me.getMapModule().addLayer(olLayer);
                         delete me._asyncLayers[layerId];
@@ -454,7 +456,6 @@ Oskari.clazz.define(
             if (!layer || layer.getLayerType() !== 'vector') {
                 return null;
             }
-
             var olLayer = me._olLayers[layer.getId()];
             if (!olLayer) {
                 olLayer = new olLayerVector({
@@ -631,7 +632,8 @@ Oskari.clazz.define(
                 return layer;
             }
             let layerUpdate = false;
-            const { layerName, layerOrganizationName, layerDescription } = options;
+            let olUpdate = false;
+            const { layerName, layerOrganizationName, layerDescription, showLayer } = options;
             if (layerName && layer.getName() !== layerName) {
                 layer.setName(layerName);
                 layerUpdate = true;
@@ -646,6 +648,14 @@ Oskari.clazz.define(
             }
             if (typeof options.opacity !== 'undefined') {
                 layer.setOpacity(options.opacity);
+                olUpdate = true;
+            }
+            if (typeof showLayer !== 'undefined') {
+                const layerOpts = layer.getOptions() || {};
+                layer.setOptions({ ...layerOpts, showLayer });
+                olUpdate = true;
+            }
+            if (olUpdate) {
                 // Apply changes to ol layer
                 this._getOlLayer(layer);
             }
@@ -1035,6 +1045,7 @@ Oskari.clazz.define(
             var vectorLayer = this._olLayers[layer.getId()];
             this.getMap().removeLayer(vectorLayer);
             delete this._olLayers[layer.getId()];
+            delete this._asyncLayers[layer.getId()];
         },
         /**
          * @method getOLMapLayers
