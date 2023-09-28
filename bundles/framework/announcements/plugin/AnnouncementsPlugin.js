@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
          * handlers/templates.
          */
         init: function () {
-            var me = this;
+            const me = this;
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
 
             me.templates.main = jQuery(
@@ -72,6 +72,11 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                     me.addAnnouncements();
                 }
             });
+            // listen to application started event and register RPC functions.
+            Oskari.on('app.start', function () {
+                // Register RPC functions
+                me._registerRPCFunctions();
+            });
         },
 
         /**
@@ -79,7 +84,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
          * Register RPC functions
          */
         _registerRPCFunctions () {
-            var me = this;
+            const me = this;
 
             const rpcService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.rpc.service.RpcService');
             if (!rpcService) {
