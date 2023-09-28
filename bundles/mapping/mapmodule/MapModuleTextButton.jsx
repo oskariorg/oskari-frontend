@@ -4,6 +4,7 @@ import { getNavigationTheme } from 'oskari-ui/theme';
 import { Button } from 'oskari-ui';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
 const BUTTON_WIDTH = 150;
 const StyledButton = styled(Button)`
     height: 28px;
@@ -17,7 +18,7 @@ const StyledButton = styled(Button)`
     margin-left: ${props => props.$marginLeft || 2}px;
     border: none;
     opacity: ${props => props.$opacity};
-    border-radius: calc(${props => props.$rounding ? props.$rounding / 100 : 0} * 32px);
+    border-radius: calc(${props => props.$rounding || 0} * 32px);
     color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
     background: ${props => props.$backgroundColor};
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
@@ -61,14 +62,15 @@ const ButtonText = styled('span')`
 
 const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     const helper = getNavigationTheme(theme);
-    const rounding = helper.getButtonRoundness();
+    // get button roundness factor instead of percentage as the component is not round itself
+    const roundingFactor = helper.getButtonRoundnessFactor();
     const icon = helper.getTextColor();
     const background = helper.getButtonColor();
     const hover = helper.getButtonHoverColor();
     const opacity = helper.getButtonOpacity();
     return (
         <StyledButton
-            $rounding={rounding}
+            $rounding={roundingFactor}
             $iconColor={icon}
             $backgroundColor={background}
             $hoverColor={hover}
