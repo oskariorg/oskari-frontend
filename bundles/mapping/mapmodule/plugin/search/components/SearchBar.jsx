@@ -12,7 +12,7 @@ import { getNavigationTheme } from 'oskari-ui/theme';
 const StyledButton = styled(Button)`
     margin-left: 7px;
     height: 35px;
-    border-radius: calc(${props => props.rounding || 0} * 35px);
+    border-radius: calc(${props => props.$rounding || 0} * 35px);
     background: ${props => props.$backgroundColor};
     color: ${props => props.$iconColor};
     border: none;
