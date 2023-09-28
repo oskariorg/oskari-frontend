@@ -67,4 +67,4 @@ BackgroundLayerSelection.propTypes = {
     layers: PropTypes.array,
     current: PropTypes.object,
     mapWidth: PropTypes.number
-}
+};
