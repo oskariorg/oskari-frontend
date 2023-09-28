@@ -29,7 +29,7 @@ const WideAutoComplete = styled(AutoComplete)`
 // padding: 4px 0px 4px 11px;
 const StyledInput = styled(TextInput)`
     height: 35px;
-    border-radius: calc(${props => props.rounding ? props.rounding.replace('%', '') / 100 : 0} * 35px);
+    border-radius: calc(${props => props.rounding || 0} * 35px);
 `;
 
 const noop = () => {};
@@ -77,6 +77,7 @@ export const SearchInput = ({ query = '', suggestions = [], onChange = noop, onS
 SearchInput.propTypes = {
     query: PropTypes.string,
     suggestions: PropTypes.arrayOf(PropTypes.string),
+    rounding: PropTypes.number,
     onChange: PropTypes.func,
     onSearch: PropTypes.func
 };
