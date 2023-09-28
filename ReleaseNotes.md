@@ -1,5 +1,10 @@
 # Release Notes
 
+## 2.12.1
+
+Added changes from 2.11.2 for 2.12.0.
+Fixed an issue where GFI popups were not always opened correctly.
+
 ## 2.12.0
 
 For a full list of changes see:
@@ -80,6 +85,14 @@ Improvements to user management:
 - Fixed issues on coordinate tool configuration on the publisher functionality
 - Fixed an issue with language selection on the publisher functionality
 - The admin UI for selecting announcements for an embedded map on the publisher functionality now has the option to hide the announcements UI on the embedded map (for using announcements programmatically).
+
+## 2.11.2
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/46?closed=1
+
+Fixed timing issues with runtime vectorlayers.
+The issue is mainly on RPC-based apps where layers are initialized directly on app startup.
 
 ## 2.11.1
 
