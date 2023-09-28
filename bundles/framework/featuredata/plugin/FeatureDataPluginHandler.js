@@ -3,8 +3,6 @@ import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
 import { showSelectByPropertiesPopup } from '../view/SelectByProperties';
 import { COLUMN_SELECTION, FILETYPES, SEPARATORS, showExportDataPopup } from '../view/ExportData';
 import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
-import { cleanFilter } from 'oskari-ui/components/FeatureFilter';
-import { FilterSelector } from '../FilterSelector';
 import { filterFeaturesByPropertyFilter } from '../../../mapping/mapmodule/oskariStyle/filter';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
@@ -21,8 +19,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
         this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
         this.flyoutController = null;
         this.selectByPropertiespopupController = null;
-//        const featureQueryFn = (geojson, opts) => this.mapModule.getVectorFeatures(geojson, opts);
-//        this.filterSelector = new FilterSelector(featureQueryFn, this.selectionService);
         this.addStateListener(() => this.updateFlyout());
     }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { showPopup } from 'oskari-ui/components/window';
-import { FeatureFilter, Message, Button } from 'oskari-ui/';
+import { FeatureFilter, Message, Button } from 'oskari-ui';
 import { SecondaryButton } from 'oskari-ui/components/buttons';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
 import { FilterTwoTone } from '@ant-design/icons';
