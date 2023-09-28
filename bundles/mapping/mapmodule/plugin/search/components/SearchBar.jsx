@@ -7,13 +7,12 @@ import { SearchInput } from './SearchInput';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
 
-
 // filtering class means that the search uses other channels than what are used by default
 // -> highlight the button
 const StyledButton = styled(Button)`
     margin-left: 7px;
     height: 35px;
-    border-radius: calc(${props => props.$rounding ? props.$rounding.replace('%', '') / 100 : 0} * 35px);
+    border-radius: calc(${props => props.rounding || 0} * 35px);
     background: ${props => props.$backgroundColor};
     color: ${props => props.$iconColor};
     border: none;
@@ -49,7 +48,7 @@ const SearchContainer = styled('div')`
     opacity: ${props => props.opacity};
     align-items: center;
     padding: 3px 7px 3px 3px;
-    border-radius: calc(${props => props.rounding ? props.rounding.replace('%', '') / 100 : 0} * 40px);
+    border-radius: calc(${props => props.rounding || 0} * 40px);
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
 
     .ant-btn-icon-only > * {
@@ -67,7 +66,8 @@ export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placehol
     const helper = getNavigationTheme(theme);
     const bgColor = helper.getButtonColor();
     const icon = helper.getTextColor();
-    const rounding = helper.getButtonRoundness();
+    // get button roundness factor instead of percentage as the component is not round itself
+    const roundingFactor = helper.getButtonRoundnessFactor();
     const opacity = helper.getButtonOpacity();
     const hover = helper.getButtonHoverColor();
     if (state.minimized) {
@@ -79,16 +79,16 @@ export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placehol
             />);
     }
     const search = (autoselected) => controller.doSearch(autoselected);
-    const { defaultChannels = [], selectedChannels = []} = state;
+    const { defaultChannels = [], selectedChannels = [] } = state;
     const isUsingDefaultChannels = selectedChannels.length === defaultChannels.length && selectedChannels.every(id => defaultChannels.includes(id));
     let optionsCSSClasses = 't_search_options';
     if (!isUsingDefaultChannels) {
         optionsCSSClasses += ' filtering';
     }
     return (
-        <SearchContainer backgroundColor={bgColor} rounding={rounding} opacity={opacity}>
+        <SearchContainer backgroundColor={bgColor} rounding={roundingFactor} opacity={opacity}>
             <SearchInput
-                rounding={rounding}
+                rounding={roundingFactor}
                 query={state.query}
                 onChange={q => controller.setQuery(q)}
                 onSearch={search}
@@ -98,7 +98,7 @@ export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placehol
             />
             { state.hasOptions &&
                 <StyledButton
-                    $rounding={rounding}
+                    $rounding={roundingFactor}
                     $iconColor={icon}
                     $backgroundColor={bgColor}
                     $hoverColor={hover}
@@ -109,7 +109,7 @@ export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placehol
                 />
             }
             <StyledButton
-                $rounding={rounding}
+                $rounding={roundingFactor}
                 $iconColor={icon}
                 $backgroundColor={bgColor}
                 $hoverColor={hover}
