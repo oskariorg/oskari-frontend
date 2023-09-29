@@ -65,7 +65,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
                         const filteredAnnouncement = me.announcements.filter(ann => ann.id === announcement);
                         if (me.isAnnouncementValid(filteredAnnouncement[0])) {
-                            me.selectedAnnouncements.push(filteredAnnouncement[0]);
+                            // make sure there are no duplicates
+                            if (me.selectedAnnouncements.filter(ann => ann.id === filteredAnnouncement[0].id).length === 0) {
+                                me.selectedAnnouncements.push(filteredAnnouncement[0]);
+                            }
                         }
                     });
                 }
@@ -80,6 +83,18 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
 
         getName: function () {
             return 'Oskari.framework.announcements.publisher.AnnouncementsTool';
+        },
+
+        /**
+         * Check if Announcement is inside the given timeframe
+         * @method @private isAnnouncementValid
+         * @param  {Object} announcement announcement
+         * @return {Boolean} true if announcement is valid
+         */
+        isAnnouncementValid: function (announcement) {
+            const announcementEnd = new Date(announcement.endDate);
+            const currentDate = new Date();
+            return currentDate.getTime() <= announcementEnd.getTime();
         },
 
         /**
