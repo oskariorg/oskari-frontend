@@ -235,7 +235,6 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 me.annRefs[announcement.id] = div;
                 announcementsDiv.append(div);
             });
-            jQuery.isEmptyObject(me.annRefs) ? jQuery('div.mapplugin.announcements').hide() : jQuery('div.mapplugin.announcements').show();
         },
 
         /**
