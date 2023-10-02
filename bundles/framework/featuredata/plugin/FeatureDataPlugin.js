@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Message } from 'oskari-ui';
 import { ThemeProvider } from 'oskari-ui/util';
-import { FeatureDataButton } from './FeatureDataButton';
 import { FeatureDataPluginHandler } from './FeatureDataPluginHandler';
 import { FEATUREDATA_WFS_STATUS } from '../view/FeatureDataContainer';
+import { MapModuleTextButton } from '../../../mapping/mapmodule/MapModuleTextButton';
 
 /**
  * @class Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin
@@ -77,23 +77,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                 return;
             }
             const { flyoutOpen, layers, loadingStatus } = this.handler.getState();
+            this.toggleGFI(!flyoutOpen);
+
+            let marginRight = '0';
+            let marginLeft = '0';
+            const position = this.getLocation();
+            if (position.includes('right')) {
+                marginRight = '10';
+            } else if (position.includes('left')) {
+                marginLeft = '10';
+            }
+
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
-                    <FeatureDataButton
+                    <MapModuleTextButton
                         visible={layers?.length > 0}
-                        icon={<Message messageKey='title' bundleKey='FeatureData'/>}
+                        text={<Message messageKey='title' bundleKey='FeatureData'/>}
                         onClick={() => this.handler.openFlyout()}
                         active={flyoutOpen}
                         loading={loadingStatus.loading}
                         position={this.getLocation()}
+                        $marginRight={marginRight}
+                        $marginLeft={marginLeft}
+                        $marginTop={'10'}
                     />
                 </ThemeProvider>,
                 el[0]
             );
         },
-        resetUI: function () {
-            if (this.handler) {
-                this.handler.closeFlyout();
+
+        toggleGFI: function (blnEnable) {
+            const gfiReqBuilder = Oskari.requestBuilder(
+                'MapModulePlugin.GetFeatureInfoActivationRequest'
+            );
+            // enable or disable gfi requests
+            if (gfiReqBuilder) {
+                this.getSandbox().request(this, gfiReqBuilder(blnEnable));
             }
         },
         /**

@@ -2,108 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { showPopup } from 'oskari-ui/components/window';
-import { Message, Select, TextInput, Button, Checkbox } from 'oskari-ui';
-import { SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
+import { FeatureFilter, Message, Button } from 'oskari-ui';
+import { SecondaryButton } from 'oskari-ui/components/buttons';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
-import { FilterTwoTone, PlusCircleOutlined } from '@ant-design/icons';
-import { green } from '@ant-design/colors';
-
-export const FilterTypes = {
-    string: {
-        equals: '=',
-        like: '~=',
-        notEquals: '≠',
-        notLike: '~≠'
-    },
-    number: {
-        equals: '=',
-        notEquals: '≠',
-        greaterThan: '>',
-        lessThan: '<',
-        greaterThanOrEqualTo: '≥',
-        lessThanOrEqualTo: '≤'
-    },
-    ALL: {
-        equals: '=',
-        like: '~=',
-        notEquals: '≠',
-        notLike: '~≠',
-        greaterThan: '>',
-        lessThan: '<',
-        greaterThanOrEqualTo: '≥',
-        lessThanOrEqualTo: '≤'
-    }
-};
-
-export const LogicalOperators = {
-    AND: 'AND',
-    OR: 'OR'
-};
-
-const getOptionsFromColumnNames = (columnNames, visibleColumnsSettings) => {
-    const { activeLayerPropertyLabels } = visibleColumnsSettings;
-    return columnNames?.map(key => {
-        return {
-            label: activeLayerPropertyLabels && activeLayerPropertyLabels[key] ? activeLayerPropertyLabels[key] : key,
-            value: key
-        };
-    });
-};
-
-const generateFilterTypeOptions = (filter, activeLayerPropertyTypes) => {
-    const field = filter?.attribute || null;
-    // unlisted type or no known property types -> just offer all filters we've got.
-    let fieldType = 'ALL';
-    if (field && activeLayerPropertyTypes && activeLayerPropertyTypes[field]) {
-        fieldType = activeLayerPropertyTypes[field];
-    }
-
-    return Object.keys(FilterTypes[fieldType]).map(key => {
-        const messageKey = 'selectByPropertiesPopup.filterType.' + key;
-        return {
-            label: <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={messageKey}></Message>,
-            value: FilterTypes[fieldType][key]
-        };
-    });
-};
-
-const generateLogicalOperatorOptions = () => {
-    return Object.keys(LogicalOperators).map(key => {
-        return {
-            label: key,
-            value: LogicalOperators[key]
-        };
-    });
-};
+import { FilterTwoTone } from '@ant-design/icons';
 
 const Funnel = styled('div')`
     margin-left: auto;
 `;
 
-const StyledSelectMedium = styled(Select)`
-    min-width: 15em;
-    margin-right: .5em;
-`;
-
-const StyledSelectSmall = styled(Select)`
-    min-width: 8em;
-    margin-right: .5em;
-`;
-
-const StyledTextInput = styled(TextInput)`
-    margin-right: .5em;
-`;
-
-const FlexRow = styled('div')`
+const ButtonsContainer = styled('div')`
     display: flex;
     padding: 0 .5em .5em .5em;
-    input.validation-error {
-        border 1px solid red;
-    }
-`;
-
-const ButtonsContainer = styled(FlexRow)`
     justify-content: center;
+    margin-top: 1em;
 `;
 
 const StyledButton = styled(Button)`
@@ -114,142 +26,54 @@ const StyledSecondaryButton = styled(SecondaryButton)`
     margin: 0 .5em 0 .5em
 `;
 
-const AddIcon = styled(PlusCircleOutlined)`
-    color: ${green.primary}
-`;
-
 const Buttons = (props) => {
-    const { closeSelectByPropertiesPopup, removeFilter, applyFilters, hasErrors } = props;
+    const { closeSelectByPropertiesPopup, resetFilter, applyFilter, hasErrors } = props;
     return <ButtonsContainer>
         <StyledSecondaryButton type='cancel' onClick={() => { closeSelectByPropertiesPopup(); }} />
-        <StyledSecondaryButton type='reset' onClick={() => { removeFilter(null, true); }}/>
-        <StyledButton type='primary' disabled={hasErrors} onClick={() => { applyFilters(); }}>
+        <StyledSecondaryButton type='reset' onClick={() => { resetFilter(); }}/>
+        <StyledButton type='primary' disabled={hasErrors} onClick={() => { applyFilter(); }}>
             <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.buttons.refresh'}/>
         </StyledButton>
     </ButtonsContainer>;
 };
 
 Buttons.propTypes = {
-    removeFilter: PropTypes.func,
+    resetFilter: PropTypes.func,
     closeSelectByPropertiesPopup: PropTypes.func,
-    applyFilters: PropTypes.func,
+    applyFilter: PropTypes.func,
     hasErrors: PropTypes.bool
-};
-
-const FilterRow = (props) => {
-    const {
-        columnOptions,
-        filterTypeOptions,
-        index,
-        filter,
-        updateFilters,
-        addFilter,
-        removeFilter,
-        showFilterOperator,
-        showAddRemove,
-        showRemove
-    } = props;
-    return <>
-        <FlexRow>
-            <Checkbox
-                checked={filter.caseSensitive}
-                onChange={(event) => { filter.caseSensitive = event?.target?.checked; updateFilters(index, filter); }}
-            >
-                <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey='selectByPropertiesPopup.caseSensitive'/>
-            </Checkbox>
-        </FlexRow>
-        <FlexRow>
-            <StyledSelectMedium
-                options={columnOptions}
-                value={filter.attribute}
-                onChange={((value) => {
-                    filter.attribute = value;
-                    filter.operator = null;
-                    updateFilters(index, filter);
-                })}/>
-            <StyledSelectMedium
-                options={filterTypeOptions}
-                value={filter.operator}
-                onChange={((value) => { filter.operator = value; updateFilters(index, filter); })}/>
-            <StyledTextInput
-                type='text'
-                value={filter.value}
-                placeholder={Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectByPropertiesPopup.valueInputPlaceholder')}
-                onChange={(event) => { filter.value = event.target.value; updateFilters(index, filter); }}
-                className={filter.error ? 'validation-error' : ''}
-            />
-            { (showFilterOperator && !showAddRemove) &&
-                <StyledSelectSmall
-                    options={generateLogicalOperatorOptions()}
-                    value={filter.logicalOperator}
-                    onChange={(value) => { filter.logicalOperator = value; updateFilters(index, filter); }}
-                />
-            }
-            { showAddRemove &&
-                <>
-                    <IconButton icon={<AddIcon />} bordered={true} onClick={(() => addFilter())}/>
-                    { showRemove && <IconButton type='delete' bordered={true} onClick={(() => removeFilter(index))}/> }
-                </>
-            }
-        </FlexRow>
-    </>;
-};
-
-FilterRow.propTypes = {
-    columnOptions: PropTypes.array,
-    filterTypeOptions: PropTypes.array,
-    index: PropTypes.number,
-    filter: PropTypes.object,
-    updateFilters: PropTypes.func,
-    addFilter: PropTypes.func,
-    removeFilter: PropTypes.func,
-    closeSelectByPropertiesPopup: PropTypes.func,
-    showFilterOperator: PropTypes.bool,
-    showAddRemove: PropTypes.bool,
-    showRemove: PropTypes.bool
 };
 
 const Container = styled('div')`
     padding: 1em;
+    min-width: 25vw;
 `;
 
 export const SelectByPropertiesPopup = (props) => {
-    const { columnNames, filters, updateFilters, addFilter, removeFilter, applyFilters, closeSelectByPropertiesPopup, visibleColumnsSettings } = props;
-    let hasErrors = false;
-    const rows = filters.map((filter, index) => {
-        if (filter?.error) {
-            hasErrors = true;
-        }
-        return <FilterRow
-            key={index}
-            index={index}
-            columnOptions={getOptionsFromColumnNames(columnNames, visibleColumnsSettings)}
-            filterTypeOptions={generateFilterTypeOptions(filter, visibleColumnsSettings.activeLayerPropertyTypes)}
-            filter={filter}
-            updateFilters={updateFilters}
-            addFilter={addFilter}
-            removeFilter={removeFilter}
-            showFilterOperator={filters?.length > 1}
-            showAddRemove={index === filters?.length - 1}
-            showRemove={filters?.length > 1}
-        />;
-    });
-
-    return <Container>
-        { rows }
-        <Buttons closeSelectByPropertiesPopup={closeSelectByPropertiesPopup} removeFilter={removeFilter} applyFilters={applyFilters} hasErrors={hasErrors}/>
-    </Container>;
+    const { columnNames, featureProperties, updateFilter, resetFilter, applyFilter, filter, labels, closeSelectByPropertiesPopup } = props;
+    return (
+        <Container>
+            <FeatureFilter onChange={updateFilter}
+                properties={columnNames}
+                filter={filter || {}}
+                labels={labels}
+                types={featureProperties}
+                disableMultipleMode={true}
+            />
+            <Buttons closeSelectByPropertiesPopup={closeSelectByPropertiesPopup} resetFilter={resetFilter} applyFilter={applyFilter}/>
+        </Container>
+    );
 };
 
 SelectByPropertiesPopup.propTypes = {
+    featureProperties: PropTypes.array,
     columnNames: PropTypes.arrayOf(PropTypes.string),
-    filters: PropTypes.array,
-    updateFilters: PropTypes.func,
-    addFilter: PropTypes.func,
-    removeFilter: PropTypes.func,
-    applyFilters: PropTypes.func,
+    labels: PropTypes.object,
+    filter: PropTypes.object,
+    updateFilter: PropTypes.func,
     closeSelectByPropertiesPopup: PropTypes.func,
-    visibleColumnsSettings: PropTypes.object
+    resetFilter: PropTypes.func,
+    applyFilter: PropTypes.func
 };
 
 export const SelectByPropertiesFunnel = (props) => {
@@ -267,36 +91,38 @@ const getActiveLayerName = (activeLayerId, layers) => {
         return '';
     }
 
-    return layers.find((layer) => layer.getId() === activeLayerId)?.getName();
+    return layers.find((layer) => layer.getId() === activeLayerId).getName() || null;
 };
 
 export const showSelectByPropertiesPopup = (state, controller) => {
-    const { activeLayerId, layers, selectByPropertiesSettings, visibleColumnsSettings } = state;
+    const { activeLayerId, layers, selectByPropertiesFilter, selectByPropertiesFeatureTypes, visibleColumnsSettings } = state;
     const content = <SelectByPropertiesPopup
-        columnNames={ selectByPropertiesSettings.allColumns }
-        visibleColumnsSettings={visibleColumnsSettings}
-        filters = { selectByPropertiesSettings.filters }
-        updateFilters={controller.updateFilters}
-        addFilter={controller.addFilter}
-        removeFilter={controller.removeFilter}
-        applyFilters={controller.applyFilters}
+        featureProperties= { selectByPropertiesFeatureTypes }
+        columnNames={ visibleColumnsSettings.allColumns }
+        labels={visibleColumnsSettings.activeLayerPropertyLabels}
+        filter={selectByPropertiesFilter}
+        updateFilter={controller.updateFilter}
+        resetFilter={controller.resetFilter}
+        applyFilter={controller.applyFilter}
         closeSelectByPropertiesPopup={controller.closeSelectByPropertiesPopup}
     />;
-    const title = <><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.title'}/> {getActiveLayerName(activeLayerId, layers)}</>;
+
+    const title = <><Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'selectByPropertiesPopup.title'}/> {getActiveLayerName(activeLayerId, layers) || ''}</>;
     const controls = showPopup(title, content, () => { controller.closeSelectByPropertiesPopup(); }, {});
 
     return {
         ...controls,
         update: (state) => {
+            const { selectByPropertiesFilter, selectByPropertiesFeatureTypes, visibleColumnsSettings } = state;
             controls.update(title,
                 <SelectByPropertiesPopup
-                    columnNames={ selectByPropertiesSettings.allColumns }
-                    visibleColumnsSettings={visibleColumnsSettings}
-                    filters = { selectByPropertiesSettings.filters }
-                    updateFilters={controller.updateFilters}
-                    addFilter={controller.addFilter}
-                    removeFilter={controller.removeFilter}
-                    applyFilters={controller.applyFilters}
+                    featureProperties= { selectByPropertiesFeatureTypes }
+                    columnNames={ visibleColumnsSettings.allColumns }
+                    labels={visibleColumnsSettings.activeLayerPropertyLabels}
+                    filter={selectByPropertiesFilter}
+                    updateFilter={controller.updateFilter}
+                    resetFilter={controller.resetFilter}
+                    applyFilter={controller.applyFilter}
                     closeSelectByPropertiesPopup={controller.closeSelectByPropertiesPopup}
                 />);
         }

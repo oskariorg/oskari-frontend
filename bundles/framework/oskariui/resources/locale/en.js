@@ -112,9 +112,12 @@ Oskari.registerLocalization({
             loading: 'Loading...'
         },
         FeatureFilter: {
-            single: 'Single property',
-            list: 'More properties',
+            single: 'One property',
+            and: 'AND operator',
+            or: 'OR operator',
             range: 'Use value range',
+            addTooltip: 'Add new row for filter',
+            clearTooltip: 'Clear filter',
             caseSensitive: {
                 true: 'Case sensitive',
                 false: 'Case insensitive'

@@ -14,7 +14,7 @@ Oskari.util = (function () {
     // break points for "mobile mode"
     const mobileDefs = {
         width: 650,
-        height: 650
+        height: 500
     };
     const isMobileDevice = !!(new MobileDetect(window.navigator.userAgent).mobile());
 
@@ -799,6 +799,15 @@ Oskari.util = (function () {
         const localeDate = dateTime.toLocaleDateString(locales, date);
         const localeTime = dateTime.toLocaleTimeString(locales, {...defaults, ...time});
         return `${localeDate} ${localeTime}`;
+    };
+
+    util.mouseExists = () => {
+        if (window.matchMedia("(pointer: fine)").matches) {
+            // Has a mouse-like device
+            return true;
+        }
+        // Probably mobile
+        return false;
     };
 
     return util;

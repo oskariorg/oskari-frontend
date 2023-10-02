@@ -139,6 +139,8 @@ Oskari.registerLocalization(
                 "lastName": "Surname",
                 "nickName": "Nickname",
                 "email": "E-mail",
+                "created": "Account created",
+                "lastLogin": "Previous login",
                 "changeInfo": "Update account data",
                 "changePassword": "Change password",
                 "removeAccount": "Delete Account",

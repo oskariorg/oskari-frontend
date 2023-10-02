@@ -323,7 +323,7 @@ Oskari.clazz.define(
                 source: new olSourceVector(),
                 title: id
             });
-            this.getMapModule().addOverlayLayer(layer);
+            this.getMapModule().addOverlayLayer(layer, 'draw');
             return layer;
         },
         /**

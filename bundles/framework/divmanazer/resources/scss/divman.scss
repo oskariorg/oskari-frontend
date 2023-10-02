@@ -20,6 +20,25 @@ body {
 */
 /* flyout toolbar */
 
+.oskari-root-el > nav {
+      &.show-scroll-icon {
+        .scroll-indicator {
+            display: flex;
+        }
+        .scroll-icon {
+          animation:flash 2s 5 linear;
+        }
+      }
+      @keyframes flash {
+        0%, 100% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: .1;
+        }
+      }
+}
+
 .oskari-flyoutheading {
     background-color: #ffd400;
     border-top: 1px solid #ffdf00;
@@ -40,6 +59,7 @@ body {
 .oskari-flyout-title {
     float: left;
     margin-left: 20px;
+    margin-right: 20px;
     margin-top: 12px;
     height: 20px;
     display: inline-block;

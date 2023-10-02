@@ -372,13 +372,18 @@ Oskari.clazz.define(
 
             me._cancelAjaxRequest();
             me._startAjaxRequest(dteMs);
-            const featureInfoUrl = this._getFeatureInfoUrl(lonlat);
+            let featureInfoUrl = this._getFeatureInfoUrl(lonlat);
             let x = Math.round(px.x);
             let y = Math.round(px.y);
             let width = mapVO.getWidth();
             let height = mapVO.getHeight();
             let bbox = mapVO.getBboxAsString();
             if (featureInfoUrl) {
+                if (featureInfoUrl.startsWith('/')) {
+                    // fixes urls starting with /action or one without protocol in general //somedomain.com
+                    // we don't really care about the domain, we are only interested in getting parts of the querystring
+                    featureInfoUrl = 'https://' + window.location.hostname + featureInfoUrl;
+                }
                 const url = new URL(featureInfoUrl);
                 if (url.searchParams.get('I')) {
                     x = Number.parseInt(url.searchParams.get('I'), 10);
