@@ -318,3 +318,4 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
         extend: ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
         protocol: ['Oskari.mapframework.publisher.Tool']
     });
+    
