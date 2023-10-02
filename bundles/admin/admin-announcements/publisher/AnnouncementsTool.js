@@ -62,12 +62,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 const toolPluginAnnouncementsConf = me._getToolPluginAnnouncementsConf();
                 if (toolPluginAnnouncementsConf !== null) {
                     me.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
-                    toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
-                        const filteredAnnouncement = me.announcements.filter(ann => ann.id === announcement);
-                        if (me.isAnnouncementValid(filteredAnnouncement[0])) {
+                    toolPluginAnnouncementsConf.config.announcements.forEach(announcementId => {
+                        const announcement = me.announcements.find(ann => ann.id === announcementId);
+                        if (announcement !== undefined && me.isAnnouncementValid(announcement)) {
                             // make sure there are no duplicates
-                            if (me.selectedAnnouncements.filter(ann => ann.id === filteredAnnouncement[0].id).length === 0) {
-                                me.selectedAnnouncements.push(filteredAnnouncement[0]);
+                            const alreadyAdded = me.selectedAnnouncements.some(ann => ann.id === announcement.id);
+                            if (!alreadyAdded) {
+                                me.selectedAnnouncements.push(announcement);
                             }
                         }
                     });
