@@ -1,3 +1,8 @@
+import './EditPlaceRequest';
+import './DeletePlaceRequest';
+import './EditCategoryRequest';
+import './DeleteCategoryRequest';
+import './PublishCategoryRequest';
 import { getCategoryId } from '../service/LayerHelper';
 /**
  * @class Oskari.mapframework.bundle.myplaces3.request.EditRequestHandler

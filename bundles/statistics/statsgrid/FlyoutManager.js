@@ -113,11 +113,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             // unrecognized flyout
             return;
         }
-        if (flyout.isVisible()) {
-            if (type === 'search') {
+        if (type === 'search') {
+            if (this.searchHandler?.getState()?.searchFlyout) {
                 this.searchHandler.getController().toggleSearchFlyout(false);
                 return;
-            } else {
+            }
+        } else {
+            if (flyout.isVisible()) {
                 this.hide(type);
                 return;
             }

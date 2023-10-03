@@ -8,7 +8,7 @@ import { IconButton } from 'oskari-ui/components/buttons';
 const FILTERS = ['value', 'in', 'notIn', 'like', 'notLike'];
 const NUMBER_FILTERS = ['greaterThan', 'atLeast', 'lessThan', 'atMost']; // For range selects array is splitted
 const NUMBER_RAW_TYPES = ['int', 'double', 'long', 'float'];
-
+const FILTERTYPE_SINGLE = 'single';
 const SEPARATOR = ';';
 const BUNDLE_KEY = 'oskariui'
 
@@ -111,7 +111,7 @@ export const cleanFilter = (filter, types) => {
     const validOR = OR.length >= 2;
     if (property && !validAND && !validOR) {
         return { property };
-    } 
+    }
     if (validAND && validOR) {
         return { AND, OR };
     }
@@ -160,13 +160,13 @@ export const getDescription = filter => {
 };
 
 const getFilterType = filter => {
-    if (Array.isArray(filter.AND) && filter.AND.length > 1) {
+    if (filter?.AND && Array.isArray(filter.AND) && filter.AND.length > 1) {
         return 'AND';
     }
-    if (Array.isArray(filter.OR) && filter.OR.length > 1) {
+    if (filter?.OR && Array.isArray(filter.OR) && filter.OR.length > 1) {
         return 'OR';
     }
-    return 'single';
+    return FILTERTYPE_SINGLE;
 };
 
 const getFilterOptions = list => list.map(value => {
@@ -287,7 +287,7 @@ const FilterList = ({filters, type, onChange, ...rest }) => {
     );
 };
 
-export const FeatureFilter = ({  filter = {}, onChange, ...rest }) => {
+export const FeatureFilter = ({  filter = {}, onChange, disableMultipleMode = false, ...rest }) => {
     const [type, setType]= useState(getFilterType(filter));
     const getFilters = () => {
         const filters = filter[type];
@@ -298,26 +298,29 @@ export const FeatureFilter = ({  filter = {}, onChange, ...rest }) => {
     // const invalid = filters.some(filter => !cleanFilterValues(filter));
     return (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <RowContainer>
-                <Radio.Group value={type} onChange={evt => setType(evt.target.value)}>
-                    <Radio.Button value={'single'}>
-                        <Message messageKey='FeatureFilter.single'/>
-                    </Radio.Button>
-                    <Radio.Button value={'AND'}>
-                        <Message messageKey='FeatureFilter.and'/>
-                    </Radio.Button>
-                    <Radio.Button value={'OR'}>
-                        <Message messageKey='FeatureFilter.or'/>
-                    </Radio.Button>
-                </Radio.Group>
-                <Buttons>
-                    { type !== 'single' && <IconButton bordered type='add' title={<Message messageKey='FeatureFilter.addTooltip'/>} onClick={onAdd}/> }
-                    <IconButton bordered type='delete' title={<Message messageKey='FeatureFilter.clearTooltip'/>} onClick={() => onChange({})} />
-                </Buttons>
-            </RowContainer>
-            <Margin/>
-            { type === 'single' && <FilterRow filter={filter.property} onFilterUpdate={property => onChange({ property })} {...rest} /> }
-            { type !== 'single' && <FilterList filters={getFilters()} type={type} onChange={onChange} {...rest} /> }
+            { !disableMultipleMode && <>
+                <RowContainer>
+                    <Radio.Group  value={type} onChange={evt => setType(evt.target.value)}>
+                        <Radio.Button value={FILTERTYPE_SINGLE}>
+                            <Message messageKey='FeatureFilter.single'/>
+                        </Radio.Button>
+                        <Radio.Button value={'AND'}>
+                            <Message messageKey='FeatureFilter.and'/>
+                        </Radio.Button>
+                        <Radio.Button value={'OR'}>
+                            <Message messageKey='FeatureFilter.or'/>
+                        </Radio.Button>
+                    </Radio.Group>
+                    <Buttons>
+                        { type !== FILTERTYPE_SINGLE && <IconButton bordered type='add' title={<Message messageKey='FeatureFilter.addTooltip'/>} onClick={onAdd}/> }
+                        <IconButton bordered type='delete' title={<Message messageKey='FeatureFilter.clearTooltip'/>} onClick={() => onChange({})} />
+                    </Buttons>
+                </RowContainer>
+                <Margin/>
+            </>
+            }
+            { type === FILTERTYPE_SINGLE && <FilterRow filter={filter.property} onFilterUpdate={property => onChange({ property })} {...rest} /> }
+            { type !== FILTERTYPE_SINGLE && <FilterList filters={getFilters()} type={type} onChange={onChange} {...rest} /> }
         </LocaleProvider>
     );
 };
@@ -327,5 +330,6 @@ FeatureFilter.propTypes = {
     onChange: PropTypes.func.isRequired,
     properties: PropTypes.array.isRequired,
     types: PropTypes.array,
-    labels: PropTypes.object
+    labels: PropTypes.object,
+    disableMultipleMode: PropTypes.bool
 };

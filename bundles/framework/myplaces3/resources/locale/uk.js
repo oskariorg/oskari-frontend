@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Видалити шар карти",
-                "deleteConfirmMove": "Шар карти {0} містить {1} об'єктів. Видалити шар карти і перемістити місця до типового шару {2} ?",
                 "deleteConfirm": "Видалити шар {0} ?",
                 "deleted": "Шар видалено"
             },

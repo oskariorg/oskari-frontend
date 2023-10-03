@@ -1,5 +1,17 @@
 # Release Notes
 
+## 2.12.1
+
+For full list of changes after 2.12.0 see both:
+- https://github.com/oskariorg/oskari-frontend/milestone/47?closed=1
+- https://github.com/oskariorg/oskari-frontend/milestone/46?closed=1
+
+- Added changes from 2.11.2 for 2.12.0.
+- Fixed an issue where GFI popups were not always opened correctly (for proxied layers).
+- Fixed an visual issue with some buttons that were previously round, but after browser update became square.
+- Decreased screen height limit from 650px to 500px when detecting small screen (fixes an issue where the geoportal was shown on mobile mode too eagerly).
+- Fixes for announcements functionality in embedded maps/RPC.
+
 ## 2.12.0
 
 For a full list of changes see:
@@ -80,6 +92,15 @@ Improvements to user management:
 - Fixed issues on coordinate tool configuration on the publisher functionality
 - Fixed an issue with language selection on the publisher functionality
 - The admin UI for selecting announcements for an embedded map on the publisher functionality now has the option to hide the announcements UI on the embedded map (for using announcements programmatically).
+
+## 2.11.2
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/46?closed=1
+
+- Fixed timing issues with runtime vectorlayers (mostly affecting some RPC-based apps).
+- Fixed an issue with layer opacity when the service is provided by ArcGIS server.
+- The issue is mainly on RPC-based apps where layers are initialized directly on app startup.
 
 ## 2.11.1
 

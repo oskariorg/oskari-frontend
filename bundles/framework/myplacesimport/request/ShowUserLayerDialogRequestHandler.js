@@ -1,3 +1,4 @@
+import './ShowUserLayerDialogRequest';
 /**
  * @class Oskari.mapframework.bundle.myplacesimport.request.ShowUserLayerDialogRequestHandler
  */

@@ -31,13 +31,15 @@ div.mapplugin.announcements {
     overflow: visible;
     max-width: 17rem;
     z-index: 15001 !important;
-  
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+
     div.content {
       background-color: white;
       max-height: 95%;
   
       div.announcements-content {
-        overflow: auto;
+        overflow: hidden;
         width:100%;
         background-color: #fff;
   

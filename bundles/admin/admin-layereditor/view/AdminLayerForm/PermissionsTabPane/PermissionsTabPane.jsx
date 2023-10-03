@@ -7,9 +7,6 @@ import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
 
 const StyledListItem = styled(ListItem)`
-    &:first-child > div {
-        font-weight: bold;
-    }
     &:not(:first-child) {
         &:nth-child(even) {
             background-color: #ffffff;
@@ -28,7 +25,18 @@ const StyledIcon = styled('div')`
 // But most instances don't have them so it's not a huge issue for first version of the UI
 const ListDiv = styled.div`
     margin-bottom: 20px;
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: 50vh;
+`;
+
+const ListDivHeader = styled('div')`
+    flex 0 0 auto;
+`;
+
+const ListDivContent = styled('div')`
+    flex 1 1 auto;
+    overflow-y: auto;
 `;
 
 const getPermissionTableHeader = (permission) => {
@@ -98,7 +106,8 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
         permissions: getHeaderPermissions(dataRows, roles),
         permissionTypes: localizedPermissionTypes
     };
-    const permissionDataModel = [headerRow, ...dataRows];
+    const headerDataModel = [headerRow];
+    const permissionDataModel = [...dataRows];
 
     const renderRow = (modelRow) => {
         const checkboxes = modelRow.permissionTypes.map(permission => {
@@ -138,7 +147,12 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
 
     return (
         <ListDiv>
-            <List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/>
+            <ListDivHeader>
+                <List bordered={false} dataSource={headerDataModel} renderItem={renderRow}/>
+            </ListDivHeader>
+            <ListDivContent>
+                <List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/>
+            </ListDivContent>
         </ListDiv>
     );
 };

@@ -77,6 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                 return;
             }
             const { flyoutOpen, layers, loadingStatus } = this.handler.getState();
+            this.toggleGFI(!flyoutOpen);
 
             let marginRight = '0';
             let marginLeft = '0';
@@ -104,9 +105,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                 el[0]
             );
         },
-        resetUI: function () {
-            if (this.handler) {
-                this.handler.closeFlyout();
+
+        toggleGFI: function (blnEnable) {
+            const gfiReqBuilder = Oskari.requestBuilder(
+                'MapModulePlugin.GetFeatureInfoActivationRequest'
+            );
+            // enable or disable gfi requests
+            if (gfiReqBuilder) {
+                this.getSandbox().request(this, gfiReqBuilder(blnEnable));
             }
         },
         /**
