@@ -1,3 +1,5 @@
+import './service/MyPlacesImportService';
+import './request/ShowUserLayerDialogRequestHandler';
 import { UserLayersTab } from './UserLayersTab';
 import { UserLayersHandler } from './handler/UserLayersHandler';
 import { TOOL, BUNDLE_NAME } from './constants';
@@ -106,7 +108,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
         return this.importService;
     },
     /**
-     * Creates the user layers tab and adds it to the personaldata bundle.
+     * Creates the user layers tab and adds it to the mydata bundle.
      *
      * @method addTab
      */
@@ -114,37 +116,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
         const sandbox = Oskari.getSandbox();
         const myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
 
-        const reqName = 'PersonalData.AddTabRequest';
         if (myDataService) {
             myDataService.addTab('userlayers', this.loc('tab.title'), UserLayersTab, this.handler);
-        } else if (sandbox.hasHandler(reqName)) {
-            // fallback to old personaldata tabs
-            this.addTabToPersonalData();
         } else if (!appStarted) {
             // Wait for the application to load all bundles and try again
             Oskari.on('app.start', () => {
                 this.addTab(true);
             });
         }
-    },
-    addTabToPersonalData: function () {
-        const userLayersTab = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.PersonalDataUserLayersTab', this);
-        const addTabReqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
-
-        if (addTabReqBuilder) {
-            this.getSandbox().request(this, addTabReqBuilder(this.loc('tab.title'), userLayersTab.getContent(), false, 'userlayers'));
-        }
-        this.tab = userLayersTab;
-        this.getService().on('update', () => {
-            this.getTab().refresh();
-        });
-    },
-    /**
-     * @method getTab
-     * @return {Oskari.mapframework.bundle.myplacesimport.PersonalDataUserLayersTab}
-     */
-    getTab: function () {
-        return this.tab;
     }
 }, {
     extend: ['Oskari.BasicBundle'],

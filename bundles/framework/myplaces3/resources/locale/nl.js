@@ -10,13 +10,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Plaatsen",
-            "nocategories": "Je hebt nog geen opgeslagen plaatsen.",
-            "maxFeaturesExceeded": "U heeft het maximale hoeveelheid eigen plaatsen overschreden. Alle plaatsen niet zijn geladen.",
             "publishCategory": {
                 "privateTooltip": "Deze kaartlaag is privé. Klik hier om het te publiceren.",
                 "publicTooltip": "Deze kaartlaag is openbaar. Klik hier om de publicatie ongedaan te maken."
             },
-            "addCategoryFormButton": "New map layer",
             "addCategory": "Voeg kaartlaag toe",
             "editCategory": "Bewerk kaartlaag",
             "deleteCategory": "Verwijder kaartlaag",
@@ -175,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Verwijder kaartlaag",
-                "deleteConfirmMove": "Kaartlaag {0} bevat {1} objecten. Wilt u de kaartlaag verwijderen en de plaatsen ervan verplaatsen naar de standaard kaartlaag {2}?",
                 "deleteConfirm": "Kaartlaag {0} verwijderen?",
                 "deleted": "Kaartlaag verwijderd"
             },

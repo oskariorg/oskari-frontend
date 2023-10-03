@@ -10,13 +10,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Sitios",
-            "nocategories": "Todavía no ha guardado los sitios.",
-            "maxFeaturesExceeded": "Ha superado la cantidad máxima de lugares. Todos los lugares no ha sido cargados.",
             "publishCategory": {
                 "privateTooltip": "La capa es privada. Pulse en la capa para publicarla.",
                 "publicTooltip": "La capa es pública. Pulse en la capa para despublicarla."
             },
-            "addCategoryFormButton": "nueva capa de mapa",
             "addCategory": "Añadir capa",
             "editCategory": "Editar capa",
             "deleteCategory": "Borrar capa",
@@ -175,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Borrar capa",
-                "deleteConfirmMove": "La capa {0} contiene {1} lugares. ¿Desea borrar la capa y mover sus lugares a la capa por defecto {2}?",
                 "deleteConfirm": "¿Borrar la capa {0}?",
                 "deleted": "Capa borrada"
             },
