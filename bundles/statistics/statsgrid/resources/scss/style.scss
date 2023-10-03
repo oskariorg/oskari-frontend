@@ -1,0 +1,908 @@
+$lightColor: #ffffff;
+$darkColor: #3c3c3c;
+$buttonColor: #0091ff;
+$buttonTextColor: #ffffff;
+
+$inputWidth: 94%;
+$buttonWidth: 86%;
+
+$flyoutPadding: 16px;
+.SumoSelect {
+    .select-all {
+        /* AntD global reset changes default sizing to border-box which breaks SumoSelect */
+        box-sizing: content-box !important;
+    }
+}
+
+/* ********************************************
+ * These are for common code in statsgrid
+ * ******************************************* */
+  .statsgrid {
+      .statsgrid-table {
+          min-height: 80%;
+          height: 80%;
+      }
+  }
+
+
+/* ********************************************
+ * These are for flyout version of statsgrid
+ * ******************************************* */
+
+.statsgrid-grid-table-header {
+    top:0;
+    left:0;
+    width:94%;
+    height:94%;
+    text-align:left;
+    padding: 5px 5px 0px 5px;
+    font-weight: normal;
+
+    .header {
+        position: absolute;
+        width: 94%;
+        top:0;
+    }
+
+    .selection {
+        .parameter {
+            .select {
+                width: auto !important;
+                float:none !important;
+            }
+        }
+    }
+
+    .title {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+
+    .selection {
+        margin-bottom: 6px;
+        width: 98%;
+    }
+
+    .sortby {
+        cursor: pointer;
+        position:absolute;
+        bottom: 0;
+        right: 0;
+
+        .orderTitle {
+            float: left;
+
+            &.selected {
+              text-decoration: underline;
+            }
+        }
+        .order {
+            height: 10px;
+            width: 10px;
+            float: left;
+            margin-top: 4px;
+
+            &.asc {
+                background-image: url('../images/asc_arrow.png');
+                background-repeat: no-repeat;
+                background-position: right center;
+            }
+
+            &.desc {
+                background-image: url('../images/desc_arrow.png');
+                background-repeat: no-repeat;
+                background-position: right center;
+            }
+        }
+    }
+}
+
+.statsgrid-grid-table-header-content {
+    top:0;
+    left:0;
+    width:94%;
+    height:94%;
+    text-align:left;
+    padding:5px 5px 0px 5px;
+    font-weight: normal;
+
+    .header {
+        position: absolute;
+        top: 5px;
+        margin-right: 25px;
+    }
+    .icon-warning-light {
+        bottom: 0;
+        position: absolute;
+        cursor: pointer;
+    }
+    .icon {
+        position: absolute;
+        top:5px;
+        right:5px;
+        cursor: pointer;
+    }
+
+    .sortby {
+        cursor: pointer;
+        position:absolute;
+        bottom: 0;
+        right: 0;
+
+        .orderTitle {
+            float: left;
+
+            &.selected {
+              text-decoration: underline;
+            }
+        }
+        .order {
+            height: 10px;
+            width: 10px;
+            float: left;
+            margin-top: 4px;
+
+            &.asc {
+                background-image: url('../images/asc_arrow.png');
+                background-repeat: no-repeat;
+                background-position: right center;
+            }
+
+            &.desc {
+                background-image: url('../images/desc_arrow.png');
+                background-repeat: no-repeat;
+                background-position: right center;
+            }
+        }
+    }
+}
+
+@keyframes statsgridcolumnselection {
+    from {background-color: #ffd400;}
+    to {background-color: #FDF8D9;}
+}
+
+div.oskari-flyout {
+    /* ********************************************
+    * Search styles
+    * ********************************************/
+
+    &.statsgrid-search-flyout {
+        .statsgrid-search-container {
+            padding: $flyoutPadding;
+        }
+        /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
+        max-width: 700px;
+        min-width: 400px;
+
+        .stats-series-selection {
+            display: inline-block;
+        }
+
+        label.oskari-formcomponent {
+          width: 100%;
+          padding-left: 10px;
+        }
+
+        .chosen-container .chosen-results {
+            max-height: 140px;
+        }
+
+        div.SumoSelect {
+            width: 100%;
+            min-width: 150px;
+            
+            div.optWrapper {
+                ul.options {
+                   max-height: 200px;
+                }
+                div.MultiControls {
+                    p.btnOk {
+                        float: right;
+                        border-radius: 0 0 3px 0;
+                        border-right: 0;
+                    }
+                    p.btnCancel {
+                        border-right: 1px solid #dbdbdb;
+                        border-radius: 0 0 0 3px;
+                    }
+                }
+            }
+        }
+
+        .statsgrid-ds-selections {
+            /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
+            max-width : 450px;
+
+            .oskari-select {
+                // Placeholder styles not depended on enabled/disabled state
+                .SumoSelect {
+                    .placeholder {
+                        font-style: normal;
+                    }
+                }
+                // Placeholder styles for enabled select
+                [class='SumoSelect'] {
+                    .placeholder {
+                        color: #595959;
+                    }
+                }
+                // Placeholder styles for disabled select
+                [class='SumoSelect disabled'] {
+                    cursor: auto;
+                    p {
+                        background-color: #f5f5f5;
+                    }
+                    .placeholder {
+                        color: #979797;
+                    }
+                }
+            }
+
+            div.selection {
+                padding-top: 0;
+                padding-bottom: 6px;
+                padding-left: 0;
+
+                &.tooltip {
+                  padding-bottom: 0 !important;
+                }
+            }
+
+
+            div.statsgrid-indicator-selections {
+                padding-bottom: 10px;
+            }
+
+            div.selection, div.statsgrid-indicator-selections {
+
+                div.title {
+                    font-weight: bold;
+                }
+
+                div.tooltip {
+                    font-style: italic;
+                    font-size: 14px;
+                }
+
+                .margintop {
+                   margin-top: 12px;
+                }
+
+                .margintopLarge {
+                   margin-top: 24px;
+                }
+
+                .noresults {
+                    font-style: italic;
+                }
+            }
+
+            input.oskari-button {
+                margin-left: 10px;
+            }
+        }
+
+
+
+
+        .stats-table{
+            margin-top: 14px;
+
+            .noresults {
+                .title {
+                    background-color:#000;
+                    color:#fff;
+                    padding:8px 10px 8px 12px;
+                    font-weight:bold;
+                }
+
+                .content{
+                    padding:10px;
+                }
+            }
+        }
+
+        div.parameter {
+            div.label, div.select {
+                float:left;
+            }
+            div.label {
+                width: 100px;
+                margin-right: 4px;
+                text-align: left;
+            }
+            div.select {
+                width: 336px;
+            }
+            div.clear {
+                clear: both;
+            }
+        }
+        thead {
+            th {
+                border: none;
+                border-bottom: 1px solid #E6E6E6;
+                border-left: 1px solid #E6E6E6;
+                border-right: 1px solid #E6E6E6;
+            }
+        }
+
+        .statsgrid-grouping-header {
+            text-align: left;
+            padding: 6px;
+            border-bottom: none !important;
+            border-top: 1px solid #E6E6E6;
+
+            &.region {
+
+            }
+
+            &.sources {
+                color: #ffffff;
+                background-color: #000000;
+
+                span {
+                    font-weight: normal;
+                }
+            }
+        }
+    }
+
+    /* ********************************************
+    * Data styles
+    * ********************************************/
+    &.statsgrid-data-flyout {
+        .oskari-datacharts {
+            padding: $flyoutPadding;
+        }
+        /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
+        max-width: 700px;
+
+        table.oskari-grid {
+            th.selected {
+                background-color: #FDF8D9;
+            }
+            th.selected-effect {
+                animation-name: statsgridcolumnselection;
+                animation-duration: 0.5s;
+                animation-iteration-count: 2;
+            }
+
+            td {
+                text-align: right;
+            }
+
+            td:first-child, th:first-child {
+                max-width: 140px;
+            }
+            .statsgrid-header-0 {
+                overflow: visible;
+            }
+        }
+
+        label span {
+            /* Indicator selection form */
+            width: 200px;
+            display: inline-block;
+        }
+
+        label.oskari-formcomponent {
+          width: 100%;
+          padding-left: 10px;
+        }
+
+        div.accordion {
+            div.accordion_panel {
+                div.content {
+                    padding: 10px;
+                }
+            }
+        }
+
+        .chosen-container .chosen-results {
+            max-height: 140px;
+        }
+
+        .statsgrid-ds-selections {
+            /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
+            max-width : 450px;
+
+            div.selection {
+                padding-top: 0;
+                padding-bottom: 6px;
+                padding-left: 0;
+
+                &.tooltip {
+                  padding-bottom: 0 !important;
+                }
+            }
+
+
+            div.statsgrid-indicator-selections {
+                padding-left: 10px;
+                padding-bottom: 10px;
+            }
+
+            div.selection, div.statsgrid-indicator-selections {
+
+                div.title {
+                    font-weight: bold;
+                }
+
+                div.tooltip {
+                    font-style: italic;
+                    font-size: 14px;
+                }
+
+                .margintop {
+                   margin-top: 12px;
+                }
+
+                .margintopLarge {
+                   margin-top: 24px;
+                }
+
+                .noresults {
+                    font-style: italic;
+                }
+            }
+
+            input.oskari-button {
+                margin-left: 10px;
+            }
+        }
+
+        .stats-table{
+            .noresults {
+                .title {
+                    background-color:#000;
+                    color:#fff;
+                    padding:8px 10px 8px 12px;
+                    font-weight:bold;
+                }
+
+                .content{
+                    padding:10px;
+                }
+            }
+        }
+
+        div.parameter {
+            div.label, div.select {
+                float:left;
+            }
+            div.label {
+                width: 100px;
+                margin-right: 4px;
+                text-align: left;
+            }
+            div.select {
+                width: 336px;
+            }
+            div.clear {
+                clear: both;
+            }
+        }
+        thead {
+            th {
+                border: none;
+                border-bottom: 1px solid #E6E6E6;
+                border-left: 1px solid #E6E6E6;
+                border-right: 1px solid #E6E6E6;
+            }
+        }
+
+        .statsgrid-grouping-header {
+            text-align: left;
+            padding: 6px;
+            border-bottom: none !important;
+            border-top: 1px solid #E6E6E6;
+
+            &.region {
+
+            }
+
+            &.sources {
+                color: #ffffff;
+                background-color: #000000;
+
+                span {
+                    font-weight: normal;
+                }
+            }
+        }
+
+        .oskari-datacharts {
+
+            #graphic {
+                .bar {
+                    fill: #5f89ad;
+                }
+
+                .axis {
+                    font-size: 13px;
+                    path, line {
+                        fill: none;
+                        display: none;
+                    }
+                }
+
+                .label {
+                    font-size: 13px;
+                }
+                .grid {
+                    .tick {
+                        stroke: lightgrey;
+                        opacity: 0.7;
+                    }
+                    path {
+                        stroke-width: 0;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    /* ********************************************
+    * Diagram styles
+    * ********************************************/
+     &.statsgrid-diagram-flyout {
+        .oskari-flyoutcontentcontainer {
+            overflow: visible;
+            display: flex;
+        }
+        // remove padding to calculate chart size and margins
+        .oskari-datacharts {
+            position: relative;
+            padding: 0;
+            flex: 1;
+        }
+        .chart-controls {
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 20px 28px;
+
+           .dropdown {
+                display: flex;
+                max-width: 100%;
+           }
+        }
+        .chart {
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+        }
+        .axisLabel {
+            margin-top: -15px;
+            position: absolute;
+            opacity: 0.8;
+        }
+        .stats-diagram-holder {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+}
+
+
+/* ********************************************
+ * Statsgrid tile styles
+ * ********************************************/
+
+ .oskari-tile.statsgrid {
+    .statsgrid-functionality {
+        width: 95%;
+        height: 34px;
+        display: inline-flex;
+        display: -ms-inline-flexbox;
+        align-items : center;
+        
+        .icon {
+            float: left;
+            width: 30px;
+            height: 30px;
+            background-color: lightgray;
+            margin-left: 16px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .text {
+            color: rgba(0,0,0,.85);
+            float: left;
+            margin-left: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            vertical-align: middle;
+            width: 95px;
+        }
+
+        &.material-selected .icon{
+            background-color: #ffd400;
+        }
+
+        &.table .icon {
+            background-image: url("../images/tile-table-light.png");
+        }
+        &.search .icon {
+            background-image: url("../images/tile-search-light.png");
+        }
+        &.diagram .icon {
+            background-image: url("../images/tile-diagram-light.png");
+        }
+
+    }
+    .hidden {
+        display: none;
+    }
+}
+
+
+/* ********************************************
+ * DataVisualizer styles
+ * ********************************************/
+div.tab-material-controls div.title {
+    font-weight: bold;
+}
+
+
+
+
+
+/* ********************************************
+ * Filter styles
+ * ********************************************/
+.oskari-flyout.statsgrid-filter-flyout {
+    .clear {
+        clear: both;
+    }
+    .right {
+        float: right;
+    }
+    .left {
+        float: left;
+    }
+    h5 {
+        padding-bottom: 0 !important;
+    }
+    .filter-button {
+        margin-top: 1em;
+    }
+    .active-filters {
+        width: 15em;
+    }
+    .content {
+        width:32em;
+    }
+    .filterIndicator, .filterCondition, .oskari-table-header {
+        width: 15em;
+    }
+    .cell {
+        height: 1em;
+        padding:7px;
+        text-align: center;
+    }
+    .indicator, #indicator {
+        width: 50%
+    }
+    .condition, #condition, .value, #value {
+        width: 20%
+    }
+    .headerCell {
+        padding: 0.9375em 0.5em;
+        text-align: left;
+        font-weight: 500;
+        font-size: calc(0.55rem + 0.28vh);
+        text-transform: uppercase;
+    }
+    td {
+        background: #FAFAFA;
+        text-align: center;
+    }
+    .oskari-table-header {
+        height: 3em;
+    }
+    .removerow {
+        border-radius: 50%;
+        height: 1.3em;
+        width: 1.37em;
+        background-image: url('../images/icon-close.png');
+    }
+    .remove {
+        width:5%;
+    }
+    .filter-edit-active{
+        background: olivedrab !important;
+    }
+    .hoverable {
+        background: white;
+        border-radius:3px;
+        border-collapse: collapse;
+        height: 15em;
+        margin: auto;
+        max-width: 600px;
+        padding:5px;
+        width: 100%;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        animation: float 5s infinite;
+
+        tr:hover {
+            background:#4E5066;
+            color:#FFFFFF;
+            border-top: 1px solid #22262e;
+            border-bottom: 1px solid #22262e;
+        }
+    }
+    tr:hover td {
+        background:#4E5066;
+        color:#FFFFFF;
+        border-top: 1px solid #22262e;
+        border-bottom: 1px solid #22262e;
+    }
+    .filter {
+        padding: 1.2em;
+    }
+    .tabsHeader {
+        padding-top:2em !important;
+    }
+}
+
+/* ********************************************
+ * User indicator form
+ * ********************************************/
+.statsgrid-user-indicator-flyout {
+    height:auto;
+    min-width: 365px;
+
+    .oskari-flyoutcontentcontainer {
+        overflow: visible;
+        max-height: 100%;
+    }
+}
+
+
+.stats-indicator-form {
+min-height: 18.75em;
+padding: 0.9375em;
+}
+.stats-indicator-form-item {
+width: 96%;
+margin-bottom: 6px;
+}
+.stats-ind-selector {
+    display: flex;
+    align-items: baseline;
+}
+.stats-not-logged-in {
+width: 100%;
+min-height: 2.5em;
+margin-bottom: 0.5em;
+padding: 0.3125em;
+max-width: 31.25em; // 500px
+}
+.user-indicator-main {
+    padding: 0.3125em;
+    max-width: 31.25em;
+}
+.stats-user-indicator-form {
+    .accordion {
+        .accordion_panel {
+            border:none;
+            &.open {
+                border:none;
+            }
+        }
+    }
+    textarea {
+        resize: none;
+        background: #FAFAFA;
+        overflow: auto;
+        height: 3em;
+    }
+    .stats-indicator-details {
+        display: flex;
+        flex-flow: column;
+    }
+    .new-indicator-dataset-params {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        input {
+            margin: 0;
+        }
+        input[type="text"] {
+            width: 80px;
+            height: 22px;
+        }
+        .regionset-container {
+            display:flex;
+            flex-direction:column;
+            margin-top: -8px;
+            width: 150px;
+        }
+    }
+}
+.user-indicator-table {
+    display: table;
+
+    tbody {
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 33em;
+        display: block;
+    }
+    .uservalue {
+        text-align: center;
+        padding: 0;
+        height: 0;
+        div {
+            padding: 8px 5px 7px;
+            min-height: 18px;
+            width: 240px;
+            height: 100%;
+            overflow-wrap: break-word;
+            overflow-y: auto;
+        }
+    }
+    .region {
+        padding: 8px 5px 7px;
+        min-width: 100px;
+        max-width: 170px;
+        text-align: center;
+    }
+}
+.user-indicator-specification {
+padding: 0.3125em;
+color:white;
+background-color: #888888;
+}
+.user-indicator-import > textarea {
+    width: 300px;
+    height: 150px;
+  }
+.user-dataset {
+    text-align: center;
+    padding: 1px;
+}
+.user-dataset-edit, .user-dataset-delete {
+    text-align: center;
+    padding-left: 5px;
+}
+/* ********************************************
+ * Indicator list
+ * ********************************************/
+ ol.statsgrid-indicator-list {
+    min-width: 430px;
+    li:nth-child(2n) {
+        background-color: #f3f3f3;
+    }
+ }
+.indicator-list-remove, .indicator-list-info {
+    cursor: pointer;
+    float: right;
+    margin: 0 3px;
+}
+/* ********************************************
+ * Indicator metadata popup
+ * ********************************************/
+div.indicator-metadata {
+    border: solid #c0d0d0;
+    border-width: 1px 0;
+    div.accordion:first-child {
+        div.accordion_panel {
+            border-top: 0;
+        }
+    }
+    div.accordion_panel {
+        border-bottom: 0;
+        p {
+            margin-top: 10px;
+        }
+    }
+ }
