@@ -5,7 +5,7 @@ import * as olProj from 'ol/proj';
 import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
 // see oskari-frontend/webpack/config.js for additional config required by Cesium
-import * as Cesium from 'cesium/Source/Cesium';
+import * as Cesium from 'cesium';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID, VECTOR_STYLE } from './domain/constants';
@@ -199,7 +199,7 @@ class MapModuleOlCesium extends MapModuleOl {
                     url: Cesium.IonResource.fromAssetId(ionAssetId)
                 });
             } else {
-                terrainProvider = Cesium.createWorldTerrain({
+                terrainProvider = Cesium.createWorldTerrainAsync({
                     requestVertexNormals: true
                 });
             }
