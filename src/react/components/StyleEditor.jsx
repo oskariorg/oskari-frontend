@@ -65,7 +65,7 @@ const styleExceptionHandler = (exceptionStyle, oldStyle) => {
     return exceptionStyle;
 };
 
-export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
+export const StyleEditor = ({ oskariStyle, onChange, format, geometryType }) => {
     let [form] = Form.useForm();
     // if we don't clone the input here the mappings
     //  between form <> style, the values can get mixed up due to mutability
@@ -74,7 +74,8 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
         ...oskariStyle
     };
 
-    const formats = tabs || constants.SUPPORTED_FORMATS;
+    const formats = constants.SUPPORTED_FORMATS.includes(geometryType)
+        ? [geometryType] : constants.SUPPORTED_FORMATS;
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
@@ -122,6 +123,6 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
 StyleEditor.propTypes = {
     oskariStyle: PropTypes.object,
     format: PropTypes.oneOf(constants.SUPPORTED_FORMATS),
-    tabs: PropTypes.array,
+    geometryType: PropTypes.string,
     onChange: PropTypes.func.isRequired
 };

@@ -8,7 +8,7 @@ import { InfoIcon } from 'oskari-ui/components/icons';
 import { Controller, Messaging } from 'oskari-ui/util';
 import { PropertiesFilter, PropertiesLocale, PropertiesFormat } from './VectorLayerAttributes/';
 import { StyledFormField, Border } from '../styled';
-import { GEOMETRY_TYPES, getGeometryType } from '../../LayerHelper';
+import { GEOMETRY_TYPES, DATA, getGeometryType } from '../../LayerHelper';
 
 const Buttons = styled.div`
     display: inline-flex;
@@ -60,10 +60,11 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     };
 
     const onGeometryTypeChange = value => {
+        const key = DATA.GEOMETRY;
         if (GEOMETRY_TYPES[0] === value) {
-            controller.setAttributesData('geometryType');
+            controller.setAttributesData(key);
         } else {
-            controller.setAttributesData('geometryType', value);
+            controller.setAttributesData(key, value);
         }
     };
     const onModalOk = () => {
@@ -106,7 +107,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
     };
     const properties = featureProperties.filter(prop => prop.name !== geomName);
     const propNames = properties.map(prop => prop.name);
-    const geometryTypeSource = data.geometryType ? 'Attributes' : 'Capabilities';
+    const geometryTypeSource = data[DATA.GEOMETRY] ? 'Attributes' : 'Capabilities';
     const propLabels = Oskari.getLocalized(data.locale) || {};
     // gather selected properties from all (localized) filters
     const selectedProperties = state.filter ? [...new Set([].concat(...Object.values(state.filter)))] : [];
@@ -142,8 +143,8 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 <Message messageKey='attributes.idProperty'/>
                 <InfoIcon title={<Message messageKey='attributes.idPropertyTooltip'/>}/>
                 <StyledFormField>
-                    <Select allowClear value={data.idProperty}
-                        onChange={value => controller.setAttributesData('idProperty', value)}
+                    <Select allowClear value={data[DATA.REPLACE_ID]}
+                        onChange={value => controller.setAttributesData(DATA.REPLACE_ID, value)}
                         options={propNames.map(value => ({value}))}/>
                 </StyledFormField>
             </Border>

@@ -5,7 +5,7 @@ import { showPopup } from 'oskari-ui/components/window';
 import { Message, TextInput, Tooltip, Divider } from 'oskari-ui';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
-import { PLUGIN_NAME, BUNDLE_KEY, DEFAULT_STYLE, STYLE_TYPE } from '../constants';
+import { PLUGIN_NAME, BUNDLE_KEY, DEFAULT_STYLE, GEOMETRY_TYPE } from '../constants';
 
 const Content = styled('div')`
     padding: 24px;
@@ -42,7 +42,7 @@ const Form = ({ onAdd, onClose }) => {
             <StyleEditor
                 oskariStyle={state.style}
                 onChange={ updateStyle }
-                tabs = {[STYLE_TYPE]}
+                geometryType = {GEOMETRY_TYPE}
             />
             <ButtonContainer>
                 <SecondaryButton type='close' onClick={onClose}/>

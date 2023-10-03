@@ -6,13 +6,12 @@ import { MoreOutlined } from '@ant-design/icons';
 
 const getToolTitle = tool => tool.getTooltip() || tool.getTitle() || tool.getName();
 
-export const ToolMenu = ({ tools }) => {
-    if (tools.length === 0) {
+export const ToolMenu = ({ tools = [] }) => {
+    const items = tools.filter(tool => tool.getName() !== 'ownStyle')
+        .map(tool => ({ title: getToolTitle(tool), action: tool.getCallback() }));
+    if (items.length === 0 || Oskari.dom.isEmbedded()) {
         return null;
     }
-    const items = tools
-        .filter(tool => tool.getName() !== 'ownStyle')
-        .map(tool => ({ title: getToolTitle(tool), action: tool.getCallback() }));
     return (
         <Dropdown items={items} placement="bottomRight">
             <MoreOutlined style={{ color: THEME_COLOR, fontSize: '24px' }} />

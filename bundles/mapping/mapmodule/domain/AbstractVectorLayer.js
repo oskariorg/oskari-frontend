@@ -47,8 +47,8 @@ export class AbstractVectorLayer extends AbstractLayer {
     }
 
     /* override */
-    getStyleType () {
-        return this._controlData.styleType;
+    getGeometryType () {
+        return this._controlData.simpleGeometryType;
     }
 
     /* override */

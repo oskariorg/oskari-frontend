@@ -110,6 +110,29 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading:'Laddar...'
+        },
+        FeatureFilter: {
+            single: 'Ett attribut',
+            and: 'AND operatör',
+            or: 'OR operatör',
+            range: 'Använd värdeintervall',
+            addTooltip: 'Lägg till ny rad för filter',
+            clearTooltip: 'Rensa filtret',
+            caseSensitive: {
+                true: 'Skiftlägeskänsligt',
+                false: 'Skiftlägesokänsligt'
+            },
+            operators: {
+                value: 'är',
+                in: 'i',
+                notIn: 'inte i',
+                like: 'som',
+                notLike: 'inte som',
+                greaterThan: 'större än',
+                atLeast: 'minst',
+                lessThan: 'mindre än',
+                atMost: 'som mest'
+            }
         }
     }
 });

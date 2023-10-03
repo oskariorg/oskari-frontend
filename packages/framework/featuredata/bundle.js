@@ -1,17 +1,13 @@
 /**
- * @class Oskari.mapframework.bundle.featuredata2.FeatureDataBundle
+ * @class Oskari.mapframework.featuredata.FeatureDataBundle
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", function () {
+Oskari.clazz.define("Oskari.mapframework.featuredata.FeatureDataBundle", function () {
 
 }, {
     "create": function () {
-        var me = this,
-            inst = Oskari.clazz.create("Oskari.mapframework.bundle.featuredata.FeatureDataBundleInstance");
-
-        return inst;
-
+        return Oskari.clazz.create("Oskari.mapframework.bundle.featuredata.FeatureDataBundleInstance");
     },
     "update": function (manager, bundle, bi, info) {
     }
@@ -26,40 +22,40 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", 
          */
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/mapmodule/plugin/AbstractMapModulePlugin.js"
+            "src": "../../../bundles/mapping/mapmodule/plugin/AbstractMapModulePlugin.js"
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/mapmodule/plugin/BasicMapModulePlugin.js"
+            "src": "../../../bundles/mapping/mapmodule/plugin/BasicMapModulePlugin.js"
         },
         /*
          * featuredata
          */
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/featuredata/instance.js"
+            "src": "../../../bundles/framework/featuredata/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/featuredata/plugin/FeatureDataPlugin.js"
+            "src": "../../../bundles/framework/featuredata/plugin/FeatureDataPlugin.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/featuredata/request/ShowFeatureDataRequest.js"
+            "src": "../../../bundles/framework/featuredata/request/ShowFeatureDataRequest.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/featuredata/request/ShowFeatureDataRequestHandler.js"
+            "src": "../../../bundles/framework/featuredata/request/ShowFeatureDataRequestHandler.js"
         }],
         "locales": [{
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/featuredata/resources/locale/en.js"
+            "src": "../../../bundles/framework/featuredata/resources/locale/en.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/featuredata/resources/locale/fi.js"
+            "src": "../../../bundles/framework/featuredata/resources/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/featuredata/resources/locale/sv.js"
+            "src": "../../../bundles/framework/featuredata/resources/locale/sv.js"
         }]
     },
     "bundle": {
@@ -101,4 +97,4 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", 
 
 });
 
-Oskari.bundle_manager.installBundleClass("featuredata", "Oskari.mapframework.bundle.featuredata.FeatureDataBundle");
+Oskari.bundle_manager.installBundleClass("featuredata", "Oskari.mapframework.featuredata.FeatureDataBundle");

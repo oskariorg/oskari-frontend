@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FlyoutCollapse, FlyoutFooter } from '../';
+import { FlyoutCollapse, FlyoutTools } from '../';
 import { Message, Divider } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 
@@ -16,6 +16,7 @@ export const FlyoutContent = ({
     // Flyout content with tools, outdated and upcoming announcements for admin users
     return (
         <div>
+            <FlyoutTools toolController={toolController} />
             <Divider orientation='left'>
                 <Message messageKey='flyout.active'/>
             </Divider>
@@ -30,8 +31,6 @@ export const FlyoutContent = ({
                 <Message messageKey='flyout.outdated'/>
             </Divider>
             <FlyoutCollapse announcements={outdated} toolController={toolController}/>
-
-            <FlyoutFooter toolController={toolController} />
         </div>
     );
 };

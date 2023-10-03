@@ -31,6 +31,28 @@ export const filterOptionalStyle = (filter, feature) => {
     return false;
 };
 
+/**
+ * @method: filterFeaturesByPropertyFilter
+ * Filter the given array of  features based on the provided single property filter
+ *
+ * @param: {Objet} filter The filter object
+ * @param: {array} features An array of oskari features (as opposed to ol features)
+ */
+export const filterFeaturesByPropertyFilter = (filter, features) => {
+    const key = filter?.property?.key || null;
+    if (!key || !features) {
+        return null;
+    }
+
+    return features?.filter(feature => {
+        if (Object.keys(feature?.properties).includes(key)) {
+            return filterProperty(filter?.property, feature?.properties[key]);
+        }
+
+        return false;
+    });
+};
+
 const filterProperty = (property, featValue) => {
     if (!property.hasOwnProperty('key') || featValue === undefined) return false;
     const ignoreCase = property.caseSensitive !== true;

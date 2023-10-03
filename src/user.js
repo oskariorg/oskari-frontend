@@ -43,7 +43,13 @@
             this._loggedIn = false;
             this._admin = false;
             this._roles = [];
+
             if (userData) {
+                const dateOptions = {
+                    time: {
+                        second: '2-digit'
+                    }
+                };
                 this._firstName = userData.firstName;
                 this._lastName = userData.lastName;
                 this._nickName = userData.nickName;
@@ -51,6 +57,8 @@
                 this._email = userData.email || userData.loginName;
                 this._uuid = userData.userUUID;
                 this._roles = userData.roles || [];
+                this._created = Oskari.util.formatDate(userData.created, dateOptions);
+                this._lastLogin = Oskari.util.formatDate(userData.lastLogin, dateOptions);
                 if (userData.userUUID) {
                     this._loggedIn = true;
                 }
@@ -120,6 +128,26 @@
              */
             getEmail: function () {
                 return this._email;
+            },
+            /**
+             * @method getCreated
+             * Timestamp the user was created
+             *
+             * @return {String}
+             *            created
+             */
+            getCreated: function () {
+                return this._created;
+            },
+            /**
+             * @method getLastLogin
+             * Timestamp the user logged in the previous time
+             *
+             * @return {String}
+             *            lastLogin
+             */
+            getLastLogin: function () {
+                return this._lastLogin;
             },
             /**
              * @method getUuid

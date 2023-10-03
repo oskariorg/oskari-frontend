@@ -3,7 +3,7 @@ export { AnnouncementsContent } from './AnnouncementsContent';
 export { AnnouncementsHandler } from './AnnouncementsHandler';
 export { FlyoutContent } from './flyout/FlyoutContent';
 export { FlyoutCollapse } from './flyout/FlyoutCollapse';
-export { FlyoutFooter } from './flyout/FlyoutFooter';
+export { FlyoutTools } from './flyout/FlyoutTools';
 export { CollapseTools } from './flyout/CollapseTools';
 export { SingleContent } from './popup/SingleContent';
 export { PaginatedContent } from './popup/PaginatedContent';

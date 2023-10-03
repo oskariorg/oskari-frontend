@@ -19,8 +19,11 @@ const sorterTooltipOptions = {
     title: <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey='flyout.sorterTooltip' />
 };
 
-// max-height: 50vh;
-// max-width: 50vw;
+const SelectionsContainer = styled('div')`
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+`;
 
 const StyledTable = styled(Table)`
     .ant-table-tbody > tr.ant-table-row-selected > td {
@@ -33,12 +36,14 @@ const StyledTable = styled(Table)`
     }
 
     overflow-y: auto;
-
+    flex: 1 1 auto;
 `;
 
-const SelectionsContainer = styled('div')`
+const FeatureDataTable = styled('div')`
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    max-height: 75vh;
 `;
 
 const SelectionRow = styled('div')`
@@ -52,7 +57,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     };
     const columnSettings = createColumnSettingsFromFeatures(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings);
     const dataSource = createDatasourceFromFeatures(features);
-    const featureTable = <>
+    const featureTable = <FeatureDataTable>
         <SelectionsContainer>
             { showExportButton && <>
                 <SelectionRow>
@@ -88,7 +93,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
                 };
             }}
         />
-    </>;
+    </FeatureDataTable>;
     return featureTable;
 };
 
@@ -149,8 +154,7 @@ const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSele
 const ContainerDiv = styled('div')`
     margin: 1em;
     min-width: 20vw;
-    max-width: 100vw;
-
+    max-width: ${props => props.isMobile ? '100' : 75}vw;
     .ant-table-selection-col, .ant-table-selection-column {
         display: none;
     }
@@ -159,7 +163,7 @@ export const FeatureDataContainer = ({ state, controller }) => {
     const { layers, activeLayerId, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, loadingStatus, visibleColumnsSettings, sorting } = state;
     const tabs = createLayerTabs(activeLayerId, layers, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, visibleColumnsSettings, controller);
     return (
-        <ContainerDiv>
+        <ContainerDiv isMobile={Oskari.util.isMobile()}>
             <Tabs
                 activeKey = { activeLayerId }
                 items={ tabs }
