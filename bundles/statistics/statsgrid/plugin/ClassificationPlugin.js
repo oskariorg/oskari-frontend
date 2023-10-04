@@ -4,7 +4,7 @@ import { LocaleProvider } from 'oskari-ui/util';
 import { Classification } from '../components/classification/Classification';
 import { showHistogramPopup } from '../components/manualClassification/HistogramForm';
 import { getPopupOptions } from '../../../mapping/mapmodule/plugin/pluginPopupHelper';
-import '../resources/scss/classificationplugin.scss';
+import '../../statsgrid2016/resources/scss/classificationplugin.scss';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
  */

@@ -3,8 +3,6 @@ import { MyIndicatorsTab } from './MyIndicatorsTab';
 import { SearchHandler } from './handler/SearchHandler';
 import './FlyoutManager.js';
 import '../statsgrid2016/Tile.js';
-import './MyIndicatorsList.jsx';
-import './MyIndicatorsTab.jsx';
 import '../statsgrid2016/service/StatisticsService.js';
 import '../statsgrid2016/service/SeriesService.js';
 import '../statsgrid2016/service/ClassificationService.js';

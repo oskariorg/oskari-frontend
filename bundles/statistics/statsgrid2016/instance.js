@@ -1,5 +1,5 @@
-import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
-import { MyIndicatorsTab } from './MyIndicatorsTab';
+import { MyIndicatorsHandler } from '../statsgrid/handler/MyIndicatorsHandler';
+import { MyIndicatorsTab } from '../statsgrid/MyIndicatorsTab';
 
 const TOGGLE_TOOL_SERIES = 'series';
 const TOGGLE_TOOL_CLASSIFICATION = 'classification';
