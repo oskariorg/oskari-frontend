@@ -1,5 +1,49 @@
-import { MyIndicatorsHandler } from '../statsgrid/handler/MyIndicatorsHandler';
-import { MyIndicatorsTab } from '../statsgrid/MyIndicatorsTab';
+import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
+import { MyIndicatorsTab } from './MyIndicatorsTab';
+import { SearchHandler } from './handler/SearchHandler';
+import './FlyoutManager.js';
+import '../statsgrid2016/Tile.js';
+import '../statsgrid2016/service/StatisticsService.js';
+import '../statsgrid2016/service/SeriesService.js';
+import '../statsgrid2016/service/ClassificationService.js';
+import '../statsgrid2016/service/ColorService.js';
+import '../statsgrid2016/service/StateService.js';
+import '../statsgrid2016/service/ErrorService.js';
+import '../statsgrid2016/service/Cache.js';
+import '../statsgrid2016/service/CacheHelper.js';
+import '../statsgrid2016/components/RegionsetSelector.js';
+import '../statsgrid2016/components/SelectedIndicatorsMenu.js';
+import '../statsgrid2016/components/IndicatorForm.js';
+import '../statsgrid2016/components/IndicatorParametersList.js';
+import '../statsgrid2016/components/IndicatorDataForm.js';
+import '../statsgrid2016/components/Diagram.js';
+import '../statsgrid2016/components/SpanSelect.js';
+import '../statsgrid2016/view/TableFlyout.js';
+import '../statsgrid2016/view/DiagramFlyout.js';
+import '../statsgrid2016/view/Filter.js';
+import '../statsgrid2016/view/IndicatorFormFlyout.js';
+import '../statsgrid2016/components/Datatable.js';
+import '../statsgrid2016/plugin/TogglePlugin.js';
+import '../statsgrid2016/components/SeriesControl.js';
+import '../statsgrid2016/publisher/SeriesToggleTool.js';
+import '../statsgrid2016/components/RegionsetViewer.js';
+import '../statsgrid2016/event/IndicatorEvent.js';
+import '../statsgrid2016/event/DatasourceEvent.js';
+import '../statsgrid2016/event/FilterEvent.js';
+import '../statsgrid2016/event/RegionsetChangedEvent.js';
+import '../statsgrid2016/event/ActiveIndicatorChangedEvent.js';
+import '../statsgrid2016/event/RegionSelectedEvent.js';
+import '../statsgrid2016/event/ClassificationChangedEvent.js';
+import '../statsgrid2016/event/ParameterChangedEvent.js';
+import '../statsgrid2016/event/StateChangedEvent.js';
+import '../statsgrid2016/publisher/AbstractStatsPluginTool.js';
+import '../statsgrid2016/publisher/StatsTableTool.js';
+import '../statsgrid2016/publisher/ClassificationTool';
+import '../statsgrid2016/publisher/ClassificationToggleTool.js';
+import '../statsgrid2016/publisher/OpacityTool.js';
+import '../statsgrid2016/plugin/ClassificationPlugin.js';
+import '../statsgrid2016/plugin/SeriesControlPlugin.js';
+import '../statsgrid2016/publisher/DiagramTool.js';
 
 const TOGGLE_TOOL_SERIES = 'series';
 const TOGGLE_TOOL_CLASSIFICATION = 'classification';
@@ -39,6 +83,8 @@ Oskari.clazz.define(
         this.flyoutManager = null;
         this._layerId = 'STATS_LAYER';
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
+
+        this.handler = null;
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -59,8 +105,10 @@ Oskari.clazz.define(
             statsService.addDatasource(conf.sources);
             statsService.addRegionset(conf.regionsets);
 
+            this.handler = new SearchHandler(sandbox, this);
+
             // initialize flyoutmanager
-            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService);
+            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService, this.handler);
             this.flyoutManager.init();
             this.getTile().setupTools(this.flyoutManager);
 
@@ -444,10 +492,6 @@ Oskari.clazz.define(
             } else {
                 // if state doesn't have indicators, reset state
                 stateService.resetState();
-                if (this.flyoutManager) {
-                    // teardown ui to get cleaned search flyout on show
-                    this.flyoutManager.getFlyout('search').teardownUI();
-                }
             }
             // if state says view was visible fire up the UI, otherwise close it
             var uimode = state.view ? 'attach' : 'close';
