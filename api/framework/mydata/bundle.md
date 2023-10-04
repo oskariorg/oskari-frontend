@@ -1,6 +1,6 @@
 # mydata
 
-Provides generic container for user data and offers other functionalities a way to present user-specific information.
+Provides generic container for listing user data and offers other functionalities a way to present user-specific information.
 
 ## Description
 
@@ -11,8 +11,6 @@ Other bundles can add tabs to list data related to their domain (eg. my places, 
 ![Display user data](mydata.png)
 
 *Here shown with tabs added by `myplaces` and `myplacesimport` bundles*
-
-**Note! This is the React.js compatible implementation of the older jQuery-based implementation of `personaldata` bundle. Any new instances should use `mydata` instead of `personaldata`.**
 
 ## TODO
 
