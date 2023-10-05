@@ -348,7 +348,7 @@ class SearchController extends StateHandler {
                     const optName = (panelLoc.selectionValues[selector.id] && panelLoc.selectionValues[selector.id][name]) ? panelLoc.selectionValues[selector.id][name] : name;
 
                     const valObject = {
-                        id: val,
+                        id: val.id || val,
                         title: optName
                     };
                     combinedValues[selector.id]['values'].push(valObject);
