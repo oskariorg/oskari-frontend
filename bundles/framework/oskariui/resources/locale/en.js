@@ -115,7 +115,10 @@ Oskari.registerLocalization({
             single: 'One property',
             and: 'AND operator',
             or: 'OR operator',
-            range: 'Use value range',
+            range: {
+                true: 'Don\'t use value range',
+                false: 'Use value range'
+            },
             addTooltip: 'Add new row for filter',
             clearTooltip: 'Clear filter',
             caseSensitive: {
