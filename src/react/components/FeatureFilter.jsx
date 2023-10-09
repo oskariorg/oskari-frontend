@@ -258,7 +258,7 @@ const FilterRow = ({properties, types, labels = {}, filter = {}, onFilterUpdate,
             }
             { isNumber &&
                 <IconButton bordered icon='><' active={isRange} onClick={toggleRange}
-                    title={<Message messageKey='FeatureFilter.range'/>}/>
+                    title={<Message messageKey={`FeatureFilter.range.${isRange}`}/>}/>
             }
             { typeof onFilterRemove === 'function' &&
                 <IconButton bordered type='delete' onClick={onFilterRemove} />
