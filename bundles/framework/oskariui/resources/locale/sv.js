@@ -115,7 +115,10 @@ Oskari.registerLocalization({
             single: 'Ett attribut',
             and: 'AND operatör',
             or: 'OR operatör',
-            range: 'Använd värdeintervall',
+            range: {
+                true: 'Använd inte värdeintervall',
+                false: 'Använd värdeintervall'
+            },
             addTooltip: 'Lägg till ny rad för filter',
             clearTooltip: 'Rensa filtret',
             caseSensitive: {
