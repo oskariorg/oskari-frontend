@@ -56,4 +56,17 @@ export class CoverageHelper {
         };
         Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [layer.getGeometryWKT(), opts]);
     }
+
+    showMetadataCoverage (geometry, displayedMetadataCoverageId) {
+        const attributes = { displayedMetadataCoverageId };
+        this.clearLayerCoverage();
+        const opts = {
+            centerTo: true,
+            clearPrevious: true,
+            layerId: COVERAGE_LAYER_ID,
+            featureStyle: COVERAGE_FEATURE_STYLE,
+            attributes
+        };
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [geometry, opts]);
+    }
 }

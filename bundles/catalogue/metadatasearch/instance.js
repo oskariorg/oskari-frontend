@@ -3,6 +3,7 @@ import { Messaging } from 'oskari-ui/util';
 import { MetadataSearchContainer } from './view/MetadataSearchContainer';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { COVERAGE_LAYER_ID } from '../../mapping/mapmodule/plugin/layers/coveragetool/CoverageHelper';
 /**
  * @class Oskari.mapframework.bundle.metadatasearch.MetadataSearchBundleInstance
  *
@@ -200,7 +201,32 @@ Oskari.clazz.define(
             },
             'AfterMapLayerRemoveEvent': function (event) {
                 this.handler.getController().updateSelectedLayers();
+            },
+            'FeatureEvent': function (event) {
+                // coverage removed by pressing the plugin button on map -> reset our own state as well.
+                if (event.getOperation() === 'remove' && event.getFeatures()?.some(feature => feature.layerId === COVERAGE_LAYER_ID)) {
+                    this.handler.updateDisplayedCoverageId(null);
+                    return;
+                }
+
+                // detect metadata coverage added to map by the id in it's properties and update bookkeeping accordingly.
+                if (event.getOperation() === 'add' && event.getFeatures()?.some(feature => feature.layerId === COVERAGE_LAYER_ID)) {
+                    const addedDisplayedCoverageId = this.getDisplayedMetadaCoverageIdFromFeatureEvent(event) || null;
+                    if (addedDisplayedCoverageId) {
+                        this.handler.updateDisplayedCoverageId(addedDisplayedCoverageId);
+                    }
+                }
             }
+        },
+        getDisplayedMetadaCoverageIdFromFeatureEvent (event) {
+            const features = event?.getFeatures().filter(feature => feature.layerId === COVERAGE_LAYER_ID);
+            if (!features || !features.length > 0) {
+                return null;
+            }
+
+            const geojsonFeatures = features.flatMap(feature => feature?.geojson?.features);
+            const found = geojsonFeatures?.find(feature => !!feature?.properties?.displayedMetadataCoverageId);
+            return found ? found.properties.displayedMetadataCoverageId : null;
         },
         /**
          * @method _teardownMetaSearch

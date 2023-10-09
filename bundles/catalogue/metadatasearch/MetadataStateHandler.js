@@ -2,6 +2,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { MetadataOptionService } from './service/MetadataOptionService';
 import { MetadataSearchService } from './service/MetadataSearchService';
 import { METADATA_BUNDLE_LOCALIZATION_ID } from './instance';
+import { CoverageHelper } from '../../mapping/mapmodule/plugin/layers/coveragetool/CoverageHelper';
 
 class MetadataStateHandler extends StateHandler {
     constructor (instance) {
@@ -10,6 +11,9 @@ class MetadataStateHandler extends StateHandler {
         this.optionsService = new MetadataOptionService(this.instance.optionAjaxUrl);
         this.searchService = new MetadataSearchService(this.instance.searchAjaxUrl);
         this.mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        this.coverageHelper = new CoverageHelper();
+        this.coverageHelper.initCoverageToolPlugin();
+
         this.setState({
             query: '',
             advancedSearchExpanded: false,
@@ -96,19 +100,13 @@ class MetadataStateHandler extends StateHandler {
     }
 
     toggleCoverageArea (result) {
-        this.instance.removeFeaturesFromMap();
         const { displayedCoverageId } = this.getState();
         if (displayedCoverageId && displayedCoverageId === result.id) {
-            this.updateState({
-                displayedCoverageId: null
-            });
+            this.coverageHelper.clearLayerCoverage();
             return;
         }
 
-        this.updateState({
-            displayedCoverageId: result.id
-        });
-        this.instance.addCoverageFeatureToMap(result.geom);
+        this.coverageHelper.showMetadataCoverage(result.geom, result.id);
     }
 
     toggleLayerVisibility (checked, layerId) {
@@ -124,6 +122,12 @@ class MetadataStateHandler extends StateHandler {
     updateSelectedLayers () {
         this.updateState({
             selectedLayers: this.getSelectedLayers()
+        });
+    }
+
+    updateDisplayedCoverageId (id) {
+        this.updateState({
+            displayedCoverageId: id
         });
     }
 
@@ -241,7 +245,8 @@ const wrapped = controllerMixin(MetadataStateHandler, [
     'updateCoverageFeature',
     'toggleLayerVisibility',
     'updateSelectedLayers',
-    'updateSearchResults'
+    'updateSearchResults',
+    'updateDisplayedCoverageId'
 ]);
 
 export { wrapped as MetadataStateHandler };
