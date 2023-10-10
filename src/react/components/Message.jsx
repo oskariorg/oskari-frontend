@@ -5,9 +5,9 @@ import styled from 'styled-components';
 
 const Label = styled('div')`
     display: ${props => props.allowTextEllipsis ? 'inline': 'inline-block'};
-    overflow: ${props => props.allowTextEllipsis ? 'hidden': ''}
-    white-space: ${props => props.allowTextEllipsis ? 'nowrap': ''}
-    text-overflow: ${props => props.allowTextEllipsis ? 'ellipsis': ''}
+    overflow: ${props => props.allowTextEllipsis ? 'hidden': ''};
+    white-space: ${props => props.allowTextEllipsis ? 'nowrap': ''};
+    text-overflow: ${props => props.allowTextEllipsis ? 'ellipsis': ''};
 `;
 
 /**
