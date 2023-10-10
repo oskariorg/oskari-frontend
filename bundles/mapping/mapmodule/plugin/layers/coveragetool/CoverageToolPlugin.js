@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
                     <Tooltip key={'FeatureDataPluginButtonTooltip'} title={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap'/>}>
                         <MapModuleTextButton
                             visible={this.isVisible()}
-                            text={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap'/>}
+                            text={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap' allowTextEllipsis={true}/>}
                             onClick={() => {
                                 this._coverageButtonClicked();
                             }}
