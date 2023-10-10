@@ -33,9 +33,10 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
                         icon={<LayersIcon />}
                         $isDropdown={true}
                         data-layerid={current?.getId()}
-                        text={current?.getName()}
                         {...rest}
-                    />
+                    >
+                        {current?.getName()}
+                    </MapModuleTextButton>
                 </Dropdown>
             </ButtonsContainer>
         );
@@ -48,14 +49,15 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
                         visible={true}
                         onClick={() => layer.onClick(layer.id)}
                         icon={null}
-                        text={layer.title}
                         active={Number.parseInt(layer.id, 10) === current?.getId()}
                         loading={false}
                         $isDropdown={false}
                         $minWidth={BUTTON_WIDTH}
                         data-layerid={layer.id}
                         {...rest}
-                    />
+                    >
+                        {layer.title}
+                    </MapModuleTextButton>
                 </Tooltip>
             ))}
         </ButtonsContainer>
