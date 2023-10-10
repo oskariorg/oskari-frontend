@@ -55,7 +55,8 @@ const StyledButton = styled(Button)`
     }
 `;
 
-const ButtonText = styled('span')`
+const ButtonText = styled('div')`
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 `;
