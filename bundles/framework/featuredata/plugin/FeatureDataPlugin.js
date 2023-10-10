@@ -100,7 +100,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                         $marginLeft={marginLeft}
                         $marginTop={'10'}
                     >
-                        {<Message messageKey='title' bundleKey='FeatureData'/>}
+                        <Message messageKey='title' bundleKey='FeatureData'/>
                     </MapModuleTextButton>
                 </ThemeProvider>,
                 el[0]
