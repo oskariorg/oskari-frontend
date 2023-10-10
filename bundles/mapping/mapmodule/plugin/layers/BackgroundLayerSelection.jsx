@@ -12,6 +12,11 @@ const ButtonsContainer = styled('div')`
     align-items: center;
 `;
 
+const BackgroundLayerSelectionButtonText = styled('div')`
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
 const getDropDownItems = (layers = []) => {
     return layers.map(layer => ({
         title: layer.title,
@@ -35,7 +40,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
                         data-layerid={current?.getId()}
                         {...rest}
                     >
-                        {current?.getName()}
+                        <BackgroundLayerSelectionButtonText>{current?.getName()}</BackgroundLayerSelectionButtonText>
                     </MapModuleTextButton>
                 </Dropdown>
             </ButtonsContainer>
@@ -56,7 +61,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
                         data-layerid={layer.id}
                         {...rest}
                     >
-                        {layer.title}
+                        <BackgroundLayerSelectionButtonText>{layer.title}</BackgroundLayerSelectionButtonText>
                     </MapModuleTextButton>
                 </Tooltip>
             ))}
