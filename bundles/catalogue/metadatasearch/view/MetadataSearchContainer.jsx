@@ -18,9 +18,10 @@ const Description = () => {
 };
 
 const SearchContainer = (props) => {
-    const { query, onChange, onSearch } = props;
+    const { query, onChange, onSearch, disabled } = props;
     return <div>
         <SearchInput
+            disabled={disabled}
             enterButton={true}
             size='large'
             value={query}
@@ -33,7 +34,8 @@ const SearchContainer = (props) => {
 SearchContainer.propTypes = {
     query: PropTypes.string,
     onChange: PropTypes.func,
-    onSearch: PropTypes.func
+    onSearch: PropTypes.func,
+    disabled: PropTypes.bool
 };
 
 const Container = ({ state, controller }) => {
@@ -54,7 +56,11 @@ const Container = ({ state, controller }) => {
             !(loading || searchResultsVisible) &&
             <>
                 <Description/>
-                <SearchContainer query={query} onChange={controller.updateQuery} onSearch={controller.doSearch}/>
+                <SearchContainer
+                    disabled={drawing}
+                    query={query}
+                    onChange={controller.updateQuery}
+                    onSearch={controller.doSearch}/>
                 <AdvancedSearchContainer
                     isExpanded={advancedSearchExpanded}
                     toggleAdvancedSearch={controller.toggleAdvancedSearch}
