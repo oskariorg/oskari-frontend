@@ -24,7 +24,7 @@ export const IndicatorParams = ({ state, controller }) => {
     const regionsets = [];
     if (state.indicatorParams?.regionset && state.indicatorParams?.regionset.length > 0) {
         for (const rs of state.indicatorParams.regionset) {
-            const rsData = state.regionsetData.find(rsd => rsd.id === rs);
+            const rsData = state.regionsetOptions.find(rsd => rsd.id === rs);
             if (rsData) regionsets.push(rsData);
         }
     }
