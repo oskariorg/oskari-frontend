@@ -211,7 +211,8 @@ class SearchController extends StateHandler {
         this.updateState({
             selectedDatasource: value,
             isUserDatasource: this.service.getDatasource(Number(value)).type === 'user',
-            selectedIndicators: []
+            selectedIndicators: [],
+            indicatorParams: null
         });
         this.fetchindicatorOptions();
     }
