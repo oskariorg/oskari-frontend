@@ -43,6 +43,9 @@ const IndicatorField = styled('div')`
 const SearchFlyout = ({ state, controller }) => {
     const Component = (
         <Content>
+            {state.indicators?.length < 1 && (
+                <Message messageKey='statsgrid.noIndicators' />
+            )}
             <Field>
                 <b><Message messageKey='panels.newSearch.seriesTitle' /></b>
                 <Checkbox
@@ -106,7 +109,9 @@ const SearchFlyout = ({ state, controller }) => {
                 </div>
             )}
             <b><Message messageKey='panels.newSearch.refineSearchLabel' /></b>
-            <i><Message messageKey='panels.newSearch.refineSearchTooltip1' /></i>
+            {!state.indicatorParams && (
+                <i><Message messageKey='panels.newSearch.refineSearchTooltip1' /></i>
+            )}
             {state.indicatorParams && (
                 <IndicatorParams
                     state={state}
