@@ -5,6 +5,7 @@ import { COVERAGE_LAYER_ID, CoverageHelper } from './CoverageHelper';
 import { ThemeProvider } from 'oskari-ui/util';
 import { MapModuleTextButton } from '../../../MapModuleTextButton';
 const FEATURE_EVENT_ADD = 'add';
+const FEATURE_EVENT_REMOVE = 'remove';
 const LOCALIZATION_BUNDLE_ID = 'MapModule';
 
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlugin',
@@ -101,7 +102,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
         createEventHandlers: function () {
             return {
                 FeatureEvent: function (event) {
-                    if (!event) {
+                    if (!event || !(event?.getOperation() === FEATURE_EVENT_ADD || event?.getOperation() === FEATURE_EVENT_REMOVE)) {
                         return;
                     }
                     const features = event?.getFeatures() || null;
