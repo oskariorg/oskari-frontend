@@ -2,10 +2,11 @@ import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showTableFlyout } from '../view/Table/TableFlyout';
 
 class TableController extends StateHandler {
-    constructor (stateHandler, service) {
+    constructor (stateHandler, service, sandbox) {
         super();
         this.stateHandler = stateHandler;
         this.service = service;
+        this.sandbox = sandbox;
         this.setState({
             ...this.stateHandler.getState(),
             selectedRegionset: null,
@@ -17,7 +18,12 @@ class TableController extends StateHandler {
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.addStateListener(() => this.updateFlyout());
+        this.eventHandlers = this.createEventHandlers();
     };
+
+    getName () {
+        return 'TableHandler';
+    }
 
     toggleTableFlyout (show, extraOnClose) {
         if (show) {
@@ -147,6 +153,18 @@ class TableController extends StateHandler {
 
     createEventHandlers () {
         const handlers = {
+            'StatsGrid.ParameterChangedEvent': (event) => {
+                if (this.state.tableFlyout) {
+                    this.fetchIndicatorData();
+                }
+            },
+            'StatsGrid.ClassificationChangedEvent': (event) => {
+                if (event.getChanged().hasOwnProperty('fractionDigits')) {
+                    if (this.state.tableFlyout) {
+                        this.fetchIndicatorData();
+                    }
+                }
+            }
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;

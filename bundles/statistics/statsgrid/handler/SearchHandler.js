@@ -32,7 +32,7 @@ class SearchController extends StateHandler {
     };
 
     getName () {
-        return 'StatisticsHandler';
+        return 'SearchHandler';
     }
 
     toggleSearchFlyout (show, extraOnClose) {
@@ -426,9 +426,10 @@ class SearchController extends StateHandler {
 
         if (this.state.searchTimeseries) {
             data.selections[keyWithTime] = this.state.indicatorParams.selected[keyWithTime][1];
+            const values = this.state.indicatorParams.selectors[keyWithTime].values.filter(val => val.id >= this.state.indicatorParams.selected[keyWithTime][1] && val.id <= this.state.indicatorParams.selected[keyWithTime][0]).reverse();
             data.series = {
                 id: keyWithTime,
-                values: this.state.indicatorParams.selectors[keyWithTime].values.filter(val => val >= this.state.indicatorParams.selected[keyWithTime][1] && val <= this.state.indicatorParams.selected[keyWithTime][0]).reverse()
+                values: values.map(val => val.id || val)
             };
         } else if (keyWithTime) {
             data.selections[keyWithTime] = this.state.indicatorParams.selected[keyWithTime];
@@ -565,8 +566,10 @@ class SearchController extends StateHandler {
 
         Object.keys(selections).forEach(selectionKey => {
             const selector = metadata.selectors.find(selector => selector.id === selectionKey);
-            const checkNotAllowed = value =>
-                !selector.allowedValues.includes(value) && !selector.allowedValues.find(obj => obj.id === value);
+            const checkNotAllowed = value => {
+                value = value.id || value;
+                return !selector.allowedValues.includes(value) && !selector.allowedValues.find(obj => obj.id === value);
+            };
 
             if (!selector) {
                 // Remove unsupported selectors silently

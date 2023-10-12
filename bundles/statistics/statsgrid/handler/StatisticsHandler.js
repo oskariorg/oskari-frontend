@@ -9,7 +9,7 @@ class StatisticsController extends StateHandler {
         this.sandbox = sandbox;
         this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
         this.searchHandler = new SearchHandler(this, this.service, this.instance, this.sandbox);
-        this.tableHandler = new TableHandler(this, this.service);
+        this.tableHandler = new TableHandler(this, this.service, this.sandbox);
         this.setState({
             indicators: [],
             activeIndicator: null
@@ -25,7 +25,12 @@ class StatisticsController extends StateHandler {
                 ...state
             });
         });
+        this.eventHandlers = this.createEventHandlers();
     };
+
+    getName () {
+        return 'StatisticsHandler';
+    }
 
     getSearchHandler () {
         return this.searchHandler;
