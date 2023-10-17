@@ -3,15 +3,18 @@ import { showSearchFlyout } from '../view/search/SearchFlyout';
 import { prepareData, showMedataPopup } from '../components/description/MetadataPopup';
 
 class SearchController extends StateHandler {
-    constructor (sandbox, instance) {
+    constructor (stateHandler, service, sandbox, instance) {
         super();
         this.instance = instance;
         this.sandbox = sandbox;
+        this.stateHandler = stateHandler;
+        this.service = service;
         this.setState({
+            ...this.stateHandler.getState(),
             searchTimeseries: false,
-            regionsetData: [],
-            datasourceData: [],
-            indicatorData: [],
+            regionsetOptions: [],
+            datasourceOptions: [],
+            indicatorOptions: [],
             selectedRegionsets: [],
             selectedDatasource: null,
             selectedIndicators: [],
@@ -24,31 +27,32 @@ class SearchController extends StateHandler {
         });
         this.metadataPopup = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
-        this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
         this.eventHandlers = this.createEventHandlers();
         this.addStateListener(() => this.updateFlyout());
     };
 
     getName () {
-        return 'StatisticsHandler';
+        return 'SearchHandler';
     }
 
-    toggleSearchFlyout (show) {
+    toggleSearchFlyout (show, extraOnClose) {
         if (show) {
             if (!this.state.searchFlyout) {
-                this.showSearchFlyout();
+                this.showSearchFlyout(extraOnClose);
             }
         } else {
             this.closeSearchFlyout();
         }
     }
 
-    showSearchFlyout () {
+    showSearchFlyout (extraOnClose) {
         this.fetchRegionsets();
         this.fetchDatasources();
-        this.fetchIndicators();
         this.updateState({
-            searchFlyout: showSearchFlyout(this.getState(), this.getController(), () => this.closeSearchFlyout())
+            searchFlyout: showSearchFlyout(this.getState(), this.getController(), () => {
+                this.closeSearchFlyout();
+                if (extraOnClose) extraOnClose();
+            })
         });
     }
 
@@ -75,7 +79,7 @@ class SearchController extends StateHandler {
             selectedRegionsets: [],
             disabledIndicatorIDs: [],
             disabledDatasources: [],
-            indicatorData: [],
+            indicatorOptions: [],
             indicatorParams: null,
             isUserDatasource: false
         });
@@ -83,32 +87,17 @@ class SearchController extends StateHandler {
 
     fetchRegionsets () {
         this.updateState({
-            regionsetData: this.service.getRegionsets()
+            regionsetOptions: this.service.getRegionsets()
         });
     }
 
     fetchDatasources () {
         this.updateState({
-            datasourceData: this.service.getDatasources()
+            datasourceOptions: this.service.getDatasources()
         });
     }
 
-    fetchIndicators () {
-        const indicators = [];
-        this.service.getStateService().getIndicators().forEach(indicator => {
-            this.service.getUILabels(indicator, labels => {
-                indicators.push({
-                    ...indicator,
-                    labels: labels
-                });
-            });
-        });
-        this.updateState({
-            indicators: indicators
-        });
-    }
-
-    fetchIndicatorData () {
+    fetchindicatorOptions () {
         if (!this.state.selectedDatasource || this.state.selectedDatasource === '') {
             return;
         }
@@ -142,7 +131,7 @@ class SearchController extends StateHandler {
                 }
             });
             this.updateState({
-                indicatorData: results
+                indicatorOptions: results
             });
             if (hasRegionSetRestriction) {
                 this.updateState({
@@ -221,9 +210,11 @@ class SearchController extends StateHandler {
     setSelectedDatasource (value) {
         this.updateState({
             selectedDatasource: value,
-            isUserDatasource: this.service.getDatasource(Number(value)).type === 'user'
+            isUserDatasource: this.service.getDatasource(Number(value)).type === 'user',
+            selectedIndicators: [],
+            indicatorParams: null
         });
-        this.fetchIndicatorData();
+        this.fetchindicatorOptions();
     }
 
     setSelectedIndicators (value) {
@@ -271,8 +262,7 @@ class SearchController extends StateHandler {
     }
 
     removeIndicator (indicator) {
-        this.service.getStateService().removeIndicator(indicator.datasource, indicator.indicator, indicator.selections, indicator.series);
-        this.fetchIndicators();
+        this.stateHandler.getController().removeIndicator(indicator);
     }
 
     handleMultipleIndicatorParams () {
@@ -436,9 +426,10 @@ class SearchController extends StateHandler {
 
         if (this.state.searchTimeseries) {
             data.selections[keyWithTime] = this.state.indicatorParams.selected[keyWithTime][1];
+            const values = this.state.indicatorParams.selectors[keyWithTime].values.filter(val => val.id >= this.state.indicatorParams.selected[keyWithTime][1] && val.id <= this.state.indicatorParams.selected[keyWithTime][0]).reverse();
             data.series = {
                 id: keyWithTime,
-                values: this.state.indicatorParams.selectors[keyWithTime].values.filter(val => val >= this.state.indicatorParams.selected[keyWithTime][1] && val <= this.state.indicatorParams.selected[keyWithTime][0]).reverse()
+                values: values.map(val => val.id || val)
             };
         } else if (keyWithTime) {
             data.selections[keyWithTime] = this.state.indicatorParams.selected[keyWithTime];
@@ -575,8 +566,10 @@ class SearchController extends StateHandler {
 
         Object.keys(selections).forEach(selectionKey => {
             const selector = metadata.selectors.find(selector => selector.id === selectionKey);
-            const checkNotAllowed = value =>
-                !selector.allowedValues.includes(value) && !selector.allowedValues.find(obj => obj.id === value);
+            const checkNotAllowed = value => {
+                value = value.id || value;
+                return !selector.allowedValues.includes(value) && !selector.allowedValues.find(obj => obj.id === value);
+            };
 
             if (!selector) {
                 // Remove unsupported selectors silently
@@ -651,7 +644,7 @@ class SearchController extends StateHandler {
                 this.updateState({
                     loading: false
                 });
-                this.fetchIndicators();
+                this.stateHandler.getController().fetchIndicators();
             }
         };
         const searchSuccessfull = search => {

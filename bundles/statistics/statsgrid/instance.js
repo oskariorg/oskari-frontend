@@ -1,6 +1,6 @@
 import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
 import { MyIndicatorsTab } from './MyIndicatorsTab';
-import { SearchHandler } from './handler/SearchHandler';
+import { StatisticsHandler } from './handler/StatisticsHandler';
 import './FlyoutManager.js';
 import '../statsgrid2016/Tile.js';
 import '../statsgrid2016/service/StatisticsService.js';
@@ -18,11 +18,9 @@ import '../statsgrid2016/components/IndicatorParametersList.js';
 import '../statsgrid2016/components/IndicatorDataForm.js';
 import '../statsgrid2016/components/Diagram.js';
 import '../statsgrid2016/components/SpanSelect.js';
-import '../statsgrid2016/view/TableFlyout.js';
 import '../statsgrid2016/view/DiagramFlyout.js';
 import '../statsgrid2016/view/Filter.js';
 import '../statsgrid2016/view/IndicatorFormFlyout.js';
-import '../statsgrid2016/components/Datatable.js';
 import '../statsgrid2016/plugin/TogglePlugin.js';
 import '../statsgrid2016/components/SeriesControl.js';
 import '../statsgrid2016/publisher/SeriesToggleTool.js';
@@ -105,7 +103,7 @@ Oskari.clazz.define(
             statsService.addDatasource(conf.sources);
             statsService.addRegionset(conf.regionsets);
 
-            this.handler = new SearchHandler(sandbox, this);
+            this.handler = new StatisticsHandler(this, sandbox);
 
             // initialize flyoutmanager
             this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService, this.handler);

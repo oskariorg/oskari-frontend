@@ -60,7 +60,7 @@ const SearchFlyout = ({ state, controller }) => {
                 <StyledSelect
                     mode='multiple'
                     filterOption={false}
-                    options={state?.regionsetData?.map(rs => ({ value: rs.id, label: rs.name }))}
+                    options={state?.regionsetOptions?.map(rs => ({ value: rs.id, label: rs.name }))}
                     placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
                     value={state?.selectedRegionsets}
                     onChange={(value) => controller.setSelectedRegionsets(value)}
@@ -69,7 +69,7 @@ const SearchFlyout = ({ state, controller }) => {
             <Field>
                 <b><Message messageKey='panels.newSearch.datasourceTitle' /></b>
                 <StyledSelect
-                    options={state?.datasourceData?.map(ds => ({ value: ds.id, label: ds.name, disabled: state.disabledDatasources.includes(ds.id) }))}
+                    options={state?.datasourceOptions?.map(ds => ({ value: ds.id, label: ds.name, disabled: state.disabledDatasources.includes(ds.id) }))}
                     placeholder={<Message messageKey='panels.newSearch.selectDatasourcePlaceholder' />}
                     value={state?.selectedDatasource}
                     onChange={(value) => controller.setSelectedDatasource(value)}
@@ -81,9 +81,9 @@ const SearchFlyout = ({ state, controller }) => {
                         <b><Message messageKey='panels.newSearch.indicatorTitle' /></b>
                         <StyledSelect
                             mode='multiple'
-                            options={state?.indicatorData?.map(i => ({ value: i.id, label: i.title, disabled: state.disabledIndicators.includes(i.id) }))}
+                            options={state?.indicatorOptions?.map(i => ({ value: i.id, label: i.title, disabled: state.disabledIndicators.includes(i.id) }))}
                             placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
-                            disabled={!state?.indicatorData || state?.indicatorData?.length < 1}
+                            disabled={!state?.indicatorOptions || state?.indicatorOptions?.length < 1}
                             value={state?.selectedIndicators}
                             onChange={(value) => controller.setSelectedIndicators(value)}
                         />
@@ -140,9 +140,9 @@ const SearchFlyout = ({ state, controller }) => {
 
 export const showSearchFlyout = (state, controller, onClose) => {
 
-    const title = <Message bundleKey= {BUNDLE_KEY} messageKey='tile.search' />;
+    const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.search' />;
     const controls = showFlyout(
-        <Message bundleKey= {BUNDLE_KEY} messageKey='tile.search' />,
+        title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <SearchFlyout state={state} controller={controller} />
         </LocaleProvider>,

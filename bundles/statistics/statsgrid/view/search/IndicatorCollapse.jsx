@@ -1,7 +1,7 @@
 import React from 'react';
 import { Message, Collapse, CollapsePanel, Tooltip } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
-import { CloseCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const StyledCollapse = styled(Collapse)`
@@ -15,6 +15,9 @@ const Row = styled('div')`
 const Actions = styled('div')`
     display: flex;
     flex-direction: row;
+`;
+const RemoveButton = styled(IconButton)`
+    margin-right: 10px;
 `;
 
 const getIndicatorText = (labels) => {
@@ -44,15 +47,15 @@ export const IndicatorCollapse = ({ state, controller }) => {
                 {state.indicators?.length < 1 ? (
                     <Message messageKey='indicatorList.emptyMsg' />
                 ) : (
-                    state.indicators.map(indicator => {
+                    state.indicators?.map(indicator => {
                         return (
                             <Row key={indicator.indicator}>
                                 <Tooltip title={indicator.labels?.full}>
                                     <span>{getIndicatorText(indicator.labels)}</span>
                                 </Tooltip>
                                 <Actions>
-                                    <IconButton
-                                        icon={<CloseCircleOutlined />}
+                                    <RemoveButton
+                                        type='delete'
                                         onClick={() => controller.removeIndicator(indicator)}
                                     />
                                     <IconButton
