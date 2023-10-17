@@ -148,8 +148,8 @@ Oskari.registerLocalization(
             }
         },
         "layerCoverageTool": {
-            "name": "Visa geografisk datatäckning",
-            "removeCoverageFromMap": "Göm geografisk datatäckning"
+            "name": "Visa kartlagrets utsträckning",
+            "removeCoverageFromMap": "Göm kartlagrets utsträckning"
         }
     }
 });
