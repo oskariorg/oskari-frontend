@@ -84,11 +84,11 @@ export const Footer = ({ layer, controller }) => {
                             onChange={styleName => controller.changeLayerStyle(layer, styleName)}
                         />
                     </ColAuto>
+                    <ColAutoRight>
+                        <ToolMenu tools={tools} />
+                    </ColAutoRight>
                 </Fragment>
             }
-            <ColAutoRight>
-                <ToolMenu tools={tools} />
-            </ColAutoRight>
         </GrayRow>
     );
 };
