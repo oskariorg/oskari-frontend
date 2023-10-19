@@ -10,6 +10,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     this.handler = handler;
     this.searchHandler = this.handler.getSearchHandler();
     this.tableHandler = this.handler.getTableHandler();
+    this.diagramHandler = this.handler.getDiagramHandler();
     this.flyoutInfo = [
         {
             id: 'search',
@@ -21,12 +22,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         },
         {
             id: 'diagram',
-            title: loc.tile.diagram,
-            oskariClass: 'Oskari.statistics.statsgrid.view.DiagramFlyout',
-            cls: 'statsgrid-diagram-flyout',
-            resizable: true,
-            minWidth: 630,
-            minHeight: 400
+            title: loc.tile.diagram
 
         },
         {
@@ -49,7 +45,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         const y = this._positionY;
         const container = jQuery(Oskari.dom.getRootEl());
         this.flyoutInfo.forEach((info) => {
-            if (info.id === 'search' || info.id === 'table') {
+            if (info.id === 'search' || info.id === 'table' || info.id === 'diagram') {
                 this.flyouts[info.id] = true;
             } else {
                 var flyout = Oskari.clazz.create(info.oskariClass, info.title, {
@@ -91,10 +87,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         if (type === 'search') {
             this.searchHandler.getController().toggleSearchFlyout(true, () => this.trigger('hide', type));
             this.hide('table');
+            this.hide('diagram');
             this.trigger('show', type);
         } else if (type === 'table') {
             this.tableHandler.getController().toggleTableFlyout(true, () => this.trigger('hide', type));
             this.hide('search');
+            this.hide('diagram');
+            this.trigger('show', type);
+        } else if (type === 'diagram') {
+            this.diagramHandler.getController().toggleDiagramFlyout(true, () => this.trigger('hide', type));
+            this.hide('search');
+            this.hide('table');
             this.trigger('show', type);
         } else {
             flyout.showOnPosition();
@@ -113,6 +116,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         } else if (type === 'table') {
             this.tableHandler.getController().toggleTableFlyout(false);
             this.trigger('hide', type);
+        } else if (type === 'diagram') {
+            this.diagramHandler.getController().toggleDiagramFlyout(false);
+            this.trigger('hide', type);
         } else {
             flyout.hide();
         }
@@ -130,6 +136,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             }
         } else if (type === 'table') {
             if (this.tableHandler?.getState()?.tableFlyout) {
+                this.hide(type);
+                return;
+            }
+        } else if (type === 'diagram') {
+            if (this.diagramHandler?.getState()?.diagramFlyout) {
                 this.hide(type);
                 return;
             }

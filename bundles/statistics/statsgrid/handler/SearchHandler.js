@@ -1,5 +1,5 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { showSearchFlyout } from '../view/search/SearchFlyout';
+import { showSearchFlyout } from '../view/Search/SearchFlyout';
 import { prepareData, showMedataPopup } from '../components/description/MetadataPopup';
 
 class SearchController extends StateHandler {
