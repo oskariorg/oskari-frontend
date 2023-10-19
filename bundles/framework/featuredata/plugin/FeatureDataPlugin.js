@@ -92,7 +92,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <MapModuleTextButton
                         visible={layers?.length > 0}
-                        text={<Message messageKey='title' bundleKey='FeatureData'/>}
                         onClick={() => this.handler.openFlyout()}
                         active={flyoutOpen}
                         loading={loadingStatus.loading}
@@ -100,7 +99,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                         $marginRight={marginRight}
                         $marginLeft={marginLeft}
                         $marginTop={'10'}
-                    />
+                    >
+                        <Message messageKey='title' bundleKey='FeatureData'/>
+                    </MapModuleTextButton>
                 </ThemeProvider>,
                 el[0]
             );

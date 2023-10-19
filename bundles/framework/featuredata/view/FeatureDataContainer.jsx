@@ -142,7 +142,11 @@ const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSele
         const showExportButton = layer.hasPermission('download');
         return {
             key: layer.getId(),
-            label: <TabTitle status={status} title={layer.getName()} active={layer.getId() === layerId} openSelectByPropertiesPopup={controller.openSelectByPropertiesPopup}/>,
+            label: <TabTitle
+                status={status} title={layer.getName()}
+                active={layer.getId() === layerId && features?.length > 0}
+                openSelectByPropertiesPopup={controller.openSelectByPropertiesPopup}
+            />,
             children: layer.getId() === layerId
                 ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, showExportButton, controller)
                 : null

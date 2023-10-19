@@ -55,11 +55,6 @@ const StyledButton = styled(Button)`
     }
 `;
 
-const ButtonText = styled('span')`
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
 const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     const helper = getNavigationTheme(theme);
     // get button roundness factor instead of percentage as the component is not round itself
@@ -81,7 +76,7 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     );
 });
 
-export const MapModuleTextButton = ({ visible, onClick, icon, text, active, position, loading, ...rest }) => {
+export const MapModuleTextButton = ({ visible, onClick, icon, children, active, position, loading, ...rest }) => {
     if (!visible) {
         return null;
     };
@@ -94,7 +89,7 @@ export const MapModuleTextButton = ({ visible, onClick, icon, text, active, posi
         loading={loading}
         {...rest}
     >
-        <ButtonText>{text}</ButtonText>
+        {children}
     </ThemedButton>;
 };
 
@@ -102,8 +97,8 @@ MapModuleTextButton.propTypes = {
     visible: PropTypes.bool,
     onClick: PropTypes.func,
     icon: PropTypes.any,
-    text: PropTypes.any,
     active: PropTypes.bool,
     position: PropTypes.string,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    children: PropTypes.any
 };

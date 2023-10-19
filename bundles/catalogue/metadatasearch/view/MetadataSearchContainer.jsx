@@ -5,15 +5,25 @@ import { SearchInput, Spin, Message } from 'oskari-ui';
 import { AdvancedSearchContainer } from './advanced-search/AdvancedSearchContainer';
 import { MetadataSearchResultListContainer } from './resultlist/MetadataSearchResultListContainer';
 import { FlexRowCentered } from './advanced-search/AdvancedSearchStyledComponents';
+import styled from 'styled-components';
+
+const DescriptionContainer = styled('div')`
+    margin-bottom: 8px;
+`;
 
 const Description = () => {
-    return <Message bundleKey={METADATA_BUNDLE_LOCALIZATION_ID} messageKey='metadataSearchDescription'/>;
+    return <DescriptionContainer>
+        <Message bundleKey={METADATA_BUNDLE_LOCALIZATION_ID} messageKey='metadataSearchDescription'/>
+    </DescriptionContainer>;
 };
 
 const SearchContainer = (props) => {
-    const { query, onChange, onSearch } = props;
+    const { query, onChange, onSearch, disabled } = props;
     return <div>
         <SearchInput
+            disabled={disabled}
+            enterButton={true}
+            size='large'
             value={query}
             onChange={(event) => onChange(event.target.value)}
             placeholder={Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'placeholder')}
@@ -24,7 +34,8 @@ const SearchContainer = (props) => {
 SearchContainer.propTypes = {
     query: PropTypes.string,
     onChange: PropTypes.func,
-    onSearch: PropTypes.func
+    onSearch: PropTypes.func,
+    disabled: PropTypes.bool
 };
 
 const Container = ({ state, controller }) => {
@@ -45,7 +56,11 @@ const Container = ({ state, controller }) => {
             !(loading || searchResultsVisible) &&
             <>
                 <Description/>
-                <SearchContainer query={query} onChange={controller.updateQuery} onSearch={controller.doSearch}/>
+                <SearchContainer
+                    disabled={drawing}
+                    query={query}
+                    onChange={controller.updateQuery}
+                    onSearch={controller.doSearch}/>
                 <AdvancedSearchContainer
                     isExpanded={advancedSearchExpanded}
                     toggleAdvancedSearch={controller.toggleAdvancedSearch}

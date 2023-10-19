@@ -115,7 +115,10 @@ Oskari.registerLocalization({
             single: 'Yksi ominaisuus',
             and: 'AND-operaattori',
             or: 'OR-operaattori',
-            range: 'Käytä arvoaluetta',
+            range: {
+                true: 'Älä käytä arvoaluetta',
+                false: 'Käytä arvoaluetta'
+            },
             addTooltip: 'Lisää suodattimeen uusi rivi',
             clearTooltip: 'Tyhjennä suodatin',
             caseSensitive: {
