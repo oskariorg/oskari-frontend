@@ -14,16 +14,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     this.flyoutInfo = [
         {
             id: 'search',
-            title: loc.tile.search
+            title: loc.tile.search,
+            controller: this.searchHandler.getController(),
+            state: this.searchHandler.getState()
         },
         {
             id: 'table',
-            title: loc.tile.table
+            title: loc.tile.table,
+            controller: this.tableHandler.getController(),
+            state: this.tableHandler.getState()
         },
         {
             id: 'diagram',
-            title: loc.tile.diagram
-
+            title: loc.tile.diagram,
+            controller: this.diagramHandler.getController(),
+            state: this.diagramHandler.getState()
         },
         {
             id: 'indicatorForm',
@@ -46,7 +51,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         const container = jQuery(Oskari.dom.getRootEl());
         this.flyoutInfo.forEach((info) => {
             if (info.id === 'search' || info.id === 'table' || info.id === 'diagram') {
-                this.flyouts[info.id] = true;
+                this.flyouts[info.id] = {
+                    controller: info.controller,
+                    state: info.state
+                };
             } else {
                 var flyout = Oskari.clazz.create(info.oskariClass, info.title, {
                     width: 'auto',
@@ -79,76 +87,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         });
     },
     open: function (type) {
-        var me = this;
-        var flyout = me.flyouts[type];
-        if (!flyout) {
+        const flyout = this.flyouts[type];
+        if (!flyout || type === 'indicatorForm') {
             return;
         }
-        if (type === 'search') {
-            this.searchHandler.getController().toggleSearchFlyout(true, () => this.trigger('hide', type));
-            this.hide('table');
-            this.hide('diagram');
-            this.trigger('show', type);
-        } else if (type === 'table') {
-            this.tableHandler.getController().toggleTableFlyout(true, () => this.trigger('hide', type));
-            this.hide('search');
-            this.hide('diagram');
-            this.trigger('show', type);
-        } else if (type === 'diagram') {
-            this.diagramHandler.getController().toggleDiagramFlyout(true, () => this.trigger('hide', type));
-            this.hide('search');
-            this.hide('table');
-            this.trigger('show', type);
-        } else {
-            flyout.showOnPosition();
-            this.trigger('show', type);
-        }
+        flyout.controller.toggleFlyout(true, () => this.trigger('hide', type));
+        this.trigger('show', type);
+        this.flyoutInfo.filter(info => info.id !== type).forEach(info => this.hide(info.id));
     },
     hide: function (type) {
-        var me = this;
-        var flyout = me.flyouts[type];
-        if (!flyout) {
+        const flyout = this.flyouts[type];
+        if (!flyout || type === 'indicatorForm') {
             return;
         }
-        if (type === 'search') {
-            this.searchHandler.getController().toggleSearchFlyout(false);
-            this.trigger('hide', type);
-        } else if (type === 'table') {
-            this.tableHandler.getController().toggleTableFlyout(false);
-            this.trigger('hide', type);
-        } else if (type === 'diagram') {
-            this.diagramHandler.getController().toggleDiagramFlyout(false);
-            this.trigger('hide', type);
-        } else {
-            flyout.hide();
-        }
+
+        flyout.controller.toggleFlyout(false);
+        this.trigger('hide', type);
     },
     toggle: function (type) {
-        var flyout = this.getFlyout(type);
-        if (!flyout) {
+        const flyout = this.getFlyout(type);
+        if (!flyout || type === 'indicatorForm') {
             // unrecognized flyout
             return;
         }
-        if (type === 'search') {
-            if (this.searchHandler?.getState()?.searchFlyout) {
-                this.hide(type);
-                return;
-            }
-        } else if (type === 'table') {
-            if (this.tableHandler?.getState()?.tableFlyout) {
-                this.hide(type);
-                return;
-            }
-        } else if (type === 'diagram') {
-            if (this.diagramHandler?.getState()?.diagramFlyout) {
-                this.hide(type);
-                return;
-            }
-        } else {
-            if (flyout.isVisible()) {
-                this.hide(type);
-                return;
-            }
+        if (flyout.state.flyout) {
+            this.hide(type);
         }
 
         // open flyout

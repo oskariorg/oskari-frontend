@@ -323,7 +323,7 @@ const createGraph = (ref, labelsRef, chartData) => {
     });
 };
 
-export const Diagram = ({ state, controller }) => {
+export const Diagram = ({ chartData, sortOrder }) => {
     let ref = useRef(null);
     let labelsRef = useRef(null);
 
@@ -334,11 +334,11 @@ export const Diagram = ({ state, controller }) => {
         if (labelsRef?.current?.children?.length > 0) {
             labelsRef.current.removeChild(labelsRef.current.children[0]);
         }
-        if (state.chartData?.data) {
-            sortData(state.chartData?.data, state.sortOrder);
-            createGraph(ref.current, labelsRef.current, state.chartData);
+        if (chartData?.data) {
+            sortData(chartData?.data, sortOrder);
+            createGraph(ref.current, labelsRef.current, chartData);
         }
-    }, [state.chartData?.data, state.sortOrder]);
+    }, [chartData, sortOrder]);
 
     return (
         <Content>

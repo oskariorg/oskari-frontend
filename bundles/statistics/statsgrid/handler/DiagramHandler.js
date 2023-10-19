@@ -10,7 +10,7 @@ class DiagramController extends StateHandler {
         this.setState({
             ...this.stateHandler.getState(),
             sortOrder: 'value-descending',
-            diagramFlyout: null,
+            flyout: null,
             loading: false
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -22,9 +22,9 @@ class DiagramController extends StateHandler {
         return 'DiagramHandler';
     }
 
-    toggleDiagramFlyout (show, extraOnClose) {
+    toggleFlyout (show, extraOnClose) {
         if (show) {
-            if (!this.state.diagramFlyout) {
+            if (!this.state.flyout) {
                 this.updateData();
                 this.showDiagramFlyout(extraOnClose);
             }
@@ -35,7 +35,7 @@ class DiagramController extends StateHandler {
 
     showDiagramFlyout (extraOnClose) {
         this.updateState({
-            diagramFlyout: showDiagramFlyout(this.getState(), this.getController(), () => {
+            flyout: showDiagramFlyout(this.getState(), this.getController(), () => {
                 this.closeDiagramFlyout();
                 if (extraOnClose) extraOnClose();
             }),
@@ -44,18 +44,18 @@ class DiagramController extends StateHandler {
     }
 
     closeDiagramFlyout () {
-        if (this.state.diagramFlyout) {
-            this.state.diagramFlyout.close();
+        if (this.state.flyout) {
+            this.state.flyout.close();
             this.updateState({
-                diagramFlyout: null,
+                flyout: null,
                 sortOrder: 'value-descending'
             });
         }
     }
 
     updateFlyout () {
-        if (this.state.diagramFlyout) {
-            this.state.diagramFlyout.update(this.getState());
+        if (this.state.flyout) {
+            this.state.flyout.update(this.getState());
         }
     }
 
@@ -94,10 +94,7 @@ class DiagramController extends StateHandler {
 
         if (!indicator) return;
         this.getIndicatorData(indicator, (data) => {
-            const isUndefined = (element) => {
-                return element.value === undefined;
-            };
-            if (!data || data.every(isUndefined)) {
+            if (!data || data.every(d => d.value === undefined)) {
                 return;
             }
             const { fractionDigits } = indicator.classification;
@@ -157,24 +154,24 @@ class DiagramController extends StateHandler {
     createEventHandlers () {
         const handlers = {
             'StatsGrid.ParameterChangedEvent': (event) => {
-                if (this.state.diagramFlyout) {
+                if (this.state.flyout) {
                     this.updateData();
                 }
             },
             'StatsGrid.ClassificationChangedEvent': (event) => {
                 if (event.getChanged().hasOwnProperty('fractionDigits')) {
-                    if (this.state.diagramFlyout) {
+                    if (this.state.flyout) {
                         this.updateData();
                     }
                 }
             },
             'StatsGrid.RegionsetChangedEvent': (event) => {
-                if (this.state.diagramFlyout) {
+                if (this.state.flyout) {
                     this.updateData();
                 }
             },
             'StatsGrid.ActiveIndicatorChangedEvent': (event) => {
-                if (this.state.diagramFlyout) {
+                if (this.state.flyout) {
                     this.updateData();
                 }
             }
@@ -194,7 +191,7 @@ class DiagramController extends StateHandler {
 }
 
 const wrapped = controllerMixin(DiagramController, [
-    'toggleDiagramFlyout',
+    'toggleFlyout',
     'closeDiagramFlyout',
     'setActiveIndicator',
     'setSortOrder'

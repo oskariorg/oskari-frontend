@@ -60,7 +60,7 @@ const DiagramFlyout = ({ state, controller }) => {
                     value={state.sortOrder}
                 />
            </Selections>
-           <Diagram state={state} controller={controller} />
+           <Diagram chartData={state.chartData} sortOrder={state.sortOrder} />
         </Content>
     );
     

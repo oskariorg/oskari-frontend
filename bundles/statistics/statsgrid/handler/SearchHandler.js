@@ -3,7 +3,7 @@ import { showSearchFlyout } from '../view/Search/SearchFlyout';
 import { prepareData, showMedataPopup } from '../components/description/MetadataPopup';
 
 class SearchController extends StateHandler {
-    constructor (stateHandler, service, sandbox, instance) {
+    constructor (stateHandler, service, instance, sandbox) {
         super();
         this.instance = instance;
         this.sandbox = sandbox;
@@ -23,7 +23,7 @@ class SearchController extends StateHandler {
             indicatorParams: null,
             isUserDatasource: false,
             loading: false,
-            searchFlyout: null
+            flyout: null
         });
         this.metadataPopup = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -35,9 +35,9 @@ class SearchController extends StateHandler {
         return 'SearchHandler';
     }
 
-    toggleSearchFlyout (show, extraOnClose) {
+    toggleFlyout (show, extraOnClose) {
         if (show) {
-            if (!this.state.searchFlyout) {
+            if (!this.state.flyout) {
                 this.showSearchFlyout(extraOnClose);
             }
         } else {
@@ -49,7 +49,7 @@ class SearchController extends StateHandler {
         this.fetchRegionsets();
         this.fetchDatasources();
         this.updateState({
-            searchFlyout: showSearchFlyout(this.getState(), this.getController(), () => {
+            flyout: showSearchFlyout(this.getState(), this.getController(), () => {
                 this.closeSearchFlyout();
                 if (extraOnClose) extraOnClose();
             })
@@ -57,17 +57,17 @@ class SearchController extends StateHandler {
     }
 
     closeSearchFlyout () {
-        if (this.state.searchFlyout) {
-            this.state.searchFlyout.close();
+        if (this.state.flyout) {
+            this.state.flyout.close();
             this.updateState({
-                searchFlyout: null
+                flyout: null
             });
         }
     }
 
     updateFlyout () {
-        if (this.state.searchFlyout) {
-            this.state.searchFlyout.update(this.getState());
+        if (this.state.flyout) {
+            this.state.flyout.update(this.getState());
         }
     }
 
@@ -859,7 +859,7 @@ const wrapped = controllerMixin(SearchController, [
     'setSelectedRegionsets',
     'setSelectedDatasource',
     'setSelectedIndicators',
-    'toggleSearchFlyout',
+    'toggleFlyout',
     'closeSearchFlyout',
     'clearSearch',
     'openMetadataPopup',

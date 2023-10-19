@@ -13,7 +13,7 @@ class TableController extends StateHandler {
             indicatorData: {},
             regionsetOptions: [],
             regions: [],
-            tableFlyout: null,
+            flyout: null,
             loading: false
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -25,9 +25,9 @@ class TableController extends StateHandler {
         return 'TableHandler';
     }
 
-    toggleTableFlyout (show, extraOnClose) {
+    toggleFlyout (show, extraOnClose) {
         if (show) {
-            if (!this.state.tableFlyout) {
+            if (!this.state.flyout) {
                 this.showTableFlyout(extraOnClose);
             }
         } else {
@@ -39,7 +39,7 @@ class TableController extends StateHandler {
         this.fetchTableRegionsets();
         const currentRegionset = this.service.getRegionsets(this.service.getStateService().getRegionset());
         this.updateState({
-            tableFlyout: showTableFlyout(this.getState(), this.getController(), () => {
+            flyout: showTableFlyout(this.getState(), this.getController(), () => {
                 this.closeTableFlyout();
                 if (extraOnClose) extraOnClose();
             }),
@@ -49,18 +49,18 @@ class TableController extends StateHandler {
     }
 
     closeTableFlyout () {
-        if (this.state.tableFlyout) {
-            this.state.tableFlyout.close();
+        if (this.state.flyout) {
+            this.state.flyout.close();
             this.updateState({
                 selectedRegionset: null,
-                tableFlyout: null
+                flyout: null
             });
         }
     }
 
     updateFlyout () {
-        if (this.state.tableFlyout) {
-            this.state.tableFlyout.update(this.getState());
+        if (this.state.flyout) {
+            this.state.flyout.update(this.getState());
         }
     }
 
@@ -154,13 +154,13 @@ class TableController extends StateHandler {
     createEventHandlers () {
         const handlers = {
             'StatsGrid.ParameterChangedEvent': (event) => {
-                if (this.state.tableFlyout) {
+                if (this.state.flyout) {
                     this.fetchIndicatorData();
                 }
             },
             'StatsGrid.ClassificationChangedEvent': (event) => {
                 if (event.getChanged().hasOwnProperty('fractionDigits')) {
-                    if (this.state.tableFlyout) {
+                    if (this.state.flyout) {
                         this.fetchIndicatorData();
                     }
                 }
@@ -181,7 +181,7 @@ class TableController extends StateHandler {
 }
 
 const wrapped = controllerMixin(TableController, [
-    'toggleTableFlyout',
+    'toggleFlyout',
     'closeTableFlyout',
     'setSelectedRegionset',
     'removeIndicator',
