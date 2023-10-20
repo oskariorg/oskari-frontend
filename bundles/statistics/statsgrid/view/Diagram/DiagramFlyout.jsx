@@ -22,9 +22,6 @@ const Selections = styled('div')`
 const StyledSelect = styled(Select)`
     max-width: 325px;
 `;
-const NoDataMessage = styled('div')`
-    margin-top: 20px;
-`;
 
 const sortOptions = [
     {
@@ -49,7 +46,7 @@ const DiagramFlyout = ({ state, controller }) => {
 
     const Component = (
         <Content>
-           <Selections>
+            <Selections>
                 <StyledSelect
                     filterOption={false}
                     options={state.indicators?.map(indicator => ({ value: indicator.hash, label: indicator.labels?.full }))}
@@ -64,14 +61,8 @@ const DiagramFlyout = ({ state, controller }) => {
                     value={state.sortOrder}
                     placeholder={<Message messageKey='datacharts.sorting.desc' />}
                 />
-           </Selections>
-           {!state.chartData?.data ? (
-                <NoDataMessage>
-                    <Message messageKey='datacharts.nodata' />
-                </NoDataMessage>
-           ) : (
-                <Diagram chartData={state.chartData} sortOrder={state.sortOrder} />
-           )}
+            </Selections>
+            <Diagram chartData={state.chartData} sortOrder={state.sortOrder} />
         </Content>
     );
     
