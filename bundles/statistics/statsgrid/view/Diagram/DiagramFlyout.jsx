@@ -22,6 +22,9 @@ const Selections = styled('div')`
 const StyledSelect = styled(Select)`
     max-width: 325px;
 `;
+const NoDataMessage = styled('div')`
+    margin-top: 20px;
+`;
 
 const sortOptions = [
     {
@@ -52,15 +55,23 @@ const DiagramFlyout = ({ state, controller }) => {
                     options={state.indicators?.map(indicator => ({ value: indicator.hash, label: indicator.labels?.full }))}
                     onChange={(value) => controller.setActiveIndicator(value)}
                     value={state.activeIndicator}
+                    placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
                 />
                 <StyledSelect
                     filterOption={false}
                     options={sortOptions}
                     onChange={(value) => controller.setSortOrder(value)}
                     value={state.sortOrder}
+                    placeholder={<Message messageKey='datacharts.sorting.desc' />}
                 />
            </Selections>
-           <Diagram chartData={state.chartData} sortOrder={state.sortOrder} />
+           {!state.chartData?.data ? (
+                <NoDataMessage>
+                    <Message messageKey='datacharts.nodata' />
+                </NoDataMessage>
+           ) : (
+                <Diagram chartData={state.chartData} sortOrder={state.sortOrder} />
+           )}
         </Content>
     );
     
