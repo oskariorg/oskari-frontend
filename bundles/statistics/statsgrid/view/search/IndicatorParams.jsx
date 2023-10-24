@@ -60,7 +60,7 @@ export const IndicatorParams = ({ state, controller }) => {
                 }
                 return (
                     <Field key={param}>
-                        <b><Message messageKey={`parameters.${param}`} /></b>
+                        <b><Message messageKey={`parameters.${param}`} defaultMsg={param} /></b>
                         <StyledSelect
                             options={selector?.values?.map(value => ({ value: value.id, label: value.title }))}
                             value={state.indicatorParams?.selected[param]}
