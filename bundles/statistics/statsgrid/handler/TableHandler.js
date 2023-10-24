@@ -78,6 +78,7 @@ class TableController extends StateHandler {
     }
 
     fetchIndicatorData () {
+        if (!this.state.indicators || this.state.indicators.length < 1) return;
         this.updateState({
             loading: true
         });

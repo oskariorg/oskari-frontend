@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select, Message, Spin } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { showFlyout } from 'oskari-ui/components/window';
 import styled from 'styled-components';
 import { LocaleProvider } from 'oskari-ui/util';
+import { Sorter } from './Sorter';
 
 const BUNDLE_KEY = 'StatsGrid';
 
@@ -15,31 +16,81 @@ const Content = styled('div')`
     display: flex;
     flex-direction: column;
 `;
+const StyledTable = styled(Table)`
+    .ant-table-column-sorter {
+        display: none;
+    }
+    .ant-table table {
+        height: 100%;
+    }
+    .ant-table-column-sorters {
+        height: 100%;
+    }
+    .ant-table-column-title {
+        height: 100%;
+    }
+`;
 const RegionHeader = styled('div')`
     display: flex;
     flex-direction: column;
+    word-wrap: break-word;
+    word-break: break-word;
 `;
 const IndicatorHeader = styled('div')`
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 0 5px;
-    ${props => props.$active && (
-        'background-color: #fdf8d9;'
-    )}
+    word-wrap: break-word;
+    word-break: break-word;
+    text-align: left;
 `;
 const StyledRemoveButton = styled(IconButton)`
     margin-left: 10px;
 `;
+const HeaderCell = styled('div')`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+`;
 
 const TableFlyout = ({ state, controller }) => {
-    const columnSettings = [
-        {
-            dataIndex: 'regionName',
-            align: 'left',
-            sorter: getSorterFor('regionName'),
-            title: () => {
-                return (
+    let initialSort = {
+        regionName: null
+    };
+    state.indicators?.forEach(indicator => {
+        initialSort[indicator.hash] = null;
+    });
+    const [sortOrder, setSortOrder] = useState(initialSort);
+
+    const changeSortOrder = (col) => {
+        let newOrder = { ...sortOrder };
+        if (newOrder[col] === 'descend' || newOrder[col] === null) {
+            newOrder[col] = 'ascend';
+        } else {
+            newOrder[col] = 'descend';
+        }
+        for (const key of Object.keys(newOrder)) {
+            if (key !== col) {
+                newOrder[key] = null;
+            }
+        }
+        setSortOrder(newOrder);
+    };
+
+    const columnSettings = [];
+
+    columnSettings.push({
+        dataIndex: 'regionName',
+        align: 'left',
+        width: 125,
+        sorter: getSorterFor('regionName'),
+        sortOrder: sortOrder['regionName'],
+        showSorterTooltip: false,
+        title: () => {
+            return (
+                <HeaderCell>
                     <RegionHeader>
                         <Message messageKey='statsgrid.areaSelection.title' />
                         {Oskari.util.isEmbedded ? (
@@ -53,34 +104,48 @@ const TableFlyout = ({ state, controller }) => {
                             />
                         )}
                     </RegionHeader>
-                );
-            },
-            sorter: null,
-            defaultSortOrder: 'ascend'
+                    <Sorter
+                        sortOrder={sortOrder['regionName']}
+                        changeSortOrder={() => changeSortOrder('regionName')}
+                    />
+                </HeaderCell>
+            );
         }
-    ];
-
+    });
     state.indicators?.forEach(indicator => {
         columnSettings.push({
             dataIndex: 'data',
             align: 'right',
+            width: 125,
             sorter: (a, b) => a.data[indicator.hash] - b.data[indicator.hash],
+            sortOrder: sortOrder[indicator.hash],
+            showSorterTooltip: false,
+            onCell: (record, rowIndex) => ({
+                style: { background: state.activeIndicator === indicator.hash ? '#fafafa' : '#ffffff' }
+            }),
+            onHeaderCell: (record, rowIndex) => ({
+                style: { background: state.activeIndicator === indicator.hash ? '#f0f0f0' : '#fafafa' }
+            }),
             title: () => {
                 return (
-                    <IndicatorHeader
-                        $active={state.activeIndicator === indicator.hash}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            controller.setActiveIndicator(indicator.hash);
-                        }}
-                    >
-                        {indicator.labels?.full}
-                        <StyledRemoveButton
-                            type='delete'
-                            onClick={() => controller.removeIndicator(indicator)}
+                    <HeaderCell>
+                        <IndicatorHeader
+                            onClick={(e) => {
+                                controller.setActiveIndicator(indicator.hash);
+                            }}
+                        >
+                            {indicator.labels?.full}
+                            <StyledRemoveButton
+                                type='delete'
+                                onClick={() => controller.removeIndicator(indicator)}
+                            />
+                        </IndicatorHeader>
+                        <Sorter
+                            sortOrder={sortOrder[indicator.hash]}
+                            changeSortOrder={() => changeSortOrder(indicator.hash)}
                         />
-                    </IndicatorHeader>
-                )
+                    </HeaderCell>
+                );
             },
             render: (title, item) => {
                 const formatter = Oskari.getNumberFormatter(indicator?.classification?.fractionDigits);
@@ -95,15 +160,19 @@ const TableFlyout = ({ state, controller }) => {
 
     const Component = (
         <Content>
-            <Table
-                columns={columnSettings}
-                dataSource={state.regions?.map(region => ({
-                    key: region.id,
-                    regionName: region.name,
-                    data: state.indicatorData[region.id]
-                }))}
-                pagination={false}
-            />
+            {!state.indicators || state.indicators.length < 1 ? (
+                <Message messageKey='statsgrid.noResults' />
+            ) : (
+                <StyledTable
+                    columns={columnSettings}
+                    dataSource={state.regions?.map(region => ({
+                        key: region.id,
+                        regionName: region.name,
+                        data: state.indicatorData[region.id]
+                    }))}
+                    pagination={false}
+                />
+            )}
         </Content>
     );
     
