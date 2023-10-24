@@ -341,24 +341,21 @@ export const Diagram = ({ chartData, sortOrder }) => {
         }
     }, [chartData, sortOrder]);
 
+    if (!chartData?.data) {
+        return <Content><Message bundleKey='StatsGrid' messageKey='datacharts.nodata' /></Content>;
+    }
     return (
         <Content>
-            {!chartData?.data ? (
-                <Message bundleKey='StatsGrid' messageKey='datacharts.nodata' />
-           ) : (
-            <div>
+            <div
+                ref={labelsRef}
+                className='statsgrid-labels'
+            />
+            <Chart>
                 <div
-                    ref={labelsRef}
-                    className='statsgrid-labels'
-                />
-                <Chart>
-                    <div
-                        ref={ref}
-                        className='statsgrid-diagram'
-                        />
-                </Chart>
-            </div>
-           )}
+                    ref={ref}
+                    className='statsgrid-diagram'
+                    />
+            </Chart>
         </Content>
     );
 };
