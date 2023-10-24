@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { Message } from 'oskari-ui';
 import * as d3 from 'd3';
 import styled from 'styled-components';
 
@@ -340,6 +341,9 @@ export const Diagram = ({ chartData, sortOrder }) => {
         }
     }, [chartData, sortOrder]);
 
+    if (!chartData?.data) {
+        return <Content><Message bundleKey='StatsGrid' messageKey='datacharts.nodata' /></Content>;
+    }
     return (
         <Content>
             <div

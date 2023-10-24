@@ -87,14 +87,18 @@ class DiagramController extends StateHandler {
     }
 
     updateData () {
+        const indicator = this.service.getStateService().getActiveIndicator();
+        if (!indicator) return;
+
         this.updateState({
             loading: true
         });
-        const indicator = this.service.getStateService().getActiveIndicator();
 
-        if (!indicator) return;
         this.getIndicatorData(indicator, (data) => {
             if (!data || data.every(d => d.value === undefined)) {
+                this.updateState({
+                    loading: false
+                });
                 return;
             }
             const { fractionDigits } = indicator.classification;

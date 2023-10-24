@@ -46,21 +46,23 @@ const DiagramFlyout = ({ state, controller }) => {
 
     const Component = (
         <Content>
-           <Selections>
+            <Selections>
                 <StyledSelect
                     filterOption={false}
                     options={state.indicators?.map(indicator => ({ value: indicator.hash, label: indicator.labels?.full }))}
                     onChange={(value) => controller.setActiveIndicator(value)}
                     value={state.activeIndicator}
+                    placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
                 />
                 <StyledSelect
                     filterOption={false}
                     options={sortOptions}
                     onChange={(value) => controller.setSortOrder(value)}
                     value={state.sortOrder}
+                    placeholder={<Message messageKey='datacharts.sorting.desc' />}
                 />
-           </Selections>
-           <Diagram chartData={state.chartData} sortOrder={state.sortOrder} />
+            </Selections>
+            <Diagram chartData={state.chartData} sortOrder={state.sortOrder} />
         </Content>
     );
     
