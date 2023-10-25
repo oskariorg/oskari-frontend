@@ -118,35 +118,30 @@ class SearchController extends StateHandler {
                     reject(new Error(err));
                     return;
                 }
-                const promises = result.indicators.map((ind) => {
-                    return new Promise((resolve, reject) => {
-                        const resultObj = {
-                            id: ind.id,
-                            title: Oskari.getLocalized(ind.name)
-                        };
-                        results.push(resultObj);
-                        if (hasRegionSetRestriction) {
-                            const supportsRegionset = this.state.selectedRegionsets.some((iter) => {
-                                return ind.regionsets.indexOf(Number(iter)) !== -1;
-                            });
-                            if (!supportsRegionset) {
-                                disabledIndicatorIDs.push(ind.id);
-                            }
+                for (const ind of result?.indicators) {
+                    const resultObj = {
+                        id: ind.id,
+                        title: Oskari.getLocalized(ind.name)
+                    };
+                    results.push(resultObj);
+                    if (hasRegionSetRestriction) {
+                        const supportsRegionset = this.state.selectedRegionsets.some((iter) => {
+                            return ind.regionsets.indexOf(Number(iter)) !== -1;
+                        });
+                        if (!supportsRegionset) {
+                            disabledIndicatorIDs.push(ind.id);
                         }
-                        resolve();
-                    });
-                });
-                Promise.all(promises).then(() => {
-                    if (result.complete) {
-                        const userDatasource = this.service.getUserDatasource();
-                        const isUserDatasource = !!userDatasource && '' + userDatasource.id === '' + this.state.selectedDatasource;
-                        if (!isUserDatasource && result.indicators.length === 0) {
-                            // show notification about empty indicator list for non-myindicators datasource
-                            Messaging.error(this.loc('errors.indicatorListIsEmpty'));
-                        }
-                        resolve();
                     }
-                });
+                }
+                if (result.complete) {
+                    const userDatasource = this.service.getUserDatasource();
+                    const isUserDatasource = !!userDatasource && '' + userDatasource.id === '' + this.state.selectedDatasource;
+                    if (!isUserDatasource && result.indicators.length === 0) {
+                        // show notification about empty indicator list for non-myindicators datasource
+                        Messaging.error(this.loc('errors.indicatorListIsEmpty'));
+                    }
+                    resolve();
+                }
             });
         });
         dataLoaded
