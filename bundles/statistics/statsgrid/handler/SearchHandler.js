@@ -106,51 +106,59 @@ class SearchController extends StateHandler {
         this.updateState({
             loading: true
         });
-        this.service.getIndicatorList(this.state.selectedDatasource, (err, result) => {
-            const results = [];
-            if (err) {
-                // notify error!!
-                Oskari.log('Oskari.statistics.statsgrid.IndicatorSelection').warn('Error getting indicator list');
-                Messaging.error(this.loc('errors.indicatorListError'));
-                return;
-            }
-            const disabledIndicatorIDs = [];
-            result.indicators.forEach((ind) => {
-                const resultObj = {
-                    id: ind.id,
-                    title: Oskari.getLocalized(ind.name)
-                };
-                results.push(resultObj);
-                if (hasRegionSetRestriction) {
-                    const supportsRegionset = this.state.selectedRegionsets.some((iter) => {
-                        return ind.regionsets.indexOf(Number(iter)) !== -1;
-                    });
-                    if (!supportsRegionset) {
-                        disabledIndicatorIDs.push(ind.id);
+
+        const results = [];
+        const disabledIndicatorIDs = [];
+        const dataLoaded = new Promise((resolve, reject) => {
+            this.service.getIndicatorList(this.state.selectedDatasource, (err, result) => {
+                if (err) {
+                    // notify error!!
+                    Oskari.log('Oskari.statistics.statsgrid.IndicatorSelection').warn('Error getting indicator list');
+                    Messaging.error(this.loc('errors.indicatorListError'));
+                    reject(new Error(err));
+                    return;
+                }
+                for (const ind of result?.indicators) {
+                    const resultObj = {
+                        id: ind.id,
+                        title: Oskari.getLocalized(ind.name)
+                    };
+                    results.push(resultObj);
+                    if (hasRegionSetRestriction) {
+                        const supportsRegionset = this.state.selectedRegionsets.some((iter) => {
+                            return ind.regionsets.indexOf(Number(iter)) !== -1;
+                        });
+                        if (!supportsRegionset) {
+                            disabledIndicatorIDs.push(ind.id);
+                        }
                     }
                 }
+                if (result.complete) {
+                    const userDatasource = this.service.getUserDatasource();
+                    const isUserDatasource = !!userDatasource && '' + userDatasource.id === '' + this.state.selectedDatasource;
+                    if (!isUserDatasource && result.indicators.length === 0) {
+                        // show notification about empty indicator list for non-myindicators datasource
+                        Messaging.error(this.loc('errors.indicatorListIsEmpty'));
+                    }
+                    resolve();
+                }
             });
-            this.updateState({
-                indicatorOptions: results
-            });
-            if (hasRegionSetRestriction) {
+        });
+        dataLoaded
+            .then(() => {
                 this.updateState({
-                    disabledIndicators: disabledIndicatorIDs
-                });
-            }
-
-            if (result.complete) {
-                this.updateState({
+                    indicatorOptions: results,
+                    disabledIndicators: disabledIndicatorIDs,
                     loading: false
                 });
-                const userDatasource = this.service.getUserDatasource();
-                const isUserDatasource = !!userDatasource && '' + userDatasource.id === '' + this.state.selectedDatasource;
-                if (!isUserDatasource && result.indicators.length === 0) {
-                    // show notification about empty indicator list for non-myindicators datasource
-                    Messaging.error(this.loc('errors.indicatorListIsEmpty'));
-                }
-            }
-        });
+            })
+            .catch(() => {
+                this.updateState({
+                    indicatorOptions: [],
+                    disabledIndicators: [],
+                    loading: false
+                });
+            });
     }
 
     setSearchTimeseries (searchTimeseries) {
