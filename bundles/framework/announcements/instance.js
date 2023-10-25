@@ -22,7 +22,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         this.bannerControls = null;
         this.descriptionPopupControls = null;
     }, {
-
         afterStart: function () {
             const me = this;
             if (me.started) {
@@ -124,6 +123,19 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
          * implements BundleInstance protocol update method - does nothing atm
          */
         stop: function () {
+        },
+        onEvent: function (event) {
+            const handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+
+            return handler.apply(this, [event]);
+        },
+        eventHandlers: {
+            MapSizeChangedEvent: function(event) {
+                this.renderBanner(this.handler.getState());
+            }
         }
     }, {
         extend: ['Oskari.userinterface.extension.DefaultExtension']
