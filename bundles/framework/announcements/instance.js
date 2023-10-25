@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             return handler.apply(this, [event]);
         },
         eventHandlers: {
-            MapSizeChangedEvent: function(event) {
+            MapSizeChangedEvent: function (event) {
                 this.renderBanner(this.handler.getState());
             }
         }
