@@ -10,7 +10,7 @@ class TableController extends StateHandler {
         this.setState({
             ...this.stateHandler.getState(),
             selectedRegionset: null,
-            indicatorData: {},
+            indicatorData: [],
             regionsetOptions: [],
             regions: [],
             flyout: null,
@@ -87,14 +87,14 @@ class TableController extends StateHandler {
             regions.forEach(reg => {
                 data[reg.id] = {};
             });
-            const promise = new Promise((resolve, reject) => {
-                this.state.indicators?.forEach((ind, index) => {
+            const promises = this.state.indicators.map(ind => {
+                return new Promise((resolve, reject) => {
                     this.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, this.state.selectedRegionset?.id, (err, indicatorData) => {
                         if (err) {
                             Messaging.error(this.loc('errors.regionsDataError'));
                             this.updateState({
                                 loading: false,
-                                indicatorData: {},
+                                indicatorData: [],
                                 regions: []
                             });
                             return;
@@ -110,14 +110,18 @@ class TableController extends StateHandler {
                                 ...region
                             };
                         }
+                        resolve();
                     });
-                    if (index === this.state.indicators.length - 1) resolve();
                 });
             });
-            promise.then(() => {
+            Promise.all(promises).then(() => {
                 this.updateState({
                     loading: false,
-                    indicatorData: data
+                    indicatorData: regions.map(region => ({
+                        key: region.id,
+                        regionName: region.name,
+                        data: data[region.id]
+                    }))
                 });
             });
         };
@@ -127,7 +131,7 @@ class TableController extends StateHandler {
                 Messaging.error(this.loc('errors.regionsDataError'));
                 this.updateState({
                     loading: false,
-                    indicatorData: {},
+                    indicatorData: [],
                     regions: []
                 });
                 return;

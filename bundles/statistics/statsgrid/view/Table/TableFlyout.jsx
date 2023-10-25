@@ -88,6 +88,12 @@ const TableFlyout = ({ state, controller }) => {
         sorter: getSorterFor('regionName'),
         sortOrder: sortOrder['regionName'],
         showSorterTooltip: false,
+        onCell: (record, rowIndex) => ({
+            style: { background: '#ffffff' }
+        }),
+        onHeaderCell: (record, rowIndex) => ({
+            style: { background: '#fafafa' }
+        }),
         title: () => {
             return (
                 <HeaderCell>
@@ -165,11 +171,7 @@ const TableFlyout = ({ state, controller }) => {
             ) : (
                 <StyledTable
                     columns={columnSettings}
-                    dataSource={state.regions?.map(region => ({
-                        key: region.id,
-                        regionName: region.name,
-                        data: state.indicatorData[region.id]
-                    }))}
+                    dataSource={[...state.indicatorData]}
                     pagination={false}
                 />
             )}
