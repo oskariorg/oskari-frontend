@@ -74,27 +74,40 @@ const getContent = (state, controller, renderDescriptionPopup) => {
             </PopupLink>
         );
     }
+
+    const notificationContent = <>
+        <InfoContainer>
+            <InfoIcon/>
+            <Column>
+                <StyledTitle>{title}</StyledTitle>
+                <span>
+                    {description}
+                    <Margin/>
+                </span>
+            </Column>
+        </InfoContainer>
+        <Margin/>
+        <Column style={{ whiteSpace: 'nowrap' }}>
+            <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
+                <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
+            </StyledCheckbox>
+            <Pagination simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
+        </Column>
+    </>;
+
+    const isMobile = Oskari.util.isMobile();
     return (
         <ThemeProvider>
-            <Row>
-                <InfoContainer>
-                    <InfoIcon/>
-                    <Column>
-                        <StyledTitle>{title}</StyledTitle>
-                        <span>
-                            {description}
-                            <Margin/>
-                        </span>
-                    </Column>
-                </InfoContainer>
-                <Margin/>
-                <Column style={{ whiteSpace: 'nowrap' }}>
-                    <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
-                        <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
-                    </StyledCheckbox>
-                    <Pagination simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
+            { isMobile &&
+                <Column>
+                    { notificationContent }
                 </Column>
-            </Row>
+            }
+            { !isMobile &&
+                <Row>
+                    { notificationContent }
+                </Row>
+            }
         </ThemeProvider>
     );
 };
