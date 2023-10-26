@@ -403,7 +403,7 @@ class SearchController extends StateHandler {
 
     setParamSelection (param, value, index = null) {
         let val;
-        if (index) {
+        if (index !== null) {
             val = this.state.indicatorParams.selected[param];
             val[index] = value;
         } else {
@@ -846,19 +846,9 @@ class SearchController extends StateHandler {
     }
 
     createEventHandlers () {
-        const handlers = {
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
+        this.service.on('StatsGrid.IndicatorEvent', (event) => {
+            this.fetchindicatorOptions();
+        });
     }
 }
 

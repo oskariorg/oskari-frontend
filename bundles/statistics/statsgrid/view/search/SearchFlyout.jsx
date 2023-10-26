@@ -125,6 +125,7 @@ const SearchFlyout = ({ state, controller }) => {
                 />
                 <PrimaryButton
                     type='search'
+                    disabled={state.selectedIndicators?.length < 1}
                     onClick={() => controller.search()}
                 />
             </ButtonContainer>
