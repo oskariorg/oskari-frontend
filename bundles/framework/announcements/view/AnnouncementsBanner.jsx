@@ -27,6 +27,8 @@ const PopupLink = styled('div')`
     div {
         text-decoration: underline
     }
+
+    margin: 0.5em 0;
 `;
 
 const InfoIcon = styled(InfoCircleOutlined)`
@@ -92,7 +94,6 @@ const ThemedNotificationContent = ThemeConsumer(({ theme, state, link, content, 
     const announcement = bannerAnnouncements[currentBanner - 1];
     const count = bannerAnnouncements.length;
     const { title } = Oskari.getLocalized(announcement.locale);
-    theme.color.primary = '#01A0E3';
     const textColor = getTextColor(theme?.color?.primary);
 
     return <>
