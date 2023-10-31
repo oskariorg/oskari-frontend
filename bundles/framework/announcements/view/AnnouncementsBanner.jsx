@@ -89,13 +89,21 @@ const StyledPagination = styled(Pagination)`
     }
 `;
 
-const ThemedNotificationContent = ThemeConsumer(({ theme, state, link, content, renderDescriptionPopup, setShowAgain, onPageChange }) => {
+const ThemedNotificationContent = ThemeConsumer(({ theme, state, link, content, renderDescriptionPopup, setShowAgain, onPageChange, isMobile }) => {
     const { bannerAnnouncements, currentBanner = 1 } = state;
     const announcement = bannerAnnouncements[currentBanner - 1];
     const count = bannerAnnouncements.length;
     const { title } = Oskari.getLocalized(announcement.locale);
     const textColor = getTextColor(theme?.color?.primary);
 
+    const pagingSection = <>
+        <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
+            <TextColorWrapper textColor={textColor}>
+                <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
+            </TextColorWrapper>
+        </StyledCheckbox>
+        <StyledPagination textColor={textColor} simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
+    </>;
     return <>
         <InfoContainer textColor={textColor}>
             <InfoIcon/>
@@ -108,14 +116,8 @@ const ThemedNotificationContent = ThemeConsumer(({ theme, state, link, content, 
             </Column>
         </InfoContainer>
         <Margin/>
-        <Column style={{ whiteSpace: 'nowrap' }}>
-            <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
-                <TextColorWrapper textColor={textColor}>
-                    <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
-                </TextColorWrapper>
-            </StyledCheckbox>
-            <StyledPagination textColor={textColor} simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
-        </Column>
+        { isMobile && <Row>{pagingSection}</Row> }
+        { !isMobile && <Column style={{ whiteSpace: 'nowrap' }}>{pagingSection}</Column> }
     </>;
 });
 
@@ -156,6 +158,7 @@ const getContent = (state, controller, renderDescriptionPopup) => {
     const isMobile = Oskari.util.isMobile();
 
     const notificationContent = <ThemedNotificationContent
+        isMobile={isMobile}
         state={state}
         link={link}
         content={content}
