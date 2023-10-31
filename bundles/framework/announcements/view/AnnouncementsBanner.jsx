@@ -95,7 +95,7 @@ const ThemedNotificationContent = ThemeConsumer(({ theme, state, link, content, 
     const count = bannerAnnouncements.length;
     const { title } = Oskari.getLocalized(announcement.locale);
     const textColor = getTextColor(theme?.color?.primary);
-
+    const linkColor = Oskari.util.isDarkColor(theme?.color?.primary) ? textColor : DEFAULT_POPUP_LINK_COLOR;
     const pagingSection = <>
         <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
             <TextColorWrapper textColor={textColor}>
@@ -110,7 +110,7 @@ const ThemedNotificationContent = ThemeConsumer(({ theme, state, link, content, 
             <Column>
                 <StyledTitle textColor={textColor}>{title}</StyledTitle>
                 <span>
-                    {getDescription(link, content, announcement, renderDescriptionPopup, textColor)}
+                    {getDescription(link, content, announcement, renderDescriptionPopup, linkColor)}
                     <Margin/>
                 </span>
             </Column>
