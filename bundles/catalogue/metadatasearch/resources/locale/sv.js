@@ -66,5 +66,8 @@ Oskari.registerLocalization({
             "info": "Visa metadata",
             "remove": "Bort från sökresultaten"
         },
+        "tool": {
+            "label": "Möjliggör användning av metadatasökningar programmatiskt",
+        }
     }
 });

@@ -4,6 +4,10 @@ import { MetadataSearchContainer } from './view/MetadataSearchContainer';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { COVERAGE_LAYER_ID } from '../../mapping/mapmodule/plugin/layers/coveragetool/CoverageHelper';
+import './publisher/MetadataSearchTool';
+import './request/MetadataSearchRequest';
+import './request/MetadataSearchRequestHandler';
+import './event/MetadataSearchResultEvent';
 /**
  * @class Oskari.mapframework.bundle.metadatasearch.MetadataSearchBundleInstance
  *
@@ -106,6 +110,15 @@ Oskari.clazz.define(
             Object.keys(this.eventHandlers).forEach(eventName => {
                 this.sandbox.registerForEventByName(this, eventName);
             });
+
+            const metadataSearchRequestHandler = Oskari.clazz.create(
+                'Oskari.catalogue.bundle.metadatasearch.request.MetadataSearchRequestHandler',
+                this
+            );
+            this.sandbox.requestHandler(
+                'MetadataSearchRequest',
+                metadataSearchRequestHandler
+            );
 
             // Default tab priority
             if (this.conf && typeof this.conf?.priority === 'number') {

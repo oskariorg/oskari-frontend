@@ -66,5 +66,8 @@ Oskari.registerLocalization({
             "info": "Näytä metatiedot",
             "remove": "Poista hakutuloksista"
         },
+        "tool": {
+            "label": "Mahdollista metadatahakujen ohjelmallinen käyttö",
+        }
     }
 });

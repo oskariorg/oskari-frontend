@@ -41,6 +41,10 @@ class MetadataStateHandler extends StateHandler {
         this.updateState({ query });
     }
 
+    handleMetadataSearchRequest (formdata, successCallback) {
+        return this.searchService.doSearch(formdata, successCallback);
+    }
+
     doSearch () {
         this.updateState({
             loading: true,
@@ -246,7 +250,8 @@ const wrapped = controllerMixin(MetadataStateHandler, [
     'toggleLayerVisibility',
     'updateSelectedLayers',
     'updateSearchResults',
-    'updateDisplayedCoverageId'
+    'updateDisplayedCoverageId',
+    'handleMetadataSearchRequest'
 ]);
 
 export { wrapped as MetadataStateHandler };
