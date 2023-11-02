@@ -81,16 +81,18 @@ export const MapModuleTextButton = ({ visible, onClick, icon, children, active, 
         return null;
     };
 
-    return <ThemedButton
-        icon={icon || null}
-        onClick={onClick}
-        active={active}
-        position={position}
-        loading={loading}
-        {...rest}
-    >
-        {children}
-    </ThemedButton>;
+    return <div>
+        <ThemedButton
+            icon={icon || null}
+            onClick={onClick}
+            active={active}
+            position={position}
+            loading={loading}
+            {...rest}
+        >
+            {children}
+        </ThemedButton>
+    </div>;
 };
 
 MapModuleTextButton.propTypes = {
