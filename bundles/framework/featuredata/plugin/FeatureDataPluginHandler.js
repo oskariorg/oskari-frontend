@@ -100,19 +100,19 @@ class FeatureDataPluginUIHandler extends StateHandler {
             return this.initState();
         }
 
-        const activeLayerId = this.determineActiveLayerId(featureDataLayers);
+        const newActiveLayerId = this.determineActiveLayerId(featureDataLayers);
         let activeLayerFeatures = null;
         let selectedFeatureIds = null;
         let visibleColumnsSettings = null;
 
-        if (activeLayerId && this.getState().flyoutOpen) {
-            activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
-            selectedFeatureIds = activeLayerFeatures && activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
-            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, activeLayerFeatures);
+        if (newActiveLayerId && this.getState().flyoutOpen) {
+            activeLayerFeatures = this.getFeaturesByLayerId(newActiveLayerId);
+            selectedFeatureIds = activeLayerFeatures && activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(newActiveLayerId) : null;
+            visibleColumnsSettings = this.createVisibleColumnsSettings(newActiveLayerId, activeLayerFeatures);
         };
 
         return {
-            activeLayerId,
+            activeLayerId: newActiveLayerId,
             layers: featureDataLayers,
             activeLayerFeatures,
             selectedFeatureIds,
@@ -235,7 +235,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
     }
 
-    createVisibleColumnsSettings (activeLayerId, features) {
+    createVisibleColumnsSettings (newActiveLayerId, features) {
         if (!features || !features.length) {
             return {
                 allColumns: [],
@@ -244,15 +244,17 @@ class FeatureDataPluginUIHandler extends StateHandler {
                 activeLayerPropertyTypes: null
             };
         }
+        const { activeLayerId, visibleColumnsSettings } = this.getState();
+        const activeLayerChanged = activeLayerId && newActiveLayerId && activeLayerId !== newActiveLayerId;
         const allColumns = Object.keys(features[0].properties).filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key));
-        const visibleColumns = [].concat(allColumns);
-        const activeLayer = this.mapModule.getSandbox().findMapLayerFromSelectedMapLayers(activeLayerId) || null;
+        const newVisibleColumns = activeLayerChanged ? [].concat(allColumns) : visibleColumnsSettings?.visibleColumns ? visibleColumnsSettings.visibleColumns : [].concat(allColumns);
+        const activeLayer = this.mapModule.getSandbox().findMapLayerFromSelectedMapLayers(newActiveLayerId) || null;
         const activeLayerPropertyLabels = activeLayer?.getPropertyLabels() || null;
         const activeLayerPropertyTypes = activeLayer?.getPropertyTypes() || null;
 
         return {
             allColumns,
-            visibleColumns,
+            visibleColumns: newVisibleColumns,
             activeLayerPropertyLabels,
             activeLayerPropertyTypes
         };
