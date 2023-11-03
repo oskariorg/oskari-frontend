@@ -76,21 +76,27 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     );
 });
 
+// We need an additional wrapper around the button for the publisher to be able to handle dragging properly.
+const PublisherDraggableWrapper = styled('div')`
+`;
+
 export const MapModuleTextButton = ({ visible, onClick, icon, children, active, position, loading, ...rest }) => {
     if (!visible) {
         return null;
     };
 
-    return <ThemedButton
-        icon={icon || null}
-        onClick={onClick}
-        active={active}
-        position={position}
-        loading={loading}
-        {...rest}
-    >
-        {children}
-    </ThemedButton>;
+    return <PublisherDraggableWrapper>
+        <ThemedButton
+            icon={icon || null}
+            onClick={onClick}
+            active={active}
+            position={position}
+            loading={loading}
+            {...rest}
+        >
+            {children}
+        </ThemedButton>
+    </PublisherDraggableWrapper>;
 };
 
 MapModuleTextButton.propTypes = {
