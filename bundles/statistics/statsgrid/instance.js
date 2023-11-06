@@ -149,7 +149,7 @@ Oskari.clazz.define(
             let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
 
             if (myDataService) {
-                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this, this.handler));
+                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this, this.handler.getController().getFormHandler()));
             } else if (!appStarted) {
                 // Wait for the application to load all bundles and try again
                 Oskari.on('app.start', () => {
