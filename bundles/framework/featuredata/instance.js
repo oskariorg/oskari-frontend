@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
                 };
                 this.getSandbox().request(this, addBtnRequestBuilder('featuredataSelectionTools', 'selectiontools', btn));
             }
-            this.sandbox.requestHandler('Featuredata.ShowFeatureDataRequest', this.requestHandlers.showFeaturedataHandler);
+            this.sandbox.requestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeaturedataHandler);
             this.__setupLayerTools();
         },
         /**
@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
             tool.setIconCls('show-featuredata-tool');
             tool.setTitle(label);
             tool.setTooltip(label);
-            tool.setCallback(() => this.sandbox.postRequestByName('Featuredata.ShowFeatureDataRequest', [layer.getId()]));
+            tool.setCallback(() => this.sandbox.postRequestByName('ShowFeatureDataRequest', [layer.getId()]));
 
             this.getLayerService().addToolForLayer(layer, tool, suppressEvent);
         },
