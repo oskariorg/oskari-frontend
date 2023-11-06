@@ -13,12 +13,8 @@ import '../statsgrid2016/service/Cache.js';
 import '../statsgrid2016/service/CacheHelper.js';
 import '../statsgrid2016/components/RegionsetSelector.js';
 import '../statsgrid2016/components/SelectedIndicatorsMenu.js';
-import '../statsgrid2016/components/IndicatorForm.js';
-import '../statsgrid2016/components/IndicatorParametersList.js';
-import '../statsgrid2016/components/IndicatorDataForm.js';
 import '../statsgrid2016/components/SpanSelect.js';
 import '../statsgrid2016/view/Filter.js';
-import '../statsgrid2016/view/IndicatorFormFlyout.js';
 import '../statsgrid2016/plugin/TogglePlugin.js';
 import '../statsgrid2016/components/SeriesControl.js';
 import '../statsgrid2016/publisher/SeriesToggleTool.js';
@@ -153,7 +149,7 @@ Oskari.clazz.define(
             let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
 
             if (myDataService) {
-                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this));
+                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this, this.handler.getController().getFormHandler()));
             } else if (!appStarted) {
                 // Wait for the application to load all bundles and try again
                 Oskari.on('app.start', () => {

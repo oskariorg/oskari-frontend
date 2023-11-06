@@ -843,11 +843,11 @@ class SearchController extends StateHandler {
     }
 
     showIndicatorForm () {
-        const formFlyout = this.instance.getFlyoutManager().getFlyout('indicatorForm');
+        const formHandler = this.stateHandler.getController().getFormHandler();
         if (this.state.selectedIndicators?.length === 1) {
-            formFlyout.showForm(this.state.selectedDatasource, this.state.selectedIndicators[0]);
+            formHandler.showIndicatorPopup(this.state.selectedDatasource, this.state.selectedIndicators[0]);
         } else {
-            formFlyout.showForm(this.state.selectedDatasource);
+            formHandler.showIndicatorPopup(this.state.selectedDatasource);
         }
     }
 
