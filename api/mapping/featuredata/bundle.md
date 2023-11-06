@@ -26,9 +26,24 @@ Setting selectionTools to true will add a new button to toolbar that opens a sel
   <tr>
     <th>Request</th><th> Where/why it's used</th>
   </tr>
+
+
+  <tr>
+    <td>DrawTools.StartDrawingRequest</td><td> Start drawing a geometry with selection tools</td>
+  </tr>
+  <tr>
+    <td>DrawTools.StopDrawingRequest</td><td> Stop selection tools drawing</td>
+  </tr>
+  <tr>
+    <td>MapModulePlugin.GetFeatureInfoActivationRequest</td><td> Enable/disable GFI functionality when featuredata flyout is opened/closed</td>
+  </tr>
   <tr>
     <td>Toolbar.AddToolButtonRequest</td><td> Requests selection toolbar button</td>
   </tr>
+  <tr>
+    <td>Toolbar.SelectToolButtonRequest</td><td> Request opening selection tools</td>
+  </tr>
+
 </table>
 
 ## Events the bundle listens to
