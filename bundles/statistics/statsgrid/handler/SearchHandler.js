@@ -200,7 +200,6 @@ class SearchController extends StateHandler {
     }
 
     setSelectedRegionsets (value) {
-        this.clearSearch();
         this.updateState({
             selectedRegionsets: value
         });
@@ -208,6 +207,9 @@ class SearchController extends StateHandler {
             const unsupportedDatasources = this.service.getUnsupportedDatasetsList(this.state.selectedRegionsets);
             if (unsupportedDatasources) {
                 const ids = unsupportedDatasources.map((iteration) => iteration.id);
+                if (ids.includes(this.state.selectedDatasource)) {
+                    this.clearSearch();
+                }
                 this.updateState({
                     disabledDatasources: ids
                 });
