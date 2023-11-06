@@ -4,6 +4,7 @@ import { showSelectByPropertiesPopup } from '../view/SelectByProperties';
 import { COLUMN_SELECTION, FILETYPES, SEPARATORS, showExportDataPopup } from '../view/ExportData';
 import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
 import { filterFeaturesByPropertyFilter } from '../../../mapping/mapmodule/oskariStyle/filter';
+import { cleanFilter } from 'oskari-ui/components/FeatureFilter';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
@@ -299,8 +300,9 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     applyFilter () {
-        const { selectByPropertiesFilter, activeLayerFeatures, activeLayerId } = this.getState();
-        const selectedFeatures = filterFeaturesByPropertyFilter(selectByPropertiesFilter, activeLayerFeatures);
+        const { selectByPropertiesFilter, selectByPropertiesFeatureTypes, activeLayerFeatures, activeLayerId } = this.getState();
+        const cleaned = cleanFilter(selectByPropertiesFilter, selectByPropertiesFeatureTypes);
+        const selectedFeatures = filterFeaturesByPropertyFilter(cleaned, activeLayerFeatures);
         const selectedFeatureIds = selectedFeatures?.map(feature => feature.id) || null;
         if (selectedFeatureIds) {
             this.selectionService.setSelectedFeatureIds(activeLayerId, selectedFeatureIds);
