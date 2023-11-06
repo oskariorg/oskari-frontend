@@ -16,8 +16,7 @@ const Container = styled.div`
     min-width: 300px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     max-width: 100vw;
-    max-height: 100%;
-    overflow: auto;
+    max-height: 100vh;
 
     @media only screen and (max-width: 950px) {
         min-width: 0;
@@ -51,7 +50,14 @@ const Container = styled.div`
         `
     )}
 `;
+const FlyoutContent = styled.div`
+    overflow: auto;
+    max-height: calc(100vh - 57px);
 
+    @media only screen and (max-width: 950px) {
+        max-height: calc(100% - 57px);
+    }
+`;
 const FlyoutHeader = styled.div`
     height: 57px;
     width: 100%;
@@ -132,9 +138,9 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
                     <CloseIcon onClose={onClose}/>
                 </ToolsContainer>
             </FlyoutHeader>
-            <div>
-                {children}
-            </div>
+                <FlyoutContent>
+                    {children}
+                </FlyoutContent>
         </Container>
     );
 });
