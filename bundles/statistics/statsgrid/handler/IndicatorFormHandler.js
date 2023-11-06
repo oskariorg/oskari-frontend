@@ -26,7 +26,6 @@ class IndicatorFormController extends StateHandler {
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.addStateListener(() => this.updatePopup());
-        this.eventHandlers = this.createEventHandlers();
     };
 
     getName () {
@@ -492,22 +491,6 @@ class IndicatorFormController extends StateHandler {
             // refresh the dataset listing on form
             this.getPopupData(this.state.datasource, this.state.indicator);
         });
-    }
-
-    createEventHandlers () {
-        const handlers = {
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
     }
 }
 
