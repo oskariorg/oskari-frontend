@@ -16,7 +16,8 @@ const Container = styled.div`
     min-width: 300px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     max-width: 100vw;
-    max-height: 100vh;
+    max-height: 100%;
+    overflow: auto;
 
     @media only screen and (max-width: 950px) {
         min-width: 0;
