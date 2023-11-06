@@ -228,7 +228,6 @@ class IndicatorFormController extends StateHandler {
                 const showDataForm = (regions, data) => {
                     data = data || {};
                     formRegions = [...regions].sort((a, b) => a.name.localeCompare(b.name)).map((region) => {
-                        // TODO: include existing values per region when editing existing dataset
                         return {
                             id: region.id,
                             name: region.name,
