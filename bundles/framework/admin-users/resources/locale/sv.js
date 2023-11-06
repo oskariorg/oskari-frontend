@@ -39,24 +39,24 @@ Oskari.registerLocalization(
         "roles": {
             "title": "Roller",
             "new": "Tilllägg en roll:",
-            "showUsers": "",
+            "showUsers": "Visa användarna",
             "errors": {
                 "form": "Namn är obligatorisk.",
-                "fetch": "",
+                "fetch": "Sökningen av roller misslyckades",
                 "save": "Lagring av en ny roll misslyckades.",
                 "delete": "Kunde inte tas bort.",
             },
             "types": {
-                "system": "",
-                "other": ""
+                "system": "Systemroller",
+                "other": "Övriga roller"
             }
         },
         "usersByRole": {
-            "title": "",
+            "title": "Användare per roll",
             "selectRole": "Välj en roll.",
-            "noUsers": "",
+            "noUsers": "Rollen har inga användare.",
             "errors": {
-                "fetch": "",
+                "fetch": "Användarnas information kunde inte hämtas för rollen.",
             }
         }
     }

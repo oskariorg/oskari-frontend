@@ -9,6 +9,8 @@
 
 import { FEATUREDATA_BUNDLE_ID } from './view/FeatureDataContainer';
 import { DRAW_REQUEST_ID, SelectToolPopupHandler } from './view/SelectToolPopupHandler.js';
+import './publisher/FeaturedataTool';
+
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleInstance',
     function () {},
     {
@@ -82,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
          * (re)creates the UI for "selected layers" functionality
          */
         createUi: function () {
-            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin', this.conf);
+            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin', this.conf);
             this.mapModule.registerPlugin(this.plugin);
             this.mapModule.startPlugin(this.plugin);
         },
