@@ -50,7 +50,14 @@ const Container = styled.div`
         `
     )}
 `;
+const FlyoutContent = styled.div`
+    overflow: auto;
+    max-height: calc(100vh - 57px);
 
+    @media only screen and (max-width: 950px) {
+        max-height: calc(100% - 57px);
+    }
+`;
 const FlyoutHeader = styled.div`
     height: 57px;
     width: 100%;
@@ -131,9 +138,9 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
                     <CloseIcon onClose={onClose}/>
                 </ToolsContainer>
             </FlyoutHeader>
-            <div>
-                {children}
-            </div>
+                <FlyoutContent>
+                    {children}
+                </FlyoutContent>
         </Container>
     );
 });
