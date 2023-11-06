@@ -2,6 +2,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { TableHandler } from './TableHandler';
 import { SearchHandler } from './SearchHandler';
 import { DiagramHandler } from './DiagramHandler';
+import { IndicatorFormHandler } from './IndicatorFormHandler';
 
 class StatisticsController extends StateHandler {
     constructor (instance, sandbox) {
@@ -12,6 +13,7 @@ class StatisticsController extends StateHandler {
         this.searchHandler = new SearchHandler(this, this.service, this.instance, this.sandbox);
         this.tableHandler = new TableHandler(this, this.service, this.sandbox);
         this.diagramHandler = new DiagramHandler(this, this.service, this.sandbox);
+        this.formHandler = new IndicatorFormHandler(this, this.service, this.sandbox);
         this.setState({
             indicators: [],
             activeIndicator: null
@@ -47,6 +49,10 @@ class StatisticsController extends StateHandler {
 
     getDiagramHandler () {
         return this.diagramHandler;
+    }
+
+    getFormHandler () {
+        return this.formHandler;
     }
 
     fetchIndicators () {
@@ -104,6 +110,7 @@ const wrapped = controllerMixin(StatisticsController, [
     'getSearchHandler',
     'getTableHandler',
     'getDiagramHandler',
+    'getFormHandler',
     'removeIndicator',
     'fetchIndicators',
     'setActiveIndicator'

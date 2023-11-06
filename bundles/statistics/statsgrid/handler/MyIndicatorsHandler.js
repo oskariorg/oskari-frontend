@@ -1,10 +1,11 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 class IndicatorsHandler extends StateHandler {
-    constructor (sandbox, instance) {
+    constructor (sandbox, instance, stateHandler) {
         super();
         this.instance = instance;
         this.sandbox = sandbox;
+        this.stateHandler = stateHandler;
         this.setState({
             data: [],
             loading: false
@@ -79,13 +80,11 @@ class IndicatorsHandler extends StateHandler {
     }
 
     addNewIndicator () {
-        const formFlyout = this.instance.getFlyoutManager().getFlyout('indicatorForm');
-        formFlyout.showForm(this.userDsId);
+        this.stateHandler.getController()?.getFormHandler()?.getController()?.showIndicatorPopup(this.userDsId);
     }
 
     editIndicator (data) {
-        const formFlyout = this.instance.getFlyoutManager().getFlyout('indicatorForm');
-        formFlyout.showForm(this.userDsId, data.id);
+        this.stateHandler.getController()?.getFormHandler()?.getController()?.showIndicatorPopup(this.userDsId, data.id);
     }
 
     openIndicator (item) {
