@@ -6,7 +6,7 @@ The Bundle provides a grid view for vector layers' object data.
 
 ## Screenshot
 
-![screenshot](featuredata_new.png)
+![screenshot](featuredata.png)
 
 ## Bundle configuration
 
