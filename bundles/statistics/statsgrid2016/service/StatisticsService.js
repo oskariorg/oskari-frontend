@@ -6,7 +6,7 @@
     const _log = Oskari.log('StatsGrid.StatisticsService');
     let _cacheHelper = null;
 
-    Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, locale, handler) {
+    Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, locale) {
         this.sandbox = sandbox;
         this.locale = locale;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
@@ -17,7 +17,6 @@
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
         this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
         this.missingRegionsetNamesCount = 0;
-        this.handler = handler;
 
         // pushed from instance
         this.datasources = [];
@@ -94,9 +93,6 @@
                 colorService: this.colors,
                 errorService: this.error
             };
-        },
-        getHandler: function () {
-            return this.handler;
         },
         addDatasource: function (ds) {
             if (!ds) {
