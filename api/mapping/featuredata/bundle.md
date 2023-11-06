@@ -80,3 +80,16 @@ Setting selectionTools to true will add a new button to toolbar that opens a sel
   <td> WFSStatusChangedEvent </td><td> Shows a loading/error indicator on UI based on vector layer process status changes.</td>
 </tr>
 </table>
+
+## Dependencies
+
+<table class="table">
+  <tr>
+    <th> Dependency </th><th> Linked from </th><th> Purpose</th>
+  </tr>
+  <tr>
+    <td> [Oskari toolbar](/documentation/bundles/framework/toolbar) </td>
+    <td> Expects to be present in application setup </td>
+    <td> To register plugin to toolbar</td>
+  </tr>
+</table>
