@@ -178,7 +178,11 @@ class SearchController extends StateHandler {
                             searchTimeseries: false
                         });
                     } else {
-                        selected = [selected, selectors[keyWithTime].values[selectors[keyWithTime].values.length - 1].id].sort((a, b) => (b - a));
+                        const selectValues = [
+                            selected,
+                            selectors[keyWithTime].values[selectors[keyWithTime].values.length - 1].id
+                        ];
+                        selected = [...selectValues].sort((a, b) => (b - a));
                     }
                 }
                 this.updateState({
