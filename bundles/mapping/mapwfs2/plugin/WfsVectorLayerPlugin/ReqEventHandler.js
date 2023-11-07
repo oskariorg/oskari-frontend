@@ -66,16 +66,12 @@ export class ReqEventHandler {
                 if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
                     return;
                 }
-                var targetLayers;
-                if (plugin.WFSLayerService.getAnalysisWFSLayerId()) {
-                    targetLayers = [plugin.WFSLayerService.getAnalysisWFSLayerId()];
+                let targetLayers;
+                if (event.selectFromAllLayers()) {
+                    targetLayers = plugin.getAllLayerIds();
                 } else {
-                    if (event.selectFromAllLayers()) {
-                        targetLayers = plugin.getAllLayerIds();
-                    } else {
-                        const layerId = plugin.WFSLayerService.getTopWFSLayer();
-                        targetLayers = layerId ? [layerId] : [];
-                    }
+                    const layerId = plugin.WFSLayerService.getTopWFSLayer();
+                    targetLayers = layerId ? [layerId] : [];
                 }
                 const featuresResult = plugin.getFeatures({
                     geometry: filterFeature.geometry
