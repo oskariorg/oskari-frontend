@@ -65,6 +65,7 @@ class TableController extends StateHandler {
     }
 
     setSelectedRegionset (value) {
+        this.service.getStateService().setRegionset(value);
         this.updateState({
             selectedRegionset: this.service.getRegionsets(value)
         });
