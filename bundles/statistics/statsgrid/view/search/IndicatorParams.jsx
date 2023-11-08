@@ -42,16 +42,16 @@ export const IndicatorParams = ({ state, controller }) => {
                                     <b><Message messageKey='parameters.from' /></b>
                                     <StyledSelect
                                         options={timeOptions}
-                                        value={state.indicatorParams?.selected[param][1]}
-                                        onChange={(value) => controller.setParamSelection(param, value, 1)}
+                                        value={state.indicatorParams?.selected[param][0]}
+                                        onChange={(value) => controller.setParamSelection(param, value, 0)}
                                     />
                                 </Field>
                                 <Field>
                                     <b><Message messageKey='parameters.to' /></b>
                                     <StyledSelect
                                         options={timeOptions}
-                                        value={state.indicatorParams?.selected[param][0]}
-                                        onChange={(value) => controller.setParamSelection(param, value, 0)}
+                                        value={state.indicatorParams?.selected[param][1]}
+                                        onChange={(value) => controller.setParamSelection(param, value, 1)}
                                     />
                                 </Field>
                             </TimeseriesField>
