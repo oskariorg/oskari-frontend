@@ -4,7 +4,6 @@ class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
         this.sandbox = Oskari.getSandbox();
-        this.layerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.setState({
             roles: [],
             permissions: [],
