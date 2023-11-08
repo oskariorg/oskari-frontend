@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { MapPreviewForm } from './form/MapPreviewForm';
+import { ThemeProvider } from 'oskari-ui/util';
+
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PanelMapPreview
  *
@@ -16,48 +21,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
      * @param {Oskari.mapframework.bundle.publisher2.insatnce} instance the instance
      */
     function (sandbox, mapmodule, localization, instance, tools) {
-        var me = this;
-        me.loc = localization;
-        me.instance = instance;
-        me.sandbox = sandbox;
-        me.mapmodule = mapmodule;
-        me.sizeOptions = [{
-            id: 'fill',
-            width: '',
-            height: '',
-            selected: true // default option
-        }, {
-            id: 'small',
-            width: 580,
-            height: 387
-        }, {
-            id: 'medium',
-            width: 700,
-            height: 600
-        }, {
-            id: 'large',
-            width: 1240,
-            height: 700
-        }, {
-            id: 'custom'
-        }];
-        this.sizeLimits = {
-            minWidth: 30,
-            minHeight: 20,
-            maxWidth: 4000,
-            maxHeight: 2000
-        };
-
-        me.selected = me.sizeOptions.filter(function (option) {
-            return option.selected;
-        })[0];
-
+        this.sandbox = sandbox;
+        this.mapmodule = mapmodule;
+        this.loc = localization;
+        this.instance = instance;
         this.tools = tools;
-
-        me.panel = null;
-        this.templates = {
-            help: jQuery('<div class="help icon-info"></div>')
-        };
+        // TODO: preselect one
+        this.selectedMapSize = null;
+        this.sizeLimits = [];
     }, {
         /**
          * @method onEvent
@@ -65,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
+            const handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
@@ -93,11 +64,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             if (!this.panel) {
                 return;
             }
-            var me = this,
-                size = me._getSelectedMapSize(),
-                customsize = me.panel.getContainer().find('.customsize'),
-                widthInput = customsize.find('input[name=width]'),
-                heightInput = customsize.find('input[name=height]');
+            this._adjustDataContainer();
+            /*
+            const customsize = this.panel.getContainer().find('.customsize');
+            const widthInput = customsize.find('input[name=width]');
+            const heightInput = customsize.find('input[name=height]');
 
             if (size.option.id === 'custom') {
                 customsize.prop('disabled', false);
@@ -126,6 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 // Adjust map sizes
                 me._adjustDataContainer();
             }
+            */
         },
 
         /**
@@ -161,6 +133,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @return {Object} size
          */
         _getSelectedMapSize: function () {
+            return {
+                valid: true,
+                width: this.selectedMapSize.width,
+                height: this.selectedMapSize.height,
+                option: this.selectedMapSize
+            };
+
+            /*
             var me = this,
                 option = me.sizeOptions.filter(function (el) {
                     return el.selected;
@@ -189,6 +169,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 validHeight: validHeight,
                 option: option
             };
+            */
         },
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -198,6 +179,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @param {Object} pData initial data
          */
         init: function (pData) {
+            this.populatePanel();
+//            this.updateMapSize();
+//            this._registerEventHandlers();
+/*
             var me = this,
                 fkey,
                 data,
@@ -282,6 +267,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             me.updateMapSize();
 
             me._registerEventHandlers();
+            */
         },
         _registerEventHandlers: function () {
             var me = this;
@@ -292,47 +278,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             }
         },
         _unregisterEventHandlers: function () {
-            var me = this;
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.sandbox.unregisterFromEventByName(me, p);
+            for (const p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    this.sandbox.unregisterFromEventByName(this, p);
                 }
             }
-        },
-        _createCustomSizes: function (contentPanel) {
-            var me = this,
-                customSizes = document.createElement('fieldset'),
-                widthInput = Oskari.clazz.create(
-                    'Oskari.userinterface.component.TextInput'
-                ),
-                heightInput = Oskari.clazz.create(
-                    'Oskari.userinterface.component.TextInput'
-                ),
-                selectedOption = me.sizeOptions.filter(function (option) {
-                    return option.selected;
-                })[0];
-
-            widthInput.setName('width');
-            widthInput.setPlaceholder(me.loc.sizes.width);
-            widthInput.setValue(selectedOption.width);
-            widthInput.setHandler(function () {
-                me.updateMapSize();
-            });
-            widthInput.insertTo(customSizes);
-            customSizes.appendChild(
-                document.createTextNode(me.loc.sizes.separator)
-            );
-
-            heightInput.setName('height');
-            heightInput.setPlaceholder(me.loc.sizes.height);
-            heightInput.setValue(selectedOption.height);
-            heightInput.setHandler(function () {
-                me.updateMapSize();
-            });
-            heightInput.insertTo(customSizes);
-
-            customSizes.className = 'customsize';
-            contentPanel.append(customSizes);
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
@@ -341,9 +291,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
         getPanel: function () {
+            if (!this.panel) {
+                this.populatePanel();
+            }
+
             return this.panel;
         },
 
+        populatePanel: function () {
+            const panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+            const contentPanel = panel.getContainer();
+
+            ReactDOM.render(
+                <ThemeProvider>
+                    <MapPreviewForm onChange={(value) => { this.mapSizeSelectionChanged(value); }}/>
+                </ThemeProvider>,
+                contentPanel[0]
+            );
+
+            panel.setTitle(this.loc.size.label);
+            this.panel = panel;
+            return panel;
+        },
+
+        mapSizeSelectionChanged: function (mapSize) {
+            this.selectedMapSize = mapSize;
+            this.updateMapSize();
+        },
         /**
          * Returns the selections the user has done with the form inputs.
          * {
