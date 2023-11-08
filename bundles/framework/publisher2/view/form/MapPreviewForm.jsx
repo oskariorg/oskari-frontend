@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Radio, NumberInput } from 'oskari-ui';
+import { Radio, TextInput } from 'oskari-ui';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -38,6 +38,17 @@ const SIZE_LIMITS = {
 const Row = styled('div')`
     display: flex;
     flex-direction: row;
+
+    .ant-input.customsize {
+        width: 60px!important;
+    }
+    input.error {
+        border: 1px solid red;
+    }
+`;
+
+const CustomSeparator = styled('div')`
+    margin: auto 0.5em;
 `;
 
 const RowContainer = styled('div')`
@@ -48,7 +59,7 @@ const RowContainer = styled('div')`
 const Label = (props) => {
     const { option } = props;
     let text = Oskari.getMsg(MESSAGE_BUNDLE_KEY, 'BasicView.sizes.' + option.id);
-    if (!isNaN(parseInt(option.width)) && !isNaN(parseInt(option.height))) {
+    if (option.id !== CUSTOM && !isNaN(parseInt(option.width)) && !isNaN(parseInt(option.height))) {
         text += ' (' + option.width + ' x ' + option.height + 'px)';
     }
     return <div>{text}</div>;
@@ -61,10 +72,51 @@ Label.propTypes = {
 export const MapPreviewForm = (props) => {
     const { onChange } = props;
     const [selected, setSelected] = useState(MAP_SIZES.find(option => option.selected).id);
+    const [customWidth, setCustomWidth] = useState(null);
+    const [customHeight, setCustomHeight] = useState(null);
+    const [errors, setErrors] = useState({});
+
+    const isValidWidth = (width) => {
+        return selected !== CUSTOM || (width >= SIZE_LIMITS.minWidth && width <= SIZE_LIMITS.maxWidth);
+    };
+
+    const isValidHeight = (height) => {
+        return selected !== CUSTOM || (height >= SIZE_LIMITS.minHeight && height <= SIZE_LIMITS.maxHeight);
+    };
+
+    const widthChanged = (value) => {
+        if (!isValidWidth(value)) {
+            setErrors({ ...errors, width: true });
+            return;
+        }
+
+        setErrors({ ...errors, width: false });
+        setCustomWidth(value);
+    };
+
+    const heightChanged = (value) => {
+        if (!isValidHeight(value)) {
+            setErrors({ ...errors, height: true });
+            return;
+        }
+
+        setErrors({ ...errors, height: false });
+        setCustomHeight(value);
+    };
 
     useEffect(() => {
-        onChange(MAP_SIZES.find(option => option.id === selected));
-    }, [selected]);
+        const selectedOption = MAP_SIZES.find(option => option.id === selected);
+        let valid = true;
+        if (selected === CUSTOM) {
+            valid = isValidWidth(customWidth) && isValidHeight(customHeight);
+            selectedOption.width = customWidth;
+            selectedOption.height = customHeight;
+        }
+
+        if (valid) {
+            onChange(selectedOption);
+        }
+    }, [selected, customWidth, customHeight]);
 
     return <RowContainer>
         <Radio.Group value={selected} onChange={(evt) => setSelected(evt.target.value)}>
@@ -74,7 +126,13 @@ export const MapPreviewForm = (props) => {
                 </Row>;
             })}
         </Radio.Group>
-        { selected === CUSTOM && <Row><NumberInput /> - <NumberInput/></Row>}
+        {
+            <Row>
+                <TextInput disabled={selected !== CUSTOM} className={errors?.width ? 'customsize error' : 'customsize'} onChange={((evt) => { widthChanged(evt.currentTarget.value); })}/>
+                <CustomSeparator>X</CustomSeparator>
+                <TextInput disabled={selected !== CUSTOM} className={errors?.height ? 'customsize error' : 'customsize'} onChange={((evt) => { heightChanged(evt.currentTarget.value); })}/>
+            </Row>
+        }
     </RowContainer>;
 };
 
