@@ -6,7 +6,7 @@ import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
 import { Message, Tooltip } from 'oskari-ui';
-import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
+import { EyeOpen, EyeShut, DragIcon } from 'oskari-ui/components/icons';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const Container = styled.div`

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import { Tooltip, Message } from 'oskari-ui';
-import { DataLayerIcon, ImageLayerIcon, ThreeDIcon, TimeSerieIcon, UserDataIcon } from './CustomIcons';
+import { DataLayerIcon, ImageLayerIcon, ThreeDIcon, TimeSerieIcon, UserDataIcon } from './LayerIcons';
 
 // TODO replace logic with layer plugins registering their icons.
 export const LayerIcon = ({ type, hasTimeseries = false, additionalTooltipKey, ...rest }) => {
@@ -24,10 +24,10 @@ export const LayerIcon = ({ type, hasTimeseries = false, additionalTooltipKey, .
         return <DataLayerIcon {...rest} />;
     };
 
-    let tooltipTitle = (<Message messageKey={ `layerTooltipTitle.${type}` } />);
+    let tooltipTitle = (<Message messageKey={ `layerTooltipTitle.${type}`  } bundleKey='LayerList' />);
     if (additionalTooltipKey) {
         tooltipTitle = (<Fragment>
-            { tooltipTitle }. <Message messageKey={ additionalTooltipKey } />
+            { tooltipTitle }. <Message messageKey={ additionalTooltipKey } bundleKey='LayerList' />
         </Fragment>);
     }
 

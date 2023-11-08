@@ -3,6 +3,7 @@ import { Checkbox, Message, Tooltip } from 'oskari-ui';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
+import { LayerIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
 
 const StyledTable = styled(Table)`
@@ -19,6 +20,14 @@ const HeaderCell = styled('div')`
 `;
 const CheckAllCheckbox = styled(Checkbox)`
     margin-top: 10px;
+`;
+const LayerName = styled('div')`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+const StyledLayerIcon = styled(LayerIcon)`
+    margin-right: 5px;
 `;
 
 const preferredOrder = ['VIEW_LAYER', 'VIEW_PUBLISHED', 'PUBLISH', 'DOWNLOAD'];
@@ -73,7 +82,22 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             align: 'left',
             title: <Message messageKey='rights.name' />,
             dataIndex: 'name',
-            sorter: getSorterFor('name')
+            sorter: getSorterFor('name'),
+            render: (title, item) => {
+                let layerType = item.layerType;
+                if (layerType !== 'analysislayer' && layerType !== 'userlayer' && layerType.includes('layer')) {
+                    // Change 'wmslayer' to 'wms' etc. for translations & icons
+                    layerType = layerType.replace('layer', '');
+                }
+                return (
+                    <LayerName>
+                        <StyledLayerIcon
+                            type={layerType}
+                        />
+                        {title}
+                    </LayerName>
+                )
+            }
         });
         permissionNames.forEach((permissionType, index) => {
             columnSettings.push({

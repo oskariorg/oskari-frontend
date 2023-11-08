@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { WarningIcon } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
-import { LayerIcon } from '../../../LayerIcon';
+import { LayerIcon } from 'oskari-ui/components/icons';
 import { MetadataIcon } from 'oskari-ui/components/icons';
 import { BACKEND_STATUS_AVAILABLE } from '../../../../../constants';
 
