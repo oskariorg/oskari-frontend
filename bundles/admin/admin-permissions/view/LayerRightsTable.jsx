@@ -50,6 +50,9 @@ const getPermissionTableHeader = (permissionType, permissionName) => {
 };
 
 export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => {
+    const handleScroll = (key) => {
+        document.querySelector(`[data-row-key="${key}"]`)?.scrollIntoView({block: 'center'});
+    };
     const hasPermission = (layer, permissionType) => {
         return layer.permissions[state.selectedRole]?.findIndex(p => p === permissionType) > -1;
     };
@@ -98,7 +101,10 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
                         <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={tooltip}>
                             <Checkbox
                                 checked={checked}
-                                onChange={(e) => controller.togglePermission(item.id, permissionType, !checked)}
+                                onChange={(e) => {
+                                    controller.togglePermission(item.id, permissionType, !checked);
+                                    handleScroll(item.key);
+                                }}
                             />
                         </Tooltip>
                     );
