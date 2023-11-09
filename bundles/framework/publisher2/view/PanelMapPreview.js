@@ -1,7 +1,41 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { MapPreviewForm } from './form/MapPreviewForm';
+import { CUSTOM_MAP_SIZE_ID, MapPreviewForm } from './form/MapPreviewForm';
 import { ThemeProvider } from 'oskari-ui/util';
+
+const MAP_SIZE_FILL_ID = 'fill';
+const MAP_SIZES = [{
+    id: MAP_SIZE_FILL_ID,
+    width: '',
+    height: '',
+    selected: true, // default option
+    valid: true,
+}, {
+    id: 'small',
+    width: 580,
+    height: 387,
+    valid: true
+}, {
+    id: 'medium',
+    width: 700,
+    height: 600,
+    valid: true
+}, {
+    id: 'large',
+    width: 1240,
+    height: 700,
+    valid: true
+}, {
+    id: CUSTOM_MAP_SIZE_ID,
+    valid: true
+}];
+
+export const CUSTOM_MAP_SIZE_LIMITS = {
+    minWidth: 30,
+    minHeight: 20,
+    maxWidth: 4000,
+    maxHeight: 2000
+};
 
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PanelMapPreview
@@ -26,9 +60,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         this.loc = localization;
         this.instance = instance;
         this.tools = tools;
-        // TODO: preselect one
         this.selectedMapSize = null;
-        this.sizeLimits = [];
+        this.sizeLimits = CUSTOM_MAP_SIZE_LIMITS;
     }, {
         /**
          * @method onEvent
@@ -133,13 +166,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @return {Object} size
          */
         _getSelectedMapSize: function () {
+            return this.selectedMapSize;
+            /*
             return {
                 valid: true,
                 width: this.selectedMapSize.width,
                 height: this.selectedMapSize.height,
                 option: this.selectedMapSize
             };
-
+*/
             /*
             var me = this,
                 option = me.sizeOptions.filter(function (el) {
@@ -179,8 +214,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @param {Object} pData initial data
          */
         init: function (pData) {
-            this.populatePanel();
-//            this.updateMapSize();
+            this.populatePanel(pData);
+            this._registerEventHandlers();
 //            this._registerEventHandlers();
 /*
             var me = this,
@@ -298,13 +333,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             return this.panel;
         },
 
-        populatePanel: function () {
+        /**
+         * Populate the actual panel content.
+         *
+         * @param data  When modifying an existing map get initial size selection from this.
+         * @method populatePanel
+         * @return {Oskari.userinterface.component.AccordionPanel}
+         */
+        populatePanel: function (data) {
             const panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             const contentPanel = panel.getContainer();
-
+            const initialSelection = data && data.metadata
+                ? { id: data.metadata.preview, width: data.metadata.size?.width || null, height: data.metadata.size?.height || null }
+                : null;
             ReactDOM.render(
                 <ThemeProvider>
-                    <MapPreviewForm onChange={(value) => { this.mapSizeSelectionChanged(value); }}/>
+                    <MapPreviewForm
+                        onChange={(value) => { this.mapSizeSelectionChanged(value); }}
+                        mapSizeOptions={MAP_SIZES}
+                        initialSelection={initialSelection}/>
                 </ThemeProvider>,
                 contentPanel[0]
             );
@@ -316,7 +363,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
         mapSizeSelectionChanged: function (mapSize) {
             this.selectedMapSize = mapSize;
-            this.updateMapSize();
+            if (this.selectedMapSize.valid) {
+                this.updateMapSize();
+            }
         },
         /**
          * Returns the selections the user has done with the form inputs.
@@ -333,7 +382,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             const selected = this._getSelectedMapSize();
             const values = {
                 metadata: {
-                    preview: selected.option.id
+                    preview: selected.id
                 }
             };
 
@@ -346,7 +395,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             return values;
         },
         validate: function () {
-            var errors = [];
+            const errors = [];
             if (!this._getSelectedMapSize().valid) {
                 errors.push({
                     field: 'size',
@@ -363,9 +412,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         **/
         stop: function () {
             // restore "fill" as default size setting
-            this.sizeOptions.forEach(item => {
-                item.selected = item.id === 'fill';
-            });
+            this.mapSizeSelectionChanged(MAP_SIZES.find(size => size.id === MAP_SIZE_FILL_ID));
             this._unregisterEventHandlers();
 
             window.setTimeout(() => {

@@ -3,37 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Radio, TextInput } from 'oskari-ui';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { CUSTOM_MAP_SIZE_LIMITS } from '../PanelMapPreview';
+import { initial } from 'lodash';
 
 const MESSAGE_BUNDLE_KEY = 'Publisher2';
-const CUSTOM = 'custom';
-
-const MAP_SIZES = [{
-    id: 'fill',
-    width: '',
-    height: '',
-    selected: true // default option
-}, {
-    id: 'small',
-    width: 580,
-    height: 387
-}, {
-    id: 'medium',
-    width: 700,
-    height: 600
-}, {
-    id: 'large',
-    width: 1240,
-    height: 700
-}, {
-    id: CUSTOM
-}];
-
-const SIZE_LIMITS = {
-    minWidth: 30,
-    minHeight: 20,
-    maxWidth: 4000,
-    maxHeight: 2000
-};
+export const CUSTOM_MAP_SIZE_ID = 'custom';
 
 const Row = styled('div')`
     display: flex;
@@ -59,7 +33,7 @@ const RowContainer = styled('div')`
 const Label = (props) => {
     const { option } = props;
     let text = Oskari.getMsg(MESSAGE_BUNDLE_KEY, 'BasicView.sizes.' + option.id);
-    if (option.id !== CUSTOM && !isNaN(parseInt(option.width)) && !isNaN(parseInt(option.height))) {
+    if (option.id !== CUSTOM_MAP_SIZE_ID && !isNaN(parseInt(option.width)) && !isNaN(parseInt(option.height))) {
         text += ' (' + option.width + ' x ' + option.height + 'px)';
     }
     return <div>{text}</div>;
@@ -70,57 +44,45 @@ Label.propTypes = {
 };
 
 export const MapPreviewForm = (props) => {
-    const { onChange } = props;
-    const [selected, setSelected] = useState(MAP_SIZES.find(option => option.selected).id);
-    const [customWidth, setCustomWidth] = useState(null);
-    const [customHeight, setCustomHeight] = useState(null);
+    const { onChange, mapSizeOptions, initialSelection } = props;
+    const [selected, setSelected] = useState(initialSelection?.id || mapSizeOptions.find(option => option.selected).id);
+    const [customWidth, setCustomWidth] = useState(initialSelection?.width ? initialSelection?.width : null);
+    const [customHeight, setCustomHeight] = useState(initialSelection?.height ? initialSelection?.height : null);
     const [errors, setErrors] = useState({});
 
     const isValidWidth = (width) => {
-        return selected !== CUSTOM || (width >= SIZE_LIMITS.minWidth && width <= SIZE_LIMITS.maxWidth);
+        return selected !== CUSTOM_MAP_SIZE_ID || (width >= CUSTOM_MAP_SIZE_LIMITS.minWidth && width <= CUSTOM_MAP_SIZE_LIMITS.maxWidth);
     };
 
     const isValidHeight = (height) => {
-        return selected !== CUSTOM || (height >= SIZE_LIMITS.minHeight && height <= SIZE_LIMITS.maxHeight);
+        return selected !== CUSTOM_MAP_SIZE_ID || (height >= CUSTOM_MAP_SIZE_LIMITS.minHeight && height <= CUSTOM_MAP_SIZE_LIMITS.maxHeight);
     };
 
     const widthChanged = (value) => {
-        if (!isValidWidth(value)) {
-            setErrors({ ...errors, width: true });
-            return;
-        }
-
-        setErrors({ ...errors, width: false });
+        setErrors({ ...errors, width: !isValidWidth(value) });
         setCustomWidth(value);
     };
 
     const heightChanged = (value) => {
-        if (!isValidHeight(value)) {
-            setErrors({ ...errors, height: true });
-            return;
-        }
-
-        setErrors({ ...errors, height: false });
+        setErrors({ ...errors, height: !isValidHeight(value) });
         setCustomHeight(value);
     };
 
     useEffect(() => {
-        const selectedOption = MAP_SIZES.find(option => option.id === selected);
+        const selectedOption = mapSizeOptions.find(option => option.id === selected);
         let valid = true;
-        if (selected === CUSTOM) {
+        if (selected === CUSTOM_MAP_SIZE_ID) {
             valid = isValidWidth(customWidth) && isValidHeight(customHeight);
             selectedOption.width = customWidth;
             selectedOption.height = customHeight;
         }
-
-        if (valid) {
-            onChange(selectedOption);
-        }
+        selectedOption.valid = valid;
+        onChange(selectedOption);
     }, [selected, customWidth, customHeight]);
 
     return <RowContainer>
         <Radio.Group value={selected} onChange={(evt) => setSelected(evt.target.value)}>
-            { MAP_SIZES.map((option) => {
+            { mapSizeOptions.map((option) => {
                 return <Row key={option.id}>
                     <Radio.Choice key={'radio_' + option.id} value={option.id}><Label option={option}/></Radio.Choice>
                 </Row>;
@@ -128,15 +90,24 @@ export const MapPreviewForm = (props) => {
         </Radio.Group>
         {
             <Row>
-                <TextInput disabled={selected !== CUSTOM} className={errors?.width ? 'customsize error' : 'customsize'} onChange={((evt) => { widthChanged(evt.currentTarget.value); })}/>
+                <TextInput
+                    disabled={selected !== CUSTOM_MAP_SIZE_ID}
+                    className={errors?.width ? 'customsize error' : 'customsize'}
+                    onChange={((evt) => { widthChanged(evt.currentTarget.value); })}
+                    value={customWidth}/>
                 <CustomSeparator>X</CustomSeparator>
-                <TextInput disabled={selected !== CUSTOM} className={errors?.height ? 'customsize error' : 'customsize'} onChange={((evt) => { heightChanged(evt.currentTarget.value); })}/>
+                <TextInput
+                    disabled={selected !== CUSTOM_MAP_SIZE_ID}
+                    className={errors?.height ? 'customsize error' : 'customsize'}
+                    onChange={((evt) => { heightChanged(evt.currentTarget.value); })}
+                    value={customHeight}/>
             </Row>
         }
     </RowContainer>;
 };
 
 MapPreviewForm.propTypes = {
-    options: PropTypes.array,
+    mapSizeOptions: PropTypes.array,
+    initialSelection: PropTypes.object,
     onChange: PropTypes.func
 };
