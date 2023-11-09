@@ -1,7 +1,7 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
+import { Tooltip, Message } from 'oskari-ui';
 import { Icon } from 'oskari-ui';
-import { EyeFilled, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const defaultColor = '#979797';
 
@@ -28,19 +28,6 @@ const TimeSerieSvg = ({ fill = defaultColor }) => (
     </svg>
 );
 TimeSerieSvg.propTypes = {
-    fill: PropTypes.string
-};
-
-const DragSvg = ({ fill = defaultColor }) => (
-    <svg width="24px" height="24px" viewBox="0 0 24 24">
-        <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-            <g transform="translate(-8.000000, -8.000000)" fill={fill}>
-                <path d="M17,25 C18.1045695,25 19,25.8954305 19,27 C19,28.1045695 18.1045695,29 17,29 C15.8954305,29 15,28.1045695 15,27 C15,25.8954305 15.8954305,25 17,25 Z M24,25 C25.1045695,25 26,25.8954305 26,27 C26,28.1045695 25.1045695,29 24,29 C22.8954305,29 22,28.1045695 22,27 C22,25.8954305 22.8954305,25 24,25 Z M17,18 C18.1045695,18 19,18.8954305 19,20 C19,21.1045695 18.1045695,22 17,22 C15.8954305,22 15,21.1045695 15,20 C15,18.8954305 15.8954305,18 17,18 Z M24,18 C25.1045695,18 26,18.8954305 26,20 C26,21.1045695 25.1045695,22 24,22 C22.8954305,22 22,21.1045695 22,20 C22,18.8954305 22.8954305,18 24,18 Z M17,11 C18.1045695,11 19,11.8954305 19,13 C19,14.1045695 18.1045695,15 17,15 C15.8954305,15 15,14.1045695 15,13 C15,11.8954305 15.8954305,11 17,11 Z M24,11 C25.1045695,11 26,11.8954305 26,13 C26,14.1045695 25.1045695,15 24,15 C22.8954305,15 22,14.1045695 22,13 C22,11.8954305 22.8954305,11 24,11 Z" id="Combined-Shape"></path>
-            </g>
-        </g>
-    </svg>
-);
-DragSvg.propTypes = {
     fill: PropTypes.string
 };
 
@@ -96,45 +83,72 @@ RasterSvg.propTypes = {
     fill: PropTypes.string
 };
 
-export const EyeOpen = (props) => (
-    <EyeFilled style={{ fontSize: '18px', color: '#006ce8', marginRight: '5px', marginTop: '2px' }} {...props} />
-);
-
-export const EyeShut = (props) => (
-    <EyeInvisibleOutlined style={{ fontSize: '18px', marginRight: '5px', marginTop: '2px' }} {...props} />
-);
-
-export const ThreeDIcon = ({ fill, ...rest }) => <Icon component={() => <ThreeDSvg fill={fill}/>} {...rest} />;
+const ThreeDIcon = ({ fill, ...rest }) => <Icon component={() => <ThreeDSvg fill={fill}/>} {...rest} />;
 ThreeDIcon.propTypes = {
     fill: PropTypes.string
 };
 
-export const TimeSerieIcon = ({ fill, ...rest }) => <Icon component={() => <TimeSerieSvg fill={fill}/>} {...rest} />;
+const TimeSerieIcon = ({ fill, ...rest }) => <Icon component={() => <TimeSerieSvg fill={fill}/>} {...rest} />;
 TimeSerieIcon.propTypes = {
     fill: PropTypes.string
 };
 
-export const DragIcon = ({ fill, ...rest }) => <Icon component={() => <DragSvg fill={fill}/>} {...rest} />;
-DragIcon.propTypes = {
-    fill: PropTypes.string
-};
-
-export const UserDataIcon = ({ fill, ...rest }) => <Icon component={() => <OwnSvg fill={fill}/>} {...rest} />;
+const UserDataIcon = ({ fill, ...rest }) => <Icon component={() => <OwnSvg fill={fill}/>} {...rest} />;
 UserDataIcon.propTypes = {
     fill: PropTypes.string
 };
 
-export const ThemeMapIcon = ({ fill, ...rest }) => <Icon component={() => <ThemeMapSvg fill={fill}/>} {...rest} />;
+const ThemeMapIcon = ({ fill, ...rest }) => <Icon component={() => <ThemeMapSvg fill={fill}/>} {...rest} />;
 ThemeMapIcon.propTypes = {
     fill: PropTypes.string
 };
 
-export const DataLayerIcon = ({ fill, ...rest }) => <Icon component={() => <VectorSvg fill={fill}/>} {...rest} />;
+const DataLayerIcon = ({ fill, ...rest }) => <Icon component={() => <VectorSvg fill={fill}/>} {...rest} />;
 DataLayerIcon.propTypes = {
     fill: PropTypes.string
 };
 
-export const ImageLayerIcon = ({ fill, ...rest }) => <Icon component={() => <RasterSvg fill={fill}/>} {...rest} />;
+const ImageLayerIcon = ({ fill, ...rest }) => <Icon component={() => <RasterSvg fill={fill}/>} {...rest} />;
 ImageLayerIcon.propTypes = {
     fill: PropTypes.string
+};
+
+export const LayerIcon = ({ type, hasTimeseries = false, additionalTooltip, ...rest }) => {
+    const getIcon = (type, rest) => {
+        if (hasTimeseries) {
+            return <TimeSerieIcon {...rest} />;
+        }
+        if (['wmts', 'wms', 'arcgis93', 'arcgis', 'vectortile', 'bingmaps'].includes(type)) {
+            return <ImageLayerIcon {...rest} />;
+        }
+        if (['wfs'].includes(type)) {
+            return <DataLayerIcon {...rest} />;
+        }
+        if (['userlayer', 'myplaces', 'analysislayer'].includes(type)) {
+            return <UserDataIcon {...rest} />;
+        }
+        if (['tiles3d'].includes(type)) {
+            return <ThreeDIcon {...rest} />;
+        }
+        return <DataLayerIcon {...rest} />;
+    };
+
+    let tooltipTitle = (<Message messageKey={ `layerTooltipTitle.${type}`  } bundleKey='oskariui' />);
+    if (additionalTooltip) {
+        tooltipTitle = (<Fragment>
+            { tooltipTitle }. { additionalTooltip }
+        </Fragment>);
+    }
+
+    return (
+        <Tooltip title={ tooltipTitle }>
+            { getIcon(type, rest) }
+        </Tooltip>
+    );
+};
+
+LayerIcon.propTypes = {
+    type: PropTypes.string.isRequired,
+    additionalTooltip: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    hasTimeseries: PropTypes.bool
 };
