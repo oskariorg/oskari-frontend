@@ -63,20 +63,6 @@ Oskari.registerLocalization(
                 'UNKNOWN': 'Tilatietoa ei ole saatavilla tälle karttatasolle.',
                 'UNSTABLE': ''
             },
-            'layerTooltipTitle': {
-                'wms': 'Rasteritaso',
-                'wmts': 'Rasteritaso',
-                'arcgis93': 'Rasteritaso',
-                'arcgis': 'Rasteritaso',
-                'vectortile': 'Rasteritaso',
-                'bingmaps': 'Rasteritaso',
-                'wfs': 'Vektoritaso',
-                'vector': 'Vektoritaso',
-                'userlayer': 'Oma aineisto',
-                'myplaces': 'Oma karttataso',
-                'analysislayer': 'Oma analyysi',
-                'tiles3d': '3D-taso'
-            },
             'guidedTour': {
                 'title': 'Karttatasot',
                 'message': 'Karttatasot-valikosta löydät kaikki karttapalvelussa saatavilla olevat karttatasot.<br/><br/>Järjestä karttatasot joko aiheen tai tiedontuottajan mukaan.<br/><br/>Hae karttatasoja karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Voit selata uusimpia karttatasoja tai suodattaa tasoja löytääksesi helpommin tarvitsemasi.<br/><br/>Avoinna olevat karttatasot voit tarkistaa Valitut tasot -välilehdeltä. Voit raahata karttatasot uuteen järjestykseen, säätää tasojen näkyvyyttä tai vaihtaa esitystyyliä osalla karttatasoista.',
