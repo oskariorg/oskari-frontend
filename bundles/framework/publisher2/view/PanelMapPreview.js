@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { CUSTOM_MAP_SIZE_ID, MapPreviewForm } from './form/MapPreviewForm';
+import { CUSTOM_MAP_SIZE_ID, MapPreviewForm, MapPreviewTooltip } from './form/MapPreviewForm';
 import { ThemeProvider } from 'oskari-ui/util';
 
 const MAP_SIZE_FILL_ID = 'fill';
@@ -9,7 +9,7 @@ const MAP_SIZES = [{
     width: '',
     height: '',
     selected: true, // default option
-    valid: true,
+    valid: true
 }, {
     id: 'small',
     width: 580,
@@ -342,6 +342,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          */
         populatePanel: function (data) {
             const panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+            const tooltipDiv = document.createElement('div');
+            ReactDOM.render(<MapPreviewTooltip/>, tooltipDiv);
+            panel.getHeader().append(tooltipDiv);
+
             const contentPanel = panel.getContainer();
             const initialSelection = data && data.metadata
                 ? { id: data.metadata.preview, width: data.metadata.size?.width || null, height: data.metadata.size?.height || null }

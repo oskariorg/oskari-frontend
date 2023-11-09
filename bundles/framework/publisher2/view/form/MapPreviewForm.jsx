@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-
 import { Radio, TextInput } from 'oskari-ui';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { CUSTOM_MAP_SIZE_LIMITS } from '../PanelMapPreview';
-import { initial } from 'lodash';
 
 const MESSAGE_BUNDLE_KEY = 'Publisher2';
 export const CUSTOM_MAP_SIZE_ID = 'custom';
 
 const Row = styled('div')`
+    margin-top: 0.5em;
     display: flex;
     flex-direction: row;
 
     .ant-input.customsize {
-        width: 60px!important;
+        width: 80px;
     }
     input.error {
         border: 1px solid red;
@@ -41,6 +40,15 @@ const Label = (props) => {
 
 Label.propTypes = {
     option: PropTypes.any
+};
+
+export const MapPreviewTooltip = () => {
+    let tooltip = Oskari.getMsg(MESSAGE_BUNDLE_KEY, 'BasicView.size.tooltip');
+    tooltip = tooltip.replace('{minWidth}', CUSTOM_MAP_SIZE_LIMITS.minWidth);
+    tooltip = tooltip.replace('{maxWidth}', CUSTOM_MAP_SIZE_LIMITS.maxWidth);
+    tooltip = tooltip.replace('{minHeight}', CUSTOM_MAP_SIZE_LIMITS.minHeight);
+    tooltip = tooltip.replace('{maxHeight}', CUSTOM_MAP_SIZE_LIMITS.maxHeight);
+    return <div className='help icon-info' title={tooltip}/>;
 };
 
 export const MapPreviewForm = (props) => {
@@ -80,6 +88,7 @@ export const MapPreviewForm = (props) => {
         onChange(selectedOption);
     }, [selected, customWidth, customHeight]);
 
+    const customInputDisabled = selected !== CUSTOM_MAP_SIZE_ID;
     return <RowContainer>
         <Radio.Group value={selected} onChange={(evt) => setSelected(evt.target.value)}>
             { mapSizeOptions.map((option) => {
@@ -91,14 +100,16 @@ export const MapPreviewForm = (props) => {
         {
             <Row>
                 <TextInput
-                    disabled={selected !== CUSTOM_MAP_SIZE_ID}
-                    className={errors?.width ? 'customsize error' : 'customsize'}
+                    placeholder={Oskari.getMsg(MESSAGE_BUNDLE_KEY, 'BasicView.sizes.width')}
+                    disabled={customInputDisabled}
+                    className={!customInputDisabled && errors?.width ? 'customsize error' : 'customsize'}
                     onChange={((evt) => { widthChanged(evt.currentTarget.value); })}
                     value={customWidth}/>
                 <CustomSeparator>X</CustomSeparator>
                 <TextInput
-                    disabled={selected !== CUSTOM_MAP_SIZE_ID}
-                    className={errors?.height ? 'customsize error' : 'customsize'}
+                    placeholder={Oskari.getMsg(MESSAGE_BUNDLE_KEY, 'BasicView.sizes.height')}
+                    disabled={customInputDisabled}
+                    className={!customInputDisabled && errors?.height ? 'customsize error' : 'customsize'}
                     onChange={((evt) => { heightChanged(evt.currentTarget.value); })}
                     value={customHeight}/>
             </Row>
