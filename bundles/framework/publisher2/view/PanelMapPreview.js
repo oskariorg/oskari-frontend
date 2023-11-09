@@ -98,39 +98,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 return;
             }
             this._adjustDataContainer();
-            /*
-            const customsize = this.panel.getContainer().find('.customsize');
-            const widthInput = customsize.find('input[name=width]');
-            const heightInput = customsize.find('input[name=height]');
-
-            if (size.option.id === 'custom') {
-                customsize.prop('disabled', false);
-                widthInput.prop('disabled', false);
-                heightInput.prop('disabled', false);
-                // Only custom option can have invalid values
-                widthInput.toggleClass('error', !size.validWidth);
-                heightInput.toggleClass('error', !size.validHeight);
-            } else {
-                customsize.prop('disabled', true);
-                widthInput.prop('disabled', true);
-                heightInput.prop('disabled', true);
-                // Update selected size to custom size fields, it's a decent
-                // starting point and it avoids error states...
-                if (!isNaN(size.width) && typeof size.width === 'number') {
-                    widthInput.val(size.width);
-                    widthInput.removeClass('error');
-                }
-                if (!isNaN(size.height) && typeof size.height === 'number') {
-                    heightInput.val(size.height);
-                    heightInput.removeClass('error');
-                }
-            }
-
-            if (size.valid) {
-                // Adjust map sizes
-                me._adjustDataContainer();
-            }
-            */
         },
 
         /**
@@ -167,44 +134,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          */
         _getSelectedMapSize: function () {
             return this.selectedMapSize;
-            /*
-            return {
-                valid: true,
-                width: this.selectedMapSize.width,
-                height: this.selectedMapSize.height,
-                option: this.selectedMapSize
-            };
-*/
-            /*
-            var me = this,
-                option = me.sizeOptions.filter(function (el) {
-                    return el.selected;
-                })[0],
-                width = option.width,
-                height = option.height,
-                validWidth = true,
-                validHeight = true;
-
-            if (option.id === 'custom') {
-                var customsize = me.panel.getContainer().find('.customsize'),
-                    widthInput = customsize.find('input[name=width]'),
-                    heightInput = customsize.find('input[name=height]');
-
-                width = parseInt(widthInput.val(), 10);
-                height = parseInt(heightInput.val(), 10);
-                validWidth = Oskari.util.isNumber(widthInput.val()) && Oskari.util.isNumberBetween(width, this.sizeLimits.minWidth, this.sizeLimits.maxWidth);
-                validHeight = Oskari.util.isNumber(heightInput.val()) && Oskari.util.isNumberBetween(height, this.sizeLimits.minHeight, this.sizeLimits.maxHeight);
-            }
-
-            return {
-                valid: validWidth && validHeight,
-                width: width,
-                validWidth: validWidth,
-                height: height,
-                validHeight: validHeight,
-                option: option
-            };
-            */
         },
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -216,93 +145,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         init: function (pData) {
             this.populatePanel(pData);
             this._registerEventHandlers();
-//            this._registerEventHandlers();
-/*
-            var me = this,
-                fkey,
-                data,
-                field,
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
-                contentPanel = panel.getContainer(),
-                tooltipCont = me.templates.help.clone();
-
-            // initial mode selection if modify.
-            if (pData && pData.metadata && pData.metadata.preview) {
-                var selectedOptions = me.sizeOptions.filter(function (option) {
-                    return (option.id === pData.metadata.preview);
-                });
-                if (selectedOptions && selectedOptions.length) {
-                    me.selected = selectedOptions[0];
-                    if (me.selected.id === 'custom' && pData.metadata.size) {
-                        me.selected.width = pData.metadata.size.width;
-                        me.selected.height = pData.metadata.size.height;
-                    }
-                }
-            }
-
-            // initialise fields only after it's certain which option is selected (new / modify)
-            me.fields = {
-                size: {
-                    clazz: 'Oskari.userinterface.component.RadioButtonGroup',
-                    handler: function (value) {
-                        me.sizeOptions.forEach(function (option) {
-                            option.selected = option.id === value;
-                        });
-                        me.updateMapSize();
-                    },
-                    options: me.sizeOptions.map(function (option) {
-                        var title = me.loc.sizes[option.id];
-                        if (option.id !== 'custom' && option.id !== 'fill') {
-                            title = me._getSizeLabel(title, option);
-                        }
-
-                        return {
-                            title: title,
-                            value: option.id
-                        };
-                    }),
-                    value: me.selected.id
-                }
-            };
-
-            for (fkey in me.fields) {
-                if (me.fields.hasOwnProperty(fkey)) {
-                    data = me.fields[fkey];
-                    field = Oskari.clazz.create(data.clazz);
-                    field.setName(fkey);
-                    if (data.options) {
-                        field.setOptions(data.options);
-                    }
-                    if (data.handler) {
-                        field.setHandler(data.handler);
-                    }
-                    if (data.placeholder && typeof field.setPlaceHolder === 'function') {
-                        field.setPlaceHolder(data.placeholder);
-                    }
-                    if (data.value) {
-                        field.setValue(data.value);
-                    }
-                    data.field = field;
-                }
-            }
-            panel.setTitle(me.loc.size.label);
-            tooltipCont.attr('title', Oskari.getMsg('Publisher2', 'BasicView.size.tooltip', this.sizeLimits));
-            panel.getHeader().append(tooltipCont);
-
-            for (fkey in this.fields) {
-                if (this.fields.hasOwnProperty(fkey)) {
-                    data = this.fields[fkey];
-                    data.field.insertTo(contentPanel);
-                }
-            }
-
-            me._createCustomSizes(contentPanel);
-
-            me.panel = panel;
-            me.updateMapSize();
-
-            me._registerEventHandlers();
-            */
         },
         _registerEventHandlers: function () {
             var me = this;
