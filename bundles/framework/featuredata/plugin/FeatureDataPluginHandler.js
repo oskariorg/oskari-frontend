@@ -237,21 +237,19 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     createVisibleColumnsSettings (newActiveLayerId, features) {
-        if (!features || !features.length) {
-            return {
-                allColumns: [],
-                visibleColumns: [],
-                activeLayerPropertyLabels: null,
-                activeLayerPropertyTypes: null
-            };
-        }
         const { activeLayerId, visibleColumnsSettings } = this.getState();
         const activeLayerChanged = activeLayerId && newActiveLayerId && activeLayerId !== newActiveLayerId;
-        const allColumns = Object.keys(features[0].properties).filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key));
-        const newVisibleColumns = activeLayerChanged ? [].concat(allColumns) : visibleColumnsSettings?.visibleColumns ? visibleColumnsSettings.visibleColumns : [].concat(allColumns);
+
+        if (!activeLayerChanged && visibleColumnsSettings) {
+            return visibleColumnsSettings;
+        }
+
         const activeLayer = this.mapModule.getSandbox().findMapLayerFromSelectedMapLayers(newActiveLayerId) || null;
+        const activeLayerProperties = activeLayer?.getProperties() || null;
+        const allColumns = activeLayerProperties?.map((property) => property.name);
         const activeLayerPropertyLabels = activeLayer?.getPropertyLabels() || null;
         const activeLayerPropertyTypes = activeLayer?.getPropertyTypes() || null;
+        const newVisibleColumns = activeLayerChanged ? [].concat(allColumns) : visibleColumnsSettings?.visibleColumns ? visibleColumnsSettings.visibleColumns : [].concat(allColumns);
 
         return {
             allColumns,
