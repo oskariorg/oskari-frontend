@@ -88,15 +88,17 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             sorter: getSorterFor('name'),
             render: (title, item) => {
                 let layerType = item.layerType;
-                if (layerType !== 'analysislayer' && layerType !== 'userlayer' && layerType.includes('layer')) {
+                if (layerType !== 'analysislayer' && layerType !== 'userlayer' && layerType?.includes('layer')) {
                     // Change 'wmslayer' to 'wms' etc. for translations & icons
                     layerType = layerType.replace('layer', '');
                 }
                 return (
                     <LayerName>
-                        <StyledLayerIcon
-                            type={layerType}
-                        />
+                        {layerType && (
+                            <StyledLayerIcon
+                                type={layerType}
+                            />
+                        )}
                         {title}
                     </LayerName>
                 )
