@@ -55,7 +55,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
     };
-    const columnSettings = createColumnSettingsFromFeatures(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings);
+    const columnSettings = createColumnSettings(selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings);
     const dataSource = createDatasourceFromFeatures(features);
     const featureTable = <FeatureDataTable>
         <SelectionsContainer>
@@ -97,9 +97,9 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     return featureTable;
 };
 
-const createColumnSettingsFromFeatures = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings) => {
-    const { visibleColumns, activeLayerPropertyLabels } = visibleColumnsSettings;
-    return Object.keys(features[0].properties)
+const createColumnSettings = (selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings) => {
+    const { allColumns, visibleColumns, activeLayerPropertyLabels } = visibleColumnsSettings;
+    return allColumns
         .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns.includes(key))
         .map(key => {
             return {
