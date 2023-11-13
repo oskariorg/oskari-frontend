@@ -11,10 +11,13 @@ const Row = styled('div')`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    word-break: break-all;
 `;
 const Actions = styled('div')`
     display: flex;
     flex-direction: row;
+    margin-left: 10px;
 `;
 const RemoveButton = styled(IconButton)`
     margin-right: 10px;
