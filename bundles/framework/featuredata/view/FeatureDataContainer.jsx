@@ -5,7 +5,6 @@ import { Table } from 'oskari-ui/components/Table';
 import styled from 'styled-components';
 import { getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 import { ShowSelectedItemsFirst } from './ShowSelectedItemsFirst';
-import { FEATUREDATA_DEFAULT_HIDDEN_FIELDS, ID_FIELD } from '../plugin/FeatureDataPluginHandler';
 import { TabTitle } from './TabStatusIndicator';
 import { FilterVisibleColumns } from './FilterVisibleColumns';
 import { ExportButton } from './ExportData';
@@ -100,7 +99,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
 const createColumnSettings = (selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings) => {
     const { allColumns, visibleColumns, activeLayerPropertyLabels } = visibleColumnsSettings;
     return allColumns
-        .filter(key => (!FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) || key === ID_FIELD) && visibleColumns.includes(key))
+        .filter(key => visibleColumns.includes(key))
         .map(key => {
             return {
                 align: 'left',

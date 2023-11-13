@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Select, Message } from 'oskari-ui';
 import PropTypes from 'prop-types';
-import { FEATUREDATA_DEFAULT_HIDDEN_FIELDS, ID_FIELD, ID_FIELD_LABEL } from '../plugin/FeatureDataPluginHandler';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
 
 const FilterVisibleColumnsContainer = styled('div')`
@@ -40,7 +39,6 @@ const createOptions = (allColumns, activeLayerPropertyLabels) => {
     }
 
     return allColumns
-        .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) || key === ID_FIELD)
         .map(key => {
             return {
                 label: activeLayerPropertyLabels && activeLayerPropertyLabels[key] ? activeLayerPropertyLabels[key] : key,

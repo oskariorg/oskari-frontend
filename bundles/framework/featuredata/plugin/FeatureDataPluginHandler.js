@@ -6,7 +6,6 @@ import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
 import { filterFeaturesByPropertyFilter } from '../../../mapping/mapmodule/oskariStyle/filter';
 import { cleanFilter } from 'oskari-ui/components/FeatureFilter';
 
-export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 export const ID_FIELD = '__fid';
 export const ID_FIELD_LABEL = 'ID';
 
@@ -363,7 +362,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     columnShouldBeVisible (key, visibleColumnsSettings) {
         const { visibleColumns } = visibleColumnsSettings;
-        return (!FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) || key === ID_FIELD) && visibleColumns?.includes(key);
+        return visibleColumns?.includes(key);
     }
 
     sendExportDataForm (data) {
