@@ -39,6 +39,8 @@ const IndicatorField = styled('div')`
     margin-right: 10px;
 `;
 
+// For preventing checkbox clickable area from stretching to 100% of content width
+const ClickableArea = ({ children }) => <div>{children}</div>;
 
 const SearchFlyout = ({ state, controller }) => {
     const Component = (
@@ -48,14 +50,14 @@ const SearchFlyout = ({ state, controller }) => {
             )}
             <Field>
                 <b><Message messageKey='panels.newSearch.seriesTitle' /></b>
-                <div>
+                <ClickableArea>
                     <Checkbox
                         checked={state.searchTimeseries}
                         onChange={(e) => controller.setSearchTimeseries(e.target.checked)}
                     >
                         <Message messageKey='panels.newSearch.seriesLabel' />
                     </Checkbox>
-                </div>
+                </ClickableArea>
             </Field>
             <Field>
                 <b><Message messageKey='panels.newSearch.regionsetTitle' /></b>
