@@ -7,6 +7,8 @@ import { filterFeaturesByPropertyFilter } from '../../../mapping/mapmodule/oskar
 import { cleanFilter } from 'oskari-ui/components/FeatureFilter';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
+export const ID_FIELD = '__fid';
+export const ID_FIELD_LABEL = 'ID';
 
 export const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
 const EXPORT_FEATUREDATA_ROUTE = 'ExportTableFile';
@@ -246,10 +248,17 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
         const activeLayer = this.mapModule.getSandbox().findMapLayerFromSelectedMapLayers(newActiveLayerId) || null;
         const activeLayerProperties = activeLayer?.getProperties() || null;
-        const allColumns = activeLayerProperties?.map((property) => property.name);
+        let allColumns = activeLayerProperties?.map((property) => property.name);
         const activeLayerPropertyLabels = activeLayer?.getPropertyLabels() || null;
         const activeLayerPropertyTypes = activeLayer?.getPropertyTypes() || null;
         const newVisibleColumns = activeLayerChanged ? [].concat(allColumns) : visibleColumnsSettings?.visibleColumns ? visibleColumnsSettings.visibleColumns : [].concat(allColumns);
+        if (!allColumns.includes(ID_FIELD)) {
+            allColumns = [ID_FIELD].concat(allColumns);
+        }
+
+        if (activeLayerPropertyLabels && !activeLayerPropertyLabels[ID_FIELD]) {
+            activeLayerPropertyLabels[ID_FIELD] = ID_FIELD_LABEL;
+        }
 
         return {
             allColumns,
@@ -354,7 +363,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     columnShouldBeVisible (key, visibleColumnsSettings) {
         const { visibleColumns } = visibleColumnsSettings;
-        return !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns?.includes(key);
+        return (!FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) || key === ID_FIELD) && visibleColumns?.includes(key);
     }
 
     sendExportDataForm (data) {
