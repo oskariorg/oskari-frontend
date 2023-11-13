@@ -48,12 +48,14 @@ const SearchFlyout = ({ state, controller }) => {
             )}
             <Field>
                 <b><Message messageKey='panels.newSearch.seriesTitle' /></b>
-                <Checkbox
-                    checked={state.searchTimeseries}
-                    onChange={(e) => controller.setSearchTimeseries(e.target.checked)}
-                >
-                    <Message messageKey='panels.newSearch.seriesLabel' />
-                </Checkbox>
+                <div>
+                    <Checkbox
+                        checked={state.searchTimeseries}
+                        onChange={(e) => controller.setSearchTimeseries(e.target.checked)}
+                    >
+                        <Message messageKey='panels.newSearch.seriesLabel' />
+                    </Checkbox>
+                </div>
             </Field>
             <Field>
                 <b><Message messageKey='panels.newSearch.regionsetTitle' /></b>
