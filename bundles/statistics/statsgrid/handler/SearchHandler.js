@@ -440,8 +440,8 @@ class SearchController extends StateHandler {
         const keyWithTime = Object.keys(this.state.indicatorParams.selected).find((key) => this.state.indicatorParams.selectors[key].time);
 
         if (this.state.searchTimeseries) {
-            data.selections[keyWithTime] = this.state.indicatorParams.selected[keyWithTime][1];
-            const values = this.state.indicatorParams.selectors[keyWithTime].values.filter(val => val.id >= this.state.indicatorParams.selected[keyWithTime][1] && val.id <= this.state.indicatorParams.selected[keyWithTime][0]).reverse();
+            data.selections[keyWithTime] = this.state.indicatorParams.selected[keyWithTime][0];
+            const values = this.state.indicatorParams.selectors[keyWithTime].values.filter(val => val.id >= this.state.indicatorParams.selected[keyWithTime][0] && val.id <= this.state.indicatorParams.selected[keyWithTime][1]).reverse();
             data.series = {
                 id: keyWithTime,
                 values: values.map(val => val.id || val)
