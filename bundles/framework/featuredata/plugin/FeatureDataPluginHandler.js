@@ -6,7 +6,8 @@ import { FEATUREDATA_BUNDLE_ID } from '../view/FeatureDataContainer';
 import { filterFeaturesByPropertyFilter } from '../../../mapping/mapmodule/oskariStyle/filter';
 import { cleanFilter } from 'oskari-ui/components/FeatureFilter';
 
-export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
+export const ID_FIELD = '__fid';
+export const ID_FIELD_LABEL = 'ID';
 
 export const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
 const EXPORT_FEATUREDATA_ROUTE = 'ExportTableFile';
@@ -69,7 +70,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
         const features = layerId ? this.getFeaturesByLayerId(layerId) : null;
         const selectedFeatureIds = layerId ? this.getSelectedFeatureIdsByLayerId(layerId) : null;
-        const visibleColumnsSettings = features && features.length ? this.createVisibleColumnsSettings(layerId, features) : null;
+        const visibleColumnsSettings = features && features.length ? this.createVisibleColumnsSettings(layerId) : null;
         this.updateState({
             activeLayerId: layerId,
             activeLayerFeatures: features,
@@ -109,7 +110,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         if (newActiveLayerId && this.getState().flyoutOpen) {
             activeLayerFeatures = this.getFeaturesByLayerId(newActiveLayerId);
             selectedFeatureIds = activeLayerFeatures && activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(newActiveLayerId) : null;
-            visibleColumnsSettings = this.createVisibleColumnsSettings(newActiveLayerId, activeLayerFeatures);
+            visibleColumnsSettings = this.createVisibleColumnsSettings(newActiveLayerId);
         };
 
         return {
@@ -197,7 +198,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             newState.activeLayerFeatures = newActiveLayerFeatures;
             newState.sorting = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.determineSortingColumn(activeLayerId, newActiveLayerFeatures) : null;
             newState.selectedFeatureIds = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
-            newState.visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, newActiveLayerFeatures);
+            newState.visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId);
             newState.selectByPropertiesFilter = {};
             newState.selectByPropertiesFeatureTypes = this.createSelectByPropertiesFeatureTypes(newState.visibleColumnsSettings);
         }
@@ -236,7 +237,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
     }
 
-    createVisibleColumnsSettings (newActiveLayerId, features) {
+    createVisibleColumnsSettings (newActiveLayerId) {
         const { activeLayerId, visibleColumnsSettings } = this.getState();
         const activeLayerChanged = activeLayerId && newActiveLayerId && activeLayerId !== newActiveLayerId;
 
@@ -246,10 +247,17 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
         const activeLayer = this.mapModule.getSandbox().findMapLayerFromSelectedMapLayers(newActiveLayerId) || null;
         const activeLayerProperties = activeLayer?.getProperties() || null;
-        const allColumns = activeLayerProperties?.map((property) => property.name);
+        let allColumns = activeLayerProperties?.map((property) => property.name);
         const activeLayerPropertyLabels = activeLayer?.getPropertyLabels() || null;
         const activeLayerPropertyTypes = activeLayer?.getPropertyTypes() || null;
         const newVisibleColumns = activeLayerChanged ? [].concat(allColumns) : visibleColumnsSettings?.visibleColumns ? visibleColumnsSettings.visibleColumns : [].concat(allColumns);
+        if (!allColumns.includes(ID_FIELD)) {
+            allColumns = [ID_FIELD].concat(allColumns);
+        }
+
+        if (activeLayerPropertyLabels && !activeLayerPropertyLabels[ID_FIELD]) {
+            activeLayerPropertyLabels[ID_FIELD] = ID_FIELD_LABEL;
+        }
 
         return {
             allColumns,
@@ -343,7 +351,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         // so we're creating this in that case
         let { visibleColumnsSettings } = this.getState();
         if (!visibleColumnsSettings) {
-            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, features);
+            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId);
         }
 
         // get the first property that isn't in the default hidden fields and use that as default.
@@ -354,7 +362,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     columnShouldBeVisible (key, visibleColumnsSettings) {
         const { visibleColumns } = visibleColumnsSettings;
-        return !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns?.includes(key);
+        return visibleColumns?.includes(key);
     }
 
     sendExportDataForm (data) {
