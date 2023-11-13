@@ -6,6 +6,7 @@ import { showFlyout } from 'oskari-ui/components/window';
 import styled from 'styled-components';
 import { LocaleProvider } from 'oskari-ui/util';
 import { Sorter } from './Sorter';
+import { IndicatorName } from '../IndicatorName';
 
 const BUNDLE_KEY = 'StatsGrid';
 
@@ -44,6 +45,7 @@ const IndicatorHeader = styled('div')`
     word-wrap: break-word;
     word-break: break-word;
     text-align: left;
+    height: 100%;
 `;
 const StyledRemoveButton = styled(IconButton)`
     margin-left: 10px;
@@ -140,7 +142,7 @@ const TableFlyout = ({ state, controller }) => {
                                 controller.setActiveIndicator(indicator.hash);
                             }}
                         >
-                            {indicator.labels?.full}
+                            <IndicatorName indicator={indicator} />
                             <StyledRemoveButton
                                 type='delete'
                                 onClick={() => controller.removeIndicator(indicator)}

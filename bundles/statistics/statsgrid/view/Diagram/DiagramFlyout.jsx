@@ -4,6 +4,7 @@ import { Select, Message, Spin } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
 import styled from 'styled-components';
 import { LocaleProvider } from 'oskari-ui/util';
+import { IndicatorName } from '../IndicatorName';
 
 const BUNDLE_KEY = 'StatsGrid';
 
@@ -49,7 +50,7 @@ const DiagramFlyout = ({ state, controller }) => {
             <Selections>
                 <StyledSelect
                     filterOption={false}
-                    options={state.indicators?.map(indicator => ({ value: indicator.hash, label: indicator.labels?.full }))}
+                    options={state.indicators?.map(indicator => ({ value: indicator.hash, label: <IndicatorName indicator={indicator} /> }))}
                     onChange={(value) => controller.setActiveIndicator(value)}
                     value={state.activeIndicator}
                     placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
