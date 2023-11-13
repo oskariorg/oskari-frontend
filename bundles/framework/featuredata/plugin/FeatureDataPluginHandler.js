@@ -69,7 +69,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
         const features = layerId ? this.getFeaturesByLayerId(layerId) : null;
         const selectedFeatureIds = layerId ? this.getSelectedFeatureIdsByLayerId(layerId) : null;
-        const visibleColumnsSettings = features && features.length ? this.createVisibleColumnsSettings(layerId, features) : null;
+        const visibleColumnsSettings = features && features.length ? this.createVisibleColumnsSettings(layerId) : null;
         this.updateState({
             activeLayerId: layerId,
             activeLayerFeatures: features,
@@ -109,7 +109,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         if (newActiveLayerId && this.getState().flyoutOpen) {
             activeLayerFeatures = this.getFeaturesByLayerId(newActiveLayerId);
             selectedFeatureIds = activeLayerFeatures && activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(newActiveLayerId) : null;
-            visibleColumnsSettings = this.createVisibleColumnsSettings(newActiveLayerId, activeLayerFeatures);
+            visibleColumnsSettings = this.createVisibleColumnsSettings(newActiveLayerId);
         };
 
         return {
@@ -197,7 +197,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             newState.activeLayerFeatures = newActiveLayerFeatures;
             newState.sorting = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.determineSortingColumn(activeLayerId, newActiveLayerFeatures) : null;
             newState.selectedFeatureIds = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
-            newState.visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, newActiveLayerFeatures);
+            newState.visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId);
             newState.selectByPropertiesFilter = {};
             newState.selectByPropertiesFeatureTypes = this.createSelectByPropertiesFeatureTypes(newState.visibleColumnsSettings);
         }
@@ -236,7 +236,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
     }
 
-    createVisibleColumnsSettings (newActiveLayerId, features) {
+    createVisibleColumnsSettings (newActiveLayerId) {
         const { activeLayerId, visibleColumnsSettings } = this.getState();
         const activeLayerChanged = activeLayerId && newActiveLayerId && activeLayerId !== newActiveLayerId;
 
@@ -343,7 +343,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
         // so we're creating this in that case
         let { visibleColumnsSettings } = this.getState();
         if (!visibleColumnsSettings) {
-            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId, features);
+            visibleColumnsSettings = this.createVisibleColumnsSettings(activeLayerId);
         }
 
         // get the first property that isn't in the default hidden fields and use that as default.
