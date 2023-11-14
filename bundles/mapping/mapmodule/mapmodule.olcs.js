@@ -12,7 +12,6 @@ import { LAYER_ID, VECTOR_STYLE } from './domain/constants';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import 'olcs/olcs.css';
-
 import './event/TimeChangedEvent';
 dayjs.extend(customParseFormat);
 // OL-cesium expects to find this global
@@ -1035,6 +1034,11 @@ class MapModuleOlCesium extends MapModuleOl {
         location = olProj.transform(location, 'EPSG:4326', this.getProjection());
         const lonlat = { lon: location[0], lat: location[1] };
         return lonlat;
+    }
+
+    getVersion () {
+        const olVersion = super.getVersion();
+        return olVersion + ' - Cesium/' + Cesium.VERSION;
     }
 }
 
