@@ -92,7 +92,8 @@ const BABEL_LOADER_RULE = {
         // getExcludedNodeModules(['react-dom', '@ant-design', 'antd', 'core-js'])
         // Exclude all but named dependencies (named deps contain es6+ modules that require transpiling)
         // FIXME: olcs seems problematic - adding it makes the build take reeeeaaaally long compared to not having it
-        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', 'olcs', 'cesium', '@mapbox'])
+        // , 'olcs', 'cesium'
+        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', '@mapbox'])
     ],
     use: {
         loader: 'babel-loader',
