@@ -218,6 +218,10 @@ class SearchController extends StateHandler {
                     disabledDatasources: ids
                 });
             }
+        } else {
+            this.updateState({
+                disabledDatasources: []
+            });
         }
     }
 
