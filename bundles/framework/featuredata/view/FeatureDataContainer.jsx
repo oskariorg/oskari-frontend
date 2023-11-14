@@ -5,7 +5,6 @@ import { Table } from 'oskari-ui/components/Table';
 import styled from 'styled-components';
 import { getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 import { ShowSelectedItemsFirst } from './ShowSelectedItemsFirst';
-import { FEATUREDATA_DEFAULT_HIDDEN_FIELDS } from '../plugin/FeatureDataPluginHandler';
 import { TabTitle } from './TabStatusIndicator';
 import { FilterVisibleColumns } from './FilterVisibleColumns';
 import { ExportButton } from './ExportData';
@@ -55,7 +54,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
     };
-    const columnSettings = createColumnSettingsFromFeatures(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings);
+    const columnSettings = createColumnSettings(selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings);
     const dataSource = createDatasourceFromFeatures(features);
     const featureTable = <FeatureDataTable>
         <SelectionsContainer>
@@ -97,10 +96,10 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     return featureTable;
 };
 
-const createColumnSettingsFromFeatures = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings) => {
-    const { visibleColumns, activeLayerPropertyLabels } = visibleColumnsSettings;
-    return Object.keys(features[0].properties)
-        .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns.includes(key))
+const createColumnSettings = (selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings) => {
+    const { allColumns, visibleColumns, activeLayerPropertyLabels } = visibleColumnsSettings;
+    return allColumns
+        .filter(key => visibleColumns.includes(key))
         .map(key => {
             return {
                 align: 'left',
@@ -142,7 +141,11 @@ const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSele
         const showExportButton = layer.hasPermission('download');
         return {
             key: layer.getId(),
-            label: <TabTitle status={status} title={layer.getName()} active={layer.getId() === layerId} openSelectByPropertiesPopup={controller.openSelectByPropertiesPopup}/>,
+            label: <TabTitle
+                status={status} title={layer.getName()}
+                active={layer.getId() === layerId && features?.length > 0}
+                openSelectByPropertiesPopup={controller.openSelectByPropertiesPopup}
+            />,
             children: layer.getId() === layerId
                 ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, showExportButton, controller)
                 : null

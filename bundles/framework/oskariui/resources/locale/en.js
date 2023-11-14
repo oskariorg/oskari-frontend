@@ -115,7 +115,10 @@ Oskari.registerLocalization({
             single: 'One property',
             and: 'AND operator',
             or: 'OR operator',
-            range: 'Use value range',
+            range: {
+                true: 'Don\'t use value range',
+                false: 'Use value range'
+            },
             addTooltip: 'Add new row for filter',
             clearTooltip: 'Clear filter',
             caseSensitive: {
@@ -133,6 +136,20 @@ Oskari.registerLocalization({
                 lessThan: 'less than',
                 atMost: 'at most'
             }
+        },
+        layerTooltipTitle: {
+            'wms': 'Raster layer',
+            'wmts': 'Raster layer',
+            'arcgis93': 'Raster layer',
+            'arcgis': 'Raster layer',
+            'vectortile': 'Raster layer',
+            'bingmaps': 'Raster layer',
+            'wfs': 'Vector layer',
+            'vector': 'Vector layer',
+            'userlayer': 'Own dataset',
+            'myplaces': 'My map layer',
+            'analysislayer': 'Own analysis',
+            'tiles3d': '3D layer'
         }
     }
 });

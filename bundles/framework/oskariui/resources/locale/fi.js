@@ -115,7 +115,10 @@ Oskari.registerLocalization({
             single: 'Yksi ominaisuus',
             and: 'AND-operaattori',
             or: 'OR-operaattori',
-            range: 'Käytä arvoaluetta',
+            range: {
+                true: 'Älä käytä arvoaluetta',
+                false: 'Käytä arvoaluetta'
+            },
             addTooltip: 'Lisää suodattimeen uusi rivi',
             clearTooltip: 'Tyhjennä suodatin',
             caseSensitive: {
@@ -133,6 +136,20 @@ Oskari.registerLocalization({
                 lessThan: 'pienempi kuin',
                 atMost: 'enintään'
             }
+        },
+        layerTooltipTitle: {
+            'wms': 'Rasteritaso',
+            'wmts': 'Rasteritaso',
+            'arcgis93': 'Rasteritaso',
+            'arcgis': 'Rasteritaso',
+            'vectortile': 'Rasteritaso',
+            'bingmaps': 'Rasteritaso',
+            'wfs': 'Vektoritaso',
+            'vector': 'Vektoritaso',
+            'userlayer': 'Oma aineisto',
+            'myplaces': 'Oma karttataso',
+            'analysislayer': 'Oma analyysi',
+            'tiles3d': '3D-taso'
         }
     }
 });

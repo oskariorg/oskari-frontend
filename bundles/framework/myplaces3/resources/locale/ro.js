@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Ştergere strat de hartă",
-                "deleteConfirmMove": "Stratul de hartă (0) conţine (1) obiect. Doriţi să ştergeţi stratul de hartă şi să mutaţi locaţiile în stratul de hartă implicit(2)?",
                 "deleteConfirm": "Ştergeţi stratul de hartă (0)?",
                 "deleted": "Strat de hartă şters"
             },

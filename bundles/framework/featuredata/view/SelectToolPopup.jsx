@@ -5,7 +5,7 @@ import { ButtonContainer, PrimaryButton } from 'oskari-ui/components/buttons';
 import { Message, Button, Radio, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
 
-const BUNDLE_NAME = 'FeatureData2';
+const BUNDLE_NAME = 'FeatureData';
 const StyledContent = styled('div')`
     width: 300px;
     margin: 12px 24px 24px;

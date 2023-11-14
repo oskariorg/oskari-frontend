@@ -7,8 +7,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchResultActio
  * @static
  * @param {Oskari.Sandbox} sandbox
  *          reference to application sandbox
- * @param {Oskari.mapframework.bundle.search.StateHandlerBundleInstance} search
- *          reference to search
+ * @param {Oskari.mapframework.bundle.search.Flyout} search
+ *          reference to search flyout
  */
     function (sandbox, search) {
         this.sandbox = sandbox;
@@ -18,14 +18,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchResultActio
      * @method handleRequest
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
-     * @param {Oskari.mapframework.bundle.personaldata.request.SearchResultActionRequestHandler} request
+     * @param {Oskari.mapframework.bundle.search.request.AddSearchResultActionRequest | Oskari.mapframework.bundle.search.request.RemoveSearchResultActionRequest} request
      *      request to handle
      */
         handleRequest: function (core, request) {
             if (request.getName() === 'Search.AddSearchResultActionRequest') {
                 this.search.addSearchResultAction({
-                    'name': request.getLinkName(),
-                    'callback': request.getCallback()
+                    name: request.getLinkName(),
+                    callback: request.getCallback()
                 });
             } else if (request.getName() === 'Search.RemoveSearchResultActionRequest') {
                 this.search.removeSearchResultAction(request.getLinkName());

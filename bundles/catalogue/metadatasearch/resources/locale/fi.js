@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     "value": {
         "tabTitle": "Metatietohaku",
         "metadataSearchDescription": "Hae paikkatietoresursseja eli paikkatietoaineistoja, -aineistosarjoja ja palveluja.",
-        "placeholder": "Kirjoita hakusana tähän.",
+        "placeholder": "Kirjoita hakusana tähän",
         "advancedSearch": {
             "showMore": "Lisää hakuehtoja",
             "showLess": "Piilota tarkennettu haku",
@@ -66,5 +66,8 @@ Oskari.registerLocalization({
             "info": "Näytä metatiedot",
             "remove": "Poista hakutuloksista"
         },
+        "tool": {
+            "label": "Mahdollista metadatahakujen ohjelmallinen käyttö",
+        }
     }
 });

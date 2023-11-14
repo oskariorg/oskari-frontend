@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { PluginHandler } from '../handler/PluginHandler';
-import { ThematicControls } from './ThematicControls';
+import { ThematicControls } from '../../statsgrid/plugin/ThematicControls';
 import { UnorderedListOutlined, TableOutlined, BarChartOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyoutManager, location) {

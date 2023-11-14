@@ -55,11 +55,6 @@ const StyledButton = styled(Button)`
     }
 `;
 
-const ButtonText = styled('span')`
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
 const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     const helper = getNavigationTheme(theme);
     // get button roundness factor instead of percentage as the component is not round itself
@@ -81,29 +76,35 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     );
 });
 
-export const MapModuleTextButton = ({ visible, onClick, icon, text, active, position, loading, ...rest }) => {
+// We need an additional wrapper around the button for the publisher to be able to handle dragging properly.
+const PublisherDraggableWrapper = styled('div')`
+`;
+
+export const MapModuleTextButton = ({ visible, onClick, icon, children, active, position, loading, ...rest }) => {
     if (!visible) {
         return null;
     };
 
-    return <ThemedButton
-        icon={icon || null}
-        onClick={onClick}
-        active={active}
-        position={position}
-        loading={loading}
-        {...rest}
-    >
-        <ButtonText>{text}</ButtonText>
-    </ThemedButton>;
+    return <PublisherDraggableWrapper>
+        <ThemedButton
+            icon={icon || null}
+            onClick={onClick}
+            active={active}
+            position={position}
+            loading={loading}
+            {...rest}
+        >
+            {children}
+        </ThemedButton>
+    </PublisherDraggableWrapper>;
 };
 
 MapModuleTextButton.propTypes = {
     visible: PropTypes.bool,
     onClick: PropTypes.func,
     icon: PropTypes.any,
-    text: PropTypes.any,
     active: PropTypes.bool,
     position: PropTypes.string,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    children: PropTypes.any
 };

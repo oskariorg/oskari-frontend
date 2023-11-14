@@ -10,13 +10,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Lokacije",
-            "nocategories": "Nimaš še shranjenih lokacij.",
-            "maxFeaturesExceeded": "presegel si dovoljeno število svojih lokacij. Vse lokacije niso bile prenesene.",
             "publishCategory": {
                 "privateTooltip": "Sloj karte je zaseben. Klikni za objavo.",
                 "publicTooltip": "Sloj karte je javen. Klikni za preklic objave."
             },
-            "addCategoryFormButton": "New map layer",
             "addCategory": "Dodaj sloj karte",
             "editCategory": "Uredi sloj karte",
             "deleteCategory": "Izbriši sloj karte",
@@ -175,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Izbriši sloj karte",
-                "deleteConfirmMove": "Sloj karte {0} vsebuje {1} objekte. Ali želiš izbrisati sloj karte in lokacije na njem premakniti na privzet sloj karte {2} ali želiš izbrisati sloj in njegove lokacije?",
                 "deleteConfirm": "Ali želiš izbrisati sloj karte {0}?",
                 "deleted": "Sloj karte je izbrisan."
             },

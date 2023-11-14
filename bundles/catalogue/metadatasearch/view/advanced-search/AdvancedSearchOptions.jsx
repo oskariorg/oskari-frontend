@@ -16,6 +16,7 @@ export const AdvancedSearchOptions = (props) => {
                 if (field.multi) {
                     return <AdvancedSearchMulti
                         key={field.field}
+                        disabled={drawing}
                         title={Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.' + field.field)}
                         options={getByField(field.field, advancedSearchOptions)}
                         selected={advancedSearchValues[field.field]}
@@ -24,6 +25,7 @@ export const AdvancedSearchOptions = (props) => {
 
                 return <AdvancedSearchDropdown
                     key={field.field}
+                    disabled={drawing}
                     title={Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.' + field.field)}
                     options={getByField(field.field, advancedSearchOptions)}
                     selected={advancedSearchValues[field.field]}

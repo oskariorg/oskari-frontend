@@ -7,10 +7,10 @@ import { FEATUREDATA_WFS_STATUS } from '../view/FeatureDataContainer';
 import { MapModuleTextButton } from '../../../mapping/mapmodule/MapModuleTextButton';
 
 /**
- * @class Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin
+ * @class Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin
  * Provides WFS grid link on top of map
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin',
+Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin',
     /**
      * @method create called automatically on construction
      * @static
@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
      */
     function () {
         var me = this;
-        me._clazz = 'Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin';
+        me._clazz = 'Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin';
         me._defaultLocation = 'top right';
         me._index = 100;
         me._name = 'FeaturedataPlugin';
@@ -92,7 +92,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <MapModuleTextButton
                         visible={layers?.length > 0}
-                        text={<Message messageKey='title' bundleKey='FeatureData'/>}
                         onClick={() => this.handler.openFlyout()}
                         active={flyoutOpen}
                         loading={loadingStatus.loading}
@@ -100,7 +99,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPl
                         $marginRight={marginRight}
                         $marginLeft={marginLeft}
                         $marginTop={'10'}
-                    />
+                    >
+                        <Message messageKey='title' bundleKey='FeatureData'/>
+                    </MapModuleTextButton>
                 </ThemeProvider>,
                 el[0]
             );

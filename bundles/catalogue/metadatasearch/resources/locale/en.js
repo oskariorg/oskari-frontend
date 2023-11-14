@@ -65,6 +65,10 @@ Oskari.registerLocalization({
             "showBBOX": "Show coverage area",
             "info": "Show metadata",
             "remove": "Remove from search results"
+        },
+        "tool": {
+            "label": "Enable programmatic use of metadata search",
         }
+
     }
 });

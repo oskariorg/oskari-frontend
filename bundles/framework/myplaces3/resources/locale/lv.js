@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Izdzēst kartes slāni",
-                "deleteConfirmMove": "Kartes slānis {0} satur {1} objektus. Vai Jūs vēlaties dzēst kartes slāni un pārvietot vietas uz noklusējuma kartes slāni {2}?",
                 "deleteConfirm": "Vai izdzēst kartes slāni {0}?",
                 "deleted": "Kartes slānis ir izdzēsts"
             },

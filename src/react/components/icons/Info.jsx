@@ -25,13 +25,13 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
  * @param {Object} style Additional styles
  * @returns 
  */
-export const Info = ThemeConsumer(({ theme = {}, children, title, size = 16, style, space = true }) => {
+export const Info = ThemeConsumer(({ theme = {}, children, title, size = 16, style, space = true, placement = 'top' }) => {
     const helper = getNavigationTheme(theme);
     const hover = helper.getButtonHoverColor();
     const bgColor = Oskari.util.hexToRgb(hover);
 
     return (
-        <Tooltip title={title || children}>
+        <Tooltip title={title || children} placement={placement}>
             <StyledInfoIcon
                 className='t_icon t_info'
                 $space={space}
