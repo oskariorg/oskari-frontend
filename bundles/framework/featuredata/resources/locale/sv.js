@@ -63,6 +63,7 @@ Oskari.registerLocalization(
                 }
             },
             "showSelectedFirst": "Visa de valda först",
+            "toggleCompressedView": "SV: Compressed view",
             "selectionTools": {
                 "title": "Markera objekt på kartan",
                 "instructions": " ",
