@@ -11,6 +11,7 @@ import { ExportButton } from './ExportData';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
 export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
+export const DEFAULT_PAGE_SIZE = 100;
 
 const theme = getHeaderTheme(Oskari.app.getTheming().getTheme());
 
@@ -79,7 +80,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
             columns={ columnSettings }
             size={ 'large '}
             dataSource={ dataSource }
-            pagination={false}
+            pagination={{ defaultPageSize: DEFAULT_PAGE_SIZE, hideOnSinglePage: true, simple: true }}
             onChange={(pagination, filters, sorter, extra) => {
                 controller.updateSorting(sorter);
             }}
