@@ -36,13 +36,33 @@ const StyledTable = styled(Table)`
         display: none;
     }
 
-    .table-cell-compressed-view {
+    td.table-cell-compressed-view {
         white-space: nowrap;
         word-break: break-word;
         overflow: hidden;
         text-overflow: ellipsis;
         min-width: 3em;
         max-width: 8em;
+    }
+
+    th.table-cell-compressed-view {
+        white-space: nowrap;
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 3em;
+        max-width: 8em;
+
+        span.ant-table-column-title {
+            max-width: 75%;
+            white-space: nowrap;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        span.ant-table-column-sorter {
+            max-width: 25%;
+        }
     }
 
     overflow-y: auto;
