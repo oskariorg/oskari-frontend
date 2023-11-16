@@ -33,6 +33,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             flyoutOpen: false,
             activeLayerFeatures: null,
             showSelectedFirst: false,
+            showCompressed: true,
             loadingStatus: {},
             visibleColumnsSettings: {
                 allColumns: [],
@@ -89,6 +90,11 @@ class FeatureDataPluginUIHandler extends StateHandler {
             newState.sorting = this.determineSortingColumn(activeLayerId, activeLayerFeatures);
         }
         this.updateState(newState);
+    }
+
+    toggleShowCompressed () {
+        const { showCompressed } = this.getState();
+        this.updateState({ showCompressed: !showCompressed });
     }
 
     updateStateAfterMapEvent () {
@@ -522,6 +528,7 @@ const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
     'closeFlyout',
     'setActiveTab',
     'toggleShowSelectedFirst',
+    'toggleShowCompressed',
     'updateStateAfterMapEvent',
     'updateSelectedFeatures',
     'updateSorting',

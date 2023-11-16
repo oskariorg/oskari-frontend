@@ -36,6 +36,15 @@ const StyledTable = styled(Table)`
         display: none;
     }
 
+    .table-cell-compressed-view {
+        white-space: nowrap;
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 3em;
+        max-width: 8em;
+    }
+
     overflow-y: auto;
     flex: 1 1 auto;
 `;
@@ -56,7 +65,7 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
     };
-    const columnSettings = createColumnSettings(selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings);
+    const columnSettings = createColumnSettings(selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings);
     const dataSource = createDatasourceFromFeatures(features);
     const featureTable = <FeatureDataTable>
         <SelectionsContainer>
@@ -71,17 +80,19 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
                 </SelectionRow>
             </>}
 
-            { !showExportButton &&
+            { !showExportButton && <>
                 <SelectionRow>
                     <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
                     <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
+                </SelectionRow>
+                <SelectionRow>
                     <CompressedView showCompressed={showCompressed} toggleShowCompressed={controller.toggleShowCompressed}/>
                 </SelectionRow>
-            }
+            </>}
         </SelectionsContainer>
         <StyledTable
             columns={ columnSettings }
-            size={ 'large '}
+            size={ 'small'}
             dataSource={ dataSource }
             pagination={{ defaultPageSize: DEFAULT_PAGE_SIZE, hideOnSinglePage: true, simple: true }}
             onChange={(pagination, filters, sorter, extra) => {
@@ -100,13 +111,14 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     return featureTable;
 };
 
-const createColumnSettings = (selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings) => {
+const createColumnSettings = (selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings) => {
     const { allColumns, visibleColumns, activeLayerPropertyLabels } = visibleColumnsSettings;
     return allColumns
         .filter(key => visibleColumns.includes(key))
         .map(key => {
             return {
                 align: 'left',
+                className: showCompressed ? 'table-cell-compressed-view' : '',
                 title: activeLayerPropertyLabels && activeLayerPropertyLabels[key] ? activeLayerPropertyLabels[key] : key,
                 key,
                 dataIndex: key,
