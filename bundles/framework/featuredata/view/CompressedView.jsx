@@ -10,6 +10,7 @@ const CompressedViewContainer = styled('div')`
 export const CompressedView = (props) => {
     return <CompressedViewContainer>
         <Switch
+            size={'small'}
             label={<Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey='toggleCompressedView'/>}
             checked={ props.showCompressed }
             defaultChecked = { true }

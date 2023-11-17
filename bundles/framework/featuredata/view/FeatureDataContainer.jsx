@@ -81,6 +81,12 @@ const SelectionRow = styled('div')`
     flex-direction: row;
     padding-bottom: 1em;
 `;
+
+const SelectionRowGroup = styled('div')`
+    display: flex;
+    flex-direction: row;
+`;
+
 const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, controller) => {
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
@@ -102,11 +108,13 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
 
             { !showExportButton && <>
                 <SelectionRow>
-                    <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+                    <SelectionRowGroup>
+                        <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+                        <CompressedView showCompressed={showCompressed} toggleShowCompressed={controller.toggleShowCompressed}/>
+                    </SelectionRowGroup>
                     <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
                 </SelectionRow>
                 <SelectionRow>
-                    <CompressedView showCompressed={showCompressed} toggleShowCompressed={controller.toggleShowCompressed}/>
                 </SelectionRow>
             </>}
         </SelectionsContainer>
