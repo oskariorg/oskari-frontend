@@ -79,12 +79,14 @@ const FeatureDataTable = styled('div')`
 const SelectionRow = styled('div')`
     display: flex;
     flex-direction: row;
+    margin: auto 0;
     padding-bottom: 1em;
 `;
 
 const SelectionRowGroup = styled('div')`
     display: flex;
     flex-direction: row;
+    margin: auto 0;
 `;
 
 const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, controller) => {

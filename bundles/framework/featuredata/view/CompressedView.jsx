@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const CompressedViewContainer = styled('div')`
+    margin-right: 2em;
 `;
 export const CompressedView = (props) => {
     return <CompressedViewContainer>
