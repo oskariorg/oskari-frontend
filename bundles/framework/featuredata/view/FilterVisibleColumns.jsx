@@ -16,10 +16,9 @@ const FilterVisibleColumnsContainer = styled('div')`
         padding-left: 0.5em;
     }
 `;
-;
 
 const SelectFixedWidth = styled(Select)`
-    min-width: 20em;
+    min-width: 15em;
 `;
 
 const BlurredMessage = (props) => {
