@@ -1,6 +1,8 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { isUpcoming, isOutdated, isActive } from '../service/util';
 
+const DEFAULT_POLLING_INTERVAL_MS = 300000;
+
 // Handler for announcements. Handles state and service calls.
 class ViewHandler extends StateHandler {
     constructor (service) {
@@ -14,25 +16,38 @@ class ViewHandler extends StateHandler {
     onFetch () {
         const announcements = this.service.getAnnouncements();
         const dontShowAgain = this.service.getIdsFromLocalStorage();
-
+        let { alreadyShown } = this.getState();
+        const { popupAnnouncements, bannerAnnouncements } = this.getState();
+        if (!alreadyShown) {
+            alreadyShown = [];
+        }
         // Admin gets all announcements
         const active = announcements.filter(a => isActive(a));
 
+        // Filter active announcements to show in banner or popup
         const newState = {
             outdated: announcements.filter(a => isOutdated(a)),
             upcoming: announcements.filter(a => isUpcoming(a)),
             active,
-            dontShowAgain
+            dontShowAgain,
+            alreadyShown,
+            popupAnnouncements: this.filterNewStateAnnouncements(active.filter(ann => ann.options.showAsPopup), popupAnnouncements, dontShowAgain, alreadyShown),
+            bannerAnnouncements: this.filterNewStateAnnouncements(active.filter(ann => !ann.options.showAsPopup), bannerAnnouncements, dontShowAgain, alreadyShown)
         };
-        // Filter active announcements to show in banner or popup
-        // Empty array in state -> already shown, don't populate array more than once
-        if (!this.state.popupAnnouncements) {
-            newState.popupAnnouncements = active.filter(ann => ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
-        }
-        if (!this.state.bannerAnnouncements) {
-            newState.bannerAnnouncements = active.filter(ann => !ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
-        }
+
+        clearTimeout(this.pollingIntervalTimeout);
+        this.pollingIntervalTimeout = setInterval(() => { this.service.fetchAnnouncements(); }, DEFAULT_POLLING_INTERVAL_MS);
         this.updateState(newState);
+    }
+
+    filterNewStateAnnouncements (active, alreadyInState, dontShowAgain, alreadyShown) {
+        let activeAnnouncements = active.filter(ann => !dontShowAgain.includes(ann.id) && !alreadyShown.includes(ann.id));
+        if (alreadyInState) {
+            const stateAnnouncementIds = alreadyInState.map((announcement) => announcement.id);
+            activeAnnouncements = activeAnnouncements.filter((ann) => !stateAnnouncementIds.includes(ann.id));
+        }
+
+        return activeAnnouncements;
     }
 
     getToolController () {
@@ -66,11 +81,37 @@ class ViewHandler extends StateHandler {
     }
 
     onPopupClose () {
-        this.updateState({ popupAnnouncements: [] });
+        const { popupAnnouncements } = this.getState();
+        let { alreadyShown } = this.getState();
+        if (!alreadyShown) {
+            alreadyShown = [];
+        }
+
+        if (popupAnnouncements) {
+            alreadyShown = alreadyShown.concat(popupAnnouncements.map(ann => ann.id));
+        }
+
+        this.updateState({
+            popupAnnouncements: [],
+            alreadyShown: [...new Set(alreadyShown)]
+        });
     }
 
     onBannerClose () {
-        this.updateState({ bannerAnnouncements: [] });
+        const { bannerAnnouncements } = this.getState();
+        let { alreadyShown } = this.getState();
+        if (!alreadyShown) {
+            alreadyShown = [];
+        }
+
+        if (bannerAnnouncements) {
+            alreadyShown = alreadyShown.concat(bannerAnnouncements.map(ann => ann.id));
+        }
+
+        this.updateState({
+            bannerAnnouncements: [],
+            alreadyShown: [...new Set(alreadyShown)]
+        });
     }
 
     onBannerChange (currentBanner) {
