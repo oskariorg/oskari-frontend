@@ -82,15 +82,7 @@ class ViewHandler extends StateHandler {
 
     onPopupClose () {
         const { popupAnnouncements } = this.getState();
-        let { alreadyShown } = this.getState();
-        if (!alreadyShown) {
-            alreadyShown = [];
-        }
-
-        if (popupAnnouncements) {
-            alreadyShown = alreadyShown.concat(popupAnnouncements.map(ann => ann.id));
-        }
-
+        const alreadyShown = this.getAlreadyShown(popupAnnouncements);
         this.updateState({
             popupAnnouncements: [],
             alreadyShown: [...new Set(alreadyShown)]
@@ -99,19 +91,24 @@ class ViewHandler extends StateHandler {
 
     onBannerClose () {
         const { bannerAnnouncements } = this.getState();
+        const alreadyShown = this.getAlreadyShown(bannerAnnouncements);
+        this.updateState({
+            bannerAnnouncements: [],
+            alreadyShown: [...new Set(alreadyShown)]
+        });
+    }
+
+    getAlreadyShown (announcements) {
         let { alreadyShown } = this.getState();
         if (!alreadyShown) {
             alreadyShown = [];
         }
 
-        if (bannerAnnouncements) {
-            alreadyShown = alreadyShown.concat(bannerAnnouncements.map(ann => ann.id));
+        if (announcements) {
+            alreadyShown = alreadyShown.concat(announcements.map(ann => ann.id));
         }
 
-        this.updateState({
-            bannerAnnouncements: [],
-            alreadyShown: [...new Set(alreadyShown)]
-        });
+        return alreadyShown;
     }
 
     onBannerChange (currentBanner) {
