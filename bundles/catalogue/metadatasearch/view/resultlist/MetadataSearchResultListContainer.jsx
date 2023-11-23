@@ -14,6 +14,7 @@ const SEARCH_RESULT_FILTER_TYPES = {
 
 const StyledSelect = styled(Select)`
     min-width: 15em;
+    margin-right: 0.5em;
 `;
 
 const SearchResultTitle = styled('div')`
