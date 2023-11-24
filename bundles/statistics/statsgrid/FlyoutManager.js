@@ -3,7 +3,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     this.flyouts = {};
     var loc = instance.getLocalization();
     Oskari.makeObservable(this);
-    this.service = instance.getStatisticsService().getStateService();
     this._positionY = 5;
     this.handler = handler;
     this.searchHandler = this.handler.getSearchHandler();
@@ -78,7 +77,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         return this.flyouts[type];
     },
     tileAttached: function () {
-        if (this.service.hasIndicators()) {
+        if (this.handler.getState().indicators?.length < 1) {
             return;
         }
         this.open('search');

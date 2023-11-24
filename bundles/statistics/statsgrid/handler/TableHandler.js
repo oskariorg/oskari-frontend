@@ -37,7 +37,7 @@ class TableController extends StateHandler {
 
     showTableFlyout (extraOnClose) {
         this.fetchTableRegionsets();
-        const currentRegionset = this.service.getRegionsets(this.service.getStateService().getRegionset());
+        const currentRegionset = this.service.getRegionsets(this.stateHandler.getState().activeRegionset);
         this.updateState({
             flyout: showTableFlyout(this.getState(), this.getController(), () => {
                 this.closeTableFlyout();
@@ -65,71 +65,29 @@ class TableController extends StateHandler {
     }
 
     setSelectedRegionset (value) {
-        this.service.getStateService().setRegionset(value);
+        this.stateHandler.getController().setActiveRegionset(value);
         this.updateState({
             selectedRegionset: this.service.getRegionsets(value)
         });
         this.fetchIndicatorData();
     }
 
-    fetchTableRegionsets () {
+    async fetchTableRegionsets () {
         this.updateState({
-            regionsetOptions: this.service.getRegionsets(this.service.getSelectedIndicatorsRegions())
+            regionsetOptions: this.service.getRegionsets(await this.service.getSelectedIndicatorsRegions())
         });
     }
 
-    fetchIndicatorData () {
+    async fetchIndicatorData () {
         if (!this.state.indicators || this.state.indicators.length < 1) return;
         this.updateState({
             loading: true
         });
-        const updateIndicatorData = (regions) => {
+        try {
             let data = {};
-            regions.forEach(reg => {
-                data[reg.id] = {};
-            });
-            const promises = this.state.indicators.map(ind => {
-                return new Promise((resolve, reject) => {
-                    this.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, this.state.selectedRegionset?.id, (err, indicatorData) => {
-                        if (err) {
-                            Messaging.error(this.loc('errors.regionsDataError'));
-                            this.updateState({
-                                loading: false,
-                                indicatorData: [],
-                                regions: []
-                            });
-                            return;
-                        }
-                        for (const key in indicatorData) {
-                            const region = data[key];
-                            if (!region) {
-                                continue;
-                            }
-                            region[ind.hash] = indicatorData[key];
-                            data[key] = {
-                                ...data[key],
-                                ...region
-                            };
-                        }
-                        resolve();
-                    });
-                });
-            });
-            Promise.all(promises).then(() => {
-                this.updateState({
-                    loading: false,
-                    indicatorData: regions.map(region => ({
-                        key: region.id,
-                        regionName: region.name,
-                        data: data[region.id]
-                    }))
-                });
-            });
-        };
-        this.service.getRegions(this.state.selectedRegionset?.id, (err, regions) => {
-            if (err) {
-                // notify error!!
-                Messaging.error(this.loc('errors.regionsDataError'));
+            const regions = await this.service.getRegions(this.state.selectedRegionset?.id);
+            if (regions.length === 0) {
+                Messaging.error(this.loc('errors.regionsDataIsEmpty'));
                 this.updateState({
                     loading: false,
                     indicatorData: [],
@@ -137,16 +95,44 @@ class TableController extends StateHandler {
                 });
                 return;
             }
-
-            if (regions.length === 0) {
-                Messaging.error(this.loc('errors.regionsDataIsEmpty'));
+            for (const reg of regions) {
+                data[reg.id] = {};
             }
 
-            updateIndicatorData(regions);
-            this.updateState({
-                regions: regions
+            const promises = this.state.indicators.map(async indicator => {
+                const indicatorData = await this.service.getIndicatorData(indicator.datasource, indicator.indicator, indicator.selections, indicator.series, this.state.selectedRegionset?.id);
+                for (const key in indicatorData) {
+                    const region = data[key];
+                    if (!region) {
+                        continue;
+                    }
+                    region[indicator.hash] = indicatorData[key];
+                    data[key] = {
+                        ...data[key],
+                        ...region
+                    };
+                }
             });
-        });
+
+            Promise.all(promises).then(() => {
+                this.updateState({
+                    loading: false,
+                    regions: regions,
+                    indicatorData: regions.map(region => ({
+                        key: region.id,
+                        regionName: region.name,
+                        data: data[region.id]
+                    }))
+                });
+            });
+        } catch (error) {
+            Messaging.error(this.loc('errors.regionsDataError'));
+            this.updateState({
+                loading: false,
+                indicatorData: [],
+                regions: []
+            });
+        }
     }
 
     removeIndicator (indicator) {

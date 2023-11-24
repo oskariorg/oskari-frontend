@@ -1,5 +1,6 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showDiagramFlyout } from '../view/Diagram/DiagramFlyout';
+import { getClassification } from '../helper/ClassificationHelper';
 
 class DiagramController extends StateHandler {
     constructor (stateHandler, service, sandbox) {
@@ -70,13 +71,12 @@ class DiagramController extends StateHandler {
     }
 
     getColorScale (data) {
-        // Format data for Oskari.statistics.statsgrid.ClassificationService.getClassification
         let numericData = {};
         data.forEach((entry) => {
             numericData[entry.id] = entry.value;
         });
         const activeIndicator = this.state.indicators?.find(indicator => indicator.hash === this.state.activeIndicator);
-        const { groups, bounds, error } = this.service.getClassificationService().getClassification(numericData, activeIndicator?.classification);
+        const { groups, bounds, error } = getClassification(numericData, activeIndicator?.classification);
         if (error) {
             return ['#555'];
         }
@@ -86,73 +86,65 @@ class DiagramController extends StateHandler {
         };
     }
 
-    updateData () {
-        const indicator = this.service.getStateService().getActiveIndicator();
+    async updateData () {
+        const indicator = this.service.getIndicator(this.stateHandler.getState().activeIndicator);
         if (!indicator) return;
 
         this.updateState({
             loading: true
         });
 
-        this.getIndicatorData(indicator, (data) => {
-            if (!data || data.every(d => d.value === undefined)) {
-                this.updateState({
-                    loading: false
-                });
-                return;
-            }
-            const { fractionDigits } = indicator.classification;
-            const digits = typeof fractionDigits === 'number' ? fractionDigits : 1;
-            const formatter = Oskari.getNumberFormatter(digits);
-            const chartOptions = {
-                colors: this.getColorScale(data),
-                valueRenderer: function (val) {
-                    if (typeof val !== 'number') {
-                        return null;
-                    }
-                    return formatter.format(val);
-                },
-                margin: {
-                    top: 0,
-                    bottom: 20,
-                    left: 50,
-                    right: 50,
-                    maxForLabel: 140
-                },
-                width: 600
-            };
+        const data = await this.getIndicatorData(indicator);
+        if (!data || data.every(d => d.value === undefined)) {
             this.updateState({
-                chartData: {
-                    data,
-                    chartOptions
-                }
+                loading: false
             });
-        });
+            return;
+        }
+
+        const { fractionDigits } = indicator.classification;
+        const digits = typeof fractionDigits === 'number' ? fractionDigits : 1;
+        const formatter = Oskari.getNumberFormatter(digits);
+        const chartOptions = {
+            colors: this.getColorScale(data),
+            valueRenderer: function (val) {
+                if (typeof val !== 'number') {
+                    return null;
+                }
+                return formatter.format(val);
+            },
+            margin: {
+                top: 0,
+                bottom: 20,
+                left: 50,
+                right: 50,
+                maxForLabel: 140
+            },
+            width: 600
+        };
         this.updateState({
-            loading: false
+            loading: false,
+            chartData: {
+                data,
+                chartOptions
+            }
         });
     }
 
-    getIndicatorData (ind, callback) {
-        const setId = this.service.getStateService().getRegionset();
+    async getIndicatorData (ind) {
+        const setId = this.stateHandler.getState().activeRegionset;
         const { datasource, indicator, selections, series } = ind;
-        this.service.getRegions(setId, (err, regions) => {
-            if (err) {
-                callback();
-                return;
-            }
-            this.service.getIndicatorData(datasource, indicator, selections, series, setId, (err, data) => {
-                if (err) {
-                    callback();
-                    return;
-                }
-                const response = regions.map(({ id, name }) => {
-                    const value = data[id];
-                    return { id, name, value };
-                });
-                callback(response);
+        try {
+            const regions = await this.service.getRegions(setId);
+            const indicatorData = await this.service.getIndicatorData(datasource, indicator, selections, series, setId);
+            const data = regions.map(({ id, name }) => {
+                const value = indicatorData[id];
+                return { id, name, value };
             });
-        });
+            return data;
+        } catch (error) {
+            Messaging.error(this.loc('errors.regionsDataError'));
+        }
     }
 
     createEventHandlers () {

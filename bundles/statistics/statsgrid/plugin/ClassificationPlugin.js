@@ -1,10 +1,12 @@
 import React from 'react';
-import { showMovableContainer, PLACEMENTS } from 'oskari-ui/components/window';
+import { PLACEMENTS } from 'oskari-ui/components/window';
 import { LocaleProvider } from 'oskari-ui/util';
 import { Classification } from '../components/classification/Classification';
-import { showHistogramPopup } from '../components/manualClassification/HistogramForm';
 import { getPopupOptions } from '../../../mapping/mapmodule/plugin/pluginPopupHelper';
 import '../../statsgrid2016/resources/scss/classificationplugin.scss';
+import { validateClassification, getLimits, getClassification } from '../helper/ClassificationHelper';
+import { getOptionsForType } from '../helper/ColorHelper';
+
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
  */
@@ -27,12 +29,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
 
         this._overflowedOffset = null;
         this._previousIsEdit = false;
-        this.indicatorData = {};
         this._bindToEvents();
-        this.service.getStateService().initClassificationPluginState(this._config, this._instance.isEmbedded());
-        this.histogramControls = null;
-
-        this.containerController = null;
+        this.stateHandler = this.service.getStateHandler();
+        this.classificationHandler = this.stateHandler.getClassificationHandler();
+        this.classificationHandler.initPluginState(this._config, this._instance.isEmbedded());
     }, {
         // buildUI() is the starting point
         buildUI: function () {
@@ -41,48 +41,54 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         // this is used to stop this/remove from screen
         stopPlugin: function () {
-            if (this.containerController) {
-                this.containerController.close();
-                this.containerController = null;
-            }
+            this.classificationHandler.closeClassificationContainer();
             this.trigger('hide');
         },
         isVisible: function () {
-            return !!this.containerController;
+            return !!this.classificationHandler.getState().classificationContainer;
         },
         toggleUI: function () {
-            this.containerController ? this.stopPlugin() : this.buildUI();
-            return !!this.containerController;
+            this.classificcationHandler.getState().classificationContainer ? this.stopPlugin() : this.buildUI();
+            return !!this.classificcationHandler?.getState().classificationContainer;
         },
-        render: function () {
-            const { error, ...state } = this.service.getStateService().getStateForClassification();
-            if (error) {
+        render: async function () {
+            if (!this.classificationHandler) {
                 return;
             }
-            const { data, status, uniqueCount, minMax } = this.getIndicatorData(state);
-            if (status === 'PENDING') {
+            const state = this.classificationHandler.getState();
+            const activeIndicator = this.service.getIndicator(state.activeIndicator);
+            if (!activeIndicator || !state.activeRegionset) {
                 return;
             }
-            const editOptions = this.getEditOptions(state, uniqueCount, minMax);
-            const classifiedDataset = this.classifyDataset(state, data, uniqueCount);
+            const indicatorData = await this.getIndicatorData(activeIndicator, state.activeRegionset);
+            if (!indicatorData) {
+                return;
+            }
+            const { data, uniqueCount, minMax } = indicatorData;
+            const seriesStats = this.service.getSeriesService().getSeriesStats(activeIndicator.hash);
+            const editOptions = this.getEditOptions(activeIndicator, uniqueCount, minMax);
+            const classifiedDataset = this.classifyDataset(activeIndicator.classification, seriesStats, data, uniqueCount);
+            const classificationControls = this.getClassificationController();
             // Histogram doesn't need to be updated on every events but props are gathered here
             // and histogram is updated only if it's opened, so update here for now
-            this.updateHistogram(state, classifiedDataset, data, editOptions);
+            this.updateHistogram({ ...state, activeIndicator, controller: classificationControls, seriesStats }, classifiedDataset, data, editOptions);
             const ui = (
                 <LocaleProvider value={{ bundleKey: this._instance.getName() }}>
                     <Classification
                         { ...state }
+                        activeIndicator={activeIndicator}
+                        regionset={state.activeRegionset}
+                        indicators={state.indicators}
                         editOptions = {editOptions}
                         classifiedDataset = {classifiedDataset}
-                        startHistogramView = {() => this.startHistogramView(state, classifiedDataset, data, editOptions)}
+                        pluginState={state.pluginState}
+                        startHistogramView = {() => this.startHistogramView({ ...state, activeIndicator, controller: classificationControls }, classifiedDataset, data, editOptions)}
                         onRenderChange = {() => { /* no-op */ }}
+                        controller={this.getClassificationController()}
                     />
                 </LocaleProvider>);
-            if (this.containerController) {
-                this.containerController.update(ui);
-                return;
-            }
-            this.containerController = showMovableContainer(ui, () => this.stopPlugin(), this.__getContainerOpts());
+
+            this.classificationHandler.showClassificationContainer(ui, () => this.stopPlugin(), this.__getContainerOpts());
         },
         // Use togglePlugin location when available, otherwise default to bottom right
         __getContainerOpts: function () {
@@ -97,49 +103,66 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 id: 'statsgrid_classification'
             };
         },
-        getIndicatorData: function (state) {
-            const { activeIndicator, regionset: activeRegionset } = state;
-            const isSerie = !!activeIndicator.series;
-            const { status, hash, regionset } = this.indicatorData;
-            const serieSelection = isSerie ? this.service.getSeriesService().getValue() : null;
-            if (status !== 'PENDING' && hash === activeIndicator.hash && regionset === activeRegionset) {
-                if (!isSerie || serieSelection === this.indicatorData.serieSelection) {
-                    return this.indicatorData;
+        getClassificationController: function () {
+            // TODO: This function probably shouldn't exist
+            const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
+            return {
+                setActiveIndicator: hash => this.stateHandler.setActiveIndicator(hash),
+                updateClassification: (key, value) => {
+                    const { classification } = this.service.getIndicator(this.stateHandler.getState().activeIndicator) || {};
+                    if (classification) {
+                        classification[key] = value;
+                        validateClassification(classification);
+                        if (eventBuilder) {
+                            this._sandbox.notifyAll(eventBuilder(classification, { [key]: value }));
+                        }
+                    }
+                },
+                updateClassificationObj: obj => {
+                    const { classification } = this.service.getIndicator(this.stateHandler.getState().activeIndicator) || {};
+                    if (classification) {
+                        Object.keys(obj).forEach(key => {
+                            classification[key] = obj[key];
+                        });
+                        validateClassification(classification);
+                        if (eventBuilder) {
+                            this._sandbox.notifyAll(eventBuilder(classification, obj));
+                        }
+                    }
                 }
-            }
-            this.indicatorData = {
-                hash: activeIndicator.hash,
-                regionset: activeRegionset,
-                data: {},
-                uniqueCount: 0,
-                serieSelection,
-                status: 'PENDING'
             };
-            this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, activeRegionset, (err, data) => {
-                if (this.indicatorData.hash !== activeIndicator.hash) return; // not latest active indicator response
+        },
+        getIndicatorData: async function (activeIndicator, activeRegionset) {
+            try {
+                const isSerie = !!activeIndicator.series;
+                const serieSelection = isSerie ? this.service.getSeriesService().getValue() : null;
+
+                const indicatorData = {
+                    hash: activeIndicator.hash,
+                    regionset: activeRegionset,
+                    data: {},
+                    uniqueCount: 0,
+                    serieSelection
+                };
+                const data = await this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, activeRegionset);
                 if (data) {
                     const validData = Object.fromEntries(Object.entries(data).filter(([key, val]) => val !== null && val !== undefined));
                     const uniqueValues = [...new Set(Object.values(validData))].sort((a, b) => a - b);
-                    this.indicatorData.uniqueCount = uniqueValues.length;
-                    this.indicatorData.data = data;
-                    this.indicatorData.minMax = { min: uniqueValues[0], max: uniqueValues[uniqueValues.length - 1] };
-                    this.indicatorData.status = 'DONE';
+                    indicatorData.uniqueCount = uniqueValues.length;
+                    indicatorData.data = data;
+                    indicatorData.minMax = { min: uniqueValues[0], max: uniqueValues[uniqueValues.length - 1] };
                 }
-                if (err) {
-                    this.log.warn('Error getting indicator data', activeIndicator, activeRegionset);
-                    this.indicatorData.status = 'ERROR';
-                }
-                this.render();
-            });
-            return this.indicatorData;
+                return indicatorData;
+            } catch (error) {
+                this.log.warn('Error getting indicator data', activeIndicator, activeRegionset);
+            }
         },
-        getEditOptions: function (state, uniqueCount, minMax) {
-            const { activeIndicator } = state;
+        getEditOptions: function (activeIndicator, uniqueCount, minMax) {
             const { type, count, reverseColors, mapStyle, base, method } = activeIndicator.classification;
-            const { count: { min, max }, methods, modes, mapStyles, types, fractionDigits } = this.service.getClassificationService().getLimits(mapStyle, type);
+            const { count: { min, max }, methods, modes, mapStyles, types, fractionDigits } = getLimits(mapStyle, type);
 
             const colorCount = mapStyle === 'points' ? 2 + count % 2 : count;
-            const colorsets = mapStyle === 'points' && type !== 'div' ? [] : this.service.getColorService().getOptionsForType(type, colorCount, reverseColors);
+            const colorsets = mapStyle === 'points' && type !== 'div' ? [] : getOptionsForType(type, colorCount, reverseColors);
 
             const disabled = [];
             if (uniqueCount < 3) {
@@ -173,30 +196,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 colorsets
             };
         },
-        classifyDataset: function (state, data, uniqueCount) {
-            const { activeIndicator: { classification }, seriesStats } = state;
-            return this.service.getClassificationService().getClassification(data, classification, seriesStats, uniqueCount);
+        classifyDataset: function (classification, seriesStats, data, uniqueCount) {
+            return getClassification(data, classification, seriesStats, uniqueCount);
         },
         startHistogramView: function (state, classifiedDataset, data, editOptions) {
-            if (this.histogramControls) {
-                // already opened, do nothing
-                return;
-            }
             this.service.getSeriesService().setAnimating(false);
-            const onClose = () => this.histogramCleanup();
-            this.histogramControls = showHistogramPopup(state, classifiedDataset, data, editOptions, onClose);
-        },
-        histogramCleanup: function () {
-            if (this.histogramControls) {
-                this.histogramControls.close();
-            }
-            this.histogramControls = null;
+            this.classificationHandler.getController().showHistogramPopup(state, classifiedDataset, data, editOptions);
         },
         updateHistogram: function (state, classifiedDataset, data, editOptions) {
-            if (!this.histogramControls) {
-                return;
-            }
-            this.histogramControls.update(state, classifiedDataset, data, editOptions);
+            this.classificationHandler.updateHistogramPopup(state, classifiedDataset, data, editOptions);
         },
         _bindToEvents: function () {
             // if indicator is removed/added - recalculate the source 1/2 etc links
@@ -210,7 +218,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
 
             this.service.on('StatsGrid.ClassificationChangedEvent', () => this.render());
             // UI styling changes e.g. disable classification editing, make transparent
-            this.service.getStateService().on('ClassificationPluginChanged', () => this.render());
+            this.service.on('StatsGrid.ClassificationPluginChanged', () => this.render());
             // need to update transparency select
             this.service.on('AfterChangeMapLayerOpacityEvent', () => this.render());
             // need to calculate contents max height and check overflow
