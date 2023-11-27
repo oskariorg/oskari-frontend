@@ -99,7 +99,7 @@ class TableController extends StateHandler {
                 data[reg.id] = {};
             }
 
-            const promises = this.state.indicators.map(async indicator => {
+            const promises = await this.state.indicators.map(async indicator => {
                 const indicatorData = await this.service.getIndicatorData(indicator.datasource, indicator.indicator, indicator.selections, indicator.series, this.state.selectedRegionset?.id);
                 for (const key in indicatorData) {
                     const region = data[key];

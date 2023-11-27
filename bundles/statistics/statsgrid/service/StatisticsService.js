@@ -462,16 +462,6 @@ import { getHash } from '../helper/StatisticsHelper';
                 throw new Error('Requested dataset is out of range');
             }
 
-            const allowedRegionsets = await this.getSelectedIndicatorsRegions(getHash(ds, indicator, params, series));
-            if (Array.isArray(allowedRegionsets) && !allowedRegionsets.includes(Number(regionset))) {
-                if (allowedRegionsets.length > 0) {
-                    this.stateHandler.getController().setActiveRegionset(allowedRegionsets[0]);
-                    regionset = allowedRegionsets[0];
-                } else {
-                    return;
-                }
-            }
-
             const data = {
                 datasource: ds,
                 indicator: indicator,
@@ -508,7 +498,13 @@ import { getHash } from '../helper/StatisticsHelper';
                     }
                 });
                 if (!response.ok) {
-                    throw new Error(response.statusText);
+                    const error = await response.json();
+                    if (error?.error?.includes('No such regionset:')) {
+                        this.cache.respondToQueue(cacheKey, []);
+                        return [];
+                    } else {
+                        throw new Error(response.statusText);
+                    }
                 }
                 const result = await response.json();
                 const regions = await this.getRegions(regionset);
@@ -546,8 +542,8 @@ import { getHash } from '../helper/StatisticsHelper';
                 ind.classification.fractionDigits = allInts ? 0 : 1;
             }
         },
-        getSelectedIndicatorsRegions: async function (hash) {
-            const indicators = hash ? [this.getIndicator(hash)] : this.stateHandler.getState().indicators;
+        getSelectedIndicatorsRegions: async function () {
+            const indicators = this.stateHandler.getState().indicators;
             const regionsets = [];
             const addRegions = function (regions) {
                 for (let i = 0; i < regions.length; i++) {
