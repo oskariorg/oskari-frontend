@@ -16,8 +16,8 @@ export const IndicatorCollapse = ({ state, controller }) => {
                 {state.indicators?.length < 1 ? (
                     <Message messageKey='indicatorList.emptyMsg' />
                 ) : (
-                    state.indicators?.map(indicator => (
-                        <IndicatorRow key={indicator.indicator} indicator={indicator} controller={controller} />
+                    state.indicators?.map((indicator, index) => (
+                        <IndicatorRow key={indicator.indicator || `indicator_${index}`} indicator={indicator} controller={controller} />
                     ))
                 )}
             </CollapsePanel>

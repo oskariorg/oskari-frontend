@@ -1,6 +1,7 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showSearchFlyout } from '../view/search/SearchFlyout';
-import { prepareData, showMedataPopup } from '../components/description/MetadataPopup';
+import { showMedataPopup } from '../components/description/MetadataPopup';
+import { getHash } from '../helper/StatisticsHelper';
 
 class SearchController extends StateHandler {
     constructor (stateHandler, service, instance, sandbox) {
@@ -97,7 +98,7 @@ class SearchController extends StateHandler {
         });
     }
 
-    fetchindicatorOptions () {
+    async fetchindicatorOptions () {
         if (!this.state.selectedDatasource || this.state.selectedDatasource === '') {
             return;
         }
@@ -109,56 +110,43 @@ class SearchController extends StateHandler {
 
         const results = [];
         const disabledIndicatorIDs = [];
-        const dataLoaded = new Promise((resolve, reject) => {
-            this.service.getIndicatorList(this.state.selectedDatasource, (err, result) => {
-                if (err) {
-                    // notify error!!
-                    Oskari.log('Oskari.statistics.statsgrid.IndicatorSelection').warn('Error getting indicator list');
-                    Messaging.error(this.loc('errors.indicatorListError'));
-                    reject(new Error(err));
-                    return;
-                }
-                for (const ind of result?.indicators) {
-                    const resultObj = {
-                        id: ind.id,
-                        title: Oskari.getLocalized(ind.name)
-                    };
-                    results.push(resultObj);
-                    if (hasRegionSetRestriction) {
-                        const supportsRegionset = this.state.selectedRegionsets.some((iter) => {
-                            return ind.regionsets.indexOf(Number(iter)) !== -1;
-                        });
-                        if (!supportsRegionset) {
-                            disabledIndicatorIDs.push(ind.id);
-                        }
+
+        try {
+            const response = await this.service.getIndicatorList(this.state.selectedDatasource);
+            for (const ind of response?.indicators) {
+                const resultObj = {
+                    id: ind.id,
+                    title: Oskari.getLocalized(ind.name)
+                };
+                results.push(resultObj);
+                if (hasRegionSetRestriction) {
+                    const supportsRegionset = this.state.selectedRegionsets.some((iter) => {
+                        return ind.regionsets.indexOf(Number(iter)) !== -1;
+                    });
+                    if (!supportsRegionset) {
+                        disabledIndicatorIDs.push(ind.id);
                     }
                 }
-                if (result.complete) {
-                    const userDatasource = this.service.getUserDatasource();
-                    const isUserDatasource = !!userDatasource && '' + userDatasource.id === '' + this.state.selectedDatasource;
-                    if (!isUserDatasource && result.indicators.length === 0) {
-                        // show notification about empty indicator list for non-myindicators datasource
-                        Messaging.error(this.loc('errors.indicatorListIsEmpty'));
-                    }
-                    resolve();
-                }
+            }
+            const userDatasource = this.service.getUserDatasource();
+            const isUserDatasource = !!userDatasource && '' + userDatasource.id === '' + this.state.selectedDatasource;
+            if (!isUserDatasource && response.indicators.length === 0) {
+                // show notification about empty indicator list for non-myindicators datasource
+                Messaging.error(this.loc('errors.indicatorListIsEmpty'));
+            }
+            this.updateState({
+                indicatorOptions: results,
+                disabledIndicators: disabledIndicatorIDs,
+                loading: false
             });
-        });
-        dataLoaded
-            .then(() => {
-                this.updateState({
-                    indicatorOptions: results,
-                    disabledIndicators: disabledIndicatorIDs,
-                    loading: false
-                });
-            })
-            .catch(() => {
-                this.updateState({
-                    indicatorOptions: [],
-                    disabledIndicators: [],
-                    loading: false
-                });
+        } catch (error) {
+            Messaging.error(error.message);
+            this.updateState({
+                indicatorOptions: [],
+                disabledIndicators: [],
+                loading: false
             });
+        }
     }
 
     setSearchTimeseries (searchTimeseries) {
@@ -245,16 +233,40 @@ class SearchController extends StateHandler {
         this.fetchIndicatorParams();
     }
 
-    openMetadataPopup (indicator = null) {
+    async openMetadataPopup (indicator = null) {
         const datasource = indicator ? indicator.datasource : this.state.selectedDatasource;
         const indicators = indicator ? indicator.indicator : this.state.selectedIndicators;
-        prepareData(this.service, datasource, indicators, (result) => {
-            if (this.metadataPopup) {
-                this.metadataPopup.update(result);
-            } else {
-                this.metadataPopup = showMedataPopup(result, () => this.closeMetadataPopup());
+
+        const data = await this.prepareMetadataPopupData(datasource, indicators);
+        if (this.metadataPopup) {
+            this.metadataPopup.update(data);
+        } else {
+            this.metadataPopup = showMedataPopup(data, () => this.closeMetadataPopup());
+        }
+    }
+
+    async prepareMetadataPopupData (datasource, indicators) {
+        const result = [];
+        const indicatorList = Array.isArray(indicators) ? indicators : indicators ? [indicators] : [];
+        for (const ind of indicatorList) {
+            try {
+                const data = await this.service.getIndicatorMetadata(datasource, ind);
+                if (!data) {
+                    return;
+                }
+                if (data) {
+                    result.push({
+                        name: data.name,
+                        desc: data.description,
+                        source: data.source,
+                        metadata: data.metadata
+                    });
+                }
+            } catch (error) {
+                return;
             }
-        });
+        }
+        return result;
     }
 
     closeMetadataPopup () {
@@ -335,16 +347,12 @@ class SearchController extends StateHandler {
         });
     }
 
-    handleSingleIndicatorParams (indId, cb) {
+    async handleSingleIndicatorParams (indId, cb) {
         const panelLoc = this.loc('panels.newSearch');
-        this.service.getIndicatorMetadata(this.state.selectedDatasource, indId, (err, indicator) => {
-            if (err) {
-                // notify error!!
-                Messaging.error(this.loc('errors.indicatorMetadataError'));
-                return;
-            }
+        try {
+            const result = await this.service.getIndicatorMetadata(this.state.selectedDatasource, indId);
             const combinedValues = {};
-            indicator.selectors.forEach((selector) => {
+            result?.selectors.forEach((selector) => {
                 selector.allowedValues.forEach((val) => {
                     if (!combinedValues[selector.id]) {
                         combinedValues[selector.id] = {
@@ -363,7 +371,7 @@ class SearchController extends StateHandler {
                 });
             });
 
-            if (indicator.regionsets.length === 0) {
+            if (result.regionsets.length === 0) {
                 Messaging.error('errors.regionsetsIsEmpty');
             }
 
@@ -371,7 +379,7 @@ class SearchController extends StateHandler {
                 datasrc: this.state.selectedDatasource,
                 selectors: combinedValues,
                 indicators: this.state.selectedIndicators,
-                regionset: indicator.regionsets,
+                regionset: result.regionsets,
                 selected: {}
             };
             if (typeof cb === 'function') {
@@ -382,7 +390,9 @@ class SearchController extends StateHandler {
                     indicatorParams: data
                 });
             }
-        });
+        } catch (error) {
+            Messaging.error(this.loc('errors.indicatorMetadataError'));
+        }
     }
 
     initParamSelections (selectors, regionsets) {
@@ -462,7 +472,7 @@ class SearchController extends StateHandler {
             loading: true
         });
         const searchData = this.getSearchValues();
-        this.service.getStateService().setRegionset(searchData.regionset);
+        this.stateHandler.getController().setActiveRegionset(searchData.regionset);
         this.handleMultipleIndicatorsSearch(searchData);
     }
 
@@ -476,7 +486,7 @@ class SearchController extends StateHandler {
      *
      * @param {Object} commonSearchValues User's selected values from the search form
      */
-    handleMultipleIndicatorsSearch (commonSearchValues) {
+    async handleMultipleIndicatorsSearch (commonSearchValues) {
         const indicators = Array.isArray(commonSearchValues.indicator) ? commonSearchValues.indicator : [commonSearchValues.indicator];
         if (!commonSearchValues.indicator || indicators.length === 0) {
             return;
@@ -500,7 +510,7 @@ class SearchController extends StateHandler {
             }
         };
 
-        indicators.forEach(indicator => {
+        for (const indicator of indicators) {
             if (indicator === '') {
                 checkDone();
                 return;
@@ -510,10 +520,11 @@ class SearchController extends StateHandler {
                 refinedSearchValues.push({ ...values, indicator });
             };
             // Get indicator metadata to check the search valididty
-            this.service.getIndicatorMetadata(commonSearchValues.datasource, indicator, (err, metadata) => {
+            try {
+                const metadata = await this.service.getIndicatorMetadata(commonSearchValues.datasource, indicator);
                 // Map possible errors by indicator name
                 const indicatorName = metadata && metadata.name ? Oskari.getLocalized(metadata.name) : indicator;
-                if (err || !metadata) {
+                if (!metadata) {
                     errorMap.set(indicatorName, { metadataNotFound: true });
                     checkDone();
                     return;
@@ -557,8 +568,10 @@ class SearchController extends StateHandler {
                     addSearchValues(searchValues);
                 }
                 checkDone();
-            });
-        });
+            } catch (error) {
+                Messaging.error(this.loc('errors.indicatorMetadataError'));
+            }
+        }
     }
 
     /**
@@ -663,7 +676,6 @@ class SearchController extends StateHandler {
                 this.updateState({
                     loading: false
                 });
-                this.stateHandler.getController().fetchIndicators();
             }
         };
         const searchSuccessfull = search => {
@@ -695,36 +707,32 @@ class SearchController extends StateHandler {
             }
             batch.push(search);
         });
-        const nextBatch = () => {
+        const nextBatch = async () => {
             let batch = batches.pop();
             if (batch) {
-                consumeBatch(batch);
+                await consumeBatch(batch);
             }
         };
-        const consumeBatch = batch => {
-            const dataPromises = [];
-            batch.forEach((search, index) => {
+        const consumeBatch = async batch => {
+            for (const search of batch) {
                 const { datasource, indicator, selections, series, regionset } = search;
-                const promise = new Promise((resolve, reject) => {
-                    this.service.getIndicatorData(datasource, indicator, selections, series, regionset, (err, data) => {
-                        if (err || !data) {
-                            searchFailed(search);
-                            resolve();
-                            return;
-                        }
-                        const enoughData = Object.values(data).some(val => !isNaN(val));
-                        if (!enoughData) {
-                            searchFailed(search);
-                            resolve();
-                            return;
-                        }
-                        searchSuccessfull(search);
-                        resolve();
-                    });
-                });
-                dataPromises.push(promise);
-            });
-            Promise.all(dataPromises).then(nextBatch);
+                try {
+                    const data = await this.service.getIndicatorData(datasource, indicator, selections, series, regionset);
+                    if (!data) {
+                        searchFailed(search);
+                        return;
+                    }
+                    const enoughData = Object.values(data).some(val => !isNaN(val));
+                    if (!enoughData) {
+                        searchFailed(search);
+                        return;
+                    }
+                    searchSuccessfull(search);
+                } catch (error) {
+                    searchFailed(search);
+                }
+            }
+            nextBatch();
         };
         nextBatch();
     }
@@ -784,7 +792,7 @@ class SearchController extends StateHandler {
         let latestNewSearch = null;
         searchValues.forEach(values => {
             const { datasource, indicator, selections, series } = values;
-            if (this.service.getStateService().addIndicator(datasource, indicator, selections, series)) {
+            if (this.stateHandler.getController().addIndicator(datasource, indicator, selections, series)) {
                 // Indicator was not already present at the service
                 latestNewSearch = values;
             }
@@ -792,12 +800,9 @@ class SearchController extends StateHandler {
         if (latestNewSearch) {
             // Search added some new indicators, let's set the last one as the active indicator.
             const { datasource, indicator, selections, series } = latestNewSearch;
-            const hash = this.service.getStateService().getHash(datasource, indicator, selections, series);
-            this.service.getStateService().setActiveIndicator(hash);
+            const hash = getHash(datasource, indicator, selections, series);
+            this.stateHandler.getController().setActiveIndicator(hash);
         }
-        /* if (this.getSpinner()) {
-            this.getSpinner().stop();
-        } */
     }
 
     getInvalidValuesStr (invalids, all) {
@@ -857,9 +862,9 @@ class SearchController extends StateHandler {
     }
 
     createEventHandlers () {
-        this.service.on('StatsGrid.IndicatorEvent', (event) => {
+        /* this.service.on('StatsGrid.IndicatorEvent', (event) => {
             this.fetchindicatorOptions();
-        });
+        }); */
     }
 }
 
