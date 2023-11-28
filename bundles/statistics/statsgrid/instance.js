@@ -79,15 +79,12 @@ Oskari.clazz.define(
         afterStart: function (sandbox) {
             const locale = Oskari.getMsg.bind(null, 'StatsGrid');
             // create the StatisticsService for handling ajax calls and common functionality.
-            const statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, locale);
+            const statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getConfiguration(), locale);
             sandbox.registerService(statsService);
             this.statsService = statsService;
-            const conf = this.getConfiguration() || {};
 
             this.stateHandler = statsService.getStateHandler();
-
-            this.stateHandler.addDatasource(conf.sources);
-            this.stateHandler.addRegionset(conf.regionsets);
+            this.stateHandler.addRegionset(this.getConfiguration().regionsets);
 
             // initialize flyoutmanager
             this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, this.stateHandler);

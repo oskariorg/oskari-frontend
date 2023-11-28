@@ -9,10 +9,10 @@ import { getHash } from '../helper/StatisticsHelper';
     const _log = Oskari.log('StatsGrid.StatisticsService');
     let _cacheHelper = null;
 
-    Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, locale) {
+    Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, conf = {}, locale) {
         this.sandbox = sandbox;
         this.locale = locale;
-        this.stateHandler = new StatisticsHandler(sandbox, this);
+        this.stateHandler = new StatisticsHandler(this, conf);
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', this.cache, this);
         this.series = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesService', sandbox, this.stateHandler);
@@ -98,23 +98,6 @@ import { getHash } from '../helper/StatisticsHelper';
         },
         getIndicator: function (hash) {
             return this.stateHandler.getState().indicators.find(ind => ind.hash === hash);
-        },
-        addDatasource: function (ds) {
-            if (!ds) {
-                // log error message
-                return;
-            }
-            const me = this;
-            if (Array.isArray(ds)) {
-                // if(typeof ds === 'array') -> loop and add all
-                ds.forEach(function (item) {
-                    me.addDatasource(item);
-                });
-                return;
-            }
-            // normalize to always have info-object (so far only holds optional description url of service with "url" key)
-            ds.info = ds.info || {};
-            this.datasources.push(ds);
         },
         getUserDatasource: function () {
             return this.stateHandler.getState().datasources.find((src) => {
