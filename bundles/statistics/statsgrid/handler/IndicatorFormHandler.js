@@ -231,7 +231,7 @@ class IndicatorFormController extends StateHandler {
                 return {
                     id: region.id,
                     name: region.name,
-                    value: data ? data[region.id] : {}
+                    value: data ? data[region.id] : null
                 };
             });
             this.updateState({
@@ -287,22 +287,24 @@ class IndicatorFormController extends StateHandler {
             selectors: this.state.selectedDataset,
             values: []
         };
-        this.state.formData?.regions?.forEach(region => {
+        for (const region of this.state.formData?.regions || []) {
             if (region.value && region.value !== '') {
                 const value = `${region.value}`.replace(/,/g, '.');
                 regionData.values.push({ ...region, value });
             }
-        });
+        }
 
         try {
-            regionData.values.forEach((data, index) => {
+            let index = 0;
+            for (const data of regionData?.values) {
                 if (!isNaN(data.value)) {
                     regionData.values[index].value = Number(data.value);
                 }
-            });
+                index++;
+            }
             const saveIndicator = await this.saveIndicator(indicatorData);
             if (regionData.values?.length) {
-                await this.saveIndicatorData(saveIndicator);
+                await this.saveIndicatorData(regionData);
             }
             this.selectSavedIndicator(saveIndicator, regionData);
             this.updateState({
@@ -355,9 +357,9 @@ class IndicatorFormController extends StateHandler {
         // save dataset
         Oskari.log('IndicatorFormFlyout').info('Save data form values', data, 'Indicator: ' + this.state.indicator);
         const values = {};
-        data.values.forEach((regionData) => {
+        for (const regionData of data?.values) {
             values[regionData.id] = regionData.value;
-        });
+        }
 
         try {
             const response = await this.service.saveIndicatorData(this.state.datasource, this.state.indicator, data.selectors, values);

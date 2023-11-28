@@ -4,7 +4,7 @@ import { LocaleProvider } from 'oskari-ui/util';
 import { Classification } from '../components/classification/Classification';
 import { getPopupOptions } from '../../../mapping/mapmodule/plugin/pluginPopupHelper';
 import '../../statsgrid2016/resources/scss/classificationplugin.scss';
-import { validateClassification, getLimits, getClassification } from '../helper/ClassificationHelper';
+import { getLimits, getClassification } from '../helper/ClassificationHelper';
 import { getOptionsForType } from '../helper/ColorHelper';
 
 /**
@@ -33,6 +33,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         this.stateHandler = this.service.getStateHandler();
         this.classificationHandler = this.stateHandler.getClassificationHandler();
         this.classificationHandler.initPluginState(this._config, this._instance.isEmbedded());
+        this.classificationHandler.addStateListener(() => this.render());
     }, {
         // buildUI() is the starting point
         buildUI: function () {
@@ -68,10 +69,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const seriesStats = this.service.getSeriesService().getSeriesStats(activeIndicator.hash);
             const editOptions = this.getEditOptions(activeIndicator, uniqueCount, minMax);
             const classifiedDataset = this.classifyDataset(activeIndicator.classification, seriesStats, data, uniqueCount);
-            const classificationControls = this.getClassificationController();
+            const controller = this.classificationHandler.getController();
             // Histogram doesn't need to be updated on every events but props are gathered here
             // and histogram is updated only if it's opened, so update here for now
-            this.updateHistogram({ ...state, activeIndicator, controller: classificationControls, seriesStats }, classifiedDataset, data, editOptions);
+            this.updateHistogram({ ...state, activeIndicator, controller, seriesStats }, classifiedDataset, data, editOptions);
             const ui = (
                 <LocaleProvider value={{ bundleKey: this._instance.getName() }}>
                     <Classification
@@ -82,9 +83,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                         editOptions = {editOptions}
                         classifiedDataset = {classifiedDataset}
                         pluginState={state.pluginState}
-                        startHistogramView = {() => this.startHistogramView({ ...state, activeIndicator, controller: classificationControls }, classifiedDataset, data, editOptions)}
+                        startHistogramView = {() => this.startHistogramView({ ...state, activeIndicator, controller }, classifiedDataset, data, editOptions)}
                         onRenderChange = {() => { /* no-op */ }}
-                        controller={this.getClassificationController()}
+                        controller={controller}
                     />
                 </LocaleProvider>);
 
@@ -101,35 +102,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             return {
                 ...opts,
                 id: 'statsgrid_classification'
-            };
-        },
-        getClassificationController: function () {
-            // TODO: This function probably shouldn't exist
-            const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
-            return {
-                setActiveIndicator: hash => this.stateHandler.setActiveIndicator(hash),
-                updateClassification: (key, value) => {
-                    const { classification } = this.service.getIndicator(this.stateHandler.getState().activeIndicator) || {};
-                    if (classification) {
-                        classification[key] = value;
-                        validateClassification(classification);
-                        if (eventBuilder) {
-                            this._sandbox.notifyAll(eventBuilder(classification, { [key]: value }));
-                        }
-                    }
-                },
-                updateClassificationObj: obj => {
-                    const { classification } = this.service.getIndicator(this.stateHandler.getState().activeIndicator) || {};
-                    if (classification) {
-                        Object.keys(obj).forEach(key => {
-                            classification[key] = obj[key];
-                        });
-                        validateClassification(classification);
-                        if (eventBuilder) {
-                            this._sandbox.notifyAll(eventBuilder(classification, obj));
-                        }
-                    }
-                }
             };
         },
         getIndicatorData: async function (activeIndicator, activeRegionset) {
@@ -207,25 +179,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.classificationHandler.updateHistogramPopup(state, classifiedDataset, data, editOptions);
         },
         _bindToEvents: function () {
-            // if indicator is removed/added - recalculate the source 1/2 etc links
-            this.service.on('StatsGrid.IndicatorEvent', () => this.render());
-
-            // Always show the active indicator - also handles "no indicator selected"
-            this.service.on('StatsGrid.ActiveIndicatorChangedEvent', () => this.render());
-
-            // need to update the legend as data changes when regionset changes
-            this.service.on('StatsGrid.RegionsetChangedEvent', () => this.render());
-
-            this.service.on('StatsGrid.ClassificationChangedEvent', () => this.render());
-            // UI styling changes e.g. disable classification editing, make transparent
-            this.service.on('StatsGrid.ClassificationPluginChanged', () => this.render());
             // need to update transparency select
             this.service.on('AfterChangeMapLayerOpacityEvent', () => this.render());
             // need to calculate contents max height and check overflow
             this.service.on('MapSizeChangedEvent', () => this.render());
-            // need to update labels
-            this.service.on('StatsGrid.ParameterChangedEvent', () => this.render());
-            this.service.on('StatsGrid.DatasourceEvent', () => this.render());
         }
     }, {
         /**

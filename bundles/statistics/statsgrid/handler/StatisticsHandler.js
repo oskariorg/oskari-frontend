@@ -332,6 +332,17 @@ class StatisticsController extends StateHandler {
         }
     }
 
+    updateIndicator (indicator) {
+        const indicators = [...this.state.indicators];
+        const index = indicators.findIndex(ind => ind.hash === indicator.hash);
+        if (index) {
+            indicators[index] = indicator;
+        }
+        this.updateState({
+            indicators
+        });
+    }
+
     createEventHandlers () {
         const handlers = {
         };
@@ -364,7 +375,8 @@ const wrapped = controllerMixin(StatisticsController, [
     'resetState',
     'updateClassificationTransparency',
     'addDatasource',
-    'addRegionset'
+    'addRegionset',
+    'updateIndicator'
 ]);
 
 export { wrapped as StatisticsHandler };
