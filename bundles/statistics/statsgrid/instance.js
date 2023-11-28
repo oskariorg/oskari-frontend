@@ -1,7 +1,7 @@
 import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
 import { MyIndicatorsTab } from './MyIndicatorsTab';
 import './FlyoutManager.js';
-import '../statsgrid2016/Tile.js';
+import './Tile.js';
 import './service/StatisticsService.js';
 import './service/SeriesService.js';
 import '../statsgrid2016/service/ClassificationService.js';
@@ -90,8 +90,7 @@ Oskari.clazz.define(
             this.stateHandler.addRegionset(conf.regionsets);
 
             // initialize flyoutmanager
-            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService, this.stateHandler);
-            this.flyoutManager.init();
+            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, this.stateHandler);
             this.getTile().setupTools(this.flyoutManager);
 
             this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), conf.location?.classes);

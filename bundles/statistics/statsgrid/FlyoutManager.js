@@ -1,47 +1,31 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (instance, service, handler) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (instance, handler) {
     this.instance = instance;
     this.flyouts = {};
-    var loc = instance.getLocalization();
     Oskari.makeObservable(this);
     this._positionY = 5;
     this.handler = handler;
     this.searchHandler = this.handler.getSearchHandler();
     this.tableHandler = this.handler.getTableHandler();
     this.diagramHandler = this.handler.getDiagramHandler();
-    this.flyoutInfo = [
-        {
-            id: 'search',
-            title: loc.tile.search,
+    const locale = Oskari.getMsg.bind(null, 'StatsGrid');
+    this.flyouts = {
+        search: {
+            title: locale('tile.search'),
             controller: this.searchHandler.getController(),
             state: this.searchHandler.getState()
         },
-        {
-            id: 'table',
-            title: loc.tile.table,
+        table: {
+            title: locale('tile.table'),
             controller: this.tableHandler.getController(),
             state: this.tableHandler.getState()
         },
-        {
-            id: 'diagram',
-            title: loc.tile.diagram,
+        diagram: {
+            title: locale('tile.diagram'),
             controller: this.diagramHandler.getController(),
             state: this.diagramHandler.getState()
         }
-    ];
+    };
 }, {
-    init: function () {
-        if (Object.keys(this.flyouts).length) {
-            // already initialized
-            return;
-        }
-
-        this.flyoutInfo.forEach((info) => {
-            this.flyouts[info.id] = {
-                controller: info.controller,
-                state: info.state
-            };
-        });
-    },
     open: function (type) {
         const flyout = this.flyouts[type];
         if (!flyout) {
@@ -49,7 +33,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         }
         flyout.controller.toggleFlyout(true, () => this.trigger('hide', type));
         this.trigger('show', type);
-        this.flyoutInfo.filter(info => info.id !== type).forEach(info => this.hide(info.id));
+        Object.keys(this.flyouts)
+            .filter(id => id !== type)
+            .forEach(type => this.hide(type));
     },
     hide: function (type) {
         const flyout = this.flyouts[type];
@@ -75,6 +61,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     },
     getFlyout: function (type) {
         return this.flyouts[type];
+    },
+    getTileOptions: function () {
+        return Object.keys(this.flyouts)
+            .map(id => {
+                return {
+                    id,
+                    label: this.flyouts[id].title
+                };
+            });
     },
     tileAttached: function () {
         if (this.handler.getState().indicators?.length < 1) {
