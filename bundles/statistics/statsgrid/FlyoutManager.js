@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (instance, service, handler) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (instance, handler) {
     this.instance = instance;
     this.flyouts = {};
     var loc = instance.getLocalization();

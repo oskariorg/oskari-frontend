@@ -90,7 +90,7 @@ Oskari.clazz.define(
             this.stateHandler.addRegionset(conf.regionsets);
 
             // initialize flyoutmanager
-            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService, this.stateHandler);
+            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, this.stateHandler);
             this.flyoutManager.init();
             this.getTile().setupTools(this.flyoutManager);
 
