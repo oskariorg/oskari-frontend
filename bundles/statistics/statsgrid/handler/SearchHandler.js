@@ -46,9 +46,10 @@ class SearchController extends StateHandler {
     }
 
     showSearchFlyout (extraOnClose) {
-        this.fetchRegionsets();
-        this.fetchDatasources();
+        // TODO: do we need to update the options here?
         this.updateState({
+            regionsetOptions: this.service.getRegionsets(),
+            datasourceOptions: this.service.getDatasources(),
             flyout: showSearchFlyout(this.getState(), this.getController(), () => {
                 this.closeSearchFlyout();
                 if (extraOnClose) extraOnClose();
@@ -82,18 +83,6 @@ class SearchController extends StateHandler {
             indicatorOptions: [],
             indicatorParams: null,
             isUserDatasource: false
-        });
-    }
-
-    fetchRegionsets () {
-        this.updateState({
-            regionsetOptions: this.service.getRegionsets()
-        });
-    }
-
-    fetchDatasources () {
-        this.updateState({
-            datasourceOptions: this.service.getDatasources()
         });
     }
 
