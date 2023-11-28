@@ -19,11 +19,7 @@ import { getHash } from '../helper/StatisticsHelper';
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
         this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
-        this.missingRegionsetNamesCount = 0;
 
-        // pushed from instance
-        this.datasources = [];
-        this.regionsets = [];
         // attach on, off, trigger functions
         Oskari.makeObservable(this);
 
@@ -204,28 +200,6 @@ import { getHash } from '../helper/StatisticsHelper';
                 }
             });
             return found;
-        },
-        addRegionset: function (regionset) {
-            if (!regionset) {
-                // log error message
-                return;
-            }
-            const me = this;
-            if (Array.isArray(regionset)) {
-                // if(typeof regionset === 'array') -> loop and add all
-                regionset.forEach(function (item) {
-                    me.addRegionset(item);
-                });
-                return;
-            }
-            if (!regionset.name) {
-                regionset.name = `${this.locale('missing.regionsetName')} ${++this.missingRegionsetNamesCount}`;
-            }
-            if (regionset.id && regionset.name) {
-                this.regionsets.push(regionset);
-            } else {
-                _log.info('Ignoring regionset without id or name:', regionset);
-            }
         },
         /**
          * Returns regionsets that are available to user.
@@ -715,8 +689,10 @@ import { getHash } from '../helper/StatisticsHelper';
          * @param datasource datasource
          */
         getUnsupportedRegionsets: function (ds) {
-            const all = this.regionsets.slice(0);
-            const supported = this.datasources.find(function (e) {
+            const { datasources, regionsets } = this.stateHandler.getState();
+            const all = regionsets.slice(0);
+
+            const supported = datasources.find(function (e) {
                 return e.id === Number(ds);
             });
             if (supported) {
@@ -741,7 +717,8 @@ import { getHash } from '../helper/StatisticsHelper';
             }
 
             const unsupportedDatasources = [];
-            this.datasources.forEach(function (ds) {
+            const datasources = this.stateHandler.getState().datasources;
+            datasources.forEach(function (ds) {
                 const supported = regionsets.some(function (iter) {
                     return ds.regionsets.indexOf(Number(iter)) !== -1;
                 });

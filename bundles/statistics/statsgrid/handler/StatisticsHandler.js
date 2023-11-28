@@ -5,7 +5,7 @@ import { DiagramHandler } from './DiagramHandler';
 import { IndicatorFormHandler } from './IndicatorFormHandler';
 import { ClassificationHandler } from './ClassificationHandler';
 import { getHash } from '../helper/StatisticsHelper';
-import { normalizeDatasources } from '../helper/ConfigHelper';
+import { normalizeDatasources, normalizeRegionsets } from '../helper/ConfigHelper';
 import { validateClassification, DEFAULT_OPTS } from '../helper/ClassificationHelper';
 
 class StatisticsController extends StateHandler {
@@ -19,10 +19,10 @@ class StatisticsController extends StateHandler {
         this.formHandler = new IndicatorFormHandler(this, this.service, this.sandbox);
         this.classificationHandler = new ClassificationHandler(this, this.service, this.sandbox);
         this.setState({
-            indicators: [],
-            regionsets: [],
-            regions: [],
             datasources: normalizeDatasources(conf.sources),
+            regionsets: normalizeRegionsets(conf.regionsets),
+            indicators: [],
+            regions: [],
             activeIndicator: null,
             activeRegionset: null,
             activeRegion: null,
@@ -290,30 +290,6 @@ class StatisticsController extends StateHandler {
         return result;
     }
 
-    addRegionset (regionset) {
-        if (!regionset) {
-            // log error message
-            return;
-        }
-        if (Array.isArray(regionset)) {
-            // if(typeof regionset === 'array') -> loop and add all
-            regionset.forEach((item) => {
-                this.addRegionset(item);
-            });
-            return;
-        }
-        if (!regionset.name) {
-            regionset.name = `${Oskari.getMsg('StatsGrid', 'missing.regionsetName')} ${++this.missingRegionsetNamesCount}`;
-        }
-        if (regionset.id && regionset.name) {
-            this.updateState({
-                regionsets: [...this.state.regionsets, regionset]
-            });
-        } else {
-            console.warn('Ignoring regionset without id or name:', regionset);
-        }
-    }
-
     updateIndicator (indicator) {
         const indicators = [...this.state.indicators];
         const index = indicators.findIndex(ind => ind.hash === indicator.hash);
@@ -356,7 +332,6 @@ const wrapped = controllerMixin(StatisticsController, [
     'setFullState',
     'resetState',
     'updateClassificationTransparency',
-    'addRegionset',
     'updateIndicator'
 ]);
 
