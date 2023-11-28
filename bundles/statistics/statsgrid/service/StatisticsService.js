@@ -580,6 +580,18 @@ import { getHash } from '../helper/StatisticsHelper';
                     id: indicatorId
                 };
             }
+            const body = {
+                // my indicators datasource id
+                datasource: datasrc,
+                name: data.name,
+                desc: data.description,
+                // textual name for the source the data is from
+                source: data.datasource
+            };
+
+            if (data.id) {
+                body.id = data.id;
+            }
             // send data to server for logged in users
             try {
                 const response = await fetch(Oskari.urls.getRoute('SaveIndicator'), {
@@ -587,15 +599,7 @@ import { getHash } from '../helper/StatisticsHelper';
                     headers: {
                         'Accept': 'application/json'
                     },
-                    body: new URLSearchParams({
-                        // my indicators datasource id
-                        datasource: datasrc,
-                        id: data.id,
-                        name: data.name,
-                        desc: data.description,
-                        // textual name for the source the data is from
-                        source: data.datasource
-                    })
+                    body: new URLSearchParams({ ...body })
                 });
                 if (!response.ok) {
                     throw new Error(response.statusText);

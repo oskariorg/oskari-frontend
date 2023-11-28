@@ -1,6 +1,7 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showMovableContainer } from 'oskari-ui/components/window';
 import { showHistogramPopup } from '../components/manualClassification/HistogramForm';
+import { validateClassification } from '../helper/ClassificationHelper';
 
 class ClassificationController extends StateHandler {
     constructor (stateHandler, service, sandbox) {
@@ -19,7 +20,6 @@ class ClassificationController extends StateHandler {
             histogramPopup: null
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
-        this.eventHandlers = this.createEventHandlers();
     };
 
     getName () {
@@ -111,20 +111,34 @@ class ClassificationController extends StateHandler {
         this.sandbox.notifyAll(eventBuilder());
     }
 
-    createEventHandlers () {
-        const handlers = {
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
+    setActiveIndicator (hash) {
+        this.stateHandler.getController().setActiveIndicator(hash);
     }
 
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
+    updateClassification (key, value) {
+        const { classification } = this.service.getIndicator(this.stateHandler.getState().activeIndicator) || {};
+        if (classification) {
+            classification[key] = value;
+            validateClassification(classification);
+            const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
+            if (eventBuilder) {
+                this.sandbox.notifyAll(eventBuilder(classification, { [key]: value }));
+            }
         }
+    }
 
-        return handler.apply(this, [e]);
+    updateClassificationObj (obj) {
+        const { classification } = this.service.getIndicator(this.stateHandler.getState().activeIndicator) || {};
+        if (classification) {
+            Object.keys(obj).forEach(key => {
+                classification[key] = obj[key];
+            });
+            validateClassification(classification);
+            const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
+            if (eventBuilder) {
+                this.sandbox.notifyAll(eventBuilder(classification, obj));
+            }
+        }
     }
 }
 
@@ -134,7 +148,10 @@ const wrapped = controllerMixin(ClassificationController, [
     'updateClassificationContainer',
     'showHistogramPopup',
     'closeHistogramPopup',
-    'updateHistogramPopup'
+    'updateHistogramPopup',
+    'setActiveIndicator',
+    'updateClassification',
+    'updateClassificationObj'
 ]);
 
 export { wrapped as ClassificationHandler };
