@@ -144,7 +144,6 @@ const SearchFlyout = ({ state, controller }) => {
 };
 
 export const showSearchFlyout = (state, controller, onClose) => {
-
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.search' />;
     const controls = showFlyout(
         title,
@@ -162,5 +161,5 @@ export const showSearchFlyout = (state, controller, onClose) => {
                 <SearchFlyout state={state} controller={controller} />
             </LocaleProvider>
         )
-    }
-}
+    };
+};
