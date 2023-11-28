@@ -26,10 +26,12 @@ export const FlexColumn = styled('div')`
 
 export const FlexRight = styled('div')`
     margin-left: auto;
+    display: flex;
+    flex-direction: row;
 `;
 
-export const ActionLinkContainer = styled('span')`
-    margin: 0 0.25em;
+export const ActionLinkContainer = styled('div')`
+    margin: auto 0.25em auto 0;
 `;
 
 export const SearchResultLayerListContainer = styled('div')`

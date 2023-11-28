@@ -2,21 +2,21 @@ import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
 import { MyIndicatorsTab } from './MyIndicatorsTab';
 import './FlyoutManager.js';
 import '../statsgrid2016/Tile.js';
-import '../statsgrid/service/StatisticsService.js';
-import '../statsgrid/service/SeriesService.js';
+import './service/StatisticsService.js';
+import './service/SeriesService.js';
 import '../statsgrid2016/service/ClassificationService.js';
 import '../statsgrid2016/service/ColorService.js';
 import '../statsgrid2016/service/ErrorService.js';
-import '../statsgrid/service/Cache.js';
-import '../statsgrid/service/CacheHelper.js';
+import './service/Cache.js';
+import './service/CacheHelper.js';
 import '../statsgrid2016/components/RegionsetSelector.js';
 import '../statsgrid2016/components/SelectedIndicatorsMenu.js';
 import '../statsgrid2016/components/SpanSelect.js';
 import '../statsgrid2016/view/Filter.js';
-import '../statsgrid/plugin/TogglePlugin.js';
+import './plugin/TogglePlugin.js';
 import '../statsgrid2016/components/SeriesControl.js';
 import '../statsgrid2016/publisher/SeriesToggleTool.js';
-import '../statsgrid/components/RegionsetViewer.js';
+import './components/RegionsetViewer.js';
 import '../statsgrid2016/event/IndicatorEvent.js';
 import '../statsgrid2016/event/DatasourceEvent.js';
 import '../statsgrid2016/event/FilterEvent.js';
@@ -31,7 +31,7 @@ import '../statsgrid2016/publisher/StatsTableTool.js';
 import '../statsgrid2016/publisher/ClassificationTool';
 import '../statsgrid2016/publisher/ClassificationToggleTool.js';
 import '../statsgrid2016/publisher/OpacityTool.js';
-import '../statsgrid/plugin/ClassificationPlugin.js';
+import './plugin/ClassificationPlugin.js';
 import '../statsgrid2016/plugin/SeriesControlPlugin.js';
 import '../statsgrid2016/publisher/DiagramTool.js';
 
@@ -77,25 +77,17 @@ Oskari.clazz.define(
         this.stateHandler = null;
     }, {
         afterStart: function (sandbox) {
-            var me = this;
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var locale = Oskari.getMsg.bind(null, 'StatsGrid');
+            const locale = Oskari.getMsg.bind(null, 'StatsGrid');
             // create the StatisticsService for handling ajax calls and common functionality.
-            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, locale, this);
+            const statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, locale);
             sandbox.registerService(statsService);
-            me.statsService = statsService;
-            var conf = this.getConfiguration() || {};
-
-            // Check if vector is configurated
-            // If it is set map modes to support also vector
-            if (conf && conf.vectorViewer === true) {
-                me.statsService.setMapModes(['wms', 'vector']);
-            }
+            this.statsService = statsService;
+            const conf = this.getConfiguration() || {};
 
             this.stateHandler = statsService.getStateHandler();
 
-            this.stateHandler.getController().addDatasource(conf.sources);
-            this.stateHandler.getController().addRegionset(conf.regionsets);
+            this.stateHandler.addDatasource(conf.sources);
+            this.stateHandler.addRegionset(conf.regionsets);
 
             // initialize flyoutmanager
             this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService, this.stateHandler);
@@ -103,22 +95,23 @@ Oskari.clazz.define(
             this.getTile().setupTools(this.flyoutManager);
 
             this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), conf.location?.classes);
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
 
             if (this.isEmbedded()) {
                 // Start in an embedded map mode
                 if (conf.grid) {
-                    me.togglePlugin.addTool('table');
+                    this.togglePlugin.addTool('table');
                 }
                 if (conf.diagram) {
-                    me.togglePlugin.addTool('diagram');
+                    this.togglePlugin.addTool('diagram');
                 }
                 if (conf.classification) {
-                    me.addMapPluginToggleTool(TOGGLE_TOOL_CLASSIFICATION);
+                    this.addMapPluginToggleTool(TOGGLE_TOOL_CLASSIFICATION);
                 }
                 if (conf.series) {
-                    me.addMapPluginToggleTool(TOGGLE_TOOL_SERIES);
+                    this.addMapPluginToggleTool(TOGGLE_TOOL_SERIES);
                 }
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
@@ -131,7 +124,7 @@ Oskari.clazz.define(
 
             // Check that user has own indicators datasource
             if (statsService.getUserDatasource()) {
-                me._addIndicatorsTabToMyData(sandbox);
+                this._addIndicatorsTabToMyData(sandbox);
             }
             // setup initial state
             this.setState();

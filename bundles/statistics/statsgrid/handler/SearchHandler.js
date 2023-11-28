@@ -4,9 +4,8 @@ import { showMedataPopup } from '../components/description/MetadataPopup';
 import { getHash } from '../helper/StatisticsHelper';
 
 class SearchController extends StateHandler {
-    constructor (stateHandler, service, instance, sandbox) {
+    constructor (stateHandler, service, sandbox) {
         super();
-        this.instance = instance;
         this.sandbox = sandbox;
         this.stateHandler = stateHandler;
         this.service = service;

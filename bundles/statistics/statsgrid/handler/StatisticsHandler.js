@@ -8,12 +8,11 @@ import { getHash } from '../helper/StatisticsHelper';
 import { validateClassification, DEFAULT_OPTS } from '../helper/ClassificationHelper';
 
 class StatisticsController extends StateHandler {
-    constructor (instance, sandbox, service) {
+    constructor (sandbox, service) {
         super();
-        this.instance = instance;
         this.sandbox = sandbox;
         this.service = service;
-        this.searchHandler = new SearchHandler(this, this.service, this.instance, this.sandbox);
+        this.searchHandler = new SearchHandler(this, this.service, this.sandbox);
         this.tableHandler = new TableHandler(this, this.service, this.sandbox);
         this.diagramHandler = new DiagramHandler(this, this.service, this.sandbox);
         this.formHandler = new IndicatorFormHandler(this, this.service, this.sandbox);

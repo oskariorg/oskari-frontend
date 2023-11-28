@@ -2,6 +2,8 @@ import { showFindByCoordinatesPopup } from './view/FindByCoordinatesPopup';
 import { boundingExtent } from 'ol/extent';
 
 const MARKER_ID_PREFIX = 'findbycoordinates_';
+const FIND_BY_COORDINATES_DEFAULT_ZOOM = 7;
+
 /**
  * @class Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance
  */
@@ -370,7 +372,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 }
                 const extent = boundingExtent(coordinates);
 
-                mapmodule.zoomToExtent(extent, false, false, 7);
+                const currentZoom = sandbox.getMap().getZoom();
+
+                mapmodule.zoomToExtent(extent, false, false, currentZoom > FIND_BY_COORDINATES_DEFAULT_ZOOM ? currentZoom : FIND_BY_COORDINATES_DEFAULT_ZOOM);
             }
         },
         /**
