@@ -77,7 +77,6 @@ Oskari.clazz.define(
         this.stateHandler = null;
     }, {
         afterStart: function (sandbox) {
-            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             const locale = Oskari.getMsg.bind(null, 'StatsGrid');
             // create the StatisticsService for handling ajax calls and common functionality.
             const statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, locale, this);
@@ -96,6 +95,7 @@ Oskari.clazz.define(
             this.getTile().setupTools(this.flyoutManager);
 
             this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), conf.location?.classes);
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
 
