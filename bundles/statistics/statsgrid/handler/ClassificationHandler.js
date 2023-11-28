@@ -116,10 +116,13 @@ class ClassificationController extends StateHandler {
     }
 
     updateClassification (key, value) {
-        const { classification } = this.service.getIndicator(this.stateHandler.getState().activeIndicator) || {};
+        const indicator = this.service.getIndicator(this.stateHandler.getState().activeIndicator);
+        const { classification } = indicator || {};
         if (classification) {
             classification[key] = value;
             validateClassification(classification);
+            indicator.classification = classification;
+            this.stateHandler.updateIndicator(indicator);
             const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
             if (eventBuilder) {
                 this.sandbox.notifyAll(eventBuilder(classification, { [key]: value }));
@@ -128,12 +131,15 @@ class ClassificationController extends StateHandler {
     }
 
     updateClassificationObj (obj) {
-        const { classification } = this.service.getIndicator(this.stateHandler.getState().activeIndicator) || {};
+        const indicator = this.service.getIndicator(this.stateHandler.getState().activeIndicator);
+        const { classification } = indicator || {};
         if (classification) {
             Object.keys(obj).forEach(key => {
                 classification[key] = obj[key];
             });
             validateClassification(classification);
+            indicator.classification = classification;
+            this.stateHandler.updateIndicator(indicator);
             const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
             if (eventBuilder) {
                 this.sandbox.notifyAll(eventBuilder(classification, obj));

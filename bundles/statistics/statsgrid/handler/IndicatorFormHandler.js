@@ -287,7 +287,7 @@ class IndicatorFormController extends StateHandler {
             selectors: this.state.selectedDataset,
             values: []
         };
-        for (const region of this.state.formData?.regions) {
+        for (const region of this.state.formData?.regions || []) {
             if (region.value && region.value !== '') {
                 const value = `${region.value}`.replace(/,/g, '.');
                 regionData.values.push({ ...region, value });

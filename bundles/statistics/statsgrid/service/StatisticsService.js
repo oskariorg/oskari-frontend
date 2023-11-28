@@ -599,7 +599,7 @@ import { getHash } from '../helper/StatisticsHelper';
                     headers: {
                         'Accept': 'application/json'
                     },
-                    body: new URLSearchParams({ ...body })
+                    body: new URLSearchParams(body)
                 });
                 if (!response.ok) {
                     throw new Error(response.statusText);

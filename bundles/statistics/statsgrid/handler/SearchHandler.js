@@ -862,9 +862,22 @@ class SearchController extends StateHandler {
     }
 
     createEventHandlers () {
-        /* this.service.on('StatsGrid.IndicatorEvent', (event) => {
-            this.fetchindicatorOptions();
-        }); */
+        const handlers = {
+            'StatsGrid.IndicatorEvent': (event) => {
+                this.fetchindicatorOptions();
+            }
+        };
+        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
+        return handlers;
+    }
+
+    onEvent (e) {
+        var handler = this.eventHandlers[e.getName()];
+        if (!handler) {
+            return;
+        }
+
+        return handler.apply(this, [e]);
     }
 }
 
