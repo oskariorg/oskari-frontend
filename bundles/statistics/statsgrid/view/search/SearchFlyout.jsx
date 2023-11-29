@@ -65,7 +65,7 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
                 <b><Message messageKey='panels.newSearch.regionsetTitle' /></b>
                 <StyledSelect
                     mode='multiple'
-                    filterOption={false}
+                    optionFilterProp='label'
                     options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
                     placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
                     value={state?.regionsetFilter}
@@ -87,6 +87,7 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
                         <b><Message messageKey='panels.newSearch.indicatorTitle' /></b>
                         <StyledSelect
                             mode='multiple'
+                            optionFilterProp='label'
                             options={state?.indicatorOptions?.map(i => ({ value: i.id, label: i.title, disabled: !!i.disabled }))}
                             placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
                             disabled={!state?.indicatorOptions || state?.indicatorOptions?.length < 1}
