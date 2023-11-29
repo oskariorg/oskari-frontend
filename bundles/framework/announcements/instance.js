@@ -1,4 +1,5 @@
 import { AnnouncementsHandler, showAnnouncementsPopup, showAnnouncementsBanner, showBannerDescriptionPopup } from './view/';
+const NOT_DISPLAYED = 'display-none';
 /**
  * @class Oskari.framework.bundle.announcements.AnnouncementsBundleInstance
  *
@@ -16,6 +17,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         const conf = this.getConfiguration();
         conf.name = 'announcements';
         conf.flyoutClazz = 'Oskari.framework.bundle.announcements.Flyout';
+        this.tile = undefined;
         this.service = null;
         this.handler = null;
         this.popupControls = null;
@@ -27,15 +29,14 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             if (me.started) {
                 return;
             }
-
+            this.tile = me.plugins['Oskari.userinterface.Tile'] ? me.plugins['Oskari.userinterface.Tile'] : null;
             me.service = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
             me.sandbox.registerService(me.service);
             const flyout = me.plugins['Oskari.userinterface.Flyout'];
             // It looks like plugin (embedded map) handles announcements differently so render popups only if flyout is present
             if (flyout) {
                 this.handler = new AnnouncementsHandler(this.service);
-                this.handler.addStateListener(state => this.renderPopup(state));
-                this.handler.addStateListener(state => this.renderBanner(state));
+                this.handler.addStateListener(state => this.stateChanged(state));
                 flyout.initHandler(this.handler);
             }
             if (me.conf && me.conf.plugin) {
@@ -57,6 +58,17 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
                     });
                 });
             });
+        },
+        stateChanged: function (state) {
+            this.renderPopup(state);
+            this.renderBanner(state);
+            this.setTileVisibility(state);
+        },
+        setTileVisibility: function (state) {
+            const isMobile = Oskari.util.isMobile();
+            // mobile mode and no active announcements
+            const shouldHide = isMobile && !(state?.active?.length);
+            this.tile?.container?.toggleClass(NOT_DISPLAYED, shouldHide);
         },
         renderPopup: function (state) {
             if (!state.popupAnnouncements || !state.popupAnnouncements.length) {
