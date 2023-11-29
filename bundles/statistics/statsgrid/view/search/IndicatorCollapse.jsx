@@ -8,7 +8,6 @@ const StyledCollapse = styled(Collapse)`
 `;
 
 export const IndicatorCollapse = ({ indicators = [], controller }) => {
-    console.log(indicators)
     return (
         <StyledCollapse>
             <CollapsePanel
