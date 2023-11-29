@@ -131,7 +131,7 @@ class SearchController extends StateHandler {
                 disabled: false
             };
             if (hasRegionSetRestriction) {
-                value.disabled = supportsRegionset(ind.regionsets);
+                value.disabled = !supportsRegionset(ind.regionsets);
             }
             return value;
         });
@@ -145,39 +145,40 @@ class SearchController extends StateHandler {
         });
 
         const selectors = this.state.indicatorParams?.selectors;
-        if (selectors) {
-            const keyWithTime = Object.keys(selectors).find((key) => selectors[key].time);
-            if (keyWithTime) {
-                let selected = selectors[keyWithTime].values[0].id;
-                if (searchTimeseries) {
-                    if (selectors[keyWithTime].values?.length <= 1) {
-                        Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
-                        this.updateState({
-                            searchTimeseries: false
-                        });
-                    } else {
-                        const selectValues = [
-                            selected,
-                            selectors[keyWithTime].values[selectors[keyWithTime].values.length - 1].id
-                        ];
-                        selected = [...selectValues].sort((a, b) => (a - b));
+        if (!selectors) {
+            return;
+        }
+        const keyWithTime = Object.keys(selectors).find((key) => selectors[key].time);
+        if (keyWithTime) {
+            let selected = selectors[keyWithTime].values[0].id;
+            if (searchTimeseries) {
+                if (selectors[keyWithTime].values?.length <= 1) {
+                    Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
+                    this.updateState({
+                        searchTimeseries: false
+                    });
+                } else {
+                    const selectValues = [
+                        selected,
+                        selectors[keyWithTime].values[selectors[keyWithTime].values.length - 1].id
+                    ];
+                    selected = [...selectValues].sort((a, b) => (a - b));
+                }
+            }
+            this.updateState({
+                indicatorParams: {
+                    ...this.state.indicatorParams,
+                    selected: {
+                        ...this.state.indicatorParams.selected,
+                        [keyWithTime]: selected
                     }
                 }
-                this.updateState({
-                    indicatorParams: {
-                        ...this.state.indicatorParams,
-                        selected: {
-                            ...this.state.indicatorParams.selected,
-                            [keyWithTime]: selected
-                        }
-                    }
-                });
-            } else if (searchTimeseries) {
-                Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
-                this.updateState({
-                    searchTimeseries: false
-                });
-            }
+            });
+        } else if (searchTimeseries) {
+            Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
+            this.updateState({
+                searchTimeseries: false
+            });
         }
     }
 
