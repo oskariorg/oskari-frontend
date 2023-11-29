@@ -42,12 +42,13 @@ const IndicatorField = styled('div')`
 // For preventing checkbox clickable area from stretching to 100% of content width
 const ClickableArea = ({ children }) => <div>{children}</div>;
 
-const SearchFlyout = ({ state, controller }) => {
+const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) => {
+    if (!datasources.length || !regionsets.length) {
+        // Nothing to show -> show generic "data missing" message
+        return (<b><Message messageKey='errors.indicatorListError' /></b>);
+    }
     const Component = (
         <Content>
-            {state.indicators?.length < 1 && (
-                <Message messageKey='statsgrid.noIndicators' />
-            )}
             <Field>
                 <b><Message messageKey='panels.newSearch.seriesTitle' /></b>
                 <ClickableArea>
@@ -64,7 +65,7 @@ const SearchFlyout = ({ state, controller }) => {
                 <StyledSelect
                     mode='multiple'
                     filterOption={false}
-                    options={state?.regionsetOptions?.map(rs => ({ value: rs.id, label: rs.name }))}
+                    options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
                     placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
                     value={state?.selectedRegionsets}
                     onChange={(value) => controller.setSelectedRegionsets(value)}
@@ -73,7 +74,7 @@ const SearchFlyout = ({ state, controller }) => {
             <Field>
                 <b><Message messageKey='panels.newSearch.datasourceTitle' /></b>
                 <StyledSelect
-                    options={state?.datasourceOptions?.map(ds => ({ value: ds.id, label: ds.name, disabled: state.disabledDatasources.includes(ds.id) }))}
+                    options={datasources.map(ds => ({ value: ds.id, label: ds.name, disabled: state.disabledDatasources.includes(ds.id) }))}
                     placeholder={<Message messageKey='panels.newSearch.selectDatasourcePlaceholder' />}
                     value={state?.selectedDatasource}
                     onChange={(value) => controller.setSelectedDatasource(value)}
@@ -118,7 +119,9 @@ const SearchFlyout = ({ state, controller }) => {
             )}
             {state.indicatorParams && (
                 <IndicatorParams
-                    state={state}
+                    allRegionsets={regionsets}
+                    params={state.indicatorParams}
+                    searchTimeseries={state.searchTimeseries}
                     controller={controller}
                 />
             )}
@@ -133,7 +136,6 @@ const SearchFlyout = ({ state, controller }) => {
                     onClick={() => controller.search()}
                 />
             </ButtonContainer>
-            <IndicatorCollapse state={state} controller={controller} />
         </Content>
     );
 
@@ -143,22 +145,30 @@ const SearchFlyout = ({ state, controller }) => {
     return Component;
 };
 
-export const showSearchFlyout = (state, controller, onClose) => {
+export const showSearchFlyout = (regionsets = [], datasources = [], indicators = [], state, controller, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.search' />;
     const controls = showFlyout(
         title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <SearchFlyout state={state} controller={controller} />
+            <Content>
+                {!indicators.length && (<Message messageKey='statsgrid.noIndicators' />)}
+                <SearchFlyout regionsets={regionsets} datasources={datasources} state={state} controller={controller} />
+                <IndicatorCollapse indicators={indicators} controller={controller} />
+            </Content>
         </LocaleProvider>,
         onClose
     );
 
     return {
         ...controls,
-        update: (state) => controls.update(
+        update: (state, indicators = []) => controls.update(
             title,
             <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                <SearchFlyout state={state} controller={controller} />
+                <Content>
+                    {!indicators.length && (<Message messageKey='statsgrid.noIndicators' />)}
+                    <SearchFlyout regionsets={regionsets} datasources={datasources} state={state} controller={controller} />
+                    <IndicatorCollapse indicators={indicators} controller={controller} />
+                </Content>
             </LocaleProvider>
         )
     };

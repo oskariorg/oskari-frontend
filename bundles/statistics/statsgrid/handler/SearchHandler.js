@@ -12,8 +12,6 @@ class SearchController extends StateHandler {
         this.setState({
             ...this.stateHandler.getState(),
             searchTimeseries: false,
-            regionsetOptions: [],
-            datasourceOptions: [],
             indicatorOptions: [],
             selectedRegionsets: [],
             selectedDatasource: null,
@@ -46,11 +44,9 @@ class SearchController extends StateHandler {
     }
 
     showSearchFlyout (extraOnClose) {
-        // TODO: do we need to update the options here?
+        const { regionsets, datasources, indicators } = this.stateHandler.getState();
         this.updateState({
-            regionsetOptions: this.service.getRegionsets(),
-            datasourceOptions: this.service.getDatasources(),
-            flyout: showSearchFlyout(this.getState(), this.getController(), () => {
+            flyout: showSearchFlyout(regionsets, datasources, indicators, this.getState(), this.getController(), () => {
                 this.closeSearchFlyout();
                 if (extraOnClose) extraOnClose();
             })
@@ -68,7 +64,8 @@ class SearchController extends StateHandler {
 
     updateFlyout () {
         if (this.state.flyout) {
-            this.state.flyout.update(this.getState());
+            const { indicators } = this.stateHandler.getState();
+            this.state.flyout.update(this.getState(), indicators);
         }
     }
 
