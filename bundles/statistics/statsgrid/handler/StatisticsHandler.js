@@ -5,12 +5,13 @@ import { DiagramHandler } from './DiagramHandler';
 import { IndicatorFormHandler } from './IndicatorFormHandler';
 import { ClassificationHandler } from './ClassificationHandler';
 import { getHash } from '../helper/StatisticsHelper';
+import { normalizeDatasources, normalizeRegionsets } from '../helper/ConfigHelper';
 import { validateClassification, DEFAULT_OPTS } from '../helper/ClassificationHelper';
 
 class StatisticsController extends StateHandler {
-    constructor (sandbox, service) {
+    constructor (service, conf = {}) {
         super();
-        this.sandbox = sandbox;
+        this.sandbox = service.getSandbox();
         this.service = service;
         this.searchHandler = new SearchHandler(this, this.service, this.sandbox);
         this.tableHandler = new TableHandler(this, this.service, this.sandbox);
@@ -18,10 +19,10 @@ class StatisticsController extends StateHandler {
         this.formHandler = new IndicatorFormHandler(this, this.service, this.sandbox);
         this.classificationHandler = new ClassificationHandler(this, this.service, this.sandbox);
         this.setState({
+            datasources: normalizeDatasources(conf.sources),
+            regionsets: normalizeRegionsets(conf.regionsets),
             indicators: [],
-            regionsets: [],
             regions: [],
-            datasources: [],
             activeIndicator: null,
             activeRegionset: null,
             activeRegion: null,
@@ -289,49 +290,6 @@ class StatisticsController extends StateHandler {
         return result;
     }
 
-    addDatasource (ds) {
-        if (!ds) {
-            // log error message
-            return;
-        }
-        if (Array.isArray(ds)) {
-            // if(typeof ds === 'array') -> loop and add all
-            ds.forEach((item) => {
-                this.addDatasource(item);
-            });
-            return;
-        }
-        // normalize to always have info-object (so far only holds optional description url of service with "url" key)
-        ds.info = ds.info || {};
-        this.updateState({
-            datasources: [...this.state.datasources, ds]
-        });
-    }
-
-    addRegionset (regionset) {
-        if (!regionset) {
-            // log error message
-            return;
-        }
-        if (Array.isArray(regionset)) {
-            // if(typeof regionset === 'array') -> loop and add all
-            regionset.forEach((item) => {
-                this.addRegionset(item);
-            });
-            return;
-        }
-        if (!regionset.name) {
-            regionset.name = `${Oskari.getMsg('StatsGrid', 'missing.regionsetName')} ${++this.missingRegionsetNamesCount}`;
-        }
-        if (regionset.id && regionset.name) {
-            this.updateState({
-                regionsets: [...this.state.regionsets, regionset]
-            });
-        } else {
-            console.warn('Ignoring regionset without id or name:', regionset);
-        }
-    }
-
     updateIndicator (indicator) {
         const indicators = [...this.state.indicators];
         const index = indicators.findIndex(ind => ind.hash === indicator.hash);
@@ -374,8 +332,6 @@ const wrapped = controllerMixin(StatisticsController, [
     'setFullState',
     'resetState',
     'updateClassificationTransparency',
-    'addDatasource',
-    'addRegionset',
     'updateIndicator'
 ]);
 
