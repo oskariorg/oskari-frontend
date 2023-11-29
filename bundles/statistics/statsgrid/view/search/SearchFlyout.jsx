@@ -47,8 +47,9 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
         // Nothing to show -> show generic "data missing" message
         return (<b><Message messageKey='errors.indicatorListError' /></b>);
     }
+    const singleIndicatorSelected = state.selectedIndicators?.length === 1;
     const Component = (
-        <Content>
+        <React.Fragment>
             <Field>
                 <b><Message messageKey='panels.newSearch.seriesTitle' /></b>
                 <ClickableArea>
@@ -67,8 +68,8 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
                     filterOption={false}
                     options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
                     placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
-                    value={state?.selectedRegionsets}
-                    onChange={(value) => controller.setSelectedRegionsets(value)}
+                    value={state?.regionsetFilter}
+                    onChange={(value) => controller.setRegionsetFilter(value)}
                 />
             </Field>
             <Field>
@@ -86,7 +87,7 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
                         <b><Message messageKey='panels.newSearch.indicatorTitle' /></b>
                         <StyledSelect
                             mode='multiple'
-                            options={state?.indicatorOptions?.map(i => ({ value: i.id, label: i.title, disabled: state.disabledIndicators.includes(i.id) }))}
+                            options={state?.indicatorOptions?.map(i => ({ value: i.id, label: i.title, disabled: !!i.disabled }))}
                             placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
                             disabled={!state?.indicatorOptions || state?.indicatorOptions?.length < 1}
                             value={state?.selectedIndicators}
@@ -97,11 +98,8 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
                         <AddIndicatorBtn
                             onClick={() => controller.showIndicatorForm()}
                         >
-                            {state.selectedIndicators?.length === 1 ? (
-                                <Message messageKey='userIndicators.modify.edit' />
-                            ) : (
-                                <Message messageKey='userIndicators.buttonTitle' />
-                            )}
+                            { !singleIndicatorSelected && (<Message messageKey='userIndicators.buttonTitle' />) }
+                            { singleIndicatorSelected && (<Message messageKey='userIndicators.modify.edit' />) }
                         </AddIndicatorBtn>
                     )}
                 </Row>
@@ -136,7 +134,7 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
                     onClick={() => controller.search()}
                 />
             </ButtonContainer>
-        </Content>
+        </React.Fragment>
     );
 
     if (state.loading) {
