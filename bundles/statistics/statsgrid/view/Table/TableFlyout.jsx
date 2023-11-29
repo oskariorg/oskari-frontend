@@ -57,11 +57,11 @@ const HeaderCell = styled('div')`
     height: 100%;
 `;
 
-const TableFlyout = ({ state, controller }) => {
+const TableFlyout = ({ indicators = [], activeIndicator, state, controller }) => {
     let initialSort = {
         regionName: null
     };
-    state.indicators?.forEach(indicator => {
+    indicators?.forEach(indicator => {
         initialSort[indicator.hash] = null;
     });
     const [sortOrder, setSortOrder] = useState(initialSort);
@@ -120,7 +120,7 @@ const TableFlyout = ({ state, controller }) => {
             );
         }
     });
-    state.indicators?.forEach(indicator => {
+    indicators?.forEach(indicator => {
         columnSettings.push({
             dataIndex: 'data',
             align: 'right',
@@ -129,10 +129,10 @@ const TableFlyout = ({ state, controller }) => {
             sortOrder: sortOrder[indicator.hash],
             showSorterTooltip: false,
             onCell: (record, rowIndex) => ({
-                style: { background: state.activeIndicator === indicator.hash ? '#fafafa' : '#ffffff' }
+                style: { background: activeIndicator === indicator.hash ? '#fafafa' : '#ffffff' }
             }),
             onHeaderCell: (record, rowIndex) => ({
-                style: { background: state.activeIndicator === indicator.hash ? '#f0f0f0' : '#fafafa' }
+                style: { background: activeIndicator === indicator.hash ? '#f0f0f0' : '#fafafa' }
             }),
             title: () => {
                 return (
@@ -168,7 +168,7 @@ const TableFlyout = ({ state, controller }) => {
 
     const Component = (
         <Content>
-            {!state.indicators || state.indicators.length < 1 ? (
+            {!indicators || indicators.length < 1 ? (
                 <Message messageKey='statsgrid.noResults' />
             ) : (
                 <StyledTable
@@ -186,22 +186,22 @@ const TableFlyout = ({ state, controller }) => {
     return Component;
 };
 
-export const showTableFlyout = (state, controller, onClose) => {
+export const showTableFlyout = (indicators, activeIndicator, state, controller, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.table' />;
     const controls = showFlyout(
         title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <TableFlyout state={state} controller={controller} />
+            <TableFlyout indicators={indicators} activeIndicator={activeIndicator} state={state} controller={controller} />
         </LocaleProvider>,
         onClose
     );
 
     return {
         ...controls,
-        update: (state) => controls.update(
+        update: (indicators, activeIndicator, state) => controls.update(
             title,
             <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                <TableFlyout state={state} controller={controller} />
+                <TableFlyout indicators={indicators} activeIndicator={activeIndicator} state={state} controller={controller} />
             </LocaleProvider>
         )
     }

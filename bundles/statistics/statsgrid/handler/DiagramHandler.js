@@ -9,7 +9,6 @@ class DiagramController extends StateHandler {
         this.service = service;
         this.sandbox = sandbox;
         this.setState({
-            ...this.stateHandler.getState(),
             sortOrder: 'value-descending',
             flyout: null,
             loading: false
@@ -35,8 +34,9 @@ class DiagramController extends StateHandler {
     }
 
     showDiagramFlyout (extraOnClose) {
+        const { indicators, activeIndicator } = this.stateHandler.getState();
         this.updateState({
-            flyout: showDiagramFlyout(this.getState(), this.getController(), () => {
+            flyout: showDiagramFlyout(indicators, activeIndicator, this.getState(), this.getController(), () => {
                 this.closeDiagramFlyout();
                 if (extraOnClose) extraOnClose();
             }),
@@ -56,7 +56,8 @@ class DiagramController extends StateHandler {
 
     updateFlyout () {
         if (this.state.flyout) {
-            this.state.flyout.update(this.getState());
+            const { indicators, activeIndicator } = this.stateHandler.getState();
+            this.state.flyout.update(indicators, activeIndicator, this.getState());
         }
     }
 
@@ -75,7 +76,7 @@ class DiagramController extends StateHandler {
         data.forEach((entry) => {
             numericData[entry.id] = entry.value;
         });
-        const activeIndicator = this.state.indicators?.find(indicator => indicator.hash === this.state.activeIndicator);
+        const activeIndicator = this.stateHandler.getState().indicators?.find(indicator => indicator.hash === this.stateHandler.getState().activeIndicator);
         const { groups, bounds, error } = getClassification(numericData, activeIndicator?.classification);
         if (error) {
             return ['#555'];

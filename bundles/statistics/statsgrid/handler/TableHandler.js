@@ -8,7 +8,6 @@ class TableController extends StateHandler {
         this.service = service;
         this.sandbox = sandbox;
         this.setState({
-            ...this.stateHandler.getState(),
             selectedRegionset: null,
             indicatorData: [],
             regionsetOptions: [],
@@ -37,9 +36,10 @@ class TableController extends StateHandler {
 
     showTableFlyout (extraOnClose) {
         this.fetchTableRegionsets();
-        const currentRegionset = this.service.getRegionsets(this.stateHandler.getState().activeRegionset);
+        const { indicators, activeIndicator, activeRegionset } = this.stateHandler.getState();
+        const currentRegionset = this.service.getRegionsets(activeRegionset);
         this.updateState({
-            flyout: showTableFlyout(this.getState(), this.getController(), () => {
+            flyout: showTableFlyout(indicators, activeIndicator, this.getState(), this.getController(), () => {
                 this.closeTableFlyout();
                 if (extraOnClose) extraOnClose();
             }),
@@ -60,7 +60,8 @@ class TableController extends StateHandler {
 
     updateFlyout () {
         if (this.state.flyout) {
-            this.state.flyout.update(this.getState());
+            const { indicators, activeIndicator } = this.stateHandler.getState();
+            this.state.flyout.update(indicators, activeIndicator, this.getState());
         }
     }
 
@@ -79,7 +80,8 @@ class TableController extends StateHandler {
     }
 
     async fetchIndicatorData () {
-        if (!this.state.indicators || this.state.indicators.length < 1) return;
+        const { indicators } = this.stateHandler.getState();
+        if (!indicators || indicators.length < 1) return;
         this.updateState({
             loading: true
         });
@@ -99,7 +101,7 @@ class TableController extends StateHandler {
                 data[reg.id] = {};
             }
 
-            const promises = await this.state.indicators.map(async indicator => {
+            const promises = await indicators.map(async indicator => {
                 const indicatorData = await this.service.getIndicatorData(indicator.datasource, indicator.indicator, indicator.selections, indicator.series, this.state.selectedRegionset?.id);
                 for (const key in indicatorData) {
                     const region = data[key];

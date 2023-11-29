@@ -43,16 +43,16 @@ const sortOptions = [
     }
 ];
 
-const DiagramFlyout = ({ state, controller }) => {
+const DiagramFlyout = ({ indicators = [], activeIndicator, state, controller }) => {
 
     const Component = (
         <Content>
             <Selections>
                 <StyledSelect
                     filterOption={false}
-                    options={state.indicators?.map(indicator => ({ value: indicator.hash, label: <IndicatorName indicator={indicator} /> }))}
+                    options={indicators?.map(indicator => ({ value: indicator.hash, label: <IndicatorName indicator={indicator} /> }))}
                     onChange={(value) => controller.setActiveIndicator(value)}
-                    value={state.activeIndicator}
+                    value={activeIndicator}
                     placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
                 />
                 <StyledSelect
@@ -73,22 +73,22 @@ const DiagramFlyout = ({ state, controller }) => {
     return Component;
 };
 
-export const showDiagramFlyout = (state, controller, onClose) => {
+export const showDiagramFlyout = (indicators, activeIndicator, state, controller, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.diagram' />;
     const controls = showFlyout(
         title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <DiagramFlyout state={state} controller={controller} />
+            <DiagramFlyout indicators={indicators} activeIndicator={activeIndicator} state={state} controller={controller} />
         </LocaleProvider>,
         onClose
     );
 
     return {
         ...controls,
-        update: (state) => controls.update(
+        update: (indicators, activeIndicator, state) => controls.update(
             title,
             <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                <DiagramFlyout state={state} controller={controller} />
+                <DiagramFlyout indicators={indicators} activeIndicator={activeIndicator} state={state} controller={controller} />
             </LocaleProvider>
         )
     }
