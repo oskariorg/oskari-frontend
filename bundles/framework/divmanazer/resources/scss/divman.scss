@@ -257,6 +257,10 @@ body {
         opacity: 0.25;
         cursor: default;
     }
+
+    &.display-none {
+        display: none;
+    }
 }
 
 .oskari-tile-title {
