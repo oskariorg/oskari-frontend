@@ -201,6 +201,9 @@ class SearchController extends StateHandler {
                 return;
             }
             this.updateState({
+                // reset any selected indicators because if they are disabled, user can't unselect them
+                selectedIndicators: [],
+                indicatorParams: null,
                 disabledDatasources: ids,
                 indicatorOptions: this.validateIndicatorList(this.getState().indicatorOptions)
             });
