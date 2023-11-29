@@ -29,9 +29,8 @@ class StatisticsController extends StateHandler {
             lastSelectedClassification: null
         });
         this.addStateListener(state => {
-            this.searchHandler.updateState({
-                ...state
-            });
+            // update search flyout in case indicators were added/removed
+            this.searchHandler.updateFlyout();
             this.tableHandler.updateState({
                 ...state
             });
