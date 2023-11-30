@@ -1,4 +1,4 @@
-import { getDefaultColor, validateColor, getRangeForColor, getAvailableTypes, getRange, getDividedColors, getColorsForClassification } from './ColorHelper';
+import { getDefaultColor, validateColor, getRangeForColor, getAvailableTypes, getRange, getDividedColors, getColorsForClassification, getOptionsForType } from './ColorHelper';
 import { equalSizeBands, createClamp } from './util';
 import geostats from 'geostats/lib/geostats.min.js';
 import 'geostats/lib/geostats.css';
@@ -348,4 +348,44 @@ const _tryBounds = (bounds, count, dataMin, dataMax) => {
     if (bounds.length === count + 1) {
         return bounds.slice();
     }
+};
+
+export const getEditOptions = (activeIndicator, uniqueCount, minMax) => {
+    const { type, count, reverseColors, mapStyle, base, method } = activeIndicator.classification;
+    const { count: { min, max }, methods, modes, mapStyles, types, fractionDigits } = getLimits(mapStyle, type);
+
+    const colorCount = mapStyle === 'points' ? 2 + count % 2 : count;
+    const colorsets = mapStyle === 'points' && type !== 'div' ? [] : getOptionsForType(type, colorCount, reverseColors);
+
+    const disabled = [];
+    if (uniqueCount < 3) {
+        disabled.push('jenks');
+        // only jenks breaks with small unique count, show at least count 2 for others
+        if (method !== 'jenks') {
+            uniqueCount = 2;
+        }
+    }
+
+    // if dataset has negative and positive values it can be divided, base !== 0 has to be given in metadata
+    const dividable = minMax && minMax.min < 0 && minMax.max > 0;
+    if (typeof base !== 'number' && !dividable) {
+        // disable option if base isn't given in metadata or dataset isn't dividable
+        disabled.push('div');
+    }
+
+    const toOption = (option, value) => ({
+        value,
+        label: Oskari.getMsg('StatsGrid', `classify.${option}.${value}`),
+        disabled: disabled.includes(value)
+    });
+    const getNumberOptions = (min, max) => Array.from({ length: max - min + 1 }, (v, i) => i + min).map(i => ({ value: i, label: `${i}` }));
+    return {
+        methods: methods.map(val => toOption('methods', val)),
+        modes: modes.map(val => toOption('modes', val)),
+        mapStyles: mapStyles.map(val => toOption('mapStyles', val)),
+        types: types.map(val => toOption('types', val)),
+        counts: getNumberOptions(min, Math.min(uniqueCount, max)),
+        fractionDigits: getNumberOptions(0, fractionDigits),
+        colorsets
+    };
 };

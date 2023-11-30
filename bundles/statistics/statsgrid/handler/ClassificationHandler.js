@@ -1,7 +1,7 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { showMovableContainer } from 'oskari-ui/components/window';
 import { showHistogramPopup } from '../components/manualClassification/HistogramForm';
-import { validateClassification } from '../helper/ClassificationHelper';
+import { validateClassification, getClassification, getEditOptions } from '../helper/ClassificationHelper';
+import { showClassificationContainer } from '../components/classification/Classification';
 
 class ClassificationController extends StateHandler {
     constructor (stateHandler, service, sandbox) {
@@ -17,28 +17,45 @@ class ClassificationController extends StateHandler {
             },
             loading: false,
             classificationContainer: null,
-            histogramPopup: null
+            histogramPopup: null,
+            classifiedDataset: {},
+            editOptions: {},
+            indicatorData: {},
+            seriesStats: {}
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
+        this.addStateListener(() => {
+            this.updateClassificationContainer();
+            this.updateHistogramPopup();
+        });
     };
 
     getName () {
         return 'ClassificationHandler';
     }
 
-    showClassificationContainer (ui, onClose, containerOpts) {
+    async showClassificationContainer (onClose, containerOpts) {
+        const { activeIndicator, indicators } = this.stateHandler.getState();
+        const indicator = this.service.getIndicator(activeIndicator);
+        await this.updateData();
+
+        if (!activeIndicator || !indicators || !this.state.indicatorData) {
+            return;
+        }
         if (this.state.classificationContainer) {
-            this.updateClassificationContainer(ui);
+            this.updateClassificationContainer();
         } else {
             this.updateState({
-                classificationContainer: showMovableContainer(ui, onClose, containerOpts)
+                classificationContainer: showClassificationContainer(indicators, indicator, this.getState(), this.getController(), onClose, containerOpts)
             });
         }
     }
 
-    updateClassificationContainer (ui) {
+    updateClassificationContainer () {
         if (this.state.classificationContainer) {
-            this.state.classificationContainer.update(ui);
+            const { activeIndicator, indicators } = this.stateHandler.getState();
+            const indicator = this.service.getIndicator(activeIndicator);
+            this.state.classificationContainer.update(indicators, indicator, this.getState());
         }
     }
 
@@ -51,11 +68,13 @@ class ClassificationController extends StateHandler {
         }
     }
 
-    showHistogramPopup (state, classifiedDataset, data, editOptions) {
+    showHistogramPopup () {
         if (!this.state.histogramPopup) {
             this.service.getSeriesService().setAnimating(false);
+            const { activeIndicator } = this.stateHandler.getState();
+            const indicator = this.service.getIndicator(activeIndicator);
             this.updateState({
-                histogramPopup: showHistogramPopup(state, classifiedDataset, data, editOptions, () => this.closeHistogramPopup())
+                histogramPopup: showHistogramPopup({ ...this.state, activeIndicator: indicator, controller: this.getController() }, this.state.classifiedDataset, this.state.indicatorData?.data, this.state.editOptions, () => this.closeHistogramPopup())
             });
         }
     }
@@ -69,9 +88,53 @@ class ClassificationController extends StateHandler {
         }
     }
 
-    updateHistogramPopup (state, classifiedDataset, data, editOptions) {
+    updateHistogramPopup () {
         if (this.state.histogramPopup) {
-            this.state.histogramPopup.update(state, classifiedDataset, data, editOptions);
+            const { activeIndicator } = this.stateHandler.getState();
+            const indicator = this.service.getIndicator(activeIndicator);
+            this.state.histogramPopup.update({ ...this.state, activeIndicator: indicator, controller: this.getController() }, this.state.classifiedDataset, this.state.indicatorData?.data, this.state.editOptions);
+        }
+    }
+
+    async updateData () {
+        const { activeIndicator, activeRegionset } = this.stateHandler.getState();
+        const indicator = this.service.getIndicator(activeIndicator);
+        const seriesStats = this.service.getSeriesService().getSeriesStats(activeIndicator);
+        const indicatorData = await this.getIndicatorData(indicator, activeRegionset);
+        const { data, uniqueCount, minMax } = indicatorData;
+        const classifiedDataset = getClassification(data, indicator.classification, seriesStats, uniqueCount);
+        const editOptions = getEditOptions(indicator, uniqueCount, minMax);
+        this.updateState({
+            classifiedDataset,
+            editOptions,
+            indicatorData,
+            seriesStats
+        });
+    }
+
+    async getIndicatorData (activeIndicator, activeRegionset) {
+        try {
+            const isSerie = !!activeIndicator.series;
+            const serieSelection = isSerie ? this.service.getSeriesService().getValue() : null;
+
+            const indicatorData = {
+                hash: activeIndicator.hash,
+                regionset: activeRegionset,
+                data: {},
+                uniqueCount: 0,
+                serieSelection
+            };
+            const data = await this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, activeRegionset);
+            if (data) {
+                const validData = Object.fromEntries(Object.entries(data).filter(([key, val]) => val !== null && val !== undefined));
+                const uniqueValues = [...new Set(Object.values(validData))].sort((a, b) => a - b);
+                indicatorData.uniqueCount = uniqueValues.length;
+                indicatorData.data = data;
+                indicatorData.minMax = { min: uniqueValues[0], max: uniqueValues[uniqueValues.length - 1] };
+            }
+            return indicatorData;
+        } catch (error) {
+            this.log.warn('Error getting indicator data', activeIndicator, activeRegionset);
         }
     }
 
