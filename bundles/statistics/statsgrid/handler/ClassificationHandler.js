@@ -10,7 +10,6 @@ class ClassificationController extends StateHandler {
         this.service = service;
         this.sandbox = sandbox;
         this.setState({
-            ...this.stateHandler.getState(),
             pluginState: {
                 editEnabled: true,
                 transparent: false
@@ -24,10 +23,7 @@ class ClassificationController extends StateHandler {
             seriesStats: {}
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
-        this.addStateListener(() => {
-            this.updateClassificationContainer();
-            this.updateHistogramPopup();
-        });
+        this.addStateListener(() => this.updateContainer());
     };
 
     getName () {
@@ -49,6 +45,11 @@ class ClassificationController extends StateHandler {
                 classificationContainer: showClassificationContainer(indicators, indicator, this.getState(), this.getController(), onClose, containerOpts)
             });
         }
+    }
+
+    updateContainer () {
+        this.updateClassificationContainer();
+        this.updateHistogramPopup();
     }
 
     updateClassificationContainer () {
@@ -220,7 +221,8 @@ const wrapped = controllerMixin(ClassificationController, [
     'updateHistogramPopup',
     'setActiveIndicator',
     'updateClassification',
-    'updateClassificationObj'
+    'updateClassificationObj',
+    'updateContainer'
 ]);
 
 export { wrapped as ClassificationHandler };

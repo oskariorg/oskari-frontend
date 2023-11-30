@@ -33,9 +33,7 @@ class StatisticsController extends StateHandler {
             this.searchHandler.updateFlyout();
             this.tableHandler.updateFlyout();
             this.diagramHandler.updateFlyout();
-            this.classificationHandler.updateState({
-                ...state
-            });
+            this.classificationHandler.updateContainer();
         });
         this.eventHandlers = this.createEventHandlers();
     };
