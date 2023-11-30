@@ -11,13 +11,13 @@ class SearchController extends StateHandler {
         this.service = service;
         this.setState({
             searchTimeseries: false,
-            indicatorOptions: [],
             regionsetFilter: [],
-            selectedDatasource: null,
-            selectedIndicators: [],
             disabledDatasources: [],
-            indicatorParams: null,
+            selectedDatasource: null,
             isUserDatasource: false,
+            indicatorOptions: [],
+            selectedIndicators: [],
+            indicatorParams: null,
             loading: false,
             flyout: null
         });

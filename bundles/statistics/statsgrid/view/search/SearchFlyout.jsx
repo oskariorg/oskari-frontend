@@ -48,6 +48,14 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
         return (<b><Message messageKey='errors.indicatorListError' /></b>);
     }
     const singleIndicatorSelected = state.selectedIndicators?.length === 1;
+    const multipleRegionsetsAvailable = regionsets.length > 1;
+    const multipleDatasourcesAvailable = datasources.length > 1;
+    if (!multipleDatasourcesAvailable && !state?.selectedDatasource) {
+        // only one datasource and it is NOT selected -> select it mid-render
+        // Note! not the best place to have this here, but there is quite a bit of combinations where this needs to be defaulted
+        // depending if regionset filter is changed / reset button is clicked etc
+        controller.setSelectedDatasource(datasources[0].id);
+    }
     const Component = (
         <React.Fragment>
             <Field>
@@ -61,26 +69,30 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
                     </Checkbox>
                 </ClickableArea>
             </Field>
-            <Field>
-                <b><Message messageKey='panels.newSearch.regionsetTitle' /></b>
-                <StyledSelect
-                    mode='multiple'
-                    optionFilterProp='label'
-                    options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
-                    placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
-                    value={state?.regionsetFilter}
-                    onChange={(value) => controller.setRegionsetFilter(value)}
-                />
-            </Field>
-            <Field>
-                <b><Message messageKey='panels.newSearch.datasourceTitle' /></b>
-                <StyledSelect
-                    options={datasources.map(ds => ({ value: ds.id, label: ds.name, disabled: state.disabledDatasources.includes(ds.id) }))}
-                    placeholder={<Message messageKey='panels.newSearch.selectDatasourcePlaceholder' />}
-                    value={state?.selectedDatasource}
-                    onChange={(value) => controller.setSelectedDatasource(value)}
-                />
-            </Field>
+            { multipleRegionsetsAvailable &&
+                <Field>
+                    <b><Message messageKey='panels.newSearch.regionsetTitle' /></b>
+                    <StyledSelect
+                        mode='multiple'
+                        optionFilterProp='label'
+                        options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
+                        placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
+                        value={state?.regionsetFilter}
+                        onChange={(value) => controller.setRegionsetFilter(value)}
+                    />
+                </Field>
+            }
+            { multipleDatasourcesAvailable &&
+                <Field>
+                    <b><Message messageKey='panels.newSearch.datasourceTitle' /></b>
+                    <StyledSelect
+                        options={datasources.map(ds => ({ value: ds.id, label: ds.name, disabled: state.disabledDatasources.includes(ds.id) }))}
+                        placeholder={<Message messageKey='panels.newSearch.selectDatasourcePlaceholder' />}
+                        value={state?.selectedDatasource}
+                        onChange={(value) => controller.setSelectedDatasource(value)}
+                    />
+                </Field>
+            }
             <Field>
                 <Row>
                     <IndicatorField>

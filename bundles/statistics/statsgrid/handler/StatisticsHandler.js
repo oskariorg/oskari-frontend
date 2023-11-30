@@ -13,22 +13,27 @@ class StatisticsController extends StateHandler {
         super();
         this.sandbox = service.getSandbox();
         this.service = service;
+        const regionsets = normalizeRegionsets(conf.regionsets);
+        let activeRegionset = null;
+        if (regionsets.length === 1) {
+            activeRegionset = regionsets[0].id;
+        }
+        this.setState({
+            datasources: normalizeDatasources(conf.sources),
+            regionsets,
+            indicators: [],
+            regions: [],
+            activeIndicator: null,
+            activeRegionset,
+            activeRegion: null,
+            lastSelectedClassification: null
+        });
         this.searchHandler = new SearchHandler(this, this.service, this.sandbox);
         this.tableHandler = new TableHandler(this, this.service, this.sandbox);
         this.diagramHandler = new DiagramHandler(this, this.service, this.sandbox);
         this.formHandler = new IndicatorFormHandler(this, this.service, this.sandbox);
         this.classificationHandler = new ClassificationHandler(this, this.service, this.sandbox);
-        this.setState({
-            datasources: normalizeDatasources(conf.sources),
-            regionsets: normalizeRegionsets(conf.regionsets),
-            indicators: [],
-            regions: [],
-            activeIndicator: null,
-            activeRegionset: null,
-            activeRegion: null,
-            lastSelectedClassification: null
-        });
-        this.addStateListener(state => {
+        this.addStateListener(() => {
             // update search flyout in case indicators were added/removed
             this.searchHandler.updateFlyout();
             this.tableHandler.updateFlyout();
