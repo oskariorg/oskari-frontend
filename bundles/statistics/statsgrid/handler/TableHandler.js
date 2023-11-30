@@ -26,7 +26,7 @@ class TableController extends StateHandler {
 
     toggleFlyout (show, extraOnClose) {
         if (show) {
-            if (!this.state.flyout) {
+            if (!this.getState().flyout) {
                 this.showTableFlyout(extraOnClose);
             }
         } else {
@@ -49,8 +49,9 @@ class TableController extends StateHandler {
     }
 
     closeTableFlyout () {
-        if (this.state.flyout) {
-            this.state.flyout.close();
+        const { flyout } = this.getState();
+        if (flyout) {
+            flyout.close();
             this.updateState({
                 selectedRegionset: null,
                 flyout: null
@@ -59,14 +60,15 @@ class TableController extends StateHandler {
     }
 
     updateFlyout () {
-        if (this.state.flyout) {
+        const state = this.getState();
+        if (state.flyout) {
             const { indicators, activeIndicator } = this.stateHandler.getState();
-            this.state.flyout.update(indicators, activeIndicator, this.getState());
+            state.flyout.update(indicators, activeIndicator, state);
         }
     }
 
     setSelectedRegionset (value) {
-        this.stateHandler.getController().setActiveRegionset(value);
+        this.stateHandler.setActiveRegionset(value);
         this.updateState({
             selectedRegionset: this.service.getRegionsets(value)
         });
@@ -86,7 +88,7 @@ class TableController extends StateHandler {
             loading: true
         });
         try {
-            let data = {};
+            const data = {};
             const regions = await this.service.getRegions(this.state.selectedRegionset?.id);
             if (regions.length === 0) {
                 Messaging.error(this.loc('errors.regionsDataIsEmpty'));
