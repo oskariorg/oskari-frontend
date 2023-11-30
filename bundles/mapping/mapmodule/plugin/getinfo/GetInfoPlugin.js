@@ -11,6 +11,8 @@ import './request/SwipeStatusRequest';
 import './request/SwipeStatusRequestHandler';
 
 import { getGfiContent, getGfiResponseType, hasGfiData } from './GfiHelper';
+
+const GFI_TYPE_APPLICATION_JSON = 'application/json';
 /**
  * @class Oskari.mapframework.mapmodule.GetInfoPlugin
  *
@@ -427,9 +429,17 @@ Oskari.clazz.define(
                     if (me._isAjaxRequestBusy()) {
                         const data = resp.data || [];
                         data.forEach((datum) => {
+                            const gfiType = datum?.gfiType || null;
+                            let features = [datum];
+                            if (gfiType === GFI_TYPE_APPLICATION_JSON) {
+                                const geoJSON = JSON.parse(datum?.content);
+                                features = geoJSON?.features?.map(feature => feature.properties) || null;
+                            }
                             me._handleInfoResult({
-                                features: [datum],
+                                layerId: datum.layerId,
+                                features,
                                 lonlat,
+                                gfiType,
                                 via: 'ajax'
                             });
                         });
@@ -483,7 +493,7 @@ Oskari.clazz.define(
                 if (hasGfiData(content, type)) {
                     // send event if layer get gfi for selected coordinates
                     // WFS layer layerId come from data object other layers layerId come from feature object
-                    var dataForMapLocationEvent = Oskari.eventBuilder(
+                    const dataForMapLocationEvent = Oskari.eventBuilder(
                         'DataForMapLocationEvent'
                     )(data.lonlat.lon, data.lonlat.lat, content, data.layerId || feature.layerId, type);
                     me.getSandbox().notifyAll(dataForMapLocationEvent);
@@ -499,7 +509,7 @@ Oskari.clazz.define(
         publisherHideUI: function (hide) {
             this._config.noUI = hide;
             if (hide === true && this.getSandbox().hasHandler('InfoBox.HideInfoBoxRequest')) {
-                var reqBuilder = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest');
+                const reqBuilder = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest');
                 this.getSandbox().request(this, reqBuilder(this.infoboxId));
             }
         },
@@ -511,11 +521,11 @@ Oskari.clazz.define(
          * @param  {Object} data
          */
         _handleInfoResult: function (data) {
-            var content = [];
-            var contentData = {};
-            var fragments = [];
+            const content = [];
+            const contentData = {};
+            let fragments = [];
 
-            if (data.via === 'ajax') {
+            if (data.via === 'ajax' && data?.gfiType !== GFI_TYPE_APPLICATION_JSON) {
                 fragments = this._parseGfiResponse(data);
             } else {
                 fragments = this._formatWFSFeaturesForInfoBox(data);
@@ -523,12 +533,12 @@ Oskari.clazz.define(
 
             this._sendDataForMapLocationEvent(data);
 
-            if (fragments.length) {
+            if (fragments?.length) {
                 contentData.html = this._renderFragments(fragments);
                 contentData.layerId = fragments[0].layerId;
                 content.push(contentData);
             }
-            var { colourScheme, font, noUI } = this._config || {};
+            const { colourScheme, font, noUI } = this._config || {};
 
             // GFIPlugin.config.noUI: true means the infobox for GFI content shouldn't be shown
             // DataForMapLocationEvent is still triggered allowing RPC apps to customize and format the data that is shown.
@@ -537,8 +547,8 @@ Oskari.clazz.define(
             }
 
             this._showGfiInfo(content, data, this.formatters, {
-                colourScheme: colourScheme,
-                font: font,
+                colourScheme,
+                font,
                 title: this._loc.title,
                 infoboxId: this.infoboxId,
                 hidePrevious: false
