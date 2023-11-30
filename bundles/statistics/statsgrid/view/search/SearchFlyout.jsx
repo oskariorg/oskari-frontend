@@ -48,6 +48,7 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
         return (<b><Message messageKey='errors.indicatorListError' /></b>);
     }
     const singleIndicatorSelected = state.selectedIndicators?.length === 1;
+    const multipleRegionsetsAvailable = regionsets.length > 1;
     const Component = (
         <React.Fragment>
             <Field>
@@ -61,17 +62,19 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
                     </Checkbox>
                 </ClickableArea>
             </Field>
-            <Field>
-                <b><Message messageKey='panels.newSearch.regionsetTitle' /></b>
-                <StyledSelect
-                    mode='multiple'
-                    optionFilterProp='label'
-                    options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
-                    placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
-                    value={state?.regionsetFilter}
-                    onChange={(value) => controller.setRegionsetFilter(value)}
-                />
-            </Field>
+            { multipleRegionsetsAvailable &&
+                <Field>
+                    <b><Message messageKey='panels.newSearch.regionsetTitle' /></b>
+                    <StyledSelect
+                        mode='multiple'
+                        optionFilterProp='label'
+                        options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
+                        placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
+                        value={state?.regionsetFilter}
+                        onChange={(value) => controller.setRegionsetFilter(value)}
+                    />
+                </Field>
+            }
             <Field>
                 <b><Message messageKey='panels.newSearch.datasourceTitle' /></b>
                 <StyledSelect
