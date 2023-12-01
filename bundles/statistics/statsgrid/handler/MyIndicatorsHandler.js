@@ -48,7 +48,7 @@ class IndicatorsHandler extends StateHandler {
     }
 
     getIndicatorById (id) {
-        const matches = this.state.data.filter((indicator) => {
+        const matches = this.getState().data.filter((indicator) => {
             return indicator.id === id;
         });
         if (matches.length > 0) {

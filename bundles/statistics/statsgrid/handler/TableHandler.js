@@ -8,16 +8,13 @@ class TableController extends StateHandler {
         this.service = service;
         this.sandbox = sandbox;
         this.setState({
-            selectedRegionset: null,
             indicatorData: [],
             regionsetOptions: [],
-            regions: [],
             flyout: null,
             loading: false
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.addStateListener(() => this.updateFlyout());
-        this.eventHandlers = this.createEventHandlers();
     };
 
     getName () {
@@ -39,11 +36,10 @@ class TableController extends StateHandler {
         const { indicators, activeIndicator, activeRegionset } = this.stateHandler.getState();
         const currentRegionset = this.service.getRegionsets(activeRegionset);
         this.updateState({
-            flyout: showTableFlyout(indicators, activeIndicator, this.getState(), this.getController(), () => {
+            flyout: showTableFlyout(indicators, activeIndicator, currentRegionset, this.getState(), this.getController(), () => {
                 this.closeTableFlyout();
                 if (extraOnClose) extraOnClose();
-            }),
-            selectedRegionset: currentRegionset
+            })
         });
         this.fetchIndicatorData();
     }
@@ -53,7 +49,6 @@ class TableController extends StateHandler {
         if (flyout) {
             flyout.close();
             this.updateState({
-                selectedRegionset: null,
                 flyout: null
             });
         }
@@ -62,16 +57,17 @@ class TableController extends StateHandler {
     updateFlyout () {
         const state = this.getState();
         if (state.flyout) {
-            const { indicators, activeIndicator } = this.stateHandler.getState();
-            state.flyout.update(indicators, activeIndicator, state);
+            const { indicators, activeIndicator, activeRegionset } = this.stateHandler.getState();
+            const currentRegionset = this.service.getRegionsets(activeRegionset);
+            state.flyout.update(indicators, activeIndicator, currentRegionset, state);
         }
     }
 
-    setSelectedRegionset (value) {
-        this.stateHandler.setActiveRegionset(value);
+    async setSelectedRegionset (value) {
         this.updateState({
-            selectedRegionset: this.service.getRegionsets(value)
+            loading: true
         });
+        await this.stateHandler.setActiveRegionset(value);
         this.fetchIndicatorData();
     }
 
@@ -81,21 +77,19 @@ class TableController extends StateHandler {
         });
     }
 
-    async fetchIndicatorData () {
-        const { indicators } = this.stateHandler.getState();
+    fetchIndicatorData () {
+        const { indicators, regions } = this.stateHandler.getState();
         if (!indicators || indicators.length < 1) return;
         this.updateState({
             loading: true
         });
         try {
             const data = {};
-            const regions = await this.service.getRegions(this.state.selectedRegionset?.id);
-            if (regions.length === 0) {
+            if (!regions || regions.length === 0) {
                 Messaging.error(this.loc('errors.regionsDataIsEmpty'));
                 this.updateState({
                     loading: false,
-                    indicatorData: [],
-                    regions: []
+                    indicatorData: []
                 });
                 return;
             }
@@ -103,38 +97,35 @@ class TableController extends StateHandler {
                 data[reg.id] = {};
             }
 
-            const promises = await indicators.map(async indicator => {
-                const indicatorData = await this.service.getIndicatorData(indicator.datasource, indicator.indicator, indicator.selections, indicator.series, this.state.selectedRegionset?.id);
-                for (const key in indicatorData) {
+            for (const indicator of indicators) {
+                const { indicatorData } = this.stateHandler.getState();
+                const regionsetData = indicatorData[indicator.indicator];
+                for (const key in regionsetData) {
                     const region = data[key];
                     if (!region) {
                         continue;
                     }
-                    region[indicator.hash] = indicatorData[key];
+                    region[indicator.hash] = regionsetData[key];
                     data[key] = {
                         ...data[key],
                         ...region
                     };
                 }
-            });
+            }
 
-            Promise.all(promises).then(() => {
-                this.updateState({
-                    loading: false,
-                    regions: regions,
-                    indicatorData: regions.map(region => ({
-                        key: region.id,
-                        regionName: region.name,
-                        data: data[region.id]
-                    }))
-                });
+            this.updateState({
+                loading: false,
+                indicatorData: regions.map(region => ({
+                    key: region.id,
+                    regionName: region.name,
+                    data: data[region.id]
+                }))
             });
         } catch (error) {
             Messaging.error(this.loc('errors.regionsDataError'));
             this.updateState({
                 loading: false,
-                indicatorData: [],
-                regions: []
+                indicatorData: []
             });
         }
     }
@@ -145,34 +136,6 @@ class TableController extends StateHandler {
 
     setActiveIndicator (hash) {
         this.stateHandler.getController().setActiveIndicator(hash);
-    }
-
-    createEventHandlers () {
-        const handlers = {
-            'StatsGrid.ParameterChangedEvent': (event) => {
-                if (this.state.flyout) {
-                    this.fetchIndicatorData();
-                }
-            },
-            'StatsGrid.ClassificationChangedEvent': (event) => {
-                if (event.getChanged().hasOwnProperty('fractionDigits')) {
-                    if (this.state.flyout) {
-                        this.fetchIndicatorData();
-                    }
-                }
-            }
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
     }
 }
 

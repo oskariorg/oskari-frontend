@@ -18,23 +18,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     this._regionsAdded = [];
     this._lastRenderCache = {};
     this.stateHandler = this.service.getStateHandler();
+    this.stateHandler.addStateListener(() => this.render());
 }, {
     render: async function (highlightRegionId) {
         try {
             const state = this.stateHandler.getState();
-            const activeIndicator = this.service.getIndicator(state.activeIndicator);
+            const { activeRegionset, indicatorData, activeIndicator } = state;
+            const currentIndicator = this.service.getIndicator(activeIndicator);
             if (!activeIndicator) {
                 this._clearRegions();
                 return;
             }
 
-            const regionset = state.activeRegionset;
-            const seriesStats = this.service.getSeriesService().getSeriesStats(activeIndicator.hash);
-            const { datasource, indicator, selections, series, classification } = activeIndicator;
+            const seriesStats = this.service.getSeriesService().getSeriesStats(activeIndicator);
+            const { classification } = currentIndicator;
             const { mapStyle } = classification;
-            this._updateLayerProperties(mapStyle, regionset);
+            this._updateLayerProperties(mapStyle, activeRegionset);
 
-            const dataByRegion = await this.service.getIndicatorData(datasource, indicator, selections, series, regionset);
+            const dataByRegion = indicatorData[currentIndicator.indicator];
             const { error, ...classifiedDataset } = getClassification(dataByRegion, classification, seriesStats);
             if (error) {
                 this._clearRegions();
@@ -43,17 +44,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             if (this._lastRenderCache.mapStyle !== mapStyle) {
                 this._clearRegions();
             }
-            this._viewRegions(regionset, classification, classifiedDataset, dataByRegion, highlightRegionId);
+            this._viewRegions(classification, classifiedDataset, dataByRegion, highlightRegionId);
         } catch (error) {
             this.log.warn('Error getting indicator data');
             this._clearRegions();
         }
     },
     /** **** PRIVATE METHODS ******/
-    _viewRegions: async function (regionset, classification, classifiedDataset, dataByRegion, highlightRegionId) {
+    _viewRegions: async function (classification, classifiedDataset, dataByRegion, highlightRegionId) {
         const locale = this.instance.getLocalization();
         try {
-            const regions = await this.service.getRegions(regionset);
+            const { regions } = this.stateHandler.getState();
             if (regions.length === 0) {
                 Messaging.error(locale.errors.regionsDataIsEmpty);
                 return;

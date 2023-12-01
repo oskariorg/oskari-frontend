@@ -36,7 +36,7 @@ class IndicatorFormController extends StateHandler {
     async showIndicatorPopup (datasourceId, indicatorId = null) {
         if (!datasourceId) return;
         await this.getPopupData(datasourceId, indicatorId);
-        if (!this.state.indicatorPopup) {
+        if (!this.getState().indicatorPopup) {
             this.updateState({
                 indicatorPopup: showIndicatorForm(this.getState(), this.getController(), () => this.closeIndicatorPopup())
             });
@@ -61,8 +61,8 @@ class IndicatorFormController extends StateHandler {
     }
 
     closeIndicatorPopup () {
-        if (this.state.indicatorPopup) {
-            this.state.indicatorPopup.close();
+        if (this.getState().indicatorPopup) {
+            this.getState().indicatorPopup.close();
         }
         this.reset();
         this.updateState({
@@ -72,16 +72,16 @@ class IndicatorFormController extends StateHandler {
     }
 
     updatePopup () {
-        if (this.state.clipboardPopup) {
-            this.state.clipboardPopup.update(this.getState());
+        if (this.getState().clipboardPopup) {
+            this.getState().clipboardPopup.update(this.getState());
         }
-        if (this.state.indicatorPopup) {
-            this.state.indicatorPopup.update(this.getState());
+        if (this.getState().indicatorPopup) {
+            this.getState().indicatorPopup.update(this.getState());
         }
     }
 
     showClipboardPopup () {
-        if (!this.state.clipboardPopup) {
+        if (!this.getState().clipboardPopup) {
             this.updateState({
                 clipboardPopup: showClipboardPopup(this.getState(), this.getController(), () => this.closeClipboardPopup())
             });
@@ -89,8 +89,8 @@ class IndicatorFormController extends StateHandler {
     }
 
     closeClipboardPopup () {
-        if (this.state.clipboardPopup) {
-            this.state.clipboardPopup.close();
+        if (this.getState().clipboardPopup) {
+            this.getState().clipboardPopup.close();
         }
         this.updateState({
             clipboardPopup: null,
@@ -178,23 +178,23 @@ class IndicatorFormController extends StateHandler {
     }
 
     addStatisticalData () {
-        if (this.state.datasetYear.length === 0 || isNaN(this.state.datasetYear)) {
+        if (this.getState().datasetYear.length === 0 || isNaN(this.getState().datasetYear)) {
             Messaging.error(this.loc('errors.myIndicatorYearInput'));
             return;
         }
-        if (!this.state.datasetRegionset) {
+        if (!this.getState().datasetRegionset) {
             Messaging.error(this.loc('errors.myIndicatorRegionselect'));
             return;
         }
         const dataset = {
-            year: this.state.datasetYear,
-            regionset: this.state.datasetRegionset
+            year: this.getState().datasetYear,
+            regionset: this.getState().datasetRegionset
         };
-        this.showDataTable(this.state.datasource, dataset, this.state.indicator);
+        this.showDataTable(this.getState().datasource, dataset, this.getState().indicator);
     }
 
     updateFormData (value, regionId) {
-        const regions = this.state.formData?.regions?.map(region => {
+        const regions = this.getState().formData?.regions?.map(region => {
             if (region.id === regionId) {
                 return {
                     ...region,
@@ -205,7 +205,7 @@ class IndicatorFormController extends StateHandler {
         });
         this.updateState({
             formData: {
-                ...this.state.formData,
+                ...this.getState().formData,
                 regions
             }
         });
@@ -279,15 +279,15 @@ class IndicatorFormController extends StateHandler {
             loading: true
         });
         const indicatorData = {
-            name: this.state.indicatorName,
-            description: this.state.indicatorDescription,
-            datasource: this.state.indicatorDatasource
+            name: this.getState().indicatorName,
+            description: this.getState().indicatorDescription,
+            datasource: this.getState().indicatorDatasource
         };
         const regionData = {
-            selectors: this.state.selectedDataset,
+            selectors: this.getState().selectedDataset,
             values: []
         };
-        for (const region of this.state.formData?.regions || []) {
+        for (const region of this.getState().formData?.regions || []) {
             if (region.value && region.value !== '') {
                 const value = `${region.value}`.replace(/,/g, '.');
                 regionData.values.push({ ...region, value });
@@ -314,7 +314,7 @@ class IndicatorFormController extends StateHandler {
                 datasetYear: '',
                 datasetRegionset: null
             });
-            this.getPopupData(this.state.datasource, this.state.indicator);
+            this.getPopupData(this.getState().datasource, this.getState().indicator);
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorSave'));
             this.updateState({
@@ -333,11 +333,11 @@ class IndicatorFormController extends StateHandler {
             return;
         }
         // inject possible id for indicator
-        if (this.state.indicator) {
-            data.id = this.state.indicator;
+        if (this.getState().indicator) {
+            data.id = this.getState().indicator;
         }
         try {
-            const response = await this.service.saveIndicator(this.state.datasource, data);
+            const response = await this.service.saveIndicator(this.getState().datasource, data);
             this.updateState({
                 indicator: response.id
             });
@@ -355,14 +355,14 @@ class IndicatorFormController extends StateHandler {
         }
 
         // save dataset
-        Oskari.log('IndicatorFormFlyout').info('Save data form values', data, 'Indicator: ' + this.state.indicator);
+        Oskari.log('IndicatorFormFlyout').info('Save data form values', data, 'Indicator: ' + this.getState().indicator);
         const values = {};
         for (const regionData of data?.values) {
             values[regionData.id] = regionData.value;
         }
 
         try {
-            const response = await this.service.saveIndicatorData(this.state.datasource, this.state.indicator, data.selectors, values);
+            const response = await this.service.saveIndicatorData(this.getState().datasource, this.getState().indicator, data.selectors, values);
             return response;
         } catch (error) {
             throw new Error(error);
@@ -399,7 +399,7 @@ class IndicatorFormController extends StateHandler {
     }
 
     importFromClipboard () {
-        const data = this.state.clipboardValue;
+        const data = this.getState().clipboardValue;
         const validRows = [];
 
         const lines = data.match(/[^\r\n]+/g);
@@ -423,7 +423,7 @@ class IndicatorFormController extends StateHandler {
             }
         });
 
-        const formData = this.state.formData.regions;
+        const formData = this.getState().formData.regions;
         validRows.forEach(row => {
             formData.forEach((data, index) => {
                 if (data.name.toLowerCase() === row.name.toLowerCase()) {
@@ -433,7 +433,7 @@ class IndicatorFormController extends StateHandler {
         });
         this.updateState({
             formData: {
-                ...this.state.formData,
+                ...this.getState().formData,
                 regions: formData
             }
         });
@@ -441,16 +441,16 @@ class IndicatorFormController extends StateHandler {
     }
 
     editDataset (dataset) {
-        this.showDataTable(this.state.datasource, { year: dataset.year, regionset: dataset.regionset }, this.state.indicator);
+        this.showDataTable(this.getState().datasource, { year: dataset.year, regionset: dataset.regionset }, this.getState().indicator);
     }
 
     async deleteDataset (dataset) {
         try {
-            await this.service.deleteIndicator(Number(this.state.datasource), this.state.indicator, { year: dataset.year }, dataset.regionset);
+            await this.service.deleteIndicator(Number(this.getState().datasource), this.getState().indicator, { year: dataset.year }, dataset.regionset);
         } catch (error) {
             Messaging.error(this.loc('errors.datasetDelete'));
         }
-        this.getPopupData(this.state.datasource, this.state.indicator);
+        this.getPopupData(this.getState().datasource, this.getState().indicator);
     }
 }
 

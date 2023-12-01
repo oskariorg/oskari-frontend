@@ -86,6 +86,9 @@ Oskari.clazz.define(
 
             this.stateHandler = statsService.getStateHandler();
 
+            // setup initial state
+            this.setState();
+
             // initialize flyoutmanager
             this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, this.stateHandler);
             this.getTile().setupTools(this.flyoutManager);
@@ -122,8 +125,6 @@ Oskari.clazz.define(
             if (statsService.getUserDatasource()) {
                 this._addIndicatorsTabToMyData(sandbox);
             }
-            // setup initial state
-            this.setState();
 
             // listen for search closing to remove stats layer if no indicators was found
             this.flyoutManager.on('hide', id => {

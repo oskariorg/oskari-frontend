@@ -26,7 +26,8 @@ class StatisticsController extends StateHandler {
             activeIndicator: null,
             activeRegionset,
             activeRegion: null,
-            lastSelectedClassification: null
+            lastSelectedClassification: null,
+            indicatorData: {}
         });
         this.searchHandler = new SearchHandler(this, this.service, this.sandbox);
         this.tableHandler = new TableHandler(this, this.service, this.sandbox);
@@ -40,7 +41,6 @@ class StatisticsController extends StateHandler {
             this.diagramHandler.updateFlyout();
             this.classificationHandler.updateContainer();
         });
-        this.eventHandlers = this.createEventHandlers();
     };
 
     getName () {
@@ -68,29 +68,37 @@ class StatisticsController extends StateHandler {
     }
 
     removeIndicator (indicator) {
-        const indicators = [...this.state.indicators];
+        const indicators = [...this.getState().indicators];
         const index = indicators.findIndex(ind => ind.hash === indicator.hash);
         if (index >= 0) {
             indicators.splice(index, 1);
         }
+        const oldData = this.getState().indicatorData;
+        const indicatorData = {};
+        const indicatorDataKeys = Object.keys(oldData).filter(key => key !== indicator.indicator);
+        for (const dataKey of indicatorDataKeys) {
+            indicatorData[dataKey] = oldData[dataKey];
+        }
         this.updateState({
-            indicators: indicators
+            indicators: indicators,
+            indicatorData
         });
-        if (this.state.indicators?.length < 1) {
+        const { activeIndicator } = this.getState();
+        if (this.getState().indicators?.length < 1) {
             this.resetState();
         } else {
-            if (indicator && indicator.hash && this.state.activeIndicator && this.state.activeIndicator.hash === indicator.hash) {
+            if (indicator && indicator.hash && activeIndicator && activeIndicator === indicator.hash) {
                 // active was the one removed -> reset active
-                const newActiveIndicator = this.state.indicators[this.state.indicators.length - 1];
+                const newActiveIndicator = this.getState().indicators[this.getState().indicators.length - 1];
                 this.setActiveIndicator(newActiveIndicator.hash);
             }
         }
     }
 
     setActiveIndicator (hash) {
-        const previous = this.state.activeIndicator;
+        const previous = this.getState().activeIndicator;
 
-        const indicator = this.state.indicators.find(ind => ind.hash === hash);
+        const indicator = this.getState().indicators.find(ind => ind.hash === hash);
         this.updateState({
             activeIndicator: hash,
             lastSelectedClassification: indicator?.classification
@@ -105,9 +113,25 @@ class StatisticsController extends StateHandler {
         }
     }
 
-    setActiveRegionset (value) {
+    async fetchIndicatorData (regionset = null) {
+        const { activeRegionset } = this.getState();
+        regionset = regionset || activeRegionset;
+        const indicatorData = {};
+        for (const indicator of this.getState().indicators) {
+            const data = await this.service.getIndicatorData(indicator.datasource, indicator.indicator, indicator.selections, indicator.series, regionset);
+            indicatorData[indicator.indicator] = data;
+        }
         this.updateState({
-            activeRegionset: value
+            indicatorData
+        });
+    }
+
+    async setActiveRegionset (value) {
+        const regions = await this.service.getRegions(value);
+        await this.fetchIndicatorData(value);
+        this.updateState({
+            activeRegionset: value,
+            regions
         });
         const eventBuilder = Oskari.eventBuilder('StatsGrid.RegionsetChangedEvent');
         this.sandbox.notifyAll(eventBuilder());
@@ -119,7 +143,7 @@ class StatisticsController extends StateHandler {
         });
         const eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
         // TODO: send which region was deselected so implementations can optimize rendering!!!!
-        this.sandbox.notifyAll(eventBuilder(this.state.activeRegionset, value, null));
+        this.sandbox.notifyAll(eventBuilder(this.getState().activeRegionset, value, null));
     }
 
     setFullState (state) {
@@ -160,10 +184,11 @@ class StatisticsController extends StateHandler {
 
         this.updateState({
             activeRegion: activeRegion,
-            activeRegionset: regionset,
             indicators: indicatorsArr,
             lastSelectedClassification
         });
+
+        this.setActiveRegionset(regionset);
 
         if (active) {
             this.setActiveIndicator(active.hash);
@@ -179,15 +204,17 @@ class StatisticsController extends StateHandler {
             activeRegion: null,
             activeRegionset: null,
             indicators: [],
-            lastSelectedClassification: null
+            regions: [],
+            lastSelectedClassification: null,
+            indicatorData: {}
         });
         const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
         this.sandbox.notifyAll(eventBuilder(true));
     }
 
     updateClassificationTransparency (transparency) {
-        const indicators = [...this.state.indicators];
-        const index = indicators.findIndex(ind => ind.hash === this.state.activeIndicator);
+        const indicators = [...this.getState().indicators];
+        const index = indicators.findIndex(ind => ind.hash === this.getState().activeIndicator);
         if (index) {
             indicators[index].classification.transparency = transparency;
             this.updateState({
@@ -221,7 +248,7 @@ class StatisticsController extends StateHandler {
             id: indicator
         });
         let found = false;
-        this.state.indicators.forEach((existing) => {
+        this.getState().indicators.forEach((existing) => {
             if (existing.hash === ind.hash) {
                 found = true;
             }
@@ -241,8 +268,10 @@ class StatisticsController extends StateHandler {
             ind.classification.mode = 'distinct';
         }
         this.updateState({
-            indicators: [...this.state.indicators, ind]
+            indicators: [...this.getState().indicators, ind]
         });
+
+        await this.fetchIndicatorData();
 
         // notify
         const eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
@@ -255,8 +284,8 @@ class StatisticsController extends StateHandler {
      * @param  {String} indicatorHash indicator hash
      */
     async getClassificationOpts (indicatorHash, opts = {}) {
-        const indicator = this.state.indicators.find(ind => ind.hash === indicatorHash) || {};
-        const lastSelected = { ...this.state.lastSelectedClassification };
+        const indicator = this.getState().indicators.find(ind => ind.hash === indicatorHash) || {};
+        const lastSelected = { ...this.getState().lastSelectedClassification };
         delete lastSelected.manualBounds;
         delete lastSelected.fractionDigits;
         delete lastSelected.base;
@@ -289,7 +318,7 @@ class StatisticsController extends StateHandler {
     }
 
     updateIndicator (indicator) {
-        const indicators = [...this.state.indicators];
+        const indicators = [...this.getState().indicators];
         const index = indicators.findIndex(ind => ind.hash === indicator.hash);
         if (index) {
             indicators[index] = indicator;
@@ -297,22 +326,6 @@ class StatisticsController extends StateHandler {
         this.updateState({
             indicators
         });
-    }
-
-    createEventHandlers () {
-        const handlers = {
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
     }
 }
 

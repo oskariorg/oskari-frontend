@@ -32,7 +32,7 @@ class SearchController extends StateHandler {
 
     toggleFlyout (show, extraOnClose) {
         if (show) {
-            if (!this.state.flyout) {
+            if (!this.getState().flyout) {
                 this.showSearchFlyout(extraOnClose);
             }
         } else {
@@ -51,8 +51,8 @@ class SearchController extends StateHandler {
     }
 
     closeSearchFlyout () {
-        if (this.state.flyout) {
-            this.state.flyout.close();
+        if (this.getState().flyout) {
+            this.getState().flyout.close();
             this.updateState({
                 flyout: null
             });
@@ -60,9 +60,9 @@ class SearchController extends StateHandler {
     }
 
     updateFlyout () {
-        if (this.state.flyout) {
+        if (this.getState().flyout) {
             const { indicators } = this.stateHandler.getState();
-            this.state.flyout.update(this.getState(), indicators);
+            this.getState().flyout.update(this.getState(), indicators);
         }
     }
 
@@ -144,7 +144,7 @@ class SearchController extends StateHandler {
             searchTimeseries: !!searchTimeseries
         });
 
-        const selectors = this.state.indicatorParams?.selectors;
+        const selectors = this.getState().indicatorParams?.selectors;
         if (!selectors) {
             return;
         }
@@ -167,9 +167,9 @@ class SearchController extends StateHandler {
             }
             this.updateState({
                 indicatorParams: {
-                    ...this.state.indicatorParams,
+                    ...this.getState().indicatorParams,
                     selected: {
-                        ...this.state.indicatorParams.selected,
+                        ...this.getState().indicatorParams.selected,
                         [keyWithTime]: selected
                     }
                 }
@@ -193,10 +193,10 @@ class SearchController extends StateHandler {
             });
             return;
         }
-        const unsupportedDatasources = this.service.getUnsupportedDatasetsList(this.state.regionsetFilter);
+        const unsupportedDatasources = this.service.getUnsupportedDatasetsList(this.getState().regionsetFilter);
         if (unsupportedDatasources) {
             const ids = unsupportedDatasources.map((iteration) => iteration.id);
-            if (ids.includes(this.state.selectedDatasource)) {
+            if (ids.includes(this.getState().selectedDatasource)) {
                 this.clearSearch();
                 return;
             }
@@ -231,8 +231,8 @@ class SearchController extends StateHandler {
     }
 
     async openMetadataPopup (indicator = null) {
-        const datasource = indicator ? indicator.datasource : this.state.selectedDatasource;
-        const indicators = indicator ? indicator.indicator : this.state.selectedIndicators;
+        const datasource = indicator ? indicator.datasource : this.getState().selectedDatasource;
+        const indicators = indicator ? indicator.indicator : this.getState().selectedIndicators;
 
         const data = await this.prepareMetadataPopupData(datasource, indicators);
         if (this.metadataPopup) {
@@ -274,17 +274,17 @@ class SearchController extends StateHandler {
     }
 
     fetchIndicatorParams () {
-        if (!this.state.selectedIndicators || this.state.selectedIndicators.length === 0) {
+        if (!this.getState().selectedIndicators || this.getState().selectedIndicators.length === 0) {
             this.updateState({
                 indicatorParams: null
             });
             return;
         }
 
-        if (this.state.selectedIndicators.length > 1) {
+        if (this.getState().selectedIndicators.length > 1) {
             this.handleMultipleIndicatorParams();
         } else {
-            this.handleSingleIndicatorParams(this.state.selectedIndicators[0]);
+            this.handleSingleIndicatorParams(this.getState().selectedIndicators[0]);
         }
     }
 
@@ -293,7 +293,7 @@ class SearchController extends StateHandler {
     }
 
     handleMultipleIndicatorParams () {
-        const indicators = this.state.selectedIndicators.filter((n) => { return n !== ''; });
+        const indicators = this.getState().selectedIndicators.filter((n) => { return n !== ''; });
         let combinedValues = {};
         let regionsets = [];
 
@@ -331,8 +331,8 @@ class SearchController extends StateHandler {
         });
         promise.then(() => {
             const data = {
-                datasrc: this.state.selectedDatasource,
-                indicators: this.state.selectedIndicators,
+                datasrc: this.getState().selectedDatasource,
+                indicators: this.getState().selectedIndicators,
                 selectors: combinedValues,
                 regionset: regionsets,
                 selected: {}
@@ -347,7 +347,7 @@ class SearchController extends StateHandler {
     async handleSingleIndicatorParams (indId, cb) {
         const panelLoc = this.loc('panels.newSearch');
         try {
-            const result = await this.service.getIndicatorMetadata(this.state.selectedDatasource, indId);
+            const result = await this.service.getIndicatorMetadata(this.getState().selectedDatasource, indId);
             const combinedValues = {};
             result?.selectors.forEach((selector) => {
                 selector.allowedValues.forEach((val) => {
@@ -373,9 +373,9 @@ class SearchController extends StateHandler {
             }
 
             const data = {
-                datasrc: this.state.selectedDatasource,
+                datasrc: this.getState().selectedDatasource,
                 selectors: combinedValues,
-                indicators: this.state.selectedIndicators,
+                indicators: this.getState().selectedIndicators,
                 regionset: result.regionsets,
                 selected: {}
             };
@@ -398,7 +398,7 @@ class SearchController extends StateHandler {
             let selected;
             if (selectors[key].time) {
                 selected = selectors[key].values[0].id;
-                if (this.state.searchTimeseries) {
+                if (this.getState().searchTimeseries) {
                     if (selectors[key].values?.length <= 1) {
                         Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
                         this.updateState({
@@ -422,16 +422,16 @@ class SearchController extends StateHandler {
     setParamSelection (param, value, index = null) {
         let val;
         if (index !== null) {
-            val = this.state.indicatorParams.selected[param];
+            val = this.getState().indicatorParams.selected[param];
             val[index] = value;
         } else {
             val = value;
         }
         this.updateState({
             indicatorParams: {
-                ...this.state.indicatorParams,
+                ...this.getState().indicatorParams,
                 selected: {
-                    ...this.state.indicatorParams.selected,
+                    ...this.getState().indicatorParams.selected,
                     [param]: val
                 }
             }
@@ -440,25 +440,25 @@ class SearchController extends StateHandler {
 
     getSearchValues () {
         const data = {
-            datasource: this.state.selectedDatasource,
-            indicator: this.state.selectedIndicators,
-            regionset: this.state.indicatorParams.selected.regionsets,
+            datasource: this.getState().selectedDatasource,
+            indicator: this.getState().selectedIndicators,
+            regionset: this.getState().indicatorParams.selected.regionsets,
             selections: {
-                ...this.state.indicatorParams.selected
+                ...this.getState().indicatorParams.selected
             }
         };
 
-        const keyWithTime = Object.keys(this.state.indicatorParams.selected).find((key) => this.state.indicatorParams.selectors[key].time);
+        const keyWithTime = Object.keys(this.getState().indicatorParams.selected).find((key) => this.getState().indicatorParams.selectors[key].time);
 
-        if (this.state.searchTimeseries) {
-            data.selections[keyWithTime] = this.state.indicatorParams.selected[keyWithTime][0];
-            const values = this.state.indicatorParams.selectors[keyWithTime].values.filter(val => val.id >= this.state.indicatorParams.selected[keyWithTime][0] && val.id <= this.state.indicatorParams.selected[keyWithTime][1]).reverse();
+        if (this.getState().searchTimeseries) {
+            data.selections[keyWithTime] = this.getState().indicatorParams.selected[keyWithTime][0];
+            const values = this.getState().indicatorParams.selectors[keyWithTime].values.filter(val => val.id >= this.getState().indicatorParams.selected[keyWithTime][0] && val.id <= this.getState().indicatorParams.selected[keyWithTime][1]).reverse();
             data.series = {
                 id: keyWithTime,
                 values: values.map(val => val.id || val)
             };
         } else if (keyWithTime) {
-            data.selections[keyWithTime] = this.state.indicatorParams.selected[keyWithTime];
+            data.selections[keyWithTime] = this.getState().indicatorParams.selected[keyWithTime];
         }
 
         return data;
@@ -851,10 +851,10 @@ class SearchController extends StateHandler {
 
     showIndicatorForm () {
         const formHandler = this.stateHandler.getFormHandler();
-        if (this.state.selectedIndicators?.length === 1) {
-            formHandler.showIndicatorPopup(this.state.selectedDatasource, this.state.selectedIndicators[0]);
+        if (this.getState().selectedIndicators?.length === 1) {
+            formHandler.showIndicatorPopup(this.getState().selectedDatasource, this.getState().selectedIndicators[0]);
         } else {
-            formHandler.showIndicatorPopup(this.state.selectedDatasource);
+            formHandler.showIndicatorPopup(this.getState().selectedDatasource);
         }
     }
 }

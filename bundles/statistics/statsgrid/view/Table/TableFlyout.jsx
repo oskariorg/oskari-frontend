@@ -57,7 +57,7 @@ const HeaderCell = styled('div')`
     height: 100%;
 `;
 
-const TableFlyout = ({ indicators = [], activeIndicator, state, controller }) => {
+const TableFlyout = ({ indicators = [], activeIndicator, selectedRegionset, state, controller }) => {
     let initialSort = {
         regionName: null
     };
@@ -102,12 +102,12 @@ const TableFlyout = ({ indicators = [], activeIndicator, state, controller }) =>
                     <RegionHeader>
                         <Message messageKey='statsgrid.areaSelection.title' />
                         {Oskari.util.isEmbedded ? (
-                            state.selectedRegionset?.name
+                            selectedRegionset?.name
                         ) : (
                             <Select
                                 filterOption={false}
                                 options={state.regionsetOptions?.map(rs => ({ value: rs.id, label: rs.name }))}
-                                value={state.selectedRegionset?.id}
+                                value={selectedRegionset?.id}
                                 onChange={(value) => controller.setSelectedRegionset(value)}
                             />
                         )}
@@ -186,22 +186,34 @@ const TableFlyout = ({ indicators = [], activeIndicator, state, controller }) =>
     return Component;
 };
 
-export const showTableFlyout = (indicators, activeIndicator, state, controller, onClose) => {
+export const showTableFlyout = (indicators, activeIndicator, selectedRegionset, state, controller, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.table' />;
     const controls = showFlyout(
         title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <TableFlyout indicators={indicators} activeIndicator={activeIndicator} state={state} controller={controller} />
+            <TableFlyout
+                indicators={indicators}
+                activeIndicator={activeIndicator}
+                selectedRegionset={selectedRegionset}
+                state={state}
+                controller={controller}
+            />
         </LocaleProvider>,
         onClose
     );
 
     return {
         ...controls,
-        update: (indicators, activeIndicator, state) => controls.update(
+        update: (indicators, activeIndicator, selectedRegionset, state) => controls.update(
             title,
             <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                <TableFlyout indicators={indicators} activeIndicator={activeIndicator} state={state} controller={controller} />
+                <TableFlyout
+                    indicators={indicators}
+                    activeIndicator={activeIndicator}
+                    selectedRegionset={selectedRegionset}
+                    state={state}
+                    controller={controller}
+                />
             </LocaleProvider>
         )
     }

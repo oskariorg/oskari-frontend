@@ -33,12 +33,14 @@ class ClassificationController extends StateHandler {
     async showClassificationContainer (onClose, containerOpts) {
         const { activeIndicator, indicators } = this.stateHandler.getState();
         const indicator = this.service.getIndicator(activeIndicator);
-        await this.updateData();
 
-        if (!activeIndicator || !indicators || !this.state.indicatorData) {
+        if (!indicator || !indicators || !this.getState().indicatorData) {
             return;
         }
-        if (this.state.classificationContainer) {
+
+        await this.updateData();
+
+        if (this.getState().classificationContainer) {
             this.updateClassificationContainer();
         } else {
             this.updateState({
@@ -53,36 +55,41 @@ class ClassificationController extends StateHandler {
     }
 
     updateClassificationContainer () {
-        if (this.state.classificationContainer) {
+        if (this.getState().classificationContainer) {
             const { activeIndicator, indicators } = this.stateHandler.getState();
-            const indicator = this.service.getIndicator(activeIndicator);
-            this.state.classificationContainer.update(indicators, indicator, this.getState());
+            if (!activeIndicator) {
+                this.closeClassificationContainer();
+            } else {
+                const indicator = this.service.getIndicator(activeIndicator);
+                this.getState().classificationContainer.update(indicators, indicator, this.getState());
+            }
         }
     }
 
     closeClassificationContainer () {
-        if (this.state.classificationContainer) {
-            this.state.classificationContainer.close();
+        if (this.getState().classificationContainer) {
+            this.getState().classificationContainer.close();
             this.updateState({
                 classificationContainer: null
             });
         }
+        this.closeHistogramPopup();
     }
 
     showHistogramPopup () {
-        if (!this.state.histogramPopup) {
+        if (!this.getState().histogramPopup) {
             this.service.getSeriesService().setAnimating(false);
             const { activeIndicator } = this.stateHandler.getState();
             const indicator = this.service.getIndicator(activeIndicator);
             this.updateState({
-                histogramPopup: showHistogramPopup({ ...this.state, activeIndicator: indicator, controller: this.getController() }, this.state.classifiedDataset, this.state.indicatorData?.data, this.state.editOptions, () => this.closeHistogramPopup())
+                histogramPopup: showHistogramPopup({ ...this.getState(), activeIndicator: indicator, controller: this.getController() }, this.getState().classifiedDataset, this.getState().indicatorData?.data, this.getState().editOptions, () => this.closeHistogramPopup())
             });
         }
     }
 
     closeHistogramPopup () {
-        if (this.state.histogramPopup) {
-            this.state.histogramPopup.close();
+        if (this.getState().histogramPopup) {
+            this.getState().histogramPopup.close();
             this.updateState({
                 histogramPopup: null
             });
@@ -90,10 +97,10 @@ class ClassificationController extends StateHandler {
     }
 
     updateHistogramPopup () {
-        if (this.state.histogramPopup) {
+        if (this.getState().histogramPopup) {
             const { activeIndicator } = this.stateHandler.getState();
             const indicator = this.service.getIndicator(activeIndicator);
-            this.state.histogramPopup.update({ ...this.state, activeIndicator: indicator, controller: this.getController() }, this.state.classifiedDataset, this.state.indicatorData?.data, this.state.editOptions);
+            this.getState().histogramPopup.update({ ...this.state, activeIndicator: indicator, controller: this.getController() }, this.getState().classifiedDataset, this.getState().indicatorData?.data, this.getState().editOptions);
         }
     }
 
@@ -125,17 +132,20 @@ class ClassificationController extends StateHandler {
                 uniqueCount: 0,
                 serieSelection
             };
-            const data = await this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, activeRegionset);
-            if (data) {
-                const validData = Object.fromEntries(Object.entries(data).filter(([key, val]) => val !== null && val !== undefined));
-                const uniqueValues = [...new Set(Object.values(validData))].sort((a, b) => a - b);
-                indicatorData.uniqueCount = uniqueValues.length;
-                indicatorData.data = data;
-                indicatorData.minMax = { min: uniqueValues[0], max: uniqueValues[uniqueValues.length - 1] };
+            const { indicatorData: stateData } = this.stateHandler.getState();
+            if (stateData && stateData[activeIndicator.indicator]) {
+                const data = stateData[activeIndicator.indicator];
+                if (data) {
+                    const validData = Object.fromEntries(Object.entries(data).filter(([key, val]) => val !== null && val !== undefined));
+                    const uniqueValues = [...new Set(Object.values(validData))].sort((a, b) => a - b);
+                    indicatorData.uniqueCount = uniqueValues.length;
+                    indicatorData.data = data;
+                    indicatorData.minMax = { min: uniqueValues[0], max: uniqueValues[uniqueValues.length - 1] };
+                }
             }
             return indicatorData;
         } catch (error) {
-            this.log.warn('Error getting indicator data', activeIndicator, activeRegionset);
+            console.warn('Error getting indicator data', activeIndicator, activeRegionset);
         }
     }
 
@@ -151,7 +161,7 @@ class ClassificationController extends StateHandler {
         }
         this.updateState({
             pluginState: {
-                ...this.state.pluginState,
+                ...this.getState().pluginState,
                 ...state
             }
         });
@@ -166,7 +176,7 @@ class ClassificationController extends StateHandler {
             this.updateClassificationPluginState(key, defaults[key]);
             this.updateState({
                 pluginState: {
-                    ...this.state.pluginState,
+                    ...this.getState().pluginState,
                     [key]: defaults[key]
                 }
             });
@@ -176,7 +186,7 @@ class ClassificationController extends StateHandler {
     }
 
     setActiveIndicator (hash) {
-        this.stateHandler.getController().setActiveIndicator(hash);
+        this.stateHandler.setActiveIndicator(hash);
     }
 
     updateClassification (key, value) {

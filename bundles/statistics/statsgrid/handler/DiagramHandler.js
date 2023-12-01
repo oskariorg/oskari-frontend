@@ -15,7 +15,6 @@ class DiagramController extends StateHandler {
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.addStateListener(() => this.updateFlyout());
-        this.eventHandlers = this.createEventHandlers();
     };
 
     getName () {
@@ -24,7 +23,7 @@ class DiagramController extends StateHandler {
 
     toggleFlyout (show, extraOnClose) {
         if (show) {
-            if (!this.state.flyout) {
+            if (!this.getState().flyout) {
                 this.updateData();
                 this.showDiagramFlyout(extraOnClose);
             }
@@ -45,8 +44,8 @@ class DiagramController extends StateHandler {
     }
 
     closeDiagramFlyout () {
-        if (this.state.flyout) {
-            this.state.flyout.close();
+        if (this.getState().flyout) {
+            this.getState().flyout.close();
             this.updateState({
                 flyout: null,
                 sortOrder: 'value-descending'
@@ -55,9 +54,9 @@ class DiagramController extends StateHandler {
     }
 
     updateFlyout () {
-        if (this.state.flyout) {
+        if (this.getState().flyout) {
             const { indicators, activeIndicator } = this.stateHandler.getState();
-            this.state.flyout.update(indicators, activeIndicator, this.getState());
+            this.getState().flyout.update(indicators, activeIndicator, this.getState());
         }
     }
 
@@ -95,7 +94,7 @@ class DiagramController extends StateHandler {
             loading: true
         });
 
-        const data = await this.getIndicatorData(indicator);
+        const data = await this.getDiagramData(indicator);
         if (!data || data.every(d => d.value === undefined)) {
             this.updateState({
                 loading: false
@@ -132,58 +131,21 @@ class DiagramController extends StateHandler {
         });
     }
 
-    async getIndicatorData (ind) {
+    async getDiagramData (ind) {
         const setId = this.stateHandler.getState().activeRegionset;
-        const { datasource, indicator, selections, series } = ind;
+        const { indicator } = ind;
         try {
             const regions = await this.service.getRegions(setId);
-            const indicatorData = await this.service.getIndicatorData(datasource, indicator, selections, series, setId);
-            const data = regions.map(({ id, name }) => {
-                const value = indicatorData[id];
+            const { indicatorData } = this.stateHandler.getState();
+            const data = indicatorData[indicator];
+            const diagramData = regions.map(({ id, name }) => {
+                const value = data[id];
                 return { id, name, value };
             });
-            return data;
+            return diagramData;
         } catch (error) {
             Messaging.error(this.loc('errors.regionsDataError'));
         }
-    }
-
-    createEventHandlers () {
-        const handlers = {
-            'StatsGrid.ParameterChangedEvent': (event) => {
-                if (this.state.flyout) {
-                    this.updateData();
-                }
-            },
-            'StatsGrid.ClassificationChangedEvent': (event) => {
-                if (event.getChanged().hasOwnProperty('fractionDigits')) {
-                    if (this.state.flyout) {
-                        this.updateData();
-                    }
-                }
-            },
-            'StatsGrid.RegionsetChangedEvent': (event) => {
-                if (this.state.flyout) {
-                    this.updateData();
-                }
-            },
-            'StatsGrid.ActiveIndicatorChangedEvent': (event) => {
-                if (this.state.flyout) {
-                    this.updateData();
-                }
-            }
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
     }
 }
 
