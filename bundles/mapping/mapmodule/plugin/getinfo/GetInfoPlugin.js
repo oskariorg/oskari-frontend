@@ -431,7 +431,7 @@ Oskari.clazz.define(
                         data.forEach((datum) => {
                             const gfiType = datum?.gfiType || null;
                             let features = [datum];
-                            if (gfiType === GFI_TYPE_APPLICATION_JSON) {
+                            if (gfiType === GFI_TYPE_APPLICATION_JSON && !me.hasCustomFormatter(datum)) {
                                 const geoJSON = JSON.parse(datum?.content);
                                 features = geoJSON?.features?.map(feature => feature.properties) || null;
                             }
@@ -525,7 +525,7 @@ Oskari.clazz.define(
             const contentData = {};
             let fragments = [];
 
-            if (data.via === 'ajax' && data?.gfiType !== GFI_TYPE_APPLICATION_JSON) {
+            if (data.via === 'ajax' && (data?.gfiType !== GFI_TYPE_APPLICATION_JSON || this.hasCustomFormatter(data))) {
                 fragments = this._parseGfiResponse(data);
             } else {
                 fragments = this._formatWFSFeaturesForInfoBox(data);

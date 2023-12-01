@@ -174,6 +174,16 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
     },
 
     /**
+     * Check whether a piece of data has a custom formatter defined
+     *
+     * @param {Object} datum A piece of gfi data
+     * @returns {Boolean} a custom formatter was found
+     */
+    hasCustomFormatter (datum) {
+        const formatter = this.layerFormatters.find((formatter) => formatter.enabled(datum));
+        return !!formatter;
+    },
+    /**
      * Parses and formats a GFI response
      *
      * @method _parseGfiResponse
