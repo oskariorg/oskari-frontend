@@ -23,6 +23,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
         this.seriesStats = {};
         this._setValueInProgress = false;
         this._throttleSelectValue = Oskari.util.throttle(this._setSelectedValue.bind(this), 500);
+        this.stateHandler = stateHandler;
+        this.stateHandler.addStateListener(() => this.collectGroupStats());
     }, {
         getStatisticsService: function () {
             if (!this.statisticsService) {
@@ -70,12 +72,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
             this._setValueInProgress = true;
             this.selectedValue = selected;
 
-            var series = this.stateHandler.getState().indicators.filter(function (ind) {
+            var series = this.stateHandler.getState().indicators.filter((ind) => {
                 return typeof ind.series !== 'undefined';
             });
             if (series.length > 0) {
-                series.forEach(function (ind) {
+                series.forEach((ind) => {
                     ind.selections[ind.series.id] = selected;
+                    this.stateHandler.getController().updateIndicator(ind);
                 });
             }
 
@@ -207,7 +210,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
                     var params = {};
                     params[series.id] = val;
                     params = jQuery.extend({}, selections, params);
-                    const data = await me.getStatisticsService().getIndicatorData(datasrc, indicator, params, series, me.stateHandler.getState().activeRegionset);
+                    const { indicatorData } = me.stateHandler.getState();
+                    const data = indicatorData[indicator];
 
                     collectedCount++;
                     for (var key in data) {

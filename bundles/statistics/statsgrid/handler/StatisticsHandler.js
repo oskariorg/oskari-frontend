@@ -326,6 +326,7 @@ class StatisticsController extends StateHandler {
         this.updateState({
             indicators
         });
+        this.fetchIndicatorData();
     }
 }
 

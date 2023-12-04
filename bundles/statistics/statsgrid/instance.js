@@ -14,7 +14,7 @@ import '../statsgrid2016/components/SelectedIndicatorsMenu.js';
 import '../statsgrid2016/components/SpanSelect.js';
 import '../statsgrid2016/view/Filter.js';
 import './plugin/TogglePlugin.js';
-import '../statsgrid2016/components/SeriesControl.js';
+import '../statsgrid/components/SeriesControl.js';
 import '../statsgrid2016/publisher/SeriesToggleTool.js';
 import './components/RegionsetViewer.js';
 import '../statsgrid2016/event/IndicatorEvent.js';

@@ -18,7 +18,7 @@ const StyledSelect = styled(Select)`
     width: 100%;
 `;
 
-const TimeSeriesParams = (fieldName, timeOptions, selectedValues, controller) => (
+const TimeSeriesParams = ({fieldName, timeOptions, selectedValues, controller}) => (
     <TimeseriesField>
         <Field>
             <b><Message messageKey='parameters.from' /></b>

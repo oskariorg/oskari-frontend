@@ -25,11 +25,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             const state = this.stateHandler.getState();
             const { activeRegionset, indicatorData, activeIndicator } = state;
             const currentIndicator = this.service.getIndicator(activeIndicator);
-            if (!activeIndicator) {
+            if (!currentIndicator) {
                 this._clearRegions();
                 return;
             }
-
             const seriesStats = this.service.getSeriesService().getSeriesStats(activeIndicator);
             const { classification } = currentIndicator;
             const { mapStyle } = classification;
@@ -348,24 +347,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
      */
     _bindToEvents: function () {
         var me = this;
-        var state = me.service.getStateHandler().getState();
-        me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
-            // Always show the active indicator
-            me.render(state.activeRegion);
-        });
-        me.service.on('StatsGrid.IndicatorEvent', function (event) {
-            me.render(state.activeRegion);
-        });
-        me.service.on('StatsGrid.ParameterChangedEvent', function (event) {
-            me.render(state.activeRegion);
-        });
-
-        me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
-            // Need to update the map
-            me._clearRegions();
-            me.render(state.activeRegion);
-        });
-
         me.service.on('StatsGrid.RegionSelectedEvent', function (event) {
             const selectedRegion = event.activeRegion;
             me._updateFeatureStyle(selectedRegion, true);
@@ -376,15 +357,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             }
             me._lastRenderCache.highlightRegionId = selectedRegion;
         });
-
-        me.service.on('StatsGrid.ClassificationChangedEvent', function (event) {
-            // Classification changed, need update map
-            me.render(state.activeRegion);
-        });
         me.service.on('AfterMapLayerRemoveEvent', function () {
             me._clearRegions();
         });
-
         me.service.on('FeatureEvent', function (event) {
             if (event.getParams().operation !== 'click' || !event.hasFeatures()) {
                 return;
