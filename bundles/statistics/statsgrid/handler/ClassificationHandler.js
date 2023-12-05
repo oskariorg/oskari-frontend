@@ -57,10 +57,10 @@ class ClassificationController extends StateHandler {
     updateClassificationContainer () {
         if (this.getState().classificationContainer) {
             const { activeIndicator, indicators } = this.stateHandler.getState();
-            if (!activeIndicator) {
+            const indicator = this.service.getIndicator(activeIndicator);
+            if (!indicator) {
                 this.closeClassificationContainer();
             } else {
-                const indicator = this.service.getIndicator(activeIndicator);
                 this.getState().classificationContainer.update(indicators, indicator, this.getState());
             }
         }
