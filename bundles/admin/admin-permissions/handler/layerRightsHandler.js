@@ -12,7 +12,7 @@ class UIHandler extends StateHandler {
             loading: false,
             changedIds: new Set(),
             pagination: {
-                pageSize: 50,
+                pageSize: 20,
                 page: 1,
                 filter: ''
             }
