@@ -15,6 +15,7 @@ class TableController extends StateHandler {
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.addStateListener(() => this.updateFlyout());
+        this.eventHandlers = this.createEventHandlers();
     };
 
     getName () {
@@ -136,6 +137,25 @@ class TableController extends StateHandler {
 
     setActiveIndicator (hash) {
         this.stateHandler.getController().setActiveIndicator(hash);
+    }
+
+    createEventHandlers () {
+        const handlers = {
+            'StatsGrid.StateChangedEvent': () => {
+                this.fetchIndicatorData();
+            }
+        };
+        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
+        return handlers;
+    }
+
+    onEvent (e) {
+        var handler = this.eventHandlers[e.getName()];
+        if (!handler) {
+            return;
+        }
+
+        return handler.apply(this, [e]);
     }
 }
 

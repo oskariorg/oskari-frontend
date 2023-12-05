@@ -124,6 +124,8 @@ class StatisticsController extends StateHandler {
         this.updateState({
             indicatorData
         });
+        const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
+        this.sandbox.notifyAll(eventBuilder());
     }
 
     async setActiveRegionset (value) {

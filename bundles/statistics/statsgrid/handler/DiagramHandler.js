@@ -15,6 +15,7 @@ class DiagramController extends StateHandler {
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.addStateListener(() => this.updateFlyout());
+        this.eventHandlers = this.createEventHandlers();
     };
 
     getName () {
@@ -146,6 +147,25 @@ class DiagramController extends StateHandler {
         } catch (error) {
             Messaging.error(this.loc('errors.regionsDataError'));
         }
+    }
+
+    createEventHandlers () {
+        const handlers = {
+            'StatsGrid.StateChangedEvent': () => {
+                this.updateData();
+            }
+        };
+        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
+        return handlers;
+    }
+
+    onEvent (e) {
+        var handler = this.eventHandlers[e.getName()];
+        if (!handler) {
+            return;
+        }
+
+        return handler.apply(this, [e]);
     }
 }
 
