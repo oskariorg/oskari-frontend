@@ -11,7 +11,9 @@ const Component = styled.div`
 `;
 const Textarea = styled(Input.TextArea)`
     font-family: inherit;
-`
+    // We need this to get the tooltip to calculate it's position correctly
+    display: block;
+`;
 
 export const LabeledInput = ({
     label,
