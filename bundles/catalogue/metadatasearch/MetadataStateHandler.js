@@ -46,16 +46,19 @@ class MetadataStateHandler extends StateHandler {
     }
 
     doSearch () {
+        const { query, advancedSearchValues } = this.getState();
+        if (!query?.length) {
+            return;
+        }
+
+        const formdata = {};
+        formdata.search = query;
+
         this.updateState({
             loading: true,
             searchResultsVisible: false,
             searchResultsFilter: null
         });
-        const { query, advancedSearchValues } = this.getState();
-        const formdata = {};
-        if (query) {
-            formdata.search = query;
-        }
 
         Object.keys(advancedSearchValues).forEach(key => {
             if (advancedSearchValues[key] instanceof Array) {
