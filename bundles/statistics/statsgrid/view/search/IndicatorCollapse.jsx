@@ -7,19 +7,18 @@ const StyledCollapse = styled(Collapse)`
     margin-top: 20px;
 `;
 
-export const IndicatorCollapse = ({ state, controller }) => {
+export const IndicatorCollapse = ({ indicators = [], controller }) => {
     return (
         <StyledCollapse>
             <CollapsePanel
                 header={<Message messageKey='indicatorList.title' />}
             >
-                {state.indicators?.length < 1 ? (
-                    <Message messageKey='indicatorList.emptyMsg' />
-                ) : (
-                    state.indicators?.map(indicator => (
-                        <IndicatorRow key={indicator.indicator} indicator={indicator} controller={controller} />
+                { !indicators.length && (<Message messageKey='indicatorList.emptyMsg' />) }
+                {
+                    indicators.map((indicator) => (
+                        <IndicatorRow key={indicator.hash} indicator={indicator} controller={controller} />
                     ))
-                )}
+                }
             </CollapsePanel>
         </StyledCollapse>
     );

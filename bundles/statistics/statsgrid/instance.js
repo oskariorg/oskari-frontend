@@ -1,24 +1,18 @@
 import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
 import { MyIndicatorsTab } from './MyIndicatorsTab';
-import { StatisticsHandler } from './handler/StatisticsHandler';
 import './FlyoutManager.js';
-import '../statsgrid2016/Tile.js';
-import '../statsgrid2016/service/StatisticsService.js';
-import '../statsgrid2016/service/SeriesService.js';
+import './Tile.js';
+import './service/StatisticsService.js';
+import './service/SeriesService.js';
 import '../statsgrid2016/service/ClassificationService.js';
 import '../statsgrid2016/service/ColorService.js';
-import '../statsgrid2016/service/StateService.js';
 import '../statsgrid2016/service/ErrorService.js';
-import '../statsgrid2016/service/Cache.js';
-import '../statsgrid2016/service/CacheHelper.js';
-import '../statsgrid2016/components/RegionsetSelector.js';
-import '../statsgrid2016/components/SelectedIndicatorsMenu.js';
-import '../statsgrid2016/components/SpanSelect.js';
-import '../statsgrid2016/view/Filter.js';
-import '../statsgrid2016/plugin/TogglePlugin.js';
-import '../statsgrid2016/components/SeriesControl.js';
+import './service/Cache.js';
+import './service/CacheHelper.js';
+import './plugin/TogglePlugin.js';
+import '../statsgrid/components/SeriesControl.js';
 import '../statsgrid2016/publisher/SeriesToggleTool.js';
-import '../statsgrid2016/components/RegionsetViewer.js';
+import './components/RegionsetViewer.js';
 import '../statsgrid2016/event/IndicatorEvent.js';
 import '../statsgrid2016/event/DatasourceEvent.js';
 import '../statsgrid2016/event/FilterEvent.js';
@@ -33,7 +27,7 @@ import '../statsgrid2016/publisher/StatsTableTool.js';
 import '../statsgrid2016/publisher/ClassificationTool';
 import '../statsgrid2016/publisher/ClassificationToggleTool.js';
 import '../statsgrid2016/publisher/OpacityTool.js';
-import '../statsgrid2016/plugin/ClassificationPlugin.js';
+import './plugin/ClassificationPlugin.js';
 import '../statsgrid2016/plugin/SeriesControlPlugin.js';
 import '../statsgrid2016/publisher/DiagramTool.js';
 
@@ -76,51 +70,43 @@ Oskari.clazz.define(
         this._layerId = 'STATS_LAYER';
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
 
-        this.handler = null;
+        this.stateHandler = null;
     }, {
         afterStart: function (sandbox) {
-            var me = this;
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var locale = Oskari.getMsg.bind(null, 'StatsGrid');
+            const locale = Oskari.getMsg.bind(null, 'StatsGrid');
             // create the StatisticsService for handling ajax calls and common functionality.
-            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, locale);
+            const conf = this.getConfiguration() || {};
+            const statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, conf, locale);
             sandbox.registerService(statsService);
-            me.statsService = statsService;
+            this.statsService = statsService;
 
-            var conf = this.getConfiguration() || {};
+            this.stateHandler = statsService.getStateHandler();
 
-            // Check if vector is configurated
-            // If it is set map modes to support also vector
-            if (conf && conf.vectorViewer === true) {
-                me.statsService.setMapModes(['wms', 'vector']);
-            }
-            statsService.addDatasource(conf.sources);
-            statsService.addRegionset(conf.regionsets);
-
-            this.handler = new StatisticsHandler(this, sandbox);
+            // setup initial state
+            this.setState();
 
             // initialize flyoutmanager
-            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService, this.handler);
-            this.flyoutManager.init();
+            this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, this.stateHandler);
             this.getTile().setupTools(this.flyoutManager);
 
             this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), conf.location?.classes);
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
 
             if (this.isEmbedded()) {
                 // Start in an embedded map mode
                 if (conf.grid) {
-                    me.togglePlugin.addTool('table');
+                    this.togglePlugin.addTool('table');
                 }
                 if (conf.diagram) {
-                    me.togglePlugin.addTool('diagram');
+                    this.togglePlugin.addTool('diagram');
                 }
                 if (conf.classification) {
-                    me.addMapPluginToggleTool(TOGGLE_TOOL_CLASSIFICATION);
+                    this.addMapPluginToggleTool(TOGGLE_TOOL_CLASSIFICATION);
                 }
                 if (conf.series) {
-                    me.addMapPluginToggleTool(TOGGLE_TOOL_SERIES);
+                    this.addMapPluginToggleTool(TOGGLE_TOOL_SERIES);
                 }
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
@@ -133,14 +119,12 @@ Oskari.clazz.define(
 
             // Check that user has own indicators datasource
             if (statsService.getUserDatasource()) {
-                me._addIndicatorsTabToMyData(sandbox);
+                this._addIndicatorsTabToMyData(sandbox);
             }
-            // setup initial state
-            this.setState();
 
             // listen for search closing to remove stats layer if no indicators was found
             this.flyoutManager.on('hide', id => {
-                if (id === 'search' && !this.statsService.getStateService().hasIndicators()) {
+                if (id === 'search' && this.stateHandler.getState().indicators?.length < 1) {
                     this._removeStatsLayer();
                 }
             });
@@ -149,7 +133,7 @@ Oskari.clazz.define(
             let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
 
             if (myDataService) {
-                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this, this.handler.getController().getFormHandler()));
+                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this, this.stateHandler.getController().getFormHandler()));
             } else if (!appStarted) {
                 // Wait for the application to load all bundles and try again
                 Oskari.on('app.start', () => {
@@ -196,14 +180,14 @@ Oskari.clazz.define(
          * Update visibility of classification / legend based on idicators length & stats layer visibility
          */
         updateClassficationViewVisibility: function () {
-            const indicatorsExist = this.statsService.getStateService().hasIndicators();
+            const indicatorsExist = this.stateHandler.getState().indicators?.length > 0;
             this._setClassificationViewVisible(indicatorsExist && !this.isLayerHidden());
         },
         /**
          * Update visibility of series control based on active indicator & stats layer visibility
          */
         updateSeriesControlVisibility: function () {
-            const isSeriesActive = this.statsService.getStateService().isSeriesActive();
+            const isSeriesActive = this.statsService.isSeriesActive();
             this._setSeriesControlVisible(isSeriesActive && !this.isLayerHidden());
         },
         _removeStatsLayer: function () {
@@ -245,7 +229,7 @@ Oskari.clazz.define(
         removeDataProviverInfo: function (ind) {
             const { datasource, indicator } = ind;
             // the check if necessary if the same indicator is added more than once with different selections
-            if (!this.statsService.getStateService().isSelected(datasource, indicator)) {
+            if (!this.statsService.isSelected(datasource, indicator)) {
                 // if this was the last dataset for the datasource & indicator. Remove it.
                 const service = this.getDataProviderInfoService();
                 if (service) {
@@ -254,27 +238,25 @@ Oskari.clazz.define(
                 }
             }
         },
-        addDataProviderInfo: function (ind) {
+        addDataProviderInfo: async function (ind) {
             const service = this.getDataProviderInfoService();
             if (!service) return;
             const { datasource, indicator, selections } = ind;
             const { name, info: { url } } = this.statsService.getDatasource(datasource);
             const id = datasource + '_' + indicator;
 
-            const callback = labels => {
-                const data = {
-                    id,
-                    name: labels.indicator,
-                    source: [labels.source, { name, url }]
-                };
-                if (!service.addItemToGroup('indicators', data)) {
-                    // if adding failed, it might because group was not registered.
-                    service.addGroup('indicators', this.getLocalization().dataProviderInfoTitle);
-                    // Try adding again
-                    service.addItemToGroup('indicators', data);
-                }
+            const labels = await this.statsService.getUILabels({ datasource, indicator, selections });
+            const data = {
+                id,
+                name: labels.indicator,
+                source: [labels.source, { name, url }]
             };
-            this.statsService.getUILabels({ datasource, indicator, selections }, callback);
+            if (!service.addItemToGroup('indicators', data)) {
+                // if adding failed, it might because group was not registered.
+                service.addGroup('indicators', this.getLocalization().dataProviderInfoTitle);
+                // Try adding again
+                service.addItemToGroup('indicators', data);
+            }
         },
         clearDataProviderInfo: function () {
             const service = this.getDataProviderInfoService();
@@ -309,7 +291,7 @@ Oskari.clazz.define(
                     this._removeStatsLayer();
                     this.flyoutManager.hideFlyouts();
                 } else {
-                    this.statsService.getStateService().getIndicators().forEach(ind => {
+                    this.stateHandler.getState().indicators.forEach(ind => {
                         this.addDataProviderInfo(ind);
                     });
                     this.updateSeriesControlVisibility();
@@ -343,6 +325,9 @@ Oskari.clazz.define(
                 this.statsService.notifyOskariEvent(evt);
             },
             'StatsGrid.Filter': function (evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
+            'StatsGrid.ClassificationPluginChanged': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
             'MapSizeChangedEvent': function (evt) {
@@ -399,7 +384,7 @@ Oskari.clazz.define(
                 if (event.getMapLayer().getId() !== this._layerId || this.getTile().isAttached()) {
                     return;
                 }
-                if (!this.statsService.getStateService().hasIndicators()) {
+                if (this.stateHandler.getState().indicators.length < 1) {
                     this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
                 } else {
                     // layer has added from layerlist and has indicators.
@@ -423,7 +408,7 @@ Oskari.clazz.define(
                     return;
                 }
                 // record opacity for published map etc
-                this.statsService.getStateService().updateClassificationTransparency(evt.getMapLayer().getOpacity());
+                this.stateHandler.getController().updateClassificationTransparency(evt.getMapLayer().getOpacity());
                 this.statsService.notifyOskariEvent(evt);
             }
         },
@@ -478,12 +463,11 @@ Oskari.clazz.define(
          */
         setState: function (newState) {
             const state = newState || this.state || {};
-            const stateService = this.statsService.getStateService();
             if (state.indicators && state.indicators.length) {
-                stateService.setState(state);
+                this.stateHandler.getController().setFullState(state);
             } else {
                 // if state doesn't have indicators, reset state
-                stateService.resetState();
+                this.stateHandler.getController().resetState();
             }
             // if state says view was visible fire up the UI, otherwise close it
             var uimode = state.view ? 'attach' : 'close';
@@ -493,9 +477,13 @@ Oskari.clazz.define(
             // State isn't cleared when stats layer is removed
             // return full state only if stats layer is selected
             if (this.sandbox.isLayerAlreadySelected(this._layerId)) {
-                const serviceState = this.statsService.getStateService().getState();
+                const state = this.stateHandler.getState();
                 return {
-                    ...serviceState,
+                    activeIndicator: state.activeIndicator,
+                    regionset: state.activeRegionset,
+                    indicators: state.indicators,
+                    activeRegion: state.activeRegion,
+                    lastSelectedClassification: state.lastSelectedClassification,
                     view: this.visible
                 };
             }

@@ -37,10 +37,14 @@ export const Header = ({ selected, indicators, isEdit, toggleEdit, onChange }) =
         <Component className='classification-header'>
             {!renderSelect && <Single>{title}</Single>}
             {renderSelect && (
-                // TODO: Use IndicatorName component here once data comes from same place as diagram/table etc.
-                <Select value={selected} onChange={onChange}>
-                    {indicators.map(opt => <Option key={opt.hash} value={opt.hash}>{opt.title}</Option>)}
-                </Select>
+                <Select
+                    value={selected}
+                    onChange={onChange}
+                    options={indicators.map(opt => ({
+                        value: opt.hash,
+                        label: opt.labels?.full
+                    }))}
+                />
             )}
             <Tooltip placement='topRight' title={<Message messageKey={`classify.edit.${isEdit ? 'close' : 'open'}`}/>}>
                 <div style={isEdit ? editStyle : {}}>

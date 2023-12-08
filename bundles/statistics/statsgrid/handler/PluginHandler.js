@@ -7,7 +7,6 @@ class UIHandler extends StateHandler {
             plugins: []
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
-        this.eventHandlers = this.createEventHandlers();
         this.addStateListener(consumer);
     };
 
@@ -18,7 +17,7 @@ class UIHandler extends StateHandler {
     addTool (tool) {
         this.updateState({
             plugins: [
-                ...this.state.plugins,
+                ...this.getState().plugins,
                 tool
             ]
         });
@@ -26,7 +25,7 @@ class UIHandler extends StateHandler {
 
     toggleTool (tool, active) {
         this.updateState({
-            plugins: this.state.plugins.map(plugin => {
+            plugins: this.getState().plugins.map(plugin => {
                 if (plugin.name !== tool) return plugin;
                 return {
                     ...plugin,
@@ -38,24 +37,8 @@ class UIHandler extends StateHandler {
 
     removeTool (tool) {
         this.updateState({
-            plugins: this.state.plugins.filter(plugin => plugin.name !== tool)
+            plugins: this.getState().plugins.filter(plugin => plugin.name !== tool)
         });
-    }
-
-    createEventHandlers () {
-        const handlers = {
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
     }
 }
 

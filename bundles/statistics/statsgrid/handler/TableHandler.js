@@ -8,11 +8,8 @@ class TableController extends StateHandler {
         this.service = service;
         this.sandbox = sandbox;
         this.setState({
-            ...this.stateHandler.getState(),
-            selectedRegionset: null,
             indicatorData: [],
             regionsetOptions: [],
-            regions: [],
             flyout: null,
             loading: false
         });
@@ -27,7 +24,7 @@ class TableController extends StateHandler {
 
     toggleFlyout (show, extraOnClose) {
         if (show) {
-            if (!this.state.flyout) {
+            if (!this.getState().flyout) {
                 this.showTableFlyout(extraOnClose);
             }
         } else {
@@ -37,116 +34,101 @@ class TableController extends StateHandler {
 
     showTableFlyout (extraOnClose) {
         this.fetchTableRegionsets();
-        const currentRegionset = this.service.getRegionsets(this.service.getStateService().getRegionset());
+        const { indicators, activeIndicator, activeRegionset } = this.stateHandler.getState();
+        const currentRegionset = this.service.getRegionsets(activeRegionset);
         this.updateState({
-            flyout: showTableFlyout(this.getState(), this.getController(), () => {
+            flyout: showTableFlyout(indicators, activeIndicator, currentRegionset, this.getState(), this.getController(), () => {
                 this.closeTableFlyout();
                 if (extraOnClose) extraOnClose();
-            }),
-            selectedRegionset: currentRegionset
+            })
         });
         this.fetchIndicatorData();
     }
 
     closeTableFlyout () {
-        if (this.state.flyout) {
-            this.state.flyout.close();
+        const { flyout } = this.getState();
+        if (flyout) {
+            flyout.close();
             this.updateState({
-                selectedRegionset: null,
                 flyout: null
             });
         }
     }
 
     updateFlyout () {
-        if (this.state.flyout) {
-            this.state.flyout.update(this.getState());
+        const state = this.getState();
+        if (state.flyout) {
+            const { indicators, activeIndicator, activeRegionset } = this.stateHandler.getState();
+            const currentRegionset = this.service.getRegionsets(activeRegionset);
+            state.flyout.update(indicators, activeIndicator, currentRegionset, state);
         }
     }
 
-    setSelectedRegionset (value) {
-        this.service.getStateService().setRegionset(value);
+    async setSelectedRegionset (value) {
         this.updateState({
-            selectedRegionset: this.service.getRegionsets(value)
+            loading: true
         });
+        await this.stateHandler.setActiveRegionset(value);
         this.fetchIndicatorData();
     }
 
-    fetchTableRegionsets () {
+    async fetchTableRegionsets () {
         this.updateState({
-            regionsetOptions: this.service.getRegionsets(this.service.getSelectedIndicatorsRegions())
+            regionsetOptions: this.service.getRegionsets(await this.service.getSelectedIndicatorsRegions())
         });
     }
 
     fetchIndicatorData () {
-        if (!this.state.indicators || this.state.indicators.length < 1) return;
+        const { indicators, regions } = this.stateHandler.getState();
+        if (!indicators || indicators.length < 1) return;
         this.updateState({
             loading: true
         });
-        const updateIndicatorData = (regions) => {
-            let data = {};
-            regions.forEach(reg => {
-                data[reg.id] = {};
-            });
-            const promises = this.state.indicators.map(ind => {
-                return new Promise((resolve, reject) => {
-                    this.service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, this.state.selectedRegionset?.id, (err, indicatorData) => {
-                        if (err) {
-                            Messaging.error(this.loc('errors.regionsDataError'));
-                            this.updateState({
-                                loading: false,
-                                indicatorData: [],
-                                regions: []
-                            });
-                            return;
-                        }
-                        for (const key in indicatorData) {
-                            const region = data[key];
-                            if (!region) {
-                                continue;
-                            }
-                            region[ind.hash] = indicatorData[key];
-                            data[key] = {
-                                ...data[key],
-                                ...region
-                            };
-                        }
-                        resolve();
-                    });
-                });
-            });
-            Promise.all(promises).then(() => {
+        try {
+            const data = {};
+            if (!regions || regions.length === 0) {
+                Messaging.error(this.loc('errors.regionsDataIsEmpty'));
                 this.updateState({
                     loading: false,
-                    indicatorData: regions.map(region => ({
-                        key: region.id,
-                        regionName: region.name,
-                        data: data[region.id]
-                    }))
-                });
-            });
-        };
-        this.service.getRegions(this.state.selectedRegionset?.id, (err, regions) => {
-            if (err) {
-                // notify error!!
-                Messaging.error(this.loc('errors.regionsDataError'));
-                this.updateState({
-                    loading: false,
-                    indicatorData: [],
-                    regions: []
+                    indicatorData: []
                 });
                 return;
             }
-
-            if (regions.length === 0) {
-                Messaging.error(this.loc('errors.regionsDataIsEmpty'));
+            for (const reg of regions) {
+                data[reg.id] = {};
             }
 
-            updateIndicatorData(regions);
+            for (const indicator of indicators) {
+                const { indicatorData } = this.stateHandler.getState();
+                const regionsetData = indicatorData[indicator.hash];
+                for (const key in regionsetData) {
+                    const region = data[key];
+                    if (!region) {
+                        continue;
+                    }
+                    region[indicator.hash] = regionsetData[key];
+                    data[key] = {
+                        ...data[key],
+                        ...region
+                    };
+                }
+            }
+
             this.updateState({
-                regions: regions
+                loading: false,
+                indicatorData: regions.map(region => ({
+                    key: region.id,
+                    regionName: region.name,
+                    data: data[region.id]
+                }))
             });
-        });
+        } catch (error) {
+            Messaging.error(this.loc('errors.regionsDataError'));
+            this.updateState({
+                loading: false,
+                indicatorData: []
+            });
+        }
     }
 
     removeIndicator (indicator) {
@@ -159,17 +141,8 @@ class TableController extends StateHandler {
 
     createEventHandlers () {
         const handlers = {
-            'StatsGrid.ParameterChangedEvent': (event) => {
-                if (this.state.flyout) {
-                    this.fetchIndicatorData();
-                }
-            },
-            'StatsGrid.ClassificationChangedEvent': (event) => {
-                if (event.getChanged().hasOwnProperty('fractionDigits')) {
-                    if (this.state.flyout) {
-                        this.fetchIndicatorData();
-                    }
-                }
+            'StatsGrid.StateChangedEvent': () => {
+                this.fetchIndicatorData();
             }
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));

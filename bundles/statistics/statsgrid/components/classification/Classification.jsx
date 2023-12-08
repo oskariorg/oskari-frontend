@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { showMovableContainer } from 'oskari-ui/components/window';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { EditClassification } from './editclassification/EditClassification';
 import { Legend } from './Legend';
 import { Header } from './Header';
+import { LocaleProvider } from 'oskari-ui/util';
 
 const Container = styled.div`
     background-color: #FFFFFF;
@@ -42,17 +44,17 @@ const LegendContainer = styled.div`
 
 export const Classification = ({
     activeIndicator,
-    indicators,
+    indicators = [],
     editOptions,
-    pluginState,
     classifiedDataset,
     startHistogramView,
     onRenderChange,
-    controller
+    controller,
+    state
 }) => {
     const [isEdit, setEdit] = useState(false);
     const { classification, hash } = activeIndicator;
-    const { transparent, editEnabled } = pluginState;
+    const { transparent, editEnabled } = state.pluginState;
 
     useEffect(() => {
         onRenderChange(isEdit);
@@ -98,4 +100,40 @@ Classification.propTypes = {
     startHistogramView: PropTypes.func.isRequired,
     onRenderChange: PropTypes.func.isRequired,
     controller: PropTypes.object.isRequired
+};
+
+export const showClassificationContainer = (indicators, activeIndicator, state, controller, onClose, options) => {
+    const Component = (
+        <LocaleProvider value={{ bundleKey: 'StatsGrid' }}>
+            <Classification
+                {...state}
+                activeIndicator={activeIndicator}
+                indicators={indicators}
+                state={state}
+                controller={controller}
+                startHistogramView={() => controller.showHistogramPopup()}
+                onRenderChange={() => {/** ??? */}}
+            />
+        </LocaleProvider>
+    );
+
+    const controls = showMovableContainer(Component, onClose, options);
+    return {
+        ...controls,
+        update: (indicators, activeIndicator, state) => {
+            controls.update(
+                <LocaleProvider value={{ bundleKey: 'StatsGrid' }}>
+                    <Classification
+                        {...state}
+                        activeIndicator={activeIndicator}
+                        indicators={indicators}
+                        state={state}
+                        controller={controller}
+                        startHistogramView={() => controller.showHistogramPopup()}
+                        onRenderChange={() => {/** ??? */}}
+                    />
+                </LocaleProvider>
+            )
+        }
+    };
 };

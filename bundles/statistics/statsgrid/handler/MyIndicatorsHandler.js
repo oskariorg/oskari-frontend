@@ -29,27 +29,26 @@ class IndicatorsHandler extends StateHandler {
         return 'MyIndicatorsHandler';
     }
 
-    refreshIndicatorsList () {
+    async refreshIndicatorsList () {
         this.updateState({
             loading: true
         });
-        this.service.getIndicatorList(this.userDsId, (err, response) => {
-            if (err) {
-                this.log.warn('Could not list own indicators in personal data tab');
-                this.updateState({
-                    loading: false
-                });
-            } else if (response && response.complete) {
-                this.updateState({
-                    data: response.indicators,
-                    loading: false
-                });
-            }
-        });
+        try {
+            const response = await this.service.getIndicatorList(this.userDsId);
+            this.updateState({
+                loading: false,
+                data: response.indicators
+            });
+        } catch (error) {
+            this.log.warn('Could not list own indicators in personal data tab');
+            this.updateState({
+                loading: false
+            });
+        }
     }
 
     getIndicatorById (id) {
-        const matches = this.state.data.filter((indicator) => {
+        const matches = this.getState().data.filter((indicator) => {
             return indicator.id === id;
         });
         if (matches.length > 0) {
@@ -59,23 +58,21 @@ class IndicatorsHandler extends StateHandler {
         Messaging.error(this.loc('tab.error.notfound'));
     }
 
-    deleteIndicator (indicator) {
+    async deleteIndicator (indicator) {
         if (this.getIndicatorById(indicator.id)) {
             this.updateState({
                 loading: true
             });
-            this.service.deleteIndicator(this.userDsId, indicator.id, null, null, (err, response) => {
-                if (err) {
-                    Messaging.error(this.loc('tab.error.notdeleted'));
-                    this.updateState({
-                        loading: false
-                    });
-                } else {
-                    Messaging.success(this.loc('tab.popup.deleteSuccess'));
-                    this.refreshIndicatorsList();
-                    // Delete fires StatsGrid.DatasourceEvent -> indicator list will be refreshed if delete is successful.
-                }
-            });
+            try {
+                await this.service.deleteIndicator(this.userDsId, indicator.id, null, null);
+                Messaging.success(this.loc('tab.popup.deleteSuccess'));
+                this.refreshIndicatorsList();
+            } catch (error) {
+                Messaging.error(this.loc('tab.error.notdeleted'));
+                this.updateState({
+                    loading: false
+                });
+            }
         }
     }
 
