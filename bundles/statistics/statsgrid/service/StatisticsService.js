@@ -335,14 +335,14 @@ import { getHash } from '../helper/StatisticsHelper';
                 if (!response.complete) {
                     let result;
                     let i;
-                    while (!result.complete && i < 5) {
+                    while (!result?.complete && i < 5) {
                         if (response.indicators?.length === result.indicators?.length) {
                             throw new Error('Same indicator list as in previous try. There might be some problems with the service');
                         }
                         result = await updateIncompleteIndicatorList(response.indicators);
                         i++;
                     }
-                    if (!result.complete) {
+                    if (!result?.complete) {
                         throw new Error('Error loading indicators');
                     }
                     return result;
