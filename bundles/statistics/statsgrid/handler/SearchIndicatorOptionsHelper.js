@@ -1,5 +1,54 @@
-
+// cache storage object
 const indicatorListPerDatasource = {};
+const getCacheKey = datasourceId => 'ds_' + datasourceId;
+
+/**
+ * Remove single OR all indicators from cache
+ * @param {Number} datasourceId
+ * @param {Number|String} indicatorId (optional)
+ */
+export const removeIndicatorFromCache = (datasourceId, indicatorId) => {
+    const cachedResponse = indicatorListPerDatasource[getCacheKey(datasourceId)];
+    if (!cachedResponse) {
+        return;
+    }
+    if (indicatorId) {
+        // single indicator
+        cachedResponse.indicators = cachedResponse.indicators.filter(indicator => indicator.id !== indicatorId);
+    } else {
+        // all indicators
+        indicatorListPerDatasource[getCacheKey(datasourceId)] = null;
+    }
+};
+/**
+ * Updates or adds to indicator listing cache
+ * Indicator always has id and might have name OR newRegionset key
+ */
+export const updateIndicatorListInCache = (datasourceId, indicator) => {
+    const cachedResponse = indicatorListPerDatasource[getCacheKey(datasourceId)];
+    if (!cachedResponse) {
+        return;
+    }
+    const cachedIndicator = cachedResponse.indicators.find(cachedInd => cachedInd.id === indicator.id);
+    if (!cachedIndicator) {
+        // insert
+        // only inject when guest user, otherwise flush from cache
+        cachedResponse.indicators.push(indicator);
+        return indicator;
+    }
+    // name not sent when updating regionset
+    cachedIndicator.name = indicator.name || cachedIndicator.name;
+    // update regionset
+    // this updates the cache as well as mutable objects are being passed around
+    const regionsets = cachedIndicator.regionsets || [];
+    if (indicator.newRegionset && !regionsets.includes(indicator.newRegionset)) {
+        // add regionset for indicator if it's a new one
+        regionsets.push(indicator.newRegionset);
+        cachedIndicator.regionsets = regionsets;
+    }
+    return cachedIndicator;
+};
+
 /**
  * Fetches listing from server andd calls callback with a list of indicators for the datasource.
  *

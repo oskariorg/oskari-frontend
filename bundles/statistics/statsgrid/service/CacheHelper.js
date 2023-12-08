@@ -1,3 +1,4 @@
+import { removeIndicatorFromCache, updateIndicatorListInCache } from '../handler/SearchIndicatorOptionsHelper';
 /**
  * @class Oskari.statistics.statsgrid.CacheHelper
  */
@@ -7,9 +8,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
 }, {
     getRegionsKey: function (regionset) {
         return 'GetRegions_' + regionset;
-    },
-    getIndicatorListKey: function (datasrc) {
-        return 'GetIndicatorList_' + datasrc;
     },
     getIndicatorMetadataKey: function (datasrc, indicatorId) {
         return 'GetIndicatorMetadata_' + datasrc + '_' + indicatorId;
@@ -48,32 +46,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
         try {
             if (data.id) {
                 // existing indicator -> update it
-                const response = await this.service.getIndicatorList(datasrc);
-                const existingIndicator = response.indicators.find(function (ind) {
-                    return '' + ind.id === '' + data.id;
+                updateIndicatorListInCache(datasrc, {
+                    id: data.id,
+                    name: data.name
                 });
-                if (!existingIndicator) {
-                    /* eslint-disable n/no-callback-literal */
-                    throw new Error('Tried saving an indicator with id, but id didn\'t match existing indicator');
-                }
-                // this probably updates the cache as well as mutable objects are being passed around
-                existingIndicator.name = data.name;
                 // possibly update "regionsets": [1851,1855] in listing cache
                 updateMetadataCache();
             } else {
                 // new indicator
-                const indicatorListCacheKey = me.getIndicatorListKey(datasrc);
-                const cachedListResponse = me.cache.get(indicatorListCacheKey) || {
-                    complete: true,
-                    indicators: []
-                };
                 // only inject when guest user, otherwise flush from cache
-                cachedListResponse.indicators.push({
+                updateIndicatorListInCache(datasrc, {
                     id: indicatorId,
                     name: data.name,
                     regionsets: []
                 });
-                me.cache.put(indicatorListCacheKey, cachedListResponse);
                 updateMetadataCache();
             }
         } catch (error) {
@@ -83,18 +69,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
     updateIndicatorDataCache: async function (datasrc, indicatorId, selectors, regionset, data) {
         const me = this;
         try {
-            const response = await this.service.getIndicatorList(datasrc);
-            const existingIndicator = response.indicators.find(function (ind) {
-                return '' + ind.id === '' + indicatorId;
+            // existing indicator -> update it
+            const existingIndicator = updateIndicatorListInCache(datasrc, {
+                id: indicatorId,
+                newRegionset: regionset
             });
-            if (!existingIndicator) {
-                throw new Error('Tried saving dataset for an indicator, but id didn\'t match existing indicator');
-            }
-            // this updates the cache as well as mutable objects are being passed around
-            if (existingIndicator.regionsets.indexOf(regionset) === -1) {
-                // add regionset for indicator if it's a new one
-                existingIndicator.regionsets.push(regionset);
-            }
 
             // only inject when guest user, otherwise flush from cache
             const metadataCacheKey = me.getIndicatorMetadataKey(datasrc, indicatorId);
@@ -159,26 +138,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
         if (!selectors && !regionset) {
             // removed the whole indicator: flush indicator from cache
             this.cache.flushKeysStartingWith(this.getIndicatorDataKeyPrefix(datasrc, indicatorId));
-            const indicatorListCacheKey = this.getIndicatorListKey(datasrc);
-            const cachedListResponse = this.cache.get(indicatorListCacheKey) || {
-                complete: true,
-                indicators: []
-            };
-            // only inject when guest user, otherwise flush from cache
-            const listIndex = cachedListResponse.indicators.findIndex(function (ind) {
-                return ind.id === indicatorId;
-            });
-            if (listIndex !== -1) {
-                cachedListResponse.indicators.splice(listIndex, 1);
-            }
-            this.cache.put(indicatorListCacheKey, cachedListResponse);
+            // remove single with guest user
+            removeIndicatorFromCache(datasrc, indicatorId);
             this.cache.remove(metadataCacheKey);
         } else if (Oskari.user().isLoggedIn()) {
             // flush the cache for logged in user so it gets reloaded from the server
             // for guests this will show some erronous info, but it's a beast to track which
             //  year/regionsets actually have data and can be removed
             this.cache.remove(metadataCacheKey);
-            this.cache.remove(this.getIndicatorListKey(datasrc));
+            // flush whole user indicators listing from cache for logged in user
+            removeIndicatorFromCache(datasrc);
             this.cache.remove(this.getIndicatorDataKey(datasrc, indicatorId, selectors, regionset));
         }
     }
