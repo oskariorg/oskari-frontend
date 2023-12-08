@@ -144,7 +144,7 @@ Oskari.registerLocalization(
         "guidedTour": {
             "help1": {
                 "title": "Kartan liikuttaminen",
-                "message": "Kartan liikuttaminen onnistuu kolmella eri tavalla. <br/> Raahaa karttaa hiirellä, kun käsi-työkalu on valittuna. <br/> Liikuta karttaa näppäimistön nuolinäppäimillä. <br/> Klikkaa nuolia oikeassa yläkulmassa olevassa panorointityökalussa."
+                "message": "Kartan liikuttaminen onnistuu kahdella eri tavalla. <br/> Raahaa karttaa hiirellä, kun käsi-työkalu on valittuna. <br/> Liikuta karttaa näppäimistön nuolinäppäimillä."
             },
             "help2": {
                 "title": "Lähentäminen ja loitontaminen",
