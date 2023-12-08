@@ -133,8 +133,8 @@ class ClassificationController extends StateHandler {
                 serieSelection
             };
             const { indicatorData: stateData } = this.stateHandler.getState();
-            if (stateData && stateData[activeIndicator.indicator]) {
-                const data = stateData[activeIndicator.indicator];
+            if (stateData && stateData[activeIndicator.hash]) {
+                const data = stateData[activeIndicator.hash];
                 if (data) {
                     const validData = Object.fromEntries(Object.entries(data).filter(([key, val]) => val !== null && val !== undefined));
                     const uniqueValues = [...new Set(Object.values(validData))].sort((a, b) => a - b);

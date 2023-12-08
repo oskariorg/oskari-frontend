@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             const { mapStyle } = classification;
             this._updateLayerProperties(mapStyle, activeRegionset);
 
-            const dataByRegion = indicatorData[currentIndicator.indicator];
+            const dataByRegion = indicatorData[currentIndicator.hash];
             const { error, ...classifiedDataset } = getClassification(dataByRegion, classification, seriesStats);
             if (error) {
                 this._clearRegions();

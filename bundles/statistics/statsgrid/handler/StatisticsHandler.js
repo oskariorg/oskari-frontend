@@ -75,7 +75,7 @@ class StatisticsController extends StateHandler {
         }
         const oldData = this.getState().indicatorData;
         const indicatorData = {};
-        const indicatorDataKeys = Object.keys(oldData).filter(key => key !== indicator.indicator);
+        const indicatorDataKeys = Object.keys(oldData).filter(key => key !== indicator.hash);
         for (const dataKey of indicatorDataKeys) {
             indicatorData[dataKey] = oldData[dataKey];
         }
@@ -119,7 +119,7 @@ class StatisticsController extends StateHandler {
         const indicatorData = {};
         for (const indicator of this.getState().indicators) {
             const data = await this.service.getIndicatorData(indicator.datasource, indicator.indicator, indicator.selections, indicator.series, regionset);
-            indicatorData[indicator.indicator] = data;
+            indicatorData[indicator.hash] = data;
         }
         this.updateState({
             indicatorData

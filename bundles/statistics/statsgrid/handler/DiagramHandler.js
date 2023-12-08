@@ -134,11 +134,11 @@ class DiagramController extends StateHandler {
 
     async getDiagramData (ind) {
         const setId = this.stateHandler.getState().activeRegionset;
-        const { indicator } = ind;
+        const { hash } = ind;
         try {
             const regions = await this.service.getRegions(setId);
             const { indicatorData } = this.stateHandler.getState();
-            const data = indicatorData[indicator];
+            const data = indicatorData[hash];
             const diagramData = regions.map(({ id, name }) => {
                 const value = data[id];
                 return { id, name, value };

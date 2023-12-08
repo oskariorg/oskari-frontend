@@ -100,7 +100,7 @@ class TableController extends StateHandler {
 
             for (const indicator of indicators) {
                 const { indicatorData } = this.stateHandler.getState();
-                const regionsetData = indicatorData[indicator.indicator];
+                const regionsetData = indicatorData[indicator.hash];
                 for (const key in regionsetData) {
                     const region = data[key];
                     if (!region) {
