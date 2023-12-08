@@ -206,7 +206,8 @@ class StatisticsController extends StateHandler {
             activeRegion: null,
             indicators: [],
             regions: [],
-            lastSelectedClassification: null
+            lastSelectedClassification: null,
+            indicatorData: {}
         });
         const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
         this.sandbox.notifyAll(eventBuilder(true));
