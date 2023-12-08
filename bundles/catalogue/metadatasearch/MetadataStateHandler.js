@@ -47,7 +47,7 @@ class MetadataStateHandler extends StateHandler {
 
     doSearch () {
         const { query, advancedSearchValues } = this.getState();
-        if (!query?.length) {
+        if (!(query?.length || this.hasAdvancedSearchValues(advancedSearchValues))) {
             return;
         }
 
@@ -72,6 +72,11 @@ class MetadataStateHandler extends StateHandler {
         });
 
         this.searchService.doSearch(formdata, (results) => this.updateSearchResults(results));
+    }
+
+    hasAdvancedSearchValues (advancedSearchValues) {
+        return !!Object.keys(advancedSearchValues)
+            .filter(key => !!advancedSearchValues[key])?.length;
     }
 
     updateSearchResults (json) {
