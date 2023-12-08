@@ -2,7 +2,7 @@ import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showSearchFlyout } from '../view/search/SearchFlyout';
 import { showMedataPopup } from '../components/description/MetadataPopup';
 import { getHash } from '../helper/StatisticsHelper';
-import { getIndicatorOptions } from './SearchIndicatorOptionsHelper';
+import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
 
 class SearchController extends StateHandler {
     constructor (stateHandler, service, sandbox) {
@@ -102,7 +102,7 @@ class SearchController extends StateHandler {
         });
 
         try {
-            getIndicatorList(selectedDatasource,
+            populateIndicatorOptions(selectedDatasource,
                 response => {
                     const { indicators = [], complete = false } = response;
                     const results = indicators.map(ind => {

@@ -12,7 +12,7 @@ const indicatorListPerDatasource = {};
  * @param {function} successCallback    called 0-n times with the whole list of indicators as param for all calls
  * @param {function} errorCallback      called if there's an error. Called only once with error message as param.
  */
-export const getIndicatorOptions = (datasourceId, successCallback, errorCallback) => {
+export const populateIndicatorOptions = async (datasourceId, successCallback, errorCallback) => {
     if (!datasourceId) {
         if (typeof errorCallback === 'function') {
             errorCallback('Datasource missing');
@@ -31,7 +31,7 @@ export const getIndicatorOptions = (datasourceId, successCallback, errorCallback
     }
 
     try {
-        const response = populateIndicatorList(datasourceId, successCallback);
+        const response = await populateIndicatorListFromServer(datasourceId, successCallback);
         const value = {
             // always signal complete when we are done with retries, even if server returned !complete
             complete: true,
@@ -42,7 +42,7 @@ export const getIndicatorOptions = (datasourceId, successCallback, errorCallback
             // this allows the server to continue processing and return updated list when available
             indicatorListPerDatasource[cacheKey] = value;
         }
-        return value;
+        successCallback(value);
     } catch (error) {
         if (typeof errorCallback === 'function') {
             errorCallback(error);
@@ -53,11 +53,10 @@ export const getIndicatorOptions = (datasourceId, successCallback, errorCallback
 };
 
 const RETRY_LIMIT = 5;
-const populateIndicatorList = async (datasourceId, successCallback, retryCount = RETRY_LIMIT, previousResult = {}) => {
+const populateIndicatorListFromServer = async (datasourceId, successCallback, retryCount = RETRY_LIMIT, previousResult = {}) => {
     const response = await getIndicatorListFromServer(datasourceId);
     if (response.complete) {
-        successCallback(response);
-        return;
+        return response;
     }
     if (retryCount === 0) {
         // not succesful after {RETRY_LIMIT} tries
@@ -70,13 +69,16 @@ const populateIndicatorList = async (datasourceId, successCallback, retryCount =
         // Same indicator list as in previous try -> not getting anything new.
         // There might be some problems with the service -> reduce retries
         newRetryCount = retryCount - 1;
+    } else {
+        // notify we have new results but keep on going with the timeout
+        successCallback(response);
     }
 
     return new Promise((resolve, reject) => {
         // try again after 10 seconds
         setTimeout(async () => {
             try {
-                resolve(await populateIndicatorList(datasourceId, successCallback, newRetryCount, response));
+                resolve(await populateIndicatorListFromServer(datasourceId, successCallback, newRetryCount, response));
             } catch (err) {
                 reject(err);
             }
