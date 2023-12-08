@@ -21,6 +21,11 @@ class SearchController extends StateHandler {
             loading: false,
             flyout: null
         });
+        const { datasources } = this.stateHandler.getState();
+        if (datasources.length === 1) {
+            // pre-select if only one options
+            this.setSelectedDatasource(datasources[0].id);
+        }
         this.metadataPopup = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.addStateListener(() => this.updateFlyout());
@@ -67,16 +72,22 @@ class SearchController extends StateHandler {
     }
 
     clearSearch () {
-        this.updateState({
+        const stateUpdates = {
             searchTimeseries: false,
-            selectedDatasource: null,
             selectedIndicators: [],
             regionsetFilter: [],
             disabledDatasources: [],
-            indicatorOptions: [],
             indicatorParams: null,
             isUserDatasource: false
-        });
+        };
+        const { datasources } = this.stateHandler.getState();
+        if (datasources.length !== 1) {
+            // only reset datasource and it's indicators if there are multiple datasources
+            stateUpdates.selectedDatasource = null;
+            stateUpdates.indicatorOptions = [];
+        }
+
+        this.updateState(stateUpdates);
     }
 
     async fetchindicatorOptions () {
