@@ -204,7 +204,6 @@ class StatisticsController extends StateHandler {
         this.updateState({
             activeIndicator: null,
             activeRegion: null,
-            activeRegionset: null,
             indicators: [],
             regions: [],
             lastSelectedClassification: null,
