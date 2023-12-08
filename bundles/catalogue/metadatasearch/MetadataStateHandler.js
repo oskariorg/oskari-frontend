@@ -46,16 +46,19 @@ class MetadataStateHandler extends StateHandler {
     }
 
     doSearch () {
+        const { query, advancedSearchValues } = this.getState();
+        if (!(query?.length || this.hasAdvancedSearchValues(advancedSearchValues))) {
+            return;
+        }
+
+        const formdata = {};
+        formdata.search = query;
+
         this.updateState({
             loading: true,
             searchResultsVisible: false,
             searchResultsFilter: null
         });
-        const { query, advancedSearchValues } = this.getState();
-        const formdata = {};
-        if (query) {
-            formdata.search = query;
-        }
 
         Object.keys(advancedSearchValues).forEach(key => {
             if (advancedSearchValues[key] instanceof Array) {
@@ -69,6 +72,11 @@ class MetadataStateHandler extends StateHandler {
         });
 
         this.searchService.doSearch(formdata, (results) => this.updateSearchResults(results));
+    }
+
+    hasAdvancedSearchValues (advancedSearchValues) {
+        return !!Object.keys(advancedSearchValues)
+            .filter(key => !!advancedSearchValues[key])?.length;
     }
 
     updateSearchResults (json) {
