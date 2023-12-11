@@ -2,6 +2,7 @@ import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showSearchFlyout } from '../view/search/SearchFlyout';
 import { showMedataPopup } from '../components/description/MetadataPopup';
 import { getHash } from '../helper/StatisticsHelper';
+import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
 
 class SearchController extends StateHandler {
     constructor (stateHandler, service, sandbox) {
@@ -91,8 +92,8 @@ class SearchController extends StateHandler {
     }
 
     async fetchindicatorOptions () {
-        const state = this.getState();
-        if (!state.selectedDatasource || state.selectedDatasource === '') {
+        const { selectedDatasource } = this.getState();
+        if (!selectedDatasource) {
             return;
         }
 
@@ -101,26 +102,19 @@ class SearchController extends StateHandler {
         });
 
         try {
-            const response = await this.service.getIndicatorList(state.selectedDatasource);
-            const { indicators = [] } = response;
-            const results = indicators.map(ind => {
-                return {
-                    id: ind.id,
-                    title: Oskari.getLocalized(ind.name),
-                    regionsets: ind.regionsets
-                };
-            });
-
-            const userDatasource = this.service.getUserDatasource();
-            const isUserDatasource = !!userDatasource && '' + userDatasource.id === '' + state.selectedDatasource;
-            if (!isUserDatasource && response.indicators.length === 0) {
-                // show notification about empty indicator list for non-myindicators datasource
-                Messaging.error(this.loc('errors.indicatorListIsEmpty'));
-            }
-            this.updateState({
-                indicatorOptions: this.validateIndicatorList(results),
-                loading: false
-            });
+            populateIndicatorOptions(selectedDatasource,
+                response => {
+                    const { indicators = [], complete = false } = response;
+                    const results = indicators.map(ind => {
+                        return {
+                            id: ind.id,
+                            title: Oskari.getLocalized(ind.name),
+                            regionsets: ind.regionsets
+                        };
+                    });
+                    this.setIndicatorsList(selectedDatasource, results, complete);
+                },
+                error => Messaging.error(this.loc(error.message)));
         } catch (error) {
             Messaging.error(error.message);
             this.updateState({
@@ -128,6 +122,23 @@ class SearchController extends StateHandler {
                 loading: false
             });
         }
+    }
+
+    setIndicatorsList (datasourceId, indicators, isComplete) {
+        this.updateState({
+            indicatorOptions: this.validateIndicatorList(indicators),
+            loading: !isComplete
+        });
+        const userDatasource = this.service.getUserDatasource();
+        const isUserDatasource = !!userDatasource && '' + userDatasource.id === '' + datasourceId;
+        if (isComplete && !isUserDatasource && !indicators.length) {
+            // show notification about empty indicator list for non-myindicators datasource
+            Messaging.error(this.loc('errors.indicatorListIsEmpty'));
+        }
+        // Notify other componets that datasource has more indicators now.
+        // Probably not be needed with the React impl
+        const indicatorsUpdatedEvent = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
+        this.sandbox.notifyAll(indicatorsUpdatedEvent(datasourceId));
     }
 
     validateIndicatorList (indicators = []) {
