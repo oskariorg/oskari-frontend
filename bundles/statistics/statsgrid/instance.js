@@ -130,7 +130,7 @@ Oskari.clazz.define(
             });
         },
         _addIndicatorsTabToMyData: function (sandbox, appStarted) {
-            let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+            const myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
 
             if (myDataService) {
                 myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this, this.stateHandler.getController().getFormHandler()));
@@ -393,7 +393,7 @@ Oskari.clazz.define(
                 }
             },
             'MapLayerVisibilityChangedEvent': function (event) {
-                var layer = event.getMapLayer();
+                const layer = event.getMapLayer();
                 if (!layer || layer.getId() !== this._layerId) {
                     return;
                 }
@@ -419,8 +419,8 @@ Oskari.clazz.define(
          * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
          */
         __addTool: function (layerModel, suppressEvent) {
-            var me = this;
-            var service = this.getLayerService();
+            const me = this;
+            const service = this.getLayerService();
             if (typeof layerModel !== 'object') {
                 // detect layerId and replace with the corresponding layerModel
                 layerModel = service.findMapLayer(layerModel);
@@ -429,9 +429,9 @@ Oskari.clazz.define(
                 return;
             }
             // add feature data tool for layer
-            var layerLoc = this.getLocalization('layertools').table_icon || {};
-            var label = layerLoc.title || 'Thematic maps';
-            var tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            const layerLoc = this.getLocalization('layertools').table_icon || {};
+            const label = layerLoc.title || 'Thematic maps';
+            const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             tool.setName('table_icon');
             tool.setTitle(label);
             tool.setTooltip(layerLoc.tooltip || label);
@@ -446,11 +446,11 @@ Oskari.clazz.define(
          */
         __setupLayerTools: function () {
             // add tools for feature data layers
-            var service = this.getLayerService();
-            var layers = service.getAllLayers();
+            const service = this.getLayerService();
+            const layers = service.getAllLayers();
             layers.forEach(layer => this.__addTool(layer, true));
             // update all layers at once since we suppressed individual events
-            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
+            const event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             this.sandbox.notifyAll(event);
         },
 
@@ -463,14 +463,9 @@ Oskari.clazz.define(
          */
         setState: function (newState) {
             const state = newState || this.state || {};
-            if (state.indicators && state.indicators.length) {
-                this.stateHandler.getController().setFullState(state);
-            } else {
-                // if state doesn't have indicators, reset state
-                this.stateHandler.getController().resetState();
-            }
+            this.stateHandler.setFullState(state);
             // if state says view was visible fire up the UI, otherwise close it
-            var uimode = state.view ? 'attach' : 'close';
+            const uimode = state.view ? 'attach' : 'close';
             this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
         },
         getState: function () {
@@ -534,9 +529,9 @@ Oskari.clazz.define(
             }
         },
         createSeriesControl: function () {
-            var sandbox = this.getSandbox();
-            var locale = Oskari.getMsg.bind(null, 'StatsGrid');
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            const sandbox = this.getSandbox();
+            const locale = Oskari.getMsg.bind(null, 'StatsGrid');
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
             this.seriesControlPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesControlPlugin', this, {}, locale, sandbox);
             this.seriesControlPlugin.on('show', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_SERIES, true));

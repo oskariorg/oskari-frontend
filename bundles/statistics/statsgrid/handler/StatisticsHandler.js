@@ -80,7 +80,7 @@ class StatisticsController extends StateHandler {
             indicatorData[dataKey] = oldData[dataKey];
         }
         this.updateState({
-            indicators: indicators,
+            indicators,
             indicatorData
         });
         const { activeIndicator } = this.getState();
@@ -150,6 +150,11 @@ class StatisticsController extends StateHandler {
 
     setFullState (state) {
         const { regionset, indicators = [], activeIndicator, activeRegion } = state || {};
+        if (!indicators.length) {
+            // if state doesn't have indicators, reset state
+            this.resetState();
+            return;
+        }
 
         // map to keep stored states work properly
         const indicatorsArr = indicators.map(ind => {
@@ -185,7 +190,7 @@ class StatisticsController extends StateHandler {
         }
 
         this.updateState({
-            activeRegion: activeRegion,
+            activeRegion,
             indicators: indicatorsArr,
             lastSelectedClassification
         });
