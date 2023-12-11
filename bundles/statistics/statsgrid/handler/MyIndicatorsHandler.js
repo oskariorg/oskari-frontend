@@ -1,4 +1,5 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
 
 class IndicatorsHandler extends StateHandler {
     constructor (sandbox, instance, formHandler) {
@@ -34,14 +35,19 @@ class IndicatorsHandler extends StateHandler {
             loading: true
         });
         try {
-            const response = await this.service.getIndicatorList(this.userDsId);
-            this.updateState({
-                loading: false,
-                data: response.indicators
-            });
+            populateIndicatorOptions(this.userDsId,
+                response => {
+                    const { indicators = [], complete = false } = response;
+                    this.updateState({
+                        loading: !complete,
+                        data: indicators
+                    });
+                },
+                error => Messaging.error(this.loc(error.message)));
         } catch (error) {
-            this.log.warn('Could not list own indicators in personal data tab');
+            Messaging.error(error.message);
             this.updateState({
+                data: [],
                 loading: false
             });
         }

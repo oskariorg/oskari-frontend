@@ -30,6 +30,7 @@ class SearchController extends StateHandler {
         this.metadataPopup = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.addStateListener(() => this.updateFlyout());
+        this.eventHandlers = this.createEventHandlers();
     };
 
     getName () {
@@ -135,10 +136,6 @@ class SearchController extends StateHandler {
             // show notification about empty indicator list for non-myindicators datasource
             Messaging.error(this.loc('errors.indicatorListIsEmpty'));
         }
-        // Notify other componets that datasource has more indicators now.
-        // Probably not be needed with the React impl
-        const indicatorsUpdatedEvent = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
-        this.sandbox.notifyAll(indicatorsUpdatedEvent(datasourceId));
     }
 
     validateIndicatorList (indicators = []) {
@@ -878,6 +875,25 @@ class SearchController extends StateHandler {
         } else {
             formHandler.showIndicatorPopup(this.getState().selectedDatasource);
         }
+    }
+
+    createEventHandlers () {
+        const handlers = {
+            'StatsGrid.DatasourceEvent': (event) => {
+                this.fetchindicatorOptions();
+            }
+        };
+        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
+        return handlers;
+    }
+
+    onEvent (e) {
+        var handler = this.eventHandlers[e.getName()];
+        if (!handler) {
+            return;
+        }
+
+        return handler.apply(this, [e]);
     }
 }
 
