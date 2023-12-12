@@ -4,9 +4,9 @@ import { SearchHandler } from './SearchHandler';
 import { DiagramHandler } from './DiagramHandler';
 import { IndicatorFormHandler } from './IndicatorFormHandler';
 import { ClassificationHandler } from './ClassificationHandler';
-import { getHash } from '../helper/StatisticsHelper';
 import { normalizeDatasources, normalizeRegionsets } from '../helper/ConfigHelper';
 import { validateClassification, DEFAULT_OPTS } from '../helper/ClassificationHelper';
+import { getIndicatorObjectToAdd } from './IndicatorHelper';
 
 class StatisticsController extends StateHandler {
     constructor (service, conf = {}) {
@@ -156,53 +156,39 @@ class StatisticsController extends StateHandler {
             return;
         }
 
-        // map to keep stored states work properly
-        const indicatorsArr = indicators.map(ind => {
-            const hash = ind.hash || getHash(ind.ds, ind.id, ind.selections, ind.series);
-            if (ind.classification) {
-                validateClassification(ind.classification);
-            }
-            return {
-                datasource: Number(ind.datasource),
-                indicator: ind.indicator,
-                selections: ind.selections,
-                series: ind.series,
-                hash,
-                classification: ind.classification,
-                labels: ind.labels
+        const setStateAsync = async (stateList) => {
+            // map to keep stored states work properly
+            for (const ind of stateList) {
+                // async/await doesn't work with forEach()
+                await this.addIndicator(ind.ds, ind.id, ind.selections, ind.series, ind.classification);
             };
-        // published maps or saved views may contain dublicate indicators => filter dublicates
-        }).filter((ind, i, inds) =>
-            (inds.findIndex(find => (find.hash === ind.hash)) === i) &&
-            (ind.hash && ind.hash !== '')
-        );
-
-        const active = indicatorsArr.find(ind => ind.hash === activeIndicator);
-        let lastSelectedClassification;
-        if (active) {
-            const { classification, series, selections } = active;
-            if (classification) {
-                lastSelectedClassification = classification;
+            const { indicators } = this.getState();
+            const active = indicators.find(ind => ind.hash === activeIndicator);
+            let lastSelectedClassification;
+            if (active) {
+                const { classification, series, selections } = active;
+                if (classification) {
+                    lastSelectedClassification = classification;
+                }
+                if (series) {
+                    this.service.getSeriesService().setValues(series.values, selections[series.id]);
+                }
             }
-            if (series) {
-                this.service.getSeriesService().setValues(series.values, selections[series.id]);
+
+            this.updateState({
+                activeRegion,
+                lastSelectedClassification
+            });
+            this.setActiveRegionset(regionset);
+
+            if (active) {
+                this.setActiveIndicator(active.hash);
             }
-        }
+            const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
+            this.sandbox.notifyAll(eventBuilder());
+        };
 
-        this.updateState({
-            activeRegion,
-            indicators: indicatorsArr,
-            lastSelectedClassification
-        });
-
-        this.setActiveRegionset(regionset);
-
-        if (active) {
-            this.setActiveIndicator(active.hash);
-        }
-
-        const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
-        this.sandbox.notifyAll(eventBuilder());
+        setStateAsync(indicators);
     }
 
     resetState () {
@@ -224,9 +210,15 @@ class StatisticsController extends StateHandler {
         if (index) {
             indicators[index].classification.transparency = transparency;
             this.updateState({
-                indicators: indicators
+                indicators
             });
         }
+    }
+
+    isIndicatorAdded (indicatorHash) {
+        const foundIncidatorInState = this.getState().indicators
+            .find((existing) => existing.hash === indicatorHash);
+        return !!foundIncidatorInState;
     }
 
     /**
@@ -241,29 +233,17 @@ class StatisticsController extends StateHandler {
      * @return {Object} false if indicator is already selected or an object describing the added indicator (includes parameters as an object)
      */
     async addIndicator (datasrc, indicator, selections, series, classification) {
-        const ind = {
-            datasource: Number(datasrc),
-            indicator: indicator,
-            selections: selections,
-            series: series,
-            hash: getHash(datasrc, indicator, selections, series)
-        };
+        const ind = await getIndicatorObjectToAdd(datasrc, indicator, selections, series);
+        if (this.isIndicatorAdded(ind.hash)) {
+            // already added to state
+            return false;
+        }
         // init classification values if not given
         ind.classification = classification || await this.getClassificationOpts(ind.hash, {
             ds: datasrc,
             id: indicator
         });
-        let found = false;
-        this.getState().indicators.forEach((existing) => {
-            if (existing.hash === ind.hash) {
-                found = true;
-            }
-        });
-
-        if (found) return false;
-
-        const labels = await this.service.getUILabels(ind);
-        ind.labels = labels;
+        validateClassification(ind.classification);
 
         if (series) {
             const seriesService = this.service.getSeriesService();

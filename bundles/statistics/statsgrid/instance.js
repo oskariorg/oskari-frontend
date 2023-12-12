@@ -238,22 +238,34 @@ Oskari.clazz.define(
                 }
             }
         },
+        __getIndicatorFromState: function (datasource, indicatorId) {
+            return this.stateHandler.getState().indicators
+                .find(ind => ind.datasource === datasource && ind.indicator === indicatorId);
+        },
         addDataProviderInfo: async function (ind) {
             const service = this.getDataProviderInfoService();
             if (!service) return;
-            const { datasource, indicator, selections } = ind;
+            const { datasource, indicator } = ind;
+            let { labels } = ind;
             const { name, info: { url } } = this.statsService.getDatasource(datasource);
             const id = datasource + '_' + indicator;
 
-            const labels = await this.statsService.getUILabels({ datasource, indicator, selections });
+            if (!labels) {
+                labels = this.__getIndicatorFromState(datasource, indicator)?.labels;
+            }
+            if (!labels) {
+                // Couldn't get labels, ignore
+                return;
+            }
             const data = {
                 id,
                 name: labels.indicator,
                 source: [labels.source, { name, url }]
             };
             if (!service.addItemToGroup('indicators', data)) {
+                const locale = Oskari.getMsg.bind(null, 'StatsGrid');
                 // if adding failed, it might because group was not registered.
-                service.addGroup('indicators', this.getLocalization().dataProviderInfoTitle);
+                service.addGroup('indicators', locale('dataProviderInfoTitle'));
                 // Try adding again
                 service.addItemToGroup('indicators', data);
             }
@@ -289,16 +301,22 @@ Oskari.clazz.define(
             'StatsGrid.StateChangedEvent': function (evt) {
                 if (evt.isReset()) {
                     this._removeStatsLayer();
-                    this.flyoutManager.hideFlyouts();
+                    this.flyoutManager?.hideFlyouts();
+                    // notify other components
+                    this.statsService.notifyOskariEvent(evt);
                 } else {
-                    this.stateHandler.getState().indicators.forEach(ind => {
-                        this.addDataProviderInfo(ind);
-                    });
-                    this.updateSeriesControlVisibility();
-                    this.updateClassficationViewVisibility();
+                    const doAsyncUpdate = async () => {
+                        const { indicators = [] } = this.stateHandler.getState();
+                        for (const ind of indicators) {
+                            await this.addDataProviderInfo(ind);
+                        };
+                        this.updateSeriesControlVisibility();
+                        this.updateClassficationViewVisibility();
+                        // notify other components
+                        this.statsService.notifyOskariEvent(evt);
+                    };
+                    doAsyncUpdate();
                 }
-                // notify other components
-                this.statsService.notifyOskariEvent(evt);
             },
             'StatsGrid.IndicatorEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -476,7 +494,15 @@ Oskari.clazz.define(
                 return {
                     activeIndicator: state.activeIndicator,
                     regionset: state.activeRegionset,
-                    indicators: state.indicators,
+                    indicators: state.indicators.map(ind => {
+                        return {
+                            ds: ind.datasource,
+                            id: ind.indicator,
+                            selections: ind.selections,
+                            classification: ind.classification,
+                            series: ind.series
+                        };
+                    }),
                     activeRegion: state.activeRegion,
                     lastSelectedClassification: state.lastSelectedClassification,
                     view: this.visible
