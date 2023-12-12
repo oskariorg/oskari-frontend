@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
 
             ReactDOM.render(
                 <StyledButton
-                    className='t_fullscreen'
+                    className='t_pichzoom_reset'
                     visible={this.isVisible()}
                     icon={<ZoomOutOutlined />}
                     onClick={() => {
