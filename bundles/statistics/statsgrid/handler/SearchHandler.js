@@ -3,6 +3,7 @@ import { showSearchFlyout } from '../view/search/SearchFlyout';
 import { showMedataPopup } from '../components/description/MetadataPopup';
 import { getHash } from '../helper/StatisticsHelper';
 import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
+import { getIndicatorMetadata } from './IndicatorHelper';
 
 class SearchController extends StateHandler {
     constructor (stateHandler, service, sandbox) {
@@ -366,7 +367,7 @@ class SearchController extends StateHandler {
     async handleSingleIndicatorParams (indId, cb) {
         const panelLoc = this.loc('panels.newSearch');
         try {
-            const result = await this.service.getIndicatorMetadata(this.getState().selectedDatasource, indId);
+            const result = await getIndicatorMetadata(this.getState().selectedDatasource, indId);
             const combinedValues = {};
             result?.selectors.forEach((selector) => {
                 selector.allowedValues.forEach((val) => {
@@ -383,7 +384,7 @@ class SearchController extends StateHandler {
                         id: val.id || val,
                         title: optName
                     };
-                    combinedValues[selector.id]['values'].push(valObject);
+                    combinedValues[selector.id].values.push(valObject);
                 });
             });
 
@@ -537,7 +538,7 @@ class SearchController extends StateHandler {
             };
             // Get indicator metadata to check the search valididty
             try {
-                const metadata = await this.service.getIndicatorMetadata(commonSearchValues.datasource, indicator);
+                const metadata = await getIndicatorMetadata(commonSearchValues.datasource, indicator);
                 // Map possible errors by indicator name
                 const indicatorName = metadata && metadata.name ? Oskari.getLocalized(metadata.name) : indicator;
                 if (!metadata) {
