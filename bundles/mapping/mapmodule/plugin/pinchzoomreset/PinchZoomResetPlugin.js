@@ -124,9 +124,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
                 el[0]
             );
         },
-        teardownUI: function () {
-            this.removeFromPluginContainer(this.getElement());
-        },
         /**
          * @method _stopPluginImpl
          *
@@ -134,7 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
          *          reference to application sandbox
          */
         _stopPluginImpl: function (sandbox) {
-            this.teardownUI();
+            this.removeFromPluginContainer(this.getElement());
         },
         isVisible: function () {
             return Oskari.util.isMobile() && this._isVisible;
