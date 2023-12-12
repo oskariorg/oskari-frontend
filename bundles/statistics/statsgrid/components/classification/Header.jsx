@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Tooltip, Message, Select, Option } from 'oskari-ui';
+import { Tooltip, Message, Select } from 'oskari-ui';
 import { EditOutlined } from '@ant-design/icons';
 
 const Component = styled.div`
@@ -30,7 +30,9 @@ const editStyle = {
 };
 
 export const Header = ({ selected, indicators, isEdit, toggleEdit, onChange }) => {
-    const { title = '' } = indicators.find(indicator => indicator.hash === selected) || {};
+    console.log(indicators);
+    const { labels = {} } = indicators.find(indicator => indicator.hash === selected) || {};
+    const { full: title = '' } = labels;
     const renderSelect = indicators.length > 1;
 
     return (
