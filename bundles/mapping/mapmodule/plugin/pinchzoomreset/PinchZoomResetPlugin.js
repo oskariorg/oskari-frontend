@@ -22,7 +22,7 @@ const StyledButton = styled(MapModuleButton)`
  *
  * Displays a button to reset pinch zoom on top of the map.
  *
- * This solves the situation where the user has pinch zoomed in sot that no other elements besides the map itself are no longer accessible.
+ * This solves the situation where the user has pinch zoomed in so that no other elements besides the map itself are no longer accessible.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetPlugin',
     /**
