@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Message, Collapse, CollapsePanel } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import { PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
@@ -19,9 +19,20 @@ const Content = styled('div')`
 `;
 
 const IndicatorForm = ({ state, controller }) => {
+    const [activePanel, setActivePanel] = useState(state.indicator ? 'data' : 'info');
+
+    const onPanelChange = () => {
+        // Because collapse onChange doesn't give the new key as argument
+        let panel = 'info';
+        if (activePanel === 'info') {
+            panel = 'data';
+        }
+        setActivePanel(panel);
+    };
+
     return (
         <Content>
-            <Collapse defaultActiveKey={state.indicator ? 'data' : 'info'}>
+            <Collapse activeKey={activePanel} onChange={onPanelChange}>
                 <CollapsePanel key='info' header={<Message messageKey='userIndicators.panelGeneric.title' />}>
                     <IndicatorInfo
                         state={state}
