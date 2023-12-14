@@ -30,7 +30,6 @@ const editStyle = {
 };
 
 export const Header = ({ selected, indicators, isEdit, toggleEdit, onChange }) => {
-    console.log(indicators);
     const { labels = {} } = indicators.find(indicator => indicator.hash === selected) || {};
     const { full: title = '' } = labels;
     const renderSelect = indicators.length > 1;
