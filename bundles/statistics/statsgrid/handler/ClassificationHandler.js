@@ -55,13 +55,21 @@ class ClassificationController extends StateHandler {
     }
 
     updateClassificationContainer () {
-        if (this.getState().classificationContainer) {
+        const state = this.getState();
+        if (state.classificationContainer) {
             const { activeIndicator, indicators } = this.stateHandler.getState();
             const indicator = this.service.getIndicator(activeIndicator);
             if (!indicator) {
                 this.closeClassificationContainer();
             } else {
-                this.getState().classificationContainer.update(indicators, indicator, this.getState());
+                const data = state?.indicatorData?.data || {};
+                if (!Object.keys(data).length) {
+                    // we need data to be updated, not just the container, but calling update data here triggers an infinite
+                    // loop as this is called from state update and data update well... updates the state
+                    // this.updateData();
+                } else {
+                    this.getState().classificationContainer.update(indicators, indicator, this.getState());
+                }
             }
         }
     }
@@ -108,7 +116,7 @@ class ClassificationController extends StateHandler {
         const { activeIndicator, activeRegionset } = this.stateHandler.getState();
         const indicator = this.service.getIndicator(activeIndicator);
         const seriesStats = this.service.getSeriesService().getSeriesStats(activeIndicator);
-        const indicatorData = await this.getIndicatorData(indicator, activeRegionset);
+        const indicatorData = this.getIndicatorData(indicator, activeRegionset);
         const { data, uniqueCount, minMax } = indicatorData;
         const classifiedDataset = getClassification(data, indicator.classification, seriesStats, uniqueCount);
         const editOptions = getEditOptions(indicator, uniqueCount, minMax);
@@ -120,7 +128,7 @@ class ClassificationController extends StateHandler {
         });
     }
 
-    async getIndicatorData (activeIndicator, activeRegionset) {
+    getIndicatorData (activeIndicator, activeRegionset) {
         try {
             const isSerie = !!activeIndicator.series;
             const serieSelection = isSerie ? this.service.getSeriesService().getValue() : null;
