@@ -115,9 +115,9 @@ class SearchController extends StateHandler {
                     });
                     this.setIndicatorsList(selectedDatasource, results, complete);
                 },
-                error => Messaging.error(this.loc(error.message)));
+                error => Messaging.error(this.loc(error)));
         } catch (error) {
-            Messaging.error(error.message);
+            Messaging.error(this.loc('errors.indicatorListError'));
             this.updateState({
                 indicatorOptions: [],
                 loading: false

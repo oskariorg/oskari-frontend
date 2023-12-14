@@ -64,7 +64,7 @@ export const updateIndicatorListInCache = (datasourceId, indicator) => {
 export const populateIndicatorOptions = async (datasourceId, successCallback, errorCallback) => {
     if (!datasourceId) {
         if (typeof errorCallback === 'function') {
-            errorCallback('Datasource missing');
+            errorCallback('errors.myIndicatorDatasource');
         }
         return;
     }
@@ -94,7 +94,7 @@ export const populateIndicatorOptions = async (datasourceId, successCallback, er
         successCallback(value);
     } catch (error) {
         if (typeof errorCallback === 'function') {
-            errorCallback(error);
+            errorCallback('errors.indicatorListError');
         } else {
             throw new Error(error);
         }
