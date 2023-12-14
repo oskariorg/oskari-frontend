@@ -43,9 +43,9 @@ class IndicatorsHandler extends StateHandler {
                         data: indicators
                     });
                 },
-                error => Messaging.error(this.loc(error.message)));
+                error => Messaging.error(this.loc(error)));
         } catch (error) {
-            Messaging.error(error.message);
+            Messaging.error(this.loc('errors.indicatorListError'));
             this.updateState({
                 data: [],
                 loading: false
