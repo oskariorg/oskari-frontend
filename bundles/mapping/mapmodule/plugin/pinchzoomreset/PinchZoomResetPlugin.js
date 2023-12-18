@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
          * @return {Boolean} true if page is zoomed in
          */
         isZoomedIn: function () {
-            return window.innerWidth !== window.visualViewport.width || window.innerHeight !== window.visualViewport.height;
+            return parseInt(window.innerWidth) !== parseInt(window.visualViewport.width) || parseInt(window.innerHeight) !== parseInt(window.visualViewport.height);
         },
 
         /**
