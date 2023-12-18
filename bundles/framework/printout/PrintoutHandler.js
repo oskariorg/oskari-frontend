@@ -158,7 +158,8 @@ class UIHandler extends StateHandler {
             pageTitle: this.state.mapTitle,
             pageScale: this.state.showScale,
             pageDate: this.state.showDate,
-            pageTimeSeriesTime: this.state.showTimeSeriesDate
+            pageTimeSeriesTime: this.state.showTimeSeriesDate,
+            lang: Oskari.getLang()
         };
 
         if (this.state.scale) {
