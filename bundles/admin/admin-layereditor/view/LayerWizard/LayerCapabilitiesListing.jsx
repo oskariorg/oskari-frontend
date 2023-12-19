@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { List, ListItem, Tooltip, Message, Confirm, Button } from 'oskari-ui';
+
 import { LocaleConsumer } from 'oskari-ui/util';
 import { LayerCapabilitiesFilter } from './LayerCapabilitiesFilter';
 import { CheckCircleTwoTone, QuestionCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
+
+const LOCALIZATION_BUNDLE_ID = 'admin-layereditor';
 
 export const StyledListItem = styled(ListItem)`
     :hover {
@@ -23,6 +26,10 @@ const PaddedItemContainer = styled('div')`
     margin-left: ${props => props.depth}vw;
 `;
 
+const ToggleButton = styled(Button)`
+    margin: 1vh 0;
+`;
+
 const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {}, getMessage }) => {
     const [filter, setfilter] = useState('');
     const [treeView, setTreeview] = useState(false);
@@ -31,17 +38,21 @@ const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {}, getM
     if (treeView) {
         return (
             <React.Fragment>
-                <Button onClick={() => setTreeview(!treeView)}>toggle flat view</Button>
+                <ToggleButton type={'primary'} onClick={() => setTreeview(!treeView)}>
+                    <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleFlatView'}/>
+                </ToggleButton>
                 <LayerCapabilitiesTreeView capabilities={capabilities} onSelect={onSelect} getMessage={getMessage}/>
             </React.Fragment>);
     }
     return (
         <React.Fragment>
-            <Button onClick={() => setTreeview(!treeView)}>toggle treeview</Button>
             <LayerCapabilitiesFilter
                 placeholder="Filter layers"
                 filter={filter}
                 onChange={(value) => setfilter(value)}/>
+            <ToggleButton type={'primary'} onClick={() => setTreeview(!treeView)}>
+                <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleTreeView'}/>
+            </ToggleButton>
             <List dataSource={layers} rowKey="name" renderItem={item => getItem(onSelect, item, getMessage)}></List>
         </React.Fragment>);
 };
@@ -79,7 +90,6 @@ LayerCapabilitiesTreeView.propTypes = {
 
 const contextWrap = LocaleConsumer(LayerCapabilitiesListing);
 export { contextWrap as LayerCapabilitiesListing };
-
 
 /**
  * Processes a layer list to be rendered based on capabilities

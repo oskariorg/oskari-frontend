@@ -10,7 +10,10 @@ Oskari.registerLocalization(
                 "typeDescription": "Select the type of the service for layer you are adding",
                 "serviceDescription": "Fill in the url and version for the service",
                 "layersDescription": "These are the layers that are available in the service. Please select one to add as a map layer",
-                "details": "Map layer details"
+                "details": "Map layer details",
+                "toggleFlatView": "Flat view",
+                "toggleTreeView": "Tree view"
+
             },
             "layertype": {
                 "wmslayer": "WMS",
