@@ -33,14 +33,18 @@ const ToggleButton = styled(Button)`
 const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {}, getMessage }) => {
     const [filter, setfilter] = useState('');
     const [treeView, setTreeview] = useState(false);
+    const canHaveTreeView = !!capabilities?.structure;
     const allLayers = prepareData(capabilities);
     const layers = sortLayers(filterLayers(allLayers, filter));
+
     if (treeView) {
         return (
             <React.Fragment>
+                { canHaveTreeView &&
                 <ToggleButton type={'primary'} onClick={() => setTreeview(!treeView)}>
                     <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleFlatView'}/>
                 </ToggleButton>
+                }
                 <LayerCapabilitiesTreeView capabilities={capabilities} onSelect={onSelect} getMessage={getMessage}/>
             </React.Fragment>);
     }
@@ -50,9 +54,11 @@ const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {}, getM
                 placeholder="Filter layers"
                 filter={filter}
                 onChange={(value) => setfilter(value)}/>
-            <ToggleButton type={'primary'} onClick={() => setTreeview(!treeView)}>
-                <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleTreeView'}/>
-            </ToggleButton>
+            { canHaveTreeView &&
+                <ToggleButton type={'primary'} onClick={() => setTreeview(!treeView)}>
+                    <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleTreeView'}/>
+                </ToggleButton>
+            }
             <List dataSource={layers} rowKey="name" renderItem={item => getItem(onSelect, item, getMessage)}></List>
         </React.Fragment>);
 };
