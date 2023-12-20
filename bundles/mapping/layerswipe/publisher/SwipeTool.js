@@ -26,7 +26,6 @@ class SwipeTool extends AbstractPublisherTool {
     }
     init (data) {
         const configuration = data?.configuration?.layerswipe?.conf;
-        super.init(configuration);
         // restore state to handler -> passing init data to it
         this.handler.init(configuration);
         if (configuration) {
