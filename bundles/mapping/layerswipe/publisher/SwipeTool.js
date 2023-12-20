@@ -56,6 +56,6 @@ class SwipeTool extends AbstractPublisherTool {
 Oskari.clazz.defineES('Oskari.publisher.SwipeTool',
     SwipeTool,
     {
-        'protocol': ['Oskari.mapframework.publisher.tool']
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     }
 );
