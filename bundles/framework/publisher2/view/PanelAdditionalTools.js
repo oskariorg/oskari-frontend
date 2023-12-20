@@ -24,57 +24,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelAdditionalT
         this.instance = instance;
         this.sandbox = sandbox;
         this.mapModule = mapmodule;
-        this.isDataVisible = false;
         this.tools = tools || [];
         this.tools = [...this.tools].sort((a, b) => a.index - b.index);
-
-        this.config = {
-            layers: {
-                promote: [{
-                    text: this.loc.layerselection.promote,
-                    id: [] // 24 , 203
-                }],
-                preselect: [] // 'base_35'
-            }
-        };
-
         this.panel = null;
         this.handler = null;
     }, {
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-        },
-        _notifyHandler: function () {
-            this.handler?.updateSelectedLayers();
-        },
         /**
          * @method init
          * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
          */
         init: function (data) {
-            for (const p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    this.sandbox.registerForEventByName(this, p);
-                }
-            }
-
             this.handler = new AdditionalToolsHandler(this.tools, this.instance.getSandbox(), () => this._updateUI());
             return this.handler.init(data);
-        },
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
         },
         getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.view.PanelAdditionalTools';
