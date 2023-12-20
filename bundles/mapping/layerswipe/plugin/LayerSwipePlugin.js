@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
      */
     function (config) {
         var me = this;
+        me._config = config || {};
         me._clazz =
             'Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlugin';
         me._defaultLocation = 'top left';
