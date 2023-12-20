@@ -10,6 +10,10 @@ Oskari.registerLocalization({
             swipeNoRasterMessage: 'Set a map layer visible.',
             swipeLayerNotVisibleTitle: 'Swipe feature is not working in the current view',
             swipeLayerNotVisibleMessage: 'The topmost layer is not visible in the current view. Move to a location where it can be seen.'
+        },
+        tool: {
+            "label": "Compare map layers",
+            "autoStart": "Start automatically"
         }
     }
 });

@@ -126,10 +126,6 @@ Oskari.registerLocalization(
                 },
                 "panButtonsOptions": {
                     "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
-                },
-                "swipe": {
-                    "label": "Tasojen vertailutyökalu",
-                    "autoStart": "Käynnistä automaattisesti"
                 }
             },
             "toollayout": {

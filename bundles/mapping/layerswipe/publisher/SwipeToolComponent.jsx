@@ -22,7 +22,7 @@ const AutoStartSelect = ({ state, controller }) => {
             checked={state.autoStart}
             onChange={(e) => controller.setAutoStart(e.target.checked)}
         >
-            <Message messageKey='BasicView.maptools.swipe.autoStart' />
+            <Message bundleKey="LayerSwipe" messageKey='tool.autoStart' />
         </Checkbox>);
 };
 
@@ -33,6 +33,6 @@ const HideUISelect = ({ state, controller }) => {
             checked={state.hideUI}
             onChange={(e) => controller.setHideUI(e.target.checked)}
         >
-            <Message messageKey='BasicView.noUI' />
+            <Message bundleKey="Publisher2" messageKey='BasicView.noUI' />
         </Checkbox>);
 };

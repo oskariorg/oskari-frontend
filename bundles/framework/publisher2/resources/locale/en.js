@@ -126,10 +126,6 @@ Oskari.registerLocalization(
                 },
                 "panButtonsOptions": {
                     "showArrows": "Pan tool"
-                },
-                "swipe": {
-                    "label": "Compare map layers",
-                    "autoStart": "Start automatically"
                 }
             },
             "toollayout": {
