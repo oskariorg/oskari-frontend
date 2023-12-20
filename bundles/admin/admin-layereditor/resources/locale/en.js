@@ -11,7 +11,7 @@ Oskari.registerLocalization(
                 "serviceDescription": "Fill in the url and version for the service",
                 "layersDescription": "These are the layers that are available in the service. Please select one to add as a map layer",
                 "details": "Map layer details",
-                "toggleFlatView": "Flat view",
+                "toggleFlatView": "List view",
                 "toggleTreeView": "Tree view"
 
             },

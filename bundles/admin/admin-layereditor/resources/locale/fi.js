@@ -11,7 +11,7 @@ Oskari.registerLocalization(
                 "serviceDescription": "Syötä lisättävän rajapinnan osoite ja versionumero",
                 "layersDescription": "Valitse rajapinnasta löytyvistä tasoista se jonka haluat lisätä karttatasoksi",
                 "details": "Tason tiedot",
-                "toggleFlatView": "Lista",
+                "toggleFlatView": "Listanäkymä",
                 "toggleTreeView": "Puunäkymä"
             },
             "layertype": {
