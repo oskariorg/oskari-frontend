@@ -10,7 +10,9 @@ Oskari.registerLocalization(
                 "typeDescription": "Valitse lisättävän rajapinnan tyyppi",
                 "serviceDescription": "Syötä lisättävän rajapinnan osoite ja versionumero",
                 "layersDescription": "Valitse rajapinnasta löytyvistä tasoista se jonka haluat lisätä karttatasoksi",
-                "details": "Tason tiedot"
+                "details": "Tason tiedot",
+                "toggleFlatView": "Listanäkymä",
+                "toggleTreeView": "Puunäkymä"
             },
             "layertype": {
                 "wmslayer": "WMS",
