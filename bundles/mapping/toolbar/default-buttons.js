@@ -229,13 +229,14 @@ Oskari.clazz.category(
             const linkParams = sandbox.generateMapLinkParameters({});
             const viewUuid = this._getLinkUuid();
 
+            const layerSwipeActive = sandbox?.findRegisteredModuleInstance('LayerSwipe')?.active;
             let guidedTour = false;
             if (Oskari.bundle('guidedtour')) {
                 guidedTour = true;
             }
             const baseUrl = mapUrlPrefix + linkParams + '&uuid=' + viewUuid + '&noSavedState=true';
 
-            this.linkPopup = showMapLinkPopup(guidedTour, baseUrl, () => this.clearLinkPopup());
+            this.linkPopup = showMapLinkPopup(guidedTour, layerSwipeActive, baseUrl, () => this.clearLinkPopup());
         },
         /**
          * Returns the map url for link tool

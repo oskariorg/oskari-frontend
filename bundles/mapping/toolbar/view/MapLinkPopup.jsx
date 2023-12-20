@@ -15,7 +15,7 @@ const Options = styled('div')`
     margin-top: 5px;
 `;
 
-const updateUrl = (baseUrl, addMarker, skipInfo) => {
+const updateUrl = (baseUrl, addMarker, skipInfo, swipeToolActive) => {
     let url = baseUrl;
     if (addMarker) {
         url += '&showMarker=true';
@@ -23,14 +23,19 @@ const updateUrl = (baseUrl, addMarker, skipInfo) => {
     if (skipInfo) {
         url += '&showIntro=false';
     }
+
+    if (swipeToolActive) {
+        url += '&layerSwipe=true';
+    }
+
     return url;
 }
 
-const PopupContent = ({ guidedTour, baseUrl, onClose }) => {
+const PopupContent = ({ guidedTour, swipeToolActive, baseUrl, onClose }) => {
     const [state, setState] = useState({
         hideGuidedTour: true,
         showMarker: false,
-        url: updateUrl(baseUrl, false, true),
+        url: updateUrl(baseUrl, false, true, swipeToolActive),
         highlighted: false
     });
 
@@ -60,7 +65,7 @@ const PopupContent = ({ guidedTour, baseUrl, onClose }) => {
                         onChange={(e) => setState({
                             ...state,
                             showMarker: e.target.checked,
-                            url: updateUrl(baseUrl, e.target.checked, state.hideGuidedTour)
+                            url: updateUrl(baseUrl, e.target.checked, state.hideGuidedTour, swipeToolActive)
                         })}
                     >
                         <Message bundleKey={BUNDLE_NAME} messageKey='buttons.link.addMarker' />
@@ -73,7 +78,7 @@ const PopupContent = ({ guidedTour, baseUrl, onClose }) => {
                             onChange={(e) => setState({
                                 ...state,
                                 hideGuidedTour: e.target.checked,
-                                url: updateUrl(baseUrl, state.showMarker, e.target.checked)
+                                url: updateUrl(baseUrl, state.showMarker, e.target.checked, swipeToolActive)
                             })}
                         >
                             <Message bundleKey={BUNDLE_NAME} messageKey='buttons.link.skipInfo' />
@@ -96,7 +101,7 @@ const PopupContent = ({ guidedTour, baseUrl, onClose }) => {
     );
 };
 
-export const showMapLinkPopup = (guidedTour, baseUrl, onClose) => {
+export const showMapLinkPopup = (guidedTour, swipeToolActive, baseUrl, onClose) => {
     const options = {
         id: 'oskari-maplink'
     };
@@ -105,6 +110,7 @@ export const showMapLinkPopup = (guidedTour, baseUrl, onClose) => {
         <PopupContent
             baseUrl={baseUrl}
             guidedTour={guidedTour}
+            swipeToolActive={swipeToolActive}
             onClose={onClose}
         />,
         onClose,
