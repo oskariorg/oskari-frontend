@@ -1,6 +1,6 @@
-import { AbstractPublisherTool } from './AbstractPublisherTool';
+import { AbstractPublisherTool } from '../../../framework/publisher2/tools/AbstractPublisherTool';
 import { SwipeToolhandler } from '../handler/SwipeToolHandler';
-import { SwipeToolComponent } from '../view/swipe/SwipeToolComponent';
+import { SwipeToolComponent } from './SwipeToolComponent';
 
 export const SWIPE_ID = 'Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlugin';
 
@@ -14,7 +14,7 @@ class SwipeTool extends AbstractPublisherTool {
     getTool () {
         return {
             id: SWIPE_ID,
-            title: Oskari.getMsg('Publisher2', 'BasicView.maptools.swipe.label'),
+            title: Oskari.getMsg('LayerSwipe', 'tool.label'),
             config: this.state.pluginConfig || {}
         };
     }
@@ -52,7 +52,7 @@ class SwipeTool extends AbstractPublisherTool {
 }
 
 // Attach protocol to make this discoverable by Oskari publisher
-Oskari.clazz.defineES('Oskari.publisher.SwipeTool',
+Oskari.clazz.defineES('Oskari.LayerSwipe.SwipeTool',
     SwipeTool,
     {
         'protocol': ['Oskari.mapframework.publisher.AdditionalTool']

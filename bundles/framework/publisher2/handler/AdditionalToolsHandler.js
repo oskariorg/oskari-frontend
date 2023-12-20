@@ -1,6 +1,6 @@
 import { controllerMixin } from 'oskari-ui/util';
 import { ToolPanelHandler } from './ToolPanelHandler';
-import '../tools/SwipeTool.js';
+import '../../../mapping/layerswipe/publisher/SwipeTool';
 
 class UIHandler extends ToolPanelHandler {
     constructor (tools, sandbox, consumer) {

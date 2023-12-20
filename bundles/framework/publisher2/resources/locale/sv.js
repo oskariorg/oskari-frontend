@@ -126,10 +126,6 @@ Oskari.registerLocalization(
                 },
                 "panButtonsOptions": {
                     "showArrows": "Panoreringsverktyg"
-                },
-                "swipe": {
-                    "label": "Jämför kartlagret högst uppe med nedanstående kartlager",
-                    "autoStart": "Starta automatisk"
                 }
             },
             "toollayout": {
