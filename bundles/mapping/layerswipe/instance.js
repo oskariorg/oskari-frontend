@@ -55,6 +55,9 @@ Oskari.clazz.define(
                 }
             };
             sandbox.request(this, addToolButtonBuilder('LayerSwipe', 'basictools', buttonConf));
+            if (this.state?.layerSwipe) {
+                this.setActive(true);
+            }
         },
 
         setActive: function (active) {
