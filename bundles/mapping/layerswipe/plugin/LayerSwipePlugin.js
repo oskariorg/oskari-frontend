@@ -44,6 +44,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
             me._loc = Oskari.getLocalization('LayerSwipe', Oskari.getLang() || Oskari.getDefaultLanguage(), true);
             me.templates.main = jQuery(
                 '<div class="mapplugin layerswipe"></div>');
+            if (me._active) {
+                me._toggleToolState(true);
+            }
         },
         resetUI: function () {},
         getInstance: function () {
