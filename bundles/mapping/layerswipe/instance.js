@@ -41,20 +41,27 @@ Oskari.clazz.define(
             this.mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
             this.popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
 
-            const addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
-            const buttonConf = {
-                iconCls: 'tool-layer-swipe',
-                tooltip: this.loc('toolLayerSwipe'),
-                sticky: true,
-                callback: () => {
-                    if (this.active) {
-                        this.activateDefaultMapTool();
-                    } else {
-                        this.setActive(true);
+            if (Oskari.dom.isEmbedded()) {
+                const plugin = Oskari.clazz.create('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlugin', this.conf);
+                this.mapModule.registerPlugin(plugin);
+                this.mapModule.startPlugin(plugin);
+            } else {
+                const addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
+                const buttonConf = {
+                    iconCls: 'tool-layer-swipe',
+                    tooltip: this.loc('toolLayerSwipe'),
+                    sticky: true,
+                    callback: () => {
+                        if (this.active) {
+                            this.activateDefaultMapTool();
+                        } else {
+                            this.setActive(true);
+                        }
                     }
-                }
-            };
-            sandbox.request(this, addToolButtonBuilder('LayerSwipe', 'basictools', buttonConf));
+                };
+                sandbox.request(this, addToolButtonBuilder('LayerSwipe', 'basictools', buttonConf));
+            }
+
         },
 
         setActive: function (active) {
