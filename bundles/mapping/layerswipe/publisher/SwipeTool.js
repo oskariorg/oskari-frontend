@@ -25,21 +25,23 @@ class SwipeTool extends AbstractPublisherTool {
         };
     }
     init (data) {
-        super.init(data);
+        const configuration = data?.configuration?.layerswipe?.conf;
+        super.init(configuration);
         // restore state to handler -> passing init data to it
-        this.handler.init(this.getTool().config);
+        this.handler.init(configuration);
+        if (configuration) {
+            this.storePluginConf(configuration);
+            this.setEnabled(true);
+        }
     }
     getValues () {
         if (!this.isEnabled()) {
             return null;
         }
-        const pluginConfig = this.getPlugin().getConfig();
         const value = {
             configuration: {
-                mapfull: {
-                    conf: {
-                        plugins: [{ id: this.getTool().id, config: pluginConfig }]
-                    }
+                layerswipe: {
+                    conf: this.getPlugin().getConfig()
                 }
             }
         };
