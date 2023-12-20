@@ -126,6 +126,10 @@ Oskari.registerLocalization(
                 },
                 "panButtonsOptions": {
                     "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
+                },
+                "swipe": {
+                    "label": "Tasojen vertailutyökalu",
+                    "autoStart": "Käynnistä automaattisesti"
                 }
             },
             "toollayout": {
@@ -246,6 +250,9 @@ Oskari.registerLocalization(
                 "baseLayers": "Taustakartat",
                 "noBaseLayers": "Ei valittuja taustakarttoja",
                 "noLayers": "Ei valittuja karttatasoja"
+            },
+            "additionalTools": {
+                "label": "Lisätyökalut"
             },
             "preview": "Kartan esikatselu",
             "location": "Sijainti ja mittakaavataso",

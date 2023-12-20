@@ -126,6 +126,10 @@ Oskari.registerLocalization(
                 },
                 "panButtonsOptions": {
                     "showArrows": "Panoreringsverktyg"
+                },
+                "swipe": {
+                    "label": "Jämför kartlagret högst uppe med nedanstående kartlager",
+                    "autoStart": "Starta automatisk"
                 }
             },
             "toollayout": {
@@ -246,6 +250,9 @@ Oskari.registerLocalization(
                 "baseLayers": "Bakgrundskartor",
                 "noBaseLayers": "Inga bakgrundskartor valda",
                 "noLayers": "Inga kartlager valda"
+            },
+            "additionalTools": {
+                "label": "Ytterligare verktyg"
             },
             "preview": "Den inbäddade kartans förhandsgranskningsvy",
             "location": "Läge och skalnivå.",
