@@ -2,7 +2,7 @@ import React from 'react';
 import { LocaleProvider } from 'oskari-ui/util';
 import ReactDOM from 'react-dom';
 import { AdditionalTools } from './form/AdditionalTools';
-import { AdditionalToolsHandler } from '../handler/AdditionalToolsHandler';
+import { ToolPanelHandler } from '../handler/ToolPanelHandler';
 
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PanelAdditionalTools
@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelAdditionalT
          * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
          */
         init: function (data) {
-            this.handler = new AdditionalToolsHandler(this.tools, this.instance.getSandbox(), () => this._updateUI());
+            this.handler = new ToolPanelHandler(this.tools, () => this._updateUI());
             return this.handler.init(data);
         },
         getName: function () {
