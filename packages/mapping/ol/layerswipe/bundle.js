@@ -19,6 +19,10 @@ Oskari.clazz.define(
                     src: '../../../../bundles/mapping/layerswipe/instance.js'
                 },
                 {
+                    type: 'text/javascript',
+                    src: '../../../../bundles/mapping/layerswipe/plugin/LayerSwipePlugin.js'
+                },
+                {
                     type: 'text/css',
                     src: '../../../../bundles/mapping/layerswipe/resources/scss/layerswipe.scss'
                 }

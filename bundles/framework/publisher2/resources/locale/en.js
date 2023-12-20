@@ -126,6 +126,10 @@ Oskari.registerLocalization(
                 },
                 "panButtonsOptions": {
                     "showArrows": "Pan tool"
+                },
+                "swipe": {
+                    "label": "Compare map layers",
+                    "autoStart": "Start automatically"
                 }
             },
             "toollayout": {
@@ -246,6 +250,9 @@ Oskari.registerLocalization(
                 "baseLayers": "Background maps",
                 "noBaseLayers": "No selected background maps",
                 "noLayers": "No selected map layers"
+            },
+            "additionalTools": {
+                "label": "Additional tools"
             },
             "preview": "Map preview",
             "location": "Location and zoom level",
