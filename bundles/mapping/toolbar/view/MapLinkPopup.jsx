@@ -25,7 +25,7 @@ const updateUrl = (baseUrl, addMarker, skipInfo, swipeToolActive) => {
     }
 
     if (swipeToolActive) {
-        url += '&layerSwipe=true';
+        url += '&swipe=true';
     }
 
     return url;
