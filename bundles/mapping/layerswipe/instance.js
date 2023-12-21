@@ -10,7 +10,6 @@ Oskari.clazz.define(
     'Oskari.mapframework.bundle.layerswipe.LayerSwipeBundleInstance',
 
     function () {
-        this.active = false;
         this.splitter = null;
         this.splitterWidth = 5;
         this.cropSize = null;
@@ -19,6 +18,7 @@ Oskari.clazz.define(
         this.oskariLayerId = null;
         this.popupService = null;
         this.popup = null;
+        this.plugin = null;
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
         this.eventListenerKeys = [];
 
@@ -43,6 +43,7 @@ Oskari.clazz.define(
 
             if (Oskari.dom.isEmbedded()) {
                 const plugin = Oskari.clazz.create('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlugin', this.conf);
+                this.plugin = plugin;
                 this.mapModule.registerPlugin(plugin);
                 this.mapModule.startPlugin(plugin);
             } else {
@@ -52,7 +53,7 @@ Oskari.clazz.define(
                     tooltip: this.loc('toolLayerSwipe'),
                     sticky: true,
                     callback: () => {
-                        if (this.active) {
+                        if (this.isActive()) {
                             this.activateDefaultMapTool();
                         } else {
                             this.setActive(true);
@@ -61,9 +62,17 @@ Oskari.clazz.define(
                 };
                 sandbox.request(this, addToolButtonBuilder('LayerSwipe', 'basictools', buttonConf));
             }
+            if (this.isActive()) {
+                // when starting we need to force setup even when state is "already active"
+                this.setActive(true, true);
+            }
         },
 
-        setActive: function (active) {
+        setActive: function (active, forcedForInit) {
+            if (!forcedForInit && this.isActive() === active) {
+                // not changing state, nothing to do
+                return;
+            }
             if (active) {
                 this.updateSwipeLayer();
                 if (this.layer === null) {
@@ -80,16 +89,30 @@ Oskari.clazz.define(
                 Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
                 this.setSwipeStatus(null, null);
             }
-            this.active = active;
+            this.setState({
+                active
+            });
             this.mapModule.getMap().render();
+            // refresh the button state if we have the plugin running
+            this.plugin?.refresh();
         },
-
+        isActive: function () {
+            return !!this.getState().active;
+        },
         setSwipeStatus: function (layerId, cropX) {
             this.oskariLayerId = layerId;
             const reqSwipeStatus = Oskari.requestBuilder('GetInfoPlugin.SwipeStatusRequest')(layerId, cropX);
             Oskari.getSandbox().request(this, reqSwipeStatus);
         },
-
+        setState: function (newState = {}) {
+            this.state = {
+                active: !!newState?.active
+            };
+            this.setActive(this.state.active);
+        },
+        getState: function () {
+            return this.state || {};
+        },
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
             const topLayer = this.getTopmostLayer();
@@ -148,13 +171,13 @@ Oskari.clazz.define(
             popup.show(title, message, buttons);
         },
         isInGeometry: function (layer) {
-            var geometries = layer.getGeometry();
+            const geometries = layer.getGeometry();
             if (!geometries || geometries.length === 0) {
                 // we might not have the coverage geometry so assume all is good if we don't know for sure
                 return true;
             }
-            var viewBounds = this.mapModule.getCurrentExtent();
-            var olExtent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
+            const viewBounds = this.mapModule.getCurrentExtent();
+            const olExtent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
             return geometries[0].intersectsExtent(olExtent);
         },
 
@@ -174,7 +197,7 @@ Oskari.clazz.define(
             const olLayers = this.mapModule.getOLMapLayers(layerId);
             return {
                 ol: olLayers.length !== 0 ? olLayers[0] : null,
-                layerId: layerId
+                layerId
             };
         },
 
@@ -184,7 +207,7 @@ Oskari.clazz.define(
             }
             const prerenderKey = this.layer.on('prerender', (event) => {
                 const ctx = event.context;
-                if (!this.active) {
+                if (!this.isActive()) {
                     ctx.restore();
                     return;
                 }
@@ -263,27 +286,27 @@ Oskari.clazz.define(
                 }
             },
             'AfterMapLayerAddEvent': function (event) {
-                if (this.active) {
+                if (this.isActive()) {
                     this.updateSwipeLayer();
                 }
             },
             'AfterMapLayerRemoveEvent': function (event) {
-                if (this.active) {
+                if (this.isActive()) {
                     this.updateSwipeLayer();
                 }
             },
             'AfterRearrangeSelectedMapLayerEvent': function (event) {
-                if (this.active) {
+                if (this.isActive()) {
                     this.updateSwipeLayer();
                 }
             },
             'MapLayerVisibilityChangedEvent': function (event) {
-                if (this.active) {
+                if (this.isActive()) {
                     this.updateSwipeLayer();
                 }
             },
             'MapSizeChangedEvent': function (event) {
-                if (this.active) {
+                if (this.isActive()) {
                     const { left } = this.getSplitterElement().offset();
                     const width = jQuery(window).width() - this.splitterWidth;
                     if (left > width) {
