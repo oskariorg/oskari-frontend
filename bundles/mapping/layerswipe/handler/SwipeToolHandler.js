@@ -7,25 +7,35 @@ class UIHandler extends StateHandler {
         this.sandbox = tool.getSandbox();
         this.setState({
             autoStart: false,
-            hideUI: false
+            noUI: false
         });
     };
+
     init (pluginConfig) {
         this.updateState({
-            ...pluginConfig
+            ...pluginConfig.conf,
+            autoStart: pluginConfig?.state?.active,
+            noUI: pluginConfig?.conf?.noUI
         });
     }
 
+    syncState () {
+        // required to sync state to plugin on startup and restore the state of the embedded map
+        const { autoStart, noUI } = this.getState();
+        this.setAutoStart(autoStart);
+        this.setHideUI(noUI);
+    }
+
     clearState () {
-        // plugin is created again on startup, so it's state doesn't need to be cleare
+        // plugin is created again on startup, so it's state doesn't need to be cleared
         this.setState({
             autoStart: false,
-            hideUI: false
+            noUI: false
         });
     }
 
     setAutoStart (value) {
-        this.tool.getPlugin().setAutoStart(value);
+        this.tool.getPlugin().toggleToolState(!!value);
         this.updateConfig2State();
     }
 
@@ -35,9 +45,9 @@ class UIHandler extends StateHandler {
     }
 
     updateConfig2State () {
-        const newConfig = this.tool?.getPlugin()?.getConfig() || {};
         this.updateState({
-            ...newConfig
+            autoStart: !!this.tool?.getPlugin()?.isActive(),
+            noUI: !!this.tool?.getPlugin()?.hasUI()
         });
     }
 }
