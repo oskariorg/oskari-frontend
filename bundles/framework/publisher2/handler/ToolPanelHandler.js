@@ -45,6 +45,18 @@ class UIHandler extends StateHandler {
         // trigger re-render
         this.notify();
     }
+
+    stop () {
+        const { tools } = this.getState();
+        tools.forEach(tool => {
+            try {
+                tool.publisherTool.stop();
+            } catch (e) {
+                Oskari.log('Publisher.ToolPanelHandler')
+                    .error('Error stopping publisher tool:', tool.getTool().id);
+            }
+        });
+    }
 };
 
 const wrapped = controllerMixin(UIHandler, [
