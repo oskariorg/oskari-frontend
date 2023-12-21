@@ -11,6 +11,7 @@ class SwipeTool extends AbstractPublisherTool {
         this.group = 'additional';
         this.handler = new SwipeToolhandler(this);
     }
+
     getTool () {
         return {
             id: SWIPE_ID,
@@ -18,34 +19,42 @@ class SwipeTool extends AbstractPublisherTool {
             config: this.state.pluginConfig || {}
         };
     }
+
     getComponent () {
         return {
             component: SwipeToolComponent,
             handler: this.handler
         };
     }
+
     init (data) {
-        const configuration = data?.configuration?.layerswipe?.conf;
+        const configuration = data?.configuration?.layerswipe || {};
         // restore state to handler -> passing init data to it
         this.handler.init(configuration);
-        if (configuration) {
-            this.storePluginConf(configuration);
+        if (configuration.conf) {
+            this.storePluginConf(configuration.conf);
             this.setEnabled(true);
         }
     }
+
     getValues () {
         if (!this.isEnabled()) {
             return null;
         }
+        const { autoStart = false } = this.handler.getState();
         const value = {
             configuration: {
                 layerswipe: {
-                    conf: this.getPlugin().getConfig()
+                    conf: this.tool?.getPlugin()?.getConfig() || {},
+                    state: {
+                        active: autoStart
+                    }
                 }
             }
         };
         return value;
     }
+
     stop () {
         super.stop();
         this.handler.clearState();

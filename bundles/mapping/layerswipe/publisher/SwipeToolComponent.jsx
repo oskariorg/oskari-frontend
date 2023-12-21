@@ -30,7 +30,7 @@ const HideUISelect = ({ state, controller }) => {
     return (
         <Checkbox
             className='t_swipe_hide_plugin'
-            checked={state.hideUI}
+            checked={state.noUI}
             onChange={(e) => controller.setHideUI(e.target.checked)}
         >
             <Message bundleKey="Publisher2" messageKey='BasicView.noUI' />
