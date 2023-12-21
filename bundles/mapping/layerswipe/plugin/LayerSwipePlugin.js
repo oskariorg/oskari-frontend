@@ -131,6 +131,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
                     onClick={(e) => this._toggleToolState(!this._active)}
                     iconActive={this._active ? true : false}
                     position={this.getLocation()}
+                    useCustomIconStyle={true}
+                    iconSize='20px'
                 />,
                 el[0]
             );
