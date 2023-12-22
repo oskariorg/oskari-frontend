@@ -64,12 +64,15 @@ Oskari.clazz.define(
             }
             if (this.isActive()) {
                 // when starting we need to force setup even when state is "already active"
-                this.setActive(true, true);
+                // we need to set state.active to false and then init the functionality by setting it back to true
+                // otherwise eventlisteners will do wrong things
+                this.state.active = false;
+                this.setActive(true);
             }
         },
 
-        setActive: function (active, forcedForInit) {
-            if (!forcedForInit && this.isActive() === active) {
+        setActive: function (active) {
+            if (this.isActive() === active) {
                 // not changing state, nothing to do
                 return;
             }
@@ -89,9 +92,10 @@ Oskari.clazz.define(
                 Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
                 this.setSwipeStatus(null, null);
             }
-            this.setState({
-                active
-            });
+            this.state = {
+                ...this.getState(),
+                active: !!active
+            };
             this.mapModule.getMap().render();
             // refresh the button state if we have the plugin running
             this.plugin?.refresh();
@@ -105,10 +109,7 @@ Oskari.clazz.define(
             Oskari.getSandbox().request(this, reqSwipeStatus);
         },
         setState: function (newState = {}) {
-            this.state = {
-                active: !!newState?.active
-            };
-            this.setActive(this.state.active);
+            this.setActive(!!newState?.active);
         },
         getState: function () {
             return this.state || {};
@@ -117,7 +118,6 @@ Oskari.clazz.define(
             this.unregisterEventListeners();
             const topLayer = this.getTopmostLayer();
             this.layer = topLayer.ol;
-
             if (topLayer.layerId !== null) {
                 this.setSwipeStatus(topLayer.layerId, this.cropSize);
             }
