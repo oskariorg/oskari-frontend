@@ -47,7 +47,7 @@ class UIHandler extends StateHandler {
     updateConfig2State () {
         this.updateState({
             autoStart: !!this.tool?.getPlugin()?.isActive(),
-            noUI: !!this.tool?.getPlugin()?.hasUI()
+            noUI: !this.tool?.getPlugin()?.hasUI()
         });
     }
 }
