@@ -22,12 +22,10 @@ const StyledButton = styled(Button)`
     ${(props) => props.rounding && `border-radius: ${props.rounding};`}
     border-radius: ${props => props.rounding};
     color: ${props => props.$active ? props.hover : props.iconcolor};
-    ${props => !props.$useCustomIconStyle && (`
-        fill: ${props.$active ? props.hover : props.iconcolor};
-        path {
-            fill: ${props.$active ? props.hover : props.iconcolor};
-        }
-    `)}
+    fill: ${props => props.$active ? props.hover : props.iconcolor};
+    path {
+        fill: ${props => props.$active ? props.hover : props.iconcolor};
+    }
     background: ${props => props.bg};
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
     display: flex;
@@ -41,11 +39,9 @@ const StyledButton = styled(Button)`
     {
         color: ${props => props.hover};
         background: ${props => props.bg};
-        ${props => !props.$useCustomIconStyle && (`
-            path {
-                fill: ${props.hover};
-            }
-        `)}
+        path {
+            fill: ${props => props.hover};
+        }
     }
     &:focus,
     &:active
@@ -55,7 +51,7 @@ const StyledButton = styled(Button)`
     }
 `;
 
-const ThemeButton = ThemeConsumer(({ theme = {}, active, icon, useCustomIconStyle, ...rest }) => {
+const ThemeButton = ThemeConsumer(({ theme = {}, active, icon, ...rest }) => {
     const helper = getNavigationTheme(theme);
     const bgColor = helper.getButtonColor();
     const iconColor = helper.getTextColor();
@@ -69,13 +65,12 @@ const ThemeButton = ThemeConsumer(({ theme = {}, active, icon, useCustomIconStyl
         rounding={rounding}
         opacity={opacity}
         $active={active}
-        icon={React.cloneElement(icon, { iconcolor: iconColor, activecolor: hover, active })}
-        $useCustomIconStyle={useCustomIconStyle}
+        icon={React.cloneElement(icon, { active })}
         { ...rest }
     />
 });
 
-export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, iconSize = '18px', children, position, useCustomIconStyle, ...rest }) => {
+export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, iconSize = '18px', children, position, ...rest }) => {
     let tooltipPosition = 'top';
     if (position && position.includes('right')) {
         tooltipPosition = 'left';
@@ -90,10 +85,9 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
                         icon={icon}
                         onClick={onClick}
                         size={size}
-                        $active={iconActive}
+                        active={iconActive ? 1 : 0}
                         $iconSize={iconSize}
                         disabled={disabled}
-                        useCustomIconStyle={useCustomIconStyle}
                         { ...rest }
                     />
             </Tooltip>
@@ -104,10 +98,9 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
                     icon={icon}
                     onClick={onClick}
                     size={size}
-                    $active={iconActive}
+                    active={iconActive ? 1 : 0}
                     $iconSize={iconSize}
                     disabled={disabled}
-                    useCustomIconStyle={useCustomIconStyle}
                     { ...rest }
                 />
         );
