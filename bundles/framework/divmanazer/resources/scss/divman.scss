@@ -21,22 +21,23 @@ body {
 /* flyout toolbar */
 
 .oskari-root-el > nav {
-      &.show-scroll-icon {
+    &.show-scroll-icon {
         .scroll-indicator {
             display: flex;
         }
         .scroll-icon {
-          animation:flash 2s 5 linear;
+            animation:flash 2s 5 linear;
         }
-      }
-      @keyframes flash {
+        }
+        @keyframes flash {
         0%, 100% {
-          opacity: 0.6;
+            opacity: 0.6;
         }
         50% {
-          opacity: .1;
+            opacity: .1;
         }
-      }
+    }
+    padding-bottom: 35px;
 }
 
 .oskari-flyoutheading {

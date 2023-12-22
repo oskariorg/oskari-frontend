@@ -1,39 +1,94 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { List, ListItem, Tooltip, Message, Confirm } from 'oskari-ui';
+import { List, ListItem, Tooltip, Message, Confirm, Button } from 'oskari-ui';
+
 import { LocaleConsumer } from 'oskari-ui/util';
 import { LayerCapabilitiesFilter } from './LayerCapabilitiesFilter';
 import { CheckCircleTwoTone, QuestionCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
 
+const LOCALIZATION_BUNDLE_ID = 'admin-layereditor';
+
 export const StyledListItem = styled(ListItem)`
-:hover {
-    background-color: #ffd400;
-}
+    :hover {
+        background-color: #ffd400;
+    }
 `;
 export const StylePopUl = styled.ul`
-max-width: 400px;
+    max-width: 400px;
 `;
 export const StylePopLi = styled.li`
-overflow: hidden;
-text-overflow: ellipsis;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
+const PaddedItemContainer = styled('div')`
+    margin-left: ${props => props.depth}vw;
+`;
+
+const ToggleButton = styled(Button)`
+    margin: 1vh 0;
 `;
 
 const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {}, getMessage }) => {
     const [filter, setfilter] = useState('');
+    const [treeView, setTreeview] = useState(false);
+    const canHaveTreeView = !!capabilities?.structure;
     const allLayers = prepareData(capabilities);
     const layers = sortLayers(filterLayers(allLayers, filter));
+
+    if (treeView) {
+        return (
+            <React.Fragment>
+                { canHaveTreeView &&
+                <ToggleButton type={'primary'} onClick={() => setTreeview(!treeView)}>
+                    <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleFlatView'}/>
+                </ToggleButton>
+                }
+                <LayerCapabilitiesTreeView capabilities={capabilities} onSelect={onSelect} getMessage={getMessage}/>
+            </React.Fragment>);
+    }
     return (
         <React.Fragment>
             <LayerCapabilitiesFilter
                 placeholder="Filter layers"
                 filter={filter}
                 onChange={(value) => setfilter(value)}/>
+            { canHaveTreeView &&
+                <ToggleButton type={'primary'} onClick={() => setTreeview(!treeView)}>
+                    <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleTreeView'}/>
+                </ToggleButton>
+            }
             <List dataSource={layers} rowKey="name" renderItem={item => getItem(onSelect, item, getMessage)}></List>
         </React.Fragment>);
 };
 
 LayerCapabilitiesListing.propTypes = {
+    capabilities: PropTypes.object,
+    getMessage: PropTypes.func.isRequired,
+    onSelect: PropTypes.func
+};
+
+const renderStructureItem = (structureItem, allLayers, depth, onSelect, getMessage) => {
+    const layer = allLayers?.find(layer => layer?.name === structureItem?.name) || null;
+    return (
+        <PaddedItemContainer key={structureItem.name} depth={depth}>
+            { getItem(onSelect, layer, getMessage) }
+            { structureItem?.structure?.map(nestedStructureItem => renderStructureItem(nestedStructureItem, allLayers, depth + 1, onSelect, getMessage)) }
+        </PaddedItemContainer>
+    );
+};
+
+const LayerCapabilitiesTreeView = ({ capabilities = {}, onSelect = () => {}, getMessage }) => {
+    const allLayers = prepareData(capabilities);
+    const { structure } = capabilities;
+    return (
+        <React.Fragment>
+            { structure.map(structureItem => renderStructureItem(structureItem, allLayers, 0, onSelect, getMessage))}
+        </React.Fragment>);
+};
+
+LayerCapabilitiesTreeView.propTypes = {
     capabilities: PropTypes.object,
     getMessage: PropTypes.func.isRequired,
     onSelect: PropTypes.func
