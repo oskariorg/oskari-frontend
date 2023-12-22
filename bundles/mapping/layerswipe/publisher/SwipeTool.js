@@ -34,6 +34,7 @@ class SwipeTool extends AbstractPublisherTool {
         if (configuration.conf) {
             this.storePluginConf(configuration.conf);
             this.setEnabled(true);
+            this.handler.syncState();
         }
     }
 
@@ -45,7 +46,7 @@ class SwipeTool extends AbstractPublisherTool {
         const value = {
             configuration: {
                 layerswipe: {
-                    conf: this.tool?.getPlugin()?.getConfig() || {},
+                    conf: this.getPlugin()?.getConfig() || {},
                     state: {
                         active: autoStart
                     }
