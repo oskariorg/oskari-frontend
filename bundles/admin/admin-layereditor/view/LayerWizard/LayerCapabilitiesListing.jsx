@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { List, ListItem, Tooltip, Message, Confirm, Button } from 'oskari-ui';
+import { List, ListItem, Tooltip, Message, Confirm, Button, Radio } from 'oskari-ui';
 
 import { LocaleConsumer } from 'oskari-ui/util';
 import { LayerCapabilitiesFilter } from './LayerCapabilitiesFilter';
@@ -26,24 +26,40 @@ const PaddedItemContainer = styled('div')`
     margin-left: ${props => props.depth}vw;
 `;
 
-const ToggleButton = styled(Button)`
+const RadioContainer = styled(Radio.Group)`
     margin: 1vh 0;
 `;
 
+const TreeviewRadio = ({ treeview, setTreeview }) => {
+    return (
+        <RadioContainer value={treeview}>
+            <Radio.Button value={false} onClick={() => setTreeview(false)}>
+                <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleFlatView'}/>
+            </Radio.Button>
+            <Radio.Button value={true} onClick={() => setTreeview(true)}>
+                <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleTreeView'}/>
+            </Radio.Button>
+        </RadioContainer>
+    );
+};
+
+TreeviewRadio.propTypes = {
+    treeview: PropTypes.bool,
+    setTreeview: PropTypes.func
+};
+
 const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {}, getMessage }) => {
     const [filter, setfilter] = useState('');
-    const [treeView, setTreeview] = useState(false);
-    const canHaveTreeView = !!capabilities?.structure;
+    const [treeview, setTreeview] = useState(false);
+    const canHaveTreeview = !!capabilities?.structure;
     const allLayers = prepareData(capabilities);
     const layers = sortLayers(filterLayers(allLayers, filter));
 
-    if (treeView) {
+    if (treeview) {
         return (
             <React.Fragment>
-                { canHaveTreeView &&
-                <ToggleButton type={'primary'} onClick={() => setTreeview(!treeView)}>
-                    <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleFlatView'}/>
-                </ToggleButton>
+                { canHaveTreeview &&
+                    <TreeviewRadio treeview={treeview} setTreeview={setTreeview}/>
                 }
                 <LayerCapabilitiesTreeView capabilities={capabilities} onSelect={onSelect} getMessage={getMessage}/>
             </React.Fragment>);
@@ -54,10 +70,8 @@ const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {}, getM
                 placeholder="Filter layers"
                 filter={filter}
                 onChange={(value) => setfilter(value)}/>
-            { canHaveTreeView &&
-                <ToggleButton type={'primary'} onClick={() => setTreeview(!treeView)}>
-                    <Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey={'wizard.toggleTreeView'}/>
-                </ToggleButton>
+            { canHaveTreeview &&
+                <TreeviewRadio treeview={treeview} setTreeview={setTreeview}/>
             }
             <List dataSource={layers} rowKey="name" renderItem={item => getItem(onSelect, item, getMessage)}></List>
         </React.Fragment>);
