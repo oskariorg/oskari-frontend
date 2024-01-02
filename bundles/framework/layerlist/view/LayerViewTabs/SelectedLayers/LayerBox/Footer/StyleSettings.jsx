@@ -60,7 +60,7 @@ export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
                                 value={currentStyle.getName()}
                                 disabled={styles.length < 2}
                                 onChange={onChange}
-                                dropdownMatchSelectWidth={false}
+                                popupMatchSelectWidth={false}
                             >
                                 { styles.length < 2 &&
                                     getOption(currentStyle)
