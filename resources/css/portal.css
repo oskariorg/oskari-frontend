@@ -520,3 +520,10 @@ This seems to only happen on the Firefox browser
 .ant-tabs .ant-tabs-nav-wrap {
     padding-right: 2em;
 }
+
+/*
+  Fixes antd v5 dropdown menus opening under flyouts
+*/
+.ant-select-dropdown {
+  z-index: 99998 !important;
+}
