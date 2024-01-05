@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Select, Collapse, CollapsePanel, Checkbox, TextInput, Switch } from 'oskari-ui';
+import { Message, Select, Collapse, Checkbox, TextInput, Switch } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 
 const BUNDLE_NAME = 'admin-layereditor';
@@ -68,6 +68,11 @@ const PanelExtra = ({ noValues, onRemove}) => {
     );
 };
 
+PanelExtra.propTypes = {
+    noValues: PropTypes.any,
+    onRemove: PropTypes.func
+};
+
 const CollapseContent = ({values = {}, onChange }) => {
     const { type, noLabel, skipEmpty, params = {} } = values;
 
@@ -97,6 +102,11 @@ const CollapseContent = ({values = {}, onChange }) => {
     );
 };
 
+CollapseContent.propTypes = {
+    values: PropTypes.any,
+    onChange: PropTypes.func
+};
+
 export const PropertiesFormat = ({ format = {}, properties, selected, labels, update }) => {
     const allSelected = selected.length === 0 || properties.length === selected.length;
     const [showAll, setShowAll] = useState(allSelected);
@@ -104,8 +114,8 @@ export const PropertiesFormat = ({ format = {}, properties, selected, labels, up
 
     const onChange = (name, key, value) => {
         const values = format[name] || {};
-        const updated = { ...values, [key]:  value };
-        update({...format, [name]: updated });
+        const updated = { ...values, [key]: value };
+        update({ ...format, [name]: updated });
     };
 
     const onRemove = (name) => {
@@ -114,22 +124,21 @@ export const PropertiesFormat = ({ format = {}, properties, selected, labels, up
         update(updated);
     };
 
+    const items = propNames.map(name => {
+        return {
+            key: name,
+            label: labels[name] ? `${name} (${labels[name]})` : name,
+            extra: <PanelExtra onRemove={() => onRemove(name)} noValues={!format[name]}/>,
+            children: <CollapseContent key={name} values={format[name]} onChange={(key, value) => onChange(name, key, value)} />
+        };
+    });
+
     return (
         <Fragment>
             { !allSelected &&
                 <StyledSwitch checked={showAll} onChange={setShowAll} label={<Message messageKey='attributes.showAll'/>}/>
             }
-            <Collapse>
-                { propNames.map(name => {
-                    return (
-                        <CollapsePanel key={name}
-                            header={labels[name] ? `${name} (${labels[name]})` : name}
-                            extra={<PanelExtra onRemove={() => onRemove(name)} noValues={!format[name]}/>}>
-                            <CollapseContent key={name} values={format[name]} onChange={(key, value) => onChange(name, key, value)} />
-                        </CollapsePanel>
-                    )})
-                }
-            </Collapse>
+            <Collapse items={items}/>
         </Fragment>
     );
 };
