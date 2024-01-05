@@ -15,24 +15,31 @@ const StyledListItem = styled(ListItem)`
 // add subgroups on the list recursively and hierarchically
 const SubGroupsListItem = ({ group, layer, controller }) => {
     return (
-        <List dataSource={group.getGroups().map(subgroup => 
-            <StyledDiv>
-        <StyledListItem>
-            <Checkbox key={subgroup.id}
-                onChange={evt => controller.setGroup(evt.target.checked, subgroup)}
-                checked={!!layer.groups.find(cur => cur === subgroup.id)}
-            >
-                {subgroup.getName()}
-            </Checkbox>
-        </StyledListItem>
-        {subgroup.groups.length > 0 && <SubGroupsListItem group={subgroup} layer={layer} controller={controller}/>}
-        </StyledDiv>)} renderItem={item => item} />
+        <List dataSource={group.getGroups().map(subgroup =>
+            <StyledDiv key={subgroup.id}>
+                <StyledListItem>
+                    <Checkbox key={subgroup.id}
+                        onChange={evt => controller.setGroup(evt.target.checked, subgroup)}
+                        checked={!!layer.groups.find(cur => cur === subgroup.id)}
+                    >
+                        {subgroup.getName()}
+                    </Checkbox>
+                </StyledListItem>
+                {subgroup.groups.length > 0 && <SubGroupsListItem group={subgroup} layer={layer} controller={controller}/>}
+            </StyledDiv>
+        )}/>
     );
+};
+
+SubGroupsListItem.propTypes = {
+    group: PropTypes.object,
+    layer: PropTypes.object,
+    controller: PropTypes.object
 };
 
 export const Groups = ({ layer, groups, controller }) => {
     const dataSource = groups.map(group =>
-        <div>
+        <div key={group.id}>
             <StyledListItem>
                 <Checkbox key={group.id}
                     onChange={evt => controller.setGroup(evt.target.checked, group)}
@@ -40,19 +47,20 @@ export const Groups = ({ layer, groups, controller }) => {
                 >
                     {group.getName()}
                 </Checkbox>
-            </StyledListItem> 
+            </StyledListItem>
             {group.groups.length > 0 && <SubGroupsListItem group={group} layer={layer} controller={controller}/>}
         </div>
     );
+    const groupPanelItems = [{
+        key: 'groupPanel',
+        label: <Message messageKey='selectMapLayerGroupsButton'/>,
+        children: <List dataSource={dataSource} renderItem={item => item} />
+    }];
     return (
         <Fragment>
             <Message messageKey='fields.groups' />
             <StyledFormField>
-                <Collapse>
-                    <CollapsePanel header={<Message messageKey='selectMapLayerGroupsButton'/>}>
-                        <List dataSource={dataSource} renderItem={item => item} />
-                    </CollapsePanel>
-                </Collapse>
+                <Collapse items={groupPanelItems}/>
             </StyledFormField>
         </Fragment>
     );
