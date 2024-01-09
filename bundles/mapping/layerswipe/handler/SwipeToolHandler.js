@@ -33,11 +33,11 @@ class UIHandler extends StateHandler {
             noUI: false
         });
     }
-/*
+    /*
     onLayersChanged () {
         // we could do setEnabled(false) here if Oskari.getSandbox().getMap().getLayers() is < 2
     }
-*/
+    */
 
     setAutoStart (value) {
         this.tool.getPlugin().toggleToolState(!!value);

@@ -487,7 +487,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             }
         },
 
-        isEnabled: function() {
+        isEnabled: function () {
             return this._enabled;
         },
         /**
