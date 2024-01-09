@@ -282,9 +282,7 @@ Oskari.clazz.define(
 
         eventHandlers: {
             'Toolbar.ToolSelectedEvent': function (event) {
-                // do not deactivate in publisher mode
-                const publisherMode = !!this.publisherInstance?.publisher?.isEnabled();
-                if (event.getToolId() !== 'LayerSwipe' && !publisherMode) {
+                if (event.getToolId() !== 'LayerSwipe') {
                     this.setActive(false);
                 }
             },

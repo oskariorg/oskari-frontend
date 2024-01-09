@@ -280,7 +280,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
             }
             if (blnEnabled) {
-                if (me.publisher?.isEnabled()) return;
+                if (me.publisher) return;
                 data = data || this.getDefaultData();
                 // trigger an event letting other bundles know we require the whole UI
                 // the latter SetStateRequest triggers UIChangeEvent as well so this is considered to be redundant
