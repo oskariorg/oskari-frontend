@@ -55,6 +55,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         me.latestGFI = null;
 
         me.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+
+        me._enabled = false;
     }, {
         /**
          * @method render
@@ -476,6 +478,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          *
          */
         setEnabled: function (isEnabled) {
+            this._enabled = isEnabled;
             if (isEnabled) {
                 this._enablePreview();
             } else {
@@ -484,6 +487,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             }
         },
 
+        isEnabled: function() {
+            return this._enabled;
+        },
         /**
          * @private @method _enablePreview
          * Modifies the main map to show what the published map would look like

@@ -43,6 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
         },
         toggleToolState: function (active) {
             this.getInstance()?.setActive(active);
+            this.refresh();
         },
         isActive: function () {
             return !!this.getInstance()?.isActive();

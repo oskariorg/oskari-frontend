@@ -39,6 +39,7 @@ Oskari.clazz.define(
 
         _startImpl: function (sandbox) {
             this.mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            this.publisherInstance = Oskari.getSandbox().findRegisteredModuleInstance('Publisher2');
             this.popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
 
             if (Oskari.dom.isEmbedded()) {
@@ -281,7 +282,9 @@ Oskari.clazz.define(
 
         eventHandlers: {
             'Toolbar.ToolSelectedEvent': function (event) {
-                if (event.getToolId() !== 'LayerSwipe') {
+                // do not deactivate in publisher mode
+                const publisherMode = !!this.publisherInstance?.publisher?.isEnabled();
+                if (event.getToolId() !== 'LayerSwipe' && !publisherMode) {
                     this.setActive(false);
                 }
             },
