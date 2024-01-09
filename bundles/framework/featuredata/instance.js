@@ -9,6 +9,8 @@
 
 import { FEATUREDATA_BUNDLE_ID } from './view/FeatureDataContainer';
 import { DRAW_REQUEST_ID, SelectToolPopupHandler } from './view/SelectToolPopupHandler.js';
+import './publisher/FeaturedataTool';
+
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleInstance',
     function () {},
     {
@@ -74,7 +76,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
                 };
                 this.getSandbox().request(this, addBtnRequestBuilder('featuredataSelectionTools', 'selectiontools', btn));
             }
-            this.sandbox.requestHandler('Featuredata.ShowFeatureDataRequest', this.requestHandlers.showFeaturedataHandler);
+            this.sandbox.requestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeaturedataHandler);
             this.__setupLayerTools();
         },
         /**
@@ -82,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
          * (re)creates the UI for "selected layers" functionality
          */
         createUi: function () {
-            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.FeatureDataPlugin', this.conf);
+            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin', this.conf);
             this.mapModule.registerPlugin(this.plugin);
             this.mapModule.startPlugin(this.plugin);
         },
@@ -121,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
             tool.setIconCls('show-featuredata-tool');
             tool.setTitle(label);
             tool.setTooltip(label);
-            tool.setCallback(() => this.sandbox.postRequestByName('Featuredata.ShowFeatureDataRequest', [layer.getId()]));
+            tool.setCallback(() => this.sandbox.postRequestByName('ShowFeatureDataRequest', [layer.getId()]));
 
             this.getLayerService().addToolForLayer(layer, tool, suppressEvent);
         },

@@ -11,8 +11,6 @@ Oskari.registerLocalization(
         "tab": {
             "title": "Places",
             "categoryTitle": "Map layer",
-            "nocategories": "You do not have any saved places yet.", // PersonalData removal
-            "maxFeaturesExceeded": "You have too many own places. Please remove some places.", // PersonalData removal
             "publishCategory": {
                 "privateTooltip": "This map layer is private. Click here to publish it.",
                 "publicTooltip": "This map layer is public. Click here to unpublish it."
@@ -21,7 +19,6 @@ Oskari.registerLocalization(
                 "title":"Export features",
                 "tooltip": "Download layer features in GeoJSON-format."
             },
-            "addCategoryFormButton": "New map layer", // PersonalData removal
             "addCategory": "Add map layer",
             "editCategory": "Edit map layer",
             "deleteCategory": "Delete map layer",
@@ -38,7 +35,6 @@ Oskari.registerLocalization(
             },
             "confirm": {
                 "deleteCategory": "Do you want to delete the map layer \"{name}\"?",
-                "deleteConfirmMove": "You are deleting the map layer \"{0}\". There {1, plural, one {is # place} other {are # places}} on the map layer. Do you want to: <br/> 1. delete the map layer and its {1, plural, one {place} other {places}} <br/> 2. move the {1, plural, one {place} other {places}} to the default map layer \"{2}\" before deleting the map layer?", // PersonalData removal
                 "categoryToPrivate": "You are unpublishing the map layer {name}. After that the map layer cannot be shared in public and embedded in another map service. Also other users cannot view the map layer anymore.",
                 "categoryToPublic": "You are publishing the map layer {name}. After that the map layer can be shared in public and embedded in another map service. Also other users can view the map layer.",
                 "deletePlace": "Do you want to delete place \"{name}\"?"

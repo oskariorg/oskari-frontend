@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Ջնջել քարտեզի շերտը",
-                "deleteConfirmMove": "Քարտեզի շերտը (0) պարունակում է օբյեկտներ(1):Ցանկանում եք արդյոք ջնջել քարտեզի շերտը կամ տեղափոխել դրա վրա եղածտեղանքը ֆոնային քարտեզի շերտի վրա(2)",
                 "deleteConfirm": "Ջնջել քարտեզի շերտը(0)",
                 "deleted": "Քարտեզի շերտը ջնջված է"
             },

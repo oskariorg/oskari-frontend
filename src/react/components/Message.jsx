@@ -4,7 +4,10 @@ import { LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const Label = styled('div')`
-    display: inline-block;
+    display: ${props => props.allowTextEllipsis ? 'inline': 'inline-block'};
+    overflow: ${props => props.allowTextEllipsis ? 'hidden': ''};
+    white-space: ${props => props.allowTextEllipsis ? 'nowrap': ''};
+    text-overflow: ${props => props.allowTextEllipsis ? 'ellipsis': ''};
 `;
 
 /**
@@ -31,7 +34,7 @@ const Label = styled('div')`
  *     <Message messageKey="hello" messageArgs={['Jack']}/>
  * </LocaleProvider>
  */
-const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, children, LabelComponent = Label, allowHTML = false }) => {
+const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, children, LabelComponent = Label, allowHTML = false, allowTextEllipsis = false }) => {
     if (!messageKey) {
         return null;
     }
@@ -54,7 +57,8 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
     }
 
     return (
-        <LabelComponent 
+        <LabelComponent
+            allowTextEllipsis={allowTextEllipsis}
             onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
                 { message } { children }
         </LabelComponent>
@@ -68,7 +72,8 @@ Message.propTypes = {
     getMessage: PropTypes.func,
     children: PropTypes.node,
     LabelComponent: PropTypes.elementType,
-    allowHTML: PropTypes.bool
+    allowHTML: PropTypes.bool,
+    allowTextEllipsis: PropTypes.bool
 };
 
 function getMessageUsingOskariGlobal(bundleKey, messageKey, messageArgs) {

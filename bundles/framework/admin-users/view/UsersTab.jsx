@@ -7,7 +7,7 @@ import { Content, Block, ButtonContainer, Button } from './styled';
 const SearchContainer = styled('div')`
     display: flex;
     flex-direction: row;
-    margin-bottom: 20px;    
+    margin-bottom: 20px;
 `;
 
 const Footer = styled('div')`
@@ -56,7 +56,7 @@ export const UsersTab = ({ state, controller, isExternal }) => {
             {userPagination.search && (
                 <SearchText><Message messageKey='users.searchResults' /> ("{userPagination.search}"):</SearchText>
             )}
-            {users.map(item => {
+            {(users && users.length > 0) && users.map(item => {
                 const { id, user, firstName, lastName } = item;
                 const details = firstName || lastName ? ` (${firstName} ${lastName})` : '';
                 return (
@@ -69,6 +69,7 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                     </Block>
                 )})
             }
+            {(!users || users.length === 0) && <Message messageKey='users.noMatch'/>}
             {userPagination.totalCount > userPagination.limit && (
                 <Footer>
                     <Pagination

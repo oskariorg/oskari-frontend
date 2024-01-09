@@ -63,6 +63,7 @@ Oskari.registerLocalization(
                 }
             },
             "showSelectedFirst": "Näytä valitut ensin",
+            "toggleCompressedView": "Tiivistetty näkymä",
             "selectionTools": {
                 "title": "Valitse kohteita",
                 "instructions": " ",

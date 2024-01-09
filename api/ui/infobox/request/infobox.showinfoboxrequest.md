@@ -66,6 +66,9 @@ Parameters for options-object:
 <tr>
   <td> positioning </td><td> String </td><td> Optional parameter, tells the relative position of the popup to the coordinates. Possible values: top, bottom, left, right</td><td> If not provided, the default bottom-right positioning is used. Only affects the popup in desktop-mode. </td>
 </tr>
+<tr>
+  <td> keepOnScreen </td><td> boolean </td><td> Optional parameter, tells the popup to try to pan the map to show the entire popup when position is close to the map edge. False by default, because under very specific circumstances (a small map view and wmts layers on map) the new map center might be calculated wrong due to a corrupted transformation from pixels to coordinates.</td>
+</tr>
 
 </table>
 
@@ -171,7 +174,7 @@ channel.getMapPosition(function(data) {
                     }
                 }
             ]
-        }                    
+        }
     ];
     var data = [
         'myInfoBox',

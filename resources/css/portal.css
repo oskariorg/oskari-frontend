@@ -58,6 +58,7 @@ body.oskari-root-el {
   position: relative;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
 /* Assumes that the root element has a <nav> tag that holds the main navigation in for example geoportal. */

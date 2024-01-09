@@ -2,13 +2,13 @@ import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { LocaleProvider } from '../util';
-import { Message, Select, Radio, TextInput, Button, Divider } from 'oskari-ui';
+import { Message, Select, Radio, TextInput } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 
 const FILTERS = ['value', 'in', 'notIn', 'like', 'notLike'];
 const NUMBER_FILTERS = ['greaterThan', 'atLeast', 'lessThan', 'atMost']; // For range selects array is splitted
 const NUMBER_RAW_TYPES = ['int', 'double', 'long', 'float'];
-
+const FILTERTYPE_SINGLE = 'single';
 const SEPARATOR = ';';
 const BUNDLE_KEY = 'oskariui'
 
@@ -16,7 +16,7 @@ const RowContainer = styled.div`
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-top: 20px;
     & ${Select} {
         width: 100%;
     }
@@ -28,13 +28,17 @@ const Buttons = styled.div`
     display: flex;
     flex-flow: row nowrap;
     & button {
-        margin-right: 10px;
+        margin-left: 10px;
     }
 `;
 
+const Margin = styled.div`
+    padding-bottom: 20px;
+`;
+
 const toNumber = value => {
-    const modified = value.replace(',', '.');
-    return isNaN(modified) ? value : Number(modified);
+    const modified = typeof value === 'string' ? value.replace(',', '.') : value;
+    return isNaN(modified) ? undefined : Number(modified);
 };
 
 // For admin: layer.capabilities.featureProperties => [{name, type}] (raw)
@@ -54,21 +58,32 @@ const cleanFilterValues = (filter, types) => {
 
     const operators = Object.keys(operatorsObj).reduce((obj, op) => {
         let value = filter[op];
-        if(!value) {
+        if(!value && value !== 0) {
             return obj;
         }
-        if ((op === 'in' || op === 'notIn') && typeof value === 'string') {
-            const arr = value.split(SEPARATOR);
-            const modified = isNumber ? arr.map(toNumber) : arr.map(s => s.trim()).filter(s=>s);
-            if (modified.length) {
-                value = modified;
+        // stored value can be string, number, Array
+        // new or edited value is string
+        if (op === 'in' || op === 'notIn') {
+            let modified;
+            if (typeof value === 'string') {
+                modified = value.split(SEPARATOR);
+            } else {
+                modified = Array.isArray(value) ? value : [value];
             }
-        } else if (isNumber) {
-            value = toNumber(value);
-        } else if (typeof value === 'string') {
-            value = value.trim();
+            modified = isNumber
+                ? modified.map(toNumber).filter(n => typeof n === 'number')
+                : modified.map(s => s.toString().trim()).filter(s=>s);
+            if (modified.length) {
+                obj[op] = modified;
+            }
+            return obj;
         }
-        if (value) {
+        if (isNumber) {
+            value = toNumber(value);
+        } else {
+            value = value.toString().trim();
+        }
+        if (value || value === 0) {
             obj[op] = value;
         }
         return obj;
@@ -96,7 +111,7 @@ export const cleanFilter = (filter, types) => {
     const validOR = OR.length >= 2;
     if (property && !validAND && !validOR) {
         return { property };
-    } 
+    }
     if (validAND && validOR) {
         return { AND, OR };
     }
@@ -142,6 +157,16 @@ export const getDescription = filter => {
         return `(${and}) AND (${or})`;
     }
     return `${and}${or}`
+};
+
+const getFilterType = filter => {
+    if (filter?.AND && Array.isArray(filter.AND) && filter.AND.length > 1) {
+        return 'AND';
+    }
+    if (filter?.OR && Array.isArray(filter.OR) && filter.OR.length > 1) {
+        return 'OR';
+    }
+    return FILTERTYPE_SINGLE;
 };
 
 const getFilterOptions = list => list.map(value => {
@@ -233,7 +258,7 @@ const FilterRow = ({properties, types, labels = {}, filter = {}, onFilterUpdate,
             }
             { isNumber &&
                 <IconButton bordered icon='><' active={isRange} onClick={toggleRange}
-                    title={<Message messageKey='FeatureFilter.range'/>}/>
+                    title={<Message messageKey={`FeatureFilter.range.${isRange}`}/>}/>
             }
             { typeof onFilterRemove === 'function' &&
                 <IconButton bordered type='delete' onClick={onFilterRemove} />
@@ -242,68 +267,60 @@ const FilterRow = ({properties, types, labels = {}, filter = {}, onFilterUpdate,
     );
 };
 
-const FilterList = ({filters, type, onUpdate, ...rest }) => {
-    if (!Array.isArray(filters)) {
-        return null;
-    }
-    const onAdd = () => onUpdate(type, [...filters, {}]);
+const FilterList = ({filters, type, onChange, ...rest }) => {
     const onFilterUpdate = (index, filter) => {
-        onUpdate(type, filters.map((f,i) => i === index ? filter : f));
+        const updated = filters.map((f,i) => i === index ? filter : f);
+        onChange({ [type]: updated });
     };
     const onFilterRemove = index => {
-        onUpdate(type, filters.filter((f,i) => i !== index));
+        const updated = filters.filter((f,i) => i !== index)
+        onChange({ [type]: updated });
     };
     return (
         <Fragment>
-            <Divider>{type}</Divider>
             { filters.map((filter, i) =>
                 <FilterRow key={`filter_${i}`} filter={filter}
                     onFilterRemove={filters.length > 2 ? () => onFilterRemove(i) : null}
                     onFilterUpdate={filter => onFilterUpdate(i, filter)} {...rest} />)
             }
-            <IconButton bordered type='add' onClick={onAdd}/>
         </Fragment>
     );
 };
 
-const MultiFilter = ({and, or, onUpdate, ...rest}) => {
-    const toggle = (key, isAdd) => onUpdate(key, isAdd ? [{},{}] : null);
-    return (
-        <Fragment>
-            <Buttons>
-                <Button onClick={() => toggle('AND', !and)}>
-                    <Message messageKey={and ? 'buttons.delete' : 'buttons.add'}/>&nbsp;AND
-                </Button>
-                <Button onClick={() => toggle('OR', !or)}>
-                    <Message messageKey={or ? 'buttons.delete' : 'buttons.add'}/>&nbsp;OR
-                </Button>
-            </Buttons>
-            <FilterList type='AND' onUpdate={onUpdate} filters={and} {...rest} />
-            <FilterList type='OR' onUpdate={onUpdate} filters={or} {...rest} />
-        </Fragment>
-    );
-};
-
-export const FeatureFilter = ({  filter = {}, onChange, ...rest }) => {
-    const [single, setSingle]= useState(!filter.AND && !filter.OR);
-    const onUpdate = (key, value) => {
-        onChange({...filter, [key]: value });
+export const FeatureFilter = ({  filter = {}, onChange, disableMultipleMode = false, ...rest }) => {
+    const [type, setType]= useState(getFilterType(filter));
+    const getFilters = () => {
+        const filters = filter[type];
+        return filters && filters.length > 1 ? filters : [{},{}];
     };
+    const onAdd = () => onChange({ [type]: [...getFilters(), {}] });
+    // TODO: onChange ({ invalid, type, filter }) ???
+    // const invalid = filters.some(filter => !cleanFilterValues(filter));
     return (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <RowContainer>
-                <Radio.Group value={single} onChange={evt => setSingle(evt.target.value)}>
-                    <Radio.Button value={true}>
-                        <Message messageKey='FeatureFilter.single'/>
-                    </Radio.Button>
-                    <Radio.Button value={false}>
-                        <Message messageKey='FeatureFilter.list'/>
-                    </Radio.Button>
-                </Radio.Group>
-                <IconButton bordered type='delete' onClick={() => onChange({})} />
-            </RowContainer>
-            { single && <FilterRow filter={filter.property} onFilterUpdate={filter => onUpdate('property', filter)} {...rest} /> }
-            { !single && <MultiFilter and={filter.AND} or={filter.OR} onUpdate={onUpdate} {...rest} /> }
+            { !disableMultipleMode && <>
+                <RowContainer>
+                    <Radio.Group  value={type} onChange={evt => setType(evt.target.value)}>
+                        <Radio.Button value={FILTERTYPE_SINGLE}>
+                            <Message messageKey='FeatureFilter.single'/>
+                        </Radio.Button>
+                        <Radio.Button value={'AND'}>
+                            <Message messageKey='FeatureFilter.and'/>
+                        </Radio.Button>
+                        <Radio.Button value={'OR'}>
+                            <Message messageKey='FeatureFilter.or'/>
+                        </Radio.Button>
+                    </Radio.Group>
+                    <Buttons>
+                        { type !== FILTERTYPE_SINGLE && <IconButton bordered type='add' title={<Message messageKey='FeatureFilter.addTooltip'/>} onClick={onAdd}/> }
+                        <IconButton bordered type='delete' title={<Message messageKey='FeatureFilter.clearTooltip'/>} onClick={() => onChange({})} />
+                    </Buttons>
+                </RowContainer>
+                <Margin/>
+            </>
+            }
+            { type === FILTERTYPE_SINGLE && <FilterRow filter={filter.property} onFilterUpdate={property => onChange({ property })} {...rest} /> }
+            { type !== FILTERTYPE_SINGLE && <FilterList filters={getFilters()} type={type} onChange={onChange} {...rest} /> }
         </LocaleProvider>
     );
 };
@@ -313,5 +330,6 @@ FeatureFilter.propTypes = {
     onChange: PropTypes.func.isRequired,
     properties: PropTypes.array.isRequired,
     types: PropTypes.array,
-    labels: PropTypes.object
+    labels: PropTypes.object,
+    disableMultipleMode: PropTypes.bool
 };

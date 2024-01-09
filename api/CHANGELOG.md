@@ -9,6 +9,12 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.13.0
+
+### [rem] Removed `personaldata` bundle
+
+Replaced by the `mydata` bundle.
+
 ## 2.11.0
 
 ### [mod] AddMapLayerRequest

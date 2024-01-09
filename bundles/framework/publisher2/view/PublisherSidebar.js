@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { mergeValues } from '../util/util';
-import { Messaging } from 'oskari-ui/util';
+import { Messaging, ThemeProvider } from 'oskari-ui/util';
 import { Header } from 'oskari-ui';
-import { ThemeProvider } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const StyledHeader = styled(Header)`
@@ -97,7 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             const publisherTools = this._createToolGroupings(accordion);
 
-            var mapPreviewPanel = this._createMapPreviewPanel(publisherTools.tools);
+            const mapPreviewPanel = this._createMapPreviewPanel(publisherTools.tools);
             mapPreviewPanel.getPanel().addClass('t_size');
             this.panels.push(mapPreviewPanel);
             accordion.addPanel(mapPreviewPanel.getPanel());
@@ -185,12 +184,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * Creates the Map Sizes panel of publisher
          */
         _createMapPreviewPanel: function (publisherTools) {
-            var me = this,
-                sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
-                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview',
-                    sandbox, mapModule, me.loc, me.instance, publisherTools
-                );
+            const me = this;
+            const sandbox = this.instance.getSandbox();
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview',
+                sandbox, mapModule, me.loc, me.instance, publisherTools
+            );
 
             // initialize form (restore data when editing)
             form.init(me.data);

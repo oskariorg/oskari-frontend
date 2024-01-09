@@ -3,6 +3,7 @@ import { Checkbox, Message, Tooltip } from 'oskari-ui';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
+import { LayerIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
 
 const StyledTable = styled(Table)`
@@ -20,6 +21,14 @@ const HeaderCell = styled('div')`
 const CheckAllCheckbox = styled(Checkbox)`
     margin-top: 10px;
 `;
+const LayerName = styled('div')`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+const StyledLayerIcon = styled(LayerIcon)`
+    margin-right: 5px;
+`;
 
 const preferredOrder = ['VIEW_LAYER', 'VIEW_PUBLISHED', 'PUBLISH', 'DOWNLOAD'];
 const getPermissionNames = (nameToLabel) => {
@@ -32,16 +41,26 @@ const getPermissionNames = (nameToLabel) => {
     return [...names, ...additionalNames];
 };
 
+const VIEW_LAYER = 'VIEW_LAYER';
+const VIEW_PUBLISHED = 'VIEW_PUBLISHED';
+const PUBLISH = 'PUBLISH';
+const DOWNLOAD = 'DOWNLOAD';
+
+const DEFAULT_PERMISSIONS = [VIEW_LAYER, VIEW_PUBLISHED, PUBLISH, DOWNLOAD];
+const isDefaultPermissionType = (permissionName) => {
+    return DEFAULT_PERMISSIONS.includes(permissionName);
+};
+
 const getPermissionTableHeader = (permissionType, permissionName) => {
     const translation = <Message messageKey={`rights.${permissionType}`} defaultMsg={permissionName} bundleKey='admin-permissions' />;
     switch (permissionType) {
-        case 'VIEW_LAYER':
+        case VIEW_LAYER:
             return <Tooltip title={translation}><StyledIcon><UnorderedListOutlined /></StyledIcon></Tooltip>
-        case 'VIEW_PUBLISHED':
+        case VIEW_PUBLISHED:
             return <Tooltip title={translation}><StyledIcon><EyeOutlined /></StyledIcon></Tooltip>
-        case 'PUBLISH':
+        case PUBLISH:
             return <Tooltip title={translation}><StyledIcon><ImportOutlined /></StyledIcon></Tooltip>
-        case 'DOWNLOAD':
+        case DOWNLOAD:
             return <Tooltip title={translation}><StyledIcon><ExportOutlined /></StyledIcon></Tooltip>
         default:
             // permissions might have server side localization as "name" that defaults to id if not given
@@ -50,6 +69,9 @@ const getPermissionTableHeader = (permissionType, permissionName) => {
 };
 
 export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => {
+    const handleScroll = (key) => {
+        document.querySelector(`[data-row-key="${key}"]`)?.scrollIntoView({block: 'center'});
+    };
     const hasPermission = (layer, permissionType) => {
         return layer.permissions[state.selectedRole]?.findIndex(p => p === permissionType) > -1;
     };
@@ -66,6 +88,9 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             });
         return checked;
     };
+
+    const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+
     const columnSettings = [];
     const permissionNames = getPermissionNames(state.permissions?.names);
     if (permissionNames.length) {
@@ -73,16 +98,37 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             align: 'left',
             title: <Message messageKey='rights.name' />,
             dataIndex: 'name',
-            sorter: getSorterFor('name')
+            sorter: getSorterFor('name'),
+            render: (title, item) => {
+                const layer = mapLayerService.findMapLayer(item.id);
+                let layerType = item.layerType;
+                if (layerType !== 'analysislayer' && layerType !== 'userlayer' && layerType?.includes('layer')) {
+                    // Change 'wmslayer' to 'wms' etc. for translations & icons
+                    layerType = layerType.replace('layer', '');
+                }
+                return (
+                    <LayerName>
+                        {layerType && (
+                            <StyledLayerIcon
+                                type={layerType}
+                                hasTimeseries={layer?.hasTimeseries()}
+                            />
+                        )}
+                        {title}
+                    </LayerName>
+                )
+            }
         });
         permissionNames.forEach((permissionType, index) => {
+            const permissionName = state.permissions.names[permissionType];
             columnSettings.push({
                 align: 'left',
+                width: isDefaultPermissionType(permissionName) ? '5em' : '10em',
                 title: () => {
                     const allCurrentLayersHavePermission = allChecked(permissionType);
                     return (
                         <HeaderCell>
-                            {getPermissionTableHeader(permissionType, state.permissions.names[permissionType])}
+                            {getPermissionTableHeader(permissionType, permissionName)}
                             <CheckAllCheckbox
                                 checked={allCurrentLayersHavePermission}
                                 onChange={() => controller.setCheckAllForPermission(permissionType, !allCurrentLayersHavePermission)}
@@ -98,7 +144,10 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
                         <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={tooltip}>
                             <Checkbox
                                 checked={checked}
-                                onChange={(e) => controller.togglePermission(item.id, permissionType, !checked)}
+                                onChange={(e) => {
+                                    controller.togglePermission(item.id, permissionType, !checked);
+                                    handleScroll(item.key);
+                                }}
                             />
                         </Tooltip>
                     );

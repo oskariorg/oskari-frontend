@@ -155,12 +155,14 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                     </DegreeContainer>
                 )}
             </CoordinateFields>
-            <Checkbox
-                checked={state.showMouseCoordinates}
-                onChange={() => controller.toggleMouseCoordinates()}
-            >
-                <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.showMouseCoordinates' />
-            </Checkbox>
+            {Oskari.util.mouseExists() && (
+                <Checkbox
+                    checked={state.showMouseCoordinates}
+                    onChange={() => controller.toggleMouseCoordinates()}
+                >
+                    <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.showMouseCoordinates' />
+                </Checkbox>
+            )}
             {showReverseGeoCodeCheckbox && (
                 <Checkbox
                     checked={state.showReverseGeoCode}

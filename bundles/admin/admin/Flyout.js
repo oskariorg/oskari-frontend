@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
          * @method handleRequest
          * @param {Oskari.mapframework.core.Core} core
          *      reference to the application core (reference sandbox core.getSandbox())
-         * @param {Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler} request
+         * @param {Oskari.mapframework.bundle.admin.request.AddTabRequest} request
          *      request to handle
          */
         handleRequest: function (core, request) {

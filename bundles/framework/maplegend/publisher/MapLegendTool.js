@@ -7,6 +7,7 @@ class MapLegendTool extends AbstractPublisherTool {
         this.index = 10;
         this.group = 'layers';
     }
+
     getTool () {
         return {
             id: 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
@@ -15,9 +16,11 @@ class MapLegendTool extends AbstractPublisherTool {
             disabledReason: Oskari.getMsg(BUNDLE_ID, 'noLegendsText')
         };
     }
+
     getComponent () {
         return {};
     }
+
     init (data) {
         const myData = data?.configuration[BUNDLE_ID];
         if (myData) {
@@ -25,23 +28,28 @@ class MapLegendTool extends AbstractPublisherTool {
             this.setEnabled(true);
         }
     }
+
     isDisabled () {
         // should we filter layers with isVisibleOnMap()?
         return !this.getSandbox().findAllSelectedMapLayers().some(l => l.getLegendImage());
     }
+
     onLayersChanged () {
         if (this.isEnabled() && this.isDisabled()) {
             // disable if layers changed and there is no longer layers with legends on map
             this.setEnabled(false);
         }
     }
+
     getValues () {
         if (!this.isEnabled()) {
             return null;
         }
         return {
-            [BUNDLE_ID]: {
-                conf: this.getPlugin().getConfig()
+            configuration: {
+                [BUNDLE_ID]: {
+                    conf: this.getPlugin().getConfig()
+                }
             }
         };
     }

@@ -196,13 +196,13 @@ var featureStyle = {
     color: '#00FF00',
     width: 5
   },
-  fill {
+  fill: {
     color: '#0000FF'
   }
 };
 
 // Define wanted feature attributes
-var updatedFeatureAttributes = {'test_property':1};
+var updatedFeatureAttributes = { 'test_property': 1 };
 
 var options = {
     featureStyle: featureStyle,

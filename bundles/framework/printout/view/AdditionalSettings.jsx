@@ -98,31 +98,31 @@ export const AdditionalSettings = ({ controller, state }) => {
                     </StyledCheckbox>
                 )}
                 {/* TODO: Enable once Coordinates are implemented to back end */}
-                {/* <StyledCheckbox
+                { <StyledCheckbox
                     checked={state.showCoordinates}
                     onChange={(e) => controller.updateField('showCoordinates', e.target.checked)}
                     disabled={state.format !== 'application/pdf'}
                 >
                     <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.coordinates.label' />
-                </StyledCheckbox> */}
+                </StyledCheckbox> }
             </FormGroup>
             {state.showCoordinates && (
                 <CoordinateOptions>
                     <FormGroup>
-                            <Label>
-                                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.coordinates.position.label' />
-                            </Label>
-                            <Radio.Group
-                                value={state.coordinatePosition}
-                                onChange={(e) => controller.updateField('coordinatePosition', e.target.value)}
-                                disabled={state.format !== 'application/pdf'}
-                            >
-                                {COORDINATE_POSITIONS.map(pos => (
-                                    <Radio.Choice value={pos} key={pos}>
-                                        <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.content.coordinates.position.options.${pos}`} />
-                                    </Radio.Choice>
-                                ))}
-                            </Radio.Group>
+                        <Label>
+                            <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.coordinates.position.label' />
+                        </Label>
+                        <Radio.Group
+                            value={state.coordinatePosition}
+                            onChange={(e) => controller.updateField('coordinatePosition', e.target.value)}
+                            disabled={state.format !== 'application/pdf'}
+                        >
+                            {COORDINATE_POSITIONS.map(pos => (
+                                <Radio.Choice value={pos} key={pos}>
+                                    <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.content.coordinates.position.options.${pos}`} />
+                                </Radio.Choice>
+                            ))}
+                        </Radio.Group>
                     </FormGroup>
                     <FormGroup>
                         <Label>

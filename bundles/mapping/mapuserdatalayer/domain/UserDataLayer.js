@@ -22,7 +22,7 @@ export class UserDataLayer extends WFSLayer {
         return this._locale;
     }
 
-    setLocale (locale) {
+    setLocale (locale = {}) {
         this._locale = locale;
     }
 

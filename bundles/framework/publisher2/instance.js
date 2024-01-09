@@ -333,7 +333,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @return {Object}
          */
         getDefaultData: function () {
-            var config = {
+            const config = {
                 mapfull: {
                     conf: {
                         plugins: [
@@ -342,7 +342,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                         ]
                     }
                 },
-                'featuredata2': {
+                featuredata: {
+                    conf: {}
+                },
+                featuredata2: {
                     conf: {}
                 }
             };
@@ -352,7 +355,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 );
             }
             // setup current mapstate so layers are not removed
-            var state = this.getSandbox().getCurrentState();
+            const state = this.getSandbox().getCurrentState();
             // merge state to initial config
             return { configuration: jQuery.extend(true, config, state) };
         },

@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Obriši sloj",
-                "deleteConfirmMove": "Sloj {0} sadrži {1} objekata. Da li želite da obrišete sloj i pomerite lokacije sa njega na početni sloj {2}?",
                 "deleteConfirm": "Obriši sloj {0}?",
                 "deleted": "Sloj je izbrisan"
             },

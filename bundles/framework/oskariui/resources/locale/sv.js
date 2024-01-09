@@ -110,6 +110,46 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading:'Laddar...'
+        },
+        FeatureFilter: {
+            single: 'Ett attribut',
+            and: 'AND operatör',
+            or: 'OR operatör',
+            range: {
+                true: 'Använd inte värdeintervall',
+                false: 'Använd värdeintervall'
+            },
+            addTooltip: 'Lägg till ny rad för filter',
+            clearTooltip: 'Rensa filtret',
+            caseSensitive: {
+                true: 'Skiftlägeskänsligt',
+                false: 'Skiftlägesokänsligt'
+            },
+            operators: {
+                value: 'är',
+                in: 'i',
+                notIn: 'inte i',
+                like: 'som',
+                notLike: 'inte som',
+                greaterThan: 'större än',
+                atLeast: 'minst',
+                lessThan: 'mindre än',
+                atMost: 'som mest'
+            }
+        },
+        layerTooltipTitle: {
+            'wms': 'Kartlager i rasterformat',
+            'wmts': 'Kartlager i rasterformat',
+            'arcgis93': 'Kartlager i rasterformat',
+            'arcgis': 'Kartlager i rasterformat',
+            'vectortile': 'Kartlager i rasterformat',
+            'bingmaps': 'Kartlager i rasterformat',
+            'wfs': 'Kartlager i vektorformat',
+            'vector': 'Kartlager i vektorformat',
+            'userlayer': 'Eget dataset',
+            'myplaces': 'Mitt kartlager',
+            'analysislayer': 'Min analys',
+            'tiles3d': '3D kartlager'
         }
     }
 });

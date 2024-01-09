@@ -15,12 +15,14 @@ import './service/VectorFeatureService.ol';
 // plugins
 import './plugin/Plugin';
 import './plugin/fullscreen/FullScreen';
+import './plugin/pinchzoomreset/PinchZoomResetPlugin';
 import './plugin/getinfo/GetInfoPlugin';
 import './plugin/search/SearchPlugin';
 import './plugin/logo/LogoPlugin';
 import './plugin/datasource/DataSourcePlugin';
 import './plugin/layers/LayerSelectionPlugin';
 import './plugin/layers/BackgroundLayerSelectionPlugin';
+import './plugin/layers/coveragetool/CoverageToolPlugin';
 import './plugin/location/GeoLocationPlugin';
 import './plugin/publishertoolbar/PublisherToolbarPlugin';
 import './plugin/realtime/RealtimePlugin';

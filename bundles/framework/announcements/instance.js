@@ -1,4 +1,5 @@
 import { AnnouncementsHandler, showAnnouncementsPopup, showAnnouncementsBanner, showBannerDescriptionPopup } from './view/';
+const NOT_DISPLAYED = 'display-none';
 /**
  * @class Oskari.framework.bundle.announcements.AnnouncementsBundleInstance
  *
@@ -22,21 +23,18 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         this.bannerControls = null;
         this.descriptionPopupControls = null;
     }, {
-
         afterStart: function () {
             const me = this;
             if (me.started) {
                 return;
             }
-
             me.service = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
             me.sandbox.registerService(me.service);
             const flyout = me.plugins['Oskari.userinterface.Flyout'];
             // It looks like plugin (embedded map) handles announcements differently so render popups only if flyout is present
             if (flyout) {
                 this.handler = new AnnouncementsHandler(this.service);
-                this.handler.addStateListener(state => this.renderPopup(state));
-                this.handler.addStateListener(state => this.renderBanner(state));
+                this.handler.addStateListener(state => this.stateChanged(state));
                 flyout.initHandler(this.handler);
             }
             if (me.conf && me.conf.plugin) {
@@ -58,6 +56,17 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
                     });
                 });
             });
+        },
+        stateChanged: function (state) {
+            this.renderPopup(state);
+            this.renderBanner(state);
+            this.setTileVisibility(state);
+        },
+        setTileVisibility: function (state) {
+            const isMobile = Oskari.util.isMobile();
+            // mobile mode and no active announcements
+            const shouldHide = isMobile && !(state?.active?.length);
+            this.getTile()?.container?.toggleClass(NOT_DISPLAYED, shouldHide);
         },
         renderPopup: function (state) {
             if (!state.popupAnnouncements || !state.popupAnnouncements.length) {
@@ -124,6 +133,19 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
          * implements BundleInstance protocol update method - does nothing atm
          */
         stop: function () {
+        },
+        onEvent: function (event) {
+            const handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+
+            return handler.apply(this, [event]);
+        },
+        eventHandlers: {
+            MapSizeChangedEvent: function (event) {
+                this.renderBanner(this.handler.getState());
+            }
         }
     }, {
         extend: ['Oskari.userinterface.extension.DefaultExtension']

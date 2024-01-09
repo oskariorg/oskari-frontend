@@ -112,9 +112,15 @@ Oskari.registerLocalization({
             loading: 'Ladataan...'
         },
         FeatureFilter: {
-            single: 'Yksi ominaisuustieto',
-            list: 'Monta ominaisuustietoa',
-            range: 'Käytä arvoaluetta',
+            single: 'Yksi ominaisuus',
+            and: 'AND-operaattori',
+            or: 'OR-operaattori',
+            range: {
+                true: 'Älä käytä arvoaluetta',
+                false: 'Käytä arvoaluetta'
+            },
+            addTooltip: 'Lisää suodattimeen uusi rivi',
+            clearTooltip: 'Tyhjennä suodatin',
             caseSensitive: {
                 true: 'Kirjainkoko vaikuttaa',
                 false: 'Kirjainkoko ei vaikuta'
@@ -130,6 +136,20 @@ Oskari.registerLocalization({
                 lessThan: 'pienempi kuin',
                 atMost: 'enintään'
             }
+        },
+        layerTooltipTitle: {
+            'wms': 'Rasteritaso',
+            'wmts': 'Rasteritaso',
+            'arcgis93': 'Rasteritaso',
+            'arcgis': 'Rasteritaso',
+            'vectortile': 'Rasteritaso',
+            'bingmaps': 'Rasteritaso',
+            'wfs': 'Vektoritaso',
+            'vector': 'Vektoritaso',
+            'userlayer': 'Oma aineisto',
+            'myplaces': 'Oma karttataso',
+            'analysislayer': 'Oma analyysi',
+            'tiles3d': '3D-taso'
         }
     }
 });

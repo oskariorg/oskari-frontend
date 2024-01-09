@@ -1,4 +1,4 @@
-import { prepareData, showMedataPopup } from './description/MetadataPopup';
+import { prepareData, showMedataPopup } from '../../statsgrid/components/description/MetadataPopup';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (service) {
     this.loc = Oskari.getMsg.bind(null, 'StatsGrid');

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.request.AddTabRequest
+ * @class Oskari.mapframework.bundle.catalogue.request.AddTabRequest
  * Requests tab to be added
  *
  * Requests are build and sent through Oskari.Sandbox.

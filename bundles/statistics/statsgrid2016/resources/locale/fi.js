@@ -180,7 +180,8 @@ Oskari.registerLocalization({
             'onlyPartialDataForIndicators': 'Palvelusta ei saatu kaikkia tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}'
         },
         'missing': {
-            'regionsetName': 'Tuntematon'
+            'regionsetName': 'Tuntematon',
+            'indicator': 'Tuntematon indikaattori'
         },
         'datacharts': {
             'flyout': 'Haettu aineisto',
