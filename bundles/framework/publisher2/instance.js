@@ -284,7 +284,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 data = data || this.getDefaultData();
                 me.getService().setIsActive(true);
 
-                if (data?.configuration) {
+                if (data?.configuration && Object.keys(data.configuration)?.length > 0) {
                     // if there exists some configuration we're calling set state, which is calling UIChangeEvent under the hood.
                     const stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
                     this.getSandbox().request(this, stateRB(data.configuration));
