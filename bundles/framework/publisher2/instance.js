@@ -282,16 +282,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             if (blnEnabled) {
                 if (me.publisher) return;
                 data = data || this.getDefaultData();
-                const isNew = !data?.uuid;
                 me.getService().setIsActive(true);
-                if (isNew) {
-                    // new -> use defaults
-                    const eventBuilder = Oskari.eventBuilder('UIChangeEvent');
-                    this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
-                } else {
-                    // edit -> use state
+
+                if (data?.configuration) {
+                    // if there exists some configuration we're calling set state, which is calling UIChangeEvent under the hood.
                     const stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
                     this.getSandbox().request(this, stateRB(data.configuration));
+                } else {
+                    // Otherwise there's no need to update the state and we can just notify everybody of ui change.
+                    const eventBuilder = Oskari.eventBuilder('UIChangeEvent');
+                    this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
+                }
+
+                if (data?.uuid) {
                     this._showEditNotification();
                 }
 

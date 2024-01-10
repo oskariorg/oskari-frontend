@@ -39,9 +39,8 @@ Oskari.clazz.define(
 
         _startImpl: function (sandbox) {
             this.mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-            this.publisherInstance = Oskari.getSandbox().findRegisteredModuleInstance('Publisher2');
             this.popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
-
+            Oskari.getSandbox().registerAsStateful(this.mediator.bundleId, this);
             if (Oskari.dom.isEmbedded()) {
                 const plugin = Oskari.clazz.create('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlugin', this.conf);
                 this.plugin = plugin;
