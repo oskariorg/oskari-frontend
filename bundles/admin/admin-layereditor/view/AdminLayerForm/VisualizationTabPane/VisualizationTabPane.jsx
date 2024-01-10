@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Controller, ErrorBoundary } from 'oskari-ui/util';
 import { Opacity } from './Opacity';
-import { Hover } from './Hover';
 import { DynamicScreensPaceErrorOptions } from './DynamicScreensSpaceErrorOptions';
 import { Scale } from './Scale';
 import { Coverage } from './Coverage';
@@ -67,9 +66,6 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
             }
             { propertyFields.includes(HOVER) &&
                 <HoverModal layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(HOVER) &&
-                <Hover layer={layer} controller={controller} />
             }
             { propertyFields.includes(CESIUM_ION) &&
                 <DynamicScreensPaceErrorOptions layer={layer} controller={controller} />
