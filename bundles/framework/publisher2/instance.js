@@ -282,17 +282,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             if (blnEnabled) {
                 if (me.publisher) return;
                 data = data || this.getDefaultData();
-                // trigger an event letting other bundles know we require the whole UI
-                // the latter SetStateRequest triggers UIChangeEvent as well so this is considered to be redundant
-                /*
-                var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
-                this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
-                */
-
+                const isNew = !data?.uuid;
                 me.getService().setIsActive(true);
-                var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
-                this.getSandbox().request(this, stateRB(data.configuration));
-                if (data.uuid) {
+                if (isNew) {
+                    // new -> use defaults
+                    const eventBuilder = Oskari.eventBuilder('UIChangeEvent');
+                    this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
+                } else {
+                    // edit -> use state
+                    const stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
+                    this.getSandbox().request(this, stateRB(data.configuration));
                     this._showEditNotification();
                 }
 
