@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { SwipeIcon } from 'oskari-ui/components/icons';
+import { SwipeIcon } from '../resources/icons/Swipe';
 import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 
 /**

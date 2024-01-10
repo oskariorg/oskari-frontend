@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ThemeConsumer } from '../../util';
-import { getNavigationTheme } from '../../theme';
+import { ThemeConsumer } from 'oskari-ui/util';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 const StyledSvg = styled('svg')`
     fill: none !important;
@@ -22,7 +22,7 @@ const StyledSvg = styled('svg')`
     }
 `;
 
-export const Swipe = ThemeConsumer(({ theme = {}, active }) => {console.log(active)
+export const Swipe = ThemeConsumer(({ theme = {}, active }) => {
     const helper = getNavigationTheme(theme);
     const iconColor = helper.getTextColor();
     const hover = helper.getButtonHoverColor();
@@ -42,3 +42,5 @@ export const Swipe = ThemeConsumer(({ theme = {}, active }) => {console.log(acti
         </StyledSvg>
     );
 });
+
+export { Swipe as SwipeIcon };

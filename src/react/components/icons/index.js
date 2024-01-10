@@ -12,4 +12,3 @@ export { Drag as DragIcon } from './Drag';
 export { LayerIcon } from './LayerIcon';
 export { EyeOpen } from './EyeOpen';
 export { EyeShut } from './EyeShut';
-export { Swipe as SwipeIcon } from './Swipe';
