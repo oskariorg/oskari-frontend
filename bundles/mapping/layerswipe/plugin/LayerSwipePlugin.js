@@ -95,25 +95,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
             this.removeFromPluginContainer(this.getElement());
         },
 
-        /**
-         * Handle plugin UI and change it when desktop / mobile mode
-         * @method  @public createPluginUI
-         * @param  {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
-         */
-        /*
-        redrawUI: function (mapInMobileMode, forced) {
-            if (!this.hasUI() || !this.isEnabled()) {
-                // no point in drawing the ui if we are not visible
-                return;
-            }
-
-            this.teardownUI();
-            this._element = this._createControlElement();
-            this.refresh();
-            this.addToPluginContainer(this._element);
-        },
-*/
         refresh: function () {
             const el = this.getElement();
             if (!el) {
@@ -143,11 +124,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
             this.teardownUI();
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
