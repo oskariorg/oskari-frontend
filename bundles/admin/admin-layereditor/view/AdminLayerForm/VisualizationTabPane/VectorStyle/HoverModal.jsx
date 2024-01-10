@@ -7,7 +7,6 @@ import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { recognizeChanges } from 'oskari-ui/components/StyleEditor/util'
 import { IconButton } from 'oskari-ui/components/buttons';
 import { Controller } from 'oskari-ui/util';
-import { StyledFormField } from '../styled';
 import { getGeometryType } from '../../../LayerHelper';
 import { SUPPORTED_FORMATS } from 'oskari-ui/components/StyleEditor/constants';
 import { EFFECT } from '../../../../../../mapping/mapmodule/oskariStyle/constants.js';
@@ -34,6 +33,16 @@ const RowItem = styled.span`
     flex-flow: row nowrap;
     *:last-child {
         margin-left: 10px;
+    }
+`;
+
+const ButtonContainer = styled.div`
+    padding-top: 5px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-flow: row nowrap;
+    button {
+        margin-right: 5px;
     }
 `;
 
@@ -118,11 +127,13 @@ export const HoverModal = ({ layer, controller }) => {
     
     return (
         <Fragment>
-            <StyledFormField>
+            <ButtonContainer>
                 <Button onClick={() => setOpen(true)}>
                     <Message messageKey='styles.hover.title' />
                 </Button>
-            </StyledFormField>
+                <IconButton type='delete' bordered disabled={!layer.options.hover}
+                    onClick={ () => controller.setHover() } />
+            </ButtonContainer>
             <Modal
                 destroyOnClose
                 mask={ false }
