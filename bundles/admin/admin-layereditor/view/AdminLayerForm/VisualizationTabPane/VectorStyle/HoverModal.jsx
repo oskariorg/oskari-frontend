@@ -98,17 +98,17 @@ export const HoverModal = ({ layer, controller }) => {
             return;
         }
         const { inherit, effect, ...styleDef } = featureStyle || {};
-        let style = featureStyle;
-        if (!useStyle) {
-            style = { inherit, effect };
-        } else if (inherit) {
-            style = {
-                inherit,
-                effect,
-                ...recognizeChanges(Oskari.custom.getDefaultStyle(), styleDef)
-            };
+        const hoverStyle = {
+            featureStyle: { inherit, effect }
+        };
+        if (useStyle) {
+            const style = recognizeChanges(Oskari.custom.getDefaultStyle(), styleDef);
+            hoverStyle.featureStyle = {...hoverStyle.featureStyle, ...style};
         }
-        controller.setHover({ featureStyle: style, content });
+        if (content.length) {
+            hoverStyle.content = content;
+        }
+        controller.setHover(hoverStyle);
         setOpen(false);
     };
     const onClose = () => {
