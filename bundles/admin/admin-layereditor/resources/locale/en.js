@@ -64,6 +64,7 @@ Oskari.registerLocalization(
             "generalTabTitle": "General",
             "visualizationTabTitle": "Visualization",
             "additionalTabTitle": "Additional",
+            "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Permissions",
             "interfaceVersionDesc": "Select an appropriate version. Prioritize the newest version that is supported.",
             "attributions": "Attributions",
@@ -96,6 +97,9 @@ Oskari.registerLocalization(
                 "service": "File identifier defined in the service",
                 "overridden": "Replaced file identifier"
             },
+            "jsonTab": {
+                "info": "These tools enable advanced configuration, use with caution."
+            },
             "capabilities": {
                 "parsed": "Capabilities parsed for layer",
                 "show": "Show GetCapabilities response",
@@ -112,6 +116,12 @@ Oskari.registerLocalization(
                     "additionalLegend": "The map layer has been given a legend that overrides the default legend provided by the service. The overriding legend was linked to a style that is no longer available. Please update the layer legend. The problematic style is marked with a ( ! ).",
                     "globalWithStyles": "The layer has more than one style available in the service. However, the layer has been defined with a single default legend. Consider removing the current default legend to be able to use the style based legends."
                 }
+            },
+            "jsonFields": {
+                "attributes": "Attributes",
+                "capabilities": "Capabilities parsed for layer",
+                "options": "Options",
+                "params": "Params"
             },
             "attributes": {
                 "label": "Attributes",

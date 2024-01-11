@@ -423,6 +423,12 @@ class UIHandler extends StateHandler {
         });
     }
 
+    setValueForLayer (key, value) {
+        this.updateState({
+            layer: { ...this.getState().layer, [key]: value }
+        });
+    }
+
     setMetadataIdentifier (metadataid) {
         this.updateState({
             layer: { ...this.getState().layer, metadataid }
@@ -1231,6 +1237,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setMinAndMaxScale',
     'setOpacity',
     'setOptions',
+    'setValueForLayer',
     'setPassword',
     'setPermissionForAll',
     'setSingleTile',
