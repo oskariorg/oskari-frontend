@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, TextAreaInput, TextInput, Collapse, CollapsePanel } from 'oskari-ui';
@@ -120,18 +120,23 @@ ParsedCollapse.propTypes = {
 
 export const JsonTabPane = ({ layer, propertyFields, controller }) => {
     return (
-        <StyledFormField>
-            <Collapse>
-                { propertyFields.includes(ATTRIBUTES) &&
-                    <ParsedCollapse json={layer.attributes} jsonKey='attributes' controller={controller}/>
-                }
-                { propertyFields.includes(CAPABILITIES) &&
-                    <ParsedCollapse skipEdit json={layer.capabilities} jsonKey='capabilities'/>
-                }
-                <ParsedCollapse json={layer.options} jsonKey='options' controller={controller}/>
-                <ParsedCollapse json={layer.params} jsonKey='params' controller={controller}/>
-            </Collapse>
-        </StyledFormField>
+        <Fragment>
+            <StyledFormField>
+                <Message messageKey='jsonTab.info'/>
+            </StyledFormField>
+            <StyledFormField>
+                <Collapse>
+                    { propertyFields.includes(ATTRIBUTES) &&
+                        <ParsedCollapse json={layer.attributes} jsonKey='attributes' controller={controller}/>
+                    }
+                    { propertyFields.includes(CAPABILITIES) &&
+                        <ParsedCollapse skipEdit json={layer.capabilities} jsonKey='capabilities'/>
+                    }
+                    <ParsedCollapse json={layer.options} jsonKey='options' controller={controller}/>
+                    <ParsedCollapse json={layer.params} jsonKey='params' controller={controller}/>
+                </Collapse>
+            </StyledFormField>
+        </Fragment>
     );
 };
 JsonTabPane.propTypes = {

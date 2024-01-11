@@ -64,7 +64,7 @@ Oskari.registerLocalization(
             "generalTabTitle": "General",
             "visualizationTabTitle": "Visualization",
             "additionalTabTitle": "Additional",
-            "jsonTabTitle": "Json fields",
+            "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Permissions",
             "interfaceVersionDesc": "Select an appropriate version. Prioritize the newest version that is supported.",
             "attributions": "Attributions",
@@ -96,6 +96,9 @@ Oskari.registerLocalization(
                 "desc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
                 "service": "File identifier defined in the service",
                 "overridden": "Replaced file identifier"
+            },
+            "jsonTab": {
+                "info": "These tools enable advanced configuration, use with caution."
             },
             "capabilities": {
                 "parsed": "Capabilities parsed for layer",

@@ -63,7 +63,7 @@ Oskari.registerLocalization(
             "generalTabTitle": "Yleiset",
             "visualizationTabTitle": "Visualisointi",
             "additionalTabTitle": "Lisätiedot",
-            "jsonTabTitle": "Json kentät",
+            "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Oikeudet",
             "interfaceVersionDesc": "Valitse ensisijaisesti uusin rajapinnan tukema versio.",
             "attributions": "Lähdeviitteet",
@@ -96,6 +96,9 @@ Oskari.registerLocalization(
                 "desc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
                 "service": "Palvelussa määritelty",
                 "overridden": "Korvaava tiedostotunniste"
+            },
+            "jsonTab": {
+                "info": "Nämä työkalut mahdollistavat lisäkonfiguraation, käytä harkiten."
             },
             "capabilities": {
                 "parsed": "Tasolle parsitut Capabilities-tiedot",

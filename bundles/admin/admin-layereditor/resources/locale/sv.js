@@ -65,6 +65,7 @@ Oskari.registerLocalization(
             "visualizationTabTitle": "Visualisering",
             "additionalTabTitle": "Ytterligare",
             "permissionsTabTitle": "Rättigheter",
+            "jsonTabTitle": "JSON",
             "interfaceVersionDesc": "Välj primärt den nyaste versionen som stöds av gränssnittet.",
             "attributions": "Tillskrivningar",
             "usernameAndPassword": "Användarnamn och lösenord",
@@ -95,6 +96,9 @@ Oskari.registerLocalization(
                 "desc": "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
                 "service": "Definierad i tjänsten",
                 "overridden": "Filtagg för metadatans"
+            },
+            "jsonTab": {
+                "info": "Dessa verktyg möjliggör avancerad konfiguration, använd med försiktighet."
             },
             "capabilities": {
                 "parsed": "Utvald information från kartlagrets capabilities",
