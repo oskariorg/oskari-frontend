@@ -51,8 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
         resetUI: function () {
         },
         getInstance: function () {
-            // we only need instance here since the flyout is operated by the instance
-            // TODO: we should move the flyout related code to this plugin
+            // We need instance as it manages the `active` state.
             if (!this._instance) {
                 if (!this.sandbox) {
                     // wacky stuff we do since sandbox might be provided
