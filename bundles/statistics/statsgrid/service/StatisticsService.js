@@ -109,8 +109,8 @@ import { getHash } from '../helper/StatisticsHelper';
          */
         isSelected: function (ds, id) {
             const indicators = this.stateHandler.getState().indicators;
-            for (var i = 0; i < indicators.length; i++) {
-                var ind = indicators[i];
+            for (let i = 0; i < indicators.length; i++) {
+                const ind = indicators[i];
                 if (ind.datasource === ds && ind.indicator === id) {
                     return true;
                 }
@@ -120,63 +120,6 @@ import { getHash } from '../helper/StatisticsHelper';
         isSeriesActive: function () {
             const active = this.getIndicator(this.stateHandler.getState().activeIndicator);
             return active && !!active.series;
-        },
-        getUILabels: async function (ind) {
-            const selectionValues = this.locale('panels.newSearch.selectionValues');
-            const { datasource, indicator, selections, series } = ind;
-            try {
-                const metadata = await this.getIndicatorMetadata(datasource, indicator);
-                if (!metadata) {
-                    return {
-                        error: true,
-                        indicator: '',
-                        params: '',
-                        full: '',
-                        paramsAsObject: {}
-                    };
-                }
-                const { name, selectors, source } = metadata;
-                const uiLabels = [];
-                Object.keys(selections).forEach(key => {
-                    const selection = selections[key];
-                    const foundSelector = selectors.find(s => s.id === key);
-                    if (foundSelector) {
-                        const value = foundSelector.allowedValues.find(v => selection === v.id || selection === v);
-                        const isObject = typeof value === 'object';
-                        const selector = foundSelector.id;
-                        const id = isObject ? value.id : value;
-                        let label;
-                        if (isObject) {
-                            label = value.name;
-                        } else {
-                            // try finding localization for the param
-                            label = Oskari.util.keyExists(selectionValues, selector + '.' + value) ? selectionValues[selector][value] : value;
-                        }
-                        uiLabels.push({ selector, id, label });
-                    }
-                });
-                const localizedName = Oskari.getLocalized(name);
-                let selectorsFormatted = ' (' + uiLabels.map(l => l.label).join(' / ') + ')';
-                if (series) {
-                    const range = String(series.values[0]) + ' - ' + String(series.values[series.values.length - 1]);
-                    selectorsFormatted = range + ' ' + selectorsFormatted;
-                }
-                return {
-                    indicator: localizedName,
-                    source: Oskari.getLocalized(source),
-                    params: selectorsFormatted,
-                    full: localizedName + ' ' + selectorsFormatted,
-                    paramsAsObject: uiLabels
-                };
-            } catch (error) {
-                return {
-                    error: true,
-                    indicator: '',
-                    params: '',
-                    full: '',
-                    paramsAsObject: {}
-                };
-            }
         },
         getDatasources: function () {
             return this.stateHandler.getState().datasources.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
@@ -332,7 +275,9 @@ import { getHash } from '../helper/StatisticsHelper';
         getIndicatorData: async function (ds, indicator, params, series, regionset) {
             if (!ds || !indicator || !regionset) {
                 // log error message
-                throw new Error('Datasource, regionset or indicator missing');
+                // something still missing from async ops
+                return;
+                // throw new Error('Datasource, regionset or indicator missing');
             }
             if (series && series.values.indexOf(params[series.id]) === -1) {
                 throw new Error('Requested dataset is out of range');

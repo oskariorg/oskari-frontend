@@ -1,3 +1,6 @@
+/*
+------------------ CACHING ------------------------
+*/
 // cache storage object
 const indicatorListPerDatasource = {};
 const getCacheKey = datasourceId => 'ds_' + datasourceId;
@@ -48,7 +51,13 @@ export const updateIndicatorListInCache = (datasourceId, indicator) => {
     }
     return cachedIndicator;
 };
+/*
+------------------ /CACHING ------------------------
+*/
 
+/*
+------------------ MAIN FUNCTIONALITY ------------------------
+*/
 /**
  * Fetches listing from server andd calls callback with a list of indicators for the datasource.
  *
@@ -100,6 +109,13 @@ export const populateIndicatorOptions = async (datasourceId, successCallback, er
         }
     }
 };
+/*
+------------------ /MAIN FUNCTIONALITY ------------------------
+*/
+
+/*
+------------------ INTERNAL HELPERS ------------------------
+*/
 
 const RETRY_LIMIT = 5;
 const populateIndicatorListFromServer = async (datasourceId, successCallback, retryCount = RETRY_LIMIT, previousResult = {}) => {
