@@ -400,7 +400,7 @@ class UIHandler extends StateHandler {
         } else {
             options.hover = json;
         }
-        this.setOptions(options)
+        this.setOptions(options);
     }
 
     setTileGridJSON (json) {
