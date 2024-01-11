@@ -20,9 +20,9 @@ export const getHeaderTheme = (theme) => {
 export const getNavigationTheme = (theme) => {
     const primary = theme.navigation?.color?.primary || DEFAULT_COLORS.DARK_BUTTON_BG;
     const textColor = getTextColor(primary);
-    let borderRadius = undefined;
+    let borderRadius = 0;
     if (theme?.navigation?.roundness) {
-        borderRadius = `${(theme?.navigation?.roundness || 0) / 2}%`;
+        borderRadius = (theme?.navigation?.roundness || 0) / 2;
     }
 
     let buttonColor = primary;
@@ -34,7 +34,10 @@ export const getNavigationTheme = (theme) => {
         getTextColor: () => theme.navigation?.color?.text || textColor,
         getButtonColor: () => buttonColor,
         getButtonHoverColor: () => theme.navigation?.color?.accent || theme.color.accent || DEFAULT_COLORS.ACCENT,
-        getButtonRoundness: () => borderRadius,
+        // like 50%
+        getButtonRoundness: () => `${borderRadius}%`,
+        // like 0.5 for calc() usage
+        getButtonRoundnessFactor: () => borderRadius / 100,
         getEffect: () => theme.navigation?.effect,
         getButtonOpacity: () => theme.navigation?.opacity || 1
     };

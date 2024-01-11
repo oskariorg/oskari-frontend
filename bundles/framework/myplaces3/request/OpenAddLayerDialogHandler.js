@@ -1,3 +1,4 @@
+import './OpenAddLayerDialogRequest';
 /**
  * @class Oskari.mapframework.bundle.myplaces3.request.OpenAddLayerDialogHandler
  * Handles sequests for opening the add layer dialog.

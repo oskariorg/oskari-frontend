@@ -7,6 +7,10 @@ const StyledCheckbox = styled(AntCheckbox)`
     + .ant-checkbox-wrapper {
         margin-left: 0;
     }
+
+    .ant-checkbox {
+        margin-bottom: auto;
+    }
 `;
 
 export const Checkbox = (props) => (

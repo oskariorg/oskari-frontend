@@ -10,13 +10,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Luoghi",
-            "nocategories": "Non hai ancora salvato nessun luogo",
-            "maxFeaturesExceeded": "Hai superato il numero massimo dei tuoi luoghi. Non sono stati caricati tutti sulla mappa.",
             "publishCategory": {
                 "privateTooltip": "Questo layer è privato. Clicca qui per pubblicarlo",
                 "publicTooltip": "Questo layer è pubblico. Clicca qui per sospendere la pubblicazione."
             },
-            "addCategoryFormButton": "Nuovo layer",
             "addCategory": "Aggiungi il layer",
             "editCategory": "Modifica il layer",
             "deleteCategory": "Cancella il layer",
@@ -175,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Cancella il layer",
-                "deleteConfirmMove": "Il layer \"{0}\" contiene {1} luoghi. Vuoi cancellare il layer e spostare i suoi luoghi sul layer predefinito {2} o vuoi cancellare il layer e i suoi luoghi?",
                 "deleteConfirm": "Vuoi cancellare il layer {0}?",
                 "deleted": "Il layer è stato cancellato"
             },

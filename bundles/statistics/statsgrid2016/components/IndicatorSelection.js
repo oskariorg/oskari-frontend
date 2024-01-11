@@ -1,5 +1,5 @@
 import { SelectList } from './SelectList';
-import { prepareData, showMedataPopup } from './description/MetadataPopup';
+import { prepareData, showMedataPopup } from '../../statsgrid/components/description/MetadataPopup';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (instance, sandbox) {
     this.instance = instance;

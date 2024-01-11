@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 layerType = 'ol3 Arcgis CACHE';
             }
 
-            openlayer.opacity = layer.getOpacity() / 100;
+            openlayer.setOpacity(layer.getOpacity() / 100);
             const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
             // Set min max zoom levels that layer should be visible in
             zoomLevelHelper.setOLZoomLimits(openlayer, layer.getMinScale(), layer.getMaxScale());

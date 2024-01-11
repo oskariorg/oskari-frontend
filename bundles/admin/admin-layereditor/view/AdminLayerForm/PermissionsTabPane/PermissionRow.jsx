@@ -24,6 +24,7 @@ const TextColumn = styled.div`
     width: ${TEXT_COLUMN_SIZE.width}px;
     padding-left: ${TEXT_COLUMN_SIZE.padding}px;
     align-self: ${props => props.isHeaderRow ? 'flex-end' : 'stretch'};
+    font-weight: ${props => props.isHeaderRow ? 'bold' : 'normal'};
 `;
 
 const StyledPermissionDiv = styled.div`

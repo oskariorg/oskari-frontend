@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Изтриване на картния слой",
-                "deleteConfirmMove": "Картният слой {0} съдържа {1}  обекти. Искате ли да изтриете картния лист и да преместите местата в картен слой по подразбиране {3} ?",
                 "deleteConfirm": "Изтриване на картния слой {0} ?",
                 "deleted": "Картният слой е изтрит"
             },

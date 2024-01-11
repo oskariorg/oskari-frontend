@@ -15,6 +15,7 @@ import './service/VectorFeatureService.ol';
 // plugins
 import './plugin/Plugin';
 import './plugin/fullscreen/FullScreen';
+import './plugin/pinchzoomreset/PinchZoomResetPlugin';
 import './plugin/getinfo/GetInfoPlugin';
 import './plugin/search/SearchPlugin';
 import './plugin/logo/LogoPlugin';

@@ -1,8 +1,8 @@
 import React from 'react';
 import { showMovableContainer, PLACEMENTS } from 'oskari-ui/components/window';
 import { LocaleProvider } from 'oskari-ui/util';
-import { Classification } from '../components/classification/Classification';
-import { showHistogramPopup } from '../components/manualClassification/HistogramForm';
+import { Classification } from '../../statsgrid/components/classification/Classification';
+import { showHistogramPopup } from '../../statsgrid/components/manualClassification/HistogramForm';
 import { getPopupOptions } from '../../../mapping/mapmodule/plugin/pluginPopupHelper';
 import '../resources/scss/classificationplugin.scss';
 /**

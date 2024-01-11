@@ -66,6 +66,10 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
             layerId: requestedLayer,
             showEditor
         };
+        if (showEditor) {
+            options.geometryType = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService')
+                ?.findMapLayer(requestedLayer)?.getGeometryType();
+        }
         if (this.popupController) {
             this.popupController.update(options);
         } else {

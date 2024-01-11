@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Select, Message } from 'oskari-ui';
 import PropTypes from 'prop-types';
-import { FEATUREDATA_DEFAULT_HIDDEN_FIELDS } from '../plugin/FeatureDataPluginHandler';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
 
 const FilterVisibleColumnsContainer = styled('div')`
@@ -17,10 +16,9 @@ const FilterVisibleColumnsContainer = styled('div')`
         padding-left: 0.5em;
     }
 `;
-;
 
 const SelectFixedWidth = styled(Select)`
-    min-width: 20em;
+    min-width: 15em;
 `;
 
 const BlurredMessage = (props) => {
@@ -40,7 +38,6 @@ const createOptions = (allColumns, activeLayerPropertyLabels) => {
     }
 
     return allColumns
-        .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key))
         .map(key => {
             return {
                 label: activeLayerPropertyLabels && activeLayerPropertyLabels[key] ? activeLayerPropertyLabels[key] : key,

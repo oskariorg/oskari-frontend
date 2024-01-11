@@ -63,6 +63,7 @@ Oskari.registerLocalization(
                 }
             },
             "showSelectedFirst": "Show selected first",
+            "toggleCompressedView": "Condensed view",
             "selectionTools": {
                 "title": "Select Features",
                 "instructions": " ",

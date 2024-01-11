@@ -39,7 +39,7 @@ const PanelExtra = ({ onRemove}) => {
     );
 };
 
-export const OptionalStyleModal = ({ vectorStyle, styleTabs, controller, onClose, properties = [] }) => {
+export const OptionalStyleModal = ({ vectorStyle, geometryType, controller, onClose, properties = [] }) => {
     const { featureStyle, optionalStyles = [] } = vectorStyle?.style || {};
     const [ styles, setStyles ] = useState(optionalStyles.length ? optionalStyles : [{}]);
 
@@ -102,7 +102,7 @@ export const OptionalStyleModal = ({ vectorStyle, styleTabs, controller, onClose
                             <FeatureFilter filter={filterDef} types={properties} properties={propertyNames}
                                 onChange={ updated => update({ ...styleDef, ...updated }, i)}/>
                             <Divider><Message messageKey='styles.vector.featureStyle' /></Divider>
-                            <StyleEditor tabs={styleTabs}
+                            <StyleEditor geometryType={geometryType}
                                 oskariStyle={ Object.keys(styleDef).length ? styleDef : featureStyle }
                                 onChange={updated => update({ ...filterDef, ...updated }, i)}/>
                         </CollapsePanel>

@@ -1,3 +1,4 @@
+import { DESCRIBE_LAYER } from '../../domain/constants';
 /**
  * @class Oskari.mapframework.domain.VectorLayer
  *
@@ -48,6 +49,14 @@ Oskari.clazz.define('Oskari.mapframework.domain.VectorLayer',
          */
         getHoverOptions: function () {
             return this._hoverOptions;
+        },
+        /**
+         * Override so DescribeLayer call isn't made for runtime vector layers with numeric ids
+         * The layer follows AddMapLayerRequest process IF the layer has been added with the showLayer: true flag.
+         * @returns always loaded status
+         */
+        getDescribeLayerStatus: function () {
+            return DESCRIBE_LAYER.LOADED;
         }
     }, {
         'extend': ['Oskari.mapframework.domain.AbstractLayer']

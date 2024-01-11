@@ -12,7 +12,7 @@ const StyledPanel = styled('div')`
     top: 0;
     /* sidebar has 3, we want to open it on top of this */
     z-index: 2;
-    width: 252px;
+    width: ${props => props.width || 252}px;
     display: flex;
     flex-direction: column;
     font-family: ${props => props.font};
@@ -31,9 +31,9 @@ const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
 `;
 
-export const SidePanel = ThemeConsumer(({ title, onClose, children, theme = {} }) => {
+export const SidePanel = ThemeConsumer(({ title, onClose, children, theme = {}, options }) => {
     return (
-        <StyledPanel className={`t_print_panel ${getFontClass(theme)}`}>
+        <StyledPanel className={`t_print_panel ${getFontClass(theme)}`} width={options.width}>
             <Content>
                 <StyledHeader
                     title={title}

@@ -14,7 +14,7 @@ Oskari.util = (function () {
     // break points for "mobile mode"
     const mobileDefs = {
         width: 650,
-        height: 650
+        height: 500
     };
     const isMobileDevice = !!(new MobileDetect(window.navigator.userAgent).mobile());
 

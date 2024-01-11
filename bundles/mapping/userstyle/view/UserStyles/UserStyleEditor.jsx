@@ -5,7 +5,7 @@ import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/compo
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { BUNDLE_KEY } from '../../constants';
 
-export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
+export const UserStyleEditor = ({ style, geometryType, onAdd, onCancel }) => {
     const { style: { featureStyle = {} } = {}, name } = style;
     const defaultStyle = Oskari.custom.generateBlankStyle();
     const [state, setState] = useState({
@@ -30,6 +30,7 @@ export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
             </Divider>
             <StyleEditor
                 oskariStyle={ state.featureStyle }
+                geometryType={ geometryType }
                 onChange={ updateStyle }
             />
             <ButtonContainer>
@@ -43,5 +44,6 @@ export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
 UserStyleEditor.propTypes = {
     onAdd: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
-    style: PropTypes.object.isRequired
+    style: PropTypes.object.isRequired,
+    geometryType: PropTypes.string
 };

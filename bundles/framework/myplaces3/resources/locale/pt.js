@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Lugares",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Apagar camada",
-                "deleteConfirmMove": "Camada {0} contém {1} objetos. Quer apagar a camada e mover os seus lugares para a camada padrão {2}?",
                 "deleteConfirm": "Apagar camada {0}?",
                 "deleted": "Camada apagada"
             },

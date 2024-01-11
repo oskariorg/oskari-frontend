@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom';
 import { Message } from 'oskari-ui';
 import { COVERAGE_LAYER_ID, CoverageHelper } from './CoverageHelper';
 import { ThemeProvider } from 'oskari-ui/util';
-import { MapModuleTextButton } from '../../../MapModuleTextButton';
-
+// import { MapModuleTextButton } from '../../../MapModuleTextButton';
+import { MapModuleButton } from '../../../MapModuleButton';
+import { IconButton } from 'oskari-ui/components/buttons';
 const FEATURE_EVENT_ADD = 'add';
+const FEATURE_EVENT_REMOVE = 'remove';
 const LOCALIZATION_BUNDLE_ID = 'MapModule';
 
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlugin',
@@ -48,19 +50,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
             if (!el) {
                 return;
             }
+
+            // clear all content from element so the tooltip gets cleared as well
+            if (!this.isVisible()) {
+                ReactDOM.render(null, el[0]);
+                return;
+            }
+
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
-                    <MapModuleTextButton
+                    <MapModuleButton
+                        className='t_coveragetoolbutton'
                         visible={this.isVisible()}
-                        text={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap'/>}
-                        onClick={() => {
-                            this._coverageButtonClicked();
-                        }}
-                        active={this.isVisible()}
+                        icon={<IconButton type={'delete'} title={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap'/>}/>}
+                        onClick={() => this._coverageButtonClicked()}
+                        iconActive={!!this.popupOpen}
                         position={this.getLocation()}
                     />
                 </ThemeProvider>,
-                el[0]);
+                el[0]
+            );
         },
         setVisible: function (visible) {
             this._visible = visible;
@@ -90,13 +99,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
         createEventHandlers: function () {
             return {
                 FeatureEvent: function (event) {
-                    if (!event) {
+                    if (!event || !(event?.getOperation() === FEATURE_EVENT_ADD || event?.getOperation() === FEATURE_EVENT_REMOVE)) {
                         return;
                     }
                     const features = event?.getFeatures() || null;
                     const isCoverageLayer = features?.some(feature => feature.layerId === COVERAGE_LAYER_ID);
                     this.setVisible(isCoverageLayer && event.getOperation() === FEATURE_EVENT_ADD);
                     this.renderButton();
+                },
+                UIChangeEvent: function (event) {
+                    this.coverageHelper.clearLayerCoverage(true);
                 }
             };
         }

@@ -1,3 +1,14 @@
+import './model/MyPlace';
+// event is not listened anywhere
+// TODO: we should remove the event since it was previously added to update personaldata listing
+import './event/MyPlacesChangedEvent';
+
+import './request/EditRequestHandler';
+import './request/OpenAddLayerDialogHandler';
+
+import './service/MyPlacesService';
+import './ButtonHandler';
+
 import { LOCALE_KEY } from './constants';
 import { MyPlacesTab } from './MyPlacesTab';
 import { MyPlacesHandler } from './handler/MyPlacesHandler';
@@ -67,10 +78,10 @@ Oskari.clazz.define(
          * @method  @private _addEventHandlers Add event handlers
          */
         _addRequestHandlers: function () {
-            var conf = this.conf || {};
-            var sandbox = Oskari.getSandbox(conf.sandbox);
+            const conf = this.conf || {};
+            const sandbox = Oskari.getSandbox(conf.sandbox);
 
-            var editRequestHandler = Oskari.clazz.create(
+            const editRequestHandler = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces3.request.EditRequestHandler',
                 sandbox,
                 this
@@ -96,7 +107,7 @@ Oskari.clazz.define(
                 editRequestHandler
             );
 
-            var openAddLayerDialogHandler = Oskari.clazz.create(
+            const openAddLayerDialogHandler = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces3.request.OpenAddLayerDialogHandler',
                 sandbox,
                 this
@@ -112,8 +123,8 @@ Oskari.clazz.define(
          */
         start: function () {
             // Should this not come as a param?
-            var conf = this.conf || {};
-            var sandbox = Oskari.getSandbox(conf.sandbox);
+            const conf = this.conf || {};
+            const sandbox = Oskari.getSandbox(conf.sandbox);
             this.sandbox = sandbox;
 
             Oskari.log('MyPlaces3').debug('Initializing my places module...');
@@ -122,7 +133,7 @@ Oskari.clazz.define(
             this.buttons = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.ButtonHandler', this);
             this.buttons.start();
 
-            var user = Oskari.user();
+            const user = Oskari.user();
             if (!user.isLoggedIn()) {
                 // guest users don't need anything else
                 return;
@@ -133,8 +144,6 @@ Oskari.clazz.define(
             // back end communication
             this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService', sandbox);
             this.myPlacesService.init();
-            // register service so personal data can access it
-            this.sandbox.registerService(this.myPlacesService);
             // init handlers
             this.myPlacesHandler = new MyPlacesHandler(this);
             this.drawHandler = new DrawHandler(this);
@@ -155,35 +164,15 @@ Oskari.clazz.define(
         },
         addTab: function (appStarted) {
             const sandbox = Oskari.getSandbox();
-            let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+            const myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
 
-            const reqName = 'PersonalData.AddTabRequest';
             if (myDataService) {
                 myDataService.addTab('myplaces', this.loc('tab.title'), MyPlacesTab, this.myPlacesHandler);
-            } else if (sandbox.hasHandler(reqName)) {
-                // fallback to old personaldata tabs
-                this.addTabToPersonalData();
             } else if (!appStarted) {
                 // Wait for the application to load all bundles and try again
                 Oskari.on('app.start', () => {
                     this.addTab(true);
                 });
-            }
-        },
-        // PersonalData removal
-        addTabToPersonalData: function () {
-            const MyPlacesTab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTab', this);
-            this.tab = MyPlacesTab;
-            this.tab.initContainer();
-            // binds tab to events
-            if (this.tab.bindEvents) {
-                this.tab.bindEvents();
-            }
-
-            const addTabReqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
-
-            if (addTabReqBuilder) {
-                this.getSandbox().request(this, addTabReqBuilder(this.loc('tab.title'), MyPlacesTab.getContent(), true, 'myplaces'));
             }
         }
     }, {
