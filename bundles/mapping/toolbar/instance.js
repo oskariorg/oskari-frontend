@@ -340,7 +340,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || '', false, null, null));
             },
             'UIChangeEvent': function (evt) {
-                // select default tool.
+                // select default tool to reset UI state.
                 this._clickButton();
             }
         },
