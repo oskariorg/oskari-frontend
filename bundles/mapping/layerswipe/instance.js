@@ -290,6 +290,9 @@ Oskari.clazz.define(
         eventHandlers: {
             'Toolbar.ToolSelectedEvent': function (event) {
                 if (event.getToolId() !== 'LayerSwipe' && event.getToolId() !== 'link' && event.getToolId() !== 'save_view') {
+                    // This bundle generates state for both link and saving views, but only if it's active.
+                    // If we deactivate when link or save view tools are clicked the state is not stored as expected.
+                    // So we need to keep the swipe tool active when these tools are clicked.
                     this.setActive(false);
                 }
             },
