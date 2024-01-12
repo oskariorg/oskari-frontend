@@ -62,6 +62,7 @@ Oskari.clazz.define(
                 };
                 sandbox.request(this, addToolButtonBuilder('LayerSwipe', 'basictools', buttonConf));
             }
+
             if (this.isActive()) {
                 // when starting we need to force setup even when state is "already active"
                 // we need to set state.active to false and then init the functionality by setting it back to true
@@ -113,6 +114,13 @@ Oskari.clazz.define(
         },
         getState: function () {
             return this.state || {};
+        },
+        getStateParameters: function () {
+            const { active } = this.getState();
+            if (active) {
+                return 'swipe=true';
+            }
+            return '';
         },
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
@@ -281,7 +289,7 @@ Oskari.clazz.define(
 
         eventHandlers: {
             'Toolbar.ToolSelectedEvent': function (event) {
-                if (event.getToolId() !== 'LayerSwipe') {
+                if (event.getToolId() !== 'LayerSwipe' && event.getToolId() !== 'link' && event.getToolId() !== 'save_view') {
                     this.setActive(false);
                 }
             },
