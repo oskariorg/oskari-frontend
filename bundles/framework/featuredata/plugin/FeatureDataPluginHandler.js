@@ -231,7 +231,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     openExportDataPopup () {
         if (this.exportDataPopupController) {
-            this.closeSelectByPropertiesPopupPopup();
+            this.closeExportDataPopup();
             return;
         }
         this.exportDataPopupController = showExportDataPopup(this.getState(), this.getController());
