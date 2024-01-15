@@ -125,7 +125,10 @@ Oskari.clazz.define(
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
             const topLayer = this.getTopmostLayer();
-            this.layer = topLayer.ol;
+            this.layer = topLayer?.ol || null;
+            if (this?.layer === null) {
+                return;
+            }
             if (topLayer.layerId !== null) {
                 this.setSwipeStatus(topLayer.layerId, this.cropSize);
             }
