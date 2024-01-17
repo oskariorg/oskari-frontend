@@ -125,6 +125,11 @@ Oskari.clazz.define(
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
             const topLayer = this.getTopmostLayer();
+
+            // no top layer === no layers -> deactivate tool
+            if (!topLayer) {
+                this.setActive(false);
+            }
             this.olLayers = topLayer?.ol || null;
             if (this?.olLayers === null) {
                 return;
