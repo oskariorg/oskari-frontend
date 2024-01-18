@@ -50,60 +50,85 @@ const PanelHeader = ({ headerMsg, infoMsg }) => {
             {infoMsg && <InfoIcon title={<Message bundleKey={BUNDLE_KEY} messageKey={infoMsg} />} /> }
         </StyledPanelHeader>
     );
-}
+};
+
+PanelHeader.propTypes = {
+    headerMsg: PropTypes.any,
+    infoMsg: PropTypes.any
+};
+
+const getCollapseItems = (state, controller, scaleSelection, scaleOptions) => {
+    const items = [];
+    const sizeOptions = {
+        key: 1,
+        label: <PanelHeader headerMsg='BasicView.size.label' infoMsg='BasicView.size.tooltip' />,
+        children: <RadioGroup
+            value={state.size}
+            onChange={(e) => controller.updateField('size', e.target.value)}>
+            {SIZE_OPTIONS?.map(option => (
+                <Radio.Choice value={option.value} key={option.value}>
+                    <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.size.options.${option.value}`} />
+                </Radio.Choice>
+            ))}
+        </RadioGroup>
+    };
+    const basicViewSettings = {
+        key: 2,
+        label: <PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />,
+        children: <AdditionalSettings state={state} controller={controller} />
+    };
+
+    items.push(sizeOptions);
+    items.push(basicViewSettings);
+
+    if (scaleSelection) {
+        const scaleSelectionItem = {
+            key: 3,
+            label: <PanelHeader headerMsg='BasicView.scale.label' infoMsg='BasicView.scale.tooltip' />,
+            children: <RadioGroup value={state.scaleType}
+                onChange={(e) => controller.updateScaleType(e.target.value)}>
+                {SCALE_OPTIONS?.map(option => (
+                    <Radio.Choice value={option} key={option}>
+                        <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.scale.${option}`} />
+                    </Radio.Choice>
+                ))}
+                {state.scaleType === 'configured' && (
+                    <Select
+                        value={state.scale}
+                        onChange={(val) => controller.updateField('scale', val)}
+                    >
+                        {scaleOptions?.map(option => (
+                            <Option value={option} key={option}>
+                                {`1:${option}`}
+                            </Option>
+                        ))}
+                    </Select>
+                )}
+            </RadioGroup>
+        };
+
+        items.push(scaleSelectionItem);
+    }
+
+    const previewItem = {
+        key: 4,
+        label: <PanelHeader headerMsg='BasicView.preview.label' />,
+        children: <>
+            <PreviewImage src={state.previewImage} landscape={state.previewImage && state.previewImage.includes('Landscape')} />
+            <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.preview.notes.extent' />
+        </>
+    };
+
+    items.push(previewItem);
+    return items;
+};
 
 export const PrintoutPanel = ({ controller, state, onClose, scaleSelection, scaleOptions }) => {
     const [openPanels, setOpenPanels] = useState([1, 2, 3, 4]);
     return (
         <ThemeProvider>
             <Content>
-                <Collapse defaultActiveKey={openPanels} onChange={setOpenPanels}>
-                    <CollapsePanel header={<PanelHeader headerMsg='BasicView.size.label' infoMsg='BasicView.size.tooltip' />} key={1}>
-                        <RadioGroup
-                            value={state.size}
-                            onChange={(e) => controller.updateField('size', e.target.value)}
-                        >
-                            {SIZE_OPTIONS?.map(option => (
-                                <Radio.Choice value={option.value} key={option.value}>
-                                    <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.size.options.${option.value}`} />
-                                </Radio.Choice>
-                            ))}
-                        </RadioGroup>
-                    </CollapsePanel>
-                    <CollapsePanel header={<PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />} key={2}>
-                        <AdditionalSettings state={state} controller={controller} />
-                    </CollapsePanel>
-                    {scaleSelection && (
-                        <CollapsePanel header={<PanelHeader headerMsg='BasicView.scale.label' infoMsg='BasicView.scale.tooltip' />} key={3}>
-                            <RadioGroup
-                                value={state.scaleType}
-                                onChange={(e) => controller.updateScaleType(e.target.value)}
-                            >
-                                {SCALE_OPTIONS?.map(option => (
-                                    <Radio.Choice value={option} key={option}>
-                                        <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.scale.${option}`} />
-                                    </Radio.Choice>
-                                ))}
-                                {state.scaleType === 'configured' && (
-                                    <Select
-                                        value={state.scale}
-                                        onChange={(val) => controller.updateField('scale', val)}
-                                    >
-                                        {scaleOptions?.map(option => (
-                                            <Option value={option} key={option}>
-                                                {`1:${option}`}
-                                            </Option>
-                                        ))}
-                                    </Select>
-                                )}
-                            </RadioGroup>
-                        </CollapsePanel>
-                    )}
-                    <CollapsePanel header={<PanelHeader headerMsg='BasicView.preview.label' />} key={4}>
-                        <PreviewImage src={state.previewImage} landscape={state.previewImage && state.previewImage.includes('Landscape')} />
-                        <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.preview.notes.extent' />
-                    </CollapsePanel>
-                </Collapse>
+                <Collapse defaultActiveKey={openPanels} onChange={setOpenPanels} items={getCollapseItems(state, controller, scaleSelection, scaleOptions)}/>
                 <Actions>
                     <SecondaryButton onClick={onClose} type='cancel' />
                     <PrimaryButton onClick={() => controller.printMap()} type='print' />
