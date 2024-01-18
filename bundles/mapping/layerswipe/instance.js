@@ -14,7 +14,7 @@ Oskari.clazz.define(
         this.splitterWidth = 5;
         this.cropSize = null;
         this.mapModule = null;
-        this.layer = null; // ol layer
+        this.olLayers = null; // ol layers (always an array of ol layers bound to a given oskarilayer, e.g. clustering uses two layers)
         this.oskariLayerId = null;
         this.popupService = null;
         this.popup = null;
@@ -79,7 +79,7 @@ Oskari.clazz.define(
             }
             if (active) {
                 this.updateSwipeLayer();
-                if (this.layer === null) {
+                if (this.olLayers === null) {
                     return;
                 }
                 this.showSplitter();
@@ -125,8 +125,13 @@ Oskari.clazz.define(
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
             const topLayer = this.getTopmostLayer();
-            this.layer = topLayer?.ol || null;
-            if (this?.layer === null) {
+
+            // no top layer === no layers -> deactivate tool
+            if (!topLayer) {
+                this.setActive(false);
+            }
+            this.olLayers = topLayer?.ol || null;
+            if (this?.olLayers === null) {
                 return;
             }
             if (topLayer.layerId !== null) {
@@ -136,7 +141,7 @@ Oskari.clazz.define(
             if (this.alertTimer) {
                 clearTimeout(this.alertTimer);
             }
-            if (this.layer === null) {
+            if (this?.olLayers === null) {
                 // When switching the background map, multiple events including
                 // remove, add and re-arrange will be triggered in order. The remove
                 // layer event causes the NO_RASTER alert to be shown when the
@@ -207,42 +212,45 @@ Oskari.clazz.define(
             }
             const olLayers = this.mapModule.getOLMapLayers(layerId);
             return {
-                ol: olLayers.length !== 0 ? olLayers[0] : null,
+                ol: olLayers.length !== 0 ? olLayers : null,
                 layerId
             };
         },
 
         registerEventListeners: function () {
-            if (this.layer === null) {
+            if (this.olLayers === null) {
                 return;
             }
-            const prerenderKey = this.layer.on('prerender', (event) => {
-                const ctx = event.context;
-                if (!this.isActive()) {
-                    ctx.restore();
-                    return;
-                }
 
-                const mapSize = this.mapModule.getMap().getSize();
-                const tl = getRenderPixel(event, [0, 0]);
-                const tr = getRenderPixel(event, [this.cropSize, 0]);
-                const bl = getRenderPixel(event, [0, mapSize[1]]);
-                const br = getRenderPixel(event, [this.cropSize, mapSize[1]]);
+            this.olLayers.forEach((olLayer) => {
+                const prerenderKey = olLayer.on('prerender', (event) => {
+                    const ctx = event.context;
+                    if (!this.isActive()) {
+                        ctx.restore();
+                        return;
+                    }
 
-                ctx.save();
-                ctx.beginPath();
-                ctx.moveTo(tl[0], tl[1]);
-                ctx.lineTo(bl[0], bl[1]);
-                ctx.lineTo(br[0], br[1]);
-                ctx.lineTo(tr[0], tr[1]);
-                ctx.closePath();
-                ctx.clip();
+                    const mapSize = this.mapModule.getMap().getSize();
+                    const tl = getRenderPixel(event, [0, 0]);
+                    const tr = getRenderPixel(event, [this.cropSize, 0]);
+                    const bl = getRenderPixel(event, [0, mapSize[1]]);
+                    const br = getRenderPixel(event, [this.cropSize, mapSize[1]]);
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(tl[0], tl[1]);
+                    ctx.lineTo(bl[0], bl[1]);
+                    ctx.lineTo(br[0], br[1]);
+                    ctx.lineTo(tr[0], tr[1]);
+                    ctx.closePath();
+                    ctx.clip();
+                });
+                this.eventListenerKeys.push(prerenderKey);
+                const postrenderKey = olLayer.on('postrender', (event) => {
+                    event.context.restore();
+                });
+                this.eventListenerKeys.push(postrenderKey);
             });
-            this.eventListenerKeys.push(prerenderKey);
-            const postrenderKey = this.layer.on('postrender', (event) => {
-                event.context.restore();
-            });
-            this.eventListenerKeys.push(postrenderKey);
         },
 
         unregisterEventListeners: function () {
