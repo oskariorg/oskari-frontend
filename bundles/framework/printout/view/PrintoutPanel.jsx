@@ -4,18 +4,19 @@ import { Controller, ThemeProvider } from 'oskari-ui/util';
 import { Collapse, Message, Radio, Select, Option } from 'oskari-ui';
 import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
-import { SCALE_OPTIONS } from '../constants';
-import { AdditionalSettings } from './AdditionalSettings';
-import { getSizeCollapseItem } from './items/SizeCollapseItem';
 import { PanelHeader } from './items/PanelHeader';
+import { getSizeCollapseItem } from './items/SizeCollapseItem';
+import { getBasicViewCollapseItem } from './items/BasicViewSettingsCollapseItem';
+import { getScaleSelectionItem } from './items/ScaleSelectionCollapseItem';
+
 export const BUNDLE_KEY = 'Printout';
 
-const Content = styled('div')``;
-
-const RadioGroup = styled(Radio.Group)`
+export const RadioGroup = styled(Radio.Group)`
     display: flex;
     flex-direction: column;
 `;
+
+const Content = styled('div')``;
 
 const PreviewImage = styled('img')`
     margin: 8px;
@@ -39,43 +40,10 @@ const Actions = styled(ButtonContainer)`
 const getCollapseItems = (state, controller, scaleSelection, scaleOptions) => {
     const items = [];
     items.push(getSizeCollapseItem(1, state, controller));
-
-    const basicViewSettings = {
-        key: 2,
-        label: <PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />,
-        children: <AdditionalSettings state={state} controller={controller} />
-    };
-
-//    items.push(sizeOptions);
-    items.push(basicViewSettings);
+    items.push(getBasicViewCollapseItem(2, state, controller));
 
     if (scaleSelection) {
-        const scaleSelectionItem = {
-            key: 3,
-            label: <PanelHeader headerMsg='BasicView.scale.label' infoMsg='BasicView.scale.tooltip' />,
-            children: <RadioGroup value={state.scaleType}
-                onChange={(e) => controller.updateScaleType(e.target.value)}>
-                {SCALE_OPTIONS?.map(option => (
-                    <Radio.Choice value={option} key={option}>
-                        <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.scale.${option}`} />
-                    </Radio.Choice>
-                ))}
-                {state.scaleType === 'configured' && (
-                    <Select
-                        value={state.scale}
-                        onChange={(val) => controller.updateField('scale', val)}
-                    >
-                        {scaleOptions?.map(option => (
-                            <Option value={option} key={option}>
-                                {`1:${option}`}
-                            </Option>
-                        ))}
-                    </Select>
-                )}
-            </RadioGroup>
-        };
-
-        items.push(scaleSelectionItem);
+        items.push(getScaleSelectionItem(3, state, controller, scaleOptions));
     }
 
     const previewItem = {

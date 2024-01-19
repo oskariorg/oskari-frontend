@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Message, Radio, TextInput, Checkbox } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
-import { FORMAT_OPTIONS, COORDINATE_POSITIONS, COORDINATE_PROJECTIONS } from '../constants';
+import { FORMAT_OPTIONS, COORDINATE_POSITIONS, COORDINATE_PROJECTIONS } from '../../constants';
 
 const BUNDLE_KEY = 'Printout';
 

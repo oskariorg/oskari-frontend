@@ -3,13 +3,7 @@ import PropTypes from 'prop-types';
 import { SIZE_OPTIONS } from '../../constants';
 import { Message, Radio } from 'oskari-ui';
 import { PanelHeader } from './PanelHeader';
-import styled from 'styled-components';
-import { BUNDLE_KEY } from '../PrintoutPanel';
-
-const RadioGroup = styled(Radio.Group)`
-    display: flex;
-    flex-direction: column;
-`;
+import { BUNDLE_KEY, RadioGroup } from '../PrintoutPanel';
 
 const SizePanelContent = ({ state, controller }) => {
     return <RadioGroup
