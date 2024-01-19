@@ -8,6 +8,7 @@ import { PanelHeader } from './items/PanelHeader';
 import { getSizeCollapseItem } from './items/SizeCollapseItem';
 import { getBasicViewCollapseItem } from './items/BasicViewSettingsCollapseItem';
 import { getScaleSelectionItem } from './items/ScaleSelectionCollapseItem';
+import { getPreviewCollapseItem } from './items/PreviewCollapseItem';
 
 export const BUNDLE_KEY = 'Printout';
 
@@ -17,21 +18,6 @@ export const RadioGroup = styled(Radio.Group)`
 `;
 
 const Content = styled('div')``;
-
-const PreviewImage = styled('img')`
-    margin: 8px;
-    padding: 5px;
-    background-color: white;
-    border-bottom-color: #C0D0E0;
-    border-bottom-style: solid;
-    border-bottom-width: 1pt;
-    border-top-color: #C0D0E0;
-    border-top-style: solid;
-    border-top-width: 1pt;
-    box-shadow: 0 0 8px #D0D0D0;
-    height: ${props => props.landscape ? '140px' : '290px'};
-    width: 200px;
-`;
 
 const Actions = styled(ButtonContainer)`
     padding-right: 15px;
@@ -46,16 +32,7 @@ const getCollapseItems = (state, controller, scaleSelection, scaleOptions) => {
         items.push(getScaleSelectionItem(3, state, controller, scaleOptions));
     }
 
-    const previewItem = {
-        key: 4,
-        label: <PanelHeader headerMsg='BasicView.preview.label' />,
-        children: <>
-            <PreviewImage src={state.previewImage} landscape={state.previewImage && state.previewImage.includes('Landscape')} />
-            <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.preview.notes.extent' />
-        </>
-    };
-
-    items.push(previewItem);
+    items.push(getPreviewCollapseItem(4, state));
     return items;
 };
 
