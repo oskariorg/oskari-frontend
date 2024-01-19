@@ -1,23 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Controller } from 'oskari-ui/util';
-import { Collapse, CollapsePanel, Message, Radio, Select, Option } from 'oskari-ui';
+import { Controller, ThemeProvider } from 'oskari-ui/util';
+import { Collapse, Message, Radio, Select, Option } from 'oskari-ui';
 import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
-import { InfoIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { SIZE_OPTIONS, SCALE_OPTIONS } from '../constants';
+import { SCALE_OPTIONS } from '../constants';
 import { AdditionalSettings } from './AdditionalSettings';
-import { ThemeProvider } from 'oskari-ui/util';
-
-const BUNDLE_KEY = 'Printout';
+import { getSizeCollapseItem } from './items/SizeCollapseItem';
+import { PanelHeader } from './items/PanelHeader';
+export const BUNDLE_KEY = 'Printout';
 
 const Content = styled('div')``;
-
-const StyledPanelHeader = styled('div')`
-    display: inline-flex;
-    flex-direction: row;
-    font-weight: bold;
-`;
 
 const RadioGroup = styled(Radio.Group)`
     display: flex;
@@ -43,42 +36,17 @@ const Actions = styled(ButtonContainer)`
     padding-right: 15px;
 `;
 
-const PanelHeader = ({ headerMsg, infoMsg }) => {
-    return (
-        <StyledPanelHeader>
-            <Message bundleKey={BUNDLE_KEY} messageKey={headerMsg} />
-            {infoMsg && <InfoIcon title={<Message bundleKey={BUNDLE_KEY} messageKey={infoMsg} />} /> }
-        </StyledPanelHeader>
-    );
-};
-
-PanelHeader.propTypes = {
-    headerMsg: PropTypes.any,
-    infoMsg: PropTypes.any
-};
-
 const getCollapseItems = (state, controller, scaleSelection, scaleOptions) => {
     const items = [];
-    const sizeOptions = {
-        key: 1,
-        label: <PanelHeader headerMsg='BasicView.size.label' infoMsg='BasicView.size.tooltip' />,
-        children: <RadioGroup
-            value={state.size}
-            onChange={(e) => controller.updateField('size', e.target.value)}>
-            {SIZE_OPTIONS?.map(option => (
-                <Radio.Choice value={option.value} key={option.value}>
-                    <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.size.options.${option.value}`} />
-                </Radio.Choice>
-            ))}
-        </RadioGroup>
-    };
+    items.push(getSizeCollapseItem(1, state, controller));
+
     const basicViewSettings = {
         key: 2,
         label: <PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />,
         children: <AdditionalSettings state={state} controller={controller} />
     };
 
-    items.push(sizeOptions);
+//    items.push(sizeOptions);
     items.push(basicViewSettings);
 
     if (scaleSelection) {
