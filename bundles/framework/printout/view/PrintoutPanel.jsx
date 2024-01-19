@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Controller, ThemeProvider } from 'oskari-ui/util';
-import { Collapse, Message, Radio, Select, Option } from 'oskari-ui';
+import { Collapse, Radio } from 'oskari-ui';
 import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
-import { PanelHeader } from './items/PanelHeader';
 import { getSizeCollapseItem } from './items/SizeCollapseItem';
 import { getBasicViewCollapseItem } from './items/BasicViewSettingsCollapseItem';
 import { getScaleSelectionItem } from './items/ScaleSelectionCollapseItem';
