@@ -4,9 +4,8 @@ import { Message, Radio, TextInput, Checkbox } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { FORMAT_OPTIONS, COORDINATE_POSITIONS, COORDINATE_PROJECTIONS } from '../../constants';
-
-const BUNDLE_KEY = 'Printout';
-
+import { PanelHeader } from './PanelHeader';
+import { BUNDLE_KEY } from '../PrintoutPanel';
 const RadioGroup = styled(Radio.Group)`
     display: flex;
     flex-direction: column;
@@ -144,6 +143,14 @@ export const AdditionalSettings = ({ controller, state }) => {
             )}
         </Content>
     );
+};
+
+export const getAdditionalSettingsCollapseItem = (key, state, controller) => {
+    return {
+        key,
+        label: <PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />,
+        children: <AdditionalSettings state={state} controller={controller}/>
+    };
 };
 
 AdditionalSettings.propTypes = {

@@ -5,7 +5,7 @@ import { Collapse, Radio } from 'oskari-ui';
 import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { getSizeCollapseItem } from './items/SizeCollapseItem';
-import { getBasicViewCollapseItem } from './items/BasicViewSettingsCollapseItem';
+import { getAdditionalSettingsCollapseItem } from './items/AdditionalSettings';
 import { getScaleSelectionItem } from './items/ScaleSelectionCollapseItem';
 import { getPreviewCollapseItem } from './items/PreviewCollapseItem';
 
@@ -25,7 +25,7 @@ const Actions = styled(ButtonContainer)`
 const getCollapseItems = (state, controller, scaleSelection, scaleOptions) => {
     const items = [];
     items.push(getSizeCollapseItem(1, state, controller));
-    items.push(getBasicViewCollapseItem(2, state, controller));
+    items.push(getAdditionalSettingsCollapseItem(2, state, controller));
 
     if (scaleSelection) {
         items.push(getScaleSelectionItem(3, state, controller, scaleOptions));
