@@ -10,66 +10,6 @@ import { LAYER_GROUP_TOGGLE_LIMIT } from '../../../../constants';
 import styled from 'styled-components';
 import { InfoIcon } from 'oskari-ui/components/icons';
 
-/* ----- Group tools ------------- */
-const StyledCollapsePanelTools = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-`;
-
-// Memoed based on layerCount, allLayersOnMap and group.unfilteredLayerCount
-const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts = {}, controller}) => {
-    const toggleLayersOnMap = (addLayers) => {
-        if (addLayers) {
-            controller.addGroupLayersToMap(group);
-        } else {
-            controller.removeGroupLayersFromMap(group);
-        }
-    };
-    // the switch adds ALL the layers in the group to the map so it's misleading if we show it when some layers are not shown in the list
-    // TODO: show switch for filtered layers BUT only add the layers that match the filter when toggled
-    const filtered = typeof group.unfilteredLayerCount !== 'undefined' && layerCount !== group.unfilteredLayerCount;
-    const toggleLimitExceeded = opts[LAYER_GROUP_TOGGLE_LIMIT] > 0 && layerCount > opts[LAYER_GROUP_TOGGLE_LIMIT];
-    const showAllLayersToggle = opts[LAYER_GROUP_TOGGLE_LIMIT] !== 0 && !toggleLimitExceeded && !filtered;
-    return (
-        <StyledCollapsePanelTools>
-            {group.description && (
-                <InfoIcon
-                    space={false}
-                    title={group.description}
-                    size={20}
-                    style={{ marginRight: '5px', marginTop: '3px' }}
-                />
-            )}
-            <LayerCountBadge
-                layerCount={layerCount}
-                unfilteredLayerCount={group.unfilteredLayerCount} />
-            { showAllLayersToggle && <AllLayersSwitch
-                checked={allLayersOnMap}
-                layerCount={layerCount}
-                onToggle={toggleLayersOnMap} />
-            }
-            <GroupToolRow group={group} />
-        </StyledCollapsePanelTools>
-    );
-}, (prevProps, nextProps) => {
-    if (prevProps.group.name !== nextProps.group.name) {
-        return false;
-    }
-    if (prevProps.group.description !== nextProps.group.description) {
-        return false;
-    }
-    const propsToCheck = ['allLayersOnMap', 'layerCount'];
-    const changed = propsToCheck.some(prop => prevProps[prop] !== nextProps[prop]);
-    if (changed) {
-        return false;
-    }
-    const unfilteredTypeChange = typeof prevProps.group.unfilteredLayerCount !== typeof nextProps.group.unfilteredLayerCount;
-    const unfilteredCountChange = prevProps.group.unfilteredLayerCount !== nextProps.group.unfilteredLayerCount;
-    return !unfilteredTypeChange || !unfilteredCountChange;
-});
-/* ----- /Group tools ------------- */
-
 /* ----- Layer list ------ */
 // Without this wrapper used here the "even" prop would be passed to "ListItem" that would generate an error
 // After we update to styled-components version 5.1 we could use "transient" props instead:
@@ -115,42 +55,46 @@ const SubGroupList = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts,
         return null;
     }
 
-    return subgroups.map(group => {
-        return (
-            <StyledSubCollapse key={group.getId()}
+    const items = subgroups.map(group => {
+        const subItems = [{
+            key: group.getId(),
+            label: 'does_not_have_a_label_and_probably_shouldnt_be_a_collapse_anyway',
+            children: <LayerCollapsePanel
+                key={group.getId()}
+                group={group}
+                selectedLayerIds={selectedLayerIds}
+                openGroupTitles={openGroupTitles}
+                controller={controller}
+                opts={opts}
+                propsNeededForPanel={propsNeededForPanel}
+            />
+
+        }];
+        return {
+            key: group.getId(),
+            label: 'does_not_have_a_label_and_probably_shouldnt_be_a_collapse_anyway',
+            children: <StyledSubCollapse key={group.getId()}
                 activeKey={openGroupTitles}
-                onChange={keys => controller.updateOpenGroupTitles(keys)}>
-                <LayerCollapsePanel
-                    key={group.getId()}
-                    group={group}
-                    selectedLayerIds={selectedLayerIds}
-                    openGroupTitles={openGroupTitles}
-                    controller={controller}
-                    opts={opts}
-                    propsNeededForPanel={propsNeededForPanel}
-                />
-            </StyledSubCollapse>
-        );
+                onChange={keys => controller.updateOpenGroupTitles(keys)}
+                items={subItems}/>
+        }
     });
+
+    return (
+        <StyledSubCollapse key={'luffliff'}
+            activeKey={openGroupTitles}
+            onChange={keys => controller.updateOpenGroupTitles(keys)}
+            items={items}/>
+    );
 };
 /* ----- /Subgroup list ------ */
 
 /*  ----- Main component for LayerCollapsePanel ------ */
-// ant-collapse-content-box will have the layer list and subgroup layer list. 
+// ant-collapse-content-box will have the layer list and subgroup layer list.
 //  Without padding 0 the subgroups will be padded twice
-const StyledCollapsePanel = styled(CollapsePanel)`
-    > .ant-collapse-content > .ant-collapse-content-box {
-        padding: 0px;
-        & > .ant-list {
-            width: 100%;
-        }
-    }
+const StyledCollapsePanel = styled('div')`
     & > div:first-child {
         min-height: 22px;
-    }
-    & > .ant-collapse-header {
-        flex-direction: row;
-        flex-wrap: wrap !important;
     }
 `;
 
@@ -176,6 +120,9 @@ const LayerCollapsePanel = (props) => {
     const isPanelOpen = propsNeededForPanel.isActive;
     // after AntD version 4.9.0 we could disable panels without children:
     // const hasChildren = layerRows.length > 0 || group.getGroups().length > 0;
+    return <div>lorem_ipsum_placeholder_content</div>;
+
+    /*
     return (
         <ErrorBoundary hide={true} debug={{group, selectedLayerIds}}>
             <StyledCollapsePanel {...propsNeededForPanel}
@@ -207,6 +154,7 @@ const LayerCollapsePanel = (props) => {
             </StyledCollapsePanel>
         </ErrorBoundary>
     );
+    */
 };
 
 
