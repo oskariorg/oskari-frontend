@@ -79,9 +79,6 @@ Oskari.clazz.define(
             }
             if (active) {
                 this.updateSwipeLayer();
-                if (this.olLayers === null) {
-                    return;
-                }
                 this.showSplitter();
                 if (this.cropSize === null) {
                     this.resetMapCropping();
@@ -122,18 +119,19 @@ Oskari.clazz.define(
             }
             return '';
         },
-        updateSwipeLayer: function () {
+        updateSwipeLayer: function (forceDeactivate) {
             this.unregisterEventListeners();
             const topLayer = this.getTopmostLayer();
 
-            // no top layer === no layers -> deactivate tool
-            if (!topLayer) {
+            // no top layer & flag set === no layers & this is not a timing thing -> deactivate tool
+            if (forceDeactivate && !topLayer) {
                 this.setActive(false);
             }
             this.olLayers = topLayer?.ol || null;
             if (this?.olLayers === null) {
                 return;
             }
+
             if (topLayer.layerId !== null) {
                 this.setSwipeStatus(topLayer.layerId, this.cropSize);
             }
@@ -314,7 +312,7 @@ Oskari.clazz.define(
             },
             'AfterMapLayerRemoveEvent': function (event) {
                 if (this.isActive()) {
-                    this.updateSwipeLayer();
+                    this.updateSwipeLayer(true);
                 }
             },
             'AfterRearrangeSelectedMapLayerEvent': function (event) {
@@ -324,7 +322,7 @@ Oskari.clazz.define(
             },
             'MapLayerVisibilityChangedEvent': function (event) {
                 if (this.isActive()) {
-                    this.updateSwipeLayer();
+                    this.updateSwipeLayer(true);
                 }
             },
             'MapSizeChangedEvent': function (event) {
