@@ -15,34 +15,46 @@ const StyledCollapse = styled(Collapse)`
         }
     }
 
-    > .ant-collapse-content > .ant-collapse-content-box {
+    .ant-collapse-content > .ant-collapse-content-box {
         padding: 0px;
         & > .ant-list {
             width: 100%;
         }
     }
-    & > div:first-child {
-        min-height: 22px;
-    }
-    & > .ant-collapse-header {
+
+    .ant-collapse-header {
         flex-direction: row;
         flex-wrap: wrap !important;
     }
 `;
+
+const getLayerRowModels = (layers = [], selectedLayerIds = [], controller, opts) => {
+    return layers.map(oskariLayer => {
+        return {
+            id: oskariLayer.getId(),
+            model: oskariLayer,
+            selected: selectedLayerIds.includes(oskariLayer.getId()),
+            controller,
+            opts
+        };
+    });
+};
 
 const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, opts, controller }) => {
     if (!Array.isArray(groups) || groups.length === 0) {
         return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
     }
 
+    // TODO: openGroupTitles we should probably check and do something with the info
+
     const groupItems = groups.map(group => {
-        const allLayersOnMap = true;
+        const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
+        // set group switch active if all layers in group are selected
+        const allLayersOnMap = layerRows.length > 0 && layerRows.every(layer => selectedLayerIds.includes(layer.id));
         return {
             key: group.getId(),
             label: group.getTitle(),
             className: `t_group gid_${group.getId()}`,
-            // data-attr doesn't seem to work for the panel in AntD-version 4.8.5
-//            data-gid={group.getId()}
             extra: <PanelToolContainer
                 group={group}
                 opts={opts}
@@ -54,10 +66,10 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, opts, contro
                 selectedLayerIds={selectedLayerIds}
                 group={group}
                 openGroupTitles={openGroupTitles}
+                layerRows={layerRows}
                 opts={opts}
                 controller={controller}
             />
-
         };
     });
 

@@ -98,30 +98,25 @@ const StyledCollapsePanel = styled('div')`
     }
 `;
 
-const getLayerRowModels = (layers = [], selectedLayerIds = [], controller, opts) => {
-    return layers.map(oskariLayer => {
-        return {
-            id: oskariLayer.getId(),
-            model: oskariLayer,
-            selected: selectedLayerIds.includes(oskariLayer.getId()),
-            controller,
-            opts
-        };
-    });
-};
-
 const LayerCollapsePanel = (props) => {
-    const { group, selectedLayerIds, openGroupTitles, opts, controller, ...propsNeededForPanel } = props;
-    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
-    // set group switch active if all layers in group are selected
-    const allLayersOnMap = layerRows.length > 0 && layerRows.every(layer => selectedLayerIds.includes(layer.id));
+    const { group, selectedLayerIds, layerRows, openGroupTitles, opts, controller, ...propsNeededForPanel } = props;
+    // const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
     // Note! Not rendering layerlist/subgroups when the panel is closed is a trade-off for performance
     //   between render as whole vs render when the panel is opened.
-    const isPanelOpen = propsNeededForPanel.isActive;
+    const isPanelOpen = true; // propsNeededForPanel.isActive;
     // after AntD version 4.9.0 we could disable panels without children:
     // const hasChildren = layerRows.length > 0 || group.getGroups().length > 0;
-    return <div>lorem_ipsum_placeholder_content</div>;
 
+    // return <><div>lorem_ipsum_placeholder_content </div>{group.getGroups()?.length}</>;
+
+    return (
+        <ErrorBoundary hide={true} debug={{ group, selectedLayerIds }}>
+            { isPanelOpen && <StyledCollapsePanel>
+                <LayerList layers={layerRows} />
+            </StyledCollapsePanel>
+            }
+        </ErrorBoundary>
+    );
     /*
     return (
         <ErrorBoundary hide={true} debug={{group, selectedLayerIds}}>
@@ -157,13 +152,13 @@ const LayerCollapsePanel = (props) => {
     */
 };
 
-
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,
     selectedLayerIds: PropTypes.array.isRequired,
     openGroupTitles: PropTypes.array.isRequired,
     opts: PropTypes.object,
-    controller: PropTypes.instanceOf(Controller).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired,
+    layerRows: PropTypes.array
 };
 /*
 const comparisonFn = (prevProps, nextProps) => {
