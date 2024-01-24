@@ -104,7 +104,7 @@ const ParsedCollapse = ({ json = {}, jsonKey, controller }) => {
     };
     return (
         <Collapse>
-            <CollapsePanel header={<Message messageKey={`jsonFields.${jsonKey}`}/>}
+            <CollapsePanel header={<Message messageKey={`jsonTab.fields.${jsonKey}`}/>}
                 extra={<PanelExtra setEdit={setEdit} skipEdit={!controller} />}>
                 { edit && <EditBlock edit={edit} onUpdate={onUpdate}/> }
                 <TextAreaInput value={prettier} autoSize={textAreaSize} />
