@@ -212,15 +212,15 @@ Oskari.registerLocalization(
                     }
                 },
                 "hover": {
-                    "title": "Objektsmarkering och verktygstips",
-                    "tooltip": "Verktygstipsrader visas för objekt",
+                    "title": "Framhävning av objekt och verktygstips",
+                    "tooltip": "Verktygstipsrader, som visas för objekt",
                     "useStyle": "Använd stildefinitioner",
                     "inherit": "Ärv stildefinitioner",
                     "effect": "Använd effekten",
-                    "fromProperty": "Använd egenskap som etikett",
+                    "fromProperty": "Använd egenskapen som etikett",
                     "labelTooltip": {
-                        "key": "Etiketten visas som den är",
-                        "keyProperty": "Etikettinnehåll tas emot från egenskap"
+                        "key": "Etiketten visas i sin ursprungliga form",
+                        "keyProperty": "Etikettinnehållet tas från den valda egenskapen"
                     }
                 }
             },
