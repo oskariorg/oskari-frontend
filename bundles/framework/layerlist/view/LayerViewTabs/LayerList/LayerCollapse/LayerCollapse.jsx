@@ -45,16 +45,16 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, opts, contro
         return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
     }
 
-    // TODO: openGroupTitles we should probably check and do something with the info
-
     const groupItems = groups.map(group => {
         const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
         // set group switch active if all layers in group are selected
         const allLayersOnMap = layerRows.length > 0 && layerRows.every(layer => selectedLayerIds.includes(layer.id));
+        const hasChildren = layerRows.length > 0 || group.getGroups().length > 0;
         return {
             key: group.getId(),
             label: group.getTitle(),
             className: `t_group gid_${group.getId()}`,
+            collapsible: hasChildren ? 'header' : 'disabled',
             extra: <PanelToolContainer
                 group={group}
                 opts={opts}
@@ -75,7 +75,8 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, opts, contro
 
     return (
         <StyledCollapse
-            bordered activeKey={openGroupTitles}
+            bordered
+            activeKey={openGroupTitles}
             onChange={keys => controller.updateOpenGroupTitles(keys)}
             items={groupItems}
         />
