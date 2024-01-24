@@ -210,6 +210,18 @@ Oskari.registerLocalization(
                         "json": "Stildefinitioner JSON-syntaxen är ogiltig.",
                         "optionalStyles": "Stilen har inte ett giltigt filter."
                     }
+                },
+                "hover": {
+                    "title": "Objektsmarkering och verktygstips",
+                    "tooltip": "Verktygstipsrader visas för objekt",
+                    "useStyle": "Använd stildefinitioner",
+                    "inherit": "Ärv stildefinitioner",
+                    "effect": "Använd effekten",
+                    "fromProperty": "Använd egenskap som etikett",
+                    "labelTooltip": {
+                        "key": "Etiketten visas som den är",
+                        "keyProperty": "Etikettinnehåll tas emot från egenskap"
+                    }
                 }
             },
             "layerStatus": {
