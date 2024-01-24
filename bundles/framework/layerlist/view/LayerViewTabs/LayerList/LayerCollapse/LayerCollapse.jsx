@@ -28,7 +28,7 @@ const StyledCollapse = styled(Collapse)`
     }
 `;
 
-const getLayerRowModels = (layers = [], selectedLayerIds = [], controller, opts) => {
+export const getLayerRowModels = (layers = [], selectedLayerIds = [], controller, opts) => {
     return layers.map(oskariLayer => {
         return {
             id: oskariLayer.getId(),

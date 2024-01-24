@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse, CollapsePanel, List, ListItem } from 'oskari-ui';
+import { List, ListItem } from 'oskari-ui';
 import { Controller, ErrorBoundary } from 'oskari-ui/util';
 import { Layer } from './Layer/';
-import { LayerCountBadge } from './LayerCountBadge';
-import { AllLayersSwitch } from './AllLayersSwitch';
-import { GroupToolRow } from './GroupToolRow';
-import { LAYER_GROUP_TOGGLE_LIMIT } from '../../../../constants';
+import { SubGroupList } from './SubGroupList';
 import styled from 'styled-components';
-import { InfoIcon } from 'oskari-ui/components/icons';
 
 /* ----- Layer list ------ */
 // Without this wrapper used here the "even" prop would be passed to "ListItem" that would generate an error
@@ -29,7 +25,7 @@ const renderLayer = (itemProps, index) => {
 };
 
 const LayerList = ({ layers }) => {
-    if (!layers.length) {
+    if (!layers?.length) {
         // no layers
         // return <div>No data</div>;
         return null;
@@ -43,51 +39,6 @@ LayerList.propTypes = {
 };
 /* ----- /Layer list ------ */
 
-/* ----- Subgroup list ------ */
-const StyledSubCollapse = styled(Collapse)`
-    border: none;
-    border-top: 1px solid #d9d9d9;
-    padding-left: 15px !important;
-`;
-const SubGroupList = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts, controller, propsNeededForPanel }) => {
-    if (!subgroups.length) {
-        // no subgroups
-        return null;
-    }
-
-    const items = subgroups.map(group => {
-        const subItems = [{
-            key: group.getId(),
-            label: 'does_not_have_a_label_and_probably_shouldnt_be_a_collapse_anyway',
-            children: <LayerCollapsePanel
-                key={group.getId()}
-                group={group}
-                selectedLayerIds={selectedLayerIds}
-                openGroupTitles={openGroupTitles}
-                controller={controller}
-                opts={opts}
-                propsNeededForPanel={propsNeededForPanel}
-            />
-
-        }];
-        return {
-            key: group.getId(),
-            label: 'does_not_have_a_label_and_probably_shouldnt_be_a_collapse_anyway',
-            children: <StyledSubCollapse key={group.getId()}
-                activeKey={openGroupTitles}
-                onChange={keys => controller.updateOpenGroupTitles(keys)}
-                items={subItems}/>
-        }
-    });
-
-    return (
-        <StyledSubCollapse key={'luffliff'}
-            activeKey={openGroupTitles}
-            onChange={keys => controller.updateOpenGroupTitles(keys)}
-            items={items}/>
-    );
-};
-/* ----- /Subgroup list ------ */
 
 /*  ----- Main component for LayerCollapsePanel ------ */
 // ant-collapse-content-box will have the layer list and subgroup layer list.
@@ -109,9 +60,19 @@ const LayerCollapsePanel = (props) => {
 
     // return <><div>lorem_ipsum_placeholder_content </div>{group.getGroups()?.length}</>;
 
+    if (!layerRows) {
+        console.log('pööp');
+    }
     return (
         <ErrorBoundary hide={true} debug={{ group, selectedLayerIds }}>
             { isPanelOpen && <StyledCollapsePanel>
+                <SubGroupList
+                    subgroups={group.getGroups()}
+                    selectedLayerIds={selectedLayerIds}
+                    opts={opts}
+                    openGroupTitles={openGroupTitles}
+                    controller={controller}
+                    { ...propsNeededForPanel } />
                 <LayerList layers={layerRows} />
             </StyledCollapsePanel>
             }
