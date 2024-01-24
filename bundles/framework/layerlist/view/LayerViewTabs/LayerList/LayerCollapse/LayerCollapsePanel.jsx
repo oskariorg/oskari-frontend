@@ -53,11 +53,15 @@ const LayerCollapsePanel = (props) => {
     // const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
     // Note! Not rendering layerlist/subgroups when the panel is closed is a trade-off for performance
     //   between render as whole vs render when the panel is opened.
-    const isPanelOpen = true; // propsNeededForPanel.isActive;
+
+    // After upgrade to antd 5.x this has become obsolete but keeping this line here commented,
+    // as a reminder to know where to start looking if there are performance issues.
+    //
+    // const isPanelOpen = propsNeededForPanel.isActive;
 
     return (
         <ErrorBoundary hide={true} debug={{ group, selectedLayerIds }}>
-            { isPanelOpen && <StyledCollapsePanel>
+            <StyledCollapsePanel>
                 <SubGroupList
                     subgroups={group.getGroups()}
                     selectedLayerIds={selectedLayerIds}
@@ -67,7 +71,6 @@ const LayerCollapsePanel = (props) => {
                     { ...propsNeededForPanel } />
                 <LayerList layers={layerRows} />
             </StyledCollapsePanel>
-            }
         </ErrorBoundary>
     );
 };
