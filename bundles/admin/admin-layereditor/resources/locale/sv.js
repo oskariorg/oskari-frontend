@@ -98,7 +98,13 @@ Oskari.registerLocalization(
                 "overridden": "Filtagg för metadatans"
             },
             "jsonTab": {
-                "info": "Dessa verktyg möjliggör avancerad konfiguration, använd med försiktighet."
+                "info": "Dessa verktyg möjliggör avancerad konfiguration, använd med försiktighet.",
+                "fields": {
+                    "attributes": "Attribut",
+                    "capabilities": "Utvald information från kartlagrets capabilities",
+                    "options": "Alternativen (options)",
+                    "params": "Parametrar"
+                }
             },
             "capabilities": {
                 "parsed": "Utvald information från kartlagrets capabilities",
