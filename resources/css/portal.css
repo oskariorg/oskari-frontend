@@ -532,3 +532,7 @@ This seems to only happen on the Firefox browser
 .ant-dropdown {
   z-index: 30050 !important;
 }
+
+.ant-popover {
+  z-index: 30030 !important;
+}
