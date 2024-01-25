@@ -523,7 +523,12 @@ This seems to only happen on the Firefox browser
 
 /*
   Fixes antd v5 dropdown menus opening under flyouts
+  z-index values copied from the old .less implementation
 */
 .ant-select-dropdown {
-  z-index: 99998 !important;
+  z-index: 30050 !important;
+}
+
+.ant-dropdown {
+  z-index: 30050 !important;
 }
