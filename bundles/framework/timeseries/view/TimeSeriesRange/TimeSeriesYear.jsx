@@ -1,5 +1,5 @@
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
-import { Button } from 'oskari-ui';
+import { Button, Select, Option } from 'oskari-ui';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Col, ColFixed, Row } from './styled';
@@ -23,6 +23,38 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
             break;
         }
     }
+
+    if (isMobile) {
+        const options = dataYears.map((item) => {
+            return <Option key={item}>{item}</Option>;
+        });
+        return <Row>
+            <Col>
+                <Button
+                    type="primary"
+                    shape="circle"
+                    disabled={prevDataYear === null}
+                    onClick={() => onChange(prevDataYear)}
+                >
+                    <StepBackwardOutlined />
+                </Button>
+            </Col>
+            <Col>
+                <Select value={value} onChange={(value) => onChange(value)}>{options}</Select>
+            </Col>
+            <Col>
+                <Button
+                    type="primary"
+                    shape="circle"
+                    disabled={nextDataYear === null}
+                    onClick={() => onChange(nextDataYear)}
+                >
+                    <StepForwardOutlined />
+                </Button>
+            </Col>
+        </Row>;
+    }
+
     return (
         <Row>
             <Col>
