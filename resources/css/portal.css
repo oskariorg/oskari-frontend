@@ -540,3 +540,7 @@ This seems to only happen on the Firefox browser
 .ant-picker-dropdown {
   z-index: 30050 !important;
 }
+
+.ant-message, .ant-notification {
+  z-index: 30010 !important;
+}
