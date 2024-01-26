@@ -5,18 +5,6 @@ import React from 'react';
 import { Col, ColFixed, Row } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
 
-const optionCompareFunction = (a, b) => {
-    if (a.key < b.key) {
-        return -1;
-    }
-
-    if (a.key > b.key) {
-        return 1;
-    }
-
-    return 0;
-};
-
 export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobile }) => {
     const currentYearIntValue = parseInt(value);
     // when current value is after last data layer
