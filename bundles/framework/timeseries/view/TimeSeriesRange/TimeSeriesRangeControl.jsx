@@ -5,8 +5,10 @@ import { Background } from './styled';
 import { TimeSeriesHeader } from './TimeSeriesHeader';
 import { TimeSeriesRange } from './TimeSeriesRange';
 import { TimeSeriesYear } from './TimeSeriesYear';
+import { ThemeConsumer } from 'oskari-ui/util';
 
-export const TimeSeriesRangeControl = ({
+export const TimeSeriesRangeControl = ThemeConsumer(({
+    theme,
     controller,
     title,
     start,
@@ -28,6 +30,7 @@ export const TimeSeriesRangeControl = ({
     return (
         <Background isMobile={isMobile}>
             <TimeSeriesHeader
+                theme={theme}
                 toggleMode={() => toggleMode()}
                 title={title}
                 mode={mode}
@@ -57,7 +60,7 @@ export const TimeSeriesRangeControl = ({
             )}
         </Background>
     );
-};
+});
 
 TimeSeriesRangeControl.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired,

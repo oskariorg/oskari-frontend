@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { TimeSeriesRangeControl } from './TimeSeriesRange/TimeSeriesRangeControl';
 import { TimeSeriesRangeControlHandler } from './TimeSeriesRange/TimeSeriesRangeControlHandler';
 
@@ -73,11 +73,13 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         }
         ReactDOM.render(
             <LocaleProvider value={{ bundleKey: 'timeseries' }}>
-                <TimeSeriesRangeControl
-                    {...this.stateHandler.getState()}
-                    controller={this.stateHandler.getController()}
-                    isMobile={this._isMobile}
-                />
+                <ThemeProvider>
+                    <TimeSeriesRangeControl
+                        {...this.stateHandler.getState()}
+                        controller={this.stateHandler.getController()}
+                        isMobile={this._isMobile}
+                    />
+                </ThemeProvider>
             </LocaleProvider>,
             mountElement
         );

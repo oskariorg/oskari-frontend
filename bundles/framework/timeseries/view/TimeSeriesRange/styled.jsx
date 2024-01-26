@@ -19,7 +19,7 @@ export const Header = styled.h3`
     cursor: move;
     display: flex;
     align-items: center;
-    color: #ffffff;
+    color: ${props => props?.theme ? props?.theme?.color?.accent : '#ffffff'};
     .header-mid-spacer {
         flex: 1;
     }
