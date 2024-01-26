@@ -5,6 +5,18 @@ import React from 'react';
 import { Col, ColFixed, Row } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
 
+const optionCompareFunction = (a, b) => {
+    if (a.key < b.key) {
+        return -1;
+    }
+
+    if (a.key > b.key) {
+        return 1;
+    }
+
+    return 0;
+};
+
 export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobile }) => {
     // when current value is after last data layer
     let prevDataYear = dataYears[dataYears.length - 1] || null;
@@ -25,9 +37,14 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
     }
 
     if (isMobile) {
-        const options = dataYears.map((item) => {
+        let options = [];
+        if (!dataYears?.includes(parseInt(value))) {
+            options.push(<Option key={parseInt(value)} disabled>{value}</Option>);
+        }
+        options = options.concat(dataYears.map((item) => {
             return <Option key={item}>{item}</Option>;
-        });
+        })).sort(optionCompareFunction);
+
         return <Row>
             <Col>
                 <Button
