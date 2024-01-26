@@ -18,6 +18,7 @@ const optionCompareFunction = (a, b) => {
 };
 
 export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobile }) => {
+    const currentYearIntValue = parseInt(value);
     // when current value is after last data layer
     let prevDataYear = dataYears[dataYears.length - 1] || null;
     let nextDataYear = null;
@@ -37,13 +38,20 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
     }
 
     if (isMobile) {
-        let options = [];
-        if (!dataYears?.includes(parseInt(value))) {
-            options.push(<Option key={parseInt(value)} disabled>{value}</Option>);
+        const currentYearDisabled = !dataYears?.includes(currentYearIntValue);
+        // need to clone this, otherwise the "current year" will remain even if we switch to a valid year without panning the map
+        const newDataYears = [].concat(dataYears);
+        if (currentYearDisabled) {
+            newDataYears.push(currentYearIntValue);
         }
-        options = options.concat(dataYears.map((item) => {
-            return <Option key={item}>{item}</Option>;
-        })).sort(optionCompareFunction);
+
+        const options = newDataYears
+            .sort()
+            .map((item) => {
+                return item === currentYearIntValue && currentYearDisabled
+                    ? <Option key={item} disabled>{item}</Option>
+                    : <Option key={item}>{item}</Option>;
+            });
 
         return <Row>
             <Col>
@@ -57,7 +65,7 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
                 </Button>
             </Col>
             <Col>
-                <Select value={value} onChange={(value) => onChange(value)}>{options}</Select>
+                <Select value={currentYearIntValue} onChange={(value) => onChange(parseInt(value))}>{options}</Select>
             </Col>
             <Col>
                 <Button
@@ -92,7 +100,7 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
                     start={start}
                     end={end}
                     dataYears={dataYears}
-                    value={value}
+                    value={currentYearIntValue}
                     onChange={(val) => onChange(val)}
                 />
             </ColFixed>
