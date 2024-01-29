@@ -127,20 +127,39 @@ div.popupHeader {
     margin: 0px;
     @include border-radius(6px 6px 0px 0px);
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 390px;
+    float: left;
+    height: auto;
+  
+    div.popupHeaderTitle {
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 390px;
     float: left;
     height: 40px;
+    padding-left: 15px;
+
 
     div {
         vertical-align: top;
-        padding-left: 15px;
         padding-right: 0;
         padding-top: 10px;
         word-break: break-word;
     }
-
+  }
+    div.coordinateWrapper {
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 390px;
+      float: left;
+      padding-left: 15px;
+      padding-bottom: 5px;
+  }
 }
 
 div.popupContent {

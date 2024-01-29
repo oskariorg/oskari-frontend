@@ -573,7 +573,8 @@ Oskari.clazz.define(
             var options = {
                 hidePrevious: params.hidePrevious === undefined ? true : params.hidePrevious,
                 colourScheme: params.colourScheme,
-                font: params.font
+                font: params.font,
+                showCoordinates: this._config.showCoordinates
             };
             if (reqBuilder) {
                 var request = reqBuilder(

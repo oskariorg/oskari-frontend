@@ -57,6 +57,7 @@ Oskari.clazz.define(
             // templates
             me._arrow = jQuery('<div class="popupHeaderArrow"></div>');
             me._header = jQuery('<div></div>');
+            me._popupHeaderTitle = jQuery('<div class="popupHeaderTitle"></div>');
             me._headerWrapper = jQuery('<div class="popupHeader"></div>');
             // FIXME move styles to css
             me._headerCloseButton = jQuery(
@@ -164,7 +165,7 @@ Oskari.clazz.define(
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
                 sanitizedTitle = Oskari.util.sanitize(title),
-                popupContentHtml = me._renderPopupContent(id, sanitizedTitle, contentDiv, additionalTools),
+                popupContentHtml = me._renderPopupContent(id, sanitizedTitle, contentDiv, additionalTools,lonlat, options.showCoordinates),
                 popupElement = me._popupWrapper.clone(),
                 lonlatArray = [lonlat.lon, lonlat.lat],
                 colourScheme = options.colourScheme,
@@ -330,6 +331,15 @@ Oskari.clazz.define(
             popup.dialog.addClass('mobile-infobox');
         },
 
+        _formatNumber: function (coordinate, decimalSeparator) {
+            if (typeof coordinate !== 'string') {
+                coordinate = coordinate + '';
+            }
+            coordinate = coordinate.replace('.', decimalSeparator);
+            coordinate = coordinate.replace(',', decimalSeparator);
+            return coordinate;
+        },
+
         /**
          * Wraps the content into popup and returns the html string.
          *
@@ -340,18 +350,19 @@ Oskari.clazz.define(
          * @param  {jQuery} contentDiv
          * @return {String}
          */
-        _renderPopupContent: function (id, title, contentDiv, additionalTools) {
+        _renderPopupContent: function (id, title, contentDiv, additionalTools, lonlat, showCoordinates) {
             var me = this,
                 arrow = this._arrow.clone(),
                 header = this._header.clone(),
+                popupHeaderTitle = this._popupHeaderTitle.clone(),
                 headerWrapper = this._headerWrapper.clone(),
                 closeButton = this._headerCloseButton.clone(),
                 resultHtml;
 
             closeButton.attr('id', 'oskari_' + id + '_headerCloseButton');
             header.append(title);
-            headerWrapper.append(header);
-            headerWrapper.append(closeButton);
+            popupHeaderTitle.append(header);
+            popupHeaderTitle.append(closeButton);
 
             // add additional btns
             jQuery.each(additionalTools, function (index, key) {
@@ -361,8 +372,54 @@ Oskari.clazz.define(
                     'class': key.iconCls,
                     'style': key.styles
                 });
-                headerWrapper.append(additionalButton);
+                popupHeaderTitle.append(additionalButton);
             });
+
+            headerWrapper.append(popupHeaderTitle);
+
+            // do we show coordinates?
+            if (showCoordinates) {
+                let mapModule = this.getMapModule();
+                let loc = Oskari.getLocalization('coordinatetool');
+
+                let crs = mapModule.getProjection();
+
+                let coordinateWrapper = jQuery('<div class="coordinateWrapper"></div>');
+
+                let lat = parseFloat(lonlat?.lat);
+                let lon = parseFloat(lonlat?.lon);
+
+                let lonlatString = '';
+
+                // Need to show degrees ?
+                if (mapModule.getProjectionUnits() === 'degrees' && !isNaN(lat) && !isNaN(lon)) {
+                    // Hard code restrict to 6 decimals
+                    const degreePoint = Oskari.util.coordinateMetricToDegrees([lon, lat], 6);
+                    lon = degreePoint[0];
+                    lat = degreePoint[1];
+                    lonlatString = loc.display.compass.lat + ': ' + lat + ' ' + loc.display.compass.lon + ': ' + lon;
+                }
+                // Otherwise show meter units
+                else if (!isNaN(lat) && !isNaN(lon)) {
+                    lat = lat.toFixed();
+                    lon = lon.toFixed();
+                    lat = me._formatNumber(lat, this.decimalSeparator);
+                    lon = me._formatNumber(lon, this.decimalSeparator);
+                    lonlatString = loc.display.compass.n + ': ' + lat + ' ' + loc.display.compass.e + ': ' + lon;
+                }
+
+                let srsDiv = jQuery('<div></div>');
+                let lonlatDiv = jQuery('<div></div>');
+
+                let crsText = loc.display.crs[crs] || crs;
+
+                srsDiv.append(crsText);
+                lonlatDiv.append(lonlatString);
+
+                coordinateWrapper.append(srsDiv);
+                coordinateWrapper.append(lonlatString);
+                headerWrapper.append(coordinateWrapper);
+            }
 
             resultHtml = arrow.outerHTML() +
                 headerWrapper.outerHTML() +
