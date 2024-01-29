@@ -377,7 +377,7 @@ Oskari.clazz.define(
 
             headerWrapper.append(popupHeaderTitle);
 
-            // render coordinates to gfi header 
+            // render coordinates to gfi header
             if (showCoordinates) {
                 let mapModule = this.getMapModule();
                 let loc = Oskari.getLocalization('coordinatetool');
