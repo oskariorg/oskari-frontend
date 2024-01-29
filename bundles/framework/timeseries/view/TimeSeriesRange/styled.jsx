@@ -58,14 +58,15 @@ export const Col = styled.div`
     position: relative;
 
     button {
-        background-color: ${primaryColor};
-        border-color: ${primaryColor};
+        background-color: ${props => props?.theme ? props?.theme?.color?.icon : primaryColor};
+        border-color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.text : primaryColor};
 
         &:hover,
         &:focus,
         &:active {
-            background-color: ${primaryColor};
-            border-color: ${primaryColor};
+            background-color: ${props => props?.theme ? props?.theme?.color?.icon : primaryColor};
+            border-color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.accent : primaryColor};
+            color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.accent : primaryColor};
         }
     }
 `;

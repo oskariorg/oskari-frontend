@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Col, ColFixed, Row } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
-
-export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobile }) => {
+import { ThemeConsumer } from 'oskari-ui/util';
+export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, dataYears, isMobile, theme }) => {
     const currentYearIntValue = parseInt(value);
     // when current value is after last data layer
     let prevDataYear = dataYears[dataYears.length - 1] || null;
@@ -55,7 +55,7 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
             <Col>
                 <Select value={currentYearIntValue} onChange={(value) => onChange(parseInt(value))}>{options}</Select>
             </Col>
-            <Col>
+            <Col theme={theme}>
                 <Button
                     type="primary"
                     shape="circle"
@@ -70,7 +70,7 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
 
     return (
         <Row>
-            <Col>
+            <Col theme={theme}>
                 <Button
                     type="primary"
                     shape="circle"
@@ -92,7 +92,7 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
                     onChange={(val) => onChange(val)}
                 />
             </ColFixed>
-            <Col>
+            <Col theme={theme}>
                 <Button
                     type="primary"
                     shape="circle"
@@ -104,7 +104,7 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
             </Col>
         </Row>
     );
-};
+});
 
 TimeSeriesYear.propTypes = {
     onChange: PropTypes.func.isRequired,
