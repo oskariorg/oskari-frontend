@@ -165,7 +165,7 @@ Oskari.clazz.define(
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
                 sanitizedTitle = Oskari.util.sanitize(title),
-                popupContentHtml = me._renderPopupContent(id, sanitizedTitle, contentDiv, additionalTools,lonlat, options.showCoordinates),
+                popupContentHtml = me._renderPopupContent(id, sanitizedTitle, contentDiv, additionalTools, lonlat, options.showCoordinates),
                 popupElement = me._popupWrapper.clone(),
                 lonlatArray = [lonlat.lon, lonlat.lat],
                 colourScheme = options.colourScheme,
@@ -377,11 +377,10 @@ Oskari.clazz.define(
 
             headerWrapper.append(popupHeaderTitle);
 
-            // do we show coordinates?
+            // render coordinates to gfi header 
             if (showCoordinates) {
                 let mapModule = this.getMapModule();
                 let loc = Oskari.getLocalization('coordinatetool');
-
                 let crs = mapModule.getProjection();
 
                 let coordinateWrapper = jQuery('<div class="coordinateWrapper"></div>');
@@ -408,15 +407,9 @@ Oskari.clazz.define(
                     lonlatString = loc.display.compass.n + ': ' + lat + ' ' + loc.display.compass.e + ': ' + lon;
                 }
 
-                let srsDiv = jQuery('<div></div>');
-                let lonlatDiv = jQuery('<div></div>');
-
                 let crsText = loc.display.crs[crs] || crs;
-
-                srsDiv.append(crsText);
-                lonlatDiv.append(lonlatString);
-
-                coordinateWrapper.append(srsDiv);
+                let crsDiv = jQuery('<div>' + crsText + '</div>');
+                coordinateWrapper.append(crsDiv);
                 coordinateWrapper.append(lonlatString);
                 headerWrapper.append(coordinateWrapper);
             }
