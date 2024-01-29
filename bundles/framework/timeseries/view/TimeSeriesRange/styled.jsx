@@ -19,7 +19,7 @@ export const Header = styled.h3`
     cursor: move;
     display: flex;
     align-items: center;
-    color: ${props => props?.theme ? props?.theme?.color?.accent : '#ffffff'};
+    color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.text : '#ffffff'};
     .header-mid-spacer {
         flex: 1;
     }
@@ -27,12 +27,12 @@ export const Header = styled.h3`
 
 export const IconButton = styled(Button)`
     padding: 10px;
-    color: ${primaryColor};
+    color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.text : primaryColor};
 
     &:hover,
     &:focus,
     &:active {
-        color: ${primaryColor};
+        color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.accent : primaryColor};
     }
 
     .anticon {

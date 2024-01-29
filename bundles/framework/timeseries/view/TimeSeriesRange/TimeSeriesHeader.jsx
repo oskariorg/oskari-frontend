@@ -52,12 +52,12 @@ export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = f
             {getHeaderContent(title, loading, error, value)}
             <div className="header-mid-spacer"></div>
             <Tooltip title={getTooltipContent(mode, modeIcon)}>
-                <IconButton type="text" size="large">
+                <IconButton type="text" size="large" theme={theme}>
                     <QuestionCircleOutlined />
                 </IconButton>
             </Tooltip>
             <Tooltip title={switchButtonMessage}>
-                <IconButton type="text" size="large" onClick={() => toggleMode()}>
+                <IconButton type="text" size="large" onClick={() => toggleMode()} theme={theme}>
                     {modeIcon}
                 </IconButton>
             </Tooltip>
