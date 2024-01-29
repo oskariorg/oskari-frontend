@@ -402,16 +402,21 @@ Oskari.clazz.define(
                 else if (!isNaN(lat) && !isNaN(lon)) {
                     lat = lat.toFixed();
                     lon = lon.toFixed();
-                    lat = me._formatNumber(lat, this.decimalSeparator);
-                    lon = me._formatNumber(lon, this.decimalSeparator);
+                    lat = me._formatNumber(lat, me.decimalSeparator);
+                    lon = me._formatNumber(lon, me.decimalSeparator);
                     lonlatString = loc.display.compass.n + ': ' + lat + ' ' + loc.display.compass.e + ': ' + lon;
                 }
 
                 let crsText = loc.display.crs[crs] || crs;
-                let crsDiv = jQuery('<div>' + crsText + '</div>');
-                coordinateWrapper.append(crsDiv);
-                coordinateWrapper.append(lonlatString);
-                headerWrapper.append(coordinateWrapper);
+                let crsDiv = crsText.length > 0 ? jQuery('<div>' + crsText + '</div>') : null;
+
+                if (crsDiv && lonlatString.length > 0) {
+                    coordinateWrapper.append(crsDiv);
+                    coordinateWrapper.append(lonlatString);
+                    headerWrapper.append(coordinateWrapper);
+                } else {
+                    me.log.warn('Error creating coordinate info for GFI popup.');
+                }
             }
 
             resultHtml = arrow.outerHTML() +
