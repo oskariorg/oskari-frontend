@@ -7,7 +7,7 @@ document.head.appendChild(GLOBAL_STYLE);
 
 export const setGlobalStyle = (theme = {}) => {
     // default to dark gray
-    const navColor = theme.navigation?.color?.primary || DEFAULT_COLORS.NAV_BG;
+    const navColor = theme.navigation?.color?.bg || theme.navigation?.color?.primary || DEFAULT_COLORS.NAV_BG;
     const headerTheme = getHeaderTheme(theme);
     const navigationDimensions = getNavigationDimensions();
     // inject Theme support for jQuery-based UI-elements (navigation, flyout, popup)
