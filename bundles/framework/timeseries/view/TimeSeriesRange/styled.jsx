@@ -6,11 +6,11 @@ const backgroundColor = '#3c3c3c';
 const borderColor = '#3c3c3c';
 const noDataColor = '#FF0000';
 
-export const Background = styled.div(({ isMobile }) => ({
-    minHeight: isMobile ? '120px !important' : '90px !imoprtant',
-    width: isMobile ? '260px !important' : '720px !important',
-    color: '#ffffff',
-    backgroundColor: backgroundColor
+export const Background = styled.div(({ isMobile, theme }) => ({
+    'minHeight': isMobile ? '120px !important' : '90px !imoprtant',
+    'width': isMobile ? '260px !important' : '720px !important',
+    'color': theme ? theme?.map?.navigation?.color?.text : '#ffffff',
+    'background-color': theme ? theme?.color?.icon : backgroundColor
 }));
 
 export const Header = styled.h3`

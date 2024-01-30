@@ -28,7 +28,7 @@ export const TimeSeriesRangeControl = ThemeConsumer(({
         }
     };
     return (
-        <Background isMobile={isMobile}>
+        <Background theme={theme} isMobile={isMobile}>
             <TimeSeriesHeader
                 theme={theme}
                 toggleMode={() => toggleMode()}
