@@ -1,11 +1,11 @@
-import { Controller } from 'oskari-ui/util';
+import { Controller, ThemeConsumer } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Background } from './styled';
 import { TimeSeriesHeader } from './TimeSeriesHeader';
 import { TimeSeriesRange } from './TimeSeriesRange';
 import { TimeSeriesYear } from './TimeSeriesYear';
-import { ThemeConsumer } from 'oskari-ui/util';
+import { getNavigationTheme } from 'oskari-ui/theme/ThemeHelper';
 
 export const TimeSeriesRangeControl = ThemeConsumer(({
     theme,
@@ -27,10 +27,16 @@ export const TimeSeriesRangeControl = ThemeConsumer(({
             controller.updateValue(value[1], 'year');
         }
     };
+    const navigationTheme = getNavigationTheme(theme);
+    const textColor = navigationTheme.getTextColor();
+    const hoverColor = navigationTheme.getButtonHoverColor();
+    const backgroundColor = navigationTheme.getNavigationBackgroundColor();
+
     return (
-        <Background theme={theme} isMobile={isMobile}>
+        <Background textColor={textColor} backgroundColor={backgroundColor} isMobile={isMobile}>
             <TimeSeriesHeader
-                theme={theme}
+                textColor={textColor}
+                hoverColor={hoverColor}
                 toggleMode={() => toggleMode()}
                 title={title}
                 mode={mode}

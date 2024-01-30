@@ -5,6 +5,7 @@ import React from 'react';
 import { Col, ColFixed, Row } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
 import { ThemeConsumer } from 'oskari-ui/util';
+import { getNavigationTheme } from 'oskari-ui/theme/ThemeHelper';
 
 const ForwardIcon = () => {
     return <StepForwardOutlined style={{ fontSize: '125%' }}/>;
@@ -34,6 +35,10 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
         }
     }
 
+    const navigationTheme = getNavigationTheme(theme);
+    const textColor = navigationTheme.getTextColor();
+    const hoverColor = navigationTheme.getButtonHoverColor();
+    const backgroundColor = navigationTheme.getNavigationBackgroundColor();
     if (isMobile) {
         const currentYearDisabled = !dataYears?.includes(currentYearIntValue);
         // need to clone this, otherwise the "current year" will remain even if we switch to a valid year without panning the map
@@ -51,7 +56,7 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
             });
 
         return <Row>
-            <Col>
+            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
                 <Button
                     type="primary"
                     shape="circle"
@@ -61,10 +66,10 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
                     <BackwardIcon />
                 </Button>
             </Col>
-            <Col>
+            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
                 <Select value={currentYearIntValue} onChange={(value) => onChange(parseInt(value))}>{options}</Select>
             </Col>
-            <Col theme={theme}>
+            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
                 <Button
                     type="primary"
                     shape="circle"
@@ -79,7 +84,7 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
 
     return (
         <Row>
-            <Col theme={theme}>
+            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
                 <Button
                     type="primary"
                     shape="circle"
@@ -101,7 +106,7 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
                     onChange={(val) => onChange(val)}
                 />
             </ColFixed>
-            <Col theme={theme}>
+            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
                 <Button
                     type="primary"
                     shape="circle"

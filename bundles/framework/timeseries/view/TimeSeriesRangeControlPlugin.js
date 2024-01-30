@@ -19,6 +19,8 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         this._element = null;
         this._isMobile = Oskari.util.isMobile();
         this._sandbox = Oskari.getSandbox();
+        this.mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
+
         this._delegate = delegate;
 
         this.stateHandler = new TimeSeriesRangeControlHandler(delegate, () => this.updateUI());
@@ -73,7 +75,7 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         }
         ReactDOM.render(
             <LocaleProvider value={{ bundleKey: 'timeseries' }}>
-                <ThemeProvider>
+                <ThemeProvider value={this.mapModule.getMapTheme()}>
                     <TimeSeriesRangeControl
                         {...this.stateHandler.getState()}
                         controller={this.stateHandler.getController()}

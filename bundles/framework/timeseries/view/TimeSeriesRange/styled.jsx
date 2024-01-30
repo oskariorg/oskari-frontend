@@ -2,15 +2,15 @@ import { Button, NumberInput } from 'oskari-ui';
 import styled from 'styled-components';
 
 const primaryColor = '#ecb900';
-const backgroundColor = '#3c3c3c';
+const bgColor = '#3c3c3c';
 const borderColor = '#3c3c3c';
 const noDataColor = '#FF0000';
 
-export const Background = styled.div(({ isMobile, theme }) => ({
-    'minHeight': isMobile ? '120px !important' : '90px !imoprtant',
+export const Background = styled.div(({ isMobile, textColor, backgroundColor }) => ({
+    'minHeight': isMobile ? '120px !important' : '90px !important',
     'width': isMobile ? '260px !important' : '720px !important',
-    'color': theme ? theme?.map?.navigation?.color?.text : '#ffffff',
-    'background-color': theme ? theme?.color?.icon : backgroundColor
+    'color': textColor || '#ffffff',
+    'background-color': backgroundColor || bgColor
 }));
 
 export const Header = styled.h3`
@@ -19,7 +19,7 @@ export const Header = styled.h3`
     cursor: move;
     display: flex;
     align-items: center;
-    color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.text : '#ffffff'};
+    color: ${props => props?.textColor ? props?.textColor : '#ffffff'};
     .header-mid-spacer {
         flex: 1;
     }
@@ -27,12 +27,12 @@ export const Header = styled.h3`
 
 export const IconButton = styled(Button)`
     padding: 10px;
-    color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.text : primaryColor};
+    color: ${props => props?.textColor ? props?.textColor : primaryColor};
 
     &:hover,
     &:focus,
     &:active {
-        color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.accent : primaryColor};
+        color: ${props => props?.hoverColor ? props?.hoverColor : primaryColor};
         background: transparent;
     }
 
@@ -59,18 +59,18 @@ export const Col = styled.div`
     position: relative;
 
     button {
-        background-color: ${props => props?.theme ? props?.theme?.color?.icon : primaryColor};
+        background-color: ${props => props?.backgroundColor ? props?.backgroundColor : primaryColor};
         border-width: 2px;
-        border-color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.text : primaryColor};
-        color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.text : primaryColor};
+        border-color: ${props => props?.textColor ? props?.textColor : primaryColor};
+        color: ${props => props?.textColor ? props?.textColor : primaryColor};
 
         &:hover,
         &:focus,
         &:active {
-            background-color: ${props => props?.theme ? props?.theme?.color?.icon : primaryColor};
+            background-color: ${props => props?.backgroundColor ? props?.backgroundColor : primaryColor};
             border-width: 2px;
-            border-color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.accent : primaryColor};
-            color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.accent : primaryColor};
+            border-color: ${props => props?.hoverColor ? props?.hoverColor : primaryColor};
+            color: ${props => props?.hoverColor ? props?.hoverColor : primaryColor};
         }
     }
 `;
