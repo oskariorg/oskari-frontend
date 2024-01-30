@@ -276,8 +276,6 @@ Oskari.clazz.define(
                 contentData: contentData,
                 lonlat: lonlat,
                 popup: popup,
-                colourScheme: colourScheme,
-                font: font,
                 options: options,
                 isInMobileMode: isInMobileMode,
                 type: popupType
@@ -348,6 +346,9 @@ Oskari.clazz.define(
          * @param  {String} id
          * @param  {String} title
          * @param  {jQuery} contentDiv
+         * @param  {Object} additionalTools
+         * @param  {Object} lonlat
+         * @param  {Boolean} showCoordinates
          * @return {String}
          */
         _renderPopupContent: function (id, title, contentDiv, additionalTools, lonlat, showCoordinates) {
@@ -581,13 +582,13 @@ Oskari.clazz.define(
                     // No content left, close popup
                     this.close(popupId);
                 } else {
-                    const { colourScheme, font, title, lonlat } = popup;
+                    const { title, lonlat, options } = popup;
                     this._renderPopup(
                         popupId,
                         contentData,
                         title,
                         lonlat,
-                        { colourScheme, font },
+                        options,
                         true
                     );
                 }
