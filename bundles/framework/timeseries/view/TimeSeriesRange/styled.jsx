@@ -59,12 +59,14 @@ export const Col = styled.div`
 
     button {
         background-color: ${props => props?.theme ? props?.theme?.color?.icon : primaryColor};
+        border-width: 2px;
         border-color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.text : primaryColor};
 
         &:hover,
         &:focus,
         &:active {
             background-color: ${props => props?.theme ? props?.theme?.color?.icon : primaryColor};
+            border-width: 2px;
             border-color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.accent : primaryColor};
             color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.accent : primaryColor};
         }

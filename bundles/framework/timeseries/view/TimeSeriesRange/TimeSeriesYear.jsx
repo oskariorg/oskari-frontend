@@ -5,6 +5,15 @@ import React from 'react';
 import { Col, ColFixed, Row } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
 import { ThemeConsumer } from 'oskari-ui/util';
+
+const ForwardIcon = () => {
+    return <StepForwardOutlined style={{ fontSize: '125%' }}/>;
+};
+
+const BackwardIcon = () => {
+    return <StepBackwardOutlined style={{ fontSize: '125%' }}/>;
+};
+
 export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, dataYears, isMobile, theme }) => {
     const currentYearIntValue = parseInt(value);
     // when current value is after last data layer
@@ -49,7 +58,7 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
                     disabled={prevDataYear === null}
                     onClick={() => onChange(prevDataYear)}
                 >
-                    <StepBackwardOutlined />
+                    <BackwardIcon />
                 </Button>
             </Col>
             <Col>
@@ -62,7 +71,7 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
                     disabled={nextDataYear === null}
                     onClick={() => onChange(nextDataYear)}
                 >
-                    <StepForwardOutlined />
+                    <ForwardIcon/>
                 </Button>
             </Col>
         </Row>;
@@ -77,7 +86,7 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
                     disabled={prevDataYear === null}
                     onClick={() => onChange(prevDataYear)}
                 >
-                    <StepBackwardOutlined />
+                    <BackwardIcon />
                 </Button>
             </Col>
             <ColFixed>
@@ -99,7 +108,7 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
                     disabled={nextDataYear === null}
                     onClick={() => onChange(nextDataYear)}
                 >
-                    <StepForwardOutlined />
+                    <ForwardIcon/>
                 </Button>
             </Col>
         </Row>
