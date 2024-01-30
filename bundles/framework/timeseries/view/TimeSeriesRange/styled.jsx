@@ -33,6 +33,7 @@ export const IconButton = styled(Button)`
     &:focus,
     &:active {
         color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.accent : primaryColor};
+        background: transparent;
     }
 
     .anticon {
@@ -61,6 +62,7 @@ export const Col = styled.div`
         background-color: ${props => props?.theme ? props?.theme?.color?.icon : primaryColor};
         border-width: 2px;
         border-color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.text : primaryColor};
+        color: ${props => props?.theme ? props?.theme?.map?.navigation?.color?.text : primaryColor};
 
         &:hover,
         &:focus,
