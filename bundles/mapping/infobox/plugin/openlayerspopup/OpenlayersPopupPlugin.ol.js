@@ -381,7 +381,7 @@ Oskari.clazz.define(
             // render coordinates to gfi header
             if (showCoordinates) {
                 let mapModule = this.getMapModule();
-                let loc = Oskari.getLocalization('coordinatetool');
+                let loc = Oskari.getLocalization('oskariui');
                 let crs = mapModule.getProjection();
 
                 let coordinateWrapper = jQuery('<div class="coordinateWrapper"></div>');
@@ -397,7 +397,7 @@ Oskari.clazz.define(
                     const degreePoint = Oskari.util.coordinateMetricToDegrees([lon, lat], 6);
                     lon = degreePoint[0];
                     lat = degreePoint[1];
-                    lonlatString = loc.display.compass.lat + ': ' + lat + ' ' + loc.display.compass.lon + ': ' + lon;
+                    lonlatString = loc.coordinates.lat + ': ' + lat + ' ' + loc.coordinates.lon + ': ' + lon;
                 }
                 // Otherwise show meter units
                 else if (!isNaN(lat) && !isNaN(lon)) {
@@ -405,10 +405,10 @@ Oskari.clazz.define(
                     lon = lon.toFixed();
                     lat = me._formatNumber(lat, me.decimalSeparator);
                     lon = me._formatNumber(lon, me.decimalSeparator);
-                    lonlatString = loc.display.compass.n + ': ' + lat + ' ' + loc.display.compass.e + ': ' + lon;
+                    lonlatString = loc.coordinates.n + ': ' + lat + ' ' + loc.coordinates.e + ': ' + lon;
                 }
 
-                let crsText = loc.display.crs[crs] || crs;
+                let crsText = loc.coordinates.crs[crs] || crs;
                 let crsDiv = crsText.length > 0 ? jQuery('<div>' + crsText + '</div>') : null;
 
                 if (crsDiv && lonlatString.length > 0) {
@@ -588,7 +588,7 @@ Oskari.clazz.define(
                         contentData,
                         title,
                         lonlat,
-                        options,
+                        options || {},
                         true
                     );
                 }

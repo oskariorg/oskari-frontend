@@ -130,6 +130,20 @@ Oskari.registerLocalization({
                 lessThan: 'mindre än',
                 atMost: 'som mest'
             }
+        },
+        coordinates: {
+            lon: "Lon",
+            lat: "Lat",
+            n: "N",
+            e: "E",
+            p: "N",
+            i: "E", 
+            crs: {
+              'EPSG:3067': "ETRS89-TM35FIN koordinater",
+              'EPSG:3575': "North Pole LAEA Europe koordinater",
+              'EPSG:3857': "WGS 84 / Pseudo-Mercator koordinater",
+              default: "{crs} koordinater"
+          },
         }
     }
 });
