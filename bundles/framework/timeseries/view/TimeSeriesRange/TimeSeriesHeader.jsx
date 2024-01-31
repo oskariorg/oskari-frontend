@@ -48,7 +48,7 @@ export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = f
     const switchButtonMessage = <Message messageKey={switchButtonMessageKey} />;
     const modeIcon = mode === 'year' ? <LoginOutlined /> : <LogoutOutlined />;
     return (
-        <Header className="timeseries-range-drag-handle" textcolor={textColor} hovercolor={hoverColor}>
+        <Header className="timeseries-range-drag-handle" textColor={textColor} hovercolor={hoverColor}>
             {getHeaderContent(title, loading, error, value)}
             <div className="header-mid-spacer"></div>
             <Tooltip title={getTooltipContent(mode, modeIcon)}>
