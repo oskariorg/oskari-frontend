@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message, UrlInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
+import { cleanUrl } from './ServiceUrlInputHelper';
 
 const { CREDENTIALS } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -23,6 +24,7 @@ export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, c
             value={layer.url}
             disabled={disabled}
             onChange={url => controller.setLayerUrl(url)}
+            onBlur={e => controller.setLayerUrl(cleanUrl(layer.url))}
             credentials={credentialProps}/>
     );
 };
