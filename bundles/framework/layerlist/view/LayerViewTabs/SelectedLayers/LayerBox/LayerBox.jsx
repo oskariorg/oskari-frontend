@@ -6,7 +6,7 @@ import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
 import { Message, Tooltip } from 'oskari-ui';
-import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
+import { EyeOpen, EyeShut, DragIcon } from 'oskari-ui/components/icons';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const Container = styled.div`
@@ -46,6 +46,16 @@ const DragContainer = styled('div')`
     margin-right: 10px;
 `;
 
+/**
+ * Fixes tooltip on disappearing after letting go of the drag handle
+ */
+const StyledDragIcon = styled(DragIcon)`
+    pointer-events: none;
+`;
+const DragWrapper = styled('div')`
+    cursor: grab;
+`;
+
 const LayerBox = ({ layer, index, controller }) => {
     const organizationName = layer.getOrganizationName();
     const publishable = layer.hasPermission('publish');
@@ -73,7 +83,9 @@ const LayerBox = ({ layer, index, controller }) => {
                     <Container $isMobile={isMobile} style={{ backgroundColor: '#fafafa' }}>
                         <DragContainer>
                             <Tooltip title={<Message messageKey='layer.drag' />} getPopupContainer={(triggerNode) => triggerNode.parentElement} placement='topRight'>
-                                <DragIcon {...provided.dragHandleProps} />
+                                <DragWrapper {...provided.dragHandleProps}>
+                                    <StyledDragIcon />
+                                </DragWrapper>
                             </Tooltip>
                         </DragContainer>
                         <Col>

@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Fshijë shtresën e hartës",
-                "deleteConfirmMove": "Shtresa e hartës {0} përmban {1} objekt. A doni ta fshini shtresën e hartës dhe vendet që janë në të t'i vendosni në shtresën e hartës automatike/të parazgjedhur (default) {2}",
                 "deleteConfirm": "Fshij shtresën e hartës {0} ?",
                 "deleted": "Shtresa e hartës ëshë fshirë"
             },

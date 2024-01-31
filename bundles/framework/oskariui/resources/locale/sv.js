@@ -113,8 +113,14 @@ Oskari.registerLocalization({
         },
         FeatureFilter: {
             single: 'Ett attribut',
-            list: 'Många attribut',
-            range: 'Använd värdeintervall',
+            and: 'AND operatör',
+            or: 'OR operatör',
+            range: {
+                true: 'Använd inte värdeintervall',
+                false: 'Använd värdeintervall'
+            },
+            addTooltip: 'Lägg till ny rad för filter',
+            clearTooltip: 'Rensa filtret',
             caseSensitive: {
                 true: 'Skiftlägeskänsligt',
                 false: 'Skiftlägesokänsligt'
@@ -144,6 +150,20 @@ Oskari.registerLocalization({
               'EPSG:3857': "WGS 84 / Pseudo-Mercator koordinater",
               default: "{crs} koordinater"
           },
+        },
+        layerTooltipTitle: {
+            'wms': 'Kartlager i rasterformat',
+            'wmts': 'Kartlager i rasterformat',
+            'arcgis93': 'Kartlager i rasterformat',
+            'arcgis': 'Kartlager i rasterformat',
+            'vectortile': 'Kartlager i rasterformat',
+            'bingmaps': 'Kartlager i rasterformat',
+            'wfs': 'Kartlager i vektorformat',
+            'vector': 'Kartlager i vektorformat',
+            'userlayer': 'Eget dataset',
+            'myplaces': 'Mitt kartlager',
+            'analysislayer': 'Min analys',
+            'tiles3d': '3D kartlager'
         }
     }
 });

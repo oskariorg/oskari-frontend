@@ -113,8 +113,14 @@ Oskari.registerLocalization({
         },
         FeatureFilter: {
             single: 'Yksi ominaisuus',
-            list: 'Monta ominaisuutta',
-            range: 'Käytä arvoaluetta',
+            and: 'AND-operaattori',
+            or: 'OR-operaattori',
+            range: {
+                true: 'Älä käytä arvoaluetta',
+                false: 'Käytä arvoaluetta'
+            },
+            addTooltip: 'Lisää suodattimeen uusi rivi',
+            clearTooltip: 'Tyhjennä suodatin',
             caseSensitive: {
                 true: 'Kirjainkoko vaikuttaa',
                 false: 'Kirjainkoko ei vaikuta'
@@ -144,6 +150,20 @@ Oskari.registerLocalization({
               'EPSG:3857': "WGS 84 / Pseudo-Mercator -koordinaatit",
               default: "{crs} -koordinaatit"
           },
+        },
+        layerTooltipTitle: {
+            'wms': 'Rasteritaso',
+            'wmts': 'Rasteritaso',
+            'arcgis93': 'Rasteritaso',
+            'arcgis': 'Rasteritaso',
+            'vectortile': 'Rasteritaso',
+            'bingmaps': 'Rasteritaso',
+            'wfs': 'Vektoritaso',
+            'vector': 'Vektoritaso',
+            'userlayer': 'Oma aineisto',
+            'myplaces': 'Oma karttataso',
+            'analysislayer': 'Oma analyysi',
+            'tiles3d': '3D-taso'
         }
     }
 });

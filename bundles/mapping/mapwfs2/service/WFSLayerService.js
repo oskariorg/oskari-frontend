@@ -21,7 +21,6 @@ Oskari.clazz.define(
         me.selectedWFSLayerIds = [];
         me.selectFromAllLayers = false;
         me.selectionToolsActive = null;
-        me.analysisWFSLayerId = null;
 
         for (let p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
@@ -126,11 +125,5 @@ Oskari.clazz.define(
                 }
             }
             return topWFSLayer;
-        },
-        getAnalysisWFSLayerId: function () {
-            return this.analysisWFSLayerId;
-        },
-        setAnalysisWFSLayerId: function (layerId) {
-            this.analysisWFSLayerId = layerId;
         }
     });

@@ -179,7 +179,8 @@ Oskari.registerLocalization({
             'onlyPartialDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}'
         },
         'missing': {
-            'regionsetName': 'Unknown'
+            'regionsetName': 'Unknown',
+            'indicator': 'Unknown indicator'
         },
         'datacharts': {
             'flyout': 'Searched data',

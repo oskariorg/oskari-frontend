@@ -10,7 +10,9 @@ Oskari.registerLocalization(
                 "typeDescription": "Valitse lisättävän rajapinnan tyyppi",
                 "serviceDescription": "Syötä lisättävän rajapinnan osoite ja versionumero",
                 "layersDescription": "Valitse rajapinnasta löytyvistä tasoista se jonka haluat lisätä karttatasoksi",
-                "details": "Tason tiedot"
+                "details": "Tason tiedot",
+                "toggleFlatView": "Listanäkymä",
+                "toggleTreeView": "Puunäkymä"
             },
             "layertype": {
                 "wmslayer": "WMS",
@@ -61,6 +63,7 @@ Oskari.registerLocalization(
             "generalTabTitle": "Yleiset",
             "visualizationTabTitle": "Visualisointi",
             "additionalTabTitle": "Lisätiedot",
+            "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Oikeudet",
             "interfaceVersionDesc": "Valitse ensisijaisesti uusin rajapinnan tukema versio.",
             "attributions": "Lähdeviitteet",
@@ -93,6 +96,15 @@ Oskari.registerLocalization(
                 "desc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
                 "service": "Palvelussa määritelty",
                 "overridden": "Korvaava tiedostotunniste"
+            },
+            "jsonTab": {
+                "info": "Nämä työkalut mahdollistavat lisäkonfiguraation, käytä harkiten.",
+                "fields": {
+                    "attributes": "Attribuutit",
+                    "capabilities": "Tasolle parsitut Capabilities-tiedot",
+                    "options": "Valinnat (options)",
+                    "params": "Parametrit"
+                }
             },
             "capabilities": {
                 "parsed": "Tasolle parsitut Capabilities-tiedot",
@@ -204,6 +216,18 @@ Oskari.registerLocalization(
                         "noStyles": "Ei tallennettuja tyylejä",
                         "json": "Tyylimääritysten JSON-syntaksi on virheellinen.",
                         "optionalStyles": "Tyylille ei ole sopivaa suodatinta."
+                    }
+                },
+                "hover": {
+                    "title": "Kohteen korostus ja tooltip",
+                    "tooltip": "Kohteelle näytettävät tooltip rivit",
+                    "useStyle": "Käytä tyylimäärityksiä",
+                    "inherit": "Peri tyylimääritykset",
+                    "effect": "Käytä tehostetta",
+                    "fromProperty": "Käytä ominaisuutta labelinä",
+                    "labelTooltip": {
+                        "key": "Label näytetään sellaisenaan",
+                        "keyProperty": "Labelin sisältö haetaan valitusta ominaisuudesta"
                     }
                 }
             },

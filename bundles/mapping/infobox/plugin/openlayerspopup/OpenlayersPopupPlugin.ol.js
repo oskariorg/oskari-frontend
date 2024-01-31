@@ -295,9 +295,11 @@ Oskari.clazz.define(
                 }
             }
 
-            if (popupType === 'desktop') {
+            const { keepOnScreen = true } = options;
+            if (popupType === 'desktop' && keepOnScreen) {
                 setTimeout(me._panMapToShowPopup.bind(me, lonlatArray, positioning), 0);
             }
+
             me._setClickEvent(id, popup, contentData, additionalTools, isInMobileMode);
         },
 

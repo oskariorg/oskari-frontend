@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Τοποθεσίες",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Διαγραφή επιπέδου χάρτη",
-                "deleteConfirmMove": "Το επίπεδο χάρτη {0} περιέχει {1} αντικείμενα. Θέλετε να διαγράψετε το επίπεδο χάρτη και να μετακινήσετε τις τοποθεσίες του στο default επίπεδο χάρτη {2};",
                 "deleteConfirm": "Διαγραφή επιπέδου χάρτη {0};",
                 "deleted": "Το επίπεδο χάρτη διαγράφηκε"
             },

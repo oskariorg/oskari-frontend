@@ -282,14 +282,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             if (blnEnabled) {
                 if (me.publisher) return;
                 data = data || this.getDefaultData();
-                // trigger an event letting other bundles know we require the whole UI
-                var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
-                this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
-
                 me.getService().setIsActive(true);
-                var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
-                this.getSandbox().request(this, stateRB(data.configuration));
-                if (data.uuid) {
+
+                if (data?.configuration && Object.keys(data.configuration)?.length > 0) {
+                    // if there exists some configuration we're calling set state, which is calling UIChangeEvent under the hood.
+                    const stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
+                    this.getSandbox().request(this, stateRB(data.configuration));
+                } else {
+                    // Otherwise there's no need to update the state and we can just notify everybody of ui change.
+                    const eventBuilder = Oskari.eventBuilder('UIChangeEvent');
+                    this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
+                }
+
+                if (data?.uuid) {
                     this._showEditNotification();
                 }
 
@@ -333,7 +338,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @return {Object}
          */
         getDefaultData: function () {
-            var config = {
+            const config = {
                 mapfull: {
                     conf: {
                         plugins: [
@@ -342,7 +347,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                         ]
                     }
                 },
-                'featuredata2': {
+                featuredata: {
+                    conf: {}
+                },
+                featuredata2: {
                     conf: {}
                 }
             };
@@ -352,7 +360,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 );
             }
             // setup current mapstate so layers are not removed
-            var state = this.getSandbox().getCurrentState();
+            const state = this.getSandbox().getCurrentState();
             // merge state to initial config
             return { configuration: jQuery.extend(true, config, state) };
         },

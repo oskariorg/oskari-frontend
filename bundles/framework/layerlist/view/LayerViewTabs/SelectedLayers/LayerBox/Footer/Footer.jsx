@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { LayerIcon } from '../../../LayerIcon';
+import { LayerIcon } from 'oskari-ui/components/icons';
 import { VisibilityInfo } from './VisibilityInfo';
 import { OpacitySlider } from './OpacitySlider';
 import { StyleSettings } from './StyleSettings';
@@ -84,11 +84,11 @@ export const Footer = ({ layer, controller }) => {
                             onChange={styleName => controller.changeLayerStyle(layer, styleName)}
                         />
                     </ColAuto>
+                    <ColAutoRight>
+                        <ToolMenu tools={tools} />
+                    </ColAutoRight>
                 </Fragment>
             }
-            <ColAutoRight>
-                <ToolMenu tools={tools} />
-            </ColAutoRight>
         </GrayRow>
     );
 };

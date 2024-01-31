@@ -7,10 +7,16 @@ dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 
 const _getStartTimeFromYear = (year) => {
+    if (!year) {
+        return null;
+    }
     return dayjs.utc(year.toString(), 'YYYY').startOf('year');
 };
 
 const _getEndTimeFromYear = (year) => {
+    if (!year) {
+        return null;
+    }
     return dayjs.utc(year.toString(), 'YYYY').endOf('year');
 };
 
@@ -148,6 +154,9 @@ class UIHandler extends StateHandler {
         }
         const startTime = _getStartTimeFromYear(startYear);
         const endTime = _getEndTimeFromYear(endYear);
+        if (!startTime || !endTime) {
+            return null;
+        }
         const newTime = `${startTime.toISOString()}/${endTime.toISOString()}`;
         this._delegate.requestNewTime(newTime);
         this._updateFeaturesByTime(startTime, endTime);

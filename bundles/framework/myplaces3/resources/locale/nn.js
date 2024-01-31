@@ -10,13 +10,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Stader",
-            "nocategories": "Du har ikkje nokon lagra stader ennå",
-            "maxFeaturesExceeded": "Du har for mange eigne stader. Ikkje alle stader er lasta.",
             "publishCategory": {
                 "privateTooltip": "Dette kartlaget er privat. Klikk her for å publisere.",
                 "publicTooltip": "Dette kartlaget er offentleg. Klikk her for å avslutte publisering."
             },
-            "addCategoryFormButton": "Nytt kartlag",
             "addCategory": "Legg til kartlaget",
             "editCategory": "Tilpass kartlaget",
             "deleteCategory": "Slett kartlaget",
@@ -175,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Slett kartlaget",
-                "deleteConfirmMove": "Kartlaget \"{0}\" inneheld {1} stader. Vil du slette kartlaget og flytte stadene til standard kartlag \"{2}\" eller vil du slette kartlaget med tilhøyrande stader?",
                 "deleteConfirm": "Ønskjer du å slette kartlaget {0}?",
                 "deleted": "Katlaget er sletta"
             },

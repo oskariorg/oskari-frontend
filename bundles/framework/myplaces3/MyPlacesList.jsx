@@ -90,6 +90,7 @@ export const MyPlacesList = ({ data = [], loading, controller }) => {
 
     return (
         <Table
+            pagination={{ defaultPageSize: 10, hideOnSinglePage: true, simple: true }}
             loading={loading}
             columns={columnSettings}
             dataSource={data.map(item => ({
@@ -100,7 +101,6 @@ export const MyPlacesList = ({ data = [], loading, controller }) => {
                 measurement: item.measurement,
                 icon: item.getDrawMode()
             }))}
-            pagination={false}
         />
     );
 };

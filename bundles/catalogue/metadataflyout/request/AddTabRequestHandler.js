@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.catalogue.request.AddTabRequestH
      * @method handleRequest
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
-     * @param {Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler} request
+     * @param {Oskari.mapframework.bundle.catalogue.request.AddTabRequest} request
      *      request to handle
      */
         handleRequest: function (core, request) {

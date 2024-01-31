@@ -18,7 +18,7 @@ Oskari.clazz
             this._id = id;
         }, {
         /** @static @property __name request name */
-            __name: 'Featuredata.ShowFeatureDataRequest',
+            __name: 'ShowFeatureDataRequest',
             /**
          * @method getName
          * @return {String} request name

@@ -174,6 +174,16 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
     },
 
     /**
+     * Check whether a piece of data has a custom formatter defined
+     *
+     * @param {Object} datum A piece of gfi data
+     * @returns {Boolean} a custom formatter was found
+     */
+    hasCustomFormatter (datum) {
+        const formatter = this.layerFormatters.find((formatter) => formatter.enabled(datum));
+        return !!formatter;
+    },
+    /**
      * Parses and formats a GFI response
      *
      * @method _parseGfiResponse
@@ -336,7 +346,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         const isMyPlace = layer.isLayerOfType('myplaces');
         const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
         // use localized labels for properties when available instead of property names
-        const localeMapping = layer.getPropertyLabels() || {};
+        const localeMapping = !!layer.getPropertyLabels && layer.getPropertyLabels() ? layer.getPropertyLabels() : {};
         const processEntry = ([prop, value]) => {
             let uiLabel = localeMapping[prop] || prop;
             let formatterOpts = {};
@@ -353,7 +363,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             return null;
         };
         const formattersForLayerFeatureData = this.layerFormatters.filter((formatter) => formatter.enabled(data));
-        const visiblePropertiesSelection = layer.getPropertySelection();
+        const visiblePropertiesSelection = !!layer.getPropertySelection && layer.getPropertySelection() ? layer.getPropertySelection() : null;
         const result = features.map(properties => {
             let markup = noDataResult;
             const formattedData = formattersForLayerFeatureData.map((formatter) => formatter.format(properties, layerId));
@@ -361,7 +371,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 // layerFormatter was used - overriding the default WFS feature data formatting
                 markup = formattedData.join('');
             } else {
-                const filteredProps = filterProperties(properties, visiblePropertiesSelection);
+                const filteredProps = visiblePropertiesSelection ? filterProperties(properties, visiblePropertiesSelection) : properties;
                 // map feature property values by running configured property formatters per property (links/images markup wrapping etc)
                 const featureProps = Object.fromEntries(
                     Object.entries(filteredProps)

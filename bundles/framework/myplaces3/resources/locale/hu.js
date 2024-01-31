@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Térképréteg törlése",
-                "deleteConfirmMove": "A térkép réteg {0} tartalmaz {1} objektumokat. Szeretné törölni a térképréteget, és a helyeket tegyük át az alapértelmezett térképrétegbe {2}?",
                 "deleteConfirm": "Törli a {0} térképréteget? \"",
                 "deleted": "Térképréteg törölve."
             },

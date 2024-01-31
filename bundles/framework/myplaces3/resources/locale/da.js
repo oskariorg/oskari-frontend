@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Slet kortlag",
-                "deleteConfirmMove": "Kortlag {0} indeholder {1} objekter. Vil du slette kortlaget og flytte stederne på det til standardkortlaget {2}?",
                 "deleteConfirm": "Slet kortlag {0}?",
                 "deleted": "Kortlag slettet"
             },

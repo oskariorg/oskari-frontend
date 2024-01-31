@@ -15,7 +15,7 @@ import '../../event/MarkerClickEvent';
 import '../../event/AfterRemoveMarkersEvent';
 import { showAddMarkerPopup } from './view/MarkersForm';
 import { showMarkerPopup } from './view/MarkerPopup';
-import { ID_PREFIX, PLUGIN_NAME, TOOL_GROUP, DEFAULT_STYLE, STYLE_TYPE, DEFAULT_DATA, SEPARATORS } from './constants';
+import { ID_PREFIX, PLUGIN_NAME, TOOL_GROUP, DEFAULT_STYLE, GEOMETRY_TYPE, DEFAULT_DATA, SEPARATORS } from './constants';
 
 /**
  * @class Oskari.mapframework.mapmodule.MarkersPlugin
@@ -44,12 +44,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this._layer = undefined;
         this.log = Oskari.log(PLUGIN_NAME);
         this.popupControls = null;
-        this.popupCleanup = () => {
+        this.popupCleanup = (restartTool = true) => {
             if (this.popupControls) {
                 this.popupControls.close();
                 this._showAddMarkerPopupOnMapClick = true;
             }
             this.popupControls = null;
+            if (!this.markerPopupControls && restartTool) {
+                this.startMarkerAdd();
+            }
         };
     }, {
 
@@ -68,6 +71,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 'Toolbar.ToolbarLoadedEvent': () => this._registerTools(),
                 'Toolbar.ToolSelectedEvent': event => {
                     if (event.getToolId() !== 'addMarker' && event.getSticky()) {
+                        if (this.popupControls) {
+                            this.popupCleanup(false);
+                        }
                         this.stopMarkerAdd(false);
                     }
                 }
@@ -155,7 +161,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private
          * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event map click
          */
-        _mapClick: function (event) {
+        _mapClick: async function (event) {
+            this.keepToolActive = true;
+            if (this.markerPopupControls) {
+                this.closeMarkerPopup();
+            }
+            this.keepToolActive = false;
             if (!this._showAddMarkerPopupOnMapClick) {
                 // get markers from layer by pixel so we get result based on visualization and not the coordinate for the point
                 const pixels = [event.getMouseX(), event.getMouseY()];
@@ -165,15 +176,36 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                         .forEach((feature) => this._markerClicked(feature.getId())));
                 return;
             }
+            // get markers from layer by pixel so we get result based on visualization and not the coordinate for the point
+            const pixels = [event.getMouseX(), event.getMouseY()];
+            const features = await this.getMarkersLayer().getFeatures(pixels);
+            for (const feature of features) {
+                this._markerClicked(feature.getId());
+            }
+
+            if (!this._showAddMarkerPopupOnMapClick) {
+                return;
+            }
+
             // adding a marker
             const { lon, lat } = event.getLonLat();
-            const coord = [lon, lat];
             this._showAddMarkerPopupOnMapClick = false;
-            const onAdd = style => {
+            const onAdd = (style, marker) => {
+                const coord = marker ? [marker.x, marker.y] : [lon, lat];
                 this.popupCleanup();
-                this._addMarkerFromPopup(coord, style);
+                this._addMarkerFromPopup(coord, style, marker?.id);
             };
-            this.popupControls = showAddMarkerPopup(onAdd, this.popupCleanup);
+            const onDelete = (marker) => {
+                this.popupCleanup();
+                this.removeMarkers(marker.id);
+            };
+
+            if (features.length > 0) {
+                const markerData = this._featureToMarkerData(features[0]);
+                this.popupControls = showAddMarkerPopup(onAdd, onDelete, this.popupCleanup, markerData);
+            } else {
+                this.popupControls = showAddMarkerPopup(onAdd, onDelete, this.popupCleanup);
+            }
         },
         /**
          * Called when a marker has been clicked.
@@ -203,16 +235,22 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this.markerPopupControls.close();
             }
             this.markerPopupControls = null;
+            if (!this.keepToolActive) {
+                this.stopMarkerAdd();
+            }
         },
         /**
          * Activate the "add marker mode" on map.
          */
         startMarkerAdd: function () {
+            if (Oskari.util.isMobile()) {
+                Oskari.dom.showNavigation(false);
+            }
             this.enableGfi(false);
             this._showAddMarkerPopupOnMapClick = true;
 
             if (!this.markerPopupControls) {
-                this.markerPopupControls = showMarkerPopup(() => this.removeMarkers(), () => this.stopMarkerAdd(true));
+                this.markerPopupControls = showMarkerPopup(() => this.removeMarkers(), () => this.closeMarkerPopup());
             }
 
             this.getMapModule().setCursorStyle('crosshair');
@@ -220,11 +258,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         /**
          * Stops the marker location selector
          */
-        stopMarkerAdd: function (selectDefault) {
+        stopMarkerAdd: function (selectDefault = true) {
             this.enableGfi(true);
             this._showAddMarkerPopupOnMapClick = false;
-            this.closeMarkerPopup();
-            this.popupCleanup();
+            if (this.markerPopupControls) {
+                this.closeMarkerPopup();
+            }
+            if (this.popupControls) {
+                this.popupCleanup();
+            }
             this.getMapModule().setCursorStyle('');
             if (!selectDefault) {
                 return;
@@ -324,8 +366,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             return style;
         },
-        _addMarkerFromPopup: function (coord, style) {
-            const id = ID_PREFIX + Oskari.getSeq(this.getName()).nextVal();
+        _addMarkerFromPopup: function (coord, style, existingId) {
+            const id = existingId || ID_PREFIX + Oskari.getSeq(this.getName()).nextVal();
             const { image, text } = style;
             const { fill, shape, size } = image;
             const styleData = {
@@ -340,7 +382,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
         _addMarkerToMap: function (id, coord, style) {
             const layerSource = this.getMarkersLayer().getSource();
-            const olStyle = this.getMapModule().getStyle(style, STYLE_TYPE);
+            const olStyle = this.getMapModule().getStyle(style, GEOMETRY_TYPE);
 
             const feature = new olFeature(new olGeom.Point(coord));
             feature.setId(id);

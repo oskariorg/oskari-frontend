@@ -2,7 +2,7 @@ export const ID_PREFIX = 'M_';
 export const BUNDLE_KEY = 'MapModule';
 export const PLUGIN_NAME = 'MarkersPlugin';
 export const TOOL_GROUP = 'selectiontools';
-export const STYLE_TYPE = 'point';
+export const GEOMETRY_TYPE = 'point';
 
 export const SEPARATORS = {
     FIELD: '|',
