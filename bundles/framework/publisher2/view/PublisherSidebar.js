@@ -133,10 +133,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 }
             });
 
-            const additionalToolsPanel = this._createAdditionalToolsPanel(additionalTools);
-            additionalToolsPanel.getPanel().addClass('t_additional_tools');
-            this.panels.push(additionalToolsPanel);
-            accordion.addPanel(additionalToolsPanel.getPanel());
+            // add additional tools panel if there are tools for it
+            if (additionalTools) {
+                const additionalToolsPanel = this._createAdditionalToolsPanel(additionalTools);
+                additionalToolsPanel.getPanel().addClass('t_additional_tools');
+                this.panels.push(additionalToolsPanel);
+                accordion.addPanel(additionalToolsPanel.getPanel());
+            }
 
             // add RPC panel if there are tools for it
             if (rpcTools) {
