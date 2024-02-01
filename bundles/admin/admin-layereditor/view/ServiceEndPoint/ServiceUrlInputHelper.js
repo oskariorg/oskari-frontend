@@ -4,6 +4,10 @@ export const cleanUrl = (url) => {
         return;
     };
 
+    if (url.indexOf('http') === -1) {
+        url = 'http://' + url;
+    }
+
     const urlObj = new URL(url);
     const keysToDelete = [];
     urlObj.searchParams.forEach((value, key) => {
