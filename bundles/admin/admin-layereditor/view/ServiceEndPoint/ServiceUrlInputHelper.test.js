@@ -47,5 +47,17 @@ describe('ServiceUrlInputHelper Tests ', () => {
         it('should return undefined with no url provided', () => {
             expect(cleanUrl(null)).toBeUndefined();
         });
+
+        it('should strip protocol from the returned url', () => {
+            const httpUrl = 'http://www.com/';
+            const httpsUrl = 'https://www.com/';
+            expect(cleanUrl(httpUrl)).toBe('www.com/');
+            expect(cleanUrl(httpsUrl)).toBe('www.com/');
+        });
+
+        it('should be able to handle url without protocol', () => {
+            const url = 'www.com/';
+            expect(cleanUrl(url)).toBe(url);
+        });
     });
 });
