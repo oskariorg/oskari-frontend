@@ -5,7 +5,7 @@ import { Select, Option } from './Select';
 import { Collapse, Panel } from './Collapse';
 import { TextInput } from './TextInput';
 import 'antd/es/input/style/index.js';
-import { cleanUrl } from '../../../bundles/admin/admin-layereditor/view/ServiceEndPoint/ServiceUrlInputHelper';
+
 const protocols = ['https', 'http'];
 export class UrlInput extends React.Component {
     constructor (props) {
