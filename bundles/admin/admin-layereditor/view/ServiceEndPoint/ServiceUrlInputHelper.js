@@ -13,5 +13,11 @@ export const cleanUrl = (url) => {
     });
 
     keysToDelete.forEach((key) => urlObj.searchParams.delete(key));
+
+    const parts = urlObj.toString().split('://');
+    if (parts.length > 1) {
+        return parts[1];
+    }
+
     return urlObj.toString();
 };
