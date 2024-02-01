@@ -81,8 +81,8 @@ export class UrlInput extends React.Component {
                 newState.url = urlParts.join('');
             }
 
-            if (newState?.url) {
-                const cleaned = cleanUrl(`${newState.protocol}://${newState.url}`);
+            if (newState?.url && this.props?.urlCleanupFunction) {
+                const cleaned = this.props?.urlCleanupFunction(`${newState.protocol}://${newState.url}`);
                 newState.url = cleaned;
             }
 
@@ -97,7 +97,7 @@ export class UrlInput extends React.Component {
     }
 
     render () {
-        const { credentials = {}, ...other } = this.props;
+        const { credentials = {}, urlCleanupFunction = null, ...other } = this.props;
         const protocolSelect = (
             <Select
                 value={this.state.protocol}
@@ -151,6 +151,8 @@ export class UrlInput extends React.Component {
 
 UrlInput.propTypes = {
     onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    urlCleanupFunction: PropTypes.func,
     value: PropTypes.string,
     credentials: PropTypes.object
 };
