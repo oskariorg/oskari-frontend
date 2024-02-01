@@ -5,7 +5,7 @@ import { Select, Option } from './Select';
 import { Collapse, Panel } from './Collapse';
 import { TextInput } from './TextInput';
 import 'antd/es/input/style/index.js';
-
+import { cleanUrl } from '../../../bundles/admin/admin-layereditor/view/ServiceEndPoint/ServiceUrlInputHelper';
 const protocols = ['https', 'http'];
 export class UrlInput extends React.Component {
     constructor (props) {
@@ -63,6 +63,39 @@ export class UrlInput extends React.Component {
             return newState;
         });
     }
+
+    onBlur (event) {
+        if (!this.props.onBlur) {
+            return;
+        }
+        const url = event.target.value;
+        this.setState((state) => {
+            const newState = {
+                ...state,
+                url
+            };
+            // in case user wrote the protocol in the field
+            const urlParts = url.split('://');
+            if (urlParts.length > 1) {
+                newState.protocol = urlParts.shift();
+                newState.url = urlParts.join('');
+            }
+
+            if (newState?.url) {
+                const cleaned = cleanUrl(`${newState.protocol}://${newState.url}`);
+                newState.url = cleaned;
+            }
+
+            if (!newState.url.trim()) {
+                // If we only have protocol -> trigger "unset"
+                this.props.onBlur(undefined);
+            } else {
+                this.props.onBlur(`${newState.protocol}://${newState.url}`);
+            }
+            return newState;
+        });
+    }
+
     render () {
         const { credentials = {}, ...other } = this.props;
         const protocolSelect = (
@@ -78,7 +111,8 @@ export class UrlInput extends React.Component {
         const processedProps = {
             ...other,
             value: undefined,
-            onChange: this.onChange.bind(this)
+            onChange: this.onChange.bind(this),
+            onBlur: this.onBlur.bind(this)
         };
 
         let collapseProps = {}
