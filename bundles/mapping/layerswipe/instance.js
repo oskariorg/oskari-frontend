@@ -1,6 +1,5 @@
 import { getRenderPixel } from 'ol/render';
 import { unByKey } from 'ol/Observable';
-
 const SwipeAlertTypes = {
     NO_RASTER: 'noRaster',
     NOT_VISIBLE: 'notVisible'
@@ -40,6 +39,8 @@ Oskari.clazz.define(
         _startImpl: function (sandbox) {
             this.mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
             this.popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
+
+            this.theme = this.mapModule.getMapTheme();
             Oskari.getSandbox().registerAsStateful(this.mediator.bundleId, this);
             if (Oskari.dom.isEmbedded()) {
                 const plugin = Oskari.clazz.create('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlugin', this.conf);
@@ -258,7 +259,10 @@ Oskari.clazz.define(
 
         getSplitterElement: function () {
             if (!this.splitter) {
-                this.splitter = jQuery('<div class="layer-swipe-splitter"></div>');
+                // Use background color from theme in inline style. Fall back to paikkatietoikkuna-yellow.
+                // This is less than satisfying but we'll have a classier implementation when we reactify the whole component.
+                const splitterColor = this.theme?.color?.accent || '#ffd400';
+                this.splitter = jQuery('<div class="layer-swipe-splitter" style="background-color:' + splitterColor + ';"></div>');
                 this.splitter.draggable({
                     containment: this.mapModule.getMapEl(),
                     axis: 'x',
