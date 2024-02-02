@@ -27,6 +27,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 '</div>'),
             announcementsPopup: jQuery(
                 '<div>' +
+                    '<div class="publisher-announcements-disclaimer">' + this.localization.tool.popup.disclaimer + '</div>' +
                     '<div class="publisher-announcements-inputs">' +
                         '<h4>' + this.localization.tool.announcementsName + '</h4><h4>' + this.localization.tool.announcementsTime + '</h4>' +
                         '<div class="ann-column ann-title"></div>' +
