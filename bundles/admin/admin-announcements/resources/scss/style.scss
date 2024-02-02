@@ -9,14 +9,19 @@ div.publisher-announcements-inputs {
     }
 }
 
+div.publisher-announcements-disclaimer {
+    margin-bottom: 0.5em;
+    font-style: italic;
+}
+
 div.basic_publisher {
-    
+
     .publisher-layout-announcements {
         padding-left: 28px;
-      
+
         input[name=publisher-announcements] {
             width: 125px;
-    
+
             button {
                 float: right;
             }

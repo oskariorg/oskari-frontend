@@ -48,7 +48,8 @@ Oskari.registerLocalization(
                 "buttonLabel": "Valitse Ilmoitukset",
                 "popup": {
                     "title": "Ilmoitukset",
-                    "close": "Sulje"
+                    "close": "Sulje",
+                    "disclaimer": "Voit valita vain nykyiset tai tulevat ilmoitukset."
                 },
                 "announcementsName": "Otsikko",
                 "announcementsTime": "Voimasssa"
