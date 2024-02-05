@@ -504,6 +504,7 @@ select:not([class*="ant-"]) {
 
 .ant-tooltip {
   z-index: 999999 !important;
+  max-width: 400px !important;
 }
 /*
 So confirm doesn't open behind flyouts (in admin for example)
