@@ -10,13 +10,11 @@ import { LAYER_ID, DATA_PROVIDER } from './constants';
 
 import './Tile.js';
 import './service/StatisticsService.js';
-import './service/SeriesService.js';
 import './service/Cache.js';
 import './service/CacheHelper.js';
 import './components/SeriesControl.js';
 import './components/RegionsetViewer.js';
 import './plugin/TogglePlugin.js';
-import './plugin/ClassificationPlugin.js';
 import './plugin/SeriesControlPlugin.js';
 
 import './publisher/AbstractStatsPluginTool.js';
