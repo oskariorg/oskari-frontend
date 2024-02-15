@@ -1,5 +1,5 @@
 
-import { FLYOUTS } from './handler/PluginHandler';
+import { FLYOUTS } from './handler/ViewHandler';
 import './resources/scss/tile.scss';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance) {

@@ -1,5 +1,5 @@
 import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
-import { ViewHandler } from './handler/PluginHandler';
+import { ViewHandler } from './handler/ViewHandler';
 import { SearchHandler } from './handler/SearchHandler';
 import { StateHandler } from './handler/StatisticsHandler';
 import { IndicatorFormHandler } from './handler/IndicatorFormHandler';
@@ -123,19 +123,17 @@ Oskari.clazz.define(
             return this.viewHandler;
         },
         removeDataProviverInfo: function (ind) {
-            // the check if necessary if the same indicator is added more than once with different selections
-            if (!this.getStateHandler().isIndicatorSelected(ind)) {
-                // if this was the last dataset for the datasource & indicator. Remove it.
-                const service = this.getDataProviderInfoService();
-                if (service) {
-                    const id = getDataProviderKey(ind);
-                    service.removeItemFromGroup(DATA_PROVIDER, id);
-                }
+            const service = this.getDataProviderInfoService();
+            if (service) {
+                const key = getDataProviderKey(ind);
+                service.removeItemFromGroup(DATA_PROVIDER, key);
             }
         },
         addDataProviderInfo: async function (ind) {
             const service = this.getDataProviderInfoService();
-            if (!service) return;
+            if (!service) {
+                return;
+            }
             const { name, info: { url } } = getDatasources().find(ds => ds.id === ind.ds) || {};
             const id = getDataProviderKey(ind);
             const data = {

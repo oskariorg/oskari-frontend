@@ -70,7 +70,8 @@ class StatisticsController extends StateHandler {
             .filter(ind => ind.ds === ds && ind.id === id)
             .map(ind => ind.hash);
         this.updateState({indicators: indicators.filter(ind => !hashes.includes(ind.hash))});
-        this.instance.removeDataProviverInfo(ds + '_' + id);
+        // needs only ds and id from indicator object
+        this.instance.removeDataProviverInfo({ ds, id });
         if (hashes.includes(activeIndicator)) {
             // active was the one removed -> reset active
             this.setActiveIndicator();
