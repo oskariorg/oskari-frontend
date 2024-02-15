@@ -18,70 +18,92 @@ const LIMITS = {
     fractionDigits: 5
 };
 
-export const DEFAULT_OPTS = {
-    classification: {
-        count: 5,
-        method: 'jenks',
-        color: 'Blues',
-        type: 'seq',
-        mode: 'discontinuous',
-        reverseColors: false,
-        mapStyle: 'choropleth',
-        transparency: 100, // or from statslayer
-        min: 10,
-        max: 60,
-        showValues: false
+const DEFAULTS = {
+    count: 5,
+    method: 'jenks',
+    color: 'Blues',
+    type: 'seq',
+    mode: 'discontinuous',
+    reverseColors: false,
+    mapStyle: 'choropleth',
+    min: 10,
+    max: 60,
+    showValues: false
+};
+
+export const shouldUpdateClassifiedData = (updated) => {
+    const updatedKeys = Array.isArray(updated) ? updated : Object.keys(updated);
+    // color and fractonDigits could update group's color and range only
+    // also min max affects group's pixel sizes
+    const keys = ['count', 'mapStyle', 'method', 'mode', 'color', 'fractionDigits', 'min', 'max'];
+    return updatedKeys.some(key => keys.includes(key));
+};
+
+export const getClassification = (data, metadata = {}, lastSelected = {}) => {
+    const classification = {
+        fractionDigits: data.allInts ? 0 : 1
+    };
+    // store only keys and values which are included in DEFAULTS
+    Object.keys(DEFAULTS).forEach(key => {
+        classification[key] = typeof lastSelected[key] === 'undefined' ? DEFAULTS[key] : lastSelected[key];
+    });
+    // override values from metadata
+    if (typeof metadata.isRatio === 'boolean') {
+        classification.mapStyle = metadata.isRatio ? 'choropleth' : 'points';
     }
-};
-
-export const getRangeForPoints = () => {
-    return { ...LIMITS.count };
-};
-
-export const getAvailableMethods = () => {
-    return [...LIMITS.methods];
-};
-
-export const getAvailableModes = () => {
-    return [...LIMITS.modes];
-};
-
-export const getAvailableMapStyles = () => {
-    return [...LIMITS.mapStyles];
-};
-
-export const getLimits = (mapStyle, type) => {
-    if (mapStyle === 'points') {
-        return { ...LIMITS };
+    if (typeof metadata.decimalCount === 'number') {
+        classification.fractionDigits = metadata.decimalCount;
     }
-    const count = getRange(type);
-    return { ...LIMITS, count };
-};
+    if (typeof metadata.base === 'number') {
+        // if there is a base value the data is divided at base value
+        classification.base = metadata.base;
+        classification.type = 'div';
+    }
+    validateClassification(classification, data);
+    return classification;
+}
+
+export const validateClassification = (classification, data) => {
+    if (!validateColor(classification)) {
+        classification.color = getDefaultColor(classification);
+    }
+    const { max } = classification.mapStyle === 'points' ? LIMITS.count : getRangeForColor(classification.color);
+    if (classification.count > max) {
+        classification.count = max;
+    }
+    // geostats fails with jenks if there isn't at least one more unique values than count
+    if (classification.method === 'jenks' && data.uniqueCount <= classification.count) {
+        classification.count = data.uniqueCount - 1;
+    }
+    // Discontinuos mode is problematic for series data,
+    // because each class has to get at least one hit -> set distinct mode.
+    if (data.seriesValues) {
+        classification.mode = 'distinct';
+    }
+}
+
+export const getGroupStats = (dataBySelection) => {
+    const values = Object.values(dataBySelection)
+        .reduce((all, data) => [...all, ...Object.values(data)], []);
+    return new geostats(values);
+}
 
 /**
  * Classifies given dataset.
- * @param  {Object} indicatorData data to classify. Keys are available for groups, values are used for classification
+ * @param  {Object} indicatorData data to classify
  * @param  {Object} opts      options for classification
  * @param  {geostats} groupStats precalculated geostats | optional
  * @return {Object}               result with classified values
  */
-export const getClassification = (indicatorData, opts, groupStats, uniqueCount) => {
-    if (typeof indicatorData !== 'object') {
-        console.warn('Data expected as object with region/value as keys/values.');
-        return { error: 'noData' };
-    }
-    // TODO: data should be validated and unique values counted in one place
-    // stateservice.getState() => returns or service triggers state for all components
-    const dataAsList = Object.values(indicatorData).filter(val => val !== null && val !== undefined);
-    const dataSize = uniqueCount || new Set(dataAsList).size;
-    // geostats fails with jenks if there isn't at least one more unique values than count
-    const minData = opts.method === 'jenks' ? Math.max(opts.count + 1, 3) : 1;
-    if ((groupStats && groupStats.serie.length < 3) || dataSize < minData) {
+export const getClassifiedData = (indicatorData, opts, groupStats) => {
+    const { dataByRegions, seriesValues } = indicatorData;
+    if (seriesValues && seriesValues.length < 3) {
         return { error: 'noEnough' };
     }
+    const values = seriesValues ? seriesValues : dataByRegions.map(d => d.value);
     const isDivided = opts.type === 'div';
     const { format } = Oskari.getNumberFormatter(opts.fractionDigits);
-    var stats = new geostats(dataAsList);
+    var stats = new geostats(values);
     stats.silent = true;
     stats.setPrecision();
     let bounds;
@@ -97,7 +119,7 @@ export const getClassification = (indicatorData, opts, groupStats, uniqueCount) 
             stats.setBounds(bounds);
         }
     };
-
+    // TODO: remove
     if (groupStats) {
         groupStats.silent = true;
         var groupOpts = groupStats.classificationOptions || {};
@@ -128,7 +150,7 @@ export const getClassification = (indicatorData, opts, groupStats, uniqueCount) 
 
     const ranges = opts.mode === 'distinct'
         ? getRangesFromBounds(bounds, opts, format)
-        : getValueRanges(dataAsList, bounds, format);
+        : getValueRanges(values, bounds, format);
     const colors = isDivided ? getDividedColors(opts, bounds) : getColorsForClassification(opts);
     const pixels = isDivided ? getDividedPixels(opts, bounds) : getPixelsForClassification(opts);
     if (![colors, pixels, ranges].every(list => Array.isArray(list) && list.length === opts.count)) {
@@ -141,6 +163,7 @@ export const getClassification = (indicatorData, opts, groupStats, uniqueCount) 
             sizePx: pixels[i],
             range: ranges[i],
             color: colors[i],
+            minValue: bounds[i],
             regionIds: []
         };
         groups.push(group);
@@ -152,15 +175,14 @@ export const getClassification = (indicatorData, opts, groupStats, uniqueCount) 
         // max value === last bound, max value isn't found, return last group index
         return index === -1 ? bounds.length - 2 : index - 1;
     };
-    for (const region in indicatorData) {
-        const value = indicatorData[region];
+    dataByRegions.forEach(({ value, id }) => {
         if (typeof value === 'undefined') {
             // no value for region -> skip
-            continue;
+            return;
         }
         var index = getGroupForValue(value);
-        groups[index].regionIds.push(region);
-    }
+        groups[index].regionIds.push(id);
+    });
     const statistics = {
         min: stats.min(),
         max: stats.max(),
@@ -175,24 +197,12 @@ export const getClassification = (indicatorData, opts, groupStats, uniqueCount) 
     return {
         groups,
         bounds,
-        format,
+        format, // TODO: remove when all components uses formatted value
         stats: statistics
     };
 };
 
-export const validateClassification = (classification) => {
-    if (!validateColor(classification)) {
-        classification.color = getDefaultColor(classification);
-    }
-    const { max } = classification.mapStyle === 'points'
-        ? getRangeForPoints()
-        : getRangeForColor(classification.color);
-    if (classification.count > max) {
-        classification.count = max;
-    }
-};
-
-export const getPixelsForClassification = (classification, index) => {
+const getPixelsForClassification = (classification, index) => {
     const { min, max, count } = classification;
     const x = d3.scaleLinear()
         .domain([0, count - 1])
@@ -214,7 +224,7 @@ export const getPixelsForClassification = (classification, index) => {
     return sizes;
 };
 
-export const getDividedPixels = (classification, bounds) => {
+const getDividedPixels = (classification, bounds) => {
     const { min, max, base = 0 } = classification;
     const baseIndex = bounds.findIndex(bound => bound >= base);
     const minValueDif = base - bounds[0];
@@ -236,7 +246,7 @@ export const getDividedPixels = (classification, bounds) => {
     return sizes;
 };
 
-export const getDividedBounds = (stats, classification) => {
+const getDividedBounds = (stats, classification) => {
     const { method, count, manualBounds, base = 0 } = classification;
     let bounds;
     if (method === 'jenks') {
@@ -286,11 +296,11 @@ export const getDividedBounds = (stats, classification) => {
     return bounds;
 };
 
-export const getRangeString = (min, max) => {
+const getRangeString = (min, max) => {
     return `${min} - ${max}`;
 };
 
-export const getRangesFromBounds = (bounds, opts, format) => {
+const getRangesFromBounds = (bounds, opts, format) => {
     const { fractionDigits } = opts;
     const ranges = [];
     const lastRange = bounds.length - 2;
@@ -310,7 +320,7 @@ export const getRangesFromBounds = (bounds, opts, format) => {
     return ranges;
 };
 
-export const getValueRanges = (data, bounds, format) => {
+const getValueRanges = (data, bounds, format) => {
     // TODO: could use sorted unique values which is used for classification options
     const sorted = [...new Set(data)].sort((a, b) => a - b);
     const ranges = [];
@@ -334,7 +344,7 @@ export const getValueRanges = (data, bounds, format) => {
     return ranges;
 };
 
-export const getBoundsFallback = (bounds, count, dataMin, dataMax) => {
+const getBoundsFallback = (bounds, count, dataMin, dataMax) => {
     return _tryBounds(bounds, count, dataMin, dataMax) || equalSizeBands(count, dataMin, dataMax);
 };
 
@@ -350,9 +360,12 @@ const _tryBounds = (bounds, count, dataMin, dataMax) => {
     }
 };
 
-export const getEditOptions = (activeIndicator, uniqueCount, minMax) => {
-    const { type, count, reverseColors, mapStyle, base, method } = activeIndicator.classification;
-    const { count: { min, max }, methods, modes, mapStyles, types, fractionDigits } = getLimits(mapStyle, type);
+export const getEditOptions = (classification, data) => {
+    const { type, count, reverseColors, mapStyle, base, method } = classification;
+    const { min: minValue, max: maxValue, uniqueCount } = data;
+
+    const { methods, modes, mapStyles, types, fractionDigits } = LIMITS;
+    const { min, max } = mapStyle === 'points' ? LIMITS.count : getRange(type);
 
     const colorCount = mapStyle === 'points' ? 2 + count % 2 : count;
     const colorsets = mapStyle === 'points' && type !== 'div' ? [] : getOptionsForType(type, colorCount, reverseColors);
@@ -367,7 +380,7 @@ export const getEditOptions = (activeIndicator, uniqueCount, minMax) => {
     }
 
     // if dataset has negative and positive values it can be divided, base !== 0 has to be given in metadata
-    const dividable = minMax && minMax.min < 0 && minMax.max > 0;
+    const dividable = minValue < 0 && maxValue > 0;
     if (typeof base !== 'number' && !dividable) {
         // disable option if base isn't given in metadata or dataset isn't dividable
         disabled.push('div');

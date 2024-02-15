@@ -1,4 +1,3 @@
-import { StatisticsHandler } from '../handler/StatisticsHandler';
 import { getHash } from '../helper/StatisticsHelper';
 
 /**
@@ -9,25 +8,12 @@ import { getHash } from '../helper/StatisticsHelper';
     const _log = Oskari.log('StatsGrid.StatisticsService');
     let _cacheHelper = null;
 
-    Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (sandbox, conf = {}, locale) {
-        this.sandbox = sandbox;
+    Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (instance, locale) {
+        this.sandbox = instance.getSandbox();
         this.locale = locale;
-        this.stateHandler = new StatisticsHandler(this, conf);
+        this.stateHandler = stateHandler;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', this.cache, this);
-        this.series = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesService', sandbox, this.stateHandler);
-        this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
-        this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
-        this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
-
-        // attach on, off, trigger functions
-        Oskari.makeObservable(this);
-
-        // possible values: wms, vector
-        this._mapModes = ['vector'];
-
-        // Make series service listen for changes
-        this.series.bindToEvents(this);
 
         this.log = Oskari.log(this.getQName());
     }, {
@@ -42,133 +28,6 @@ import { getHash } from '../helper/StatisticsHelper';
         },
         getSandbox: function () {
             return this.sandbox;
-        },
-        setMapModes: function (mapModes) {
-            this._mapModes = mapModes;
-        },
-        getMapModes: function () {
-            return this._mapModes;
-        },
-        hasMapMode: function (mode) {
-            const me = this;
-            let hasMode = false;
-            me._mapModes.forEach(function (mapmode) {
-                if (mapmode === mode) {
-                    hasMode = true;
-                }
-            });
-            return hasMode;
-        },
-        /**
-         * Used to propate Oskari events for files that have reference to service, but don't need to be registered to sandbox.
-         * Usage: service.on('StatsGrid.RegionsetChangedEvent', function(evt) {});
-         *
-         * statsgrid/instance.js registers eventhandlers and calls this to let components know about events.
-         * @param  {Oskari.mapframework.event.Event} event event that needs to be propagated to components
-         */
-        notifyOskariEvent: function (event) {
-            this.trigger(event.getName(), event);
-        },
-        getSeriesService: function () {
-            return this.series;
-        },
-        getClassificationService: function () {
-            return this.classification;
-        },
-        getColorService: function () {
-            return this.colors;
-        },
-        getErrorService: function () {
-            return this.error;
-        },
-        getAllServices: function () {
-            return {
-                seriesService: this.series,
-                classificationService: this.classification,
-                colorService: this.colors,
-                errorService: this.error
-            };
-        },
-        getStateHandler: function () {
-            return this.stateHandler;
-        },
-        getIndicator: function (hash) {
-            return this.stateHandler.getState().indicators.find(ind => ind.hash === hash);
-        },
-        getUserDatasource: function () {
-            return this.stateHandler.getState().datasources.find((src) => {
-                return src.type === 'user';
-            });
-        },
-        /**
-         * Returns true if an indicator matching the datasource and id is still selected with any parameters.
-         * Can be used to check if we should show the dataprovider information for the indicator or not.
-         * @param  {Number}  ds datasource id
-         * @param  {String}  id Indicator id
-         * @return {Boolean} true if this indicator with any selections is still part of the selected indicators
-         */
-        isSelected: function (ds, id) {
-            const indicators = this.stateHandler.getState().indicators;
-            for (let i = 0; i < indicators.length; i++) {
-                const ind = indicators[i];
-                if (ind.datasource === ds && ind.indicator === id) {
-                    return true;
-                }
-            }
-            return false;
-        },
-        isSeriesActive: function () {
-            const active = this.getIndicator(this.stateHandler.getState().activeIndicator);
-            return active && !!active.series;
-        },
-        getDatasources: function () {
-            return this.stateHandler.getState().datasources.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
-        },
-        /**
-         * Returns datasource {id, name, type} as object.
-         * If id omitted returns all datasources as array.
-         * If datasource with matching id isn't found returns null.
-         * @param  {Number} id datasource id
-         * @return {Object[]|Object|Null} datasource information or null if not found
-         */
-        getDatasource: function (id) {
-            const list = this.stateHandler.getState().datasources;
-            if (!id) {
-                return list;
-            }
-            let found = null;
-            list.forEach((ds) => {
-                if ('' + ds.id === '' + id) {
-                    found = ds;
-                }
-            });
-            return found;
-        },
-        /**
-         * Returns regionsets that are available to user.
-         * Based on maplayers of type STATS.
-         */
-        getRegionsets: function (includeOnlyIds) {
-            const list = this.stateHandler.getState().regionsets || [];
-            if (!list || list.length === 0) {
-                return [];
-            }
-            const singleValue = typeof includeOnlyIds === 'number' || typeof includeOnlyIds === 'string';
-            if (singleValue) {
-                // wrap to an array
-                includeOnlyIds = [includeOnlyIds];
-            }
-            if (Array.isArray(includeOnlyIds)) {
-                const result = list.filter((reg) => {
-                    return includeOnlyIds.indexOf(reg.id) !== -1;
-                });
-                if (singleValue) {
-                    // if requested with single value, unwrap result from array
-                    return result.length ? result[0] : null;
-                }
-                return result;
-            }
-            return list;
         },
         /**
          * Calls callback with a list of regions for the regionset.
@@ -207,9 +66,7 @@ import { getHash } from '../helper/StatisticsHelper';
                     throw new Error(response.statusText);
                 }
                 const result = await response.json();
-                const onlyWithNames = result.regions.filter((region) => {
-                    return !!region.name;
-                });
+                const onlyWithNames = result.regions.filter(region => region.name);
                 this.cache.respondToQueue(cacheKey, null, onlyWithNames);
                 return onlyWithNames;
             } catch (error) {
@@ -266,31 +123,20 @@ import { getHash } from '../helper/StatisticsHelper';
         },
         /**
          * Calls callback with a list of indicators for the datasource.
-         * @param  {Number}   ds        datasource id
-         * @param  {Number}   indicator indicator id
-         * @param  {Object}   params    indicator selections
-         * @param  {Object}   series    serie keys
-         * @param  {Object}   regionset regionset
+         * @param  {Object}   indicator indicator id
+         * @param  {Number}   regionset regionset
          */
-        getIndicatorData: async function (ds, indicator, params, series, regionset) {
-            if (!ds || !indicator || !regionset) {
+        getIndicatorData: async function (indicator = {}, regionset) {
+            const { ds, id, selections, series } = indicator;
+            if (!ds || !id || !regionset) {
                 // log error message
-                // something still missing from async ops
-                return;
-                // throw new Error('Datasource, regionset or indicator missing');
+                throw new Error('Datasource, regionset or indicatorId missing');
             }
-            if (series && series.values.indexOf(params[series.id]) === -1) {
+            if (series && series.values.indexOf(selections[series.id]) === -1) {
                 throw new Error('Requested dataset is out of range');
             }
 
-            const data = {
-                datasource: ds,
-                indicator: indicator,
-                regionset: regionset,
-                selectors: JSON.stringify(params || {})
-            };
-
-            const cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
+            const cacheKey = _cacheHelper.getIndicatorDataKey(ds, id, selections, regionset);
             _log.debug('Getting data with key', cacheKey);
 
             const cachedResponse = this.cache.tryCachedVersion(cacheKey);
@@ -311,7 +157,10 @@ import { getHash } from '../helper/StatisticsHelper';
             // use first param as error indicator - null == no error
             try {
                 const response = await fetch(Oskari.urls.getRoute('GetIndicatorData', {
-                    ...data
+                    datasource: ds,
+                    indicator: id,
+                    regionset,
+                    selectors: JSON.stringify(selections || {})
                 }), {
                     method: 'GET',
                     headers: {
@@ -320,69 +169,16 @@ import { getHash } from '../helper/StatisticsHelper';
                 });
                 if (!response.ok) {
                     const error = await response.json();
-                    if (error?.error?.includes('No such regionset:')) {
-                        this.cache.respondToQueue(cacheKey, []);
-                        return [];
-                    } else {
-                        throw new Error(response.statusText);
-                    }
+                    // error?.error?.includes('No such regionset:')
+                    throw new Error(response.statusText);
                 }
                 const result = await response.json();
-                const regions = await this.getRegions(regionset);
-                // filter out data for regions that are not part of the regionset since some adapters return additional data!
-                // any additional data will result in broken classification
-                const filteredResponse = {};
-                for (const reg of regions) {
-                    filteredResponse[reg.id] = result[reg.id];
-                }
-                const hash = getHash(ds, indicator, params, series);
-                this._setInitialFractions(hash, filteredResponse);
-                this.cache.respondToQueue(cacheKey, null, filteredResponse);
-                return filteredResponse;
+                this.cache.respondToQueue(cacheKey, null, result);
+                return result;
             } catch (error) {
                 this.cache.respondToQueue(cacheKey, 'Error loading indicator data');
                 throw new Error(error);
             }
-        },
-        /**
-         * @method @private _setInitialFractions
-         * Sets initial fractionDigits for presentation of indicator
-         * Zero if indicator has only integers values, otherwise 1
-         * @param {String} indicatorHash
-         * @param {Object} data indicator data
-         */
-        _setInitialFractions: function (indicatorHash, data) {
-            const ind = this.getIndicator(indicatorHash);
-            if (!ind) {
-                return;
-            }
-            if (typeof ind.classification.fractionDigits !== 'number') {
-                const allInts = Object.keys(data).every(function (key) {
-                    return data[key] % 1 === 0;
-                });
-                ind.classification.fractionDigits = allInts ? 0 : 1;
-            }
-        },
-        getSelectedIndicatorsRegions: async function () {
-            const indicators = this.stateHandler.getState().indicators;
-            const regionsets = [];
-            const addRegions = function (regions) {
-                for (let i = 0; i < regions.length; i++) {
-                    if (jQuery.inArray(regions[i], regionsets) === -1) {
-                        regionsets.push(regions[i]);
-                    }
-                }
-            };
-            for (let i = 0; i < indicators.length; i++) {
-                const ind = indicators[i];
-                try {
-                    const indicator = await this.getIndicatorMetadata(ind.datasource, ind.indicator);
-                    addRegions(indicator.regionsets);
-                } catch (error) {
-                    throw new Error(error);
-                }
-            }
-            return regionsets;
         },
         saveIndicator: async function (datasrc, data) {
             if (!datasrc) {
@@ -461,8 +257,6 @@ import { getHash } from '../helper/StatisticsHelper';
             if (!Oskari.user().isLoggedIn()) {
                 // successfully saved for guest user
                 _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data);
-                // send out event about updated indicators
-                me.sandbox.notifyAll(Oskari.eventBuilder('StatsGrid.DatasourceEvent')(datasrc));
                 return;
             }
             // send data to server for logged in users
@@ -486,8 +280,6 @@ import { getHash } from '../helper/StatisticsHelper';
                 const result = await response.json();
                 _log.debug('AddIndicatorData', result);
                 _cacheHelper.updateIndicatorDataCache(datasrc, indicatorId, actualSelectors, regionset, data);
-                // send out event about updated indicators
-                me.sandbox.notifyAll(Oskari.eventBuilder('StatsGrid.DatasourceEvent')(datasrc));
                 return result;
             } catch (error) {
                 throw new Error('Error saving data to server');
@@ -497,18 +289,17 @@ import { getHash } from '../helper/StatisticsHelper';
          * selectors and regionset are optional -> will only delete dataset from indicator if given
          */
         deleteIndicator: async function (datasrc, indicatorId, selectors, regionset) {
+            const stateHandler = this.instance.getStateHandler();
+            if (!stateHandler) {
+                throw new Error('Failed to get state handler');
+            }
             // remove indicators from state before deleting indicator data
-            this.stateHandler.getState().indicators
-                .filter(ind => ind.datasource === datasrc && ind.indicator === indicatorId)
-                .forEach(ind => {
-                    this.stateHandler.getController().removeIndicator(getHash(ind.datasource, ind.indicator, ind.selections, ind.series));
-                });
+            stateHandler.getController().removeIndicators(datasrc, indicatorId);
             if (!Oskari.user().isLoggedIn()) {
                 // just flush cache
                 _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                 return;
             }
-            const me = this;
             const data = {
                 datasource: datasrc,
                 id: indicatorId
@@ -537,60 +328,10 @@ import { getHash } from '../helper/StatisticsHelper';
                 const result = await response.json();
                 _log.debug('DeleteIndicator', result);
                 _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
-                if (!selectors) {
-                    // if selectors/regionset is missing -> trigger a DatasourceEvent as the indicator listing changes
-                    const eventBuilder = Oskari.eventBuilder('StatsGrid.DatasourceEvent');
-                    me.sandbox.notifyAll(eventBuilder(datasrc));
-                }
                 return result;
             } catch (error) {
                 throw new Error('Error on server');
             }
-        },
-        /**
-         * @method  @public  getUnsupportedRegionsets
-         * @description returns a list of unsupported regionsets for the currently selected datasource
-         * @param datasource datasource
-         */
-        getUnsupportedRegionsets: function (ds) {
-            const { datasources, regionsets } = this.stateHandler.getState();
-            const all = regionsets.slice(0);
-
-            const supported = datasources.find(function (e) {
-                return e.id === Number(ds);
-            });
-            if (supported) {
-                supported.regionsets.forEach(function (index) {
-                    for (let i = 0; i < all.length; i++) {
-                        if (all[i].id === index) {
-                            all.splice(i, 1);
-                        }
-                    }
-                });
-                return all;
-            }
-        },
-        /**
-         * @method  @public  getUnsupportedDatasets
-         * @description returns a list of unsupported datasources for the currently selected regionset(s)
-         * @param regionsets regionsets
-         */
-        getUnsupportedDatasetsList: function (regionsets) {
-            if (regionsets === null) {
-                return;
-            }
-
-            const unsupportedDatasources = [];
-            const datasources = this.stateHandler.getState().datasources;
-            datasources.forEach(function (ds) {
-                const supported = regionsets.some(function (iter) {
-                    return ds.regionsets.indexOf(Number(iter)) !== -1;
-                });
-                if (!supported) {
-                    unsupportedDatasources.push(ds);
-                }
-            });
-            return unsupportedDatasources;
         }
     }, {
         protocol: ['Oskari.mapframework.service.Service']

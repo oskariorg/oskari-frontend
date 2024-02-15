@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Diagram } from './Diagram';
 import { Select, Message, Spin } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
@@ -43,8 +43,10 @@ const sortOptions = [
     }
 ];
 
-const DiagramFlyout = ({ indicators = [], activeIndicator, state, controller }) => {
-
+const DiagramFlyout = ({ state, controller }) => {
+    const { indicators, activeIndicator, loading } = state;
+    const { data, classifiedData } = indicators.find(ind => ind.hash === activeIndicator) || {};
+    const [sortOrder, setSortOrder] = useState('value-descending');
     const Component = (
         <Content>
             <Selections>
@@ -58,37 +60,37 @@ const DiagramFlyout = ({ indicators = [], activeIndicator, state, controller }) 
                 <StyledSelect
                     filterOption={false}
                     options={sortOptions}
-                    onChange={(value) => controller.setSortOrder(value)}
-                    value={state.sortOrder}
+                    onChange={(value) => setSortOrder(value)}
+                    value={sortOrder}
                     placeholder={<Message messageKey='datacharts.sorting.desc' />}
                 />
             </Selections>
-            <Diagram chartData={state.chartData} sortOrder={state.sortOrder} />
+            <Diagram data={data?.dataByRegions} classifiedData={classifiedData} sortOrder={sortOrder} />
         </Content>
     );
     
-    if (state.loading) {
+    if (loading) {
         return <Spin showTip={true}>{Component}</Spin>;
     }
     return Component;
 };
 
-export const showDiagramFlyout = (indicators, activeIndicator, state, controller, onClose) => {
+export const showDiagramFlyout = (state, controller, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.diagram' />;
     const controls = showFlyout(
         title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <DiagramFlyout indicators={indicators} activeIndicator={activeIndicator} state={state} controller={controller} />
+            <DiagramFlyout state={state} controller={controller} />
         </LocaleProvider>,
         onClose
     );
 
     return {
         ...controls,
-        update: (indicators, activeIndicator, state) => controls.update(
+        update: (state) => controls.update(
             title,
             <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                <DiagramFlyout indicators={indicators} activeIndicator={activeIndicator} state={state} controller={controller} />
+                <DiagramFlyout state={state} controller={controller} />
             </LocaleProvider>
         )
     }

@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { LocaleProvider } from 'oskari-ui/util';
 import { IndicatorParams } from './IndicatorParams';
 import { IndicatorCollapse } from './IndicatorCollapse';
+import { getDatasources, getRegionsets } from '../../helper/ConfigHelper';
 
 const BUNDLE_KEY = 'StatsGrid';
 const Content = styled('div')`
@@ -42,7 +43,9 @@ const IndicatorField = styled('div')`
 // For preventing checkbox clickable area from stretching to 100% of content width
 const ClickableArea = ({ children }) => <div>{children}</div>;
 
-const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) => {
+const SearchFlyout = ({ state, controller }) => {
+    const datasources =  getDatasources();
+    const regionsets = getRegionsets();
     if (!datasources.length || !regionsets.length) {
         // Nothing to show -> show generic "data missing" message
         return (<b><Message messageKey='errors.indicatorListError' /></b>);
@@ -50,12 +53,6 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
     const singleIndicatorSelected = state.selectedIndicators?.length === 1;
     const multipleRegionsetsAvailable = regionsets.length > 1;
     const multipleDatasourcesAvailable = datasources.length > 1;
-    if (!multipleDatasourcesAvailable && !state?.selectedDatasource) {
-        // only one datasource and it is NOT selected -> select it mid-render
-        // Note! not the best place to have this here, but there is quite a bit of combinations where this needs to be defaulted
-        // depending if regionset filter is changed / reset button is clicked etc
-        controller.setSelectedDatasource(datasources[0].id);
-    }
     const Component = (
         <React.Fragment>
             <Field>
@@ -156,15 +153,17 @@ const SearchFlyout = ({ regionsets = [], datasources = [], state, controller }) 
     return Component;
 };
 
-export const showSearchFlyout = (regionsets = [], datasources = [], indicators = [], state, controller, onClose) => {
+export const showSearchFlyout = (state, indicators = [], searchController, stateController, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.search' />;
     const controls = showFlyout(
         title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Content>
                 {!indicators.length && (<Message messageKey='statsgrid.noIndicators' />)}
-                <SearchFlyout regionsets={regionsets} datasources={datasources} state={state} controller={controller} />
-                <IndicatorCollapse indicators={indicators} controller={controller} />
+                <SearchFlyout state={state} controller={searchController} />
+                <IndicatorCollapse indicators={indicators}
+                    removeIndicator={stateController.removeIndicator}
+                    showMetadata={searchController.openMetadataPopup}/>
             </Content>
         </LocaleProvider>,
         onClose
@@ -177,8 +176,10 @@ export const showSearchFlyout = (regionsets = [], datasources = [], indicators =
             <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
                 <Content>
                     {!indicators.length && (<Message messageKey='statsgrid.noIndicators' />)}
-                    <SearchFlyout regionsets={regionsets} datasources={datasources} state={state} controller={controller} />
-                    <IndicatorCollapse indicators={indicators} controller={controller} />
+                    <SearchFlyout state={state} controller={searchController} />
+                    <IndicatorCollapse indicators={indicators}
+                        removeIndicator={stateController.removeIndicator}
+                        showMetadata={searchController.openMetadataPopup}/>
                 </Content>
             </LocaleProvider>
         )

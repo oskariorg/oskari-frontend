@@ -1,336 +1,289 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { TableHandler } from './TableHandler';
-import { SearchHandler } from './SearchHandler';
-import { DiagramHandler } from './DiagramHandler';
-import { IndicatorFormHandler } from './IndicatorFormHandler';
-import { ClassificationHandler } from './ClassificationHandler';
-import { normalizeDatasources, normalizeRegionsets } from '../helper/ConfigHelper';
-import { validateClassification, DEFAULT_OPTS } from '../helper/ClassificationHelper';
-import { getIndicatorObjectToAdd } from './IndicatorHelper';
+import { getHashForIndicator, populateData, populateSeriesData, getUILabels, getUpdatedLabels, formatData } from '../helper/StatisticsHelper';
+import { getClassification, getClassifiedData, shouldUpdateClassifiedData, validateClassification } from '../helper/ClassificationHelper';
+import { LAYER_ID } from '../constants';
+import { getRegionsets } from '../helper/ConfigHelper';
 
 class StatisticsController extends StateHandler {
-    constructor (service, conf = {}) {
+    constructor (instance, service) {
         super();
-        this.sandbox = service.getSandbox();
+        this.instance = instance;
+        this.sandbox = instance.getSandbox();
         this.service = service;
-        const regionsets = normalizeRegionsets(conf.regionsets);
-        let activeRegionset = null;
-        if (regionsets.length === 1) {
-            activeRegionset = regionsets[0].id;
-        }
-        this.setState({
-            datasources: normalizeDatasources(conf.sources),
-            regionsets,
-            indicators: [],
-            regions: [],
-            activeIndicator: null,
-            activeRegionset,
-            activeRegion: null,
-            lastSelectedClassification: null,
-            indicatorData: {}
-        });
-        this.searchHandler = new SearchHandler(this, this.service, this.sandbox);
-        this.tableHandler = new TableHandler(this, this.service, this.sandbox);
-        this.diagramHandler = new DiagramHandler(this, this.service, this.sandbox);
-        this.formHandler = new IndicatorFormHandler(this, this.service, this.sandbox);
-        this.classificationHandler = new ClassificationHandler(this, this.service, this.sandbox);
-        this.addStateListener(() => {
-            // update search flyout in case indicators were added/removed
-            this.searchHandler.updateFlyout();
-            this.tableHandler.updateFlyout();
-            this.diagramHandler.updateFlyout();
-            this.classificationHandler.updateContainer();
-        });
-    };
+        this.setState(this.getInitialState());
+        this.log = Oskari.log('Oskari.statistics.statsgrid.StatisticsHandler');
+    }
 
     getName () {
         return 'StatisticsHandler';
     }
 
-    getSearchHandler () {
-        return this.searchHandler;
+    getInitialState () {
+        const regionset = getRegionsets().length === 1 ? getRegionsets()[0] : null;
+        return {
+            loading: false,
+            activeIndicator: null, // hash
+            activeRegion: null,
+            regionset,
+            indicators: [],
+            regions: [], // TODO: move to helper
+            isSeriesActive: false
+        };
     }
 
-    getTableHandler () {
-        return this.tableHandler;
+    resetState () {
+        this.instance.clearDataProviderInfo();
+        this.sandbox.postRequestByName('RemoveMapLayerRequest', [LAYER_ID]);
+        this.instance.getViewHandler().closeAll(true);
+        this.updateState(this.getInitialState());
     }
 
-    getDiagramHandler () {
-        return this.diagramHandler;
-    }
-
-    getFormHandler () {
-        return this.formHandler;
-    }
-
-    getClassificationHandler () {
-        return this.classificationHandler;
+    isIndicatorSelected = (indicator, strict = false) => {
+        const { hash, ds, id } = indicator;
+        const { indicators } = this.getState();
+        if (strict) {
+            return indicators.some(ind => ind.hash === hash);
+        }
+        // selections could vary
+        return indicators.some(ind => ind.ds === ds && ind.id === id);
     }
 
     removeIndicator (indicator) {
-        const indicators = [...this.getState().indicators];
-        const index = indicators.findIndex(ind => ind.hash === indicator.hash);
-        if (index >= 0) {
-            indicators.splice(index, 1);
-        }
-        const oldData = this.getState().indicatorData;
-        const indicatorData = {};
-        const indicatorDataKeys = Object.keys(oldData).filter(key => key !== indicator.hash);
-        for (const dataKey of indicatorDataKeys) {
-            indicatorData[dataKey] = oldData[dataKey];
-        }
-        this.updateState({
-            indicators,
-            indicatorData
-        });
-        const { activeIndicator } = this.getState();
-        if (this.getState().indicators?.length < 1) {
+        const indicators = this.getState().indicators.filter(ind => ind.hash !== indicator.hash);
+        if (indicators.length === 0) {
             this.resetState();
-        } else {
-            if (indicator && indicator.hash && activeIndicator && activeIndicator === indicator.hash) {
-                // active was the one removed -> reset active
-                const newActiveIndicator = this.getState().indicators[this.getState().indicators.length - 1];
-                this.setActiveIndicator(newActiveIndicator.hash);
+            return;
+        }
+        this.updateState({indicators});
+        // check if the same indicator is added more than once with different selections
+        if (!this.isIndicatorSelected(indicator)) {
+            this.instance.removeDataProviverInfo(indicator);
+        }
+        if (this.getState().activeIndicator === hash) {
+            // active was the one removed -> reset active
+            this.setActiveIndicator();
+        }
+    }
+    removeIndicators(ds, id) {
+        const { indicators, activeIndicator } = this.getState();
+        const hashes = indicators
+            .filter(ind => ind.ds === ds && ind.id === id)
+            .map(ind => ind.hash);
+        this.updateState({indicators: indicators.filter(ind => !hashes.includes(ind.hash))});
+        this.instance.removeDataProviverInfo(ds + '_' + id);
+        if (hashes.includes(activeIndicator)) {
+            // active was the one removed -> reset active
+            this.setActiveIndicator();
+        }
+    }
+
+    setActiveIndicator (hash = null) {
+        let activeIndicator = hash;
+        const { indicators } = this.getState();
+        const indicator = indicators.find(ind => ind.hash === hash);
+        if (!indicator && indicators.length) {
+            activeIndicator = indicators[0].hash;
+        }
+        const isSeriesActive = indicator ? !!indicator.series : false;
+        this.updateState({ activeIndicator, isSeriesActive });
+    }
+
+    async setActiveRegionset (regionset) {
+        this.updateState({ loading: true });
+        const regions = await this.service.getRegions(regionset);
+        const indicators = updateIndicatorsRegions(regionset);
+        this.updateState({ regionset, regions, indicators, loading: false });
+    }
+
+    async updateIndicatorsRegions (regionset, regions) {
+        const indicators = [...this.getState().indicators];
+        for (let i=0; i < indicators.length; i++) {
+            const indicator = indicators[i];
+            indicator.data = await this.fetchIndicatorData(indicator, regionset, regions);
+        };
+        return indicators;
+    }
+
+    setActiveRegion (activeRegion) {
+        this.updateState({ activeRegion });
+    }
+
+    updateClassification (updated) {
+        const { activeIndicator: hash, indicators } = this.getState();
+        const indicator = indicators.find(ind => ind.hash === hash);
+        if (!indicator) {
+            this.log.warn(`Couldn't find indicator to update classification`);
+            return;
+        }
+        const updatedKeys = Object.keys(updated);
+        const classification = { ...indicator.classification, ...updated };
+        validateClassification(classification, indicator.data);
+        const classifiedData = getClassifiedData(indicator.data, classification);
+        const updatedInd = { ...indicator, classification, classifiedData };
+
+        if (updatedKeys.includes('fractionDigits')) {
+            formatData(updatedInd.data, classification);
+        }
+
+        // keep order
+        this.updateState({
+            indicators: indicators.map(ind => ind.hash === hash ? updatedInd : ind)
+        });
+    }
+
+    setSeriesValue (value) {
+        const { indicators } = this.getState()
+        const hashes = indicators.filter(ind => ind.series).map(ind => ind.hash);
+        const updated = indicators.map(ind => {
+            if (hashes.includes(ind.hash)) {
+                const { id } = ind.series;
+                const selections = {...ind.selections, [id]: value};
+                const labels = getUpdatedLabels(ind.labels, selections);
+                return { ...ind, selections, labels };
             }
+            return ind;
+        });
+        this.updateState( {indicators: updated });
+    }
+
+    getStateToStore () {
+        // State isn't cleared when stats layer is removed
+        // return full state only if stats layer is selected
+        if (!this.sandbox.isLayerAlreadySelected(LAYER_ID)) {
+            return null;
         }
-    }
-
-    setActiveIndicator (hash) {
-        const previous = this.getState().activeIndicator;
-
-        const indicator = this.getState().indicators.find(ind => ind.hash === hash);
-        this.updateState({
-            activeIndicator: hash,
-            lastSelectedClassification: indicator?.classification
+        const state = this.getState();
+        const indicators = state.indicators.map(ind => {
+            return {
+                ds: ind.ds,
+                id: ind.id,
+                selections: ind.selections,
+                classification: ind.classification,
+                series: ind.series
+            };
         });
-
-        const eventBuilder = Oskari.eventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
-        this.sandbox.notifyAll(eventBuilder(hash.activeIndicator, previous));
-
-        if (indicator) {
-            const indicatorEvent = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
-            this.sandbox.notifyAll(indicatorEvent(indicator.datasource, indicator.indicator, indicator.selections, indicator.series));
-        }
+        return {
+            active: state.activeIndicator,
+            activeRegion: state.activeRegion,
+            regionset: state.regionset,
+            indicators
+        };
     }
 
-    async fetchIndicatorData (regionset = null) {
-        const { activeRegionset } = this.getState();
-        regionset = regionset || activeRegionset;
-        const indicatorData = {};
-        for (const indicator of this.getState().indicators) {
-            const data = await this.service.getIndicatorData(indicator.datasource, indicator.indicator, indicator.selections, indicator.series, regionset);
-            indicatorData[indicator.hash] = data;
-        }
-        this.updateState({
-            indicatorData
-        });
-        const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
-        this.sandbox.notifyAll(eventBuilder());
-    }
-
-    async setActiveRegionset (value) {
-        const regions = await this.service.getRegions(value);
-        await this.fetchIndicatorData(value);
-        this.updateState({
-            activeRegionset: value,
-            regions
-        });
-        const eventBuilder = Oskari.eventBuilder('StatsGrid.RegionsetChangedEvent');
-        this.sandbox.notifyAll(eventBuilder());
-    }
-
-    setActiveRegion (value) {
-        this.updateState({
-            activeRegion: value
-        });
-        const eventBuilder = Oskari.eventBuilder('StatsGrid.RegionSelectedEvent');
-        // TODO: send which region was deselected so implementations can optimize rendering!!!!
-        this.sandbox.notifyAll(eventBuilder(this.getState().activeRegionset, value, null));
-    }
-
-    setFullState (state) {
-        const { regionset, indicators = [], activeIndicator, activeRegion } = state || {};
+    async setStoredState (state) {
+        const { regionset, indicators = [], active: activeIndicator, activeRegion } = state || {};
         if (!indicators.length) {
             // if state doesn't have indicators, reset state
             this.resetState();
             return;
         }
-
-        const setStateAsync = async (stateList) => {
-            // map to keep stored states work properly
-            for (const ind of stateList) {
-                // async/await doesn't work with forEach()
-                await this.addIndicator(ind.ds, ind.id, ind.selections, ind.series, ind.classification);
+        this.updateState({ loading: true });
+        try {
+            const indicatorsToAdd = [];
+            // async/await doesn't work with forEach()
+            for (let i = 0; i < indicators.length; i++) {
+                const toAdd = await this.getIndicatorToAdd(indicators[i], regionset);
+                indicatorsToAdd.push(toAdd);
+                this.instance.addDataProviderInfo(toAdd);
+                // TODO: check that active indicator (hash) exists
+                // TODO: isSeriesActive
             };
-            const { indicators } = this.getState();
-            const active = indicators.find(ind => ind.hash === activeIndicator);
-            let lastSelectedClassification;
-            if (active) {
-                const { classification, series, selections } = active;
-                if (classification) {
-                    lastSelectedClassification = classification;
-                }
-                if (series) {
-                    this.service.getSeriesService().setValues(series.values, selections[series.id]);
-                }
-            }
-
-            this.updateState({
-                activeRegion,
-                lastSelectedClassification
-            });
-            this.setActiveRegionset(regionset);
-
-            if (active) {
-                this.setActiveIndicator(active.hash);
-            }
-            const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
-            this.sandbox.notifyAll(eventBuilder());
-        };
-
-        setStateAsync(indicators);
-    }
-
-    resetState () {
-        this.updateState({
-            activeIndicator: null,
-            activeRegion: null,
-            indicators: [],
-            regions: [],
-            lastSelectedClassification: null,
-            indicatorData: {}
-        });
-        const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
-        this.sandbox.notifyAll(eventBuilder(true));
-    }
-
-    updateClassificationTransparency (transparency) {
-        const indicators = [...this.getState().indicators];
-        const index = indicators.findIndex(ind => ind.hash === this.getState().activeIndicator);
-        if (index) {
-            indicators[index].classification.transparency = transparency;
-            this.updateState({
-                indicators
-            });
+            this.updateState({ activeIndicator, activeRegion, regionset, indicators: indicatorsToAdd, loading: false });
+        } catch (error) {
+            this.log.warn('Failed to set stored state', error.message);
         }
     }
 
-    isIndicatorAdded (indicatorHash) {
-        const foundIncidatorInState = this.getState().indicators
-            .find((existing) => existing.hash === indicatorHash);
-        return !!foundIncidatorInState;
-    }
-
-    /**
-     * Adds indicator to selected indicators. Triggers event to notify about change
-     * and sets the added indicator as the active one triggering another event.
-     * @param  {Number} datasrc    datasource id
-     * @param  {Number} indicator  indicator id
-     * @param  {Object} selections object containing the parameters for the indicator
-     * @param  {Object} series object containing series values
-     * @param {Object} classification indicator classification
-     *
-     * @return {Object} false if indicator is already selected or an object describing the added indicator (includes parameters as an object)
-     */
-    async addIndicator (datasrc, indicator, selections, series, classification) {
-        const ind = await getIndicatorObjectToAdd(datasrc, indicator, selections, series);
-        if (this.isIndicatorAdded(ind.hash)) {
-            // already added to state
+    async addIndicator (indicator, regionset) {
+        if (this.isIndicatorSelected(indicator, true)) {
+            // already selected
+            if (regionset === this.getState().regionset) {
+                // TODO: update data & classification
+            }
+            return true;
+        }
+        try {
+            this.updateState({ loading: true });
+            const indicatorToAdd = await this.getIndicatorToAdd(indicator, regionset);
+            this.instance.addDataProviderInfo(indicatorToAdd);
+            this.updateState({
+                indicators: [...this.getState().indicators, indicatorToAdd]
+            });
+        } catch (error) {
+            this.log.warn(error.message);
             return false;
         }
-        // init classification values if not given
-        ind.classification = classification || await this.getClassificationOpts(ind.hash, {
-            ds: datasrc,
-            id: indicator
-        });
-        validateClassification(ind.classification);
-
-        if (series) {
-            const seriesService = this.service.getSeriesService();
-            seriesService.setValues(series.values);
-            ind.selections[series.id] = seriesService.getValue();
-            // Discontinuos mode is problematic for series data,
-            // because each class has to get at least one hit -> set distinct mode.
-            ind.classification.mode = 'distinct';
-        }
-        this.updateState({
-            indicators: [...this.getState().indicators, ind]
-        });
-
-        await this.fetchIndicatorData();
-
-        // notify
-        const eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
-        this.sandbox.notifyAll(eventBuilder(ind.datasource, ind.indicator, ind.selections, ind.series));
-        return ind;
+        this.updateState({ loading: false });
+        return true;
     }
 
-    /**
-     * Gets getClassificationOpts
-     * @param  {String} indicatorHash indicator hash
-     */
-    async getClassificationOpts (indicatorHash, opts = {}) {
-        const indicator = this.getState().indicators.find(ind => ind.hash === indicatorHash) || {};
-        const lastSelected = { ...this.getState().lastSelectedClassification };
-        delete lastSelected.manualBounds;
-        delete lastSelected.fractionDigits;
-        delete lastSelected.base;
-
-        const metadataClassification = {};
-        // Note! Assumes that the metadata has been loaded when selecting the indicator from the list to get a sync response
-        // don't try this at home...
-        try {
-            const data = await this.service.getIndicatorMetadata(indicator.datasource || opts.ds, indicator.indicator || opts.id);
-            const metadata = data.metadata || {};
-            if (typeof metadata.isRatio === 'boolean') {
-                metadataClassification.mapStyle = metadata.isRatio ? 'choropleth' : 'points';
-            }
-            if (typeof metadata.decimalCount === 'number') {
-                metadataClassification.fractionDigits = metadata.decimalCount;
-            }
-            if (typeof metadata.base === 'number') {
-                // if there is a base value the data is divided at base value
-                // TODO: other stuff based on this
-                metadataClassification.base = metadata.base;
-                metadataClassification.type = 'div';
-            }
-        } catch (error) {
-            return;
+    // gather all needed stuff for rendering components before adding indicator to state
+    async getIndicatorToAdd (indicator, regionset) {
+        const regions = await this.service.getRegions(regionset);
+        if (this.getState().regionset !== regionset) {
+            this.updateState({regions, regionset});
         }
+        if(!indicator.hash) {
+            // to be sure that indicator has always hash
+            indicator.hash = getHashForIndicator(indicator);
+        }
+        if (indicator.series) {
+            // TODO: SearchHandler should select first value
+            const { id, values } = indicator.series;
+            indicator.selections[id] = values[0];
+        }
+        const data = await this.fetchIndicatorData(indicator, regionset, regions);
+        const meta = await this.service.getIndicatorMetadata(indicator.ds, indicator.id);
+        // active indicicator has latest user selected classification
+        const { indicators, activeIndicator } = this.getState();
+        const { classification: latest } = indicators.find(ind => ind.hash === activeIndicator) || {};
+        const classification = indicator.classification || getClassification(data, meta.metadata, latest);
+        const classifiedData = getClassifiedData(data, classification);
+        const labels = getUILabels(indicator, meta);
+        // format data here because data is populated before classification (fractionDigits) created
+        formatData(data, classification);
 
-        const result = Object.assign({}, DEFAULT_OPTS.classification, lastSelected, metadataClassification);
-        validateClassification(result);
-        return result;
+        return {
+            ...indicator,
+            data,
+            classification,
+            labels,
+            classifiedData
+        };
     }
 
-    updateIndicator (indicator) {
-        const indicators = [...this.getState().indicators];
-        const index = indicators.findIndex(ind => ind.hash === indicator.hash);
-        if (index) {
-            indicators[index] = indicator;
+    async fetchIndicatorData (indicator, regionset, regions) {
+        let data = {};
+        const fractionDigits = indicator?.classification?.fractionDigits;
+        if (indicator.series) {
+            const { id, values } = indicator.series;
+            const dataBySelection = {};
+            for (let i = 0; i < values.length; i++) {
+                const value = values[i];
+                const selections = {...indicator.selections, [id]: value};
+                const rawData = await this.service.getIndicatorData({...indicator, selections}, regionset);
+                dataBySelection[value] = rawData;
+            }
+            data = populateSeriesData(dataBySelection, regions, regionset, fractionDigits);
+        } else {
+            const rawData = await this.service.getIndicatorData(indicator, regionset);
+            data = populateData(rawData, regions, regionset, fractionDigits);
         }
-        this.updateState({
-            indicators
-        });
-        this.fetchIndicatorData();
+        return data;
     }
 }
 
 const wrapped = controllerMixin(StatisticsController, [
-    'getSearchHandler',
-    'getTableHandler',
-    'getDiagramHandler',
-    'getFormHandler',
-    'getClassificationHandler',
     'removeIndicator',
+    'removeIndicators',
     'setActiveIndicator',
     'setActiveRegionset',
     'setActiveRegion',
     'addIndicator',
-    'setFullState',
     'resetState',
-    'updateClassificationTransparency',
-    'updateIndicator'
+    'updateIndicator',
+    'updateClassification',
+    'setSeriesValue'
 ]);
 
-export { wrapped as StatisticsHandler };
+export { wrapped as StateHandler };

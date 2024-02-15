@@ -1,5 +1,30 @@
+// cache
+let datasources = [];
+let regionsets = [];
+export const initConfig = (conf = {}) => {
+    const ds = normalizeDatasources(conf.sources);
+    datasources = ds.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+    regionsets = normalizeRegionsets(conf.regionsets);
+};
 
-export const normalizeDatasources = (ds) => {
+export const getDatasources = () => {
+    return datasources;
+};
+
+export const getRegionsets = () => {
+    return regionsets;
+};
+
+export const getUnsupportedDatasourceIds = (regionsets) => {
+    if (regionsets === null) {
+        return [];
+    }
+    return getDatasources()
+        .filter(ds => !regionsets.some(rsId => ds.regionsets.includes(rsId)))
+        .map(ds => ds.id);
+};
+
+const normalizeDatasources = (ds) => {
     if (!ds) {
         // log error message
         return [];
@@ -25,7 +50,7 @@ const normalizeSingleDatasource = (ds) => {
     };
 };
 
-export const normalizeRegionsets = (regionset) => {
+const normalizeRegionsets = (regionset) => {
     if (!regionset) {
         // log error message
         return [];

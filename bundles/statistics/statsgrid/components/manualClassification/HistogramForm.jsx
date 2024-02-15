@@ -5,6 +5,7 @@ import { showPopup } from 'oskari-ui/components/window';
 import { Message, Select, Option } from 'oskari-ui';
 import { PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { manualClassificationEditor } from './editor';
+import { getEditOptions } from '../../helper/ClassificationHelper';
 import '../../../statsgrid2016/resources/scss/manualClassification.scss';
 
 const BUNDLE_KEY = 'StatsGrid';
@@ -20,14 +21,14 @@ const StyledSelect = styled(Select)`
 
 const Form = ({
     state,
-    classifiedDataset,
-    data,
-    editOptions,
+    pluginState,
+    controller,
     onClose
 }) => {
     const ref = useRef();
     const [activeBound, setActiveBound] = useState();
-    const { editEnabled } = state?.pluginState;
+    const { activeIndicator, indicators } = state;
+    const { classification: { editEnabled } } = pluginState;
     useEffect(() => {
         // editor appends content to ref element, clear content
         ref.current.innerHTML = '';
@@ -36,14 +37,19 @@ const Form = ({
         }
         manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, fractionDigits, base, onBoundChange, !editEnabled);
     }, [editEnabled]);
-    const { activeIndicator: { classification }, seriesStats, controller } = state;
+    const { classifiedData, classification, data} = indicators.find(ind => ind.hash === activeIndicator) || {};
+    if (!classifiedData || !classification || !data) {
+        // TODO: something common like InactiveLegend error: 'noData'
+        return null;
+    }
     const { method, fractionDigits, base } = classification;
-    const { methods } = editOptions;
-    const { groups = [], bounds, error } = classifiedDataset;
+    const { groups = [], bounds, error } = classifiedData;
+    // TODO: getMethdodOptions(data.uniqueCount);
+    const { methods } = getEditOptions(classification, data);
 
     const colors = groups.map(group => group.color);
-    const dataAsList = Object.values(seriesStats ? seriesStats.serie : data);
-    const onMethodChange = method => controller.updateClassification('method', method);
+    const dataAsList = data.seriesValues ? data.seriesValues : data.dataByRegions.map(d => d.value);
+    const onMethodChange = method => controller.updateClassification({ method });
     const onBoundChange = (manualBounds, index) => {
         if (index !== activeBound) {
             setActiveBound(index);
@@ -56,7 +62,7 @@ const Form = ({
         if (method !== 'manual') {
             updated.method = 'manual';
         }
-        controller.updateClassificationObj(updated);
+        controller.updateClassification(updated);
     };
     return (
         <Content>
@@ -83,34 +89,24 @@ const Form = ({
 
 Form.propTypes = {
     state: PropTypes.object.isRequired,
-    classifiedDataset: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired,
-    editOptions: PropTypes.object.isRequired,
+    pluginState: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired
 };
 
-const getMessage = path => <Message messageKey={ `classify.edit.${path}` } bundleKey={BUNDLE_KEY} />;
-
-const getContent = (state, classifiedDataset, data, editOptions, onClose) => (
-    <Form
-        state = { state }
-        onClose={ onClose }
-        classifiedDataset = { classifiedDataset }
-        data = { data }
-        editOptions = { editOptions }
-    />
-);
-
-export const showHistogramPopup = (state, classifiedDataset, data, editOptions, onClose) => {
+export const showHistogramPopup = (state, viewState, controller, onClose) => {
     const controls = showPopup(
-        getMessage('title'),
-        getContent(state, classifiedDataset, data, editOptions, onClose),
+        <Message messageKey='classify.edit.title' bundleKey={BUNDLE_KEY} />,
+        <Form state={state} pluginState={viewState} controller={controller} onClose={onClose} />,
         onClose,
         { id: 'statsgrid-histogram' }
     );
     return {
         ...controls,
-        update: (state, classifiedDataset, data, editOptions) =>
-            controls.update(getMessage('title'), getContent(state, classifiedDataset, data, editOptions, onClose))
+        update: (state, viewState) =>
+            controls.update(
+                <Message messageKey='classify.edit.title' bundleKey={BUNDLE_KEY} />,
+                <Form state={state} pluginState={viewState} controller={controller} onClose={onClose} />
+            )
     };
 };

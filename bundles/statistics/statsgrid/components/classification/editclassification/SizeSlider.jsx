@@ -60,7 +60,7 @@ export const SizeSlider = ({
         setRange(range);
     };
     const onAfterChange = () => {
-        controller.updateClassificationObj({ min: range[0], max: range[1] });
+        controller.updateClassification({ min: range[0], max: range[1] });
     };
     return (
         <div>

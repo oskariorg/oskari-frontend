@@ -30,20 +30,17 @@ const editStyle = {
 };
 
 export const Header = ({ selected, indicators, isEdit, toggleEdit, onChange }) => {
-    const { labels = {} } = indicators.find(indicator => indicator.hash === selected) || {};
-    const { full: title = '' } = labels;
     const renderSelect = indicators.length > 1;
-
     return (
         <Component className='classification-header'>
-            {!renderSelect && <Single>{title}</Single>}
+            {!renderSelect && <Single>{selected.labels.full}</Single>}
             {renderSelect && (
                 <Select
-                    value={selected}
+                    value={selected.hash}
                     onChange={onChange}
                     options={indicators.map(opt => ({
                         value: opt.hash,
-                        label: opt.labels?.full
+                        label: opt.labels.full
                     }))}
                 />
             )}
@@ -57,7 +54,7 @@ export const Header = ({ selected, indicators, isEdit, toggleEdit, onChange }) =
 };
 
 Header.propTypes = {
-    selected: PropTypes.string.isRequired,
+    selected: PropTypes.object.isRequired,
     indicators: PropTypes.array.isRequired,
     isEdit: PropTypes.bool.isRequired,
     toggleEdit: PropTypes.func.isRequired,
