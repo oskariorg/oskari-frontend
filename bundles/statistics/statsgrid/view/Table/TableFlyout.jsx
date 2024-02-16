@@ -8,6 +8,7 @@ import { LocaleProvider } from 'oskari-ui/util';
 import { Sorter } from './Sorter';
 import { IndicatorName } from '../IndicatorName';
 import { getRegionsets } from '../../helper/ConfigHelper';
+import { getDataByRegions } from '../../helper/StatisticsHelper';
 
 const BUNDLE_KEY = 'StatsGrid';
 
@@ -88,7 +89,7 @@ const TableFlyout = ({ state, controller }) => {
     };
     // TODO:
     const regionValues = indicators.reduce((data, indicator) => {
-        indicator.data.dataByRegions.forEach(region => {
+        getDataByRegions(indicator).forEach(region => {
             const {id, value } = region;
             if (!data[id]) {
                 data[id] = {};

@@ -1,6 +1,7 @@
 import { Messaging } from 'oskari-ui/util';
 import { LAYER_ID } from '../constants';
 import { getRegionsets } from '../helper/ConfigHelper';
+import { getDataByRegions } from '../helper/StatisticsHelper';
 
 const BORDER_PRIO = 10000;
 const REGION_PRIO = 10;
@@ -27,8 +28,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 this.clearRegions();
                 return;
             }
-            const { data, classification, classifiedData } = currentIndicator;
-            const { dataByRegions } = data;
+            const { classification, classifiedData } = currentIndicator;
+            const dataByRegions = getDataByRegions(currentIndicator);
             const { mapStyle } = classification;
             this._updateLayerProperties(mapStyle, regionset);
 

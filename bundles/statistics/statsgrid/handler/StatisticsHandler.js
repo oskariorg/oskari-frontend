@@ -1,6 +1,6 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { getHashForIndicator, populateData, populateSeriesData, getUILabels, getUpdatedLabels, formatData } from '../helper/StatisticsHelper';
-import { getClassification, getClassifiedData, shouldUpdateClassifiedData, validateClassification } from '../helper/ClassificationHelper';
+import { getClassification, getClassifiedData, validateClassification } from '../helper/ClassificationHelper';
 import { LAYER_ID } from '../constants';
 import { getRegionsets } from '../helper/ConfigHelper';
 
@@ -104,7 +104,7 @@ class StatisticsController extends StateHandler {
             const indicator = indicators[i];
             const data = await this.fetchIndicatorData(indicator, regionset, regions);
             validateClassification(indicator.classification, data);
-            const classifiedData = getClassifiedData(data, indicator.classification);
+            const classifiedData = getClassifiedData(indicator);
             updated.push( {...indicator, data, classifiedData });
         };
         return updated;
@@ -124,9 +124,8 @@ class StatisticsController extends StateHandler {
         const updatedKeys = Object.keys(updated);
         const classification = { ...indicator.classification, ...updated };
         validateClassification(classification, indicator.data);
-        const classifiedData = getClassifiedData(indicator.data, classification);
-        const updatedInd = { ...indicator, classification, classifiedData };
-
+        const updatedInd = { ...indicator, classification };
+        updatedInd.classifiedData = getClassifiedData(updatedInd);
         if (updatedKeys.includes('fractionDigits')) {
             formatData(updatedInd.data, classification);
         }
@@ -142,10 +141,12 @@ class StatisticsController extends StateHandler {
         const hashes = indicators.filter(ind => ind.series).map(ind => ind.hash);
         const updated = indicators.map(ind => {
             if (hashes.includes(ind.hash)) {
-                const { id } = ind.series;
-                const selections = {...ind.selections, [id]: value};
-                const labels = getUpdatedLabels(ind.labels, selections);
-                return { ...ind, selections, labels };
+                const indicator = {...ind};
+                const { id } = indicator.series;
+                indicator.selections = {...indicator.selections, [id]: value};
+                indicator.labels = getUpdatedLabels(indicator.labels, indicator.selections);
+                indicator.classifiedData = getClassifiedData(indicator);
+                return indicator;
             }
             return ind;
         });
@@ -260,7 +261,7 @@ class StatisticsController extends StateHandler {
         } else {
             validateClassification(classification, data);
         }
-        const classifiedData = getClassifiedData(data, classification);
+        const classifiedData = getClassifiedData({ ...indicator, data, classification });
         const labels = getUILabels(indicator, meta);
         // format data here because data is populated before classification (fractionDigits) created
         formatData(data, classification);

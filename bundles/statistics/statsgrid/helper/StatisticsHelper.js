@@ -32,6 +32,25 @@ export const getHash = (datasrc, indicator, selections, series) => {
 
 export const getDataProviderKey = (indicator) => indicator.ds + '_' + indicator.id;
 
+export const getDataByRegions = (indicator, optRegionset) => {
+    const { dataByRegions, dataBySelection, regionset } = indicator.data || {};
+    // use optional regionset to be sure that we have right data
+    if (optRegionset && optRegionset !== regionset) {
+        return [];
+    }
+    if (dataBySelection) {
+        const { id } = indicator.series || {};
+        const selection = indicator.selections[id];
+        if (Array.isArray(dataBySelection[selection])) {
+            return dataBySelection[selection];
+        }
+    }
+    if (Array.isArray(dataByRegions)) {
+        return dataByRegions;
+    }
+    return [];
+};
+
 // filter out data for regions that are not part of the regionset since some adapters return additional data!
 // any additional data will result in broken classification
 export const populateData = (data, regions, regionset, fractionDigits) => {
@@ -89,7 +108,6 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
         }
     });
     return {
-        dataByRegions: [], // TODO: remove when all components handles series
         dataBySelection,
         regionset,
         seriesValues, // needed for series bounds

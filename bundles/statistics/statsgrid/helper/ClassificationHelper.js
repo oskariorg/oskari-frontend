@@ -3,6 +3,7 @@ import { equalSizeBands, createClamp } from './util';
 import geostats from 'geostats/lib/geostats.min.js';
 import 'geostats/lib/geostats.css';
 import * as d3 from 'd3';
+import { getDataByRegions } from './StatisticsHelper';
 
 const LIMITS = {
     // 2-7 used for points, colorservice's colorsets limits other mapStyles
@@ -95,11 +96,12 @@ export const getGroupStats = (dataBySelection) => {
  * @param  {geostats} groupStats precalculated geostats | optional
  * @return {Object}               result with classified values
  */
-export const getClassifiedData = (indicatorData, opts, groupStats) => {
-    const { dataByRegions, seriesValues } = indicatorData;
+export const getClassifiedData = (indicator, groupStats) => {
+    const { classification: opts, data: {seriesValues} } = indicator;
     if (seriesValues && seriesValues.length < 3) {
         return { error: 'noEnough' };
     }
+    const dataByRegions = getDataByRegions(indicator);
     const values = seriesValues ? seriesValues : dataByRegions.map(d => d.value);
     const isDivided = opts.type === 'div';
     const { format } = Oskari.getNumberFormatter(opts.fractionDigits);
