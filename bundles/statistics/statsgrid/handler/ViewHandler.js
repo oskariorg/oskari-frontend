@@ -90,7 +90,7 @@ class UIHandler extends StateHandler {
                 if (!this.seriesControlPlugin) {
                     this.seriesControlPlugin = createSeriesControlPlugin(this.instance.getSandbox(), this.stateHandler);
                 }
-                this.seriesControlPlugin.refresh(viewState);
+                this.seriesControlPlugin.refresh();
             }
         } else {
             this.close('classification');

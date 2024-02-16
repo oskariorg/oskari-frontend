@@ -92,17 +92,22 @@ class StatisticsController extends StateHandler {
     async setActiveRegionset (regionset) {
         this.updateState({ loading: true });
         const regions = await this.service.getRegions(regionset);
-        const indicators = updateIndicatorsRegions(regionset);
+        const indicators = await this.updateIndicatorsRegions(regionset, regions);
         this.updateState({ regionset, regions, indicators, loading: false });
     }
 
     async updateIndicatorsRegions (regionset, regions) {
-        const indicators = [...this.getState().indicators];
+        const { indicators } = this.getState();
+        const updated = [];
+        // async/await doesn't work with map()
         for (let i=0; i < indicators.length; i++) {
             const indicator = indicators[i];
-            indicator.data = await this.fetchIndicatorData(indicator, regionset, regions);
+            const data = await this.fetchIndicatorData(indicator, regionset, regions);
+            validateClassification(indicator.classification, data);
+            const classifiedData = getClassifiedData(data, indicator.classification);
+            updated.push( {...indicator, data, classifiedData });
         };
-        return indicators;
+        return updated;
     }
 
     setActiveRegion (activeRegion) {
@@ -180,16 +185,27 @@ class StatisticsController extends StateHandler {
         }
         this.updateState({ loading: true });
         try {
+            let active;
             const indicatorsToAdd = [];
             // async/await doesn't work with forEach()
             for (let i = 0; i < indicators.length; i++) {
                 const toAdd = await this.getIndicatorToAdd(indicators[i], regionset);
                 indicatorsToAdd.push(toAdd);
                 this.instance.addDataProviderInfo(toAdd);
-                // TODO: check that active indicator (hash) exists
-                // TODO: isSeriesActive
+                if (toAdd.hash === activeIndicator) {
+                    active = toAdd;
+                }
             };
-            this.updateState({ activeIndicator, activeRegion, regionset, indicators: indicatorsToAdd, loading: false });
+            const isSeriesActive = active ? !!active.series : false;
+            this.updateState({ activeIndicator, isSeriesActive, activeRegion, regionset, indicators: indicatorsToAdd, loading: false });
+            // backwards compatibility
+            if (active) {
+                const opacity = active.classification?.transparency || 100;
+                this.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [LAYER_ID, opacity]);
+            } else {
+                // reset active
+                this.setActiveIndicator();
+            }
         } catch (error) {
             this.log.warn('Failed to set stored state', error.message);
         }
@@ -199,12 +215,17 @@ class StatisticsController extends StateHandler {
         if (this.isIndicatorSelected(indicator, true)) {
             // already selected
             if (regionset === this.getState().regionset) {
-                // TODO: update data & classification
+                setActiveRegionset(regionset);
             }
             return true;
         }
         try {
             this.updateState({ loading: true });
+            // TODO: SearchHandler should select first value
+            if (indicator.series) {
+                const { id, values } = indicator.series;
+                indicator.selections[id] = values[0];
+            }
             const indicatorToAdd = await this.getIndicatorToAdd(indicator, regionset);
             this.instance.addDataProviderInfo(indicatorToAdd);
             this.updateState({
@@ -228,17 +249,17 @@ class StatisticsController extends StateHandler {
             // to be sure that indicator has always hash
             indicator.hash = getHashForIndicator(indicator);
         }
-        if (indicator.series) {
-            // TODO: SearchHandler should select first value
-            const { id, values } = indicator.series;
-            indicator.selections[id] = values[0];
-        }
         const data = await this.fetchIndicatorData(indicator, regionset, regions);
         const meta = await this.service.getIndicatorMetadata(indicator.ds, indicator.id);
-        // active indicicator has latest user selected classification
-        const { indicators, activeIndicator } = this.getState();
-        const { classification: latest } = indicators.find(ind => ind.hash === activeIndicator) || {};
-        const classification = indicator.classification || getClassification(data, meta.metadata, latest);
+        let { classification } = indicator;
+        if (!classification) {
+            // active indicicator has latest user selected classification
+            const { indicators, activeIndicator } = this.getState();
+            const { classification: latest } = indicators.find(ind => ind.hash === activeIndicator) || {};
+            classification = getClassification(data, meta.metadata, latest);
+        } else {
+            validateClassification(classification, data);
+        }
         const classifiedData = getClassifiedData(data, classification);
         const labels = getUILabels(indicator, meta);
         // format data here because data is populated before classification (fractionDigits) created

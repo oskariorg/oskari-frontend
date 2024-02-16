@@ -63,7 +63,7 @@ export const getClassification = (data, metadata = {}, lastSelected = {}) => {
     return classification;
 }
 
-export const validateClassification = (classification, data) => {
+export const validateClassification = (classification, data = {}) => {
     if (!validateColor(classification)) {
         classification.color = getDefaultColor(classification);
     }

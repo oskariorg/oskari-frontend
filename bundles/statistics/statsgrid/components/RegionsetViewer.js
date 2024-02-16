@@ -36,8 +36,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 this.clearRegions();
                 return;
             }
-            if (this._lastRenderCache.mapStyle !== mapStyle) {
+            const { mapStyle: lastStyle, regionset: lastRegionset } = this._lastRenderCache;
+            if (lastStyle !== mapStyle || lastRegionset !== regionset) {
                 this.clearRegions();
+                this._lastRenderCache.regionset = regionset;
             }
             this._viewRegions(classification, classifiedData, dataByRegions, activeRegion);
         } catch (error) {
