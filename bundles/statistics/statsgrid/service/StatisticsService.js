@@ -9,9 +9,9 @@ import { getHash } from '../helper/StatisticsHelper';
     let _cacheHelper = null;
 
     Oskari.clazz.define('Oskari.statistics.statsgrid.StatisticsService', function (instance, locale) {
+        this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.locale = locale;
-        this.stateHandler = stateHandler;
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', this.cache, this);
 
