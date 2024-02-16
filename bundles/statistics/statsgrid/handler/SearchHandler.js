@@ -1,100 +1,48 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { showSearchFlyout } from '../view/search/SearchFlyout';
 import { showMedataPopup } from '../components/description/MetadataPopup';
-import { getHash } from '../helper/StatisticsHelper';
+import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
 import { getIndicatorMetadata } from './IndicatorHelper';
+import { getDatasources, getUnsupportedDatasourceIds } from '../helper/ConfigHelper';
 
 class SearchController extends StateHandler {
-    constructor (stateHandler, service, sandbox) {
+    constructor (instance, service, stateHandler) {
         super();
-        this.sandbox = sandbox;
+        this.instance = instance;
         this.stateHandler = stateHandler;
         this.service = service;
-        this.setState({
-            searchTimeseries: false,
-            regionsetFilter: [],
-            disabledDatasources: [],
-            selectedDatasource: null,
-            isUserDatasource: false,
-            indicatorOptions: [],
-            selectedIndicators: [],
-            indicatorParams: null,
-            loading: false,
-            flyout: null
-        });
-        const { datasources } = this.stateHandler.getState();
-        if (datasources.length === 1) {
-            // pre-select if only one options
-            this.setSelectedDatasource(datasources[0].id);
-        }
+        this.setState(this.getInitialState());
         this.metadataPopup = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
-        this.addStateListener(() => this.updateFlyout());
-        this.eventHandlers = this.createEventHandlers();
-    };
+        this.log = Oskari.log('Oskari.statistics.statsgrid.SearchHandler');
+    }
 
     getName () {
         return 'SearchHandler';
     }
 
-    toggleFlyout (show, extraOnClose) {
-        if (show) {
-            if (!this.getState().flyout) {
-                this.showSearchFlyout(extraOnClose);
-            }
-        } else {
-            this.closeSearchFlyout();
-        }
-    }
-
-    showSearchFlyout (extraOnClose) {
-        const { regionsets, datasources, indicators } = this.stateHandler.getState();
-        this.updateState({
-            flyout: showSearchFlyout(regionsets, datasources, indicators, this.getState(), this.getController(), () => {
-                this.closeSearchFlyout();
-                if (extraOnClose) extraOnClose();
-            })
-        });
-    }
-
-    closeSearchFlyout () {
-        if (this.getState().flyout) {
-            this.getState().flyout.close();
-            this.updateState({
-                flyout: null
-            });
-        }
-    }
-
-    updateFlyout () {
-        if (this.getState().flyout) {
-            const { indicators } = this.stateHandler.getState();
-            this.getState().flyout.update(this.getState(), indicators);
-        }
-    }
-
-    clearSearch () {
-        const stateUpdates = {
+    getInitialState () {
+        const ds = getDatasources().length === 1 ? getDatasources()[0] : null;
+        // TODO: if ds => trigger populateIndicatorOptions => indicatorOptions
+        return {
             searchTimeseries: false,
             selectedIndicators: [],
             regionsetFilter: [],
+            selectedDatasource: ds ? ds.id : null,
             disabledDatasources: [],
+            indicatorOptions: [],
             indicatorParams: null,
-            isUserDatasource: false
+            isUserDatasource: ds ? ds.type === 'user' : false,
+            loading: false
         };
-        const { datasources } = this.stateHandler.getState();
-        if (datasources.length !== 1) {
-            // only reset datasource and it's indicators if there are multiple datasources
-            stateUpdates.selectedDatasource = null;
-            stateUpdates.indicatorOptions = [];
-        }
+    }
 
-        this.updateState(stateUpdates);
+    clearSearch () {
+        this.updateState(this.getInitialState());
     }
 
     async fetchindicatorOptions () {
-        const { selectedDatasource } = this.getState();
+        const { selectedDatasource, isUserDatasource } = this.getState();
         if (!selectedDatasource) {
             return;
         }
@@ -114,7 +62,14 @@ class SearchController extends StateHandler {
                             regionsets: ind.regionsets
                         };
                     });
-                    this.setIndicatorsList(selectedDatasource, results, complete);
+                    this.updateState({
+                        indicatorOptions: this.validateIndicatorList(results),
+                        loading: !complete
+                    });
+                    if (complete && !isUserDatasource && !results.length) {
+                        // show notification about empty indicator list for non-myindicators datasource
+                        Messaging.error(this.loc('errors.indicatorListIsEmpty'));
+                    }
                 },
                 error => Messaging.error(this.loc(error)));
         } catch (error) {
@@ -123,19 +78,6 @@ class SearchController extends StateHandler {
                 indicatorOptions: [],
                 loading: false
             });
-        }
-    }
-
-    setIndicatorsList (datasourceId, indicators, isComplete) {
-        this.updateState({
-            indicatorOptions: this.validateIndicatorList(indicators),
-            loading: !isComplete
-        });
-        const userDatasource = this.service.getUserDatasource();
-        const isUserDatasource = !!userDatasource && '' + userDatasource.id === '' + datasourceId;
-        if (isComplete && !isUserDatasource && !indicators.length) {
-            // show notification about empty indicator list for non-myindicators datasource
-            Messaging.error(this.loc('errors.indicatorListIsEmpty'));
         }
     }
 
@@ -213,10 +155,9 @@ class SearchController extends StateHandler {
             });
             return;
         }
-        const unsupportedDatasources = this.service.getUnsupportedDatasetsList(this.getState().regionsetFilter);
-        if (unsupportedDatasources) {
-            const ids = unsupportedDatasources.map((iteration) => iteration.id);
-            if (ids.includes(this.getState().selectedDatasource)) {
+        const disabledDatasources = getUnsupportedDatasourceIds(this.getState().regionsetFilter);
+        if (disabledDatasources.length) {
+            if (disabledDatasources.includes(this.getState().selectedDatasource)) {
                 this.clearSearch();
                 return;
             }
@@ -224,16 +165,17 @@ class SearchController extends StateHandler {
                 // reset any selected indicators because if they are disabled, user can't unselect them
                 selectedIndicators: [],
                 indicatorParams: null,
-                disabledDatasources: ids,
+                disabledDatasources,
                 indicatorOptions: this.validateIndicatorList(this.getState().indicatorOptions)
             });
         }
     }
 
     setSelectedDatasource (value) {
+        const ds = getDatasources().find(ds => ds.id === value) || {};
         this.updateState({
-            selectedDatasource: value,
-            isUserDatasource: this.service.getDatasource(Number(value)).type === 'user',
+            selectedDatasource: ds.id || null,
+            isUserDatasource: ds.type === 'user',
             selectedIndicators: [],
             indicatorParams: null
         });
@@ -250,11 +192,12 @@ class SearchController extends StateHandler {
         this.fetchIndicatorParams();
     }
 
+    // indicator is state handler's selected indicator (on map)
     async openMetadataPopup (indicator = null) {
-        const datasource = indicator ? indicator.datasource : this.getState().selectedDatasource;
-        const indicators = indicator ? indicator.indicator : this.getState().selectedIndicators;
+        const datasource = indicator ? indicator.ds : this.getState().selectedDatasource;
+        const indicatorIds = indicator ? [indicator.id] : this.getState().selectedIndicators;
 
-        const data = await this.prepareMetadataPopupData(datasource, indicators);
+        const data = await this.prepareMetadataPopupData(datasource, indicatorIds);
         if (this.metadataPopup) {
             this.metadataPopup.update(data);
         } else {
@@ -262,23 +205,15 @@ class SearchController extends StateHandler {
         }
     }
 
-    async prepareMetadataPopupData (datasource, indicators) {
+    async prepareMetadataPopupData (datasource, indicatorIds) {
         const result = [];
-        const indicatorList = Array.isArray(indicators) ? indicators : indicators ? [indicators] : [];
-        for (const ind of indicatorList) {
+        for (const id of indicatorIds) {
             try {
-                const data = await this.service.getIndicatorMetadata(datasource, ind);
+                const data = await getIndicatorMetadata(datasource, id);
                 if (!data) {
                     return;
                 }
-                if (data) {
-                    result.push({
-                        name: data.name,
-                        desc: data.description,
-                        source: data.source,
-                        metadata: data.metadata
-                    });
-                }
+                result.push(data);
             } catch (error) {
                 return;
             }
@@ -306,10 +241,6 @@ class SearchController extends StateHandler {
         } else {
             this.handleSingleIndicatorParams(this.getState().selectedIndicators[0]);
         }
-    }
-
-    removeIndicator (indicator) {
-        this.stateHandler.getController().removeIndicator(indicator);
     }
 
     handleMultipleIndicatorParams () {
@@ -367,7 +298,7 @@ class SearchController extends StateHandler {
     async handleSingleIndicatorParams (indId, cb) {
         const panelLoc = this.loc('panels.newSearch');
         try {
-            const result = await getIndicatorMetadata(this.getState().selectedDatasource, indId);
+            const result = await this.service.getIndicatorMetadata(this.getState().selectedDatasource, indId);
             const combinedValues = {};
             result?.selectors.forEach((selector) => {
                 selector.allowedValues.forEach((val) => {
@@ -489,7 +420,6 @@ class SearchController extends StateHandler {
             loading: true
         });
         const searchData = this.getSearchValues();
-        this.stateHandler.setActiveRegionset(searchData.regionset);
         this.handleMultipleIndicatorsSearch(searchData);
     }
 
@@ -732,9 +662,12 @@ class SearchController extends StateHandler {
         };
         const consumeBatch = async batch => {
             for (const search of batch) {
-                const { datasource, indicator, selections, series, regionset } = search;
+                // TODO: search values indicator => id, datasource => ds
+                const { datasource: ds, indicator: id, regionset, ...rest } = search;
                 try {
-                    const data = await this.service.getIndicatorData(datasource, indicator, selections, series, regionset);
+                    // TODO: addIndicator returns false if indicator couldn't be added
+                    // these could be removed?
+                    const data = await this.service.getIndicatorData({ id, ds, ...rest }, regionset);
                     if (!data) {
                         searchFailed(search);
                         return;
@@ -806,19 +739,19 @@ class SearchController extends StateHandler {
     }
 
     addIndicators (searchValues) {
-        let latestNewSearch = null;
+        let latestHash = null;
         searchValues.forEach(values => {
-            const { datasource, indicator, selections, series } = values;
-            if (this.stateHandler.addIndicator(datasource, indicator, selections, series)) {
-                // Indicator was not already present at the service
-                latestNewSearch = values;
+            // TODO: search values indicator => id, datasource => ds
+            const { datasource: ds, indicator: id, regionset, ...rest } = values;
+            const indicator = { id, ds, ...rest };
+            indicator.hash = getHashForIndicator(indicator);
+            if (this.stateHandler.addIndicator(indicator, regionset)) {
+                latestHash = indicator.hash;
             }
         });
-        if (latestNewSearch) {
+        if (latestHash) {
             // Search added some new indicators, let's set the last one as the active indicator.
-            const { datasource, indicator, selections, series } = latestNewSearch;
-            const hash = getHash(datasource, indicator, selections, series);
-            this.stateHandler.setActiveIndicator(hash);
+            this.stateHandler.setActiveIndicator(latestHash);
         }
     }
 
@@ -870,31 +803,13 @@ class SearchController extends StateHandler {
     }
 
     showIndicatorForm () {
-        const formHandler = this.stateHandler.getFormHandler();
-        if (this.getState().selectedIndicators?.length === 1) {
-            formHandler.showIndicatorPopup(this.getState().selectedDatasource, this.getState().selectedIndicators[0]);
-        } else {
-            formHandler.showIndicatorPopup(this.getState().selectedDatasource);
-        }
-    }
-
-    createEventHandlers () {
-        const handlers = {
-            'StatsGrid.DatasourceEvent': (event) => {
-                this.fetchindicatorOptions();
-            }
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
+        const { selectedDatasource, selectedIndicators } = this.getState();
+        const formHandler = this.instance.getViewHandler().formHandler;
+        if (!formHandler) {
             return;
         }
-
-        return handler.apply(this, [e]);
+        const indicator = selectedIndicators.length === 1 ? selectedIndicators[0] : null;
+        formHandler.showIndicatorPopup(selectedDatasource, indicator);
     }
 }
 
@@ -909,7 +824,6 @@ const wrapped = controllerMixin(SearchController, [
     'openMetadataPopup',
     'setParamSelection',
     'search',
-    'removeIndicator',
     'showIndicatorForm'
 ]);
 

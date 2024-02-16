@@ -18,7 +18,7 @@ export const MetadataCollapse = ({ data = [] }) => {
                 return (
                     <CollapsePanel header={name} key={name}>
                         <MetadataContent 
-                            description={metadata.desc}
+                            description={metadata.description}
                             source={metadata.source}
                             metadata={metadata.metadata}
                         />

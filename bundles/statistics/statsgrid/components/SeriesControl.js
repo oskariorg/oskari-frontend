@@ -1,11 +1,16 @@
 import * as d3 from 'd3';
+import '../resources/css/seriesplayback.css';
 
-Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandbox, locale) {
-    this.sb = sandbox;
+const INTERVALS = [
+    { key: 'fast', value: 1000 },
+    { key: 'normal', value: 2000 },
+    { key: 'slow', value: 3000 }
+];
+
+Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (controller, locale) {
+    this.controller = controller;
     this.loc = locale;
     this.log = Oskari.log('Oskari.statistics.statsgrid.SeriesControl');
-    this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-    this.seriesService = this.service.getSeriesService();
     this.__templates = {
         main: _.template(
             '<div class="statsgrid-series-control-container">' +
@@ -29,30 +34,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
     };
     this._lineWidth = 500;
     this._minWidth = 290;
+    // internal state
     this._uiState = {
         values: [],
-        currentSeriesIndex: undefined
+        animating: false,
+        interval: 2000,
+        index: 0,
+        hash: null
     };
-    this._bindToEvents();
+    this._throttleAnimation = Oskari.util.throttle(() => this._next(), 2000);
 }, {
-    __speedOptions: [
-        { key: 'fast', value: 1000 },
-        { key: 'normal', value: 2000 },
-        { key: 'slow', value: 3000 }
-    ],
+    getState: function () {
+        return this._uiState;
+    },
+    updateState: function (state) {
+        this._uiState = {...this._uiState, ...state};
+    },
     /**
      * @method _generateSelectOptions Generate localized options for <select> dropdowns
      * @private
-     * @param  {String} prefix localization path prefix
-     * @param  {Object[]} options key, value to localize
      * @return {Object[]} key, value that has been localized
      */
-    _generateSelectOptions: function (prefix, options) {
-        var me = this;
-        return options.map(function (e) {
+    _generateSelectOptions: function () {
+        return INTERVALS.map(({key, value}) =>  {
             return {
-                title: me.loc(prefix + e.key),
-                value: e.value
+                title: this.loc(`series.speed.${key}`),
+                value
             };
         });
     },
@@ -67,29 +74,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         var stepper = jQuery(this.__templates.stepper());
 
         stepper.find('.stats-series-playpause').on('click', function (e) {
-            var shouldAnimate = !me.seriesService.isAnimating();
-            me.seriesService.setAnimating(shouldAnimate);
-            me._setAnimationState(me.seriesService.isAnimating());
+            me._setAnimationState(!me.getState().animating);
         });
         stepper.find('.stats-series-back').on('click', this._doSingleStep.bind(this, false));
         stepper.find('.stats-series-forward').on('click', this._doSingleStep.bind(this, true));
 
         controlPanel.append(stepper);
-        me._setAnimationState(me.seriesService.isAnimating());
 
         var speedPanel = jQuery('<div class="stats-series-speed"></div>');
         var speedLabel = jQuery('<label>').text(me.loc('series.speed.label'));
         var speedSelect = jQuery('<select></select>');
         var speedOpts = '';
-        me._generateSelectOptions('series.speed.', me.__speedOptions).forEach(function (opt) {
+        me._generateSelectOptions().forEach(function (opt) {
             speedOpts += '<option value="' + opt.value + '">' + opt.title + '</option>';
         });
         speedSelect.append(speedOpts);
-        speedSelect.val(me.seriesService.getFrameInterval());
+        speedSelect.val(this.getState().interval);
         speedSelect.on('change', function () {
-            me.seriesService.setAnimating(false);
-            me.seriesService.setFrameInterval(parseInt(speedSelect.val()));
-            me._setAnimationState(false);
+            me.setFrameInterval(parseInt(speedSelect.val()));
         });
         speedPanel.append(speedLabel);
         speedPanel.append(speedSelect);
@@ -97,7 +99,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         controlPanel.append(speedPanel);
 
         var valueDisplay = jQuery('<div class="stats-series-value"></div>');
-        valueDisplay.html(me.seriesService.getValue());
         controlPanel.append(valueDisplay);
     },
     /**
@@ -106,18 +107,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
      * @param  {Boolean} forward true to move forward, false to move back
      */
     _doSingleStep: function (forward) {
-        if (this.seriesService.isAnimating()) {
+        const { animating, index } =  this.getState();
+        if (animating) {
             return;
         }
         // quick ui response
-        var delta = forward ? 1 : -1;
-        var requestedIndex = this._uiState.currentSeriesIndex + delta;
-        if (this._isValidIndex(requestedIndex)) {
-            this._renderHandle(requestedIndex);
-            this._updateValueDisplay(requestedIndex);
+        const delta = forward ? 1 : -1;
+        const requestedIndex = index + delta;
+        if (!this._isValidIndex(requestedIndex)) {
+            return;
         }
-
-        forward ? this.seriesService.next() : this.seriesService.previous();
+        this._renderHandle(requestedIndex);
+        this._updateValueDisplay(requestedIndex);
+        this._setSelectedValue(requestedIndex);
+    },
+    _next: function () {
+        const { index = 0, values, animating } =  this.getState();
+        if (!animating) {
+            return;
+        }
+        const next = index + 1;
+        if (next > values.length - 1) {
+            this._setAnimationState(false);
+            return;
+        }
+        this._setSelectedValue(next);
+    },
+    _setSelectedValue: function (index) {
+        const { animating, values } = this.getState();
+        const value = values[index];
+        this.controller.setSeriesValue(value);
+        if (animating) {
+            this._updateSeriesIndex(index);
+            this._throttleAnimation();
+        }
     },
     _isValidIndex: function (index) {
         return index >= 0 && index < this._uiState.values.length;
@@ -129,16 +152,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
             this.setWidth(this._minWidth);
         }
         el.append(this._element);
-        this._updateValues();
+    },
+    setFrameInterval: function (interval) {
+        this._setAnimationState(false);
+        this._throttleAnimation = Oskari.util.throttle(() => this._next(), interval);
+        this.updateState({interval});
     },
     /**
      * @method _setAnimationState Set animating / not animating state
      * @private
-     * @param  {Boolean} shouldAnimate should the series be animating?
+     * @param  {Boolean} shouldAnimate should the series be animating, toggle if missing
      */
-    _setAnimationState: function (shouldAnimate) {
-        this._element.find('.stats-series-playpause').toggleClass('pause', shouldAnimate);
-        this._element.find('.stats-series-back, .stats-series-forward').toggleClass('disabled', shouldAnimate);
+    _setAnimationState: function (animating) {
+        this._element.find('.stats-series-playpause').toggleClass('pause', animating);
+        this._element.find('.stats-series-back, .stats-series-forward').toggleClass('disabled', animating);
+        this.updateState({ animating });
+        if (!animating) {
+            return;
+        }
+        const { values, index, interval } = this.getState();
+        if (index >= values.length -1) {
+            // Step to the beginning, if the series is on the last value
+            this._setSelectedValue(this.values[0]);
+            // Wait frameInterval before starting the animation
+            setTimeout(this._throttleAnimation, interval);
+        } else {
+            this._throttleAnimation();
+        }
     },
     /**
      * @method setWidth Set component width and redraw series axis
@@ -157,11 +197,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
      * @private
      */
     _updateLineSegments: function () {
+        const { index, values } = this.getState();
         var me = this;
-        var values = me.seriesService.getValues();
         var margin = { left: 15, right: 15 };
-
-        me._uiState.values = values;
 
         // calculate tick density
         var tickCount = values.length;
@@ -200,7 +238,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
             .call(axis);
 
         var handle = svg.select('g.drag-handle')
-            .attr('transform', 'translate(' + scale(me.seriesService.getSelectedIndex()) + ',30)')
+            .attr('transform', 'translate(' + scale(index) + ',30)')
             .on('drag', null)
             .on('end', null); // remove old event handlers
 
@@ -221,8 +259,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
             me._updateSeriesIndex(scale.invert(newX));
 
             if (deepUpdate) {
-                var serieValue = me._uiState.values[me._uiState.currentSeriesIndex];
-                me.seriesService.setSelectedValue(serieValue);
+                me._setSelectedValue(me.getState().index);
             }
         }
 
@@ -234,7 +271,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
             .attr('height', 40)
             .on('click', null) // remove old event handlers
             .on('click', function (e) {
-                me.seriesService.setAnimating(false);
                 me._setAnimationState(false);
                 var newX = d3.pointer(e)[0];
                 valueFromMouse(newX, true);
@@ -255,46 +291,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
 
         handle.call(dragBehavior);
     },
-    _updateSeriesIndex: function (index) {
-        var seriesIndex = Math.round(index);
-        if (this._uiState.currentSeriesIndex !== seriesIndex) {
-            this._uiState.currentSeriesIndex = seriesIndex;
-        }
+    _updateSeriesIndex: function (num) {
+        var index = Math.round(num);
         this._renderHandle(index);
-        this._updateValueDisplay(this._uiState.currentSeriesIndex);
+        this.updateState ({ index });
+        this._updateValueDisplay();
     },
-    _updateValueDisplay: function (index) {
+    _updateValueDisplay: function () {
+        const { values, index } = this.getState();
         var display = this._element.find('.stats-series-value');
-        var value = this._uiState.values[index];
+        var value = values[index];
         display.text(value);
     },
-    _updateValues: function (indicator) {
-        const activeIndicator = this.service.getStateHandler().getState().activeIndicator;
-        const active = indicator || this.service.getIndicator(activeIndicator);
-        if (active && active.series) {
-            this.seriesService.setValues(active.series.values);
-            this._updateLineSegments();
-            this._updateSeriesIndex(this.seriesService.getSelectedIndex());
-            if (this.seriesService.isAnimating()) {
-                this.seriesService.setAnimating(false);
-                this._setAnimationState(false);
-            }
+    updateValues: function (indicator) {
+        if (!indicator || !indicator.series || this.getState().hash === indicator.hash) {
+            return;
         }
-    },
-    _updateSelection: function () {
-        this._setAnimationState(this.seriesService.isAnimating());
-        const index = this.seriesService.getSelectedIndex();
-        if (this._isValidIndex(index)) {
-            this._updateSeriesIndex(index);
-        }
-    },
-    /**
-     * Listen to events that require re-rendering the UI
-     */
-    _bindToEvents: function () {
-        this.service.on('StatsGrid.ActiveIndicatorChangedEvent', event =>
-            this._updateValues(event.getCurrent()));
-        this.service.on('StatsGrid.ParameterChangedEvent', () =>
-            this._updateSelection());
+        const { values, id } = indicator.series;
+        const value = indicator.selections[id];
+        const index = values.indexOf(value);
+        this.updateState({ values, index });
+        this._updateLineSegments();
+        this._updateSeriesIndex(index);
+        this._setAnimationState(false);
     }
 });

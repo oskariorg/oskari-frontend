@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { showMovableContainer } from 'oskari-ui/components/window';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -43,29 +43,26 @@ const LegendContainer = styled.div`
 `;
 
 export const Classification = ({
-    activeIndicator,
-    indicators = [],
-    editOptions,
-    classifiedDataset,
-    startHistogramView,
-    onRenderChange,
+    showHistogram,
     controller,
-    state
+    state,
+    pluginState
 }) => {
     const [isEdit, setEdit] = useState(false);
-    const { classification, hash } = activeIndicator;
-    const { transparent, editEnabled } = state.pluginState;
-
-    useEffect(() => {
-        onRenderChange(isEdit);
-    });
+    const { layer, classification: {transparent, editEnabled} } = pluginState;
+    const { activeIndicator, indicators } = state;
+    const current = indicators.find(ind => ind.hash === activeIndicator);
+    if (!current) {
+        return null;
+    }
+    const { classification, classifiedData, data } = current;
 
     const toggleEdit = () => setEdit(!isEdit);
 
     return (
         <Container className={transparent && !isEdit ? 'transparent-classification' : ''}>
             <Header
-                selected = {hash}
+                selected = {current}
                 isEdit = {isEdit}
                 toggleEdit = {toggleEdit}
                 indicators = {indicators}
@@ -73,17 +70,18 @@ export const Classification = ({
             <ContentWrapper>
                 {isEdit &&
                     <EditClassification
-                        options = {editOptions}
+                        data = {data}
                         values = {classification}
                         editEnabled = {editEnabled}
                         controller = {controller}
-                        startHistogramView = {startHistogramView}/>
+                        showHistogram = {showHistogram}
+                        opacity = {layer.opacity}/>
                 }
                 <LegendContainer className = "classification-legend">
                     <Legend
-                        classifiedDataset = {classifiedDataset}
+                        classifiedData = {classifiedData}
                         mapStyle = {classification.mapStyle}
-                        transparency = {classification.transparency}
+                        transparency = {layer.opacity}
                     />
                 </LegendContainer>
             </ContentWrapper>
@@ -92,27 +90,20 @@ export const Classification = ({
 };
 
 Classification.propTypes = {
-    activeIndicator: PropTypes.object.isRequired,
-    indicators: PropTypes.array.isRequired,
-    editOptions: PropTypes.object.isRequired,
+    state: PropTypes.object.isRequired,
     pluginState: PropTypes.object.isRequired,
-    classifiedDataset: PropTypes.object.isRequired,
-    startHistogramView: PropTypes.func.isRequired,
-    onRenderChange: PropTypes.func.isRequired,
+    showHistogram: PropTypes.func.isRequired,
     controller: PropTypes.object.isRequired
 };
 
-export const showClassificationContainer = (indicators, activeIndicator, state, controller, onClose, options) => {
+export const showClassificationContainer = (state, viewState, controller, options, showHistogram, onClose) => {
     const Component = (
         <LocaleProvider value={{ bundleKey: 'StatsGrid' }}>
             <Classification
-                {...state}
-                activeIndicator={activeIndicator}
-                indicators={indicators}
+                pluginState={viewState}
                 state={state}
                 controller={controller}
-                startHistogramView={() => controller.showHistogramPopup()}
-                onRenderChange={() => {/** ??? */}}
+                showHistogram={showHistogram}
             />
         </LocaleProvider>
     );
@@ -120,17 +111,14 @@ export const showClassificationContainer = (indicators, activeIndicator, state, 
     const controls = showMovableContainer(Component, onClose, options);
     return {
         ...controls,
-        update: (indicators, activeIndicator, state) => {
+        update: (state, viewState) => {
             controls.update(
                 <LocaleProvider value={{ bundleKey: 'StatsGrid' }}>
                     <Classification
-                        {...state}
-                        activeIndicator={activeIndicator}
-                        indicators={indicators}
+                        pluginState={viewState}
                         state={state}
                         controller={controller}
-                        startHistogramView={() => controller.showHistogramPopup()}
-                        onRenderChange={() => {/** ??? */}}
+                        showHistogram={showHistogram}
                     />
                 </LocaleProvider>
             )

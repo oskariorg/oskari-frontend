@@ -1,14 +1,14 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { showIndicatorForm } from '../view/Form/IndicatorForm';
-import { showClipboardPopup } from '../view/Form/ClipboardPopup';
-import { getHash } from '../helper/StatisticsHelper';
+
+import { getHashForIndicator } from '../helper/StatisticsHelper';
+import { getDatasources, getRegionsets } from '../helper/ConfigHelper';
 
 class IndicatorFormController extends StateHandler {
-    constructor (stateHandler, service, sandbox) {
+    constructor (instance) {
         super();
-        this.stateHandler = stateHandler;
-        this.service = service;
-        this.sandbox = sandbox;
+        this.instance = instance;
+        this.service = instance.getStatisticsService();
+        this.sandbox = instance.getSandbox();
         this.setState({
             indicatorName: '',
             indicatorDescription: '',
@@ -26,7 +26,6 @@ class IndicatorFormController extends StateHandler {
             clipboardValue: ''
         });
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
-        this.addStateListener(() => this.updatePopup());
     };
 
     getName () {
@@ -36,11 +35,11 @@ class IndicatorFormController extends StateHandler {
     async showIndicatorPopup (datasourceId, indicatorId = null) {
         if (!datasourceId) return;
         await this.getPopupData(datasourceId, indicatorId);
-        if (!this.getState().indicatorPopup) {
-            this.updateState({
-                indicatorPopup: showIndicatorForm(this.getState(), this.getController(), () => this.closeIndicatorPopup())
-            });
-        }
+        this.instance.getViewHandler().show('indicatorForm');
+    }
+
+    showClipboardPopup () {
+        this.instance.getViewHandler().show('clipboard');
     }
 
     reset () {
@@ -59,48 +58,19 @@ class IndicatorFormController extends StateHandler {
             clipboardValue: ''
         });
     }
-
     closeIndicatorPopup () {
-        if (this.getState().indicatorPopup) {
-            this.getState().indicatorPopup.close();
-        }
         this.reset();
-        this.updateState({
-            indicatorPopup: null
-        });
         this.closeClipboardPopup();
     }
 
-    updatePopup () {
-        if (this.getState().clipboardPopup) {
-            this.getState().clipboardPopup.update(this.getState());
-        }
-        if (this.getState().indicatorPopup) {
-            this.getState().indicatorPopup.update(this.getState());
-        }
-    }
-
-    showClipboardPopup () {
-        if (!this.getState().clipboardPopup) {
-            this.updateState({
-                clipboardPopup: showClipboardPopup(this.getState(), this.getController(), () => this.closeClipboardPopup())
-            });
-        }
-    }
-
     closeClipboardPopup () {
-        if (this.getState().clipboardPopup) {
-            this.getState().clipboardPopup.close();
-        }
-        this.updateState({
-            clipboardPopup: null,
-            clipboardValue: ''
-        });
+        this.instance.getViewHandler().close('clipboard');
+        this.updateState({ clipboardValue: '' });
     }
 
     async getPopupData (datasourceId, indicatorId) {
-        const datasource = this.service.getDatasource(datasourceId);
-        const regionsetOptions = this.service.getRegionsets(datasource.regionsets);
+        const { regionsets = [] } = getDatasources().find(ds => ds.id === datasourceId) || {};
+        const regionsetOptions = getRegionsets().filter(rs => regionsets.includes(rs.id));
 
         if (indicatorId) {
             await this.getIndicatorDatasets(datasourceId, indicatorId);
@@ -215,14 +185,14 @@ class IndicatorFormController extends StateHandler {
         this.updateState({
             loading: true
         });
-        const regionset = this.service.getRegionsets(dataset.regionset);
+        const regionset = getRegionsets().find(rs => rs.id === dataset.regionset);
         const labels = {};
-        labels[dataset.regionset] = regionset.name;
+        labels[dataset.regionset] = regionset?.name;
         let formRegions;
         let regions;
 
         try {
-            regions = await this.service.getRegions(regionset.id);
+            regions = await this.service.getRegions(dataset.regionset);
             let data;
             if (indicatorId) {
                 data = await this.service.getIndicatorData(datasourceId, indicatorId, { year: dataset.year }, null, dataset.regionset);
@@ -389,13 +359,15 @@ class IndicatorFormController extends StateHandler {
     }
 
     selectSavedIndicator (indicator, data) {
-        const { ds, id } = indicator;
-        const selectors = { ...data.selectors };
-        this.stateHandler.getController().setActiveRegionset(selectors.regionset);
-        delete selectors.regionset;
-        this.stateHandler.addIndicator(ds, id, selectors);
-        const hash = getHash(ds, id, selectors);
-        this.stateHandler.setActiveIndicator(hash);
+        const { regionset, ...selections } = data.selectors;
+        const ind = {
+            ...indicator,
+            selections
+        };
+        ind.hash = getHashForIndicator(ind);
+        const handler = this.instance.getStateHandler();
+        handler?.addIndicator(ind, regionset);
+        handler?.setActiveIndicator(ind.hash);
     }
 
     importFromClipboard () {

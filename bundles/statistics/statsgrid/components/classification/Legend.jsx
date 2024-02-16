@@ -13,15 +13,15 @@ const Container = styled.div`
 export const Legend = ({
     transparency,
     mapStyle,
-    classifiedDataset
+    classifiedData
 }) => {
-    const { error } = classifiedDataset;
+    const { error } = classifiedData;
     if (error) {
         const errorKey = error === 'general' ? 'cannotCreateLegend' : error;
         return (<InactiveLegend error = {errorKey} />);
     }
     const opacity = transparency / 100 || 1;
-    const { groups } = classifiedDataset;
+    const { groups } = classifiedData;
     const maxSizePx = groups.map(g => g.sizePx).reduce((max, val) => max < val ? val : max);
     return (
         <Container>
@@ -40,5 +40,5 @@ export const Legend = ({
 Legend.propTypes = {
     transparency: PropTypes.number.isRequired,
     mapStyle: PropTypes.string.isRequired,
-    classifiedDataset: PropTypes.object.isRequired
+    classifiedData: PropTypes.object.isRequired
 };

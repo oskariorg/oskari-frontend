@@ -1,56 +1,55 @@
-import { getClassification } from '../helper/ClassificationHelper';
 import { Messaging } from 'oskari-ui/util';
+import { LAYER_ID } from '../constants';
+import { getRegionsets } from '../helper/ConfigHelper';
+import { getDataByRegions } from '../helper/StatisticsHelper';
 
 const BORDER_PRIO = 10000;
 const REGION_PRIO = 10;
 const HIGHLIGHT_PRIO = 1;
 
-Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (instance, sandbox) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (instance) {
     this.instance = instance;
-    this.sb = sandbox;
-    this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.sb = instance.getSandbox();
+    this.service = instance.getStatisticsService();
+    this.stateHandler = instance.getStateHandler();
     this.log = Oskari.log('Oskari.statistics.statsgrid.RegionsetViewer');
 
-    this.LAYER_ID = 'STATS_LAYER';
-
-    this._bindToEvents();
     this._pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
     this._regionsAdded = [];
     this._lastRenderCache = {};
-    this.stateHandler = this.service.getStateHandler();
-    this.stateHandler.addStateListener(() => this.render());
-}, {
-    render: async function (highlightRegionId) {
-        try {
-            const state = this.stateHandler.getState();
-            const { activeRegionset, indicatorData, activeIndicator } = state;
-            const currentIndicator = this.service.getIndicator(activeIndicator);
-            if (!currentIndicator) {
-                this._clearRegions();
-                return;
-            }
-            const seriesStats = this.service.getSeriesService().getSeriesStats(activeIndicator);
-            const { classification } = currentIndicator;
-            const { mapStyle } = classification;
-            this._updateLayerProperties(mapStyle, activeRegionset);
 
-            const dataByRegion = indicatorData[currentIndicator.hash];
-            const { error, ...classifiedDataset } = getClassification(dataByRegion, classification, seriesStats);
-            if (error) {
-                this._clearRegions();
+    this.stateHandler.addStateListener(state => this.render(state));
+}, {
+    render: async function (state) {
+        try {
+            const { indicators, activeIndicator, activeRegion, regionset } = state;
+            const currentIndicator = indicators.find(ind => ind.hash === activeIndicator);
+            if (!currentIndicator) {
+                this.clearRegions();
                 return;
             }
-            if (this._lastRenderCache.mapStyle !== mapStyle) {
-                this._clearRegions();
+            const { classification, classifiedData } = currentIndicator;
+            const dataByRegions = getDataByRegions(currentIndicator);
+            const { mapStyle } = classification;
+            this._updateLayerProperties(mapStyle, regionset);
+
+            if (classifiedData.error) {
+                this.clearRegions();
+                return;
             }
-            this._viewRegions(classification, classifiedDataset, dataByRegion, highlightRegionId);
+            const { mapStyle: lastStyle, regionset: lastRegionset } = this._lastRenderCache;
+            if (lastStyle !== mapStyle || lastRegionset !== regionset) {
+                this.clearRegions();
+                this._lastRenderCache.regionset = regionset;
+            }
+            this._viewRegions(classification, classifiedData, dataByRegions, activeRegion);
         } catch (error) {
-            this.log.warn('Error getting indicator data');
-            this._clearRegions();
+            this.log.warn('Error getting indicator data:', error.message);
+            this.clearRegions();
         }
     },
     /** **** PRIVATE METHODS ******/
-    _viewRegions: async function (classification, classifiedDataset, dataByRegion, highlightRegionId) {
+    _viewRegions: async function (classification, classifiedData, dataByRegions, highlightRegionId) {
         const locale = this.instance.getLocalization();
         try {
             const { regions } = this.stateHandler.getState();
@@ -58,17 +57,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 Messaging.error(locale.errors.regionsDataIsEmpty);
                 return;
             }
-            this._addRegionFeatures(classification, classifiedDataset, regions, dataByRegion, highlightRegionId);
+            this._addRegionFeatures(classification, classifiedData, regions, dataByRegions, highlightRegionId);
         } catch (error) {
             Messaging.error(locale.errors.regionsDataError);
         }
     },
-    _addRegionFeatures: function (classification, classifiedDataset, regions, dataByRegion, highlightRegionId) {
+    _addRegionFeatures: function (classification, classifiedData, regions, dataByRegions, highlightRegionId) {
         const me = this;
         const addFeaturesRequestParams = [];
         const handledRegions = [];
-        const { groups, format } = classifiedDataset;
-        const { mapStyle, showValues, transparency } = classification;
+        const { groups, format } = classifiedData;
+        const { mapStyle, showValues } = classification;
         groups.forEach(function (regiongroup, index) {
             const { color, sizePx, regionIds } = regiongroup;
             const optionalStyles = [];
@@ -85,7 +84,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 if (!region) {
                     return;
                 }
-                const regionVal = format(dataByRegion[regionId]);
+                const regionVal = format(dataByRegions.find(r => r.id === regionId)?.value);
                 if (me._regionsAdded.includes(regionId)) {
                     updates.push({
                         value: regionId,
@@ -124,9 +123,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 clearPrevious: false,
                 featureStyle: regionFeatureStyle,
                 optionalStyles: optionalStyles,
-                layerId: me.LAYER_ID,
+                layerId: LAYER_ID,
                 prio: REGION_PRIO + index,
-                opacity: typeof transparency !== 'undefined' ? transparency : 100,
                 animationDuration: 250
             };
             const borderRequestOptions = Object.assign({}, regionRequestOptions, {
@@ -168,7 +166,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             });
             const borders = regionsWithoutValue.map(id => 'border' + id);
             const removes = regionsWithoutValue.concat(borders);
-            me.sb.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', ['id', removes, me.LAYER_ID]);
+            me.sb.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', ['id', removes, LAYER_ID]);
         }
         addFeaturesRequestParams.forEach(params => {
             me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);
@@ -191,9 +189,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         return geojson;
     },
 
-    _clearRegions: function () {
+    clearRegions: function () {
         var me = this;
-        me.sb.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
+        me.sb.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
         me._regionsAdded = [];
     },
 
@@ -282,8 +280,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     },
 
     _updateLayerProperties: function (mapStyle, regionsetId) {
-        const regionset = this.service.getRegionsets(regionsetId);
-
+        const regionset = getRegionsets().find( rs => rs.id === regionsetId);
         const hoverOptions = {
             featureStyle: {
                 stroke: {
@@ -306,7 +303,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             'VectorLayerRequest',
             [
                 {
-                    layerId: this.LAYER_ID,
+                    layerId: LAYER_ID,
                     hover: hoverOptions,
                     showLayer: true,
                     layerDescription: (regionset && regionset.name) ? regionset.name : null
@@ -328,7 +325,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         style.effect = highlight ? 'darken' : '';
         const requestOptions = {
             featureStyle: style,
-            layerId: this.LAYER_ID,
+            layerId: LAYER_ID,
             prio: highlight ? HIGHLIGHT_PRIO : REGION_PRIO + index
         };
         const searchOptions = { id: regionId };
@@ -342,9 +339,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             this.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [borderSearchOptions, borderRequestOptions]);
         }
     },
-    /**
-     * Listen to events that require re-rendering the UI
-     */
+    // TODO: optimize rendering?
     _bindToEvents: function () {
         var me = this;
         me.service.on('StatsGrid.RegionSelectedEvent', function (event) {
@@ -357,22 +352,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             }
             me._lastRenderCache.highlightRegionId = selectedRegion;
         });
-        me.service.on('AfterMapLayerRemoveEvent', function () {
-            me._clearRegions();
-        });
-        me.service.on('FeatureEvent', function (event) {
-            if (event.getParams().operation !== 'click' || !event.hasFeatures()) {
-                return;
-            }
-
-            // resolve region
-            var topmostFeature = event.getParams().features[0];
-            if (topmostFeature.layerId !== me.LAYER_ID) {
-                return;
-            }
-            var region = topmostFeature.geojson.features[0].properties.id;
-            me.stateHandler.setActiveRegion(region);
-        });
     }
-
 });

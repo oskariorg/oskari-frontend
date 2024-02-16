@@ -3,6 +3,16 @@ import { Message } from 'oskari-ui';
 import * as d3 from 'd3';
 import styled from 'styled-components';
 
+const MARGIN =  {
+    top: 0,
+    bottom: 20,
+    left: 50,
+    right: 50,
+    maxForLabel: 140
+};
+
+const WIDTH = 600;
+
 const Chart = styled('div')`
     overflow-y: scroll;
     max-height: 850px;
@@ -21,15 +31,14 @@ const getScaleArray = (min, max) => {
     return [min, max];
 };
 
-const getDimensionsFromData = (options, data) => {
+const getDimensionsFromData = (data) => {
     const pxPerChar = 5.5;
     const xLabelOffset = 15;
     const xOffset = -5;
 
-    const { width, margin: { left: optLeft, right: optRight, maxForLabel }, maxTicks } = options;
     // default values if couldn't calculate from data
-    let left = optLeft;
-    let right = optRight;
+    let left = MARGIN.left;
+    let right = MARGIN.right;
     let min = 0;
     let max = 0;
     let ticks = 0;
@@ -44,21 +53,22 @@ const getDimensionsFromData = (options, data) => {
 
         const widestLabel = d3.max(data, (d) => d.name.length);
         const labelPx = widestLabel * pxPerChar;
-        let labelMargin = labelPx < maxForLabel ? labelPx : maxForLabel;
-        let chartWidth = width - left - right;
+        let labelMargin = labelPx < MARGIN.maxForLabel ? labelPx : MARGIN.maxForLabel;
+        // TODO: why chartWidt and x are calculated with default values and later updated??
+        let chartWidth = WIDTH - left - right;
         const x = d3.scaleLinear().domain(getScaleArray(min, max)).range([0, chartWidth]);
         let xOrigin = x(0);
         // calculate how much space is needed for labels, if negative then label fits inside chart
         const spaceForPositive = labelMargin - xOrigin;
         const spaceForNegative = xOrigin + labelMargin - chartWidth;
         if (spaceForPositive > 0) {
-            left = spaceForPositive + optLeft / 2;
+            left = spaceForPositive + left / 2;
         }
         if (spaceForNegative > 0) {
-            right = spaceForNegative + optRight / 2;
+            right = spaceForNegative + left / 2;
         }
         // update chart width
-        chartWidth = width - left - right;
+        chartWidth = WIDTH - left - right;
         xOrigin = x.range([0, chartWidth])(0);
         // calculate max label lengths and ticks
         positive = Math.floor((left + xOrigin - xLabelOffset) / pxPerChar);
@@ -66,7 +76,9 @@ const getDimensionsFromData = (options, data) => {
 
         const xDigits = Math.floor((Math.log(Math.max(Math.abs(min), max)) * Math.LOG10E) + 1);
         const tickTarget = Math.floor((chartWidth / xDigits) / 10);
-        ticks = tickTarget > maxTicks ? maxTicks : tickTarget;
+        // TODO: options maxTicks was undefined. Should we use classification count or constant??
+        //ticks = tickTarget > maxTicks ? maxTicks : tickTarget;
+        ticks = tickTarget;
     }
 
     return {
@@ -78,16 +90,16 @@ const getDimensionsFromData = (options, data) => {
     };
 };
 
-const calculateDimensions = (options, data) => {
-    const { width, margin: { top, bottom } } = options;
-    const { labels, dataset, axis, height, margin: { left, right } } = getDimensionsFromData(options, data);
+const calculateDimensions = (data) => {
+    const { top, bottom } = MARGIN;
+    const { labels, dataset, axis, height, margin: { left, right } } = getDimensionsFromData(data);
     return {
         margin: { left, right, top, bottom },
         dataset,
         axis,
-        container: { width, height },
+        container: { WIDTH, height },
         chart: {
-            width: width - left - right,
+            width: WIDTH - left - right,
             height: height - bottom - top
         },
         labels
@@ -142,8 +154,16 @@ const sortData = (data, sortingType = 'value-descending') => {
     }
 };
 
-const createGraph = (ref, labelsRef, chartData) => {
-    const dimensions = calculateDimensions(chartData.chartOptions, chartData.data);
+const createGraph = (ref, labelsRef, data, classifiedData ) => {
+    const { groups, format = value => value, error } = classifiedData;
+    const valueRenderer = value => {
+        if (typeof value !== 'number') {
+            return null;
+        }
+        return format(value);
+    }
+
+    const dimensions = calculateDimensions(data);
 
     let x;
     let y;
@@ -151,19 +171,20 @@ const createGraph = (ref, labelsRef, chartData) => {
     y = d3.scaleBand();
     const { min, max } = dimensions.dataset;
     const xScaleDomain = getScaleArray(min, max);
-    const yScaleDomain = chartData.data.map((d) => d.name);
+    const yScaleDomain = data.map((d) => d.name);
     y.range([dimensions.chart?.height, 0]);
     x.range([0, dimensions.chart?.width]);
 
     x.domain(xScaleDomain);
     y.domain(yScaleDomain);
 
-    const { colors, valueRenderer } = chartData.chartOptions;
     let colorScale;
-    if (Array.isArray(colors)) {
-        colorScale = d3.scaleThreshold().range(colors);
+    if (error) {
+        colorScale = d3.scaleThreshold().range(['#555']);
     } else {
-        colorScale = d3.scaleThreshold().domain(colors.bounds).range(colors.values);
+        const minValues = groups.map(g => g.minValue);
+        const colors = groups.map(g => g.color);
+        colorScale = d3.scaleThreshold().domain(minValues).range(colors);
     }
 
     const svg = d3.select(ref)
@@ -211,7 +232,7 @@ const createGraph = (ref, labelsRef, chartData) => {
 
     const labels = svg.append('g')
         .selectAll('.labels')
-        .data(chartData.data)
+        .data(data)
         .enter()
         .append('g')
         .attr('class', (d) => { return d.value < 0 ? 'labels negative' : 'labels positive'; })
@@ -258,7 +279,7 @@ const createGraph = (ref, labelsRef, chartData) => {
 
     // bars
     const bars = svg.insert('g', 'g.y').selectAll('.bar')
-        .data(chartData.data)
+        .data(data)
         .enter()
         .append('g')
         .attr('class', (d) => { return d.value < 0 ? 'negative' : 'positive'; })
@@ -324,7 +345,7 @@ const createGraph = (ref, labelsRef, chartData) => {
     });
 };
 
-export const Diagram = ({ chartData, sortOrder }) => {
+export const Diagram = ({ data, classifiedData,  sortOrder }) => {
     let ref = useRef(null);
     let labelsRef = useRef(null);
 
@@ -335,13 +356,13 @@ export const Diagram = ({ chartData, sortOrder }) => {
         if (labelsRef?.current?.children?.length > 0) {
             labelsRef.current.removeChild(labelsRef.current.children[0]);
         }
-        if (chartData?.data) {
-            sortData(chartData?.data, sortOrder);
-            createGraph(ref.current, labelsRef.current, chartData);
+        if (data) {
+            sortData(data, sortOrder);
+            createGraph(ref.current, labelsRef.current, data, classifiedData);
         }
-    }, [chartData, sortOrder]);
+    }, [data, classifiedData, sortOrder]);
 
-    if (!chartData?.data) {
+    if (!data) {
         return <Content><Message bundleKey='StatsGrid' messageKey='datacharts.nodata' /></Content>;
     }
     return (

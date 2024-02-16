@@ -1,0 +1,49 @@
+/* ********************************************
+ * Statsgrid tile styles
+ * ********************************************/
+
+.oskari-tile.statsgrid {
+    .statsgrid-functionality {
+        width: 95%;
+        height: 34px;
+        display: inline-flex;
+        display: -ms-inline-flexbox;
+        align-items : center;
+        
+        .icon {
+            float: left;
+            width: 30px;
+            height: 30px;
+            background-color: lightgray;
+            margin-left: 16px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .text {
+            color: rgba(0,0,0,.85);
+            float: left;
+            margin-left: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            vertical-align: middle;
+            width: 95px;
+        }
+
+        &.material-selected .icon{
+            background-color: #ffd400;
+        }
+
+        &.grid .icon {
+            background-image: url("../images/tile-table-light.png");
+        }
+        &.search .icon {
+            background-image: url("../images/tile-search-light.png");
+        }
+        &.diagram .icon {
+            background-image: url("../images/tile-diagram-light.png");
+        }
+    }
+    .hidden {
+        display: none;
+    }
+}

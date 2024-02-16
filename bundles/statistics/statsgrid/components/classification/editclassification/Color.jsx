@@ -16,8 +16,8 @@ export const Color = ({ colorsets, values, controller, disabled }) => {
     const { color, mapStyle, reverseColors, type } = values;
     const isSimple = mapStyle === 'points' && type !== 'div';
 
-    const handleReverseColors = evt => controller.updateClassification('reverseColors', evt.target.checked);
-    const handleColorChange = color => controller.updateClassification('color', color);
+    const handleReverseColors = evt => controller.updateClassification({ reverseColors: evt.target.checked } );
+    const handleColorChange = color => controller.updateClassification({ color });
     return (
         <Component className="classification-colors option">
             <ColorSelect colorsets = {colorsets} isSimple = {isSimple} value = {color}

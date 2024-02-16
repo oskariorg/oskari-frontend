@@ -1,3 +1,6 @@
+export const LAYER_ID = 'STATS_LAYER';
+export const DATA_PROVIDER = 'indicators';
+
 export const COLOR_SETS = [{
     'name': 'BrBG',
     'type': 'div',

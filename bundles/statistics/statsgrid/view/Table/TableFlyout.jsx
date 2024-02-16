@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { LocaleProvider } from 'oskari-ui/util';
 import { Sorter } from './Sorter';
 import { IndicatorName } from '../IndicatorName';
+import { getRegionsets } from '../../helper/ConfigHelper';
+import { getDataByRegions } from '../../helper/StatisticsHelper';
 
 const BUNDLE_KEY = 'StatsGrid';
 
@@ -57,7 +59,12 @@ const HeaderCell = styled('div')`
     height: 100%;
 `;
 
-const TableFlyout = ({ indicators = [], activeIndicator, selectedRegionset, state, controller }) => {
+const getValueSorter = hash => {
+    return (a,b) => a.dataByHash[hash] - b.dataByHash[hash];
+};
+
+const TableFlyout = ({ state, controller }) => {
+    const { indicators, activeIndicator, regionset, loading, regions } = state;
     let initialSort = {
         regionName: null
     };
@@ -80,15 +87,34 @@ const TableFlyout = ({ indicators = [], activeIndicator, selectedRegionset, stat
         }
         setSortOrder(newOrder);
     };
+    // TODO:
+    const regionValues = indicators.reduce((data, indicator) => {
+        getDataByRegions(indicator).forEach(region => {
+            const {id, value } = region;
+            if (!data[id]) {
+                data[id] = {};
+            }
+            data[id][indicator.hash] = value; //TDOO: formatted
+        });
+        return data;
+    }, {});
+    const dataSource = regions.map(region => {
+        return {
+            key: region.id,
+            name: region.name,
+            dataByHash: regionValues[region.id]
+            // TODO: [hash] : value
+        };
+    })
 
     const columnSettings = [];
 
     columnSettings.push({
-        dataIndex: 'regionName',
+        dataIndex: 'name',
         align: 'left',
         width: 125,
-        sorter: getSorterFor('regionName'),
-        sortOrder: sortOrder['regionName'],
+        sorter: getSorterFor('name'),
+        sortOrder: sortOrder['name'],
         showSorterTooltip: false,
         onCell: (record, rowIndex) => ({
             style: { background: '#ffffff' }
@@ -101,20 +127,20 @@ const TableFlyout = ({ indicators = [], activeIndicator, selectedRegionset, stat
                 <HeaderCell>
                     <RegionHeader>
                         <Message messageKey='statsgrid.areaSelection.title' />
-                        {Oskari.util.isEmbedded ? (
-                            selectedRegionset?.name
+                        {Oskari.dom.isEmbedded() ? (
+                            getRegionsets().find(r => r.id === regionset)?.name || ''
                         ) : (
                             <Select
                                 filterOption={false}
-                                options={state.regionsetOptions?.map(rs => ({ value: rs.id, label: rs.name }))}
-                                value={selectedRegionset?.id}
-                                onChange={(value) => controller.setSelectedRegionset(value)}
+                                options={getRegionsets().map(rs => ({ value: rs.id, label: rs.name }))}
+                                value={regionset}
+                                onChange={(value) => controller.setActiveRegionset(value)}
                             />
                         )}
                     </RegionHeader>
                     <Sorter
-                        sortOrder={sortOrder['regionName']}
-                        changeSortOrder={() => changeSortOrder('regionName')}
+                        sortOrder={sortOrder['name']}
+                        changeSortOrder={() => changeSortOrder('name')}
                     />
                 </HeaderCell>
             );
@@ -122,10 +148,10 @@ const TableFlyout = ({ indicators = [], activeIndicator, selectedRegionset, stat
     });
     indicators?.forEach(indicator => {
         columnSettings.push({
-            dataIndex: 'data',
+            dataIndex: 'value', //indicator.hash
             align: 'right',
             width: 125,
-            sorter: (a, b) => a.data[indicator.hash] - b.data[indicator.hash],
+            sorter: getValueSorter(indicator.hash),
             sortOrder: sortOrder[indicator.hash],
             showSorterTooltip: false,
             onCell: (record, rowIndex) => ({
@@ -156,12 +182,12 @@ const TableFlyout = ({ indicators = [], activeIndicator, selectedRegionset, stat
                 );
             },
             render: (title, item) => {
-                const formatter = Oskari.getNumberFormatter(indicator?.classification?.fractionDigits);
-                let data = item.data ? item.data[indicator.hash] : '';
-                if (typeof data === 'number') {
-                    data = formatter.format(data);
+                const value = item.dataByHash[indicator.hash] || '';
+                if (typeof value === 'number') {
+                    const formatter = Oskari.getNumberFormatter(indicator?.classification?.fractionDigits);
+                    return formatter.format(value);
                 }
-                return data;
+                return value;
             }
         });
     });
@@ -173,28 +199,25 @@ const TableFlyout = ({ indicators = [], activeIndicator, selectedRegionset, stat
             ) : (
                 <StyledTable
                     columns={columnSettings}
-                    dataSource={[...state.indicatorData]}
+                    dataSource={dataSource}
                     pagination={false}
                 />
             )}
         </Content>
     );
     
-    if (state.loading) {
+    if (loading) {
         return <Spin showTip={true}>{Component}</Spin>;
     }
     return Component;
 };
 
-export const showTableFlyout = (indicators, activeIndicator, selectedRegionset, state, controller, onClose) => {
-    const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.table' />;
+export const showTableFlyout = (state, controller, onClose) => {
+    const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.grid' />;
     const controls = showFlyout(
         title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <TableFlyout
-                indicators={indicators}
-                activeIndicator={activeIndicator}
-                selectedRegionset={selectedRegionset}
                 state={state}
                 controller={controller}
             />
@@ -204,13 +227,10 @@ export const showTableFlyout = (indicators, activeIndicator, selectedRegionset, 
 
     return {
         ...controls,
-        update: (indicators, activeIndicator, selectedRegionset, state) => controls.update(
+        update: (state) => controls.update(
             title,
             <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
                 <TableFlyout
-                    indicators={indicators}
-                    activeIndicator={activeIndicator}
-                    selectedRegionset={selectedRegionset}
                     state={state}
                     controller={controller}
                 />

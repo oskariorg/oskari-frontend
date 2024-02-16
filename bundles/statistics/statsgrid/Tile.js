@@ -1,13 +1,14 @@
 
-Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, service) {
+import { FLYOUTS } from './handler/ViewHandler';
+import './resources/scss/tile.scss';
+
+Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance) {
     this.instance = instance;
-    this.sb = this.instance.getSandbox();
-    this.loc = this.instance.getLocalization();
-    this.statsService = service;
+    this.viewHandler = null;
+    this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     this.container = null;
     this.template = null;
     this._tileExtensions = {};
-    this.flyoutManager = null;
     this._attached = false;
     this._templates = {
         extraSelection: ({ id, label }) =>
@@ -29,14 +30,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
      * @return {String} localized text for the title of the tile
      */
     getTitle: function () {
-        return this.loc.flyout.title;
+        return this.loc('flyout.title');
     },
     /**
      * @method getDescription
      * @return {String} localized text for the description of the tile
      */
     getDescription: function () {
-        return this.instance.getLocalization('desc');
+        return this.loc('desc');
     },
     /**
      * @method setEl
@@ -59,23 +60,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
     startPlugin: function () {
         this._addTileStyleClasses();
     },
-    setupTools: function (flyoutManager) {
+    setupTools: function (viewHandler) {
         const tpl = this._templates.extraSelection;
-        this.flyoutManager = flyoutManager;
+        this.viewHandler = viewHandler;
 
-        flyoutManager.getTileOptions().forEach((flyout) => {
-            const tileExtension = jQuery(tpl(flyout));
-            this.extendTile(tileExtension, flyout.id);
+        FLYOUTS.forEach(id => {
+            const label = this.loc(`tile.${id}`);
+            const tileExtension = jQuery(tpl({id, label}));
+            this.extendTile(tileExtension, id);
             tileExtension.on('click', function (event) {
                 event.stopPropagation();
-                flyoutManager.toggle(flyout.id);
+                viewHandler.toggle(id);
             });
         });
-
         this.hideExtensions();
-
-        this.flyoutManager.on('show', (flyout) => this.toggleExtension(flyout, true));
-        this.flyoutManager.on('hide', (flyout) => this.toggleExtension(flyout, false));
     },
     /**
      * Adds a class for the tile so we can programmatically identify which functionality the tile controls.
@@ -124,24 +122,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
      * Hides all the extra options (used when tile is "deactivated")
      */
     hideExtensions: function () {
-        var extraOptions = this.getExtensions();
+        const extraOptions = this.getExtensions();
         Object.keys(extraOptions).forEach(function (key) {
             extraOptions[key].addClass('hidden');
         });
+        this.viewHandler.close('search');
         this._attached = false;
-        this.flyoutManager.tileClosed();
     },
     /**
      * Shows the tile extra options (when tile is activated)
      * @return {[type]} [description]
      */
     showExtensions: function () {
-        var extraOptions = this.getExtensions();
+        const extraOptions = this.getExtensions();
         Object.keys(extraOptions).forEach(function (key) {
             extraOptions[key].removeClass('hidden');
         });
         this._attached = true;
-        this.flyoutManager.tileAttached();
     },
     isAttached: function () {
         return this._attached;
