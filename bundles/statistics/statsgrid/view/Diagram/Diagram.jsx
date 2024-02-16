@@ -106,13 +106,6 @@ const calculateDimensions = (data) => {
     };
 };
 
-const nullsLast = (a, b) => {
-    if (a == null && b == null) return 0;
-    if (a == null) return -1;
-    if (b == null) return 1;
-    return 0;
-};
-
 const getTextContent = (d, maxLength) => {
     const max = d.value < 0 ? maxLength.negative : maxLength.positive;
     if (d.name.length > max) {
@@ -135,34 +128,19 @@ const sortData = (data, sortingType = 'value-descending') => {
         break;
     case 'value-ascending':
         data.sort((a, b) => {
-            const result = nullsLast(a.value, b.value);
-            if (!result) {
-                return d3.descending(a.value, b.value);
-            }
-            return result;
+            return d3.descending(a.value, b.value);
         });
         break;
     case 'value-descending':
         data.sort((a, b) => {
-            const result = nullsLast(a.value, b.value);
-            if (!result) {
-                return d3.ascending(a.value, b.value);
-            }
-            return result;
+            return d3.ascending(a.value, b.value);
         });
         break;
     }
 };
 
 const createGraph = (ref, labelsRef, data, classifiedData ) => {
-    const { groups, format = value => value, error } = classifiedData;
-    const valueRenderer = value => {
-        if (typeof value !== 'number') {
-            return null;
-        }
-        return format(value);
-    }
-
+    const { groups, error } = classifiedData;
     const dimensions = calculateDimensions(data);
 
     let x;
@@ -303,10 +281,7 @@ const createGraph = (ref, labelsRef, data, classifiedData ) => {
     // append text
     const noValStr = Oskari.getMsg('DivManazer', 'graph.noValue');
     bars.each((d, i, nodes) => {
-        const isNumber = typeof d.value === 'number';
-        if (!valueRenderer && isNumber) {
-            return;
-        }
+        const isNumber = typeof d.value !== 'undefined';
         let textAnchor = 'start';
         let transformX = '5px';
         let locationX = x(0);
@@ -315,7 +290,7 @@ const createGraph = (ref, labelsRef, data, classifiedData ) => {
         if (isNumber) {
             locationX = x(d.value);
             const width = barWidth(d);
-            rendered = valueRenderer(d.value);
+            rendered = d.formatted;
             const renderedLength = typeof rendered === 'string' ? rendered.length * 8 : 0; // 8px per char (generous)
             const fitsInBar = renderedLength < width - 10; // padding of 5px + 5px
             if (fitsInBar) {
@@ -356,13 +331,13 @@ export const Diagram = ({ data, classifiedData,  sortOrder }) => {
         if (labelsRef?.current?.children?.length > 0) {
             labelsRef.current.removeChild(labelsRef.current.children[0]);
         }
-        if (data) {
+        if (data.length) {
             sortData(data, sortOrder);
             createGraph(ref.current, labelsRef.current, data, classifiedData);
         }
     }, [data, classifiedData, sortOrder]);
 
-    if (!data) {
+    if (data.length === 0) {
         return <Content><Message bundleKey='StatsGrid' messageKey='datacharts.nodata' /></Content>;
     }
     return (
