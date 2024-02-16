@@ -59,7 +59,7 @@ Oskari.registerLocalization(
                     "printLabel": "Time series time"
                 },
                 "coordinates": {
-                    "label": "Show coordinates",
+                    "label": "Include coordinates",
                     "position": {
                         "label": "Location",
                         "options": {

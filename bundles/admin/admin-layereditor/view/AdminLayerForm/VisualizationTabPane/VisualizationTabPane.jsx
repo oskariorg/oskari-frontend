@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Controller, ErrorBoundary } from 'oskari-ui/util';
 import { Opacity } from './Opacity';
-import { Hover } from './Hover';
 import { DynamicScreensPaceErrorOptions } from './DynamicScreensSpaceErrorOptions';
 import { Scale } from './Scale';
 import { Coverage } from './Coverage';
@@ -10,6 +9,7 @@ import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
 import { StyledColumn } from './styled';
 import { RasterStyle } from './RasterStyle';
+import { HoverModal } from './VectorStyle/HoverModal';
 import { TimeSeries } from './TimeSeries';
 import { VectorStyle } from './VectorStyle';
 import { LayerTypeNotSupported } from '../LayerTypeNotSupported';
@@ -65,7 +65,7 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
                 <VectorStyle layer={layer} controller={controller} external={showExternalVectorStyle}/>
             }
             { propertyFields.includes(HOVER) &&
-                <Hover layer={layer} controller={controller} />
+                <HoverModal layer={layer} controller={controller} />
             }
             { propertyFields.includes(CESIUM_ION) &&
                 <DynamicScreensPaceErrorOptions layer={layer} controller={controller} />

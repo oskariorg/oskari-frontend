@@ -106,9 +106,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // RPC panel is added after other tools
             const rpcTools = publisherTools.groups.rpc;
             const layerTools = publisherTools.groups.layers;
+            const additionalTools = publisherTools.groups.additional;
             // clear rpc/layers groups from others for looping/group so they are not listed twice
             delete publisherTools.groups.rpc;
             delete publisherTools.groups.layers;
+            delete publisherTools.groups.additional;
 
             const mapLayersPanel = this._createMapLayersPanel(layerTools);
             mapLayersPanel.getPanel().addClass('t_layers');
@@ -130,6 +132,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     accordion.addPanel(panel);
                 }
             });
+
+            // add additional tools panel if there are tools for it
+            if (additionalTools) {
+                const additionalToolsPanel = this._createAdditionalToolsPanel(additionalTools);
+                additionalToolsPanel.getPanel().addClass('t_additional_tools');
+                this.panels.push(additionalToolsPanel);
+                accordion.addPanel(additionalToolsPanel.getPanel());
+            }
+
             // add RPC panel if there are tools for it
             if (rpcTools) {
                 const rpcPanel = this._createRpcPanel(rpcTools);
@@ -202,6 +213,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             form.init(this.data);
             return form;
         },
+        _createAdditionalToolsPanel: function (tools) {
+            const sandbox = this.instance.getSandbox();
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelAdditionalTools', tools, sandbox, mapModule, this.loc, this.instance);
+            form.init(this.data);
+            return form;
+        },
         /**
          * @private @method _createToolLayoutPanel
          * Creates the tool layout panel of publisher
@@ -257,7 +275,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _createToolGroupings: function () {
             const sandbox = this.instance.getSandbox();
             const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            const definedTools = [...Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool'), ...Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool')];
+            const definedTools = [...Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool'),
+                ...Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool')
+            ];
+
             const grouping = {};
             const allTools = [];
             // group tools per tool-group
@@ -465,7 +486,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 this._disablePreview();
             }
         },
-
         /**
          * @private @method _enablePreview
          * Modifies the main map to show what the published map would look like

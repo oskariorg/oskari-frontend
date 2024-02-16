@@ -68,6 +68,20 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading: 'Загрузка...'
+        },
+        coordinates: {
+            lon: "Долгота",
+            lat: "Широта",
+            n: "N",
+            e: "E",
+            p: "N",
+            i: "E", 
+            crs: {
+              'EPSG:3067': "Координаты ETRS89-TM35FIN",
+              'EPSG:3575': "Координаты в азимутальной равновеликой проекции Ламберта Северного полюса (Европа)",
+              'EPSG:3857': "WGS 84 / Pseudo-Mercator координаты",
+              default: "{crs} координаты"
+          },
         }
     }
 });

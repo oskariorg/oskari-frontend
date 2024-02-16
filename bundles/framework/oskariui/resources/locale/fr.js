@@ -74,7 +74,20 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading: 'Chargement en cours...'
+        },
+        coordinates: {
+            lon: "Lon",
+            lat: "Lat",
+            n: "N",
+            e: "E",
+            p: "N",
+            i: "E", 
+            crs: {
+              'EPSG:3067': "Coordonnées ETRS89-TM35FIN",
+              'EPSG:3575': "Coordonnées de la projection équivalente de Lambert de l'Europe centrée sur le pôle Nord",
+              'EPSG:3857': "Coordonnées WGS 84 / Pseudo-Mercator",
+              default: "Coordonnées {crs}"
+          },
         }
-        
     }
 });

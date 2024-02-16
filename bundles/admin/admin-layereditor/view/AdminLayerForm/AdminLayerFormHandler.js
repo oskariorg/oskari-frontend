@@ -393,6 +393,16 @@ class UIHandler extends StateHandler {
         this.updateOptionsJsonProperty(json, 'tempHoverJSON', 'hover');
     }
 
+    setHover (json) {
+        const options = { ...this.getState().layer.options };
+        if (!json) {
+            delete options.hover;
+        } else {
+            options.hover = json;
+        }
+        this.setOptions(options);
+    }
+
     setTileGridJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempTileGridJSON', 'tileGrid');
     }
@@ -420,6 +430,12 @@ class UIHandler extends StateHandler {
     setOptions (options) {
         this.updateState({
             layer: { ...this.getState().layer, options }
+        });
+    }
+
+    setValueForLayer (key, value) {
+        this.updateState({
+            layer: { ...this.getState().layer, [key]: value }
         });
     }
 
@@ -1223,6 +1239,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setGfiXslt',
     'setGroup',
     'setHoverJSON',
+    'setHover',
     'setLayerName',
     'setLayerUrl',
     'setLegendUrl',
@@ -1231,6 +1248,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setMinAndMaxScale',
     'setOpacity',
     'setOptions',
+    'setValueForLayer',
     'setPassword',
     'setPermissionForAll',
     'setSingleTile',

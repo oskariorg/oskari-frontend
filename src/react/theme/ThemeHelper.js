@@ -39,7 +39,8 @@ export const getNavigationTheme = (theme) => {
         // like 0.5 for calc() usage
         getButtonRoundnessFactor: () => borderRadius / 100,
         getEffect: () => theme.navigation?.effect,
-        getButtonOpacity: () => theme.navigation?.opacity || 1
+        getButtonOpacity: () => theme.navigation?.opacity || 1,
+        getNavigationBackgroundColor: () => theme.navigation?.color?.bg || theme.navigation?.color?.primary || DEFAULT_COLORS.NAV_BG
     };
     return funcs;
 };

@@ -7,7 +7,6 @@ import { SelectedTime } from './SelectedTime';
 import { GfiType } from './GfiType';
 import { GfiContent } from './GfiContent';
 import { GfiStyle } from './GfiStyle';
-import { Attributes } from './Attributes';
 import { VectorLayerAttributes } from './VectorLayerAttributes';
 import { Attributions } from './Attributions';
 import { MetadataId } from './MetadataId';
@@ -25,7 +24,6 @@ const {
     GFI_TYPE,
     GFI_XSLT,
     ATTRIBUTIONS,
-    ATTRIBUTES,
     WFS_LAYER
 } = LayerComposingModel;
 
@@ -66,9 +64,6 @@ export const AdditionalTabPane = ({ layer, propertyFields, metadata, controller 
             }
             { propertyFields.includes(WFS_LAYER) &&
                 <VectorLayerAttributes layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(ATTRIBUTES) &&
-                <Attributes layer={layer} controller={controller} />
             }
         </Fragment>
     );
