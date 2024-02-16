@@ -58,6 +58,10 @@ const HeaderCell = styled('div')`
     height: 100%;
 `;
 
+const getValueSorter = hash => {
+    return (a,b) => a.dataByHash[hash] - b.dataByHash[hash];
+};
+
 const TableFlyout = ({ state, controller }) => {
     const { indicators, activeIndicator, regionset, loading, regions } = state;
     let initialSort = {
@@ -134,8 +138,8 @@ const TableFlyout = ({ state, controller }) => {
                         )}
                     </RegionHeader>
                     <Sorter
-                        sortOrder={sortOrder['regionName']}
-                        changeSortOrder={() => changeSortOrder('regionName')}
+                        sortOrder={sortOrder['name']}
+                        changeSortOrder={() => changeSortOrder('name')}
                     />
                 </HeaderCell>
             );
@@ -146,7 +150,7 @@ const TableFlyout = ({ state, controller }) => {
             dataIndex: 'value', //indicator.hash
             align: 'right',
             width: 125,
-            sorter: (a, b) => a.data[indicator.hash] - b.data[indicator.hash],
+            sorter: getValueSorter(indicator.hash),
             sortOrder: sortOrder[indicator.hash],
             showSorterTooltip: false,
             onCell: (record, rowIndex) => ({
