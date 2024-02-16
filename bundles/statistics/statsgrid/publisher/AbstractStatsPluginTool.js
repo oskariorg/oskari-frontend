@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
     init: function (data) {
         const id = this.id;
         const conf = this.getStatsgridConf(data);
-        this.setEnabled(conf[id] === true); // OR: !== false
+        this.setEnabled(conf[id] === true);
     },
     getValues: function () {
         const id = this._getToolId();
@@ -15,8 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
     },
     getTool: function () {
         const id = this._getToolId();
-        const title = this.title; // OR: titleKey
-        //allowClassification: false
+        const title = this.title;
         return {
             id: this.pluginId || defaultPlugin,
             title,

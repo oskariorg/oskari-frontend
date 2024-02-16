@@ -5,10 +5,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
     id: 'allowClassification',
     title: 'allowClassification',
 
-    // required for dragndrop in publisher - also plugin needs to
-    getPlugin: function () {
-        var stats = this.getStatsgridBundle();
-        return stats.classificationPlugin;
+    init: function (data) {
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf[this.id] !== false);
     },
     _setEnabledImpl: function (enabled) {
         const handler = this.getViewHandler();
