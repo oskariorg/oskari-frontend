@@ -58,12 +58,12 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
                             className='t_edit'
                             title={<Message messageKey='tab.grid.edit' />}
                             icon={<EditOutlined style={editIconStyle} />}
-                            onClick={() => controller.editIndicator(item)}
+                            onClick={() => controller.editIndicator(item.id)}
                         />
                         <DeleteButton
                             type='icon'
                             title={<Message messageKey='tab.popup.deletemsg' messageArgs={{ name: item.name }} />}
-                            onConfirm={() => controller.deleteIndicator(item)}
+                            onConfirm={() => controller.deleteIndicator(item.id)}
                         />
                     </ToolsContainer>
                 )
