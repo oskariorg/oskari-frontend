@@ -1,5 +1,6 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
+import { deleteIndicator } from './IndicatorHelper';
 
 class IndicatorsHandler extends StateHandler {
     constructor (instance, formHandler, userDsId) {
@@ -8,7 +9,6 @@ class IndicatorsHandler extends StateHandler {
         this.userDsId = userDsId;
         this.formHandler = formHandler;
         this.sandbox = instance.getSandbox();
-        this.service = instance.getStatisticsService();
         this.setState({
             data: [],
             loading: false
@@ -60,7 +60,9 @@ class IndicatorsHandler extends StateHandler {
                 loading: true
             });
             try {
-                await this.service.deleteIndicator(this.userDsId, indicator.id, null, null);
+                // removes all indicator data (no selections or regionset)
+                console.log('ds + id is needed', indicator);
+                await deleteIndicator(indicator);
                 Messaging.success(this.loc('tab.popup.deleteSuccess'));
                 this.refreshIndicatorsList();
             } catch (error) {
@@ -73,19 +75,15 @@ class IndicatorsHandler extends StateHandler {
     }
 
     addNewIndicator () {
-        this.formHandler.getController().showIndicatorPopup(this.userDsId);
+        this.formHandler.getController().showIndicatorPopup(this.userDsI);
     }
 
     editIndicator (id) {
         this.formHandler.getController().showIndicatorPopup(this.userDsId, id);
     }
-    // TODO:
-    openIndicator (item) {
-        const flyoutManager = this.instance.getFlyoutManager();
-        flyoutManager.open('search');
-        const searchFlyout = flyoutManager.getFlyout('search');
-        const indicatorSelector = searchFlyout.getIndicatorSelectionComponent();
-        indicatorSelector.setIndicatorData(this.userDsId, item.id);
+    openIndicator (indicator) {
+        const viewHandler = this.instance.getViewHandler();
+        viewHandler?.openSearchWithSelections(indicator);
     }
 }
 
