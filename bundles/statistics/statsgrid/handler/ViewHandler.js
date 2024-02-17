@@ -164,6 +164,11 @@ class UIHandler extends StateHandler {
         }
     }
 
+    openSearchWithSelections (indicator) {
+        //this.searchHandler.selectValues(indicator);
+        this.show('search');
+    }
+
     show (id) {
         if (!id || this.controls[id]) {
             // already shown, do nothing
@@ -195,8 +200,7 @@ class UIHandler extends StateHandler {
             // controls = showMedataPopup(data, onClose);
         } else if (id === 'indicatorForm' && this.formHandler) {
             const onCloseWrapper = () => {
-                // TODO: reset on open to get rid of wrapper and forma handler's close methods
-                this.formHandler.closeIndicatorPopup();
+                this.close('clipboard');
                 onClose();
             };
             controls = showIndicatorForm(this.formHandler.getState(), this.formHandler.getController(), onCloseWrapper);

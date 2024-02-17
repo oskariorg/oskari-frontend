@@ -1,15 +1,16 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { getHashForIndicator, populateData, populateSeriesData, getUILabels, getUpdatedLabels, formatData } from '../helper/StatisticsHelper';
+import { getHashForIndicator, getUILabels, getUpdatedLabels, formatData } from '../helper/StatisticsHelper';
 import { getClassification, getClassifiedData, validateClassification } from '../helper/ClassificationHelper';
+import { getDataForIndicator, getIndicatorMetadata } from './IndicatorHelper';
+import { getRegionsAsync } from '../helper/RegionsHelper'; // don't use getRegions in handler
 import { LAYER_ID } from '../constants';
 import { getRegionsets } from '../helper/ConfigHelper';
 
 class StatisticsController extends StateHandler {
-    constructor (instance, service) {
+    constructor (instance) {
         super();
         this.instance = instance;
         this.sandbox = instance.getSandbox();
-        this.service = service;
         this.setState(this.getInitialState());
         this.log = Oskari.log('Oskari.statistics.statsgrid.StatisticsHandler');
     }
@@ -24,9 +25,8 @@ class StatisticsController extends StateHandler {
             loading: false,
             activeIndicator: null, // hash
             activeRegion: null,
-            regionset,
+            regionset, // id
             indicators: [],
-            regions: [], // TODO: move to helper
             isSeriesActive: false
         };
     }
@@ -91,9 +91,9 @@ class StatisticsController extends StateHandler {
 
     async setActiveRegionset (regionset) {
         this.updateState({ loading: true });
-        const regions = await this.service.getRegions(regionset);
+        const regions = await getRegionsAsync(regionset);
         const indicators = await this.updateIndicatorsRegions(regionset, regions);
-        this.updateState({ regionset, regions, indicators, loading: false });
+        this.updateState({ regionset, indicators, loading: false });
     }
 
     async updateIndicatorsRegions (regionset, regions) {
@@ -230,6 +230,7 @@ class StatisticsController extends StateHandler {
             const indicatorToAdd = await this.getIndicatorToAdd(indicator, regionset);
             this.instance.addDataProviderInfo(indicatorToAdd);
             this.updateState({
+                regionset,
                 indicators: [...this.getState().indicators, indicatorToAdd]
             });
         } catch (error) {
@@ -242,16 +243,12 @@ class StatisticsController extends StateHandler {
 
     // gather all needed stuff for rendering components before adding indicator to state
     async getIndicatorToAdd (indicator, regionset) {
-        const regions = await this.service.getRegions(regionset);
-        if (this.getState().regionset !== regionset) {
-            this.updateState({regions, regionset});
-        }
+        // to be sure that indicator has always hash
         if(!indicator.hash) {
-            // to be sure that indicator has always hash
             indicator.hash = getHashForIndicator(indicator);
         }
-        const data = await this.fetchIndicatorData(indicator, regionset, regions);
-        const meta = await this.service.getIndicatorMetadata(indicator.ds, indicator.id);
+        const data = await getDataForIndicator(indicator, regionset);
+        const meta = await getIndicatorMetadata(indicator.ds, indicator.id);
         let { classification } = indicator;
         if (!classification) {
             // active indicicator has latest user selected classification
@@ -275,25 +272,7 @@ class StatisticsController extends StateHandler {
         };
     }
 
-    async fetchIndicatorData (indicator, regionset, regions) {
-        let data = {};
-        const fractionDigits = indicator?.classification?.fractionDigits;
-        if (indicator.series) {
-            const { id, values } = indicator.series;
-            const dataBySelection = {};
-            for (let i = 0; i < values.length; i++) {
-                const value = values[i];
-                const selections = {...indicator.selections, [id]: value};
-                const rawData = await this.service.getIndicatorData({...indicator, selections}, regionset);
-                dataBySelection[value] = rawData;
-            }
-            data = populateSeriesData(dataBySelection, regions, regionset, fractionDigits);
-        } else {
-            const rawData = await this.service.getIndicatorData(indicator, regionset);
-            data = populateData(rawData, regions, regionset, fractionDigits);
-        }
-        return data;
-    }
+
 }
 
 const wrapped = controllerMixin(StatisticsController, [

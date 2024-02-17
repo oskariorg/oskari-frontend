@@ -9,9 +9,6 @@ import { getDataProviderKey } from './helper/StatisticsHelper';
 import { LAYER_ID, DATA_PROVIDER } from './constants';
 
 import './Tile.js';
-import './service/StatisticsService.js';
-import './service/Cache.js';
-import './service/CacheHelper.js';
 import './components/SeriesControl.js';
 import './components/RegionsetViewer.js';
 import './plugin/TogglePlugin.js';
@@ -49,7 +46,6 @@ Oskari.clazz.define(
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.StatsGridBundleInstance');
 
-        this.statsService = null;
         this.stateHandler = null;
         this.searchHandler = null;
         this.regionsetViewer = null;
@@ -58,13 +54,9 @@ Oskari.clazz.define(
             const conf = this.getConfiguration() || {};
             initConfig(conf);
 
-            // Pass service and handlers to others to keep right init order
-            const statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', this, this.loc);
-            sandbox.registerService(statsService);
-            this.statsService = statsService;
-
-            this.stateHandler = new StateHandler(this, statsService);
-            this.searchHandler = new SearchHandler(this, statsService, this.stateHandler);
+            // Pass handlers to others to keep right init order
+            this.stateHandler = new StateHandler(this);
+            this.searchHandler = new SearchHandler(this, this.stateHandler);
             this.viewHandler = new ViewHandler(this, this.stateHandler, this.searchHandler);
             if (Oskari.dom.isEmbedded()) {
                 this.viewHandler.setEmbeddedTools(conf);
@@ -108,9 +100,6 @@ Oskari.clazz.define(
         getLayerService: function () {
             return this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         },
-        getStatisticsService: function () {
-            return this.statsService;
-        },
         getDataProviderInfoService: function () {
             return this.getSandbox().getService('Oskari.map.DataProviderInfoService');
         },
@@ -119,6 +108,9 @@ Oskari.clazz.define(
         },
         getViewHandler: function () {
             return this.viewHandler;
+        },
+        getSearchHandler: function () {
+            return this.searchHandler;
         },
         removeDataProviverInfo: function (ind) {
             const service = this.getDataProviderInfoService();
