@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                         loadError: false,
                         showMetadataCallback: uuid ? showMetadata : null
                     };
-                });
+                }).reverse();
 
             ReactDOM.render(
                 <ThemeProvider>
