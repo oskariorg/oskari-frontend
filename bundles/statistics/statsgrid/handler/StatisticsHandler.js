@@ -1,10 +1,10 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler as StateHandlerBase, controllerMixin } from 'oskari-ui/util';
 import { getHashForIndicator, populateData, populateSeriesData, getUILabels, getUpdatedLabels, formatData } from '../helper/StatisticsHelper';
 import { getClassification, getClassifiedData, validateClassification } from '../helper/ClassificationHelper';
 import { LAYER_ID } from '../constants';
 import { getRegionsets } from '../helper/ConfigHelper';
 
-class StatisticsController extends StateHandler {
+class StatisticsController extends StateHandlerBase {
     constructor (instance, service) {
         super();
         this.instance = instance;
@@ -38,9 +38,9 @@ class StatisticsController extends StateHandler {
         this.updateState(this.getInitialState());
     }
 
-    isIndicatorSelected = (indicator, strict = false) => {
+    isIndicatorSelected (indicator, strict = false) {
         const { hash, ds, id } = indicator;
-        const { indicators } = this.getState();
+        const { indicators = [] } = this.getState();
         if (strict) {
             return indicators.some(ind => ind.hash === hash);
         }
@@ -54,22 +54,23 @@ class StatisticsController extends StateHandler {
             this.resetState();
             return;
         }
-        this.updateState({indicators});
+        this.updateState({ indicators });
         // check if the same indicator is added more than once with different selections
         if (!this.isIndicatorSelected(indicator)) {
             this.instance.removeDataProviverInfo(indicator);
         }
-        if (this.getState().activeIndicator === hash) {
+        if (this.getState().activeIndicator === indicator.hash) {
             // active was the one removed -> reset active
             this.setActiveIndicator();
         }
     }
-    removeIndicators(ds, id) {
+
+    removeIndicators (ds, id) {
         const { indicators, activeIndicator } = this.getState();
         const hashes = indicators
             .filter(ind => ind.ds === ds && ind.id === id)
             .map(ind => ind.hash);
-        this.updateState({indicators: indicators.filter(ind => !hashes.includes(ind.hash))});
+        this.updateState({ indicators: indicators.filter(ind => !hashes.includes(ind.hash)) });
         // needs only ds and id from indicator object
         this.instance.removeDataProviverInfo({ ds, id });
         if (hashes.includes(activeIndicator)) {
@@ -100,12 +101,16 @@ class StatisticsController extends StateHandler {
         const { indicators } = this.getState();
         const updated = [];
         // async/await doesn't work with map()
-        for (let i=0; i < indicators.length; i++) {
+        for (let i = 0; i < indicators.length; i++) {
             const indicator = indicators[i];
             const data = await this.fetchIndicatorData(indicator, regionset, regions);
             validateClassification(indicator.classification, data);
             const classifiedData = getClassifiedData(indicator);
-            updated.push( {...indicator, data, classifiedData });
+            updated.push({
+                ...indicator,
+                data,
+                classifiedData
+            });
         };
         return updated;
     }
@@ -137,20 +142,23 @@ class StatisticsController extends StateHandler {
     }
 
     setSeriesValue (value) {
-        const { indicators } = this.getState()
+        const { indicators } = this.getState();
         const hashes = indicators.filter(ind => ind.series).map(ind => ind.hash);
         const updated = indicators.map(ind => {
             if (hashes.includes(ind.hash)) {
-                const indicator = {...ind};
+                const indicator = { ...ind };
                 const { id } = indicator.series;
-                indicator.selections = {...indicator.selections, [id]: value};
+                indicator.selections = {
+                    ...indicator.selections,
+                    [id]: value
+                };
                 indicator.labels = getUpdatedLabels(indicator.labels, indicator.selections);
                 indicator.classifiedData = getClassifiedData(indicator);
                 return indicator;
             }
             return ind;
         });
-        this.updateState( {indicators: updated });
+        this.updateState({ indicators: updated });
     }
 
     getStateToStore () {
@@ -216,7 +224,7 @@ class StatisticsController extends StateHandler {
         if (this.isIndicatorSelected(indicator, true)) {
             // already selected
             if (regionset === this.getState().regionset) {
-                setActiveRegionset(regionset);
+                this.setActiveRegionset(regionset);
             }
             return true;
         }
@@ -244,9 +252,9 @@ class StatisticsController extends StateHandler {
     async getIndicatorToAdd (indicator, regionset) {
         const regions = await this.service.getRegions(regionset);
         if (this.getState().regionset !== regionset) {
-            this.updateState({regions, regionset});
+            this.updateState({ regions, regionset });
         }
-        if(!indicator.hash) {
+        if (!indicator.hash) {
             // to be sure that indicator has always hash
             indicator.hash = getHashForIndicator(indicator);
         }
@@ -283,8 +291,15 @@ class StatisticsController extends StateHandler {
             const dataBySelection = {};
             for (let i = 0; i < values.length; i++) {
                 const value = values[i];
-                const selections = {...indicator.selections, [id]: value};
-                const rawData = await this.service.getIndicatorData({...indicator, selections}, regionset);
+                const selections = {
+                    ...indicator.selections,
+                    [id]: value
+                };
+                const rawData = await this.service.getIndicatorData({
+                    ...indicator,
+                    selections
+                },
+                regionset);
                 dataBySelection[value] = rawData;
             }
             data = populateSeriesData(dataBySelection, regions, regionset, fractionDigits);

@@ -60,7 +60,7 @@ export const populateData = (data, regions, regionset, fractionDigits) => {
     const values = new Set();
     for (const reg of regions) {
         const { id, name } = reg;
-        //TODO: validate?
+        // TODO: validate?
         const value = data[id];
         const formatted = typeof format === 'function' ? format(value) : '';
         dataByRegions.push({ id, value, name, formatted });
@@ -74,7 +74,7 @@ export const populateData = (data, regions, regionset, fractionDigits) => {
     }
     const unique = [...values].sort((a, b) => a - b);
     if (!unique.length) {
-         return { error: 'noData', dataByRegions: [] };
+        return { error: 'noData', dataByRegions: [] };
     }
     return {
         dataByRegions,
@@ -90,8 +90,8 @@ export const populateData = (data, regions, regionset, fractionDigits) => {
 // any additional data will result in broken classification
 export const populateSeriesData = (data, regions, regionset, fractionDigits) => {
     const dataBySelection = {};
-    let seriesValues = [];
-    let seriesAllInts = true;
+    const seriesValues = [];
+    // let seriesAllInts = true;
     let seriesMin = Number.POSITIVE_INFINITY;
     let seriesMax = Number.NEGATIVE_INFINITY;
     Object.keys(data).forEach(selector => {
@@ -101,11 +101,13 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
             return;
         }
         dataByRegions.forEach(d => seriesValues.push(d.value));
-        seriesMax = seriesMax > max  ? seriesMax : max;
+        seriesMax = seriesMax > max ? seriesMax : max;
         seriesMin = seriesMin < min ? seriesMin : min;
+        /*
         if (allInts === false) {
             seriesAllInts = false;
         }
+        */
     });
     return {
         dataBySelection,
@@ -121,10 +123,14 @@ export const formatData = (data, classification) => {
     const { dataByRegions, dataBySelection } = data;
     const { format } = Oskari.getNumberFormatter(classification.fractionDigits);
     if (dataByRegions) {
-        dataByRegions.forEach(region => region.formatted = format(region.value));
+        dataByRegions.forEach(region => {
+            region.formatted = format(region.value);
+        });
     } else if (dataBySelection) {
         Object.keys(dataBySelection).forEach(selector => {
-            dataBySelection[selector].forEach(region => region.formatted = format(region.value));
+            dataBySelection[selector].forEach(region => {
+                region.formatted = format(region.value);
+            });
         });
     }
 };
@@ -190,7 +196,7 @@ export const getUpdatedLabels = (labels, selections) => {
         return labels;
     }
     // Doesn't validate selectors
-    const paramsList = Object.keys(selections).map( selector => {
+    const paramsList = Object.keys(selections).map(selector => {
         const value = selections[selector];
         return {
             selector,

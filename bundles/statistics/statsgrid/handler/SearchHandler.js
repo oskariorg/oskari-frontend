@@ -245,7 +245,7 @@ class SearchController extends StateHandler {
 
     handleMultipleIndicatorParams () {
         const indicators = this.getState().selectedIndicators.filter((n) => { return n !== ''; });
-        let combinedValues = {};
+        const combinedValues = {};
         let regionsets = [];
 
         const addMissingElements = (list, newValues, propertyName) => {
@@ -344,7 +344,7 @@ class SearchController extends StateHandler {
     }
 
     initParamSelections (selectors, regionsets) {
-        let selections = {};
+        const selections = {};
         Object.keys(selectors).forEach(key => {
             let selected;
             if (selectors[key].time) {
@@ -532,7 +532,7 @@ class SearchController extends StateHandler {
      */
     getRefinedSearch (metadata, commonSearchValues) {
         // Make a deep clone of search values
-        var indSearchValues = jQuery.extend(true, {}, commonSearchValues);
+        const indSearchValues = jQuery.extend(true, {}, commonSearchValues);
         const { regionset, selections, series } = indSearchValues;
 
         if (Array.isArray(metadata.regionsets) && !metadata.regionsets.includes(Number(regionset))) {
@@ -655,7 +655,7 @@ class SearchController extends StateHandler {
             batch.push(search);
         });
         const nextBatch = async () => {
-            let batch = batches.pop();
+            const batch = batches.pop();
             if (batch) {
                 await consumeBatch(batch);
             }

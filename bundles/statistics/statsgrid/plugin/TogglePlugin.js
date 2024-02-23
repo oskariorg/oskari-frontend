@@ -51,11 +51,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (handle
         this.teardownUI(true);
     }
 }, {
-    'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
+    extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
     /**
      * @static @property {string[]} protocol array of superclasses
      */
-    'protocol': [
+    protocol: [
         'Oskari.mapframework.module.Module',
         'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
     ]
