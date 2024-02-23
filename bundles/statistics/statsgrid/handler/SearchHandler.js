@@ -435,7 +435,7 @@ class SearchController extends StateHandler {
      */
     async handleMultipleIndicatorsSearch (commonSearchValues) {
         const indicators = Array.isArray(commonSearchValues.indicator) ? commonSearchValues.indicator : [commonSearchValues.indicator];
-        if (!commonSearchValues.indicator || indicators.length === 0) {
+        if (indicators.length === 0) {
             return;
         }
         const refinedSearchValues = [];
