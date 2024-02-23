@@ -79,6 +79,7 @@ class IndicatorsHandler extends StateHandler {
     editIndicator (id) {
         this.formHandler.getController().showIndicatorPopup(this.userDsId, id);
     }
+
     // TODO:
     openIndicator (item) {
         const flyoutManager = this.instance.getFlyoutManager();
