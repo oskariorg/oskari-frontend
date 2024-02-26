@@ -1,27 +1,36 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function () {
-},
-{
-    index: 1,
-    group: 'data',
-    id: 'transparent',
-    title: 'transparent',
-    pluginId: 'Oskari.statistics.statsgrid.ClassificationPlugin',
+import { AbstractStatsPluginTool } from './AbstractStatsPluginTool';
 
-    _setEnabledImpl: function (enabled) {
+class OpacityTool extends AbstractStatsPluginTool {
+    constructor (...args) {
+        super(...args);
+        this.index = 1;
+        this.group = 'data';
+        this.id = 'transparent';
+        this.title = 'transparent';
+        this.pluginId = 'Oskari.statistics.statsgrid.ClassificationPlugin';
+    }
+
+    setEnabled (enabled) {
         const handler = this.getViewHandler();
         if (!handler) {
             return;
         }
         handler.getController().updateClassificationState('transparent', enabled);
-    },
-    _stopImpl: function () {
+    }
+
+    _stopImpl () {
         const handler = this.getViewHandler();
         if (!handler) {
             return;
         }
         handler.getController().updateClassificationState('transparent');
     }
-}, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
-    'protocol': ['Oskari.mapframework.publisher.Tool']
-});
+};
+
+// Attach protocol to make this discoverable by Oskari publisher
+Oskari.clazz.defineES('Oskari.mapframework.publisher.tool.OpacityTool',
+    OpacityTool,
+    {
+        protocol: ['Oskari.mapframework.publisher.Tool']
+    }
+);

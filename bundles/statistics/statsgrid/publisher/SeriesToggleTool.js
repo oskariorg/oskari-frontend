@@ -1,11 +1,15 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', function () {
-}, {
-    index: 1,
-    group: 'data',
-    id: 'series',
-    title: 'allowHidingSeriesControl',
+import { AbstractStatsPluginTool } from './AbstractStatsPluginTool';
 
-    isDisplayed: function (data) {
+class SeriesToggleTool extends AbstractStatsPluginTool {
+    constructor (...args) {
+        super(...args);
+        this.index = 1;
+        this.group = 'data';
+        this.id = 'series';
+        this.title = 'allowHidingSeriesControl';
+    }
+
+    isDisplayed (data) {
         const stats = this.getStatsgridBundle();
         if (!stats) {
             return false;
@@ -13,7 +17,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
         const { indicators } = this.getStateHandler().getState();
         return indicators.some(ind => ind.series);
     }
-}, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
-    'protocol': ['Oskari.mapframework.publisher.Tool']
-});
+};
+
+// Attach protocol to make this discoverable by Oskari publisher
+Oskari.clazz.defineES('Oskari.mapframework.publisher.tool.SeriesToggleTool',
+    SeriesToggleTool,
+    {
+        protocol: ['Oskari.mapframework.publisher.Tool']
+    }
+);
