@@ -1,6 +1,7 @@
 import { Messaging } from 'oskari-ui/util';
 import { LAYER_ID } from '../constants';
 import { getRegionsets } from '../helper/ConfigHelper';
+import { getRegions } from '../helper/RegionsHelper';
 import { getDataByRegions } from '../helper/StatisticsHelper';
 
 const BORDER_PRIO = 10000;
@@ -64,7 +65,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     _viewRegions: async function (classification, classifiedData, dataByRegions, highlightRegionId) {
         const locale = this.instance.getLocalization();
         try {
-            const { regions } = this.stateHandler.getState();
+            const { regionset } = this.stateHandler.getState();
+            const regions = getRegions(regionset);
             if (regions.length === 0) {
                 Messaging.error(locale.errors.regionsDataIsEmpty);
                 return;
