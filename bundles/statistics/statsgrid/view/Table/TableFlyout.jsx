@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Select, Message, Spin } from 'oskari-ui';
+import { Select, Message } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { showFlyout } from 'oskari-ui/components/window';
 import styled from 'styled-components';
-import { LocaleProvider } from 'oskari-ui/util';
+import { FlyoutContent } from '../FlyoutContent';
 import { Sorter } from './Sorter';
 import { IndicatorName } from '../IndicatorName';
 import { getRegionsets } from '../../helper/ConfigHelper';
@@ -13,13 +13,6 @@ import { getDataByRegions } from '../../helper/StatisticsHelper';
 const BUNDLE_KEY = 'StatsGrid';
 const COLUMN = 200;
 
-const Content = styled('div')`
-    max-height: 850px;
-    overflow-y: scroll;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-`;
 const StyledTable = styled(Table)`
     .ant-table-column-sorter {
         display: none;
@@ -176,36 +169,19 @@ const TableFlyout = ({ state, controller }) => {
         });
     });
 
-    const Component = (
-        <Content>
-            {!indicators || indicators.length < 1 ? (
-                <Message messageKey='statsgrid.noResults' />
-            ) : (
-                <StyledTable
-                    columns={columnSettings}
-                    dataSource={dataSource}
-                    pagination={false}
-                />
-            )}
-        </Content>
-    );
-    
-    if (loading) {
-        return <Spin showTip={true}>{Component}</Spin>;
-    }
-    return Component;
+    return <StyledTable columns={columnSettings} dataSource={dataSource} pagination={false}/>
 };
 
 export const showTableFlyout = (state, controller, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.grid' />;
     const controls = showFlyout(
         title,
-        <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+        <FlyoutContent state={state}>
             <TableFlyout
                 state={state}
                 controller={controller}
             />
-        </LocaleProvider>,
+        </FlyoutContent>,
         onClose
     );
 
@@ -213,12 +189,12 @@ export const showTableFlyout = (state, controller, onClose) => {
         ...controls,
         update: (state) => controls.update(
             title,
-            <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+            <FlyoutContent state={state}>
                 <TableFlyout
                     state={state}
                     controller={controller}
                 />
-            </LocaleProvider>
+            </FlyoutContent>
         )
     }
 };

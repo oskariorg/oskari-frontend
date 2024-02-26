@@ -1,20 +1,14 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Diagram } from './Diagram';
-import { Select, Message, Spin } from 'oskari-ui';
+import { Select, Message } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
 import styled from 'styled-components';
-import { LocaleProvider } from 'oskari-ui/util';
 import { IndicatorName } from '../IndicatorName';
 import { getDataByRegions } from '../../helper/StatisticsHelper';
+import { FlyoutContent } from '../FlyoutContent';
 
 const BUNDLE_KEY = 'StatsGrid';
 
-const Content = styled('div')`
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    max-width: 700px;
-`;
 const Selections = styled('div')`
     display: flex;
     flex-direction: row;
@@ -45,12 +39,12 @@ const sortOptions = [
 ];
 
 const DiagramFlyout = ({ state, controller }) => {
-    const { indicators, activeIndicator, loading } = state;
+    const { indicators, activeIndicator } = state;
     const current = indicators.find(ind => ind.hash === activeIndicator) || {};
     const dataByRegions = getDataByRegions(current);
     const [sortOrder, setSortOrder] = useState('value-descending');
-    const Component = (
-        <Content>
+    return (
+        <Fragment>
             <Selections>
                 <StyledSelect
                     filterOption={false}
@@ -68,22 +62,17 @@ const DiagramFlyout = ({ state, controller }) => {
                 />
             </Selections>
             <Diagram data={dataByRegions} classifiedData={current.classifiedData} sortOrder={sortOrder} />
-        </Content>
+        </Fragment>
     );
-    
-    if (loading) {
-        return <Spin showTip={true}>{Component}</Spin>;
-    }
-    return Component;
 };
 
 export const showDiagramFlyout = (state, controller, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.diagram' />;
     const controls = showFlyout(
         title,
-        <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+        <FlyoutContent state={state}>
             <DiagramFlyout state={state} controller={controller} />
-        </LocaleProvider>,
+        </FlyoutContent>,
         onClose
     );
 
@@ -91,9 +80,9 @@ export const showDiagramFlyout = (state, controller, onClose) => {
         ...controls,
         update: (state) => controls.update(
             title,
-            <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+            <FlyoutContent state={state}>
                 <DiagramFlyout state={state} controller={controller} />
-            </LocaleProvider>
+            </FlyoutContent>
         )
     }
 };
