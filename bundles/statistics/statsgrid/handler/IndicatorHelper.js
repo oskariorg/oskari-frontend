@@ -9,6 +9,55 @@ const indicatorDataStore = {};
 const getMetaCacheKey = (datasourceId, indicatorId) => 'ds_' + datasourceId + '_ind_' + indicatorId;
 const getDataCacheKey = (indicator, regionsetId) => 'hash_' + indicator.hash + '_rs_' + regionsetId;
 
+// for guest user's own indicators
+const updateIndicatorMetadataInCache = (indicator) => {
+    const { id, ds, selections = {} } = indicator;
+    const cacheKey = getMetaCacheKey(ds, id);
+    const cachedResponse = indicatorMetadataStore[cacheKey];
+
+    const lang = Oskari.getLang();
+    const selectors = Object.keys(selections).map(id => {
+        const value = selections[id];
+        return {
+            id,
+            name: id,
+            time: true,
+            allowedValues: [{name: value, id: value}]
+        };
+    });
+    // TODO: regionsets
+    if (!cachedResponse) {
+        indicatorMetadataStore[cacheKey] = {
+            public: true,
+            id,
+            ds,
+            name: {[lang]: indicator.name},
+            description: {[lang]: indicator.description},
+            source: {[lang]: indicator.source},
+            regionsets: [],
+            selectors
+        };
+        return;
+    }
+    // update allowed values
+    const { selectors: cachedSelectors } = cachedResponse;
+    selectors.forEach(selector => {
+        const { id, allowedValues } = selector;
+        const cached = cachedSelectors.find(s => s.id === id);
+        if (!cached) {
+            cachedSelectors.push(selector);
+            return;
+        }
+        allowedValues.forEach(value => {
+            if (cached.allowedValues.some(v => v.id === value.id)) {
+                // already added
+                return;
+            }
+            cached.allowedValues.push(value);
+        });
+    });
+};
+
 export const getIndicatorMetadata = async (datasourceId, indicatorId) => {
     if (!datasourceId || !indicatorId) {
         throw new Error('Datasource or indicator missing');
@@ -108,6 +157,7 @@ export const saveIndicator = async (indicator) => {
     if (!Oskari.user().isLoggedIn()) {
         const id = indicator.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
         updateIndicatorListInCache({ ...indicator, id });
+        updateIndicatorMetadataInCache(indicator);
         return id;
     }
     try {
@@ -129,7 +179,7 @@ export const saveIndicator = async (indicator) => {
             throw new Error(response.statusText);
         }
         const result = await response.json();
-        console.log('does result contain required', result);
+        console.log('TODO: does result contain required', result);
         updateIndicatorListInCache({ ...indicator, id: result.id });
         return result.id;
     } catch (error) {
@@ -137,15 +187,15 @@ export const saveIndicator = async (indicator) => {
     }
 };
 
-export const saveIndicatorData = async (indicator, data, regionset) => {
-    if (!indicator || !regionset || !indicator.hash) {
-        throw new Error('Indicator (id, hash, selections, data) or regionset missing');
+export const saveIndicatorData = async (indicator, data, regionsetId) => {
+    if (!indicator || !regionsetId || !indicator.hash) {
+        throw new Error('Indicator (id, hash, selections, data) or regionset id missing');
     }
     const cacheKey = getDataCacheKey(indicator, regionsetId);
     if (!Oskari.user().isLoggedIn()) {
         // successfully saved for guest user
         indicatorDataStore[cacheKey] = data;
-        //updateIndicatorListInCache();
+        updateIndicatorListInCache(indicator, regionsetId);
         return;
     }
     // send data to server for logged in users
@@ -159,7 +209,7 @@ export const saveIndicatorData = async (indicator, data, regionset) => {
                 datasource: indicator.ds,
                 id: indicator.id,
                 selectors: JSON.stringify(selections),
-                regionset,
+                regionset: regionsetId,
                 data: JSON.stringify(data)
             })
         });
@@ -167,9 +217,9 @@ export const saveIndicatorData = async (indicator, data, regionset) => {
             throw new Error(response.statusText);
         }
         const result = await response.json();
-        console.log('saved data', result);
+        console.log('TODO: saved data', result);
         indicatorDataStore[cacheKey] = result;
-        // updateIndicatorListInCache();
+        updateIndicatorListInCache(indicator, regionsetId);
         return;
     } catch (error) {
         throw new Error('Error saving data to server');
@@ -218,7 +268,7 @@ export const deleteIndicator = async (indicator, regionset) => {
             throw new Error(response.statusText);
         }
         const result = await response.json();
-        console.log('delete', result);
+        console.log('TODO: delete', result);
         flushDataCache();
         removeIndicatorFromCache(indicator);
         return;
