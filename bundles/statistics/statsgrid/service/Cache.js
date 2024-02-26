@@ -62,6 +62,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Cache',
                 this.put(key, response);
             }
             const queueKey = 'queue_' + key;
+            // FIXME: this doesn't make sense anymore.
+            // Previously it was used to call functions registered on addToQueue(), but the callback are no longer used so this is kind of a weird function
             this.put(queueKey, null);
         },
         /**
