@@ -59,6 +59,7 @@ const LayerTools = ({ model, controller, opts }) => {
             <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
             <MetadataIcon
                 metadataId={model.getMetadataIdentifier()}
+                metadataUrl={model.getAttributes().metadataUrl || null}
                 style={{ marginBottom: '1px', marginLeft: '5px' }}
             />
         </Tools>

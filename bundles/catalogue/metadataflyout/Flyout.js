@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     if (pageInfo) {
                         data = pageInfo.data;
                         page = pageInfo.page;
-                        page.scheduleShowMetadata(data.uuid, data.RS_Identifier_Code, data.RS_Identifier_CodeSpace);
+                        page.scheduleShowMetadata(data.uuid, data.metadataUrl, data.RS_Identifier_Code, data.RS_Identifier_CodeSpace);
                     }
                 }
             }

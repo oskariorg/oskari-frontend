@@ -105,9 +105,10 @@ class MetadataStateHandler extends StateHandler {
         return searchResult;
     }
 
-    showMetadata (uuid) {
+    showMetadata (uuid, metadataUrl) {
         this.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{
-            uuid
+            uuid,
+            metadataUrl
         }]);
     }
 

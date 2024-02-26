@@ -19,7 +19,7 @@ Oskari.clazz.define(
          * @param {function} errorCallback   Error callback function
          *
          */
-        getCSWData: function (uuid, lang, successCallback, errorCallback) {
+        getCSWData: function (uuid, lang, metadataUrl, successCallback, errorCallback) {
             var err = this._checkArgs(
                     uuid,
                     lang,
@@ -34,6 +34,10 @@ Oskari.clazz.define(
             uri = this.baseUrl + 'action_route=GetCSWData&uuid=' + uuid +
                 '&lang=' + lang +
                 '&srs=' + this.srs;
+
+            if (metadataUrl !== null) {
+                uri = uri + '&metadataUrl=' + metadataUrl;
+            }
 
             jQuery.ajax({
                 url: uri,

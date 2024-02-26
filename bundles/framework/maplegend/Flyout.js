@@ -102,9 +102,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         refresh: function () {
             this._populateLayerList();
         },
-        showMetadataFlyout: function (event, uuid) {
+        showMetadataFlyout: function (event, uuid, metadataUrl) {
             event.stopPropagation();
-            this.instance.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{ uuid }]);
+            this.instance.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{ uuid, metadataUrl }]);
         },
         /**
          * @method _populateLayerList
@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             const layers = this.instance.getSandbox().findAllSelectedMapLayers();
 
             // populate selected layer list
-            const showMetadata = (event, uuid) => this.showMetadataFlyout(event, uuid);
+            const showMetadata = (event, uuid, metadataUrl) => this.showMetadataFlyout(event, uuid, metadataUrl);
             const legends = layers
                 .filter(layer => typeof layer.getLegendImage === 'function' && !!layer.getLegendImage())
                 .map(layer => {
@@ -125,6 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                         title: layer.getName(),
                         uuid: uuid,
                         legendImageURL: layer.getLegendImage(),
+                        metadataUrl: layer.getAttributes().metadataUrl,
                         loadError: false,
                         showMetadataCallback: uuid ? showMetadata : null
                     };

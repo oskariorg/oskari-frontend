@@ -239,6 +239,7 @@ class ViewHandler extends StateHandler {
 
     showLayerMetadata (layer) {
         const uuid = layer.getMetadataIdentifier();
+        const metadataUrl = layer.getAttributes().metadataUrl || null;
         const subUuids = [];
         if (layer.getSubLayers()) {
             layer.getSubLayers().forEach(subLayer => {
@@ -249,7 +250,7 @@ class ViewHandler extends StateHandler {
             });
         }
         this.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [
-            { uuid },
+            { uuid, metadataUrl },
             subUuids.map(sub => ({ uuid: sub }))
         ]);
     }

@@ -228,9 +228,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * This is the actual data loader function
          *
          * @param {string} uuid UUID
+         * @param {string} metadataUrl Metadata url
          *
          */
-        _getMetadata: function (uuid) {
+        _getMetadata: function (uuid, metadataUrl) {
             var me = this;
 
             if (uuid === null || uuid === undefined) {
@@ -242,6 +243,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             me.instance.getLoader().getCSWData(
                 uuid,
                 Oskari.getLang(),
+                metadataUrl,
                 // TODO add sensible error handling
                 function (data) {
                     me._processJSON(uuid, data);
@@ -264,9 +266,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * styled with bundled CSS.
          *
          * @param {string} uuid UUID
+         * @param {string} metadataUrl Metadata url
          *
          */
-        showMetadata: function (uuid) {
+        showMetadata: function (uuid, metadataUrl) {
             if (uuid === null || uuid === undefined) {
                 // Not a major error, keep on rolling
                 this.instance.getSandbox().printError(
@@ -275,7 +278,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 return;
             }
 
-            this._getMetadata(uuid);
+            this._getMetadata(uuid, metadataUrl);
         },
 
         /**
@@ -286,9 +289,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * Used to buffer excess calls. Main entry point.
          *
          * @param {string} uuid UUID
+         * @param {string} metadataUrl Metadata url
          *
          */
-        scheduleShowMetadata: function (uuid) {
+        scheduleShowMetadata: function (uuid, metadataUrl) {
             if (uuid === null || uuid === undefined) {
                 // Not a major error, keep on rolling
                 this.instance.getSandbox().printError(
@@ -296,7 +300,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 );
                 return;
             }
-            this.showMetadata(uuid);
+            this.showMetadata(uuid, metadataUrl);
         },
 
         /**
