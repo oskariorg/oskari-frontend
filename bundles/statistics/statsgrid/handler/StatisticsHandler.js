@@ -2,7 +2,6 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { getHashForIndicator, getUILabels, getUpdatedLabels, formatData } from '../helper/StatisticsHelper';
 import { getClassification, getClassifiedData, validateClassification } from '../helper/ClassificationHelper';
 import { getDataForIndicator, getIndicatorMetadata } from './IndicatorHelper';
-import { getRegionsAsync } from '../helper/RegionsHelper'; // don't use getRegions in handler
 import { LAYER_ID } from '../constants';
 import { getRegionsets } from '../helper/ConfigHelper';
 
@@ -91,18 +90,17 @@ class StatisticsController extends StateHandler {
 
     async setActiveRegionset (regionset) {
         this.updateState({ loading: true });
-        const regions = await getRegionsAsync(regionset);
-        const indicators = await this.updateIndicatorsRegions(regionset, regions);
+        const indicators = await this.updateIndicatorsRegions(regionset);
         this.updateState({ regionset, indicators, loading: false });
     }
 
-    async updateIndicatorsRegions (regionset, regions) {
+    async updateIndicatorsRegions (regionset) {
         const { indicators } = this.getState();
         const updated = [];
         // async/await doesn't work with map()
         for (let i=0; i < indicators.length; i++) {
             const indicator = indicators[i];
-            const data = await this.fetchIndicatorData(indicator, regionset, regions);
+            const data = await getDataForIndicator(indicator, regionset);
             validateClassification(indicator.classification, data);
             const classifiedData = getClassifiedData(indicator);
             updated.push( {...indicator, data, classifiedData });
@@ -271,8 +269,6 @@ class StatisticsController extends StateHandler {
             classifiedData
         };
     }
-
-
 }
 
 const wrapped = controllerMixin(StatisticsController, [

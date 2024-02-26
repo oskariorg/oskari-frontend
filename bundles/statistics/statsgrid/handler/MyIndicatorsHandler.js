@@ -61,7 +61,6 @@ class IndicatorsHandler extends StateHandler {
             });
             try {
                 // removes all indicator data (no selections or regionset)
-                console.log('ds + id is needed', indicator);
                 await deleteIndicator(indicator);
                 Messaging.success(this.loc('tab.popup.deleteSuccess'));
                 this.refreshIndicatorsList();

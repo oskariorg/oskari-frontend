@@ -37,7 +37,7 @@ export const getRegionsAsync = async (regionset) => {
         const onlyWithNames = result.regions.filter(region => region.name);
         // cache results
         regionsStore[regionset] = onlyWithNames;
-        return result;
+        return onlyWithNames;
     } catch (error) {
         throw new Error(error);
     }

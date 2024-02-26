@@ -28,7 +28,7 @@ export const removeIndicatorFromCache = (indicator) => {
  * Updates or adds to indicator listing cache
  * Indicator always has id and might have name OR newRegionset key
  */
-export const updateIndicatorListInCache = (indicator, regionset) => {
+export const updateIndicatorListInCache = (indicator, regionsetId) => {
     const cachedResponse = indicatorListPerDatasource[getCacheKey(indicator.ds)];
     if (!cachedResponse) {
         return;
@@ -37,7 +37,14 @@ export const updateIndicatorListInCache = (indicator, regionset) => {
     if (!cachedIndicator) {
         // insert
         // only inject when guest user, otherwise flush from cache
-        cachedResponse.indicators.push({ indicator, regionsets: [regionset]});
+        const toAdd = {
+            id: indicator.id,
+            name: indicator.name
+        };
+        if (regionsetId) {
+            toAdd.regionsets = [regionsetId];
+        }
+        cachedResponse.indicators.push(toAdd);
         return indicator;
     }
     // name not sent when updating regionset, TODO: why?
@@ -45,9 +52,9 @@ export const updateIndicatorListInCache = (indicator, regionset) => {
     // update regionset
     // this updates the cache as well as mutable objects are being passed around
     const regionsets = cachedIndicator.regionsets || [];
-    if (regionset && !regionsets.includes(regionset)) {
+    if (regionsetId && !regionsets.includes(regionsetId)) {
         // add regionset for indicator if it's a new one
-        regionsets.push(regionset);
+        regionsets.push(regionsetId);
         cachedIndicator.regionsets = regionsets;
     }
     return cachedIndicator;
