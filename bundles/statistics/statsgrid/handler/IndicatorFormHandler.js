@@ -3,7 +3,7 @@ import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { getIndicatorMetadata, getIndicatorData, saveIndicator, saveIndicatorData, deleteIndicator } from './IndicatorHelper';
 import { getDatasources, getRegionsets } from '../helper/ConfigHelper';
-import { getRegions } from '../helper/RegionsHelper';
+import { getRegionsAsync } from '../helper/RegionsHelper';
 
 const SELECTOR = 'year';
 
@@ -34,7 +34,7 @@ class IndicatorFormController extends StateHandler {
 
     // TODO: why state doesn't use same syntax for indicator than others (ds, source, id, selections)
     getSelectedIndicator(full) {
-        const { indicatorName, indicatorDescription, indicatorSource, datasourceId, indicatorId } = this.getState();
+        const { indicatorName, indicatorDescription, indicatorSource, datasourceId, indicatorId, datasetYear } = this.getState();
         if (!full) {
             return {
                 ds: datasourceId,
@@ -76,7 +76,7 @@ class IndicatorFormController extends StateHandler {
 
     async preparePopupData (indicator) {
         const { id, ds } = indicator;
-        const { regionsets = [] } = getDatasources().find(ds => ds.id === ds) || {};
+        const { regionsets = [] } = getDatasources().find(({id}) => id === ds) || {};
         const regionsetOptions = getRegionsets().filter(rs => regionsets.includes(rs.id));
 
         if (id) {
@@ -154,7 +154,7 @@ class IndicatorFormController extends StateHandler {
             Messaging.error(this.loc('errors.myIndicatorRegionselect'));
             return;
         }
-        const indicator = this.getSelectedIndicator();;
+        const indicator = this.getSelectedIndicator();
         this.showDataTable(indicator, datasetRegionset);
     }
 
@@ -184,8 +184,9 @@ class IndicatorFormController extends StateHandler {
         const { name } = getRegionsets().find(rs => rs.id === regionsetId) || {};
         const labels = {};
         labels[regionsetId] = name;
+        let regions;
         try {
-            const regions = await getRegions(regionsetId);
+            regions = await getRegionsAsync(regionsetId);
             let data = {};
             if (indicator.id) {
                 data = await getIndicatorData(indicator, regionsetId);
@@ -199,7 +200,7 @@ class IndicatorFormController extends StateHandler {
             });
             this.updateState({
                 loading: false,
-                selectedDataset: dataset,
+                selectedDataset: data,
                 formData: {
                     regions: formRegions,
                     labels: labels
@@ -207,7 +208,9 @@ class IndicatorFormController extends StateHandler {
             });
         } catch (error) {
             Messaging.error(Oskari.getMsg('StatsGrid', 'errors.regionsDataError'));
+            // TODO: is this needed?
             if (regions) {
+                /*
                 this.updateState({
                     loading: false,
                     selectedDataset: dataset,
@@ -216,6 +219,7 @@ class IndicatorFormController extends StateHandler {
                         labels: labels
                     }
                 });
+                */
             } else {
                 this.cancelForm();
             }
@@ -244,33 +248,28 @@ class IndicatorFormController extends StateHandler {
         }
         
         const { regions = [] } = formData;
-        // TODO: what is stored? Strings, undefined??
-        console.log(regions);
-        const data = regions           
-            .map(reg => {
-                if (typeof reg.value === 'undefined') {
+        const data = {};
+        regions.forEach(region => {
+                if (typeof region.value === 'undefined') {
                     return;
                 }
-                const value = `${reg.value}`.replace(/,/g, '.');
-                if (isNaN(value)) {
+                const value = `${region.value}`.trim().replace(/,/g, '.');
+                if (!value || isNaN(value)) {
                     return;
                 }
-                return {...region, value: Number(value)};
-            })
-            // remove empty fields
-            .filter(region => region);
-        // TODO: actually {regionId: value} is required not list
+                data[region.id] = Number(value);
+            });
         try {
             indicator.id = await saveIndicator(indicator);
             indicator.hash = getHashForIndicator(indicator);
-            this.log().info('Saved indicator', data, 'Indicator: ' + indicator.id);
-            if (data.length) {
-                await saveIndicatorData(indicator, data, regionset);
-                this.log().info('Saved data form values', data, 'Indicator: ' + indicator.id);
+            this.log.info('Saved indicator', data, 'Indicator: ' + indicator.id);
+            if (Object.keys(data).length) {
+                await saveIndicatorData(indicator, data, datasetRegionset);
+                this.log.info('Saved data form values', data, 'Indicator: ' + indicator.id);
             }
             this.selectSavedIndicator(indicator, datasetRegionset);
             this.cancelForm();
-            this.getPopupData(indicator);
+            this.preparePopupData(indicator);
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorSave'));
             this.cancelForm();
@@ -322,24 +321,19 @@ class IndicatorFormController extends StateHandler {
             }
         });
     }
-    // TODO: is this needed? editDataset => showDataTable
     editDataset (selections = {}, regionset) {
-        console.log(selections);
-        return;
         const indicator = { ...this.getSelectedIndicator(), selections };
         this.showDataTable(indicator, regionset);
     }
-    // TODO:
+
     async deleteDataset (selections = {}, regionset) {
-        console.log(selections);
-        return;
         const indicator = { ...this.getSelectedIndicator(), selections };
         try {
             await deleteIndicator(indicator, regionset);
         } catch (error) {
             Messaging.error(this.loc('errors.datasetDelete'));
         }
-        this.getPopupData(indicator);
+        this.preparePopupData(indicator);
     }
 }
 
