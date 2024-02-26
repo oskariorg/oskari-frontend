@@ -5,6 +5,16 @@ import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
 import { getIndicatorMetadata } from './IndicatorHelper';
 import { getDatasources, getUnsupportedDatasourceIds } from '../helper/ConfigHelper';
 
+const getValueAsArray = (selection) => {
+    if (selection === null || typeof selection === 'undefined') {
+        return [];
+    }
+    if (Array.isArray(selection)) {
+        return selection;
+    }
+    return [selection];
+};
+
 class SearchController extends StateHandler {
     constructor (instance, service, stateHandler) {
         super();
@@ -434,8 +444,9 @@ class SearchController extends StateHandler {
      * @param {Object} commonSearchValues User's selected values from the search form
      */
     async handleMultipleIndicatorsSearch (commonSearchValues) {
-        const indicators = Array.isArray(commonSearchValues.indicator) ? commonSearchValues.indicator : [commonSearchValues.indicator];
+        const indicators = getValueAsArray(commonSearchValues.indicator);
         if (indicators.length === 0) {
+            // nothing selected
             return;
         }
         const refinedSearchValues = [];
