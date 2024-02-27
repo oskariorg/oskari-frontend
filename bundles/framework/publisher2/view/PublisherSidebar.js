@@ -107,22 +107,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // RPC panel is added after other tools
             const rpcTools = publisherTools.groups.rpc;
             const layerTools = publisherTools.groups.layers;
-            const additionalTools = publisherTools.groups.additional;
-            const statsgridTools = publisherTools.groups.data;
             // clear rpc/layers groups from others for looping/group so they are not listed twice
             delete publisherTools.groups.rpc;
             delete publisherTools.groups.layers;
-            delete publisherTools.groups.additional;
-            delete publisherTools.groups.data;
 
             const mapLayersPanel = this._createMapLayersPanel(layerTools);
             mapLayersPanel.getPanel().addClass('t_layers');
             this.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
-
+            // separate tools that support react from ones that don't
+            const reactGroups = ['additional', 'data'];
+            const reactGroupsTools = {};
             // create panel for each tool group
             Object.keys(publisherTools.groups).forEach(group => {
                 const tools = publisherTools.groups[group];
+                if (reactGroups.includes(group)) {
+                    // panels with react groups handled after this
+                    reactGroupsTools[group] = tools;
+                    return;
+                }
                 const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     group, tools, this.instance, this.loc
                 );
@@ -135,27 +138,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     accordion.addPanel(panel);
                 }
             });
-            if (statsgridTools) {
-                const groupId = 'data';
-                const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelReactTools', statsgridTools, groupId);
+            Object.keys(reactGroupsTools).forEach(group => {
+                const tools = reactGroupsTools[group];
+                const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelReactTools', tools, group);
                 const hasToolsToShow = toolPanel.init(this.data);
-                console.log('hasToolsToShow', hasToolsToShow);
                 this.panels.push(toolPanel);
                 if (hasToolsToShow) {
                     const panel = toolPanel.getPanel();
                     panel.addClass('t_tools');
-                    panel.addClass('t_' + groupId);
+                    panel.addClass('t_' + group);
                     accordion.addPanel(panel);
                 }
-            }
-
-            // add additional tools panel if there are tools for it
-            if (additionalTools) {
-                const additionalToolsPanel = this._createAdditionalToolsPanel(additionalTools);
-                additionalToolsPanel.getPanel().addClass('t_additional_tools');
-                this.panels.push(additionalToolsPanel);
-                accordion.addPanel(additionalToolsPanel.getPanel());
-            }
+            });
 
             // add RPC panel if there are tools for it
             if (rpcTools) {
@@ -226,13 +220,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const sandbox = this.instance.getSandbox();
             const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers', tools, sandbox, mapModule, this.loc, this.instance);
-            form.init(this.data);
-            return form;
-        },
-        _createAdditionalToolsPanel: function (tools) {
-            const sandbox = this.instance.getSandbox();
-            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelAdditionalTools', tools, sandbox, mapModule, this.loc, this.instance);
             form.init(this.data);
             return form;
         },
