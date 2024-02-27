@@ -6,8 +6,6 @@ const defaultPlugin = 'Oskari.statistics.statsgrid.TogglePlugin';
 export class AbstractStatsPluginTool extends AbstractPublisherTool {
     getTool () {
         const id = this._getToolId();
-        // TODO: move localizations:
-        // Oskari.getMsg('StatsGrid', 'tool.label' + title)
         return {
             id: this.pluginId || defaultPlugin,
             title: this.getTitle(),
@@ -19,6 +17,8 @@ export class AbstractStatsPluginTool extends AbstractPublisherTool {
     }
 
     getTitle () {
+        // TODO: move localizations:
+        // Oskari.getMsg('StatsGrid', 'tool.label' + title)
         return Oskari.getMsg('Publisher2', 'BasicView.data.' + this.title);
     }
 

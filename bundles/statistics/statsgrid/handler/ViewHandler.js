@@ -10,11 +10,12 @@ import { showHistogramPopup } from '../components/manualClassification/Histogram
 
 export const FLYOUTS = ['search', 'grid', 'diagram']; // to toggle tile
 
+const CLASSIFICATION = 'classification';
 const classificationDefaults = {
     editEnabled: true,
     transparent: false
 };
-const embeddedTools = [...FLYOUTS, 'classification'];
+const embeddedTools = [...FLYOUTS, CLASSIFICATION];
 
 class UIHandler extends StateHandler {
     constructor (instance, stateHandler, searchHandler) {
@@ -54,6 +55,7 @@ class UIHandler extends StateHandler {
     setEmbeddedTools (conf) {
         const mapButtons = embeddedTools.filter(tool => conf[tool]);
         const activeMapButtons = embeddedTools.filter(id => this.controls[id]);
+        // TODO: state.classification confista (classificationDefaults) jotta julkaistun kartan tila saadaan alustettua
         this.updateState({ mapButtons, activeMapButtons });
     }
 
@@ -79,12 +81,15 @@ class UIHandler extends StateHandler {
         const isActive = onMap && visible && hasIndicators;
 
         // automaticly shown/closed views
+        const hasClassificationButton = viewState.mapButtons.includes(CLASSIFICATION);
         if (isActive) {
             if (classification) {
                 classification.update(state, viewState);
-            } else {
-                this.show('classification');
+            } else if (!hasClassificationButton) {
+                // classification always visible except when there is a button to show it
+                this.show(CLASSIFICATION);
             }
+
             if (state.isSeriesActive) {
                 if (!this.seriesControlPlugin) {
                     this.seriesControlPlugin = createSeriesControlPlugin(this.instance.getSandbox(), this.stateHandler);
@@ -92,7 +97,7 @@ class UIHandler extends StateHandler {
                 this.seriesControlPlugin.refresh();
             }
         } else {
-            this.close('classification');
+            this.close(CLASSIFICATION);
             if (this.seriesControlPlugin) {
                 this.seriesControlPlugin.stopPlugin();
             }
@@ -117,7 +122,7 @@ class UIHandler extends StateHandler {
             if (id === 'search') {
                 const searchState = this.searchHandler.getState();
                 control.update(searchState, state.indicators);
-            } else if (id === 'classification' || id === 'histogram') {
+            } else if (id === CLASSIFICATION || id === 'histogram') {
                 const viewState = this.getState();
                 control.update(state, viewState);
             } else {
@@ -135,6 +140,11 @@ class UIHandler extends StateHandler {
 
     addMapButton (id) {
         const mapButtons = [...this.getState().mapButtons, id];
+        if (id === CLASSIFICATION && this.controls[id]) {
+            // classification is by default open while the other windows are not
+            // close it if we add the button for classification
+            this.close(id);
+        }
         this.updateState({ mapButtons });
     }
 
@@ -183,17 +193,19 @@ class UIHandler extends StateHandler {
             controls = showTableFlyout(state, controller, onClose);
         } else if (id === 'diagram') {
             controls = showDiagramFlyout(state, controller, onClose);
-        } else if (id === 'classification') {
+        } else if (id === CLASSIFICATION) {
             const opts = getContainerOptions(this.togglePlugin);
             const showHistogram = () => this.show('histogram');
             controls = showClassificationContainer(state, this.getState(), controller, opts, showHistogram, onClose);
         } else if (id === 'histogram') {
             controls = showHistogramPopup(state, this.getState(), controller, onClose);
+        /*
+        // For now search handler opens metadata popup
         } else if (id === 'metadata') {
-            // For now search handler opens metadata popup
-            // const { selectedDatasource, selectedIndicators } = this.searchHandler.getState();
-            // const data = await this.prepareMetadataPopupData(selectedDatasource, selectedIndicators);
-            // controls = showMedataPopup(data, onClose);
+            const { selectedDatasource, selectedIndicators } = this.searchHandler.getState();
+            const data = await this.prepareMetadataPopupData(selectedDatasource, selectedIndicators);
+            controls = showMedataPopup(data, onClose);
+        */
         } else if (id === 'indicatorForm' && this.formHandler) {
             const onCloseWrapper = () => {
                 // TODO: reset on open to get rid of wrapper and forma handler's close methods
