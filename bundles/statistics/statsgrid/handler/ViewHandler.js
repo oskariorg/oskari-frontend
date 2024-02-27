@@ -1,5 +1,5 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { getContainerOptions, createSeriesControlPlugin, createTogglePlugin } from '../helper/ViewHelper';
+import { getContainerOptions, createSeriesControlPlugin, createTogglePlugin, stopTogglePlugin } from '../helper/ViewHelper';
 import { showTableFlyout } from '../view/Table/TableFlyout';
 import { showSearchFlyout } from '../view/search/SearchFlyout';
 import { showDiagramFlyout } from '../view/Diagram/DiagramFlyout';
@@ -10,11 +10,12 @@ import { showHistogramPopup } from '../components/manualClassification/Histogram
 
 export const FLYOUTS = ['search', 'grid', 'diagram']; // to toggle tile
 
+const CLASSIFICATION = 'classification';
 const classificationDefaults = {
     editEnabled: true,
     transparent: false
 };
-const embeddedTools = [...FLYOUTS, 'classification'];
+const embeddedTools = [...FLYOUTS, CLASSIFICATION];
 
 class UIHandler extends StateHandler {
     constructor (instance, stateHandler, searchHandler) {
@@ -54,6 +55,7 @@ class UIHandler extends StateHandler {
     setEmbeddedTools (conf) {
         const mapButtons = embeddedTools.filter(tool => conf[tool]);
         const activeMapButtons = embeddedTools.filter(id => this.controls[id]);
+        // TODO: state.classification confista (classificationDefaults) jotta julkaistun kartan tila saadaan alustettua
         this.updateState({ mapButtons, activeMapButtons });
     }
 
@@ -79,12 +81,15 @@ class UIHandler extends StateHandler {
         const isActive = onMap && visible && hasIndicators;
 
         // automaticly shown/closed views
+        const hasClassificationButton = viewState.mapButtons.includes(CLASSIFICATION);
         if (isActive) {
             if (classification) {
                 classification.update(state, viewState);
-            } else {
-                this.show('classification');
+            } else if (!hasClassificationButton) {
+                // classification always visible except when there is a button to show it
+                this.show(CLASSIFICATION);
             }
+
             if (state.isSeriesActive) {
                 if (series) {
                     series.update(state);
@@ -93,7 +98,7 @@ class UIHandler extends StateHandler {
                 }
             }
         } else {
-            this.close('classification');
+            this.close(CLASSIFICATION);
             this.close('series');
         }
         // create toggle plugin only when needed
@@ -102,7 +107,13 @@ class UIHandler extends StateHandler {
             this.togglePlugin = createTogglePlugin(sandbox, this);
         }
         if (this.togglePlugin) {
-            this.togglePlugin.refresh(viewState);
+            if (viewState.mapButtons.length > 0) {
+                this.togglePlugin.refresh(viewState);
+            } else {
+                const sandbox = this.instance.getSandbox();
+                stopTogglePlugin(sandbox, this.togglePlugin);
+                this.togglePlugin = null;
+            }
         }
     }
 
@@ -116,7 +127,7 @@ class UIHandler extends StateHandler {
             if (id === 'search') {
                 const searchState = this.searchHandler.getState();
                 control.update(searchState, state.indicators);
-            } else if (id === 'classification' || id === 'histogram') {
+            } else if (id === CLASSIFICATION || id === 'histogram') {
                 const viewState = this.getState();
                 control.update(state, viewState);
             } else {
@@ -137,12 +148,18 @@ class UIHandler extends StateHandler {
 
     addMapButton (id) {
         const mapButtons = [...this.getState().mapButtons, id];
+        if (id === CLASSIFICATION && this.controls[id]) {
+            // classification is by default open while the other windows are not
+            // close it if we add the button for classification
+            this.close(id);
+        }
         this.updateState({ mapButtons });
     }
 
     removeMapButton (id) {
         const mapButtons = this.getState().mapButtons.filter(btn => btn !== id);
-        this.updateState({ mapButtons });
+        const activeMapButtons = mapButtons.filter(id => this.controls[id]);
+        this.updateState({ mapButtons, activeMapButtons });
     }
 
     updateLayer (key, value) {
@@ -185,17 +202,19 @@ class UIHandler extends StateHandler {
             controls = showTableFlyout(state, controller, onClose);
         } else if (id === 'diagram') {
             controls = showDiagramFlyout(state, controller, onClose);
-        } else if (id === 'classification') {
+        } else if (id === CLASSIFICATION) {
             const opts = getContainerOptions(this.togglePlugin);
             const showHistogram = () => this.show('histogram');
             controls = showClassificationContainer(state, this.getState(), controller, opts, showHistogram, onClose);
         } else if (id === 'histogram') {
             controls = showHistogramPopup(state, this.getState(), controller, onClose);
+        /*
+        // For now search handler opens metadata popup
         } else if (id === 'metadata') {
-            // For now search handler opens metadata popup
-            // const { selectedDatasource, selectedIndicators } = this.searchHandler.getState();
-            // const data = await this.prepareMetadataPopupData(selectedDatasource, selectedIndicators);
-            // controls = showMedataPopup(data, onClose);
+            const { selectedDatasource, selectedIndicators } = this.searchHandler.getState();
+            const data = await this.prepareMetadataPopupData(selectedDatasource, selectedIndicators);
+            controls = showMedataPopup(data, onClose);
+        */
         } else if (id === 'indicatorForm' && this.formHandler) {
             const onCloseWrapper = () => {
                 // TODO: reset on open to get rid of wrapper and forma handler's close methods

@@ -121,7 +121,7 @@ export const showClassificationContainer = (state, viewState, controller, option
                         showHistogram={showHistogram}
                     />
                 </LocaleProvider>
-            )
+            );
         }
     };
 };
