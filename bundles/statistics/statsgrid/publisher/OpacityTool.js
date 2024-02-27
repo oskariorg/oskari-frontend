@@ -18,7 +18,7 @@ class OpacityTool extends AbstractStatsPluginTool {
         handler.getController().updateClassificationState('transparent', enabled);
     }
 
-    _stopImpl () {
+    stop () {
         const handler = this.getViewHandler();
         if (!handler) {
             return;

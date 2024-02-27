@@ -22,7 +22,7 @@ class ClassificationTool extends AbstractStatsPluginTool {
         handler.getController().updateClassificationState('editEnabled', enabled);
     }
 
-    _stopImpl () {
+    stop () {
         const handler = this.getViewHandler();
         if (!handler) {
             return;

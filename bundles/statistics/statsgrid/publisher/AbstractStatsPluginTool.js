@@ -125,6 +125,14 @@ export class AbstractStatsPluginTool extends AbstractPublisherTool {
             }
         };
     }
+
+    stop () {
+        const handler = this.getViewHandler();
+        if (!handler) {
+            return;
+        }
+        handler.getController().removeMapButton(this.id);
+    }
 };
 
 /*
