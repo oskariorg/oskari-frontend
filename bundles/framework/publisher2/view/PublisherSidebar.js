@@ -4,6 +4,7 @@ import { mergeValues } from '../util/util';
 import { Messaging, ThemeProvider } from 'oskari-ui/util';
 import { Header } from 'oskari-ui';
 import styled from 'styled-components';
+import './PanelReactTools';
 
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
@@ -26,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
      *
      */
     function (instance, localization, data) {
-        var me = this;
+        const me = this;
         me.data = data;
         me.panels = [];
         me.instance = instance;
@@ -107,10 +108,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const rpcTools = publisherTools.groups.rpc;
             const layerTools = publisherTools.groups.layers;
             const additionalTools = publisherTools.groups.additional;
+            const statsgridTools = publisherTools.groups.data;
             // clear rpc/layers groups from others for looping/group so they are not listed twice
             delete publisherTools.groups.rpc;
             delete publisherTools.groups.layers;
             delete publisherTools.groups.additional;
+            delete publisherTools.groups.data;
 
             const mapLayersPanel = this._createMapLayersPanel(layerTools);
             mapLayersPanel.getPanel().addClass('t_layers');
@@ -132,6 +135,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     accordion.addPanel(panel);
                 }
             });
+            if (statsgridTools) {
+                const groupId = 'data';
+                const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelReactTools', statsgridTools, groupId);
+                const hasToolsToShow = toolPanel.init(this.data);
+                console.log('hasToolsToShow', hasToolsToShow);
+                this.panels.push(toolPanel);
+                if (hasToolsToShow) {
+                    const panel = toolPanel.getPanel();
+                    panel.addClass('t_tools');
+                    panel.addClass('t_' + groupId);
+                    accordion.addPanel(panel);
+                }
+            }
 
             // add additional tools panel if there are tools for it
             if (additionalTools) {
