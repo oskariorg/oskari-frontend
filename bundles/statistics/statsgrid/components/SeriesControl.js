@@ -313,7 +313,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
         const { values, id } = indicator.series;
         const value = indicator.selections[id];
         const index = values.indexOf(value);
-        this.updateState({ values, index });
+        this.updateState({ values, index, hash: indicator.hash });
         this._updateLineSegments();
         this._updateSeriesIndex(index);
         this._setAnimationState(false);
