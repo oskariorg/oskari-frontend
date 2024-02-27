@@ -247,7 +247,7 @@ Oskari.registerLocalization(
                 "noBaseLayers": "No selected background maps",
                 "noLayers": "No selected map layers"
             },
-            "additionalTools": {
+            "additional": {
                 "label": "Additional tools"
             },
             "preview": "Map preview",

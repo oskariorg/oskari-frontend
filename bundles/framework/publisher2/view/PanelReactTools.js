@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelReactTools'
      */
     function (tools, groupId) {
         this.groupId = groupId;
-        this.tools = tools || [];
+        this.tools = tools ? [...tools] : [];
         this.tools = [...this.tools].sort((a, b) => a.index - b.index);
         this.panel = null;
         this.handler = null;
