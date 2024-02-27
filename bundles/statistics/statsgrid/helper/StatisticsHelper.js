@@ -58,24 +58,22 @@ export const populateData = (data, regions, regionset, fractionDigits) => {
     const dataByRegions = [];
     let allInts = true;
     const values = new Set();
-    for (const reg of regions) {
-        const { id, name } = reg;
-        // TODO: validate?
+    // also table assumes that every region has value and list is ordered by regions
+    regions.forEach(({ id, name }) => {
         const value = data[id];
-        const formatted = typeof format === 'function' ? format(value) : '';
-        dataByRegions.push({ id, value, name, formatted });
-        if (value === null || isNaN(value)) {
-            continue;
+        const ignore = value === null || isNaN(value);
+        const formatted = !ignore && typeof format === 'function' ? format(value) : '';
+        // use undefined always to simplify value exits checks and sorting (region without value is sorted last)
+        dataByRegions.push({ id, value: ignore ? undefined : value, name, formatted });
+        if (ignore) {
+            return;
         }
         if (allInts && value % 1 !== 0) {
             allInts = false;
         }
         values.add(value);
-    }
+    });
     const unique = [...values].sort((a, b) => a - b);
-    if (!unique.length) {
-        return { error: 'noData', dataByRegions: [] };
-    }
     return {
         dataByRegions,
         regionset,
@@ -91,7 +89,7 @@ export const populateData = (data, regions, regionset, fractionDigits) => {
 export const populateSeriesData = (data, regions, regionset, fractionDigits) => {
     const dataBySelection = {};
     const seriesValues = [];
-    // let seriesAllInts = true;
+    let seriesAllInts = true;
     let seriesMin = Number.POSITIVE_INFINITY;
     let seriesMax = Number.NEGATIVE_INFINITY;
     Object.keys(data).forEach(selector => {
@@ -103,11 +101,9 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
         dataByRegions.forEach(d => seriesValues.push(d.value));
         seriesMax = seriesMax > max ? seriesMax : max;
         seriesMin = seriesMin < min ? seriesMin : min;
-        /*
         if (allInts === false) {
             seriesAllInts = false;
         }
-        */
     });
     return {
         dataBySelection,
@@ -115,6 +111,7 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
         seriesValues, // needed for series bounds
         min: seriesMin,
         max: seriesMax,
+        allInts: seriesAllInts,
         uniqueCount: new Set(seriesValues).size
     };
 };

@@ -89,6 +89,10 @@ Oskari.registerLocalization({
                 'slow': 'Långsam'
             }
         },
+        'diagram': {
+            'title': 'Stapeldiagram',
+            'noValue': 'Inte tillgänglig'
+        },
         'parameters': {
             'sex': 'Kön',
             'year': 'År',

@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
-import { Select, Message, Spin } from 'oskari-ui';
+import { Select, Message } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { showFlyout } from 'oskari-ui/components/window';
 import styled from 'styled-components';
-import { LocaleProvider } from 'oskari-ui/util';
+import { FlyoutContent } from '../FlyoutContent';
 import { Sorter } from './Sorter';
 import { IndicatorName } from '../IndicatorName';
 import { getRegionsets } from '../../helper/ConfigHelper';
 import { getDataByRegions } from '../../helper/StatisticsHelper';
 
 const BUNDLE_KEY = 'StatsGrid';
+const COLUMN = 200;
 
-const Content = styled('div')`
-    max-height: 850px;
-    overflow-y: scroll;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-`;
 const StyledTable = styled(Table)`
     .ant-table-column-sorter {
         display: none;
@@ -59,10 +53,6 @@ const HeaderCell = styled('div')`
     height: 100%;
 `;
 
-const getValueSorter = hash => {
-    return (a,b) => a.dataByHash[hash] - b.dataByHash[hash];
-};
-
 const TableFlyout = ({ state, controller }) => {
     const { indicators, activeIndicator, regionset, loading, regions } = state;
     let initialSort = {
@@ -87,32 +77,26 @@ const TableFlyout = ({ state, controller }) => {
         }
         setSortOrder(newOrder);
     };
-    // TODO:
-    const regionValues = indicators.reduce((data, indicator) => {
-        getDataByRegions(indicator).forEach(region => {
-            const {id, value } = region;
-            if (!data[id]) {
-                data[id] = {};
-            }
-            data[id][indicator.hash] = value; //TDOO: formatted
-        });
+    // every value is set by looping regions => same indexes
+    const dataByHash = indicators.reduce((data, ind) => {
+        data[ind.hash] = getDataByRegions(ind)
         return data;
     }, {});
-    const dataSource = regions.map(region => {
-        return {
-            key: region.id,
-            name: region.name,
-            dataByHash: regionValues[region.id]
-            // TODO: [hash] : value
-        };
-    })
-
+    const hashes = indicators.map(ind => ind.hash);
+    const dataSource = regions.map(({ id, name }, i) => {
+        const data = { key: id, name };
+        hashes.forEach(hash => {
+            const { value, formatted } = dataByHash[hash][i];
+            data[hash] = { value, formatted };
+        });
+        return data;
+    });
     const columnSettings = [];
 
     columnSettings.push({
         dataIndex: 'name',
         align: 'left',
-        width: 125,
+        width: COLUMN,
         sorter: getSorterFor('name'),
         sortOrder: sortOrder['name'],
         showSorterTooltip: false,
@@ -147,25 +131,26 @@ const TableFlyout = ({ state, controller }) => {
         }
     });
     indicators?.forEach(indicator => {
+        const { hash } = indicator;
         columnSettings.push({
-            dataIndex: 'value', //indicator.hash
+            dataIndex: [hash, 'formatted'],
             align: 'right',
-            width: 125,
-            sorter: getValueSorter(indicator.hash),
-            sortOrder: sortOrder[indicator.hash],
+            width: COLUMN,
+            sorter: (a, b) => a[hash].value - b[hash].value,
+            sortOrder: sortOrder[hash],
             showSorterTooltip: false,
             onCell: (record, rowIndex) => ({
-                style: { background: activeIndicator === indicator.hash ? '#fafafa' : '#ffffff' }
+                style: { background: activeIndicator === hash ? '#fafafa' : '#ffffff' }
             }),
             onHeaderCell: (record, rowIndex) => ({
-                style: { background: activeIndicator === indicator.hash ? '#f0f0f0' : '#fafafa' }
+                style: { background: activeIndicator === hash ? '#f0f0f0' : '#fafafa' }
             }),
             title: () => {
                 return (
                     <HeaderCell>
                         <IndicatorHeader
                             onClick={(e) => {
-                                controller.setActiveIndicator(indicator.hash);
+                                controller.setActiveIndicator(hash);
                             }}
                         >
                             <IndicatorName indicator={indicator} />
@@ -175,53 +160,28 @@ const TableFlyout = ({ state, controller }) => {
                             />
                         </IndicatorHeader>
                         <Sorter
-                            sortOrder={sortOrder[indicator.hash]}
-                            changeSortOrder={() => changeSortOrder(indicator.hash)}
+                            sortOrder={sortOrder[hash]}
+                            changeSortOrder={() => changeSortOrder(hash)}
                         />
                     </HeaderCell>
                 );
-            },
-            render: (title, item) => {
-                const value = item.dataByHash[indicator.hash] || '';
-                if (typeof value === 'number') {
-                    const formatter = Oskari.getNumberFormatter(indicator?.classification?.fractionDigits);
-                    return formatter.format(value);
-                }
-                return value;
             }
         });
     });
 
-    const Component = (
-        <Content>
-            {!indicators || indicators.length < 1 ? (
-                <Message messageKey='statsgrid.noResults' />
-            ) : (
-                <StyledTable
-                    columns={columnSettings}
-                    dataSource={dataSource}
-                    pagination={false}
-                />
-            )}
-        </Content>
-    );
-    
-    if (loading) {
-        return <Spin showTip={true}>{Component}</Spin>;
-    }
-    return Component;
+    return <StyledTable columns={columnSettings} dataSource={dataSource} pagination={false}/>
 };
 
 export const showTableFlyout = (state, controller, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.grid' />;
     const controls = showFlyout(
         title,
-        <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+        <FlyoutContent state={state}>
             <TableFlyout
                 state={state}
                 controller={controller}
             />
-        </LocaleProvider>,
+        </FlyoutContent>,
         onClose
     );
 
@@ -229,12 +189,12 @@ export const showTableFlyout = (state, controller, onClose) => {
         ...controls,
         update: (state) => controls.update(
             title,
-            <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+            <FlyoutContent state={state}>
                 <TableFlyout
                     state={state}
                     controller={controller}
                 />
-            </LocaleProvider>
+            </FlyoutContent>
         )
     }
 };
