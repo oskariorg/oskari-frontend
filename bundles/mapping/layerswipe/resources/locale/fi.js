@@ -10,6 +10,10 @@ Oskari.registerLocalization({
             swipeNoRasterMessage: 'Aseta karttatasovalikosta taso näkyväksi',
             swipeLayerNotVisibleTitle: 'Karttatasojen vertailu ei toimi tässä näkymässä',
             swipeLayerNotVisibleMessage: 'Ylin karttataso ei näy tässä näkymässä. Siirry sijaintiin, jossa se näkyy.'
+        },
+        tool: {
+            "label": "Tasojen vertailutyökalu",
+            "autoStart": "Käynnistä automaattisesti"
         }
     }
 });

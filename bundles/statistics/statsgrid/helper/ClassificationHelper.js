@@ -62,7 +62,7 @@ export const getClassification = (data, metadata = {}, lastSelected = {}) => {
     }
     validateClassification(classification, data);
     return classification;
-}
+};
 
 export const validateClassification = (classification, data = {}) => {
     if (!validateColor(classification)) {
@@ -81,13 +81,13 @@ export const validateClassification = (classification, data = {}) => {
     if (data.seriesValues) {
         classification.mode = 'distinct';
     }
-}
+};
 
 export const getGroupStats = (dataBySelection) => {
     const values = Object.values(dataBySelection)
         .reduce((all, data) => [...all, ...Object.values(data)], []);
     return new geostats(values);
-}
+};
 
 /**
  * Classifies given dataset.
@@ -97,12 +97,12 @@ export const getGroupStats = (dataBySelection) => {
  * @return {Object}               result with classified values
  */
 export const getClassifiedData = (indicator, groupStats) => {
-    const { classification: opts, data: {seriesValues} } = indicator;
+    const { classification: opts, data: { seriesValues } } = indicator;
     if (seriesValues && seriesValues.length < 3) {
         return { error: 'noEnough' };
     }
     const dataByRegions = getDataByRegions(indicator);
-    const values = seriesValues ? seriesValues : dataByRegions.map(d => d.value);
+    const values = seriesValues || dataByRegions.map(d => d.value);
     const isDivided = opts.type === 'div';
     const { format } = Oskari.getNumberFormatter(opts.fractionDigits);
     var stats = new geostats(values);
@@ -124,7 +124,7 @@ export const getClassifiedData = (indicator, groupStats) => {
     // TODO: remove
     if (groupStats) {
         groupStats.silent = true;
-        var groupOpts = groupStats.classificationOptions || {};
+        const groupOpts = groupStats.classificationOptions || {};
         const calculateBounds =
             groupOpts.method !== opts.method ||
             groupOpts.count !== opts.count ||
@@ -182,7 +182,7 @@ export const getClassifiedData = (indicator, groupStats) => {
             // no value for region -> skip
             return;
         }
-        var index = getGroupForValue(value);
+        const index = getGroupForValue(value);
         groups[index].regionIds.push(id);
     });
     const statistics = {
@@ -363,7 +363,8 @@ const _tryBounds = (bounds, count, dataMin, dataMax) => {
 
 export const getEditOptions = (classification, data) => {
     const { type, count, reverseColors, mapStyle, base, method } = classification;
-    const { min: minValue, max: maxValue, uniqueCount } = data;
+    const { min: minValue, max: maxValue } = data;
+    let { uniqueCount } = data;
 
     const { methods, modes, mapStyles, types, fractionDigits } = LIMITS;
     const { min, max } = mapStyle === 'points' ? LIMITS.count : getRange(type);

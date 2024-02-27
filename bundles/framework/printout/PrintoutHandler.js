@@ -158,12 +158,16 @@ class UIHandler extends StateHandler {
             pageTitle: this.state.mapTitle,
             pageScale: this.state.showScale,
             pageDate: this.state.showDate,
-            pageTimeSeriesTime: this.state.showTimeSeriesDate
+            pageTimeSeriesTime: this.state.showTimeSeriesDate,
+            lang: Oskari.getLang(),
+            coordinateSRS: this.mapModule.getProjection()
         };
 
         if (this.state.scale) {
             params.scaleText = '1:' + this.state.scale;
         }
+
+        // check if other target crs setting beside default has been selected
         if (this.state.showCoordinates) {
             params.coordinateInfo = this.state.coordinatePosition;
             params.coordinateSRS = this.state.coordinateProjection === 'map' ? this.mapModule.getProjection() : this.state.coordinateProjection;
@@ -255,7 +259,8 @@ class UIHandler extends StateHandler {
             srs: map.getSrsName(),
             coord: `${map.getX()}_${map.getY()}`,
             mapLayers,
-            scaledWidth: PREVIEW_SCALED_WIDTH
+            scaledWidth: PREVIEW_SCALED_WIDTH,
+            coordinateSRS: this.mapModule.getProjection()
         };
         if (layer.hasTimeseries()) {
             params.time = this._getTimeParam();

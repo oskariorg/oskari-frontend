@@ -88,7 +88,7 @@ export const VectorStyleSelect = ({ layer, controller, editStyle, editOptional }
                         <ButtonContainer>
                             { style.type === 'oskari' && (
                                 <Fragment>
-                                    <Badge themed count={style.style.optionalStyles?.length || 0} showZero={false}>
+                                    <Badge count={style.style.optionalStyles?.length || 0} showZero={false}>
                                         <IconButton { ...btnProps } icon={<FilterOutlined />}
                                             title={ <Message messageKey='styles.vector.optionalStyles' /> }
                                             onClick={ () => editOptional(style) } />

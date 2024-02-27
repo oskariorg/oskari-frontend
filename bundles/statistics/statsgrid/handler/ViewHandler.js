@@ -70,7 +70,6 @@ class UIHandler extends StateHandler {
         this.formHandler = formHandler;
     }
 
-
     onViewChange (viewState) {
         const state = this.stateHandler.getState();
         const { classification } = this.controls;
@@ -82,7 +81,7 @@ class UIHandler extends StateHandler {
         // automaticly shown/closed views
         if (isActive) {
             if (classification) {
-                classification.update(state, viewState)
+                classification.update(state, viewState);
             } else {
                 this.show('classification');
             }
@@ -106,7 +105,6 @@ class UIHandler extends StateHandler {
         if (this.togglePlugin) {
             this.togglePlugin.refresh(viewState);
         }
-
     }
 
     onStateChange (state) {
@@ -137,7 +135,7 @@ class UIHandler extends StateHandler {
 
     addMapButton (id) {
         const mapButtons = [...this.getState().mapButtons, id];
-        this.updateState({mapButtons});
+        this.updateState({ mapButtons });
     }
 
     removeMapButton (id) {
@@ -146,7 +144,10 @@ class UIHandler extends StateHandler {
     }
 
     updateLayer (key, value) {
-        this.updateState({ layer: {...this.getState().layer, [key]: value }})
+        this.updateState({ layer: {
+            ...this.getState().layer,
+            [key]: value
+        } });
     }
 
     // if value isn't given => reset to default
@@ -178,7 +179,7 @@ class UIHandler extends StateHandler {
             const searchState = this.searchHandler.getState();
             const searchController = this.searchHandler.getController();
             controls = showSearchFlyout(searchState, state.indicators, searchController, controller, onClose);
-        } else if (id === 'grid') { //stored state u
+        } else if (id === 'grid') { // stored state u
             controls = showTableFlyout(state, controller, onClose);
         } else if (id === 'diagram') {
             controls = showDiagramFlyout(state, controller, onClose);
@@ -201,7 +202,7 @@ class UIHandler extends StateHandler {
             };
             controls = showIndicatorForm(this.formHandler.getState(), this.formHandler.getController(), onCloseWrapper);
         } else if (id === 'clipboard' && this.formHandler) {
-            controls = showClipboardPopup(this.formHandler.getState(), this.formHandler.getController(), onClose)
+            controls = showClipboardPopup(this.formHandler.getState(), this.formHandler.getController(), onClose);
         } else {
             this.log.warn(`Tried to show view with id: ${id}`);
             return;
@@ -223,7 +224,7 @@ class UIHandler extends StateHandler {
             if (skipSearch && id === 'search') {
                 return;
             }
-            this.close(id)
+            this.close(id);
         });
     }
 
@@ -233,7 +234,7 @@ class UIHandler extends StateHandler {
         }
         if (this.togglePlugin && embeddedTools.includes(viewId)) {
             const activeMapButtons = embeddedTools.filter(viewId => this.controls[viewId]);
-            this.updateState({activeMapButtons});
+            this.updateState({ activeMapButtons });
         }
     }
 }

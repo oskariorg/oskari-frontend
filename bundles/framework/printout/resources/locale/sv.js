@@ -13,10 +13,10 @@ Oskari.registerLocalization(
                 "label": "Storlek",
                 "tooltip": "Välj utskriftsstorlek. Uppdateringar visas i förhandsgranskningsbilden.",
                 "options": {
-                    "A4": "A4 porträtt",                        
+                    "A4": "A4 porträtt",
                     "A4_Landscape": "A4 landskap",
                     "A3": "A3 porträtt",
-                    "A3_Landscape": "A3 landskap"        
+                    "A3_Landscape": "A3 landskap"
                 }
             },
             "preview": {
@@ -59,7 +59,7 @@ Oskari.registerLocalization(
                     "printLabel": "Tidpunkten av tidsserien"
                 },
                 "coordinates": {
-                    "label": "Visa koordinaterna",
+                    "label": "Visa koordinater",
                     "position": {
                         "label": "Placering",
                         "options": {

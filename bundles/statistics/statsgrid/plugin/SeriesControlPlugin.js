@@ -4,7 +4,7 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
 
     function (sandbox, stateHandler) {
-        var me = this;
+        const me = this;
         this.stateHandler = stateHandler;
         me._locale = Oskari.getMsg.bind(null, 'StatsGrid');
         me._sandbox = sandbox;
@@ -83,12 +83,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
          * Enables the flyout resizing
          */
         _enableResize: function () {
-            var me = this;
-            var element = me._element;
-            var mouseOffsetX = 0;
+            const me = this;
+            const element = me._element;
+            let mouseOffsetX = 0;
 
             // Resizer image for lower right corner
-            var resizer = jQuery('<div/>');
+            const resizer = jQuery('<div/>');
             resizer.addClass('flyout-resizer');
             resizer.removeClass('allowHover');
             resizer.addClass('icon-drag');
@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
                     return;
                 }
                 me.resizing = true;
-                var elemOffset = element.offset();
+                const elemOffset = element.offset();
                 mouseOffsetX = e.pageX - element[0].offsetWidth - elemOffset.left;
                 // Disable mouse selecting
                 jQuery(document).attr('unselectable', 'on')
@@ -122,12 +122,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
                     return;
                 }
 
-                var element = me._element;
-                var position = element.offset();
-                var minWidth = 290;
+                const element = me._element;
+                const position = element.offset();
+                const minWidth = 290;
 
                 if (e.pageX > position.left + minWidth) {
-                    var newWidth = e.pageX - position.left - mouseOffsetX;
+                    const newWidth = e.pageX - position.left - mouseOffsetX;
                     element.css('max-width', newWidth.toString() + 'px');
                     element.css('width', newWidth.toString() + 'px');
                     me._seriesControl.setWidth(newWidth);
@@ -140,15 +140,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
         },
         stopPlugin: function () {
             this.teardownUI();
-            var mobileDefs = this.getMobileDefs();
+            const mobileDefs = this.getMobileDefs();
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]

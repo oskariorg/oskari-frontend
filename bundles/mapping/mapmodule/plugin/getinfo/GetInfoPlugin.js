@@ -584,6 +584,7 @@ Oskari.clazz.define(
                 hidePrevious: params.hidePrevious === undefined ? true : params.hidePrevious,
                 colourScheme: params.colourScheme,
                 font: params.font,
+                showCoordinates: this._config?.showCoordinates,
                 keepOnScreen: true
             };
             if (reqBuilder) {

@@ -23,6 +23,10 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         this.bannerControls = null;
         this.descriptionPopupControls = null;
     }, {
+        __name: 'announcements',
+        getName: function () {
+            return this.__name;
+        },
         afterStart: function () {
             const me = this;
             if (me.started) {

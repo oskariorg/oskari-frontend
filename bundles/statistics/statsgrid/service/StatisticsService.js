@@ -38,17 +38,27 @@ import { getHash } from '../helper/StatisticsHelper';
                 this.log.warn('Requested regions without regionset');
                 throw new Error('Regionset missing');
             }
-
             const cacheKey = _cacheHelper.getRegionsKey(regionset);
             const cachedResponse = this.cache.tryCachedVersion(cacheKey);
             if (cachedResponse) {
                 // found a cached response
-                return cachedResponse;
+                return new Promise((resolve) => {
+                    resolve(cachedResponse);
+                });
             }
-
+            const createNewAttempt = (resolve) => {
+                const cachedResponse = this.cache.tryCachedVersion(cacheKey);
+                if (cachedResponse) {
+                    resolve(cachedResponse);
+                } else {
+                    // try again in 200ms
+                    setTimeout(() => createNewAttempt(resolve), 200);
+                }
+            };
             if (this.cache.addToQueue(cacheKey)) {
                 // request already in progress
-                return;
+                // return a promise to make async await work!!
+                return new Promise((resolve) => createNewAttempt(resolve));
             }
             // call GetRegions with parameter regionset=regionset
             // use first param as error indicator - null == no error
@@ -67,6 +77,7 @@ import { getHash } from '../helper/StatisticsHelper';
                 }
                 const result = await response.json();
                 const onlyWithNames = result.regions.filter(region => region.name);
+                // stores value to cache so we can get it later in the createNewAttempt()
                 this.cache.respondToQueue(cacheKey, null, onlyWithNames);
                 return onlyWithNames;
             } catch (error) {

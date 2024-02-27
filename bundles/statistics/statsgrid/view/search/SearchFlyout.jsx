@@ -44,7 +44,7 @@ const IndicatorField = styled('div')`
 const ClickableArea = ({ children }) => <div>{children}</div>;
 
 const SearchFlyout = ({ state, controller }) => {
-    const datasources =  getDatasources();
+    const datasources = getDatasources();
     const regionsets = getRegionsets();
     if (!datasources.length || !regionsets.length) {
         // Nothing to show -> show generic "data missing" message
