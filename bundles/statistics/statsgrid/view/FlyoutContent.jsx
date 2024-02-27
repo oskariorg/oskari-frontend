@@ -6,7 +6,6 @@ import { LocaleProvider } from 'oskari-ui/util';
 import { BUNDLE_KEY } from '../constants';
 
 const Content = styled.div`
-    max-height: 850px;
     max-width: 700px;
     overflow-y: auto;
     padding: 20px;

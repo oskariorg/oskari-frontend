@@ -4,7 +4,6 @@ import { Select, Message } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
 import styled from 'styled-components';
 import { IndicatorName } from '../IndicatorName';
-import { getDataByRegions } from '../../helper/StatisticsHelper';
 import { FlyoutContent } from '../FlyoutContent';
 
 const BUNDLE_KEY = 'StatsGrid';
@@ -40,8 +39,7 @@ const sortOptions = [
 
 const DiagramFlyout = ({ state, controller }) => {
     const { indicators, activeIndicator } = state;
-    const current = indicators.find(ind => ind.hash === activeIndicator) || {};
-    const dataByRegions = getDataByRegions(current);
+    const current = indicators.find(ind => ind.hash === activeIndicator);
     const [sortOrder, setSortOrder] = useState('value-descending');
     return (
         <Fragment>
@@ -61,7 +59,7 @@ const DiagramFlyout = ({ state, controller }) => {
                     placeholder={<Message messageKey='datacharts.sorting.desc' />}
                 />
             </Selections>
-            <Diagram data={dataByRegions} classifiedData={current.classifiedData} sortOrder={sortOrder} />
+            <Diagram indicator={current} sortOrder={sortOrder} />
         </Fragment>
     );
 };

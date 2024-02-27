@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import styled from 'styled-components';
+import { getDataByRegions } from '../../helper/StatisticsHelper';
+import { BUNDLE_KEY } from '../../constants';
 
 const MARGIN =  {
     top: 0,
@@ -14,7 +16,7 @@ const WIDTH = 600;
 
 const Chart = styled('div')`
     overflow-y: scroll;
-    max-height: 850px;
+    max-height: calc(100vh - 180px);
 `;
 const Content = styled('div')`
     margin-top: 10px;
@@ -34,6 +36,7 @@ const getDimensionsFromData = (data) => {
     const pxPerChar = 5.5;
     const xLabelOffset = 15;
     const xOffset = -5;
+    const maxTicks = 10;
 
     // default values if couldn't calculate from data
     let left = MARGIN.left;
@@ -75,14 +78,11 @@ const getDimensionsFromData = (data) => {
 
         const xDigits = Math.floor((Math.log(Math.max(Math.abs(min), max)) * Math.LOG10E) + 1);
         const tickTarget = Math.floor((chartWidth / xDigits) / 10);
-        // TODO: options maxTicks was undefined. Should we use classification count or constant??
-        //ticks = tickTarget > maxTicks ? maxTicks : tickTarget;
-        ticks = tickTarget;
+        ticks = tickTarget > maxTicks ? maxTicks : tickTarget;
     }
 
     return {
         height,
-        dataset: { min, max },
         axis: { ticks, xOffset },
         margin: { left, right },
         labels: { positive, negative }
@@ -91,12 +91,11 @@ const getDimensionsFromData = (data) => {
 
 const calculateDimensions = (data) => {
     const { top, bottom } = MARGIN;
-    const { labels, dataset, axis, height, margin: { left, right } } = getDimensionsFromData(data);
+    const { labels, axis, height, margin: { left, right } } = getDimensionsFromData(data);
     return {
         margin: { left, right, top, bottom },
-        dataset,
         axis,
-        container: { WIDTH, height },
+        container: { width: WIDTH, height },
         chart: {
             width: WIDTH - left - right,
             height: height - bottom - top
@@ -113,40 +112,33 @@ const getTextContent = (d, maxLength) => {
     return d.name;
 };
 
-const sortData = (data, sortingType = 'value-descending') => {
-    switch (sortingType) {
-    case 'name-ascending':
-        data.sort((a, b) => {
-            return d3.descending(a.name, b.name);
-        });
-        break;
-    case 'name-descending':
-        data.sort((a, b) => {
-            return d3.ascending(a.name, b.name);
-        });
-        break;
-    case 'value-ascending':
-        data.sort((a, b) => {
-            return d3.descending(a.value, b.value);
-        });
-        break;
-    case 'value-descending':
-        data.sort((a, b) => {
-            return d3.ascending(a.value, b.value);
-        });
-        break;
+const getSortedData = (indicator, sortingType = 'value-descending') => {
+    const data =  getDataByRegions(indicator);
+    if (sortingType === 'name-ascending') {
+        return data.toSorted((a, b) => d3.descending(a.name, b.name));
     }
+    if (sortingType === 'name-descending') {
+        return data.toSorted((a, b) => d3.ascending(a.name, b.name));
+    }
+    if (sortingType === 'value-ascending') {
+        return data.toSorted((a, b) => d3.descending(a.value, b.value));
+    }
+    if (sortingType === 'value-descending') {
+        return data.toSorted((a, b) => d3.ascending(a.value, b.value));
+    }
+    return data;
 };
 
-const createGraph = (ref, labelsRef, data, classifiedData ) => {
-    const { groups, error } = classifiedData;
+const createGraph = (ref, labelsRef, indicator, sortOrder ) => {
+    const { groups, error } = indicator.classifiedData;
+    const { min, max } = indicator.data;
+    const data = getSortedData(indicator, sortOrder);
     const dimensions = calculateDimensions(data);
-
+    const { format } = Oskari.getNumberFormatter();
     let x;
     let y;
     x = d3.scaleLinear();
     y = d3.scaleBand();
-    const { min, max } = dimensions.dataset;
     const xScaleDomain = getScaleArray(min, max);
     const yScaleDomain = data.map((d) => d.name);
     y.range([dimensions.chart?.height, 0]);
@@ -178,7 +170,7 @@ const createGraph = (ref, labelsRef, data, classifiedData ) => {
             .ticks(ticks)
             .tickSizeInner(-height + xOffset)
             .tickSizeOuter(0)
-            .tickFormat(d => Oskari.getMsg('DivManazer', 'graph.tick', { value: d }));
+            .tickFormat(d => format(d));
     
         const xtickAxis = svg.append('g')
         .attr('class', 'x axis')
@@ -278,7 +270,7 @@ const createGraph = (ref, labelsRef, data, classifiedData ) => {
         .attr('height', 17)
         .attr('width', barWidth);
     // append text
-    const noValStr = Oskari.getMsg('DivManazer', 'graph.noValue');
+    const noValStr = Oskari.getMsg(BUNDLE_KEY, 'diagram.noValue');
     bars.each((d, i, nodes) => {
         const isNumber = typeof d.value !== 'undefined';
         let textAnchor = 'start';
@@ -319,7 +311,7 @@ const createGraph = (ref, labelsRef, data, classifiedData ) => {
     });
 };
 
-export const Diagram = ({ data, classifiedData,  sortOrder }) => {
+export const Diagram = ({ indicator,  sortOrder }) => {
     let ref = useRef(null);
     let labelsRef = useRef(null);
 
@@ -330,11 +322,10 @@ export const Diagram = ({ data, classifiedData,  sortOrder }) => {
         if (labelsRef?.current?.children?.length > 0) {
             labelsRef.current.removeChild(labelsRef.current.children[0]);
         }
-        if (data.length) {
-            sortData(data, sortOrder);
-            createGraph(ref.current, labelsRef.current, data, classifiedData);
+        if (indicator) {
+            createGraph(ref.current, labelsRef.current, indicator, sortOrder);
         }
-    }, [data, classifiedData, sortOrder]);
+    }, [indicator, sortOrder]);
 
     return (
         <Content>
