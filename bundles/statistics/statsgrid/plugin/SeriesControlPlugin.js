@@ -28,14 +28,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
             this.element ? this.teardownUI() : this._buildUI();
             return !!this.element;
         },
-        refresh: function (indicator) {
+        refresh: function (state) {
             if (!this.element) {
                 return;
             }
-            if (!indicator) {
-                const { activeIndicator, indicators } = this.stateHandler.getState();
-                indicator = indicators.find(ind => ind.hash === activeIndicator);
-            }
+            const { activeIndicator, indicators } = state || this.stateHandler.getState();
+            const indicator = indicators.find(ind => ind.hash === activeIndicator);
+
             this._seriesControl.updateValues(indicator);
         },
         /**
