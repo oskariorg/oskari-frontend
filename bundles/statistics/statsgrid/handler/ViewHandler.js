@@ -1,5 +1,5 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { getContainerOptions, createSeriesControlPlugin, createTogglePlugin } from '../helper/ViewHelper';
+import { getContainerOptions, createSeriesControlPlugin, createTogglePlugin, stopTogglePlugin } from '../helper/ViewHelper';
 import { showTableFlyout } from '../view/Table/TableFlyout';
 import { showSearchFlyout } from '../view/search/SearchFlyout';
 import { showDiagramFlyout } from '../view/Diagram/DiagramFlyout';
@@ -108,7 +108,13 @@ class UIHandler extends StateHandler {
             this.togglePlugin = createTogglePlugin(sandbox, this);
         }
         if (this.togglePlugin) {
-            this.togglePlugin.refresh(viewState);
+            if (viewState.mapButtons.length > 0) {
+                this.togglePlugin.refresh(viewState);
+            } else {
+                const sandbox = this.instance.getSandbox();
+                stopTogglePlugin(sandbox, this.togglePlugin);
+                this.togglePlugin = null;
+            }
         }
     }
 
@@ -150,7 +156,8 @@ class UIHandler extends StateHandler {
 
     removeMapButton (id) {
         const mapButtons = this.getState().mapButtons.filter(btn => btn !== id);
-        this.updateState({ mapButtons });
+        const activeMapButtons = mapButtons.filter(id => this.controls[id]);
+        this.updateState({ mapButtons, activeMapButtons });
     }
 
     updateLayer (key, value) {

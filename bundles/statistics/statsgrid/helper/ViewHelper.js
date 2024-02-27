@@ -24,3 +24,9 @@ export const createTogglePlugin = (sandbox, viewHandler) => {
     mapModule.startPlugin(plugin);
     return plugin;
 };
+
+export const stopTogglePlugin = (sandbox, togglePlugin) => {
+    const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+    mapModule.unregisterPlugin(togglePlugin);
+    mapModule.stopPlugin(togglePlugin);
+};
