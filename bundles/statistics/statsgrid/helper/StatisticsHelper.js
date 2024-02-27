@@ -89,7 +89,7 @@ export const populateData = (data, regions, regionset, fractionDigits) => {
 export const populateSeriesData = (data, regions, regionset, fractionDigits) => {
     const dataBySelection = {};
     const seriesValues = [];
-    // let seriesAllInts = true;
+    let seriesAllInts = true;
     let seriesMin = Number.POSITIVE_INFINITY;
     let seriesMax = Number.NEGATIVE_INFINITY;
     Object.keys(data).forEach(selector => {
@@ -101,11 +101,9 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
         dataByRegions.forEach(d => seriesValues.push(d.value));
         seriesMax = seriesMax > max ? seriesMax : max;
         seriesMin = seriesMin < min ? seriesMin : min;
-        /*
         if (allInts === false) {
             seriesAllInts = false;
         }
-        */
     });
     return {
         dataBySelection,
@@ -113,6 +111,7 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
         seriesValues, // needed for series bounds
         min: seriesMin,
         max: seriesMax,
+        allInts: seriesAllInts,
         uniqueCount: new Set(seriesValues).size
     };
 };
