@@ -133,7 +133,7 @@ export const formatData = (data, classification) => {
 };
 
 export const getUILabels = (ind, metadata) => {
-    const selectionValues = Oskari.getMsg('StatsGrid' ,'panels.newSearch.selectionValues');
+    const selectionValues = Oskari.getMsg('StatsGrid', 'panels.newSearch.selectionValues');
     const { selections, series } = ind;
     const getError = () => ({
         error: true,

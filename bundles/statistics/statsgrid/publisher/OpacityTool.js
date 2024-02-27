@@ -11,6 +11,12 @@ class OpacityTool extends AbstractStatsPluginTool {
     }
 
     setEnabled (enabled) {
+        if (enabled === this.isEnabled()) {
+            return;
+        }
+
+        // Stop checks if we are already disabled so toggle the value after
+        this.state.enabled = enabled;
         const handler = this.getViewHandler();
         if (!handler) {
             return;

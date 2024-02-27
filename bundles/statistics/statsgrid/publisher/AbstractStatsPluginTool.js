@@ -7,7 +7,7 @@ export class AbstractStatsPluginTool extends AbstractPublisherTool {
     getTool () {
         const id = this._getToolId();
         return {
-            id: this.pluginId || defaultPlugin,
+            id: this.pluginId || (defaultPlugin + '.' + id),
             title: this.getTitle(),
             config: {
                 [id]: true
@@ -20,6 +20,10 @@ export class AbstractStatsPluginTool extends AbstractPublisherTool {
         // TODO: move localizations:
         // Oskari.getMsg('StatsGrid', 'tool.label' + title)
         return Oskari.getMsg('Publisher2', 'BasicView.data.' + this.title);
+    }
+
+    getComponent () {
+        return {};
     }
 
     init (data) {
@@ -72,7 +76,7 @@ export class AbstractStatsPluginTool extends AbstractPublisherTool {
         if (this._isStatsActive()) {
             return true;
         }
-        return Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
+        return Oskari.util.keyExists(data, 'configuration.statsgrid.state');
     }
 
     getStatsgridConf (initialData) {
