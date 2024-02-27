@@ -133,13 +133,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
         }
         this._setSelectedValue(next);
     },
-    _setSelectedValue: function (index) {
-        const { animating, values } = this.getState();
+    _setSelectedValue: function (index, delayed) {
+        const { animating, values, interval } = this.getState();
         const value = values[index];
         this.controller.setSeriesValue(value);
         if (animating) {
             this._updateSeriesIndex(index);
-            this._throttleAnimation();
+            if (delayed === true) {
+                // Wait frameInterval before starting the animation
+                setTimeout(this._throttleAnimation, interval);
+            } else {
+                this._throttleAnimation();
+            }
         }
     },
     _isValidIndex: function (index) {
@@ -170,12 +175,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
         if (!animating) {
             return;
         }
-        const { values, index, interval } = this.getState();
+        const { values, index } = this.getState();
         if (index >= values.length -1) {
             // Step to the beginning, if the series is on the last value
-            this._setSelectedValue(this.values[0]);
-            // Wait frameInterval before starting the animation
-            setTimeout(this._throttleAnimation, interval);
+            this._setSelectedValue(0, true);
         } else {
             this._throttleAnimation();
         }
