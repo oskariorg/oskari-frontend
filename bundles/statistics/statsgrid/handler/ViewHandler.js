@@ -72,7 +72,7 @@ class UIHandler extends StateHandler {
 
     onViewChange (viewState) {
         const state = this.stateHandler.getState();
-        const { classification } = this.controls;
+        const { classification, series } = this.controls;
 
         const hasIndicators = state.indicators.length > 0;
         const { onMap, visible } = viewState.layer;
@@ -86,16 +86,15 @@ class UIHandler extends StateHandler {
                 this.show('classification');
             }
             if (state.isSeriesActive) {
-                if (!this.seriesControlPlugin) {
-                    this.seriesControlPlugin = createSeriesControlPlugin(this.instance.getSandbox(), this.stateHandler);
+                if (series) {
+                    series.update(state);
+                } else {
+                    this.show('series');
                 }
-                this.seriesControlPlugin.refresh();
             }
         } else {
             this.close('classification');
-            if (this.seriesControlPlugin) {
-                this.seriesControlPlugin.stopPlugin();
-            }
+            this.close('series');
         }
         // create toggle plugin only when needed
         if (viewState.mapButtons.length > 0 && !this.togglePlugin) {
@@ -124,6 +123,9 @@ class UIHandler extends StateHandler {
                 control.update(state);
             }
         });
+        if (state.isSeriesActive && !this.controls.series) {
+            this.show('series');
+        }
     }
 
     onSearchChange (state) {
@@ -203,12 +205,32 @@ class UIHandler extends StateHandler {
             controls = showIndicatorForm(this.formHandler.getState(), this.formHandler.getController(), onCloseWrapper);
         } else if (id === 'clipboard' && this.formHandler) {
             controls = showClipboardPopup(this.formHandler.getState(), this.formHandler.getController(), onClose);
+        } else if (id === 'series') {
+            controls = this._createSeriesControls();
         } else {
             this.log.warn(`Tried to show view with id: ${id}`);
             return;
         }
         this.controls[id] = controls;
         this.notifyExtensions(id, true);
+    }
+    _createSeriesControls () {
+        if (!this.seriesControlPlugin) {
+            this.seriesControlPlugin = createSeriesControlPlugin(this.instance.getSandbox(), this.stateHandler);
+        } else if (!this.seriesControlPlugin.getElement()) {
+            this.seriesControlPlugin.redrawUI();
+        }
+        this.seriesControlPlugin.refresh();
+
+        const close = () => this.seriesControlPlugin.stopPlugin();
+        const update = state => {
+            if (state.isSeriesActive) {
+                this.seriesControlPlugin.refresh(state);
+            } else {
+                this.close('series');
+            }
+        };
+        return { update, close };
     }
 
     close (id) {
