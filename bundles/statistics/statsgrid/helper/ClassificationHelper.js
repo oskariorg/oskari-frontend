@@ -199,7 +199,6 @@ export const getClassifiedData = (indicator, groupStats) => {
     return {
         groups,
         bounds,
-        format, // TODO: remove when all components uses formatted value
         stats: statistics
     };
 };

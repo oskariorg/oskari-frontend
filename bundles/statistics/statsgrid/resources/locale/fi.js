@@ -90,7 +90,8 @@ Oskari.registerLocalization({
             }
         },
         'diagram': {
-            'title': 'Diagram'
+            'title': 'Pylväsdiagrammi',
+            'noValue': 'Ei arvoa'
         },
         'parameters': {
             'sex': 'Sukupuoli',

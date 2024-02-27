@@ -90,7 +90,8 @@ Oskari.registerLocalization(
             }
         },
         "diagram": {
-            "title": "Schéma"
+            "title": "Schéma",
+            "noValue": "S/O"
         },
         "parameters": {
             "sex": "Sexe",

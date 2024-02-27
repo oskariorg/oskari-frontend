@@ -749,17 +749,17 @@ class SearchController extends StateHandler {
         }
     }
 
-    addIndicators (searchValues) {
+    async addIndicators (searchValues) {
         let latestHash = null;
-        searchValues.forEach(values => {
+        for (let i = 0; i < searchValues.length; i++) {
             // TODO: search values indicator => id, datasource => ds
-            const { datasource: ds, indicator: id, regionset, ...rest } = values;
+            const { datasource: ds, indicator: id, regionset, ...rest } = searchValues[i];
             const indicator = { id, ds, ...rest };
             indicator.hash = getHashForIndicator(indicator);
-            if (this.stateHandler.addIndicator(indicator, regionset)) {
+            if (await this.stateHandler.addIndicator(indicator, regionset)) {
                 latestHash = indicator.hash;
             }
-        });
+        };
         if (latestHash) {
             // Search added some new indicators, let's set the last one as the active indicator.
             this.stateHandler.setActiveIndicator(latestHash);
