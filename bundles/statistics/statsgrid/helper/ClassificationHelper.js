@@ -56,9 +56,12 @@ export const getClassification = (data, metadata = {}, lastSelected = {}) => {
         classification.fractionDigits = metadata.decimalCount;
     }
     if (typeof metadata.base === 'number') {
-        // if there is a base value the data is divided at base value
-        classification.base = metadata.base;
-        classification.type = 'div';
+        // doesn't make sense to use divided classification if data isn't divided
+        if (data.min < metadata.base && data.max > metadata.base) {
+            // if there is a base value the data is divided at base value
+            classification.base = metadata.base;
+            classification.type = 'div';
+        }
     }
     validateClassification(classification, data);
     return classification;
