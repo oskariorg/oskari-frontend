@@ -62,7 +62,7 @@ const HeaderTools = styled.div`
 `;
 
 const TableFlyout = ({ state, controller }) => {
-    const { indicators, activeIndicator, regionset, loading, regions } = state;
+    const { indicators, activeIndicator, regionset, regions } = state;
     let initialSort = {
         regionName: null
     };
@@ -100,7 +100,15 @@ const TableFlyout = ({ state, controller }) => {
         return data;
     });
     const columnSettings = [];
-
+    const regionsetIds = [];
+    indicators.forEach(ind => {
+        const sets = ind.allowedRegionsets || [];
+        sets.forEach(id => {
+            if (!regionsetIds.includes(id)) {
+                regionsetIds.push(id);
+            }
+        });
+    });
     columnSettings.push({
         dataIndex: 'name',
         align: 'left',
@@ -124,7 +132,9 @@ const TableFlyout = ({ state, controller }) => {
                         ) : (
                             <Select
                                 filterOption={false}
-                                options={getRegionsets().map(rs => ({ value: rs.id, label: rs.name }))}
+                                options={getRegionsets()
+                                    .filter(rs => regionsetIds.includes(rs.id))
+                                    .map(rs => ({ value: rs.id, label: rs.name }))}
                                 value={regionset}
                                 onChange={(value) => controller.setActiveRegionset(value)}
                             />

@@ -273,13 +273,14 @@ class StatisticsController extends StateHandlerBase {
         const labels = getUILabels(indicator, meta);
         // format data here because data is populated before classification (fractionDigits) created
         formatData(data, classification);
-
+        const allowedRegionsets = Array.isArray(meta.regionsets) ? meta.regionsets : [];
         return {
             ...indicator,
             data,
             classification,
             labels,
-            classifiedData
+            classifiedData,
+            allowedRegionsets
         };
     }
 
