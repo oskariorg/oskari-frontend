@@ -21,7 +21,7 @@ class OpacityTool extends AbstractStatsPluginTool {
         if (!handler) {
             return;
         }
-        handler.getController().updateClassificationState('transparent', enabled);
+        handler.updateClassificationState('transparent', enabled);
     }
 
     stop () {
@@ -29,7 +29,7 @@ class OpacityTool extends AbstractStatsPluginTool {
         if (!handler) {
             return;
         }
-        handler.getController().updateClassificationState('transparent');
+        handler.updateClassificationState('transparent');
     }
 };
 
