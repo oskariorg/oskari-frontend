@@ -163,6 +163,7 @@ export const showSearchFlyout = (state, indicators = [], searchController, state
                 <SearchFlyout state={state} controller={searchController} />
                 <IndicatorCollapse indicators={indicators}
                     removeIndicator={stateController.removeIndicator}
+                    removeAll={stateController.resetState}
                     showMetadata={searchController.openMetadataPopup}/>
             </Content>
         </LocaleProvider>,
@@ -179,6 +180,7 @@ export const showSearchFlyout = (state, indicators = [], searchController, state
                     <SearchFlyout state={state} controller={searchController} />
                     <IndicatorCollapse indicators={indicators}
                         removeIndicator={stateController.removeIndicator}
+                        removeAll={stateController.resetState}
                         showMetadata={searchController.openMetadataPopup}/>
                 </Content>
             </LocaleProvider>
