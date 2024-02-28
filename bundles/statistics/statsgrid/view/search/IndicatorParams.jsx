@@ -65,6 +65,7 @@ export const IndicatorParams = ({ params, allRegionsets = [], searchTimeseries, 
                             options={selector?.values?.map(value => ({ value: value.id, label: value.title }))}
                             value={params.selected[param]}
                             onChange={(value) => controller.setParamSelection(param, value)}
+                            mode={selector?.time === true ? 'multiple' : ''}
                         />
                     </Field>
                 );

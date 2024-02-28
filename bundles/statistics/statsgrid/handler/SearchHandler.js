@@ -3,7 +3,7 @@ import { showMedataPopup } from '../components/description/MetadataPopup';
 import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
 import { getIndicatorMetadata } from './IndicatorHelper';
-import { getDatasources, getUnsupportedDatasourceIds } from '../helper/ConfigHelper';
+import { getDatasources, getUnsupportedDatasourceIds, getRegionsets } from '../helper/ConfigHelper';
 
 const getValueAsArray = (selection) => {
     if (selection === null || typeof selection === 'undefined') {
@@ -81,7 +81,10 @@ class SearchController extends StateHandler {
                         Messaging.error(this.loc('errors.indicatorListIsEmpty'));
                     }
                 },
-                error => Messaging.error(this.loc(error)));
+                error => {
+                    Messaging.error(this.loc(error));
+                    this.updateState({loading: false});
+                })
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorListError'));
             this.updateState({
@@ -358,7 +361,8 @@ class SearchController extends StateHandler {
         Object.keys(selectors).forEach(key => {
             let selected;
             if (selectors[key].time) {
-                selected = selectors[key].values[0].id;
+                // time has multi-select => use array
+                selected = [selectors[key].values[0].id];
                 if (this.getState().searchTimeseries) {
                     if (selectors[key].values?.length <= 1) {
                         Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
@@ -376,7 +380,9 @@ class SearchController extends StateHandler {
 
             selections[key] = selected;
         });
-        selections.regionsets = regionsets[0];
+        // metadata regionsets doesn't have same order than all regionsets
+        // select first allowed value from all regionsets
+        selections.regionsets = getRegionsets().find(rs => regionsets.includes(rs.id))?.id;
         return selections;
     }
 
