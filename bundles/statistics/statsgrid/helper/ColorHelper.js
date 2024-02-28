@@ -33,7 +33,11 @@ export const getColorsForClassification = (classification) => {
 
 export const getDividedColors = (classification, bounds) => {
     const { mapStyle, base = 0 } = classification;
-    const baseIndex = bounds.findIndex(bound => bound >= base);
+    let baseIndex = bounds.findIndex(bound => bound >= base);
+    if (baseIndex === -1) {
+        // all bounds are under base value, use last index
+        baseIndex = bounds.length -1;
+    }
 
     if (mapStyle === 'points') {
         return _getDividedPoints(classification, baseIndex);
