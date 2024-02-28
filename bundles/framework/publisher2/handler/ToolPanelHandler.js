@@ -16,13 +16,15 @@ class UIHandler extends StateHandler {
             const tool = this.toolsToInit.shift();
             try {
                 tool.init(data);
-                this._addToolToState(tool);
+                if (tool.isDisplayed(data)) {
+                    this._addToolToState(tool);
+                }
             } catch (err) {
                 Oskari.log('ToolPanelHandler').error('Error initializing publisher tool:', tool);
             }
         }
         const { tools } = this.getState();
-        return tools.some(tool => tool.publisherTool.isDisplayed(data));
+        return tools.length > 0;
     }
 
     _addToolToState (tool) {
