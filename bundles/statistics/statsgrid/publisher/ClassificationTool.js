@@ -25,7 +25,7 @@ class ClassificationTool extends AbstractStatsPluginTool {
         if (!handler) {
             return;
         }
-        handler.getController().updateClassificationState('editEnabled', enabled);
+        handler.updateClassificationState('editEnabled', enabled);
     }
 
     stop () {
@@ -33,7 +33,7 @@ class ClassificationTool extends AbstractStatsPluginTool {
         if (!handler) {
             return;
         }
-        handler.getController().updateClassificationState('editEnabled', true);
+        handler.updateClassificationState('editEnabled', true);
     }
 
     // TODO: is this main tool (always included)??
@@ -41,8 +41,7 @@ class ClassificationTool extends AbstractStatsPluginTool {
         if (!this._isStatsActive()) {
             return null;
         }
-        const stats = this.getStatsgridBundle();
-        const { location } = stats?.togglePlugin?.getConfig() || {};
+        const { location } = this.getPlugin().getConfig() || {};
         return {
             configuration: {
                 statsgrid: {
@@ -52,7 +51,7 @@ class ClassificationTool extends AbstractStatsPluginTool {
                             classes: 'bottom right'
                         }
                     },
-                    state: this.__sandbox.getStatefulComponents().statsgrid.getState()
+                    state: this.getSandbox().getStatefulComponents().statsgrid.getState()
                 }
             }
         };

@@ -148,12 +148,17 @@ class UIHandler extends StateHandler {
 
     addMapButton (id) {
         const mapButtons = [...this.getState().mapButtons, id];
+        /*
         if (id === CLASSIFICATION && this.controls[id]) {
             // classification is by default open while the other windows are not
             // close it if we add the button for classification
+            // FIXME: this makes classification duplicate itself when toggled with the other buttons.
+            // lets keep it open and recalculate the activeMapButtons so it's activated since its open by default
             this.close(id);
         }
-        this.updateState({ mapButtons });
+        */
+        const activeMapButtons = mapButtons.filter(id => this.controls[id]);
+        this.updateState({ mapButtons, activeMapButtons });
     }
 
     removeMapButton (id) {
@@ -233,6 +238,7 @@ class UIHandler extends StateHandler {
         this.controls[id] = controls;
         this.notifyExtensions(id, true);
     }
+
     _createSeriesControls () {
         if (!this.seriesControlPlugin) {
             this.seriesControlPlugin = createSeriesControlPlugin(this.instance.getSandbox(), this.stateHandler);
