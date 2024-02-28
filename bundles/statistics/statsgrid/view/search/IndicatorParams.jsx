@@ -39,10 +39,18 @@ const TimeSeriesParams = ({fieldName, timeOptions, selectedValues, controller}) 
     </TimeseriesField>
 );
 
-export const IndicatorParams = ({ params, allRegionsets = [], searchTimeseries, controller }) => {
+export const IndicatorParams = ({ params, allRegionsets = [], searchTimeseries, regionsetFilter, controller }) => {
     const paramKeys = Object.keys(params.selectors);
     const indicatorRegionsets = params.regionset || [];
-    const regionsetOptions = allRegionsets.filter(rs => indicatorRegionsets.includes(rs.id));
+    const regionsetOptions = allRegionsets
+        .filter(rs => indicatorRegionsets.includes(rs.id))
+        .map(rs => {
+            const opt = { value: rs.id, label: rs.name };
+            if (regionsetFilter.length && !regionsetFilter.includes(rs.id)) {
+                opt.disabled = true;
+            }
+            return opt;
+        });
 
     return (
         <div>
@@ -74,7 +82,7 @@ export const IndicatorParams = ({ params, allRegionsets = [], searchTimeseries, 
                 <Field>
                     <b><Message messageKey='parameters.regionset' /></b>
                     <StyledSelect
-                        options={regionsetOptions.map(rs => ({ value: rs.id, label: rs.name }))}
+                        options={regionsetOptions}
                         value={params.selected.regionsets}
                         onChange={(value) => controller.setParamSelection('regionsets', value)}
                     />

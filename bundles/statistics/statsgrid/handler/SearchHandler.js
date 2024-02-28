@@ -357,13 +357,14 @@ class SearchController extends StateHandler {
     }
 
     initParamSelections (selectors, regionsets) {
+        const { regionsetFilter, searchTimeseries } = this.getState();
         const selections = {};
         Object.keys(selectors).forEach(key => {
             let selected;
             if (selectors[key].time) {
                 // time has multi-select => use array
                 selected = [selectors[key].values[0].id];
-                if (this.getState().searchTimeseries) {
+                if (searchTimeseries) {
                     if (selectors[key].values?.length <= 1) {
                         Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
                         this.updateState({
@@ -382,7 +383,8 @@ class SearchController extends StateHandler {
         });
         // metadata regionsets doesn't have same order than all regionsets
         // select first allowed value from all regionsets
-        selections.regionsets = getRegionsets().find(rs => regionsets.includes(rs.id))?.id;
+        const allowedIds = regionsetFilter.length ? regionsets.filter(id => regionsetFilter.includes(id)) : regionsets;
+        selections.regionsets = getRegionsets().find(rs => allowedIds.includes(rs.id))?.id;
         return selections;
     }
 

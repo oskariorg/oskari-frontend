@@ -129,6 +129,7 @@ const SearchFlyout = ({ state, controller }) => {
                 <IndicatorParams
                     allRegionsets={regionsets}
                     params={state.indicatorParams}
+                    regionsetFilter={state.regionsetFilter}
                     searchTimeseries={state.searchTimeseries}
                     controller={controller}
                 />
