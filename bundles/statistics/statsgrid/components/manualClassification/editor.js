@@ -6,7 +6,7 @@ import { updateDragHandles } from './updateDragHandles';
 import * as d3 from 'd3';
 
 const width = 500;
-const height = 303;
+const height = 310;
 const margin = 12;
 const histoHeight = 200;
 
@@ -23,7 +23,6 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         .append('svg')
         .attr('width', width)
         .attr('height', height);
-
     const histoClip = svg.append('defs').append('clipPath').attr('id', 'histoClip');
     const guide = svg.append('g');
     const histoGroup = svg.append('g').attr('clip-path', 'url(#histoClip)');
@@ -32,9 +31,9 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
 
     const histogramGenerator = d3.histogram().thresholds(50);
     const histoData = histogramGenerator(indicatorData);
-
+    const highestBar = d3.max(histoData, (d) => d.length);
     const y = d3.scaleLinear()
-        .domain([0, d3.max(histoData, (d) => d.length)])
+        .domain([0, highestBar])
         .range([histoHeight, 0]);
 
     const x = d3.scaleLinear()
@@ -42,8 +41,9 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         .clamp(true)
         .range([margin * 2, width - margin]); // double left margin to get more space for tick labels
 
+    const opts = { histoHeight, height, margin, highestBar, fractionDigits };
     // HISTOGRAM CLIP PATH
-    histogram(histoClip, histoData, x, y, height);
+    histogram(histoClip, histoData, x, y, opts);
 
     const handlesData = manualBounds.map((d, i) => ({ value: d, id: i }));
 
@@ -76,7 +76,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         .on('end', notify);
 
     // BOUNDS EDGES
-    edgeLines(boundsLines, handlesData, x, y, histoHeight);
+    edgeLines(boundsLines, handlesData, x, y, opts);
 
     // VALUE INPUT INIT & INTERACTION
 
@@ -115,8 +115,8 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         });
 
     function update (skipInput) {
-        updateBandBlocks(histoGroup, handlesData, x, colorSet, histoHeight);
-        updateDragHandles(dragHandles, handlesData, x, dragBehavior, isSelected, isBase, histoHeight);
+        updateBandBlocks(histoGroup, handlesData, x, colorSet, opts);
+        updateDragHandles(dragHandles, handlesData, x, dragBehavior, isSelected, isBase, opts);
 
         if (skipInput) {
             return;
@@ -128,7 +128,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         valueInput.property('value', fixed).classed('fail', false);
 
         // VALUE INPUT GUIDE BOX
-        inputGuide(guide, x, 50, histoHeight + 50, x(value));
+        inputGuide(guide, x, 50, height, x(value));
     }
     update();
 }

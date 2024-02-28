@@ -1,32 +1,34 @@
 import * as d3 from 'd3';
-
+const TICKS = 4;
 /**
  * Draws right/left edges (min/max bounds values) of chart
  * @param {Object} svg node into which to render
  * @param {Object[]} handlesData values of bounds handles
  * @param {Function} xScale d3 scale function
- * @param {Number} histoHeight height of histogram area in px
+ * @param {Object} opts
  */
-export function edgeLines (svg, handlesData, xScale, yScale, histoHeight) {
-    const formatter = Oskari.getNumberFormatter(2);
-
+export function edgeLines (svg, handlesData, xScale, yScale, opts) {
+    const { histoHeight, fractionDigits = 1, highestBar, margin} = opts;
+    const formatter = Oskari.getNumberFormatter(fractionDigits);
+    // For small datasets integer ticks might show same values => decrease
+    const ticks = highestBar > TICKS ? TICKS : highestBar;
     const left = handlesData[0].value;
     const right = handlesData[handlesData.length - 1].value;
     const bounds = svg.selectAll('.edge')
         .data([left, right]);
 
     const yAxis = d3.axisLeft(yScale)
-        .ticks(4);
+        .ticks(ticks, 'd');
     svg.append('g')
         .classed('edge', true)
-        .attr('transform', `translate(${xScale(left)} 0)`)
+        .attr('transform', `translate(${xScale(left)} ${margin})`)
         .call(yAxis);
 
     const boundsEnter = bounds
         .enter()
         .append('g')
         .classed('edge', true)
-        .attr('transform', (d) => `translate(${xScale(d)} 0)`);
+        .attr('transform', (d) => `translate(${xScale(d)} ${margin})`);
 
     boundsEnter
         .append('path')

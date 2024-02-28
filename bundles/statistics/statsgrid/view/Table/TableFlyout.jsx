@@ -44,7 +44,8 @@ const IndicatorHeader = styled('div')`
     height: 100%;
 `;
 const StyledRemoveButton = styled(IconButton)`
-    margin-left: 10px;
+    margin-right: 10px;
+    height: 20px;
 `;
 const HeaderCell = styled('div')`
     display: flex;
@@ -52,9 +53,16 @@ const HeaderCell = styled('div')`
     justify-content: space-between;
     height: 100%;
 `;
+const HeaderTools = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10px;
+    height: 20px;
+`;
 
 const TableFlyout = ({ state, controller }) => {
-    const { indicators, activeIndicator, regionset, loading, regions } = state;
+    const { indicators, activeIndicator, regionset, regions } = state;
     let initialSort = {
         regionName: null
     };
@@ -92,7 +100,15 @@ const TableFlyout = ({ state, controller }) => {
         return data;
     });
     const columnSettings = [];
-
+    const regionsetIds = [];
+    indicators.forEach(ind => {
+        const sets = ind.allowedRegionsets || [];
+        sets.forEach(id => {
+            if (!regionsetIds.includes(id)) {
+                regionsetIds.push(id);
+            }
+        });
+    });
     columnSettings.push({
         dataIndex: 'name',
         align: 'left',
@@ -116,16 +132,19 @@ const TableFlyout = ({ state, controller }) => {
                         ) : (
                             <Select
                                 filterOption={false}
-                                options={getRegionsets().map(rs => ({ value: rs.id, label: rs.name }))}
+                                options={getRegionsets()
+                                    .filter(rs => regionsetIds.includes(rs.id))
+                                    .map(rs => ({ value: rs.id, label: rs.name }))}
                                 value={regionset}
                                 onChange={(value) => controller.setActiveRegionset(value)}
                             />
                         )}
                     </RegionHeader>
-                    <Sorter
-                        sortOrder={sortOrder['name']}
-                        changeSortOrder={() => changeSortOrder('name')}
-                    />
+                    <HeaderTools>
+                        <Sorter
+                            sortOrder={sortOrder['name']}
+                            changeSortOrder={() => changeSortOrder('name')} />
+                    </HeaderTools>
                 </HeaderCell>
             );
         }
@@ -148,21 +167,17 @@ const TableFlyout = ({ state, controller }) => {
             title: () => {
                 return (
                     <HeaderCell>
-                        <IndicatorHeader
-                            onClick={(e) => {
-                                controller.setActiveIndicator(hash);
-                            }}
-                        >
+                        <IndicatorHeader onClick={() => controller.setActiveIndicator(hash)}>
                             <IndicatorName indicator={indicator} />
+                        </IndicatorHeader>
+                        <HeaderTools>
+                            <Sorter
+                                sortOrder={sortOrder[hash]}
+                                changeSortOrder={() => changeSortOrder(hash)}/>
                             <StyledRemoveButton
                                 type='delete'
-                                onClick={() => controller.removeIndicator(indicator)}
-                            />
-                        </IndicatorHeader>
-                        <Sorter
-                            sortOrder={sortOrder[hash]}
-                            changeSortOrder={() => changeSortOrder(hash)}
-                        />
+                                onClick={() => controller.removeIndicator(indicator)}/>
+                        </HeaderTools>
                     </HeaderCell>
                 );
             }
