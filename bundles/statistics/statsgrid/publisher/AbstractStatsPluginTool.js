@@ -76,7 +76,7 @@ export class AbstractStatsPluginTool extends AbstractPublisherTool {
         if (this._isStatsActive()) {
             return true;
         }
-        return Oskari.util.keyExists(data, 'configuration.statsgrid.state');
+        return !!data?.configuration?.statsgrid?.state;
     }
 
     getStatsgridConf (initialData) {
