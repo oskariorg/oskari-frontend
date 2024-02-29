@@ -117,8 +117,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
         if (!this._isValidIndex(requestedIndex)) {
             return;
         }
-        this._renderHandle(requestedIndex);
-        this._updateValueDisplay(requestedIndex);
+        this._updateSeriesIndex(requestedIndex);
         this._setSelectedValue(requestedIndex);
     },
     _next: function () {

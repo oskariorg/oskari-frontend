@@ -98,7 +98,12 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
         if (error) {
             return;
         }
-        dataByRegions.forEach(d => seriesValues.push(d.value));
+        dataByRegions.forEach(d => {
+            if (typeof d.value === 'undefined') {
+                return;
+            }
+            seriesValues.push(d.value)
+        });
         seriesMax = seriesMax > max ? seriesMax : max;
         seriesMin = seriesMin < min ? seriesMin : min;
         if (allInts === false) {
