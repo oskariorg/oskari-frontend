@@ -55,8 +55,12 @@ class UIHandler extends StateHandler {
     setEmbeddedTools (conf) {
         const mapButtons = embeddedTools.filter(tool => conf[tool]);
         const activeMapButtons = embeddedTools.filter(id => this.controls[id]);
-        // TODO: state.classification confista (classificationDefaults) jotta julkaistun kartan tila saadaan alustettua
-        this.updateState({ mapButtons, activeMapButtons });
+        const classification = {
+            ...this.getState().classification,
+            editEnabled: !!conf?.allowClassification,
+            transparent: !!conf?.transparent
+        };
+        this.updateState({ mapButtons, activeMapButtons, classification });
     }
 
     setIndicatorFormHandler (formHandler) {
