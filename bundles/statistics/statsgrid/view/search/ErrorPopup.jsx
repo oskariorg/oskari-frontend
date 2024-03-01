@@ -19,7 +19,6 @@ const Popup = ({errors}) => {
         <Content>
             {errors.map((indicator,i) => {
                 const { name, partialSeries, selections } = indicator;
-                console.log(indicator.error);
                 const selection = partialSeries
                     ? getInvalidSerie(partialSeries)
                     : getSelection(selections);
