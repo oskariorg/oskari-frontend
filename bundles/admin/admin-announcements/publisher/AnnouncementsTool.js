@@ -27,6 +27,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 '</div>'),
             announcementsPopup: jQuery(
                 '<div>' +
+                    '<div class="publisher-announcements-disclaimer">' + this.localization.tool.popup.disclaimer + '</div>' +
                     '<div class="publisher-announcements-inputs">' +
                         '<h4>' + this.localization.tool.announcementsName + '</h4><h4>' + this.localization.tool.announcementsTime + '</h4>' +
                         '<div class="ann-column ann-title"></div>' +
@@ -241,9 +242,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
         },
         // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
         updateSelectedInput: function () {
-            jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(this.selectedAnnouncements.map(i => i.locale[this.lang].title).toString());
+            jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(this.selectedAnnouncements.map(i => Oskari.getLocalized(i.locale, this.lang)?.title).toString());
         },
-
         /**
          * @private @method _getToolPluginAnnouncementsConf
          * @return {Object / null} config or null if not found

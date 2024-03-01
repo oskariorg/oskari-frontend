@@ -1,3 +1,4 @@
+export const BUNDLE_KEY = 'StatsGrid';
 export const LAYER_ID = 'STATS_LAYER';
 export const DATA_PROVIDER = 'indicators';
 

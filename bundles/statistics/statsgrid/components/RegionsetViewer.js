@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         const me = this;
         const addFeaturesRequestParams = [];
         const handledRegions = [];
-        const { groups, format } = classifiedData;
+        const { groups } = classifiedData;
         const { mapStyle, showValues } = classification;
         groups.forEach(function (regiongroup, index) {
             const { color, sizePx, regionIds } = regiongroup;
@@ -98,18 +98,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 if (!region) {
                     return;
                 }
-                const regionVal = format(dataByRegions.find(r => r.id === regionId)?.value);
+                const { formatted = ''} = dataByRegions.find(r => r.id === regionId) || {};
                 if (me._regionsAdded.includes(regionId)) {
                     updates.push({
                         value: regionId,
                         properties: {
-                            regionValue: regionVal
+                            regionValue: formatted
                         }
                     });
                 } else {
-                    const feature = me._getFeature(mapStyle, region, regionVal);
+                    const feature = me._getFeature(mapStyle, region, formatted);
                     if (mapStyle === 'points') {
-                        borderFeatures.push(me._getBorderFeature(region, regionVal));
+                        borderFeatures.push(me._getBorderFeature(region, formatted));
                     }
                     regionFeaturesToAdd.push(feature);
                     adds.push(regionId);

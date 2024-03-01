@@ -20,8 +20,8 @@ const ICONS = {
 export const ThematicControls = ({ mapButtons, active, toggle }) => {
     return (
         <Container>
-            {mapButtons.map((id, index) => (
-                <div key={index}>
+            {mapButtons.map(id => (
+                <div key={id}>
                     <MapModuleButton
                         onClick={() => toggle(id)}
                         icon={ICONS[id]}

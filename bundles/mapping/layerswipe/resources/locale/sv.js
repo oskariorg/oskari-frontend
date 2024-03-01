@@ -10,6 +10,10 @@ Oskari.registerLocalization({
             swipeNoRasterMessage: 'Lägg till kartlager i kartvyn.',
             swipeLayerNotVisibleTitle: 'Jämförelse av kartlager fungerar inte i vyn',
             swipeLayerNotVisibleMessage: 'Den kartlagret högst uppe kan inte ses i vyn.'
+        },
+        tool: {
+            "label": "Jämför kartlagret högst uppe med nedanstående kartlager",
+            "autoStart": "Starta automatisk"
         }
     }
 });

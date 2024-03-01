@@ -164,7 +164,7 @@ class IndicatorFormController extends StateHandler {
             if (region.id === regionId) {
                 return {
                     ...region,
-                    value: value
+                    value
                 };
             }
             return region;
@@ -203,7 +203,7 @@ class IndicatorFormController extends StateHandler {
                 selectedDataset: data,
                 formData: {
                     regions: formRegions,
-                    labels: labels
+                    labels
                 }
             });
         } catch (error) {
@@ -216,7 +216,7 @@ class IndicatorFormController extends StateHandler {
                     selectedDataset: dataset,
                     formData: {
                         regions: formRegions,
-                        labels: labels
+                        labels
                     }
                 });
                 */
@@ -301,7 +301,7 @@ class IndicatorFormController extends StateHandler {
                 }
                 validRows.push({
                     name: area,
-                    value: value
+                    value
                 });
             }
         });

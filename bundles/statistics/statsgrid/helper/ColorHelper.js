@@ -33,7 +33,11 @@ export const getColorsForClassification = (classification) => {
 
 export const getDividedColors = (classification, bounds) => {
     const { mapStyle, base = 0 } = classification;
-    const baseIndex = bounds.findIndex(bound => bound >= base);
+    let baseIndex = bounds.findIndex(bound => bound >= base);
+    if (baseIndex === -1) {
+        // all bounds are under base value, use last index
+        baseIndex = bounds.length -1;
+    }
 
     if (mapStyle === 'points') {
         return _getDividedPoints(classification, baseIndex);
@@ -49,7 +53,18 @@ const _getDividedChoropleth = (classification, baseIndex) => {
     const overBase = count - baseIndex - neutral;
 
     const colorCount = Math.max(underBase, overBase) * 2 + neutral;
-    const colorset = [...getColorset(colorCount, color)];
+    let colorset = [];
+    try {
+        colorset = [...getColorset(colorCount, color)];
+    } catch(e) {
+        // If values are divided unequally, high count doesn't have required amount of colors
+        // validateClassification and getOptions should handle this properly but it requires some refactoring
+        // For now avoid error and let user update classification
+        const max = Math.max(underBase, overBase);
+        const cause = `${max} groups are ${overBase > underBase ? 'over' : 'under'} base value`;
+        console.warn(`Failed to get divided colors. Count ${count} requires ${colorCount} colors because ${cause}.`);
+        return [];
+    }
     if (reverseColors) {
         colorset.reverse();
     }

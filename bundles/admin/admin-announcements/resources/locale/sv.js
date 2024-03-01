@@ -48,7 +48,9 @@ Oskari.registerLocalization(
                 "buttonLabel": "Välj Aviseringar",
                 "popup": {
                     "title": "Aviseringar",
-                    "close": "Stäng"
+                    "close": "Stäng",
+                    "disclaimer": "Du kan välja bara aktuella eller framtida aviseringar."
+
                 },
                 "announcementsName": "Titel",
                 "announcementsTime": "Datumintervall"

@@ -1,5 +1,5 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { getContainerOptions, createSeriesControlPlugin, createTogglePlugin } from '../helper/ViewHelper';
+import { getContainerOptions, createSeriesControlPlugin, createTogglePlugin, stopTogglePlugin } from '../helper/ViewHelper';
 import { showTableFlyout } from '../view/Table/TableFlyout';
 import { showSearchFlyout } from '../view/search/SearchFlyout';
 import { showDiagramFlyout } from '../view/Diagram/DiagramFlyout';
@@ -10,11 +10,12 @@ import { showHistogramPopup } from '../components/manualClassification/Histogram
 
 export const FLYOUTS = ['search', 'grid', 'diagram']; // to toggle tile
 
+const CLASSIFICATION = 'classification';
 const classificationDefaults = {
     editEnabled: true,
     transparent: false
 };
-const embeddedTools = [...FLYOUTS, 'classification'];
+const embeddedTools = [...FLYOUTS, CLASSIFICATION];
 
 class UIHandler extends StateHandler {
     constructor (instance, stateHandler, searchHandler) {
@@ -54,7 +55,12 @@ class UIHandler extends StateHandler {
     setEmbeddedTools (conf) {
         const mapButtons = embeddedTools.filter(tool => conf[tool]);
         const activeMapButtons = embeddedTools.filter(id => this.controls[id]);
-        this.updateState({ mapButtons, activeMapButtons });
+        const classification = {
+            ...this.getState().classification,
+            editEnabled: !!conf?.allowClassification,
+            transparent: !!conf?.transparent
+        };
+        this.updateState({ mapButtons, activeMapButtons, classification });
     }
 
     setIndicatorFormHandler (formHandler) {
@@ -70,33 +76,34 @@ class UIHandler extends StateHandler {
         this.formHandler = formHandler;
     }
 
-
     onViewChange (viewState) {
         const state = this.stateHandler.getState();
-        const { classification } = this.controls;
+        const { classification, series } = this.controls;
 
         const hasIndicators = state.indicators.length > 0;
         const { onMap, visible } = viewState.layer;
         const isActive = onMap && visible && hasIndicators;
 
         // automaticly shown/closed views
+        const hasClassificationButton = viewState.mapButtons.includes(CLASSIFICATION);
         if (isActive) {
             if (classification) {
-                classification.update(state, viewState)
-            } else {
-                this.show('classification');
+                classification.update(state, viewState);
+            } else if (!hasClassificationButton) {
+                // classification always visible except when there is a button to show it
+                this.show(CLASSIFICATION);
             }
+
             if (state.isSeriesActive) {
-                if (!this.seriesControlPlugin) {
-                    this.seriesControlPlugin = createSeriesControlPlugin(this.instance.getSandbox(), this.stateHandler);
+                if (series) {
+                    series.update(state);
+                } else {
+                    this.show('series');
                 }
-                this.seriesControlPlugin.refresh();
             }
         } else {
-            this.close('classification');
-            if (this.seriesControlPlugin) {
-                this.seriesControlPlugin.stopPlugin();
-            }
+            this.close(CLASSIFICATION);
+            this.close('series');
         }
         // create toggle plugin only when needed
         if (viewState.mapButtons.length > 0 && !this.togglePlugin) {
@@ -104,9 +111,14 @@ class UIHandler extends StateHandler {
             this.togglePlugin = createTogglePlugin(sandbox, this);
         }
         if (this.togglePlugin) {
-            this.togglePlugin.refresh(viewState);
+            if (viewState.mapButtons.length > 0) {
+                this.togglePlugin.refresh(viewState);
+            } else {
+                const sandbox = this.instance.getSandbox();
+                stopTogglePlugin(sandbox, this.togglePlugin);
+                this.togglePlugin = null;
+            }
         }
-
     }
 
     onStateChange (state) {
@@ -119,13 +131,16 @@ class UIHandler extends StateHandler {
             if (id === 'search') {
                 const searchState = this.searchHandler.getState();
                 control.update(searchState, state.indicators);
-            } else if (id === 'classification' || id === 'histogram') {
+            } else if (id === CLASSIFICATION || id === 'histogram') {
                 const viewState = this.getState();
                 control.update(state, viewState);
             } else {
                 control.update(state);
             }
         });
+        if (state.isSeriesActive && !this.controls.series) {
+            this.show('series');
+        }
     }
 
     onSearchChange (state) {
@@ -137,16 +152,30 @@ class UIHandler extends StateHandler {
 
     addMapButton (id) {
         const mapButtons = [...this.getState().mapButtons, id];
-        this.updateState({mapButtons});
+        /*
+        if (id === CLASSIFICATION && this.controls[id]) {
+            // classification is by default open while the other windows are not
+            // close it if we add the button for classification
+            // FIXME: this makes classification duplicate itself when toggled with the other buttons.
+            // lets keep it open and recalculate the activeMapButtons so it's activated since its open by default
+            this.close(id);
+        }
+        */
+        const activeMapButtons = mapButtons.filter(id => this.controls[id]);
+        this.updateState({ mapButtons, activeMapButtons });
     }
 
     removeMapButton (id) {
         const mapButtons = this.getState().mapButtons.filter(btn => btn !== id);
-        this.updateState({ mapButtons });
+        const activeMapButtons = mapButtons.filter(id => this.controls[id]);
+        this.updateState({ mapButtons, activeMapButtons });
     }
 
     updateLayer (key, value) {
-        this.updateState({ layer: {...this.getState().layer, [key]: value }})
+        this.updateState({ layer: {
+            ...this.getState().layer,
+            [key]: value
+        } });
     }
 
     // if value isn't given => reset to default
@@ -183,21 +212,23 @@ class UIHandler extends StateHandler {
             const searchState = this.searchHandler.getState();
             const searchController = this.searchHandler.getController();
             controls = showSearchFlyout(searchState, state.indicators, searchController, controller, onClose);
-        } else if (id === 'grid') { //stored state u
+        } else if (id === 'grid') { // stored state u
             controls = showTableFlyout(state, controller, onClose);
         } else if (id === 'diagram') {
             controls = showDiagramFlyout(state, controller, onClose);
-        } else if (id === 'classification') {
+        } else if (id === CLASSIFICATION) {
             const opts = getContainerOptions(this.togglePlugin);
             const showHistogram = () => this.show('histogram');
             controls = showClassificationContainer(state, this.getState(), controller, opts, showHistogram, onClose);
         } else if (id === 'histogram') {
             controls = showHistogramPopup(state, this.getState(), controller, onClose);
+        /*
+        // For now search handler opens metadata popup
         } else if (id === 'metadata') {
-            // For now search handler opens metadata popup
-            // const { selectedDatasource, selectedIndicators } = this.searchHandler.getState();
-            // const data = await this.prepareMetadataPopupData(selectedDatasource, selectedIndicators);
-            // controls = showMedataPopup(data, onClose);
+            const { selectedDatasource, selectedIndicators } = this.searchHandler.getState();
+            const data = await this.prepareMetadataPopupData(selectedDatasource, selectedIndicators);
+            controls = showMedataPopup(data, onClose);
+        */
         } else if (id === 'indicatorForm' && this.formHandler) {
             const onCloseWrapper = () => {
                 this.close('clipboard');
@@ -205,13 +236,34 @@ class UIHandler extends StateHandler {
             };
             controls = showIndicatorForm(this.formHandler.getState(), this.formHandler.getController(), onCloseWrapper);
         } else if (id === 'clipboard' && this.formHandler) {
-            controls = showClipboardPopup(this.formHandler.getState(), this.formHandler.getController(), onClose)
+            controls = showClipboardPopup(this.formHandler.getState(), this.formHandler.getController(), onClose);
+        } else if (id === 'series') {
+            controls = this._createSeriesControls();
         } else {
             this.log.warn(`Tried to show view with id: ${id}`);
             return;
         }
         this.controls[id] = controls;
         this.notifyExtensions(id, true);
+    }
+
+    _createSeriesControls () {
+        if (!this.seriesControlPlugin) {
+            this.seriesControlPlugin = createSeriesControlPlugin(this.instance.getSandbox(), this.stateHandler);
+        } else if (!this.seriesControlPlugin.getElement()) {
+            this.seriesControlPlugin.redrawUI();
+        }
+        this.seriesControlPlugin.refresh();
+
+        const close = () => this.seriesControlPlugin.stopPlugin();
+        const update = state => {
+            if (state.isSeriesActive) {
+                this.seriesControlPlugin.refresh(state);
+            } else {
+                this.close('series');
+            }
+        };
+        return { update, close };
     }
 
     close (id) {
@@ -227,7 +279,7 @@ class UIHandler extends StateHandler {
             if (skipSearch && id === 'search') {
                 return;
             }
-            this.close(id)
+            this.close(id);
         });
     }
 
@@ -237,7 +289,7 @@ class UIHandler extends StateHandler {
         }
         if (this.togglePlugin && embeddedTools.includes(viewId)) {
             const activeMapButtons = embeddedTools.filter(viewId => this.controls[viewId]);
-            this.updateState({activeMapButtons});
+            this.updateState({ activeMapButtons });
         }
     }
 }

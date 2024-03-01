@@ -137,6 +137,20 @@ Oskari.registerLocalization({
                 atMost: 'at most'
             }
         },
+        coordinates: {
+            lon: "Lon",
+            lat: "Lat",
+            n: "N",
+            e: "E",
+            p: "N",
+            i: "E", 
+            crs: {
+              'EPSG:3067': "ETRS89-TM35FIN coordinates",
+              'EPSG:3575': "North Pole LAEA Europe coordinates",
+              'EPSG:3857': "WGS 84 / Pseudo-Mercator coordinates",
+              default: "{crs} coordinates"
+          },
+        },
         layerTooltipTitle: {
             'wms': 'Raster layer',
             'wmts': 'Raster layer',

@@ -10,7 +10,10 @@ Oskari.registerLocalization(
                 "typeDescription": "Välj vilken typ av gränssnitt du vill lägga till",
                 "serviceDescription": "Ange adress och versionnummer för gränssnittet du vill lägga till",
                 "layersDescription": "Från lagren i gränssnittet väljer du det du vill lägga till som kartlager",
-                "details": "Uppgifter om kartlagret"
+                "details": "Uppgifter om kartlagret",
+                "toggleFlatView": "Listvy",
+                "toggleTreeView": "Trädvy"
+
             },
             "layertype": {
                 "wmslayer": "WMS",
@@ -62,6 +65,7 @@ Oskari.registerLocalization(
             "visualizationTabTitle": "Visualisering",
             "additionalTabTitle": "Ytterligare",
             "permissionsTabTitle": "Rättigheter",
+            "jsonTabTitle": "JSON",
             "interfaceVersionDesc": "Välj primärt den nyaste versionen som stöds av gränssnittet.",
             "attributions": "Tillskrivningar",
             "usernameAndPassword": "Användarnamn och lösenord",
@@ -92,6 +96,15 @@ Oskari.registerLocalization(
                 "desc": "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
                 "service": "Definierad i tjänsten",
                 "overridden": "Filtagg för metadatans"
+            },
+            "jsonTab": {
+                "info": "Dessa verktyg möjliggör avancerad konfiguration, använd med försiktighet.",
+                "fields": {
+                    "attributes": "Attribut",
+                    "capabilities": "Utvald information från kartlagrets capabilities",
+                    "options": "Alternativen (options)",
+                    "params": "Parametrar"
+                }
             },
             "capabilities": {
                 "parsed": "Utvald information från kartlagrets capabilities",
@@ -202,6 +215,18 @@ Oskari.registerLocalization(
                         "noStyles": "Inga sparade stilar",
                         "json": "Stildefinitioner JSON-syntaxen är ogiltig.",
                         "optionalStyles": "Stilen har inte ett giltigt filter."
+                    }
+                },
+                "hover": {
+                    "title": "Framhävning av objekt och verktygstips",
+                    "tooltip": "Verktygstipsrader, som visas för objekt",
+                    "useStyle": "Använd stildefinitioner",
+                    "inherit": "Ärv stildefinitioner",
+                    "effect": "Använd effekten",
+                    "fromProperty": "Använd egenskapen som etikett",
+                    "labelTooltip": {
+                        "key": "Etiketten visas i sin ursprungliga form",
+                        "keyProperty": "Etikettinnehållet tas från den valda egenskapen"
                     }
                 }
             },

@@ -96,7 +96,8 @@ Oskari.registerLocalization(
             }
         },
         "diagram": {
-            "title": "Диаграмма"
+            "title": "Диаграмма",
+            "noValue": "Недоступно"
         },
         "parameters": {
             "sex": "Пол",

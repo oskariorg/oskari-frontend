@@ -1,31 +1,99 @@
-import { LAYER_ID } from "../constants";
+import { AbstractPublisherTool } from '../../../framework/publisher2/tools/AbstractPublisherTool';
+
+import { LAYER_ID } from '../constants';
 const defaultPlugin = 'Oskari.statistics.statsgrid.TogglePlugin';
 
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool', function () {
-}, {
-    /* override if needed */
-    init: function (data) {
-        const id = this.id;
-        const conf = this.getStatsgridConf(data);
-        this.setEnabled(conf[id] === true);
-    },
-    getValues: function () {
+export class AbstractStatsPluginTool extends AbstractPublisherTool {
+    getTool () {
         const id = this._getToolId();
-        return this.getConfiguration({ [id]: this.isEnabled() });
-    },
-    getTool: function () {
-        const id = this._getToolId();
-        const title = this.title;
         return {
-            id: this.pluginId || defaultPlugin,
-            title,
+            id: this.pluginId || (defaultPlugin + '.' + id),
+            title: this.getTitle(),
             config: {
                 [id]: true
             },
             hasNoPlugin: true
         };
-    },
-    _setEnabledImpl: function (enabled) {
+    }
+
+    getTitle () {
+        // TODO: move localizations:
+        // Oskari.getMsg('StatsGrid', 'tool.label' + title)
+        return Oskari.getMsg('Publisher2', 'BasicView.data.' + this.title);
+    }
+
+    getComponent () {
+        return {};
+    }
+
+    init (data) {
+        const id = this.id;
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf[id] === true);
+    }
+
+    getStatsgridBundle () {
+        return Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+    }
+
+    getViewHandler () {
+        const instance = this.getStatsgridBundle();
+        if (!instance) {
+            return;
+        }
+        return instance.getViewHandler();
+    }
+
+    _getToolId () {
+        return this.id || 'AbstractStatsPluginTool';
+    }
+
+    getPlugin () {
+        return this.getViewHandler()?.togglePlugin;
+    }
+
+    getStateHandler () {
+        const instance = this.getStatsgridBundle();
+        if (!instance) {
+            return;
+        }
+        return instance.getStateHandler();
+    }
+
+    /**
+    * @method @private _isStatsActive
+    * @return true when stats layer is on the map, false if removed
+    */
+    _isStatsActive () {
+        return Oskari.getSandbox().isLayerAlreadySelected(LAYER_ID);
+    }
+
+    /**
+     * @method isDisplayed Is displayed.
+     * @returns {Boolean} true, if stats layer is on the map or data contains statsdrid conf
+     */
+    isDisplayed (data) {
+        if (this._isStatsActive()) {
+            return true;
+        }
+        return !!data?.configuration?.statsgrid?.state;
+    }
+
+    getStatsgridConf (initialData) {
+        const conf = initialData?.configuration?.statsgrid?.conf || {};
+        // Setup the plugin location whenever any of the stats tools parse initial config.
+        // There will be "too many calls" to this but it's not too bad and
+        // we want the location always set or reset no matter which tool sets it
+        this.getPlugin()?.setLocation(conf.location?.classes);
+        return conf;
+    }
+
+    // override since we want to use the instance we currently have, not create a new one
+    setEnabled (enabled) {
+        const changed = super.setEnabled(enabled);
+        if (!changed) {
+            return;
+        }
         const handler = this.getViewHandler();
         if (!handler) {
             return;
@@ -35,70 +103,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
         } else {
             handler.getController().removeMapButton(this.id);
         }
-    },
-    _stopImpl: function () {
-        this._setEnabledImpl(false);
-        /*
-        const handler = this.getViewHandler();
-        if (!handler) {
-            return;
-        }
-        handler.getController().removeTool(this.id);
-        */
-    },
-    /* override if needed ends */
-    _getToolId: function () {
-        return this.id || 'AbstractStatsPluginTool';
-    },
+    }
 
-    getStatsgridConf: function (initialData) {
-        const conf = initialData?.configuration?.statsgrid?.conf || {};
-        // Setup the plugin location whenever any of the stats tools parse initial config.
-        // There will be "too many calls" to this but it's not too bad and
-        // we want the location always set or reset no matter which tool sets it
-        this.getStatsgridBundle()?.togglePlugin?.setLocation(conf.location?.classes);
-        return conf;
-    },
+    getValues () {
+        if (!this.isEnabled()) {
+            return null;
+        }
+        const id = this._getToolId();
+        return this.getConfiguration({ [id]: this.isEnabled() });
+    }
 
-    getStatsgridBundle: function () {
-        return Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-    },
-    getViewHandler: function () {
-        const instance = this.getStatsgridBundle();
-        if (!instance) {
-            return;
-        }
-        return instance.getViewHandler();
-    },
-    getStateHandler: function () {
-        const instance = this.getStatsgridBundle();
-        if (!instance) {
-            return;
-        }
-        return instance.getStateHandler();
-    },
-    /**
-    * @method @private _isStatsActive
-    * @return true when stats layer is on the map, false if removed
-    */
-    _isStatsActive: function () {
-        return Oskari.getSandbox().isLayerAlreadySelected(LAYER_ID);
-    },
-    /**
-     * @method isDisplayed Is displayed.
-     * @returns {Boolean} true, if stats layer is on the map or data contains statsdrid conf
-     */
-    isDisplayed: function (data) {
-        if (this._isStatsActive()) {
-            return true;
-        }
-        return Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
-    },
-    getPlugin: function () {
-        var stats = this.getStatsgridBundle();
-        return stats?.togglePlugin;
-    },
-    getConfiguration: function (conf = {}) {
+    getConfiguration (conf = {}) {
         // just to make sure if user removes the statslayer while in publisher
         // if there is no statslayer on map -> don't setup tools configuration
         // otherwise the embedded map will get statsgrid config which means that editing the embedded
@@ -114,6 +129,22 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
             }
         };
     }
-}, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool']
-});
+
+    stop () {
+        const handler = this.getViewHandler();
+        if (!handler) {
+            return;
+        }
+        handler.getController().removeMapButton(this.id);
+    }
+};
+
+/*
+// Attach protocol to make this discoverable by Oskari publisher
+Oskari.clazz.defineES('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool',
+    AbstractStatsPluginTool,
+    {
+        protocol: ['Oskari.mapframework.publisher.Tool']
+    }
+);
+*/

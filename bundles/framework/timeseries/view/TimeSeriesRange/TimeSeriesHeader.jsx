@@ -42,22 +42,22 @@ const getTooltipContent = (mode, modeIcon) => {
     );
 }
 
-export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false, value}) => {
+export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false, value, textColor, hoverColor }) => {
     const helpMessage = <Message messageKey="rangeControl.helpMessage" />;
     const switchButtonMessageKey = mode === 'year' ? 'rangeControl.switchToRange' : 'rangeControl.switchToYear';
     const switchButtonMessage = <Message messageKey={switchButtonMessageKey} />;
     const modeIcon = mode === 'year' ? <LoginOutlined /> : <LogoutOutlined />;
     return (
-        <Header className="timeseries-range-drag-handle">
+        <Header className="timeseries-range-drag-handle" textColor={textColor} hovercolor={hoverColor}>
             {getHeaderContent(title, loading, error, value)}
             <div className="header-mid-spacer"></div>
             <Tooltip title={getTooltipContent(mode, modeIcon)}>
-                <IconButton type="text" size="large">
+                <IconButton type="text" size="large" $textColor={textColor} $hoverColor={hoverColor}>
                     <QuestionCircleOutlined />
                 </IconButton>
             </Tooltip>
             <Tooltip title={switchButtonMessage}>
-                <IconButton type="text" size="large" onClick={() => toggleMode()}>
+                <IconButton type="text" size="large" onClick={() => toggleMode()} $textColor={textColor} $hoverColor={hoverColor}>
                     {modeIcon}
                 </IconButton>
             </Tooltip>
@@ -70,5 +70,8 @@ TimeSeriesHeader.propTypes = {
     title: PropTypes.string.isRequired,
     mode: PropTypes.oneOf(['year', 'range']),
     loading: PropTypes.bool,
-    error: PropTypes.bool
+    error: PropTypes.bool,
+    value: PropTypes.any,
+    textColor: PropTypes.string,
+    hoverColor: PropTypes.string
 };

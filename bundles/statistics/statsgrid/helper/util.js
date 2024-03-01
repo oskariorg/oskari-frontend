@@ -6,13 +6,13 @@
  * @param {Number} max
  */
 export function equalSizeBands (classCount, min, max) {
-    var output = [];
+    const output = [];
     if (classCount < 1) {
         return;
     }
-    var step = (max - min) / classCount;
+    const step = (max - min) / classCount;
 
-    for (var i = 0; i < classCount; i++) {
+    for (let i = 0; i < classCount; i++) {
         output.push(min + step * i);
     }
 

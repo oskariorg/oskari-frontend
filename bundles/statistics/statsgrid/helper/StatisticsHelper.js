@@ -58,24 +58,22 @@ export const populateData = (data, regions, regionset, fractionDigits) => {
     const dataByRegions = [];
     let allInts = true;
     const values = new Set();
-    for (const reg of regions) {
-        const { id, name } = reg;
-        //TODO: validate?
+    // also table assumes that every region has value and list is ordered by regions
+    regions.forEach(({ id, name }) => {
         const value = data[id];
-        const formatted = typeof format === 'function' ? format(value) : '';
-        dataByRegions.push({ id, value, name, formatted });
-        if (value === null || isNaN(value)) {
-            continue;
+        const ignore = value === null || isNaN(value);
+        const formatted = !ignore && typeof format === 'function' ? format(value) : '';
+        // use undefined always to simplify value exits checks and sorting (region without value is sorted last)
+        dataByRegions.push({ id, value: ignore ? undefined : value, name, formatted });
+        if (ignore) {
+            return;
         }
         if (allInts && value % 1 !== 0) {
             allInts = false;
         }
         values.add(value);
-    }
+    });
     const unique = [...values].sort((a, b) => a - b);
-    if (!unique.length) {
-         return { error: 'noData', dataByRegions: [] };
-    }
     return {
         dataByRegions,
         regionset,
@@ -90,7 +88,7 @@ export const populateData = (data, regions, regionset, fractionDigits) => {
 // any additional data will result in broken classification
 export const populateSeriesData = (data, regions, regionset, fractionDigits) => {
     const dataBySelection = {};
-    let seriesValues = [];
+    const seriesValues = [];
     let seriesAllInts = true;
     let seriesMin = Number.POSITIVE_INFINITY;
     let seriesMax = Number.NEGATIVE_INFINITY;
@@ -100,8 +98,13 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
         if (error) {
             return;
         }
-        dataByRegions.forEach(d => seriesValues.push(d.value));
-        seriesMax = seriesMax > max  ? seriesMax : max;
+        dataByRegions.forEach(d => {
+            if (typeof d.value === 'undefined') {
+                return;
+            }
+            seriesValues.push(d.value)
+        });
+        seriesMax = seriesMax > max ? seriesMax : max;
         seriesMin = seriesMin < min ? seriesMin : min;
         if (allInts === false) {
             seriesAllInts = false;
@@ -113,6 +116,7 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
         seriesValues, // needed for series bounds
         min: seriesMin,
         max: seriesMax,
+        allInts: seriesAllInts,
         uniqueCount: new Set(seriesValues).size
     };
 };
@@ -121,16 +125,20 @@ export const formatData = (data, classification) => {
     const { dataByRegions, dataBySelection } = data;
     const { format } = Oskari.getNumberFormatter(classification.fractionDigits);
     if (dataByRegions) {
-        dataByRegions.forEach(region => region.formatted = format(region.value));
+        dataByRegions.forEach(region => {
+            region.formatted = format(region.value);
+        });
     } else if (dataBySelection) {
         Object.keys(dataBySelection).forEach(selector => {
-            dataBySelection[selector].forEach(region => region.formatted = format(region.value));
+            dataBySelection[selector].forEach(region => {
+                region.formatted = format(region.value);
+            });
         });
     }
 };
 
 export const getUILabels = (ind, metadata) => {
-    const selectionValues = Oskari.getMsg('StatsGrid' ,'panels.newSearch.selectionValues');
+    const selectionValues = Oskari.getMsg('StatsGrid', 'panels.newSearch.selectionValues');
     const { selections, series } = ind;
     const getError = () => ({
         error: true,
@@ -190,7 +198,7 @@ export const getUpdatedLabels = (labels, selections) => {
         return labels;
     }
     // Doesn't validate selectors
-    const paramsList = Object.keys(selections).map( selector => {
+    const paramsList = Object.keys(selections).map(selector => {
         const value = selections[selector];
         return {
             selector,

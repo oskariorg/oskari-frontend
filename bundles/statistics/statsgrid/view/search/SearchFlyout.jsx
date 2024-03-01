@@ -44,7 +44,7 @@ const IndicatorField = styled('div')`
 const ClickableArea = ({ children }) => <div>{children}</div>;
 
 const SearchFlyout = ({ state, controller }) => {
-    const datasources =  getDatasources();
+    const datasources = getDatasources();
     const regionsets = getRegionsets();
     if (!datasources.length || !regionsets.length) {
         // Nothing to show -> show generic "data missing" message
@@ -129,6 +129,7 @@ const SearchFlyout = ({ state, controller }) => {
                 <IndicatorParams
                     allRegionsets={regionsets}
                     params={state.indicatorParams}
+                    regionsetFilter={state.regionsetFilter}
                     searchTimeseries={state.searchTimeseries}
                     controller={controller}
                 />
@@ -163,6 +164,7 @@ export const showSearchFlyout = (state, indicators = [], searchController, state
                 <SearchFlyout state={state} controller={searchController} />
                 <IndicatorCollapse indicators={indicators}
                     removeIndicator={stateController.removeIndicator}
+                    removeAll={stateController.resetState}
                     showMetadata={searchController.openMetadataPopup}/>
             </Content>
         </LocaleProvider>,
@@ -179,6 +181,7 @@ export const showSearchFlyout = (state, indicators = [], searchController, state
                     <SearchFlyout state={state} controller={searchController} />
                     <IndicatorCollapse indicators={indicators}
                         removeIndicator={stateController.removeIndicator}
+                        removeAll={stateController.resetState}
                         showMetadata={searchController.openMetadataPopup}/>
                 </Content>
             </LocaleProvider>

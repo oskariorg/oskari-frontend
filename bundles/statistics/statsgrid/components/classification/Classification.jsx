@@ -49,7 +49,7 @@ export const Classification = ({
     pluginState
 }) => {
     const [isEdit, setEdit] = useState(false);
-    const { layer, classification: {transparent, editEnabled} } = pluginState;
+    const { layer, classification: { transparent, editEnabled } } = pluginState;
     const { activeIndicator, indicators } = state;
     const current = indicators.find(ind => ind.hash === activeIndicator);
     if (!current) {
@@ -121,7 +121,7 @@ export const showClassificationContainer = (state, viewState, controller, option
                         showHistogram={showHistogram}
                     />
                 </LocaleProvider>
-            )
+            );
         }
     };
 };

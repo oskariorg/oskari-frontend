@@ -56,13 +56,16 @@ export const getClassification = (data, metadata = {}, lastSelected = {}) => {
         classification.fractionDigits = metadata.decimalCount;
     }
     if (typeof metadata.base === 'number') {
-        // if there is a base value the data is divided at base value
-        classification.base = metadata.base;
-        classification.type = 'div';
+        // doesn't make sense to use divided classification if data isn't divided
+        if (data.min < metadata.base && data.max > metadata.base) {
+            // if there is a base value the data is divided at base value
+            classification.base = metadata.base;
+            classification.type = 'div';
+        }
     }
     validateClassification(classification, data);
     return classification;
-}
+};
 
 export const validateClassification = (classification, data = {}) => {
     if (!validateColor(classification)) {
@@ -81,13 +84,13 @@ export const validateClassification = (classification, data = {}) => {
     if (data.seriesValues) {
         classification.mode = 'distinct';
     }
-}
+};
 
 export const getGroupStats = (dataBySelection) => {
     const values = Object.values(dataBySelection)
         .reduce((all, data) => [...all, ...Object.values(data)], []);
     return new geostats(values);
-}
+};
 
 /**
  * Classifies given dataset.
@@ -97,54 +100,20 @@ export const getGroupStats = (dataBySelection) => {
  * @return {Object}               result with classified values
  */
 export const getClassifiedData = (indicator, groupStats) => {
-    const { classification: opts, data: {seriesValues} } = indicator;
+    const { classification: opts, data: { seriesValues } } = indicator;
     if (seriesValues && seriesValues.length < 3) {
         return { error: 'noEnough' };
     }
     const dataByRegions = getDataByRegions(indicator);
-    const values = seriesValues ? seriesValues : dataByRegions.map(d => d.value);
+    const values = seriesValues || dataByRegions.map(d => d.value).filter(val => typeof val !== 'undefined');
     const isDivided = opts.type === 'div';
     const { format } = Oskari.getNumberFormatter(opts.fractionDigits);
-    var stats = new geostats(values);
+
+    const stats = new geostats(values);
     stats.silent = true;
     stats.setPrecision();
-    let bounds;
-    const setBounds = (stats) => {
-        if (opts.method === 'jenks') {
-            bounds = stats.getClassJenks(opts.count);
-        } else if (opts.method === 'quantile') {
-            bounds = stats.getQuantile(opts.count);
-        } else if (opts.method === 'equal') {
-            bounds = stats.getEqInterval(opts.count);
-        } else if (opts.method === 'manual') {
-            bounds = getBoundsFallback(opts.manualBounds, opts.count, stats.min(), stats.max());
-            stats.setBounds(bounds);
-        }
-    };
-    // TODO: remove
-    if (groupStats) {
-        groupStats.silent = true;
-        var groupOpts = groupStats.classificationOptions || {};
-        const calculateBounds =
-            groupOpts.method !== opts.method ||
-            groupOpts.count !== opts.count ||
-            (opts.method === 'manual' && !Oskari.util.arraysEqual(groupStats.bounds, opts.manualBounds));
 
-        if (calculateBounds) {
-            setBounds(groupStats);
-            groupOpts.method = opts.method;
-            groupOpts.count = opts.count;
-            groupStats.classificationOptions = groupOpts;
-        } else {
-            bounds = groupStats.bounds;
-        }
-        // Set bounds manually.
-        stats.setBounds(groupStats.bounds);
-    } else if (isDivided) {
-        bounds = getDividedBounds(stats, opts);
-    } else {
-        setBounds(stats);
-    }
+    const bounds = isDivided ? getDividedBounds(stats, opts) : getBounds(stats, opts);
     if (bounds.some(bound => isNaN(bound))) {
         console.warn('Failed to create bounds');
         return { error: 'noEnough' };
@@ -182,7 +151,7 @@ export const getClassifiedData = (indicator, groupStats) => {
             // no value for region -> skip
             return;
         }
-        var index = getGroupForValue(value);
+        const index = getGroupForValue(value);
         groups[index].regionIds.push(id);
     });
     const statistics = {
@@ -199,9 +168,26 @@ export const getClassifiedData = (indicator, groupStats) => {
     return {
         groups,
         bounds,
-        format, // TODO: remove when all components uses formatted value
         stats: statistics
     };
+};
+
+const getBounds = (stats, opts) => {
+    if (opts.method === 'jenks') {
+        return stats.getClassJenks(opts.count);
+    }
+    if (opts.method === 'quantile') {
+        return stats.getQuantile(opts.count);
+    }
+    if (opts.method === 'equal') {
+        return stats.getEqInterval(opts.count);
+    }
+    if (opts.method === 'manual') {
+        const bounds = getBoundsFallback(opts.manualBounds, opts.count, stats.min(), stats.max());
+        stats.setBounds(bounds);
+        return bounds;
+    }
+    return [];
 };
 
 const getPixelsForClassification = (classification, index) => {
@@ -364,7 +350,8 @@ const _tryBounds = (bounds, count, dataMin, dataMax) => {
 
 export const getEditOptions = (classification, data) => {
     const { type, count, reverseColors, mapStyle, base, method } = classification;
-    const { min: minValue, max: maxValue, uniqueCount } = data;
+    const { min: minValue, max: maxValue } = data;
+    let { uniqueCount } = data;
 
     const { methods, modes, mapStyles, types, fractionDigits } = LIMITS;
     const { min, max } = mapStyle === 'points' ? LIMITS.count : getRange(type);

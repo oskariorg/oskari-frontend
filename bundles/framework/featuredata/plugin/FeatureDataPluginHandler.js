@@ -231,7 +231,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     openExportDataPopup () {
         if (this.exportDataPopupController) {
-            this.closeSelectByPropertiesPopupPopup();
+            this.closeExportDataPopup();
             return;
         }
         this.exportDataPopupController = showExportDataPopup(this.getState(), this.getController());
@@ -255,6 +255,15 @@ class FeatureDataPluginUIHandler extends StateHandler {
         const activeLayer = this.mapModule.getSandbox().findMapLayerFromSelectedMapLayers(newActiveLayerId) || null;
         const activeLayerProperties = activeLayer?.getProperties() || null;
         let allColumns = activeLayerProperties?.map((property) => property.name);
+
+        // for some reason no properties for layer -> resort to features as last fallback.
+        if (!allColumns?.length) {
+            const features = this.getFeaturesByLayerId(newActiveLayerId);
+            if (features?.length) {
+                allColumns = Object.keys(features[0]?.properties) || [];
+            }
+        }
+
         const activeLayerPropertyLabels = activeLayer?.getPropertyLabels() || null;
         const activeLayerPropertyTypes = activeLayer?.getPropertyTypes() || null;
         const newVisibleColumns = activeLayerChanged ? [].concat(allColumns) : visibleColumnsSettings?.visibleColumns ? visibleColumnsSettings.visibleColumns : [].concat(allColumns);

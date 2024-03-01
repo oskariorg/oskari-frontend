@@ -4,6 +4,7 @@ import { mergeValues } from '../util/util';
 import { Messaging, ThemeProvider } from 'oskari-ui/util';
 import { Header } from 'oskari-ui';
 import styled from 'styled-components';
+import './PanelReactTools';
 
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
@@ -26,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
      *
      */
     function (instance, localization, data) {
-        var me = this;
+        const me = this;
         me.data = data;
         me.panels = [];
         me.instance = instance;
@@ -114,10 +115,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             mapLayersPanel.getPanel().addClass('t_layers');
             this.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
-
+            // separate tools that support react from ones that don't
+            const reactGroups = ['additional', 'data'];
+            const reactGroupsTools = {};
             // create panel for each tool group
             Object.keys(publisherTools.groups).forEach(group => {
                 const tools = publisherTools.groups[group];
+                if (reactGroups.includes(group)) {
+                    // panels with react groups handled after this
+                    reactGroupsTools[group] = tools;
+                    return;
+                }
                 const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     group, tools, this.instance, this.loc
                 );
@@ -130,6 +138,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     accordion.addPanel(panel);
                 }
             });
+            Object.keys(reactGroupsTools).forEach(group => {
+                const tools = reactGroupsTools[group];
+                const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelReactTools', tools, group);
+                const hasToolsToShow = toolPanel.init(this.data);
+                this.panels.push(toolPanel);
+                if (hasToolsToShow) {
+                    const panel = toolPanel.getPanel();
+                    panel.addClass('t_tools');
+                    panel.addClass('t_' + group);
+                    accordion.addPanel(panel);
+                }
+            });
+
             // add RPC panel if there are tools for it
             if (rpcTools) {
                 const rpcPanel = this._createRpcPanel(rpcTools);
@@ -257,7 +278,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _createToolGroupings: function () {
             const sandbox = this.instance.getSandbox();
             const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            const definedTools = [...Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool'), ...Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool')];
+            const definedTools = [...Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool'),
+                ...Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool')
+            ];
+
             const grouping = {};
             const allTools = [];
             // group tools per tool-group
@@ -465,7 +489,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 this._disablePreview();
             }
         },
-
         /**
          * @private @method _enablePreview
          * Modifies the main map to show what the published map would look like

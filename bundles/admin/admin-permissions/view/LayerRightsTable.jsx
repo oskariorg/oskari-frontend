@@ -88,6 +88,9 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             });
         return checked;
     };
+
+    const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+
     const columnSettings = [];
     const permissionNames = getPermissionNames(state.permissions?.names);
     if (permissionNames.length) {
@@ -97,6 +100,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             dataIndex: 'name',
             sorter: getSorterFor('name'),
             render: (title, item) => {
+                const layer = mapLayerService.findMapLayer(item.id);
                 let layerType = item.layerType;
                 if (layerType !== 'analysislayer' && layerType !== 'userlayer' && layerType?.includes('layer')) {
                     // Change 'wmslayer' to 'wms' etc. for translations & icons
@@ -107,6 +111,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
                         {layerType && (
                             <StyledLayerIcon
                                 type={layerType}
+                                hasTimeseries={layer?.hasTimeseries()}
                             />
                         )}
                         {title}

@@ -3,7 +3,17 @@ import { showMedataPopup } from '../components/description/MetadataPopup';
 import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
 import { getIndicatorMetadata, getIndicatorData } from './IndicatorHelper';
-import { getDatasources, getUnsupportedDatasourceIds } from '../helper/ConfigHelper';
+import { getDatasources, getUnsupportedDatasourceIds, getRegionsets } from '../helper/ConfigHelper';
+
+const getValueAsArray = (selection) => {
+    if (selection === null || typeof selection === 'undefined') {
+        return [];
+    }
+    if (Array.isArray(selection)) {
+        return selection;
+    }
+    return [selection];
+};
 
 class SearchController extends StateHandler {
     constructor (instance, stateHandler) {
@@ -70,7 +80,10 @@ class SearchController extends StateHandler {
                         Messaging.error(this.loc('errors.indicatorListIsEmpty'));
                     }
                 },
-                error => Messaging.error(this.loc(error)));
+                error => {
+                    Messaging.error(this.loc(error));
+                    this.updateState({loading: false});
+                })
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorListError'));
             this.updateState({
@@ -244,7 +257,7 @@ class SearchController extends StateHandler {
 
     handleMultipleIndicatorParams () {
         const indicators = this.getState().selectedIndicators.filter((n) => { return n !== ''; });
-        let combinedValues = {};
+        const combinedValues = {};
         let regionsets = [];
 
         const addMissingElements = (list, newValues, propertyName) => {
@@ -344,12 +357,14 @@ class SearchController extends StateHandler {
     }
 
     initParamSelections (selectors, regionsets) {
-        let selections = {};
+        const { regionsetFilter, searchTimeseries } = this.getState();
+        const selections = {};
         Object.keys(selectors).forEach(key => {
             let selected;
             if (selectors[key].time) {
-                selected = selectors[key].values[0].id;
-                if (this.getState().searchTimeseries) {
+                // time has multi-select => use array
+                selected = [selectors[key].values[0].id];
+                if (searchTimeseries) {
                     if (selectors[key].values?.length <= 1) {
                         Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
                         this.updateState({
@@ -366,7 +381,10 @@ class SearchController extends StateHandler {
 
             selections[key] = selected;
         });
-        selections.regionsets = regionsets[0];
+        // metadata regionsets doesn't have same order than all regionsets
+        // select first allowed value from all regionsets
+        const allowedIds = regionsetFilter.length ? regionsets.filter(id => regionsetFilter.includes(id)) : regionsets;
+        selections.regionsets = getRegionsets().find(rs => allowedIds.includes(rs.id))?.id;
         return selections;
     }
 
@@ -434,8 +452,9 @@ class SearchController extends StateHandler {
      * @param {Object} commonSearchValues User's selected values from the search form
      */
     async handleMultipleIndicatorsSearch (commonSearchValues) {
-        const indicators = Array.isArray(commonSearchValues.indicator) ? commonSearchValues.indicator : [commonSearchValues.indicator];
-        if (!commonSearchValues.indicator || indicators.length === 0) {
+        const indicators = getValueAsArray(commonSearchValues.indicator);
+        if (indicators.length === 0) {
+            // nothing selected
             return;
         }
         const refinedSearchValues = [];
@@ -532,7 +551,7 @@ class SearchController extends StateHandler {
      */
     getRefinedSearch (metadata, commonSearchValues) {
         // Make a deep clone of search values
-        var indSearchValues = jQuery.extend(true, {}, commonSearchValues);
+        const indSearchValues = jQuery.extend(true, {}, commonSearchValues);
         const { regionset, selections, series } = indSearchValues;
 
         if (Array.isArray(metadata.regionsets) && !metadata.regionsets.includes(Number(regionset))) {
@@ -655,7 +674,7 @@ class SearchController extends StateHandler {
             batch.push(search);
         });
         const nextBatch = async () => {
-            let batch = batches.pop();
+            const batch = batches.pop();
             if (batch) {
                 await consumeBatch(batch);
             }
@@ -738,17 +757,17 @@ class SearchController extends StateHandler {
         }
     }
 
-    addIndicators (searchValues) {
+    async addIndicators (searchValues) {
         let latestHash = null;
-        searchValues.forEach(values => {
+        for (let i = 0; i < searchValues.length; i++) {
             // TODO: search values indicator => id, datasource => ds
-            const { datasource: ds, indicator: id, regionset, ...rest } = values;
+            const { datasource: ds, indicator: id, regionset, ...rest } = searchValues[i];
             const indicator = { id, ds, ...rest };
             indicator.hash = getHashForIndicator(indicator);
-            if (this.stateHandler.addIndicator(indicator, regionset)) {
+            if (await this.stateHandler.addIndicator(indicator, regionset)) {
                 latestHash = indicator.hash;
             }
-        });
+        };
         if (latestHash) {
             // Search added some new indicators, let's set the last one as the active indicator.
             this.stateHandler.setActiveIndicator(latestHash);

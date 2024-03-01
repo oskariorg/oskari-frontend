@@ -1,35 +1,47 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', function () {
-}, {
-    index: 1,
-    group: 'data',
-    id: 'allowClassification',
-    title: 'allowClassification',
+import { AbstractStatsPluginTool } from './AbstractStatsPluginTool';
 
-    init: function (data) {
+class ClassificationTool extends AbstractStatsPluginTool {
+    constructor (...args) {
+        super(...args);
+        this.index = 1;
+        this.group = 'data';
+        this.id = 'allowClassification';
+        this.title = 'allowClassification';
+    }
+
+    init (data) {
         const conf = this.getStatsgridConf(data);
         this.setEnabled(conf[this.id] !== false);
-    },
-    _setEnabledImpl: function (enabled) {
+    }
+
+    setEnabled (enabled) {
+        if (enabled === this.isEnabled()) {
+            return;
+        }
+
+        // Stop checks if we are already disabled so toggle the value after
+        this.state.enabled = enabled;
         const handler = this.getViewHandler();
         if (!handler) {
             return;
         }
-        handler.getController().updateClassificationState('editEnabled', enabled);
-    },
-    _stopImpl: function () {
+        handler.updateClassificationState('editEnabled', enabled);
+    }
+
+    stop () {
         const handler = this.getViewHandler();
         if (!handler) {
             return;
         }
-        handler.getController().updateClassificationState('editEnabled');
-    },
+        handler.updateClassificationState('editEnabled', true);
+    }
+
     // TODO: is this main tool (always included)??
-    getValues: function () {
+    getValues () {
         if (!this._isStatsActive()) {
             return null;
         }
-        var stats = this.getStatsgridBundle();
-        const { location } = stats?.togglePlugin?.getConfig() || {};
+        const { location } = this.getPlugin().getConfig() || {};
         return {
             configuration: {
                 statsgrid: {
@@ -39,12 +51,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
                             classes: 'bottom right'
                         }
                     },
-                    state: this.__sandbox.getStatefulComponents().statsgrid.getState()
+                    state: this.getSandbox().getStatefulComponents().statsgrid.getState()
                 }
             }
         };
     }
-}, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
-    'protocol': ['Oskari.mapframework.publisher.Tool']
-});
+};
+
+// Attach protocol to make this discoverable by Oskari publisher
+Oskari.clazz.defineES('Oskari.mapframework.publisher.tool.ClassificationTool',
+    ClassificationTool,
+    {
+        protocol: ['Oskari.mapframework.publisher.Tool']
+    }
+);
