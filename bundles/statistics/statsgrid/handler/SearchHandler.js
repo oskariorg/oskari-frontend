@@ -348,9 +348,6 @@ class SearchController extends StateHandler {
      * This function rules out any unsupported selection parameters for each indicator and warns user of invalid values.
      * (f.ex.Selected year out of range)
      *
-     *
-     * @param {Object} commonSearchValues User's selected values from the search form
-     * 
      * @param {Object} commonSearchValues User's selected values from the search form
      */
     async handleMultipleIndicatorsSearch () {
