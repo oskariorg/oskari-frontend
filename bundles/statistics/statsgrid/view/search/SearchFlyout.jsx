@@ -7,6 +7,7 @@ import { LocaleProvider } from 'oskari-ui/util';
 import { IndicatorParams } from './IndicatorParams';
 import { IndicatorCollapse } from './IndicatorCollapse';
 import { getDatasources, getRegionsets } from '../../helper/ConfigHelper';
+import { validateSelectionsForSearch } from '../../handler/SearchIndicatorOptionsHelper';
 
 const BUNDLE_KEY = 'StatsGrid';
 const Content = styled('div')`
@@ -97,7 +98,7 @@ const SearchFlyout = ({ state, controller }) => {
                         <StyledSelect
                             mode='multiple'
                             optionFilterProp='label'
-                            options={state?.indicatorOptions?.map(i => ({ value: i.id, label: i.title, disabled: !!i.disabled }))}
+                            options={state?.indicatorOptions?.map(i => ({ value: i.id, label: i.name, disabled: !!i.disabled }))}
                             placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
                             disabled={!state?.indicatorOptions || state?.indicatorOptions?.length < 1}
                             value={state?.selectedIndicators}
@@ -122,18 +123,10 @@ const SearchFlyout = ({ state, controller }) => {
                 </div>
             )}
             <b><Message messageKey='panels.newSearch.refineSearchLabel' /></b>
-            {!state.indicatorParams && (
-                <i><Message messageKey='panels.newSearch.refineSearchTooltip1' /></i>
-            )}
-            {state.indicatorParams && (
-                <IndicatorParams
-                    allRegionsets={regionsets}
-                    params={state.indicatorParams}
-                    regionsetFilter={state.regionsetFilter}
-                    searchTimeseries={state.searchTimeseries}
-                    controller={controller}
-                />
-            )}
+            <IndicatorParams
+                allRegionsets={regionsets}
+                state={state}
+                controller={controller}/>
             <ButtonContainer>
                 <SecondaryButton
                     type='clear'
@@ -141,13 +134,12 @@ const SearchFlyout = ({ state, controller }) => {
                 />
                 <PrimaryButton
                     type='search'
-                    disabled={state.selectedIndicators?.length < 1}
+                    disabled={!validateSelectionsForSearch(state)}
                     onClick={() => controller.search()}
                 />
             </ButtonContainer>
         </React.Fragment>
     );
-
     if (state.loading) {
         return <Spin showTip={true}>{Component}</Spin>;
     }
