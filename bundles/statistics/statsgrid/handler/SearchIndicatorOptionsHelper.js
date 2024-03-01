@@ -114,6 +114,31 @@ export const populateIndicatorOptions = async (datasourceId, successCallback, er
 */
 
 /*
+------------------ HELPERS ------------------------
+*/
+export const validateSelectionsForSearch = (state) => {
+    const { indicatorParams: { selections, selectors }, selectedRegionset, selectedIndicators } = state;
+    if (!selectedIndicators.length || !selectedRegionset || !selections) {
+        return false;
+    }
+    const keys = Object.keys(selections);
+    if (keys.length !== Object.keys(selectors).length) {
+        return false;
+    }
+    return keys.every(key => {
+        const selection = selections[key];
+        if (Array.isArray(selection)) {
+            return selection.length > 0;
+        }
+        return selection === 0 || selection;
+    });
+};
+
+/*
+------------------ /HELPERS ------------------------
+*/
+
+/*
 ------------------ INTERNAL HELPERS ------------------------
 */
 
