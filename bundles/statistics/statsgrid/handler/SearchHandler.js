@@ -288,7 +288,7 @@ class SearchController extends StateHandler {
             const cur = current[key];
             if (time) {
                 if (searchTimeseries) {
-                    return cur.length === 2
+                    return cur.length === 2 && cur[0] < cur[1];
                 }
                 return Array.isArray(cur) && cur.some(id => allowed.includes(id));
             }
@@ -311,8 +311,7 @@ class SearchController extends StateHandler {
                     Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
                     this.updateState({ searchTimeseries: false });
                 } else {
-                    const last = allowed[allowed.length - 1];
-                    selected.push(last);
+                    selected.unshift(allowed[allowed.length - 1]);
                 }
             }
             selections[key] = selected;
