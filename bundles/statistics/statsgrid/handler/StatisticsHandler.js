@@ -218,6 +218,11 @@ class StatisticsController extends StateHandlerBase {
         }
     }
 
+    async selectIndicator (indicator, regionset) {
+        await this.addIndicator(indicator, regionset);
+        this.setActiveIndicator(indicator.hash);
+    }
+
     async addIndicator (indicator, regionset) {
         if (this.isIndicatorSelected(indicator, true)) {
             // already selected
@@ -287,6 +292,7 @@ const wrapped = controllerMixin(StatisticsController, [
     'setActiveRegionset',
     'setActiveRegion',
     'addIndicator',
+    'selectIndicator',
     'resetState',
     'updateIndicator',
     'updateClassification',
