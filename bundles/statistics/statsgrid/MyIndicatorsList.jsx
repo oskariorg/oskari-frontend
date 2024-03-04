@@ -16,7 +16,7 @@ const editIconStyle = {
     fontSize: '16px'
 };
 
-export const MyIndicatorsList = ({ controller, data = [], loading }) => {
+export const MyIndicatorsList = ({ controller, indicators = [], loading }) => {
     const columnSettings = [
         {
             dataIndex: 'name',
@@ -80,7 +80,7 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
             </ButtonContainer>
             <Table
                 columns={columnSettings}
-                dataSource={data.map(item => ({
+                dataSource={indicators.map(item => ({
                     key: item.id,
                     ...item
                 }))}
@@ -92,7 +92,7 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
 };
 
 MyIndicatorsList.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.object),
+    indicators: PropTypes.arrayOf(PropTypes.object),
     controller: PropTypes.object.isRequired,
     loading: PropTypes.bool
 };
