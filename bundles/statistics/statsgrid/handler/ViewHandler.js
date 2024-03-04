@@ -194,7 +194,7 @@ class UIHandler extends StateHandler {
     }
 
     openSearchWithSelections (indicator) {
-        //this.searchHandler.selectValues(indicator);
+        this.searchHandler.getController().populateForm(indicator);
         this.show('search');
     }
 
@@ -236,7 +236,7 @@ class UIHandler extends StateHandler {
             };
             controls = showIndicatorForm(this.formHandler.getState(), this.formHandler.getController(), onCloseWrapper);
         } else if (id === 'clipboard' && this.formHandler) {
-            controls = showClipboardPopup(this.formHandler.getState(), this.formHandler.getController(), onClose);
+            controls = showClipboardPopup(this.formHandler.getController(), onClose);
         } else if (id === 'series') {
             controls = this._createSeriesControls();
         } else {

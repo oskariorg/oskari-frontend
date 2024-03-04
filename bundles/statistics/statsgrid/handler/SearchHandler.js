@@ -50,6 +50,14 @@ class SearchController extends StateHandler {
         this.updateState(this.getInitialState());
     }
 
+    async populateForm (indicator) {
+        const { id, ds } = indicator;
+        this.updateState({ selectedDatasource: ds });
+        await this.fetchindicatorOptions();
+        const indicators = id ? [id] : [];
+        this.setSelectedIndicators(indicators);
+    }
+
     async fetchindicatorOptions () {
         const { selectedDatasource, isUserDatasource } = this.getState();
         if (!selectedDatasource) {
@@ -843,7 +851,8 @@ const wrapped = controllerMixin(SearchController, [
     'openMetadataPopup',
     'setParamSelection',
     'search',
-    'showIndicatorForm'
+    'showIndicatorForm',
+    'populateForm'
 ]);
 
 export { wrapped as SearchHandler };
