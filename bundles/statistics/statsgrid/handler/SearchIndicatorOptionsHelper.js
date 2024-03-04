@@ -37,17 +37,13 @@ export const updateIndicatorListInCache = (indicator, regionsetId) => {
     if (!cachedIndicator) {
         // insert
         // only inject when guest user, otherwise flush from cache
-        const toAdd = {
+        cachedResponse.indicators.push({
             id: indicator.id,
-            name: indicator.name
-        };
-        if (regionsetId) {
-            toAdd.regionsets = [regionsetId];
-        }
-        cachedResponse.indicators.push(toAdd);
+            name: indicator.name,
+            regionsets: regionsetId ? [regionsetId] : []
+        });
         return indicator;
     }
-    // name not sent when updating regionset, TODO: why?
     cachedIndicator.name = indicator.name || cachedIndicator.name;
     // update regionset
     // this updates the cache as well as mutable objects are being passed around
