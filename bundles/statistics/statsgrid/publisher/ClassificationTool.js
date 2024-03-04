@@ -36,12 +36,15 @@ class ClassificationTool extends AbstractStatsPluginTool {
         handler.updateClassificationState('editEnabled', true);
     }
 
-    // TODO: is this main tool (always included)??
+    // Classification is always present with thematic maps: either as a button toggle OR always on screen
+    // That is why _this tool_ writes the "main config/state" for embedded map
+    // Other statsgrid tools assume that the state (selected indicators etc) is written by something else and
+    // their getValues() only return a mergeable change that controls their setting
     getValues () {
         if (!this._isStatsActive()) {
             return null;
         }
-        const { location } = this.getPlugin().getConfig() || {};
+        const { location } = this.getPlugin()?.getConfig() || {};
         return {
             configuration: {
                 statsgrid: {
