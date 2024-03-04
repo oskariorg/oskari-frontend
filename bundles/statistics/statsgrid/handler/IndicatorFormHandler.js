@@ -32,26 +32,19 @@ class IndicatorFormController extends StateHandler {
         this.instance.getViewHandler().show('clipboard');
     }
 
-    // TODO: why state doesn't use same syntax for indicator than others (ds, source, id, selections)
     getSelectedIndicator(full) {
         const { indicatorName, indicatorDescription, indicatorSource, datasourceId, indicatorId, datasetYear } = this.getState();
-        if (!full) {
-            return {
-                ds: datasourceId,
-                id: indicatorId,
-                selections: { [SELECTOR]: datasetYear }
-            }
-        }
         const indicator = {
             ds: datasourceId,
-            name: indicatorName,
-            description: indicatorDescription,
-            source: indicatorSource,
-            selections: { [SELECTOR]: datasetYear }
-        };
-        if (indicatorId) {
-            indicator.id = indicatorId;
+            id: indicatorId,
+            selections: datasetYear ? { [SELECTOR]: datasetYear } : {}
         }
+        if (!full) {
+            return indicator;
+        }
+        indicator.name = indicatorName;
+        indicator.description = indicatorDescription;
+        indicator.source = indicatorSource;
         return indicator;
     }
 
@@ -320,7 +313,6 @@ class IndicatorFormController extends StateHandler {
         const selections = { [SELECTOR]: item[SELECTOR]};
         const indicator = {...this.getSelectedIndicator(), selections };
         indicator.hash = getHashForIndicator(indicator);
-
         const handler = this.instance.getStateHandler();
         if (handler?.isIndicatorSelected(indicator, true)) {
             handler.getController().removeIndicator(indicator);
