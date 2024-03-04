@@ -10,7 +10,7 @@ const getMetaCacheKey = (datasourceId, indicatorId) => 'ds_' + datasourceId + '_
 const getDataCacheKey = (indicator, regionsetId) => 'hash_' + indicator.hash + '_rs_' + regionsetId;
 
 // for guest user's own indicators
-const updateIndicatorMetadataInCache = (indicator) => {
+const updateIndicatorMetadataInCache = (indicator, regionsetId) => {
     const { id, ds, selections = {} } = indicator;
     const cacheKey = getMetaCacheKey(ds, id);
     const cachedResponse = indicatorMetadataStore[cacheKey];
@@ -25,7 +25,6 @@ const updateIndicatorMetadataInCache = (indicator) => {
             allowedValues: [{name: value, id: value}]
         };
     });
-    // TODO: regionsets
     if (!cachedResponse) {
         indicatorMetadataStore[cacheKey] = {
             public: true,
@@ -34,10 +33,16 @@ const updateIndicatorMetadataInCache = (indicator) => {
             name: {[lang]: indicator.name},
             description: {[lang]: indicator.description},
             source: {[lang]: indicator.source},
-            regionsets: [],
+            regionsets: regionsetId ? [regionsetId] : [],
             selectors
         };
         return;
+    }
+    cachedResponse.name[lang] = indicator.name;
+    cachedResponse.description[lang] = indicator.description;
+    cachedResponse.source[lang] = indicator.source;
+    if (regionsetId && !cachedResponse.regionsets.includes(regionsetId)) {
+        cachedResponse.regionsets.push(regionsetId);
     }
     // update allowed values
     const { selectors: cachedSelectors } = cachedResponse;
@@ -161,8 +166,10 @@ export const saveIndicator = async (indicator) => {
         throw new Error('Indicator missing');
     }
     if (!Oskari.user().isLoggedIn()) {
-        const id = indicator.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
-        updateIndicatorListInCache({ ...indicator, id });
+        const id =  indicator.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
+        const saved = { ...indicator, id };
+        updateIndicatorListInCache(saved);
+        updateIndicatorMetadataInCache(saved);
         return id;
     }
     // All keys used in Frontend doesn't match backend
@@ -204,6 +211,7 @@ export const saveIndicatorData = async (indicator, data, regionsetId) => {
         // successfully saved for guest user
         indicatorDataStore[cacheKey] = data;
         updateIndicatorListInCache(indicator, regionsetId);
+        updateIndicatorMetadataInCache(indicator, regionsetId);
         return;
     }
     // send data to server for logged in users
