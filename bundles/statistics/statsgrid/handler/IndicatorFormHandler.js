@@ -189,7 +189,11 @@ class IndicatorFormController extends StateHandler {
             regions = await getRegionsAsync(regionsetId);
             let data = {};
             if (indicator.id) {
-                data = await getIndicatorData(indicator, regionsetId);
+                try {
+                    data = await getIndicatorData(indicator, regionsetId);
+                } catch (e) {
+                    // no data saved for selections
+                }
             }
             const formRegions = [...regions].sort((a, b) => a.name.localeCompare(b.name)).map((region) => {
                 return {
@@ -208,21 +212,7 @@ class IndicatorFormController extends StateHandler {
             });
         } catch (error) {
             Messaging.error(Oskari.getMsg('StatsGrid', 'errors.regionsDataError'));
-            // TODO: is this needed?
-            if (regions) {
-                /*
-                this.updateState({
-                    loading: false,
-                    selectedDataset: dataset,
-                    formData: {
-                        regions: formRegions,
-                        labels
-                    }
-                });
-                */
-            } else {
-                this.cancelForm();
-            }
+            this.cancelForm();
         }
     }
 
@@ -266,8 +256,10 @@ class IndicatorFormController extends StateHandler {
             if (Object.keys(data).length) {
                 await saveIndicatorData(indicator, data, datasetRegionset);
                 this.log.info('Saved data form values', data, 'Indicator: ' + indicator.id);
+                // add indicator only when data is saved
+                this.selectSavedIndicator(indicator, datasetRegionset);
             }
-            this.selectSavedIndicator(indicator, datasetRegionset);
+            Messaging.success(this.loc('userIndicators.dialog.successMsg'));
             this.cancelForm();
             this.preparePopupData(indicator);
         } catch (error) {
@@ -277,9 +269,7 @@ class IndicatorFormController extends StateHandler {
     }
 
     selectSavedIndicator (indicator, regionset) {
-        const handler = this.instance.getStateHandler();
-        handler?.addIndicator(indicator, regionset);
-        handler?.setActiveIndicator(indicator.hash);
+        this.instance.getStateHandler()?.getController().selectIndicator(indicator, regionset);
     }
 
     importFromClipboard (data) {
@@ -288,9 +278,8 @@ class IndicatorFormController extends StateHandler {
         const lines = data.match(/[^\r\n]+/g);
         // loop through all the lines and parse municipalities (name or code)
         lines.forEach((line) => {
-            let area,
-                value;
-
+            let area;
+            let value;
             // separator can be a tabulator or a semicolon
             const matches = line.match(/([^\t;]+) *[\t;]+ *(.*)/);
             if (matches && matches.length === 3) {
@@ -321,15 +310,24 @@ class IndicatorFormController extends StateHandler {
             }
         });
     }
-    editDataset (selections = {}, regionset) {
-        const indicator = { ...this.getSelectedIndicator(), selections };
-        this.showDataTable(indicator, regionset);
+    editDataset (item = {}) {
+        const selections = { [SELECTOR]: item[SELECTOR]};
+        const indicator = {...this.getSelectedIndicator(), selections };
+        this.showDataTable(indicator, item.regionset);
     }
 
-    async deleteDataset (selections = {}, regionset) {
-        const indicator = { ...this.getSelectedIndicator(), selections };
+    async deleteDataset (item = {}) {
+        const selections = { [SELECTOR]: item[SELECTOR]};
+        const indicator = {...this.getSelectedIndicator(), selections };
+        indicator.hash = getHashForIndicator(indicator);
+
+        const handler = this.instance.getStateHandler();
+        if (handler?.isIndicatorSelected(indicator, true)) {
+            handler.getController().removeIndicator(indicator);
+        }
         try {
-            await deleteIndicator(indicator, regionset);
+            await deleteIndicator(indicator, item.regionset);
+            Messaging.success(this.loc('tab.popup.deleteSuccess'));
         } catch (error) {
             Messaging.error(this.loc('errors.datasetDelete'));
         }
