@@ -391,3 +391,12 @@ export const getEditOptions = (classification, data) => {
         colorsets
     };
 };
+
+export const getMethodOptions = (indicator) => {
+    const { uniqueCount } = indicator.data;
+    return LIMITS.methods.map(value => ({
+        value,
+        label: Oskari.getMsg('StatsGrid', `classify.methods.${value}`),
+        disabled: value === 'jenks' && uniqueCount < 3
+    }));
+};
