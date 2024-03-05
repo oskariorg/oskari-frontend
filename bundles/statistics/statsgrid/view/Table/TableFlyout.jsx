@@ -153,12 +153,20 @@ const TableFlyout = ({ state, controller }) => {
     });
     indicators?.forEach(indicator => {
         const { hash } = indicator;
+        const sorter = (c1,c2) => {
+            const a = c1[hash].value;
+            const b = c2[hash].value;
+            if (a === b) return 0;
+            if (typeof a === 'undefined') return -1;
+            if (typeof b === 'undefined') return 1;
+            return sortOrder[hash] === 'descend' ? a - b : b - a;
+        };
         columnSettings.push({
             dataIndex: [hash, 'formatted'],
             align: 'right',
             width: COLUMN,
-            sorter: (a, b) => a[hash].value - b[hash].value,
-            sortOrder: sortOrder[hash],
+            sorter,
+            sortOrder: 'descend',
             showSorterTooltip: false,
             onCell: (record, rowIndex) => ({
                 style: { background: activeIndicator === hash ? '#fafafa' : '#ffffff' }
