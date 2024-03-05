@@ -75,7 +75,7 @@ class IndicatorsHandler extends StateHandler {
     }
 
     addNewIndicator () {
-        this.formHandler.getController().showIndicatorPopup(this.userDsI);
+        this.formHandler.getController().showIndicatorPopup(this.userDsId);
     }
 
     editIndicator (id) {
