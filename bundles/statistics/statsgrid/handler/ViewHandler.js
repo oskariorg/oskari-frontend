@@ -193,6 +193,11 @@ class UIHandler extends StateHandler {
         }
     }
 
+    openSearchWithSelections (indicator) {
+        this.searchHandler.getController().populateForm(indicator);
+        this.show('search');
+    }
+
     show (id) {
         if (!id || this.controls[id]) {
             // already shown, do nothing
@@ -226,13 +231,12 @@ class UIHandler extends StateHandler {
         */
         } else if (id === 'indicatorForm' && this.formHandler) {
             const onCloseWrapper = () => {
-                // TODO: reset on open to get rid of wrapper and forma handler's close methods
-                this.formHandler.closeIndicatorPopup();
+                this.close('clipboard');
                 onClose();
             };
             controls = showIndicatorForm(this.formHandler.getState(), this.formHandler.getController(), onCloseWrapper);
         } else if (id === 'clipboard' && this.formHandler) {
-            controls = showClipboardPopup(this.formHandler.getState(), this.formHandler.getController(), onClose);
+            controls = showClipboardPopup(this.formHandler.getController(), onClose);
         } else if (id === 'series') {
             controls = this._createSeriesControls();
         } else {

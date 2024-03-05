@@ -1,6 +1,7 @@
 import { Messaging } from 'oskari-ui/util';
 import { LAYER_ID } from '../constants';
 import { getRegionsets } from '../helper/ConfigHelper';
+import { getRegions } from '../helper/RegionsHelper';
 import { getDataByRegions } from '../helper/StatisticsHelper';
 
 const BORDER_PRIO = 10000;
@@ -10,7 +11,6 @@ const HIGHLIGHT_PRIO = 1;
 Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (instance) {
     this.instance = instance;
     this.sb = instance.getSandbox();
-    this.service = instance.getStatisticsService();
     this.stateHandler = instance.getStateHandler();
     this.log = Oskari.log('Oskari.statistics.statsgrid.RegionsetViewer');
 
@@ -26,6 +26,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             const currentIndicator = indicators.find(ind => ind.hash === activeIndicator);
             if (!currentIndicator) {
                 this.clearRegions();
+                return;
+            }
+            // assume that state update contains only active region change
+            // this is little dangerous but rendering whole layer is heavy operation
+            const { highlightRegionId: previous } = this._lastRenderCache;
+            if (activeRegion && activeRegion !== previous) {
+                // higlight feature
+                this._updateFeatureStyle(activeRegion, true);
+                if (previous) {
+                    // Remove previous highlight
+                    this._updateFeatureStyle(previous, false);
+                }
+                this._lastRenderCache.highlightRegionId = activeRegion;
                 return;
             }
             const { classification, classifiedData } = currentIndicator;
@@ -52,7 +65,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     _viewRegions: async function (classification, classifiedData, dataByRegions, highlightRegionId) {
         const locale = this.instance.getLocalization();
         try {
-            const { regions } = this.stateHandler.getState();
+            const { regionset } = this.stateHandler.getState();
+            const regions = getRegions(regionset);
             if (regions.length === 0) {
                 Messaging.error(locale.errors.regionsDataIsEmpty);
                 return;
@@ -338,19 +352,5 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             borderSearchOptions.id = 'border' + regionId;
             this.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [borderSearchOptions, borderRequestOptions]);
         }
-    },
-    // TODO: optimize rendering?
-    _bindToEvents: function () {
-        var me = this;
-        me.service.on('StatsGrid.RegionSelectedEvent', function (event) {
-            const selectedRegion = event.activeRegion;
-            me._updateFeatureStyle(selectedRegion, true);
-            // Remove previous highlight
-            const previous = me._lastRenderCache.highlightRegionId;
-            if (previous && previous !== selectedRegion) {
-                me._updateFeatureStyle(previous, false);
-            }
-            me._lastRenderCache.highlightRegionId = selectedRegion;
-        });
     }
 });

@@ -9,6 +9,7 @@ import { Sorter } from './Sorter';
 import { IndicatorName } from '../IndicatorName';
 import { getRegionsets } from '../../helper/ConfigHelper';
 import { getDataByRegions } from '../../helper/StatisticsHelper';
+import { getRegions } from '../../helper/RegionsHelper';
 
 const BUNDLE_KEY = 'StatsGrid';
 const COLUMN = 200;
@@ -62,7 +63,8 @@ const HeaderTools = styled.div`
 `;
 
 const TableFlyout = ({ state, controller }) => {
-    const { indicators, activeIndicator, regionset, regions } = state;
+    const { indicators, activeIndicator, regionset } = state;
+    const regions = getRegions(regionset);
     let initialSort = {
         regionName: null
     };
