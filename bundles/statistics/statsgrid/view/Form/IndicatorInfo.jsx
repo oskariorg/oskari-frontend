@@ -30,8 +30,8 @@ export const IndicatorInfo = ({ state, controller }) => {
             />
             <StyledInput
                 placeholder={Oskari.getMsg('StatsGrid', 'userIndicators.panelGeneric.formDatasource')}
-                value={state.indicatorDatasource}
-                onChange={(e) => controller.setIndicatorDatasource(e.target.value)}
+                value={state.indicatorSource}
+                onChange={(e) => controller.setindicatorSource(e.target.value)}
             />
         </Content>
     );

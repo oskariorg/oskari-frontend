@@ -2,7 +2,7 @@ import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showMedataPopup } from '../components/description/MetadataPopup';
 import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
-import { getIndicatorMetadata } from './IndicatorHelper';
+import { getIndicatorMetadata, getIndicatorData } from './IndicatorHelper';
 import { getDatasources, getUnsupportedDatasourceIds, getRegionsets } from '../helper/ConfigHelper';
 
 const getValueAsArray = (selection) => {
@@ -16,11 +16,10 @@ const getValueAsArray = (selection) => {
 };
 
 class SearchController extends StateHandler {
-    constructor (instance, service, stateHandler) {
+    constructor (instance, stateHandler) {
         super();
         this.instance = instance;
         this.stateHandler = stateHandler;
-        this.service = service;
         this.setState(this.getInitialState());
         this.metadataPopup = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -49,6 +48,14 @@ class SearchController extends StateHandler {
 
     clearSearch () {
         this.updateState(this.getInitialState());
+    }
+
+    async populateForm (indicator) {
+        const { id, ds } = indicator;
+        this.updateState({ selectedDatasource: ds });
+        await this.fetchindicatorOptions();
+        const indicators = id ? [id] : [];
+        this.setSelectedIndicators(indicators);
     }
 
     async fetchindicatorOptions () {
@@ -311,7 +318,8 @@ class SearchController extends StateHandler {
     async handleSingleIndicatorParams (indId, cb) {
         const panelLoc = this.loc('panels.newSearch');
         try {
-            const result = await this.service.getIndicatorMetadata(this.getState().selectedDatasource, indId);
+            const { selectedDatasource, selectedIndicators } = this.getState();
+            const result = await getIndicatorMetadata(selectedDatasource, indId);
             const combinedValues = {};
             result?.selectors.forEach((selector) => {
                 selector.allowedValues.forEach((val) => {
@@ -337,9 +345,9 @@ class SearchController extends StateHandler {
             }
 
             const data = {
-                datasrc: this.getState().selectedDatasource,
+                datasrc: selectedDatasource,
                 selectors: combinedValues,
-                indicators: this.getState().selectedIndicators,
+                indicators: selectedIndicators,
                 regionset: result.regionsets,
                 selected: {}
             };
@@ -686,7 +694,7 @@ class SearchController extends StateHandler {
                 try {
                     // TODO: addIndicator returns false if indicator couldn't be added
                     // these could be removed?
-                    const data = await this.service.getIndicatorData({ id, ds, ...rest }, regionset);
+                    const data = await getIndicatorData({ id, ds, ...rest }, regionset);
                     if (!data) {
                         searchFailed(search);
                         return;
@@ -843,7 +851,8 @@ const wrapped = controllerMixin(SearchController, [
     'openMetadataPopup',
     'setParamSelection',
     'search',
-    'showIndicatorForm'
+    'showIndicatorForm',
+    'populateForm'
 ]);
 
 export { wrapped as SearchHandler };

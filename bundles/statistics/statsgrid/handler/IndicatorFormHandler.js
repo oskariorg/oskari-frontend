@@ -1,40 +1,30 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 import { getHashForIndicator } from '../helper/StatisticsHelper';
+import { getIndicatorMetadata, getIndicatorData, saveIndicator, saveIndicatorData, deleteIndicator } from './IndicatorHelper';
 import { getDatasources, getRegionsets } from '../helper/ConfigHelper';
+import { getRegionsAsync } from '../helper/RegionsHelper';
+
+const SELECTOR = 'year';
 
 class IndicatorFormController extends StateHandler {
     constructor (instance) {
         super();
         this.instance = instance;
-        this.service = instance.getStatisticsService();
         this.sandbox = instance.getSandbox();
-        this.setState({
-            indicatorName: '',
-            indicatorDescription: '',
-            indicatorDatasource: '',
-            indicatorPopup: null,
-            clipboardPopup: null,
-            indicator: null,
-            datasource: null,
-            regionsetOptions: [],
-            datasets: [],
-            datasetYear: '',
-            datasetRegionset: null,
-            selectedDataset: null,
-            formData: {},
-            clipboardValue: ''
-        });
+        this.setState(this.getInitState());
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
+        this.log = Oskari.log('Oskari.statistics.statsgrid.IndicatorFormHandler');
     };
 
     getName () {
         return 'IndicatorFormHandler';
     }
 
-    async showIndicatorPopup (datasourceId, indicatorId = null) {
-        if (!datasourceId) return;
-        await this.getPopupData(datasourceId, indicatorId);
+    async showIndicatorPopup (ds, id = null) {
+        if (!ds) return;
+        this.reset();
+        await this.preparePopupData({ ds, id });
         this.instance.getViewHandler().show('indicatorForm');
     }
 
@@ -42,50 +32,55 @@ class IndicatorFormController extends StateHandler {
         this.instance.getViewHandler().show('clipboard');
     }
 
-    reset () {
-        this.updateState({
+    getSelectedIndicator (full) {
+        const { indicatorName, indicatorDescription, indicatorSource, datasourceId, indicatorId, datasetYear } = this.getState();
+        const indicator = {
+            ds: datasourceId,
+            id: indicatorId,
+            selections: datasetYear ? { [SELECTOR]: datasetYear } : {}
+        };
+        if (!full) {
+            return indicator;
+        }
+        indicator.name = indicatorName;
+        indicator.description = indicatorDescription;
+        indicator.source = indicatorSource;
+        return indicator;
+    }
+
+    getInitState () {
+        return {
             indicatorName: '',
-            indicatorDatasource: '',
+            indicatorSource: '',
             indicatorDescription: '',
-            indicator: null,
-            datasource: null,
+            indicatorId: null,
+            datasourceId: null,
             regionsetOptions: null,
             datasets: null,
             datasetYear: '',
             datasetRegionset: null,
             selectedDataset: null,
-            formData: {},
-            clipboardValue: ''
-        });
+            formData: {}
+        };
+    }
+    reset () {
+        this.updateState(this.getInitState());
     }
 
-    closeIndicatorPopup () {
-        this.reset();
-        this.closeClipboardPopup();
-    }
-
-    closeClipboardPopup () {
-        this.instance.getViewHandler().close('clipboard');
-        this.updateState({ clipboardValue: '' });
-    }
-
-    async getPopupData (datasourceId, indicatorId) {
-        const { regionsets = [] } = getDatasources().find(ds => ds.id === datasourceId) || {};
+    async preparePopupData (indicator) {
+        const { id, ds } = indicator;
+        const { regionsets = [] } = getDatasources().find(({ id }) => id === ds) || {};
         const regionsetOptions = getRegionsets().filter(rs => regionsets.includes(rs.id));
 
-        if (indicatorId) {
-            await this.getIndicatorDatasets(datasourceId, indicatorId);
+        if (id) {
+            await this.getIndicatorDatasets(indicator);
         }
-        this.updateState({
-            datasource: datasourceId,
-            indicator: indicatorId,
-            regionsetOptions
-        });
+        this.updateState({ datasourceId: ds, indicatorId: id, regionsetOptions });
     }
 
-    async getIndicatorDatasets (datasourceId, indicatorId) {
+    async getIndicatorDatasets (indicator) {
         try {
-            const ind = await this.service.getIndicatorMetadata(datasourceId, indicatorId);
+            const ind = await getIndicatorMetadata(indicator.ds, indicator.id);
             const datasets = [];
             for (const sel of ind?.selectors) {
                 for (const regionset of ind.regionsets) {
@@ -105,7 +100,7 @@ class IndicatorFormController extends StateHandler {
                 datasets,
                 indicatorName: Oskari.getLocalized(ind.name),
                 indicatorDescription: Oskari.getLocalized(ind.description),
-                indicatorDatasource: Oskari.getLocalized(ind.source)
+                indicatorSource: Oskari.getLocalized(ind.source)
             });
         } catch (error) {
             Messaging.error(Oskari.getMsg('StatsGrid', 'errors.indicatorMetadataError'));
@@ -124,9 +119,9 @@ class IndicatorFormController extends StateHandler {
         });
     }
 
-    setIndicatorDatasource (value) {
+    setindicatorSource (value) {
         this.updateState({
-            indicatorDatasource: value
+            indicatorSource: value
         });
     }
 
@@ -142,30 +137,23 @@ class IndicatorFormController extends StateHandler {
         });
     }
 
-    setClipboardValue (value) {
-        this.updateState({
-            clipboardValue: value
-        });
-    }
-
     addStatisticalData () {
-        if (this.getState().datasetYear.length === 0 || isNaN(this.getState().datasetYear)) {
+        const { datasetYear, datasetRegionset } = this.getState();
+        if (datasetYear.length === 0 || isNaN(datasetYear)) {
             Messaging.error(this.loc('errors.myIndicatorYearInput'));
             return;
         }
-        if (!this.getState().datasetRegionset) {
+        if (!datasetRegionset) {
             Messaging.error(this.loc('errors.myIndicatorRegionselect'));
             return;
         }
-        const dataset = {
-            year: this.getState().datasetYear,
-            regionset: this.getState().datasetRegionset
-        };
-        this.showDataTable(this.getState().datasource, dataset, this.getState().indicator);
+        const indicator = this.getSelectedIndicator();
+        this.showDataTable(indicator, datasetRegionset);
     }
 
     updateFormData (value, regionId) {
-        const regions = this.getState().formData?.regions?.map(region => {
+        const { formData } = this.getState();
+        const regions = formData.regions?.map(region => {
             if (region.id === regionId) {
                 return {
                     ...region,
@@ -176,38 +164,40 @@ class IndicatorFormController extends StateHandler {
         });
         this.updateState({
             formData: {
-                ...this.getState().formData,
+                ...formData,
                 regions
             }
         });
     }
 
-    async showDataTable (datasourceId, dataset, indicatorId) {
+    async showDataTable (indicator, regionsetId) {
         this.updateState({
             loading: true
         });
-        const regionset = getRegionsets().find(rs => rs.id === dataset.regionset);
+        const { name } = getRegionsets().find(rs => rs.id === regionsetId) || {};
         const labels = {};
-        labels[dataset.regionset] = regionset?.name;
-        let formRegions;
+        labels[regionsetId] = name;
         let regions;
-
         try {
-            regions = await this.service.getRegions(dataset.regionset);
-            let data;
-            if (indicatorId) {
-                data = await this.service.getIndicatorData(datasourceId, indicatorId, { year: dataset.year }, null, dataset.regionset);
+            regions = await getRegionsAsync(regionsetId);
+            let data = {};
+            if (indicator.id) {
+                try {
+                    data = await getIndicatorData(indicator, regionsetId);
+                } catch (e) {
+                    // no data saved for selections
+                }
             }
-            formRegions = [...regions].sort((a, b) => a.name.localeCompare(b.name)).map((region) => {
+            const formRegions = [...regions].sort((a, b) => a.name.localeCompare(b.name)).map((region) => {
                 return {
                     id: region.id,
                     name: region.name,
-                    value: data ? data[region.id] : null
+                    value: data[region.id]
                 };
             });
             this.updateState({
                 loading: false,
-                selectedDataset: dataset,
+                selectedDataset: data,
                 formData: {
                     regions: formRegions,
                     labels
@@ -215,29 +205,13 @@ class IndicatorFormController extends StateHandler {
             });
         } catch (error) {
             Messaging.error(Oskari.getMsg('StatsGrid', 'errors.regionsDataError'));
-            if (regions) {
-                this.updateState({
-                    loading: false,
-                    selectedDataset: dataset,
-                    formData: {
-                        regions: formRegions,
-                        labels
-                    }
-                });
-            } else {
-                this.updateState({
-                    loading: false,
-                    selectedDataset: null,
-                    datasetYear: '',
-                    datasetRegionset: null,
-                    formData: {}
-                });
-            }
+            this.cancelForm();
         }
     }
 
     cancelForm () {
         this.updateState({
+            loading: false,
             selectedDataset: null,
             datasetYear: '',
             datasetRegionset: null,
@@ -249,138 +223,56 @@ class IndicatorFormController extends StateHandler {
         this.updateState({
             loading: true
         });
-        const indicatorData = {
-            name: this.getState().indicatorName,
-            description: this.getState().indicatorDescription,
-            datasource: this.getState().indicatorDatasource
-        };
-        const regionData = {
-            selectors: this.getState().selectedDataset,
-            values: []
-        };
-        for (const region of this.getState().formData?.regions || []) {
-            if (region.value && region.value !== '') {
-                const value = `${region.value}`.replace(/,/g, '.');
-                regionData.values.push({ ...region, value });
-            }
+        const { formData, datasetRegionset } = this.getState();
+        const indicator = this.getSelectedIndicator(true);
+        if (typeof indicator.name !== 'string' || indicator.name.trim().length === 0) {
+            Messaging.warn(this.loc('errors.myIndicatorNameInput'));
+            return;
         }
 
+        const { regions = [] } = formData;
+        const data = {};
+        regions.forEach(region => {
+            if (typeof region.value === 'undefined') {
+                return;
+            }
+            const value = `${region.value}`.trim().replace(/,/g, '.');
+            if (!value || isNaN(value)) {
+                return;
+            }
+            data[region.id] = Number(value);
+        });
         try {
-            let index = 0;
-            for (const data of regionData?.values) {
-                if (!isNaN(data.value)) {
-                    regionData.values[index].value = Number(data.value);
-                }
-                index++;
+            indicator.id = await saveIndicator(indicator);
+            indicator.hash = getHashForIndicator(indicator);
+            this.log.info('Saved indicator', data, 'Indicator: ' + indicator.id);
+            if (Object.keys(data).length) {
+                await saveIndicatorData(indicator, data, datasetRegionset);
+                this.log.info('Saved data form values', data, 'Indicator: ' + indicator.id);
+                // add indicator only when data is saved
+                this.selectSavedIndicator(indicator, datasetRegionset);
             }
-            const saveIndicator = await this.saveIndicator(indicatorData);
-            if (regionData.values?.length) {
-                await this.saveIndicatorData(regionData);
-            }
-            this.selectSavedIndicator(saveIndicator, regionData);
-            this.updateState({
-                loading: false,
-                selectedDataset: null,
-                formData: {},
-                datasetYear: '',
-                datasetRegionset: null
-            });
-            this.getPopupData(this.getState().datasource, this.getState().indicator);
+            Messaging.success(this.loc('userIndicators.dialog.successMsg'));
+            this.cancelForm();
+            this.preparePopupData(indicator);
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorSave'));
-            this.updateState({
-                loading: false,
-                selectedDataset: null,
-                formData: {},
-                datasetYear: '',
-                datasetRegionset: null
-            });
+            this.cancelForm();
         }
     }
 
-    async saveIndicator (data) {
-        if (!this.validateIndicator(data)) {
-            Messaging.error('Error in indicator validation');
-            return;
-        }
-        // inject possible id for indicator
-        if (this.getState().indicator) {
-            data.id = this.getState().indicator;
-        }
-        try {
-            const response = await this.service.saveIndicator(this.getState().datasource, data);
-            this.updateState({
-                indicator: response.id
-            });
-            Oskari.log('IndicatorFormFlyout').info('Saved indicator', data, 'Indicator: ' + response.id);
-            return response;
-        } catch (error) {
-            throw new Error(error);
-        }
+    selectSavedIndicator (indicator, regionset) {
+        this.instance.getStateHandler()?.getController().selectIndicator(indicator, regionset);
     }
 
-    async saveIndicatorData (data) {
-        if (!this.validateIndicatorData(data)) {
-            Messaging.error('Error in data validation');
-            return;
-        }
-
-        // save dataset
-        Oskari.log('IndicatorFormFlyout').info('Save data form values', data, 'Indicator: ' + this.getState().indicator);
-        const values = {};
-        for (const regionData of data?.values) {
-            values[regionData.id] = regionData.value;
-        }
-
-        try {
-            const response = await this.service.saveIndicatorData(this.getState().datasource, this.getState().indicator, data.selectors, values);
-            return response;
-        } catch (error) {
-            throw new Error(error);
-        }
-    }
-
-    validateIndicator (data) {
-        const { name } = data;
-        if (typeof name !== 'string' || name.trim().length === 0) {
-            Messaging.warn(this.loc('errors.myIndicatorNameInput'));
-            return false;
-        }
-        return true;
-    }
-
-    validateIndicatorData (regionValues) {
-        for (const singleRegion of regionValues.values) {
-            if (typeof singleRegion.value === 'undefined' || isNaN(singleRegion.value) || typeof singleRegion.value !== 'number') {
-                Messaging.warn(this.loc('errors.myIndicatorInvalidData'));
-                return false;
-            }
-        }
-        return true;
-    }
-
-    selectSavedIndicator (indicator, data) {
-        const { regionset, ...selections } = data.selectors;
-        const ind = {
-            ...indicator,
-            selections
-        };
-        ind.hash = getHashForIndicator(ind);
-        const handler = this.instance.getStateHandler();
-        handler?.addIndicator(ind, regionset);
-        handler?.setActiveIndicator(ind.hash);
-    }
-
-    importFromClipboard () {
-        const data = this.getState().clipboardValue;
+    importFromClipboard (data) {
         const validRows = [];
 
         const lines = data.match(/[^\r\n]+/g);
         // loop through all the lines and parse municipalities (name or code)
         lines.forEach((line) => {
-            let area,
-                value;
-
+            let area;
+            let value;
             // separator can be a tabulator or a semicolon
             const matches = line.match(/([^\t;]+) *[\t;]+ *(.*)/);
             if (matches && matches.length === 3) {
@@ -410,27 +302,35 @@ class IndicatorFormController extends StateHandler {
                 regions: formData
             }
         });
-        this.closeClipboardPopup();
+    }
+    editDataset (item = {}) {
+        const selections = { [SELECTOR]: item[SELECTOR] };
+        const indicator = { ...this.getSelectedIndicator(), selections };
+        this.showDataTable(indicator, item.regionset);
     }
 
-    editDataset (dataset) {
-        this.showDataTable(this.getState().datasource, { year: dataset.year, regionset: dataset.regionset }, this.getState().indicator);
-    }
-
-    async deleteDataset (dataset) {
+    async deleteDataset (item = {}) {
+        const selections = { [SELECTOR]: item[SELECTOR] };
+        const indicator = { ...this.getSelectedIndicator(), selections };
+        indicator.hash = getHashForIndicator(indicator);
+        const handler = this.instance.getStateHandler();
+        if (handler?.isIndicatorSelected(indicator, true)) {
+            handler.getController().removeIndicator(indicator);
+        }
         try {
-            await this.service.deleteIndicator(Number(this.getState().datasource), this.getState().indicator, { year: dataset.year }, dataset.regionset);
+            await deleteIndicator(indicator, item.regionset);
+            Messaging.success(this.loc('tab.popup.deleteSuccess'));
         } catch (error) {
             Messaging.error(this.loc('errors.datasetDelete'));
         }
-        this.getPopupData(this.getState().datasource, this.getState().indicator);
+        this.preparePopupData(indicator);
     }
 }
 
 const wrapped = controllerMixin(IndicatorFormController, [
     'setIndicatorName',
     'setIndicatorDescription',
-    'setIndicatorDatasource',
+    'setindicatorSource',
     'setDatasetYear',
     'setDatasetRegionset',
     'showDataTable',

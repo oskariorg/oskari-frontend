@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import styled from 'styled-components';
-import { getDataByRegions } from '../../helper/StatisticsHelper';
+import { getDataByRegions, getValueSorter } from '../../helper/StatisticsHelper';
 import { BUNDLE_KEY } from '../../constants';
 
 const MARGIN =  {
@@ -121,10 +121,10 @@ const getSortedData = (indicator, sortingType = 'value-descending') => {
         return data.toSorted((a, b) => d3.ascending(a.name, b.name));
     }
     if (sortingType === 'value-ascending') {
-        return data.toSorted((a, b) => d3.descending(a.value, b.value));
+        return data.toSorted(getValueSorter(true));
     }
     if (sortingType === 'value-descending') {
-        return data.toSorted((a, b) => d3.ascending(a.value, b.value));
+        return data.toSorted(getValueSorter(false));
     }
     return data;
 };
@@ -314,7 +314,6 @@ const createGraph = (ref, labelsRef, indicator, sortOrder ) => {
 export const Diagram = ({ indicator,  sortOrder }) => {
     let ref = useRef(null);
     let labelsRef = useRef(null);
-
     useEffect(() => {
         if (ref?.current?.children?.length > 0) {
             ref.current.removeChild(ref.current.children[0]);
