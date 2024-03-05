@@ -13,12 +13,18 @@ const histoHeight = 200;
 /**
  * Creates classification editor into given DOM node
  * @param {HTMLElement} el DOM node
- * @param {Number[]} manualBounds class bounds at start of editing
- * @param {Number[]} indicatorData dataset values
- * @param {String[]} colorSet colors corresponding to classes
+ * @param {Object} indicator active indicator
+ * @param {Number} activeIndex index of active bound
+ * @param {Boolean} disabled controls disabled
  * @param {Function} changeCallback function that is called with updated bounds, when user makes changes
  */
-export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, activeId, fractionDigits, base, changeCallback, disabled) {
+export function manualClassificationEditor (el, indicator, activeIndex, disabled, changeCallback) {
+    const { classification, classifiedData, data } = indicator;
+    const { fractionDigits, base } = classification;
+    const { groups = [], bounds = [] } = classifiedData;
+    const colorSet = groups.map(group => group.color);
+    const indicatorData = data.seriesValues ? data.seriesValues : data.dataByRegions.map(d => d.value);
+
     const svg = d3.select(el)
         .append('svg')
         .attr('width', width)
@@ -37,7 +43,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         .range([histoHeight, 0]);
 
     const x = d3.scaleLinear()
-        .domain([manualBounds[0], manualBounds[manualBounds.length - 1]])
+        .domain([bounds[0], bounds[bounds.length - 1]])
         .clamp(true)
         .range([margin * 2, width - margin]); // double left margin to get more space for tick labels
 
@@ -45,11 +51,11 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
     // HISTOGRAM CLIP PATH
     histogram(histoClip, histoData, x, y, opts);
 
-    const handlesData = manualBounds.map((d, i) => ({ value: d, id: i }));
+    const handlesData = bounds.map((d, i) => ({ value: d, id: i }));
 
     let selected = handlesData[1];
-    if (activeId && activeId > 0 && activeId < manualBounds.length - 1) {
-        selected = handlesData[activeId];
+    if (activeIndex && activeIndex > 0 && activeIndex < bounds.length - 1) {
+        selected = handlesData[activeIndex];
     }
     const isSelected = d => d.id === selected.id;
     const isBase = d => typeof base !== 'undefined' && base === d.value;

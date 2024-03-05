@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { showPopup } from 'oskari-ui/components/window';
-import { Message, Select, Option } from 'oskari-ui';
+import { Message, Select } from 'oskari-ui';
 import { PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { manualClassificationEditor } from './editor';
-import { getEditOptions } from '../../helper/ClassificationHelper';
+import { getMethodOptions } from '../../helper/ClassificationHelper';
 import '../../../statsgrid2016/resources/scss/manualClassification.scss';
 
 const BUNDLE_KEY = 'StatsGrid';
@@ -25,32 +25,31 @@ const Form = ({
     controller,
     onClose
 }) => {
+    const { activeIndicator, indicators } = state;
+    const indicator = indicators.find(ind => ind.hash === activeIndicator);
+    if (!indicator) {
+        return (
+            <Content>
+                <Message bundleKey={BUNDLE_KEY} messageKey='legend.noActive'/>
+            </Content>
+        );
+    }
     const ref = useRef();
     const [activeBound, setActiveBound] = useState();
-    const { activeIndicator, indicators } = state;
-    const { classification: { editEnabled } } = pluginState;
+    const disabled = !pluginState.classification.editEnabled;
+    const error = indicator.classifiedData?.error;
+
     useEffect(() => {
         // editor appends content to ref element, clear content
         ref.current.innerHTML = '';
-        if (error) {
+        if (!indicator || error) {
             return;
         }
-        manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, fractionDigits, base, onBoundChange, !editEnabled);
-    }, [editEnabled]);
-    const { classifiedData, classification, data} = indicators.find(ind => ind.hash === activeIndicator) || {};
-    if (!classifiedData || !classification || !data) {
-        // TODO: something common like InactiveLegend error: 'noData'
-        return null;
-    }
-    const { method, fractionDigits, base } = classification;
-    const { groups = [], bounds, error } = classifiedData;
-    // TODO: getMethdodOptions(data.uniqueCount);
-    const { methods } = getEditOptions(classification, data);
+        manualClassificationEditor(ref.current, indicator, activeBound, disabled, onBoundChange);
+    }, [indicator, activeBound, disabled]);
 
-    const colors = groups.map(group => group.color);
-    const dataAsList = data.seriesValues ? data.seriesValues : data.dataByRegions.map(d => d.value);
-    const onMethodChange = method => controller.updateClassification({ method });
     const onBoundChange = (manualBounds, index) => {
+        const { bounds = [] } = indicator.classifiedData;
         if (index !== activeBound) {
             setActiveBound(index);
         }
@@ -59,25 +58,21 @@ const Form = ({
             return;
         }
         const updated = { manualBounds };
-        if (method !== 'manual') {
+        if (indicator.classification.method !== 'manual') {
             updated.method = 'manual';
         }
         controller.updateClassification(updated);
     };
+
     return (
         <Content>
             <label><b><Message messageKey={'classify.labels.method' } bundleKey={BUNDLE_KEY} /></b></label>
             <StyledSelect
                 className='t_option-method'
-                value = {method}
-                disabled={!editEnabled}
-                onChange={value => onMethodChange(value)}>
-                {methods.map(({ label, ...rest }, i) => (
-                    <Option key={`option-${i}`} {...rest}>
-                        {label}
-                    </Option>
-                ))}
-            </StyledSelect>
+                value={indicator.classification.method}
+                disabled={disabled}
+                onChange={method => controller.updateClassification({ method })}
+                options={getMethodOptions(indicator)}/>
             <div ref={ref} className="manual-class-view"/>
             {error && <Message messageKey={'legend.noEnough' } bundleKey={BUNDLE_KEY} />}
             <ButtonContainer>
