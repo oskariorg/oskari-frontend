@@ -32,6 +32,15 @@ export const getHash = (datasrc, indicator, selections, series) => {
 
 export const getDataProviderKey = (indicator) => indicator.ds + '_' + indicator.id;
 
+export const getValueSorter = asc => {
+    return (a,b) => {
+        if (a.value === b.value) return 0;
+        if (typeof a.value === 'undefined') return -1;
+        if (typeof b.value === 'undefined') return 1;
+        return asc ? b.value - a.value : a.value - b.value;
+    };
+};
+
 export const getDataByRegions = (indicator, optRegionset) => {
     const { dataByRegions, dataBySelection, regionset } = indicator.data || {};
     // use optional regionset to be sure that we have right data
@@ -124,15 +133,14 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
 export const formatData = (data, classification) => {
     const { dataByRegions, dataBySelection } = data;
     const { format } = Oskari.getNumberFormatter(classification.fractionDigits);
+    const fomatRegion = region => {
+        region.formatted = typeof region.value === 'undefined' ? '' : format(region.value);
+    };
     if (dataByRegions) {
-        dataByRegions.forEach(region => {
-            region.formatted = format(region.value);
-        });
+        dataByRegions.forEach(fomatRegion);
     } else if (dataBySelection) {
         Object.keys(dataBySelection).forEach(selector => {
-            dataBySelection[selector].forEach(region => {
-                region.formatted = format(region.value);
-            });
+            dataBySelection[selector].forEach(fomatRegion);
         });
     }
 };
