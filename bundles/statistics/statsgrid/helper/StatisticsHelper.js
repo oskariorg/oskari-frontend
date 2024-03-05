@@ -102,7 +102,7 @@ export const populateSeriesData = (data, regions, regionset, fractionDigits) => 
             if (typeof d.value === 'undefined') {
                 return;
             }
-            seriesValues.push(d.value)
+            seriesValues.push(d.value);
         });
         seriesMax = seriesMax > max ? seriesMax : max;
         seriesMin = seriesMin < min ? seriesMin : min;

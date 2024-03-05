@@ -83,8 +83,8 @@ class SearchController extends StateHandler {
                 },
                 error => {
                     Messaging.error(this.loc(error));
-                    this.updateState({loading: false});
-                })
+                    this.updateState({ loading: false });
+                });
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorListError'));
             this.updateState({

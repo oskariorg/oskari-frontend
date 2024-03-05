@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 if (!region) {
                     return;
                 }
-                const { formatted = ''} = dataByRegions.find(r => r.id === regionId) || {};
+                const { formatted = '' } = dataByRegions.find(r => r.id === regionId) || {};
                 if (me._regionsAdded.includes(regionId)) {
                     updates.push({
                         value: regionId,
@@ -280,7 +280,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     },
 
     _updateLayerProperties: function (mapStyle, regionsetId) {
-        const regionset = getRegionsets().find( rs => rs.id === regionsetId);
+        const regionset = getRegionsets().find(rs => rs.id === regionsetId);
         const hoverOptions = {
             featureStyle: {
                 stroke: {

@@ -1,5 +1,3 @@
-import { getHash } from '../helper/StatisticsHelper';
-
 /**
  * @class Oskari.statistics.statsgrid.StatisticsService
  */
@@ -179,8 +177,7 @@ import { getHash } from '../helper/StatisticsHelper';
                     }
                 });
                 if (!response.ok) {
-                    const error = await response.json();
-                    // error?.error?.includes('No such regionset:')
+                    await response.json();
                     throw new Error(response.statusText);
                 }
                 const result = await response.json();
@@ -225,7 +222,7 @@ import { getHash } from '../helper/StatisticsHelper';
                 const response = await fetch(Oskari.urls.getRoute('SaveIndicator'), {
                     method: 'POST',
                     headers: {
-                        'Accept': 'application/json'
+                        Accept: 'application/json'
                     },
                     body: new URLSearchParams(body)
                 });
@@ -244,7 +241,6 @@ import { getHash } from '../helper/StatisticsHelper';
             }
         },
         saveIndicatorData: async function (datasrc, indicatorId, selectors, data) {
-            const me = this;
             if (!datasrc) {
                 throw new Error('Datasource missing');
             }

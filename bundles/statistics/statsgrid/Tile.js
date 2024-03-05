@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance) {
 
         FLYOUTS.forEach(id => {
             const label = this.loc(`tile.${id}`);
-            const tileExtension = jQuery(tpl({id, label}));
+            const tileExtension = jQuery(tpl({ id, label }));
             this.extendTile(tileExtension, id);
             tileExtension.on('click', function (event) {
                 event.stopPropagation();
