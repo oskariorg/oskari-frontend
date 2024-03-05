@@ -1,81 +1,76 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
+import { deleteIndicator } from './IndicatorHelper';
 
 class IndicatorsHandler extends StateHandler {
-    constructor (sandbox, instance, formHandler) {
+    constructor (instance, formHandler, userDsId) {
         super();
         this.instance = instance;
-        this.sandbox = sandbox;
+        this.userDsId = userDsId;
         this.formHandler = formHandler;
+        this.sandbox = instance.getSandbox();
         this.setState({
-            data: [],
+            indicators: [],
             loading: false
         });
-        this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
-        this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
-        const dataSource = this.service.getUserDatasource();
-        this.userDsId = dataSource ? dataSource.id : null;
-        this.eventHandlers = this.createEventHandlers();
         this.refreshIndicatorsList();
     };
-
-    popupCleanup () {
-        if (this.popupControls) this.popupControls.close();
-        this.popupControls = null;
-    }
 
     getName () {
         return 'MyIndicatorsHandler';
     }
 
-    refreshIndicatorsList () {
+    async refreshIndicatorsList () {
         this.updateState({
             loading: true
         });
-        this.service.getIndicatorList(this.userDsId, (err, response) => {
-            if (err) {
-                this.log.warn('Could not list own indicators in personal data tab');
-                this.updateState({
-                    loading: false
+        try {
+            populateIndicatorOptions(this.userDsId,
+                response => {
+                    const { indicators = [], complete = false } = response;
+                    this.updateState({
+                        loading: !complete,
+                        indicators
+                    });
+                },
+                error => {
+                    this.updateState({ loading: false });
+                    Messaging.error(this.loc(error));
                 });
-            } else if (response && response.complete) {
-                this.updateState({
-                    data: response.indicators,
-                    loading: false
-                });
-            }
-        });
+        } catch (error) {
+            Messaging.error(this.loc('errors.indicatorListError'));
+            this.updateState({
+                indicators: [],
+                loading: false
+            });
+        }
     }
 
     getIndicatorById (id) {
-        const matches = this.state.data.filter((indicator) => {
-            return indicator.id === id;
-        });
-        if (matches.length > 0) {
-            return matches[0];
+        const indicator = this.getState().indicators.find(ind => ind.id === id);
+        if (!indicator) {
+            // couldn't find indicator -> show an error
+            Messaging.error(this.loc('tab.error.notfound'));
         }
-        // couldn't find indicator -> show an error
-        Messaging.error(this.loc('tab.error.notfound'));
+        return indicator;
     }
 
-    deleteIndicator (indicator) {
-        if (this.getIndicatorById(indicator.id)) {
-            this.updateState({
-                loading: true
-            });
-            this.service.deleteIndicator(this.userDsId, indicator.id, null, null, (err, response) => {
-                if (err) {
-                    Messaging.error(this.loc('tab.error.notdeleted'));
-                    this.updateState({
-                        loading: false
-                    });
-                } else {
-                    Messaging.success(this.loc('tab.popup.deleteSuccess'));
-                    this.refreshIndicatorsList();
-                    // Delete fires StatsGrid.DatasourceEvent -> indicator list will be refreshed if delete is successful.
-                }
-            });
+    async deleteIndicator (id) {
+        const indicator = this.getIndicatorById(id);
+        if (!indicator) {
+            Messaging.error(this.loc('tab.error.notdeleted'));
+            return;
+        }
+        this.updateState({ loading: true });
+        try {
+            // removes all indicator data (no selections or regionset)
+            await deleteIndicator({ ...indicator, ds: this.userDsId });
+            Messaging.success(this.loc('tab.popup.deleteSuccess'));
+            this.refreshIndicatorsList();
+        } catch (error) {
+            this.updateState({ loading: false });
         }
     }
 
@@ -83,37 +78,12 @@ class IndicatorsHandler extends StateHandler {
         this.formHandler.getController().showIndicatorPopup(this.userDsId);
     }
 
-    editIndicator (data) {
-        this.formHandler.getController().showIndicatorPopup(this.userDsId, data.id);
+    editIndicator (id) {
+        this.formHandler.getController().showIndicatorPopup(this.userDsId, id);
     }
-
-    openIndicator (item) {
-        const flyoutManager = this.instance.getFlyoutManager();
-        flyoutManager.open('search');
-        const searchFlyout = flyoutManager.getFlyout('search');
-        const indicatorSelector = searchFlyout.getIndicatorSelectionComponent();
-        indicatorSelector.setIndicatorData(this.userDsId, item.id);
-    }
-
-    createEventHandlers () {
-        const handlers = {
-            'StatsGrid.DatasourceEvent': (event) => {
-                if (event.getDatasource() === this.userDsId) {
-                    this.refreshIndicatorsList();
-                }
-            }
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
+    openIndicator (indicator) {
+        const viewHandler = this.instance.getViewHandler();
+        viewHandler?.openSearchWithSelections({ ds: this.userDsId, ...indicator });
     }
 }
 

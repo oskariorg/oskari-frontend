@@ -1,19 +1,13 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import { Diagram } from './Diagram';
-import { Select, Message, Spin } from 'oskari-ui';
+import { Select, Message } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
 import styled from 'styled-components';
-import { LocaleProvider } from 'oskari-ui/util';
 import { IndicatorName } from '../IndicatorName';
+import { FlyoutContent } from '../FlyoutContent';
 
 const BUNDLE_KEY = 'StatsGrid';
 
-const Content = styled('div')`
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    max-width: 700px;
-`;
 const Selections = styled('div')`
     display: flex;
     flex-direction: row;
@@ -44,42 +38,39 @@ const sortOptions = [
 ];
 
 const DiagramFlyout = ({ state, controller }) => {
-
-    const Component = (
-        <Content>
+    const { indicators, activeIndicator } = state;
+    const current = indicators.find(ind => ind.hash === activeIndicator);
+    const [sortOrder, setSortOrder] = useState('value-descending');
+    return (
+        <Fragment>
             <Selections>
                 <StyledSelect
                     filterOption={false}
-                    options={state.indicators?.map(indicator => ({ value: indicator.hash, label: <IndicatorName indicator={indicator} /> }))}
+                    options={indicators?.map(indicator => ({ value: indicator.hash, label: <IndicatorName indicator={indicator} /> }))}
                     onChange={(value) => controller.setActiveIndicator(value)}
-                    value={state.activeIndicator}
+                    value={activeIndicator}
                     placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
                 />
                 <StyledSelect
                     filterOption={false}
                     options={sortOptions}
-                    onChange={(value) => controller.setSortOrder(value)}
-                    value={state.sortOrder}
+                    onChange={(value) => setSortOrder(value)}
+                    value={sortOrder}
                     placeholder={<Message messageKey='datacharts.sorting.desc' />}
                 />
             </Selections>
-            <Diagram chartData={state.chartData} sortOrder={state.sortOrder} />
-        </Content>
+            <Diagram indicator={current} sortOrder={sortOrder} />
+        </Fragment>
     );
-    
-    if (state.loading) {
-        return <Spin showTip={true}>{Component}</Spin>;
-    }
-    return Component;
 };
 
 export const showDiagramFlyout = (state, controller, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.diagram' />;
     const controls = showFlyout(
         title,
-        <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+        <FlyoutContent state={state}>
             <DiagramFlyout state={state} controller={controller} />
-        </LocaleProvider>,
+        </FlyoutContent>,
         onClose
     );
 
@@ -87,9 +78,9 @@ export const showDiagramFlyout = (state, controller, onClose) => {
         ...controls,
         update: (state) => controls.update(
             title,
-            <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+            <FlyoutContent state={state}>
                 <DiagramFlyout state={state} controller={controller} />
-            </LocaleProvider>
+            </FlyoutContent>
         )
     }
 };

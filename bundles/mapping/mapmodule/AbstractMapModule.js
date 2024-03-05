@@ -2073,8 +2073,6 @@ Oskari.clazz.define(
                 // no position given, add to end
                 content.append(element);
             }
-            // Make sure container is visible
-            container.css('display', '');
         },
 
         /**
@@ -2084,16 +2082,10 @@ Oskari.clazz.define(
          * @param {Boolean} detachOnly true to detach and preserve event handlers, false to remove element
          */
         removeMapControlPlugin: function (element, detachOnly) {
-            var container = element.parents('.mapplugins');
-            var content = element.parents('.mappluginsContent');
-            // TODO take this into use in all UI plugins so we can hide unused containers...
             if (detachOnly) {
                 element.detach();
             } else {
                 element.remove();
-            }
-            if (!this.isInLayerToolsEditMode() && content.children().length === 0) {
-                container.css('display', 'none');
             }
         },
 

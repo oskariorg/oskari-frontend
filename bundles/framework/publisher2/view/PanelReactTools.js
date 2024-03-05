@@ -8,23 +8,15 @@ import { PublisherToolsList } from './form/PublisherToolsList';
  * @class Oskari.mapframework.bundle.publisher.view.PanelAdditionalTools
  *
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelAdditionalTools',
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelReactTools',
 
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Object} sandbox
-     * @param {Object} mapmodule
-     * @param {Object} localization
-     *       publisher localization data
-     * @param {Oskari.mapframework.bundle.publisher2.instance} instance the instance
      */
-    function (tools, sandbox, mapmodule, localization, instance) {
-        this.loc = localization;
-        this.instance = instance;
-        this.sandbox = sandbox;
-        this.mapModule = mapmodule;
-        this.tools = tools || [];
+    function (tools, groupId) {
+        this.groupId = groupId;
+        this.tools = tools ? [...tools] : [];
         this.tools = [...this.tools].sort((a, b) => a.index - b.index);
         this.panel = null;
         this.handler = null;
@@ -38,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelAdditionalT
             return this.handler.init(data);
         },
         getName: function () {
-            return 'Oskari.mapframework.bundle.publisher2.view.PanelAdditionalTools';
+            return `Oskari.mapframework.bundle.publisher2.view.PanelReactTools.${this.groupId}`;
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
@@ -51,7 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelAdditionalT
                 this.panel = Oskari.clazz.create(
                     'Oskari.userinterface.component.AccordionPanel'
                 );
-                this.panel.setTitle(this.loc.additionalTools.label);
+                this.panel.setTitle(Oskari.getMsg('Publisher2', `BasicView.${this.groupId}.label`));
                 this._updateUI();
             }
             return this.panel;
@@ -74,8 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelAdditionalT
          * @return {Object[]}
          */
         validate: function () {
-            var errors = [];
-            return errors;
+            return [];
         },
 
         /**

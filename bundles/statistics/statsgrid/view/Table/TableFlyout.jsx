@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
-import { Select, Message, Spin } from 'oskari-ui';
+import { Select, Message } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { showFlyout } from 'oskari-ui/components/window';
 import styled from 'styled-components';
-import { LocaleProvider } from 'oskari-ui/util';
+import { FlyoutContent } from '../FlyoutContent';
 import { Sorter } from './Sorter';
 import { IndicatorName } from '../IndicatorName';
+import { getRegionsets } from '../../helper/ConfigHelper';
+import { getDataByRegions } from '../../helper/StatisticsHelper';
+import { getRegions } from '../../helper/RegionsHelper';
 
 const BUNDLE_KEY = 'StatsGrid';
+const COLUMN = 200;
 
-const Content = styled('div')`
-    max-height: 850px;
-    overflow-y: scroll;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-`;
 const StyledTable = styled(Table)`
     .ant-table-column-sorter {
         display: none;
@@ -48,7 +45,8 @@ const IndicatorHeader = styled('div')`
     height: 100%;
 `;
 const StyledRemoveButton = styled(IconButton)`
-    margin-left: 10px;
+    margin-right: 10px;
+    height: 20px;
 `;
 const HeaderCell = styled('div')`
     display: flex;
@@ -56,12 +54,21 @@ const HeaderCell = styled('div')`
     justify-content: space-between;
     height: 100%;
 `;
+const HeaderTools = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10px;
+    height: 20px;
+`;
 
 const TableFlyout = ({ state, controller }) => {
+    const { indicators, activeIndicator, regionset } = state;
+    const regions = getRegions(regionset);
     let initialSort = {
         regionName: null
     };
-    state.indicators?.forEach(indicator => {
+    indicators?.forEach(indicator => {
         initialSort[indicator.hash] = null;
     });
     const [sortOrder, setSortOrder] = useState(initialSort);
@@ -80,15 +87,36 @@ const TableFlyout = ({ state, controller }) => {
         }
         setSortOrder(newOrder);
     };
-
+    // every value is set by looping regions => same indexes
+    const dataByHash = indicators.reduce((data, ind) => {
+        data[ind.hash] = getDataByRegions(ind)
+        return data;
+    }, {});
+    const hashes = indicators.map(ind => ind.hash);
+    const dataSource = regions.map(({ id, name }, i) => {
+        const data = { key: id, name };
+        hashes.forEach(hash => {
+            const { value, formatted } = dataByHash[hash][i];
+            data[hash] = { value, formatted };
+        });
+        return data;
+    });
     const columnSettings = [];
-
+    const regionsetIds = [];
+    indicators.forEach(ind => {
+        const sets = ind.allowedRegionsets || [];
+        sets.forEach(id => {
+            if (!regionsetIds.includes(id)) {
+                regionsetIds.push(id);
+            }
+        });
+    });
     columnSettings.push({
-        dataIndex: 'regionName',
+        dataIndex: 'name',
         align: 'left',
-        width: 125,
-        sorter: getSorterFor('regionName'),
-        sortOrder: sortOrder['regionName'],
+        width: COLUMN,
+        sorter: getSorterFor('name'),
+        sortOrder: sortOrder['name'],
         showSorterTooltip: false,
         onCell: (record, rowIndex) => ({
             style: { background: '#ffffff' }
@@ -101,98 +129,84 @@ const TableFlyout = ({ state, controller }) => {
                 <HeaderCell>
                     <RegionHeader>
                         <Message messageKey='statsgrid.areaSelection.title' />
-                        {Oskari.util.isEmbedded ? (
-                            state.selectedRegionset?.name
+                        {Oskari.dom.isEmbedded() ? (
+                            getRegionsets().find(r => r.id === regionset)?.name || ''
                         ) : (
                             <Select
                                 filterOption={false}
-                                options={state.regionsetOptions?.map(rs => ({ value: rs.id, label: rs.name }))}
-                                value={state.selectedRegionset?.id}
-                                onChange={(value) => controller.setSelectedRegionset(value)}
+                                options={getRegionsets()
+                                    .filter(rs => regionsetIds.includes(rs.id))
+                                    .map(rs => ({ value: rs.id, label: rs.name }))}
+                                value={regionset}
+                                onChange={(value) => controller.setActiveRegionset(value)}
                             />
                         )}
                     </RegionHeader>
-                    <Sorter
-                        sortOrder={sortOrder['regionName']}
-                        changeSortOrder={() => changeSortOrder('regionName')}
-                    />
+                    <HeaderTools>
+                        <Sorter
+                            sortOrder={sortOrder['name']}
+                            changeSortOrder={() => changeSortOrder('name')} />
+                    </HeaderTools>
                 </HeaderCell>
             );
         }
     });
-    state.indicators?.forEach(indicator => {
+    indicators?.forEach(indicator => {
+        const { hash } = indicator;
+        const sorter = (c1,c2) => {
+            const a = c1[hash].value;
+            const b = c2[hash].value;
+            if (a === b) return 0;
+            if (typeof a === 'undefined') return -1;
+            if (typeof b === 'undefined') return 1;
+            return sortOrder[hash] === 'descend' ? a - b : b - a;
+        };
         columnSettings.push({
-            dataIndex: 'data',
+            dataIndex: [hash, 'formatted'],
             align: 'right',
-            width: 125,
-            sorter: (a, b) => a.data[indicator.hash] - b.data[indicator.hash],
-            sortOrder: sortOrder[indicator.hash],
+            width: COLUMN,
+            sorter,
+            sortOrder: 'descend',
             showSorterTooltip: false,
             onCell: (record, rowIndex) => ({
-                style: { background: state.activeIndicator === indicator.hash ? '#fafafa' : '#ffffff' }
+                style: { background: activeIndicator === hash ? '#fafafa' : '#ffffff' }
             }),
             onHeaderCell: (record, rowIndex) => ({
-                style: { background: state.activeIndicator === indicator.hash ? '#f0f0f0' : '#fafafa' }
+                style: { background: activeIndicator === hash ? '#f0f0f0' : '#fafafa' }
             }),
             title: () => {
                 return (
                     <HeaderCell>
-                        <IndicatorHeader
-                            onClick={(e) => {
-                                controller.setActiveIndicator(indicator.hash);
-                            }}
-                        >
+                        <IndicatorHeader onClick={() => controller.setActiveIndicator(hash)}>
                             <IndicatorName indicator={indicator} />
+                        </IndicatorHeader>
+                        <HeaderTools>
+                            <Sorter
+                                sortOrder={sortOrder[hash]}
+                                changeSortOrder={() => changeSortOrder(hash)}/>
                             <StyledRemoveButton
                                 type='delete'
-                                onClick={() => controller.removeIndicator(indicator)}
-                            />
-                        </IndicatorHeader>
-                        <Sorter
-                            sortOrder={sortOrder[indicator.hash]}
-                            changeSortOrder={() => changeSortOrder(indicator.hash)}
-                        />
+                                onClick={() => controller.removeIndicator(indicator)}/>
+                        </HeaderTools>
                     </HeaderCell>
                 );
-            },
-            render: (title, item) => {
-                const formatter = Oskari.getNumberFormatter(indicator?.classification?.fractionDigits);
-                let data = item.data ? item.data[indicator.hash] : '';
-                if (typeof data === 'number') {
-                    data = formatter.format(data);
-                }
-                return data;
             }
         });
     });
 
-    const Component = (
-        <Content>
-            {!state.indicators || state.indicators.length < 1 ? (
-                <Message messageKey='statsgrid.noResults' />
-            ) : (
-                <StyledTable
-                    columns={columnSettings}
-                    dataSource={[...state.indicatorData]}
-                    pagination={false}
-                />
-            )}
-        </Content>
-    );
-    
-    if (state.loading) {
-        return <Spin showTip={true}>{Component}</Spin>;
-    }
-    return Component;
+    return <StyledTable columns={columnSettings} dataSource={dataSource} pagination={false}/>
 };
 
 export const showTableFlyout = (state, controller, onClose) => {
-    const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.table' />;
+    const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.grid' />;
     const controls = showFlyout(
         title,
-        <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <TableFlyout state={state} controller={controller} />
-        </LocaleProvider>,
+        <FlyoutContent state={state}>
+            <TableFlyout
+                state={state}
+                controller={controller}
+            />
+        </FlyoutContent>,
         onClose
     );
 
@@ -200,9 +214,12 @@ export const showTableFlyout = (state, controller, onClose) => {
         ...controls,
         update: (state) => controls.update(
             title,
-            <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                <TableFlyout state={state} controller={controller} />
-            </LocaleProvider>
+            <FlyoutContent state={state}>
+                <TableFlyout
+                    state={state}
+                    controller={controller}
+                />
+            </FlyoutContent>
         )
     }
 };

@@ -10,7 +10,7 @@ export const MyIndicatorsTab = ({ state, controller }) => {
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <MyIndicatorsList
                 controller={controller}
-                data={state.data}
+                indicators={state.indicators}
                 loading={state.loading}
             />
         </LocaleProvider>

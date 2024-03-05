@@ -10,6 +10,7 @@ jest.useFakeTimers();
 describe('FilterHandler', () => {
     initServices();
     const handler = new FilterHandler(getBundleInstance());
+
     // remove things added to globals so we don't break other tests
     afterAll(() => teardown());
 
@@ -42,11 +43,14 @@ describe('FilterHandler', () => {
     });
 
     test('notifying state changes', () => {
-        expect.assertions(3);
+        expect.assertions(4);
         const mockFn = jest.fn();
         handler.addStateListener(mockFn);
         handler.getController().setActiveFilterId('newest');
+        jest.runAllTimers();
+        expect(mockFn).toHaveBeenCalledTimes(1);
         handler.getController().setSearchText('base');
+        jest.runAllTimers();
 
         const { searchText, activeFilterId } = handler.getState();
         expect(activeFilterId).toBe('newest');
