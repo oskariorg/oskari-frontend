@@ -9,6 +9,7 @@ import { Sorter } from './Sorter';
 import { IndicatorName } from '../IndicatorName';
 import { getRegionsets } from '../../helper/ConfigHelper';
 import { getDataByRegions } from '../../helper/StatisticsHelper';
+import { getRegions } from '../../helper/RegionsHelper';
 
 const BUNDLE_KEY = 'StatsGrid';
 const COLUMN = 200;
@@ -62,7 +63,8 @@ const HeaderTools = styled.div`
 `;
 
 const TableFlyout = ({ state, controller }) => {
-    const { indicators, activeIndicator, regionset, regions } = state;
+    const { indicators, activeIndicator, regionset } = state;
+    const regions = getRegions(regionset);
     let initialSort = {
         regionName: null
     };
@@ -151,12 +153,20 @@ const TableFlyout = ({ state, controller }) => {
     });
     indicators?.forEach(indicator => {
         const { hash } = indicator;
+        const sorter = (c1,c2) => {
+            const a = c1[hash].value;
+            const b = c2[hash].value;
+            if (a === b) return 0;
+            if (typeof a === 'undefined') return -1;
+            if (typeof b === 'undefined') return 1;
+            return sortOrder[hash] === 'descend' ? a - b : b - a;
+        };
         columnSettings.push({
             dataIndex: [hash, 'formatted'],
             align: 'right',
             width: COLUMN,
-            sorter: (a, b) => a[hash].value - b[hash].value,
-            sortOrder: sortOrder[hash],
+            sorter,
+            sortOrder: 'descend',
             showSorterTooltip: false,
             onCell: (record, rowIndex) => ({
                 style: { background: activeIndicator === hash ? '#fafafa' : '#ffffff' }

@@ -36,7 +36,7 @@ export const getDividedColors = (classification, bounds) => {
     let baseIndex = bounds.findIndex(bound => bound >= base);
     if (baseIndex === -1) {
         // all bounds are under base value, use last index
-        baseIndex = bounds.length -1;
+        baseIndex = bounds.length - 1;
     }
 
     if (mapStyle === 'points') {
@@ -56,7 +56,7 @@ const _getDividedChoropleth = (classification, baseIndex) => {
     let colorset = [];
     try {
         colorset = [...getColorset(colorCount, color)];
-    } catch(e) {
+    } catch (e) {
         // If values are divided unequally, high count doesn't have required amount of colors
         // validateClassification and getOptions should handle this properly but it requires some refactoring
         // For now avoid error and let user update classification

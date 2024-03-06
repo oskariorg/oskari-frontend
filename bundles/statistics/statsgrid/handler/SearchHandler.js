@@ -7,11 +7,10 @@ import { getDatasources, getUnsupportedDatasourceIds, getRegionsets } from '../h
 import { showSearchErrorPopup } from '../view/search/ErrorPopup';
 
 class SearchController extends StateHandler {
-    constructor (instance, service, stateHandler) {
+    constructor (instance, stateHandler) {
         super();
         this.instance = instance;
         this.stateHandler = stateHandler;
-        this.service = service;
         this.setState(this.getInitialState());
         this.metadataPopup = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -46,6 +45,24 @@ class SearchController extends StateHandler {
         this.updateState(this.getInitialState(true));
     }
 
+    async populateForm (indicator) {
+        const { id, ds } = indicator;
+        this.updateState({ selectedDatasource: ds });
+        await this.fetchindicatorOptions();
+        const indicators = id ? [id] : [];
+        this.setSelectedIndicators(indicators);
+    }
+
+    onCacheUpdate ({ datasourceId, indicatorId }) {
+        const { selectedDatasource, selectedIndicators } = this.getState();
+        if (datasourceId && selectedDatasource === datasourceId) {
+            this.fetchindicatorOptions();
+        }
+        if (indicatorId && selectedIndicators.includes(indicatorId)) {
+            this.fetchIndicatorParams();
+        }
+    }
+
     async fetchindicatorOptions () {
         const { selectedDatasource, isUserDatasource } = this.getState();
         if (!selectedDatasource) {
@@ -71,8 +88,8 @@ class SearchController extends StateHandler {
                 },
                 error => {
                     Messaging.error(this.loc(error));
-                    this.updateState({loading: false});
-                })
+                    this.updateState({ loading: false });
+                });
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorListError'));
             this.updateState({
@@ -245,7 +262,7 @@ class SearchController extends StateHandler {
         const { selectedDatasource } = this.getState();
         try {
             // TODO: metadata selector allowedValue can be value or { name, id } => handle in one place and cache {id, title} or {value, label}
-            const meta = await this.service.getIndicatorMetadata(selectedDatasource, indicatorId);
+            const meta = await getIndicatorMetadata(selectedDatasource, indicatorId);
             const { selectors = [], regionsets = [] } = meta;
             const combinedSelectors = {};
             selectors.forEach((selector) => {
@@ -512,7 +529,8 @@ const wrapped = controllerMixin(SearchController, [
     'openMetadataPopup',
     'setParamSelection',
     'search',
-    'showIndicatorForm'
+    'showIndicatorForm',
+    'populateForm'
 ]);
 
 export { wrapped as SearchHandler };

@@ -8,7 +8,7 @@ const TICKS = 4;
  * @param {Object} opts
  */
 export function edgeLines (svg, handlesData, xScale, yScale, opts) {
-    const { histoHeight, fractionDigits = 1, highestBar, margin} = opts;
+    const { histoHeight, fractionDigits = 1, highestBar, margin } = opts;
     const formatter = Oskari.getNumberFormatter(fractionDigits);
     // For small datasets integer ticks might show same values => decrease
     const ticks = highestBar > TICKS ? TICKS : highestBar;

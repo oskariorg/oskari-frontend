@@ -10,25 +10,26 @@ const getCacheKey = datasourceId => 'ds_' + datasourceId;
  * @param {Number} datasourceId
  * @param {Number|String} indicatorId (optional)
  */
-export const removeIndicatorFromCache = (datasourceId, indicatorId) => {
-    const cachedResponse = indicatorListPerDatasource[getCacheKey(datasourceId)];
+export const removeIndicatorFromCache = (indicator) => {
+    const { ds, id } = indicator;
+    const cachedResponse = indicatorListPerDatasource[getCacheKey(ds)];
     if (!cachedResponse) {
         return;
     }
-    if (indicatorId) {
+    if (id) {
         // single indicator
-        cachedResponse.indicators = cachedResponse.indicators.filter(indicator => indicator.id !== indicatorId);
+        cachedResponse.indicators = cachedResponse.indicators.filter(indicator => indicator.id !== id);
     } else {
         // all indicators
-        indicatorListPerDatasource[getCacheKey(datasourceId)] = null;
+        indicatorListPerDatasource[getCacheKey(ds)] = null;
     }
 };
 /**
  * Updates or adds to indicator listing cache
  * Indicator always has id and might have name OR newRegionset key
  */
-export const updateIndicatorListInCache = (datasourceId, indicator) => {
-    const cachedResponse = indicatorListPerDatasource[getCacheKey(datasourceId)];
+export const updateIndicatorListInCache = (indicator, regionsetId) => {
+    const cachedResponse = indicatorListPerDatasource[getCacheKey(indicator.ds)];
     if (!cachedResponse) {
         return;
     }
@@ -36,17 +37,20 @@ export const updateIndicatorListInCache = (datasourceId, indicator) => {
     if (!cachedIndicator) {
         // insert
         // only inject when guest user, otherwise flush from cache
-        cachedResponse.indicators.push(indicator);
+        cachedResponse.indicators.push({
+            id: indicator.id,
+            name: indicator.name,
+            regionsets: regionsetId ? [regionsetId] : []
+        });
         return indicator;
     }
-    // name not sent when updating regionset
     cachedIndicator.name = indicator.name || cachedIndicator.name;
     // update regionset
     // this updates the cache as well as mutable objects are being passed around
     const regionsets = cachedIndicator.regionsets || [];
-    if (indicator.newRegionset && !regionsets.includes(indicator.newRegionset)) {
+    if (regionsetId && !regionsets.includes(regionsetId)) {
         // add regionset for indicator if it's a new one
-        regionsets.push(indicator.newRegionset);
+        regionsets.push(regionsetId);
         cachedIndicator.regionsets = regionsets;
     }
     return cachedIndicator;

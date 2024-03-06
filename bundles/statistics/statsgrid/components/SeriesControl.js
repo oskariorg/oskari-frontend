@@ -48,7 +48,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
         return this._uiState;
     },
     updateState: function (state) {
-        this._uiState = {...this._uiState, ...state};
+        this._uiState = { ...this._uiState, ...state };
+    },
+    resetState: function () {
+        this._uiState = {
+            values: [],
+            animating: false,
+            interval: 2000,
+            index: 0,
+            hash: null
+        };
     },
     /**
      * @method _generateSelectOptions Generate localized options for <select> dropdowns
@@ -56,7 +65,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
      * @return {Object[]} key, value that has been localized
      */
     _generateSelectOptions: function () {
-        return INTERVALS.map(({key, value}) =>  {
+        return INTERVALS.map(({ key, value }) => {
             return {
                 title: this.loc(`series.speed.${key}`),
                 value
@@ -107,7 +116,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
      * @param  {Boolean} forward true to move forward, false to move back
      */
     _doSingleStep: function (forward) {
-        const { animating, index } =  this.getState();
+        const { animating, index } = this.getState();
         if (animating) {
             return;
         }
@@ -121,7 +130,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
         this._setSelectedValue(requestedIndex);
     },
     _next: function () {
-        const { index = 0, values, animating } =  this.getState();
+        const { index = 0, values, animating } = this.getState();
         if (!animating) {
             return;
         }
@@ -160,7 +169,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
     setFrameInterval: function (interval) {
         this._setAnimationState(false);
         this._throttleAnimation = Oskari.util.throttle(() => this._next(), interval);
-        this.updateState({interval});
+        this.updateState({ interval });
     },
     /**
      * @method _setAnimationState Set animating / not animating state
@@ -175,7 +184,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
             return;
         }
         const { values, index } = this.getState();
-        if (index >= values.length -1) {
+        if (index >= values.length - 1) {
             // Step to the beginning, if the series is on the last value
             this._setSelectedValue(0, true);
         } else {
@@ -296,7 +305,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
     _updateSeriesIndex: function (num) {
         var index = Math.round(num);
         this._renderHandle(index);
-        this.updateState ({ index });
+        this.updateState({ index });
         this._updateValueDisplay();
     },
     _updateValueDisplay: function () {

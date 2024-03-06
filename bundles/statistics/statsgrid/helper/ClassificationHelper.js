@@ -77,7 +77,15 @@ export const validateClassification = (classification, data = {}) => {
     }
     // geostats fails with jenks if there isn't at least one more unique values than count
     if (classification.method === 'jenks' && data.uniqueCount <= classification.count) {
-        classification.count = data.uniqueCount - 1;
+        const newCount = data.uniqueCount - 1;
+        const { min } = LIMITS.count;
+        if (newCount >= min) {
+            classification.count = newCount;
+        } else {
+            // cannot use 'jenks', change method
+            classification.method = 'equal';
+            classification.count = min;
+        }
     }
     // Discontinuos mode is problematic for series data,
     // because each class has to get at least one hit -> set distinct mode.
@@ -390,4 +398,13 @@ export const getEditOptions = (classification, data) => {
         fractionDigits: getNumberOptions(0, fractionDigits),
         colorsets
     };
+};
+
+export const getMethodOptions = (indicator) => {
+    const { uniqueCount } = indicator.data;
+    return LIMITS.methods.map(value => ({
+        value,
+        label: Oskari.getMsg('StatsGrid', `classify.methods.${value}`),
+        disabled: value === 'jenks' && uniqueCount < 3
+    }));
 };

@@ -6,37 +6,42 @@ const Field = styled('div')`
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
-    width: 50%;
-    margin-right: 10px;
+    width: 180px;
 `;
-const TimeseriesField = styled('div')`
+const Timeseries = styled.div`
     display: flex;
     flex-direction: row;
-    width: 50%;
+    margin-bottom: 10px;
+`;
+const TimeseriesField = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    margin-right: 10px;
 `;
 const StyledSelect = styled(Select)`
     width: 100%;
 `;
 
 const TimeSeriesParams = ({name, options, selectedValues, controller}) => (
-    <TimeseriesField>
-        <Field>
+    <Timeseries>
+        <TimeseriesField>
             <b><Message messageKey='parameters.from' /></b>
             <StyledSelect
                 options={options}
                 value={selectedValues[0]}
                 onChange={(value) => controller.setParamSelection(name, [value, selectedValues[1]])}
             />
-        </Field>
-        <Field>
+        </TimeseriesField>
+        <TimeseriesField>
             <b><Message messageKey='parameters.to' /></b>
             <StyledSelect
                 options={options}
                 value={selectedValues[1]}
                 onChange={(value) => controller.setParamSelection(name, [selectedValues[0], value])}
             />
-        </Field>
-    </TimeseriesField>
+        </TimeseriesField>
+    </Timeseries>
 );
 
 export const IndicatorParams = ({ state, allRegionsets, controller }) => {

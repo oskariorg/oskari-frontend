@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const StyledTable = styled(Table)`
     max-height: 475px;
-    overflow-y: scroll;
+    overflow-y: auto;
 `;
 
 export const IndicatorDatasets = ({ state, controller }) => {
@@ -35,7 +35,7 @@ export const IndicatorDatasets = ({ state, controller }) => {
                         />
                         <IconButton
                             type='delete'
-                            onClick={() => controller.deleteDataset(item)}
+                            onConfirm={() => controller.deleteDataset(item)}
                         />
                     </ButtonContainer>
                 );

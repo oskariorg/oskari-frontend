@@ -132,19 +132,22 @@ div.popupHeader {
     width: 390px;
     float: left;
     height: auto;
-  
+
     div.popupHeaderTitle {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     float: left;
-    height: 40px;
 
     div {
         vertical-align: top;
         padding-right: 0;
         padding-top: 10px;
         word-break: break-word;
+    }
+
+    div.olPopupCloseBox {
+      flex: 0 0 16px;
     }
   }
     div.coordinateWrapper {

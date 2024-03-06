@@ -1,7 +1,7 @@
 import React from 'react';
-import { Checkbox, Select, Message, Spin, Button } from 'oskari-ui';
+import { Checkbox, Select, Message, Spin } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
-import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
+import { ButtonContainer, PrimaryButton, SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { LocaleProvider } from 'oskari-ui/util';
 import { IndicatorParams } from './IndicatorParams';
@@ -31,15 +31,20 @@ const Row = styled('div')`
     width: 100%;
     align-items: end;
 `;
-const AddIndicatorBtn = styled(Button)`
-    max-width: 40%;
+const UserIndicatorButton = styled(IconButton)`
+    margin-left: 10px;
 `;
 const IndicatorField = styled('div')`
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-right: 10px;
 `;
+
+const UserIndicator = ({isSingle, onClick}) => {
+    const type = isSingle ? 'edit' : 'add';
+    const title = isSingle ? 'userIndicators.modify.edit' : 'userIndicators.buttonTitle';
+    return <UserIndicatorButton bordered type={type} title={<Message messageKey={title} />} onClick={onClick} />
+};
 
 // For preventing checkbox clickable area from stretching to 100% of content width
 const ClickableArea = ({ children }) => <div>{children}</div>;
@@ -105,14 +110,7 @@ const SearchFlyout = ({ state, controller }) => {
                             onChange={(value) => controller.setSelectedIndicators(value)}
                         />
                     </IndicatorField>
-                    {state.isUserDatasource && (
-                        <AddIndicatorBtn
-                            onClick={() => controller.showIndicatorForm()}
-                        >
-                            { !singleIndicatorSelected && (<Message messageKey='userIndicators.buttonTitle' />) }
-                            { singleIndicatorSelected && (<Message messageKey='userIndicators.modify.edit' />) }
-                        </AddIndicatorBtn>
-                    )}
+                    {state.isUserDatasource && <UserIndicator onClick={controller.showIndicatorForm} isSingle={singleIndicatorSelected} /> }
                 </Row>
             </Field>
             {state.selectedIndicators && state.selectedIndicators.length > 0 && (
