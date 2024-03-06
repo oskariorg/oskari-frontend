@@ -15,7 +15,7 @@ const classificationDefaults = {
     editEnabled: true,
     transparent: false
 };
-const embeddedTools = [...FLYOUTS, CLASSIFICATION];
+const embeddedTools = [...FLYOUTS, CLASSIFICATION, 'series'];
 
 class UIHandler extends StateHandler {
     constructor (instance, stateHandler, searchHandler) {
