@@ -93,11 +93,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
         /**
          * @private @method _processJSON
          *
-         * @param {string} uuid         UUID
          * @param {Object} metadataJSON Metadata object
          *
          */
-        _processJSON: function (uuid, metadataJson) {
+        _processJSON: function (metadataJson) {
             var me = this,
                 data,
                 dataTemplate,
@@ -197,7 +196,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 }
             });
 
-            data.uuid = uuid;
             me._createContent(data);
         },
 
@@ -228,25 +226,24 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * This is the actual data loader function
          *
          * @param {string} uuid UUID
-         * @param {string} metadataUrl Metadata url
+         * @param {number} layerId layer id
          *
          */
-        _getMetadata: function (uuid, metadataUrl) {
+        _getMetadata: function (uuid, layerId) {
             var me = this;
 
-            if (uuid === null || uuid === undefined) {
+            if ((uuid === null || uuid === undefined) && (layerId === null || layerId === undefined)) {
                 throw new TypeError(
-                    '_getMetadata(): missing uuid'
+                    '_getMetadata(): missing uuid and layerId'
                 );
             }
-
             me.instance.getLoader().getCSWData(
                 uuid,
+                layerId,
                 Oskari.getLang(),
-                metadataUrl,
                 // TODO add sensible error handling
                 function (data) {
-                    me._processJSON(uuid, data);
+                    me._processJSON(data);
                 },
                 function (jqXHR, exception) {
                     // Request failed, show generic message to user
@@ -265,20 +262,20 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * Backend provides HTML setups that will be embedded and
          * styled with bundled CSS.
          *
-         * @param {string} uuid UUID
-         * @param {string} metadataUrl Metadata url
+         * @param {string} uuid uuid
+         * @param {number} layerId layer id
          *
          */
-        showMetadata: function (uuid, metadataUrl) {
-            if (uuid === null || uuid === undefined) {
+        showMetadata: function (uuid, layerId) {
+            if ((uuid === null || uuid === undefined) && (layerId === null || layerId === undefined)) {
                 // Not a major error, keep on rolling
                 this.instance.getSandbox().printError(
-                    'showMetadata(): Missing uuid.'
+                    'showMetadata(): Missing layerId and uuid.'
                 );
                 return;
             }
 
-            this._getMetadata(uuid, metadataUrl);
+            this._getMetadata(uuid, layerId);
         },
 
         /**
@@ -288,19 +285,19 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * ( calls directly now )
          * Used to buffer excess calls. Main entry point.
          *
-         * @param {string} uuid UUID
-         * @param {string} metadataUrl Metadata url
+         * @param {number} layerId layer id
          *
          */
-        scheduleShowMetadata: function (uuid, metadataUrl) {
-            if (uuid === null || uuid === undefined) {
+        scheduleShowMetadata: function (uuid, layerId) {
+            if ((uuid === null || uuid === undefined) && (layerId === null || layerId === undefined)) {
                 // Not a major error, keep on rolling
                 this.instance.getSandbox().printError(
-                    'scheduleShowMetadata(): Missing uuid.'
+                    'scheduleShowMetadata(): Missing uuid and layerId.'
                 );
                 return;
             }
-            this.showMetadata(uuid, metadataUrl);
+
+            this.showMetadata(uuid, layerId);
         },
 
         /**

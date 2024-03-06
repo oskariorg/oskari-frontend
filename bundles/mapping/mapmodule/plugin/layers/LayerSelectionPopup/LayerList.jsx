@@ -28,10 +28,10 @@ export const LayerList = ({ layers, showMetadata, styleSelectable, setLayerVisib
                                 checked={layer.isVisible()}
                                 value={layer.getId()}
                                 onChange={e => setLayerVisibility(layer, e.target.checked, false)}
-                                >{layer.getName()}</Checkbox>
-                            {showMetadata && (<MetadataIcon metadataId={layer.getMetadataIdentifier()} metadataUrl={layer.getAttributes().metadataUrl || null} />)}
+                            >{layer.getName()}</Checkbox>
+                            {showMetadata && (<MetadataIcon metadataId={layer.getMetadataIdentifier()} layerId={layer.getId()} />)}
                         </LayerRow>
-                            {layer.isVisible() && styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}
+                        {layer.isVisible() && styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}
                     </div>
                 );
             })}

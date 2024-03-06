@@ -105,10 +105,9 @@ class MetadataStateHandler extends StateHandler {
         return searchResult;
     }
 
-    showMetadata (uuid, metadataUrl) {
+    showMetadata (layerId) {
         this.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{
-            uuid,
-            metadataUrl
+            layerId: layerId
         }]);
     }
 

@@ -13,7 +13,7 @@ Oskari.clazz.define(
 
         /** @method handleRequest dispatches processing to instance */
         handleRequest: function (core, request) {
-            this.instance.scheduleShowMetadata(request.getAllMetadata(), request.metadataUrl);
+            this.instance.scheduleShowMetadata(request.getAllMetadata());
         }
     }, {
         protocol: ['Oskari.mapframework.core.RequestHandler']

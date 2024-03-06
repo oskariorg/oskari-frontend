@@ -22,8 +22,7 @@ const StyledMetadataIcon = styled(InfoCircleOutlined)`
  * @param {Object} style Additional styles
  * @returns 
  */
-export const Metadata = ThemeConsumer(({ theme = {}, metadataId, metadataUrl, size = 16, style }) => {
-
+export const Metadata = ThemeConsumer(({ theme = {}, metadataId, layerId, size = 16, style }) => {
     if (!metadataId || !Oskari.getSandbox().hasHandler('catalogue.ShowMetadataRequest')) return null;
 
     const helper = getNavigationTheme(theme);
@@ -32,7 +31,7 @@ export const Metadata = ThemeConsumer(({ theme = {}, metadataId, metadataUrl, si
 
     const onClick = () => {
         Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
-            {uuid: metadataId, metadataUrl: metadataUrl}
+            { layerId:layerId }
     ]);
     };
 

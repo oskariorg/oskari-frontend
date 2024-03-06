@@ -15,6 +15,7 @@ const Tools = styled('div')`
     }
 `;
 
+//remove?
 const hasSubLayerMetadata = (layer) => {
     const subLayers = layer.getSubLayers();
     if (!subLayers || subLayers.length === 0) {
@@ -52,14 +53,13 @@ const LayerTools = ({ model, controller, opts }) => {
     const backendStatus = backendAvailable ? getBackendStatus(model) : {};
     const statusOnClick =
         backendAvailable && backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
-
     return (
         <Tools className="layer-tools">
             {unsupported && <WarningIcon tooltip={unsupported.getDescription()} />}
             <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
             <MetadataIcon
                 metadataId={model.getMetadataIdentifier()}
-                metadataUrl={model.getAttributes().metadataUrl || null}
+                layerId={model.getId()}
                 style={{ marginBottom: '1px', marginLeft: '5px' }}
             />
         </Tools>

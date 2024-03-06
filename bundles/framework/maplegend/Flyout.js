@@ -102,9 +102,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         refresh: function () {
             this._populateLayerList();
         },
-        showMetadataFlyout: function (event, uuid, metadataUrl) {
+        showMetadataFlyout: function (event, layerId) {
             event.stopPropagation();
-            this.instance.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{ uuid, metadataUrl }]);
+            this.instance.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{ layerId: layerId }]);
         },
         /**
          * @method _populateLayerList
@@ -116,18 +116,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             const layers = this.instance.getSandbox().findAllSelectedMapLayers();
 
             // populate selected layer list
-            const showMetadata = (event, uuid, metadataUrl) => this.showMetadataFlyout(event, uuid, metadataUrl);
+            const showMetadata = (event, layerId) => this.showMetadataFlyout(event, layerId);
             const legends = layers
                 .filter(layer => typeof layer.getLegendImage === 'function' && !!layer.getLegendImage())
                 .map(layer => {
-                    const uuid = layer.getMetadataIdentifier();
+                    const layerId = layer.getId();
                     return {
                         title: layer.getName(),
-                        uuid: uuid,
+                        layerId,
                         legendImageURL: layer.getLegendImage(),
                         metadataUrl: layer.getAttributes().metadataUrl,
                         loadError: false,
-                        showMetadataCallback: uuid ? showMetadata : null
+                        showMetadataCallback: layerId ? showMetadata : null
                     };
                 }).reverse();
 

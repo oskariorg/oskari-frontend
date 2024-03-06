@@ -237,9 +237,10 @@ class ViewHandler extends StateHandler {
         this.updateState({ selectedLayerIds });
     }
 
+    // Is this deprecated?
     showLayerMetadata (layer) {
         const uuid = layer.getMetadataIdentifier();
-        const metadataUrl = layer.getAttributes().metadataUrl || null;
+        const layerId = layer.id;
         const subUuids = [];
         if (layer.getSubLayers()) {
             layer.getSubLayers().forEach(subLayer => {
@@ -250,7 +251,7 @@ class ViewHandler extends StateHandler {
             });
         }
         this.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [
-            { uuid, metadataUrl },
+            { layerId: layerId },
             subUuids.map(sub => ({ uuid: sub }))
         ]);
     }

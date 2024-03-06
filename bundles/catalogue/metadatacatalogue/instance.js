@@ -1185,8 +1185,7 @@ Oskari.clazz.define(
                         jQuery(cells[4]).find('div.layerInfo').on('click', function () {
                             var rn = 'catalogue.ShowMetadataRequest';
                             me.sandbox.postRequestByName(rn, [{
-                                uuid: row.id,
-                                metadataUrl: row.getAttributes().metadataUrl || null
+                                uuid: row.id
                             }]);
                         });
 

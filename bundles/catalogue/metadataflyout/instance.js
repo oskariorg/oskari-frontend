@@ -247,8 +247,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 
             tool.setCallback(function () {
                 me.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
-                    uuid: layer.getMetadataIdentifier(),
-                    metadataUrl: layer.getAttributes().metadataUrl || null
+                    layerId: layer.getId()
                 },
                 additionalUuids
                 ]);

@@ -318,7 +318,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
             var me = this,
                 sandbox = me._sandbox,
                 uuid = layer.getMetadataIdentifier(),
-                metadataUrl = layer.getAttributes().metadataUrl || null,
+                layerId = layer.id,
                 additionalUuids = [],
                 additionalUuidsCheck = {};
             additionalUuidsCheck[uuid] = true;
@@ -337,8 +337,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
                 }
             }
             sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
-                uuid: uuid,
-                metadataUrl: metadataUrl
+                layerId: layerId
             },
             additionalUuids
             ]);

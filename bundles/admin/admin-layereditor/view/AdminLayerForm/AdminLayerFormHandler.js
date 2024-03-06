@@ -1177,9 +1177,9 @@ class UIHandler extends StateHandler {
         layer.vectorStyleStatus[id] = status;
     }
 
-    showLayerMetadata (uuid, metadataUrl) {
+    showLayerMetadata (layerId) {
         Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
-            { uuid, metadataUrl }
+            { layerId: layerId }
         ]);
     }
 

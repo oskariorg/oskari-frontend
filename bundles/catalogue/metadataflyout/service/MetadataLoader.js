@@ -14,14 +14,16 @@ Oskari.clazz.define(
          * @public @method getCSWData
          *
          * @param {string}   uuid            Metadata UUID
+         * @param {string}   layerId         Layer id
          * @param {string}   lang            Metadata language
          * @param {function} successCallback Success callback function
          * @param {function} errorCallback   Error callback function
          *
          */
-        getCSWData: function (uuid, lang, metadataUrl, successCallback, errorCallback) {
+        getCSWData: function (uuid, layerId, lang, successCallback, errorCallback) {
             var err = this._checkArgs(
                     uuid,
+                    layerId,
                     lang,
                     successCallback,
                     errorCallback
@@ -31,13 +33,16 @@ Oskari.clazz.define(
             if (err) {
                 throw new TypeError(err);
             }
-            uri = this.baseUrl + 'action_route=GetCSWData&uuid=' + uuid +
+            uri = this.baseUrl + 'action_route=GetCSWData' +
                 '&lang=' + lang +
                 '&srs=' + this.srs;
 
-            if (metadataUrl !== null) {
-                uri = uri + '&metadataUrl=' + metadataUrl;
+            if (!(layerId === null || layerId === undefined)) {
+                uri = uri + '&layerId=' + layerId;
+            } else if (!(uuid === null || uuid === undefined)) {
+                uri = uri + '&uuid=' + uuid;
             }
+            console.log(uri)
 
             jQuery.ajax({
                 url: uri,
@@ -62,19 +67,20 @@ Oskari.clazz.define(
          * @private @method _checkArgs
          *
          * @param {string}    uuid            Metadata UUID
+         * @param {number}    layerId         Layer id
          * @param {string}    lang            Metadata language
          * @param {function}  successCallback Success callback function
          * @param {function}  errorCallback   Error callback function
          *
          * @return {string[]}                 Errors
          */
-        _checkArgs: function (uuid, lang, successCallback, errorCallback) {
+        _checkArgs: function (uuid, layerId, lang, successCallback, errorCallback) {
             var exceptions = [],
                 base = 'getCSWData():\n  -',
                 ret = null;
 
-            if (this._isMissing(uuid)) {
-                exceptions.push('missing uuid');
+            if (this._isMissing(uuid) && this._isMissing(layerId)) {
+                exceptions.push('missing layerId and UUID');
             }
 
             if (this._isMissing(lang)) {
