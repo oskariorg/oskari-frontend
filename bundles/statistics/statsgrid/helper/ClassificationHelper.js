@@ -109,11 +109,11 @@ export const getGroupStats = (dataBySelection) => {
  */
 export const getClassifiedData = (indicator, groupStats) => {
     const { classification: opts, data: { seriesValues } } = indicator;
-    if (seriesValues && seriesValues.length < 3) {
-        return { error: 'noEnough' };
-    }
     const dataByRegions = getDataByRegions(indicator);
     const values = seriesValues || dataByRegions.map(d => d.value).filter(val => typeof val !== 'undefined');
+    if (!values.length || seriesValues.length < 3) {
+        return { error: 'noEnough' };
+    }
     const isDivided = opts.type === 'div';
     const { format } = Oskari.getNumberFormatter(opts.fractionDigits);
 
