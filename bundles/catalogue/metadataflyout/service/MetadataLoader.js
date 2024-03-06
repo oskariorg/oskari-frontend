@@ -42,7 +42,6 @@ Oskari.clazz.define(
             } else if (!(uuid === null || uuid === undefined)) {
                 uri = uri + '&uuid=' + uuid;
             }
-            console.log(uri)
 
             jQuery.ajax({
                 url: uri,
