@@ -58,8 +58,8 @@ class SearchController extends StateHandler {
         this.setSelectedIndicators(indicators);
     }
 
-    onCacheUpdate({ datasourceId, indicatorId }) {
-        const { selectedDatasource,  selectedIndicators } = this.getState();
+    onCacheUpdate ({ datasourceId, indicatorId }) {
+        const { selectedDatasource, selectedIndicators } = this.getState();
         if (datasourceId && selectedDatasource === datasourceId) {
             this.fetchindicatorOptions();
         }

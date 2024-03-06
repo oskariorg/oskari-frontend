@@ -267,7 +267,7 @@ class IndicatorFormController extends StateHandler {
 
     notifyCacheUpdate (indicator) {
         const { datasourceId } = this.getState();
-        this.instance.getSearchHandler()?.onCacheUpdate({ datasourceId, indicator});
+        this.instance.getSearchHandler()?.onCacheUpdate({ datasourceId, indicator });
     }
 
     selectSavedIndicator (indicator, regionset) {
