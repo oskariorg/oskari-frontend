@@ -214,7 +214,11 @@ class StatisticsController extends StateHandlerBase {
         }
     }
 
-    async selectIndicator (indicator, regionset) {
+    async selectSavedIndicator (indicator, regionset) {
+        if (this.isIndicatorSelected(indicator, true)) {
+            // remove indicator first to get updated indicator and data
+            this.removeIndicator(indicator);
+        }
         await this.addIndicator(indicator, regionset);
         this.setActiveIndicator(indicator.hash);
     }
@@ -288,7 +292,7 @@ const wrapped = controllerMixin(StatisticsController, [
     'setActiveRegionset',
     'setActiveRegion',
     'addIndicator',
-    'selectIndicator',
+    'selectSavedIndicator',
     'resetState',
     'updateIndicator',
     'updateClassification',
