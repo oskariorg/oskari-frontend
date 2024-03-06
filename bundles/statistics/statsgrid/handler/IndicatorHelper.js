@@ -1,4 +1,4 @@
-import { getHash, getDataProviderKey, populateData, populateSeriesData } from '../helper/StatisticsHelper';
+import { getHash, getHashForIndicator, getDataProviderKey, populateData, populateSeriesData } from '../helper/StatisticsHelper';
 import { updateIndicatorListInCache, removeIndicatorFromCache } from './SearchIndicatorOptionsHelper';
 import { getRegionsAsync } from '../helper/RegionsHelper';
 
@@ -7,7 +7,10 @@ const statsGridLocale = Oskari.getMsg.bind(null, 'StatsGrid');
 const indicatorMetadataStore = {};
 const indicatorDataStore = {};
 const getMetaCacheKey = (datasourceId, indicatorId) => 'ds_' + datasourceId + '_ind_' + indicatorId;
-const getDataCacheKey = (indicator, regionsetId) => 'hash_' + indicator.hash + '_rs_' + regionsetId;
+const getDataCacheKey = (indicator, regionsetId) => {
+    const hash = indicator.hash || getHashForIndicator(indicator);
+    return 'hash_' + hash + '_rs_' + regionsetId;
+};
 
 // for guest user's own indicators
 const updateIndicatorMetadataInCache = (indicator, regionsetId) => {
@@ -124,9 +127,8 @@ export const getDataForIndicator = async (indicator, regionset) => {
 };
 
 export const getIndicatorData = async (indicator, regionsetId) => {
-    const { ds, id, selections = {} } = indicator;
-    if (!ds || !id || !regionsetId) {
-        throw new Error('Datasource, regionset or indicator id missing');
+    if (!indicator || !regionsetId) {
+        throw new Error('Indicator (id, ds, selections) or regionset id missing');
     }
     const cacheKey = getDataCacheKey(indicator, regionsetId);
     const cachedResponse = indicatorDataStore[cacheKey];
@@ -136,10 +138,10 @@ export const getIndicatorData = async (indicator, regionsetId) => {
     }
     try {
         const response = await fetch(Oskari.urls.getRoute('GetIndicatorData', {
-            datasource: ds,
-            indicator: id,
+            datasource: indicator.ds,
+            indicator: indicator.id,
             regionset: regionsetId,
-            selectors: JSON.stringify(selections)
+            selectors: JSON.stringify(indicator.selections)
         }), {
             method: 'GET',
             headers: {
@@ -203,8 +205,8 @@ export const saveIndicator = async (indicator) => {
 };
 
 export const saveIndicatorData = async (indicator, data, regionsetId) => {
-    if (!indicator || !regionsetId || !indicator.hash) {
-        throw new Error('Indicator (id, hash, selections, data) or regionset id missing');
+    if (!indicator || !data || !regionsetId) {
+        throw new Error('Indicator (id, ds, selections), data or regionset id missing');
     }
     const cacheKey = getDataCacheKey(indicator, regionsetId);
     if (!Oskari.user().isLoggedIn()) {
@@ -252,10 +254,9 @@ export const deleteIndicator = async (indicator, regionsetId) => {
         } else {
             // remove all
             const prefix = getDataProviderKey(indicator);
-            const hashes = Object.keys(indicatorDataStore);
-            hashes.forEach(hash => {
-                if (hash.includes(prefix)) {
-                    delete indicatorDataStore[cacheKey];
+            Object.keys(indicatorDataStore).forEach(key => {
+                if (key.includes(prefix)) {
+                    delete indicatorDataStore[key];
                 }
             });
         }

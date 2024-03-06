@@ -147,8 +147,7 @@ class IndicatorFormController extends StateHandler {
             Messaging.error(this.loc('errors.myIndicatorRegionselect'));
             return;
         }
-        const indicator = this.getSelectedIndicator();
-        this.showDataTable(indicator, datasetRegionset);
+        this.showDataTable();
     }
 
     updateFormData (value, regionId) {
@@ -170,7 +169,9 @@ class IndicatorFormController extends StateHandler {
         });
     }
 
-    async showDataTable (indicator, regionsetId) {
+    async showDataTable () {
+        const indicator = this.getSelectedIndicator();
+        const regionsetId = this.getState().datasetRegionset;
         this.updateState({
             loading: true
         });
@@ -198,6 +199,7 @@ class IndicatorFormController extends StateHandler {
             this.updateState({
                 loading: false,
                 selectedDataset: data,
+                datasetRegionset: regionsetId,
                 formData: {
                     regions: formRegions,
                     labels
@@ -223,7 +225,7 @@ class IndicatorFormController extends StateHandler {
         this.updateState({
             loading: true
         });
-        const { formData, datasetRegionset } = this.getState();
+        const { formData, datasetRegionset, datasetYear } = this.getState();
         const indicator = this.getSelectedIndicator(true);
         if (typeof indicator.name !== 'string' || indicator.name.trim().length === 0) {
             Messaging.warn(this.loc('errors.myIndicatorNameInput'));
@@ -245,24 +247,31 @@ class IndicatorFormController extends StateHandler {
         try {
             indicator.id = await saveIndicator(indicator);
             indicator.hash = getHashForIndicator(indicator);
-            this.log.info('Saved indicator', data, 'Indicator: ' + indicator.id);
+            this.log.info('Saved indicator', indicator);
             if (Object.keys(data).length) {
                 await saveIndicatorData(indicator, data, datasetRegionset);
-                this.log.info('Saved data form values', data, 'Indicator: ' + indicator.id);
+                const indicatorInfo = `Indicator: ${indicator.id}, selection: ${datasetYear}, regionset: ${datasetRegionset}.`;
+                this.log.info('Saved data form values', data, indicatorInfo);
                 // add indicator only when data is saved
                 this.selectSavedIndicator(indicator, datasetRegionset);
             }
             Messaging.success(this.loc('userIndicators.dialog.successMsg'));
             this.cancelForm();
             this.preparePopupData(indicator);
+            this.notifyCacheUpdate(indicator);
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorSave'));
             this.cancelForm();
         }
     }
 
+    notifyCacheUpdate (indicator) {
+        const { datasourceId } = this.getState();
+        this.instance.getSearchHandler()?.onCacheUpdate({ datasourceId, indicator });
+    }
+
     selectSavedIndicator (indicator, regionset) {
-        this.instance.getStateHandler()?.getController().selectIndicator(indicator, regionset);
+        this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, regionset);
     }
 
     importFromClipboard (data) {
@@ -304,9 +313,10 @@ class IndicatorFormController extends StateHandler {
         });
     }
     editDataset (item = {}) {
-        const selections = { [SELECTOR]: item[SELECTOR] };
-        const indicator = { ...this.getSelectedIndicator(), selections };
-        this.showDataTable(indicator, item.regionset);
+        const datasetYear = item[SELECTOR];
+        const datasetRegionset = item.regionset;
+        this.updateState({ datasetYear, datasetRegionset });
+        this.showDataTable();
     }
 
     async deleteDataset (item = {}) {
@@ -324,6 +334,7 @@ class IndicatorFormController extends StateHandler {
             Messaging.error(this.loc('errors.datasetDelete'));
         }
         this.preparePopupData(indicator);
+        this.notifyCacheUpdate(indicator);
     }
 }
 
@@ -333,7 +344,6 @@ const wrapped = controllerMixin(IndicatorFormController, [
     'setindicatorSource',
     'setDatasetYear',
     'setDatasetRegionset',
-    'showDataTable',
     'addStatisticalData',
     'updateFormData',
     'cancelForm',
