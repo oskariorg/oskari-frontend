@@ -55,6 +55,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
                 this.removeFromPluginContainer(this.getElement());
                 this.element = null;
             }
+            this._seriesControl.resetState();
         },
         _buildUI: function () {
             this._isMobileVisible = true;
