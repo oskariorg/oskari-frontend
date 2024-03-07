@@ -74,13 +74,6 @@ Oskari.registerLocalization({
             'removeSource': 'Remove data',
             'noIndicators': 'Start using thematic maps by adding an indicator on the map.'
         },
-        'legend': {
-            'title': 'Classification',
-            'noActive': 'Data was not selected, select data to see map classification.',
-            'noEnough': 'The data is too small to be classified, try different data or change limitings.',
-            'noData': 'Data is not available for the selected point in time.',
-            'cannotCreateLegend': 'Legend cannot be created by chosen values, try different values.'
-        },
         'series': {
             'speed': {
                 'label': 'Animation speed',
@@ -177,7 +170,11 @@ Oskari.registerLocalization({
             'myIndicatorInvalidData': 'Data has invalid values.',
             'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.',
             'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}',
-            'onlyPartialDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}'
+            'onlyPartialDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}',
+            'noActiveLegend': 'Data was not selected, select data to see map classification.',
+            'noEnough': 'The data is too small to be classified, try different data or change limitings.',
+            'noData': 'Data is not available for the selected point in time.',
+            'cannotCreateLegend': 'Legend cannot be created by chosen values, try different values.'
         },
         'missing': {
             'regionsetName': 'Unknown',
