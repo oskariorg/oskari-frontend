@@ -146,57 +146,36 @@ export const formatData = (data, classification) => {
 };
 
 export const getUILabels = (ind, metadata) => {
-    const selectionValues = Oskari.getMsg('StatsGrid', 'panels.newSearch.selectionValues');
-    const { selections, series } = ind;
-    const getError = () => ({
-        error: true,
-        indicator: '',
-        params: '',
-        full: '',
-        range: '',
-        paramsList: []
-    });
-    try {
-        if (!metadata) {
-            return getError();
-        }
-        const { name, selectors, source } = metadata;
-        const uiLabels = [];
-        Object.keys(selections).forEach(key => {
-            const selection = selections[key];
-            const foundSelector = selectors.find(s => s.id === key);
-            if (foundSelector) {
-                const value = foundSelector.allowedValues.find(v => selection === v.id || selection === v);
-                const isObject = typeof value === 'object';
-                const selector = foundSelector.id;
-                const id = isObject ? value.id : value;
-                let label;
-                if (isObject) {
-                    label = value.name;
-                } else {
-                    // try finding localization for the param
-                    label = Oskari.util.keyExists(selectionValues, selector + '.' + value) ? selectionValues[selector][value] : value;
-                }
-                uiLabels.push({ selector, id, label });
-            }
-        });
-        const localizedName = Oskari.getLocalized(name);
-        let selectorsFormatted = '(' + uiLabels.map(l => l.label).join(' / ') + ')';
-        const range = series ? series.values[0] + ' - ' + series.values[series.values.length - 1] : '';
-        if (range) {
-            selectorsFormatted = range + ' ' + selectorsFormatted;
-        }
-        return {
-            indicator: localizedName,
-            source: Oskari.getLocalized(source),
-            params: selectorsFormatted,
-            full: localizedName + ' ' + selectorsFormatted,
-            paramsList: uiLabels,
-            range
-        };
-    } catch (error) {
-        return getError();
+    if (!metadata) {
+        return;
     }
+    const { selections, series } = ind;
+    const { name, selectors, source } = metadata;
+    const paramsList = [];
+    Object.keys(selections).forEach(id => {
+        const selector = selectors.find(s => s.id === id);
+        if (!selector) {
+            return;
+        }
+        const selection = selections[id];
+        const { value, label } = selector.values.find(v => v.value === selection) || {};
+        if (value) {
+            paramsList.push({ id, value, label });
+        }
+    });
+    let selectorsFormatted = '(' + paramsList.map(l => l.label).join(' / ') + ')';
+    const range = series ? series.values[0] + ' - ' + series.values[series.values.length - 1] : '';
+    if (range) {
+        selectorsFormatted = range + ' ' + selectorsFormatted;
+    }
+    return {
+        indicator: name,
+        source,
+        params: selectorsFormatted,
+        full: name + ' ' + selectorsFormatted,
+        paramsList,
+        range
+    };
 };
 
 // series needs to update labels on selected change
@@ -206,11 +185,11 @@ export const getUpdatedLabels = (labels, selections) => {
         return labels;
     }
     // Doesn't validate selectors
-    const paramsList = Object.keys(selections).map(selector => {
-        const value = selections[selector];
+    const paramsList = Object.keys(selections).map(id => {
+        const value = selections[id];
         return {
-            selector,
-            id: value,
+            id,
+            value,
             label: value
         };
     });

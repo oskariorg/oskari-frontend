@@ -80,28 +80,11 @@ class IndicatorFormController extends StateHandler {
 
     async getIndicatorDatasets (indicator) {
         try {
-            const ind = await getIndicatorMetadata(indicator.ds, indicator.id);
+            const { selectors, regionsets, name, source, description } = await getIndicatorMetadata(indicator.ds, indicator.id);
             const datasets = [];
-            for (const sel of ind?.selectors) {
-                for (const regionset of ind.regionsets) {
-                    for (const value of sel.allowedValues) {
-                        const data = {};
-                        if (typeof value === 'object') {
-                            data[sel.id] = value.id;
-                        } else {
-                            data[sel.id] = value;
-                        }
-                        data.regionset = regionset;
-                        datasets.push(data);
-                    }
-                }
-            }
-            this.updateState({
-                datasets,
-                indicatorName: Oskari.getLocalized(ind.name),
-                indicatorDescription: Oskari.getLocalized(ind.description),
-                indicatorSource: Oskari.getLocalized(ind.source)
-            });
+            // create dataset for every value and regionset compination like {year: 2024, regionset: 2036}
+            selectors.forEach(s => s.values.forEach(valObj => regionsets.forEach(regionset => datasets.push({[s.id]: valObj.value, regionset}))));
+            this.updateState({ datasets, indicator: {...indicator, name, source, description } });
         } catch (error) {
             Messaging.error(Oskari.getMsg('StatsGrid', 'errors.indicatorMetadataError'));
         }

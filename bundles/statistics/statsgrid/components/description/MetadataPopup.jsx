@@ -10,19 +10,19 @@ const POPUP_OPTIONS = {
     id: BUNDLE_KEY + '-metadata'
 };
 
-export const showMedataPopup = (data = [], onClose) => {
+export const showMedataPopup = (indicators, onClose) => {
     const controls = showPopup(
-        <Message messageKey="metadataPopup.title" bundleKey={BUNDLE_KEY} messageArgs={{indicators: data.length}}/>,
+        <Message messageKey="metadataPopup.title" bundleKey={BUNDLE_KEY} messageArgs={{indicators: indicators.length}}/>,
         (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <MetadataCollapse data={data} />
+            <MetadataCollapse indicators={indicators}/>
         </LocaleProvider>), onClose, POPUP_OPTIONS);
     return {
         ...controls,
-        update: (data) => {
+        update: (indicators) => {
             controls.update(
-                <Message messageKey="metadataPopup.title" bundleKey={BUNDLE_KEY} messageArgs={{indicators: data.length}}/>,
+                <Message messageKey="metadataPopup.title" bundleKey={BUNDLE_KEY} messageArgs={{indicators: indicators.length}}/>,
                 (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                    <MetadataCollapse data={data} />
+                    <MetadataCollapse indicators={indicators} />
                 </LocaleProvider>)
             );
             controls.bringToTop();

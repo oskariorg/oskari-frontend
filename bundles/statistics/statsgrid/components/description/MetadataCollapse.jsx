@@ -2,25 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MetadataContent } from './MetadataContent';
 import { Collapse, CollapsePanel, Message } from 'oskari-ui';
+import { getCachedMetadata } from '../../handler/IndicatorHelper';
 
-export const MetadataCollapse = ({ data = [] }) => {
+export const MetadataCollapse = ({ indicators }) => {
+    // Only selected indiator (map or search) has button to show popup => metadata is always cached
+    const data = indicators.map(ind => getCachedMetadata(ind.ds, ind.id));
     if (!data.length) {
         return (<Message messageKey='metadataPopup.noMetadata' messageArgs={{ indicators: 1 }}/>);
     }
     // Description can include HTML so well have to wrap it as HTML content...
     return (
-        <Collapse defaultActiveKey={data.map(item => Oskari.getLocalized(item.name))}>
-            { data.map(metadata => {
-                const name = Oskari.getLocalized(metadata.name) || '';
+        <Collapse defaultActiveKey={data.map(item => item.id)}>
+            { data.map(({ name, description, source, metadata, id }) => {
                 if (!name) {
                     return null;
                 }
                 return (
-                    <CollapsePanel header={name} key={name}>
+                    <CollapsePanel header={name} key={id}>
                         <MetadataContent 
-                            description={metadata.description}
-                            source={metadata.source}
-                            metadata={metadata.metadata}
+                            description={description}
+                            source={source}
+                            metadata={metadata}
                         />
                     </CollapsePanel>
                 );
@@ -30,10 +32,8 @@ export const MetadataCollapse = ({ data = [] }) => {
 };
 
 MetadataCollapse.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.object,
-        desc: PropTypes.object,
-        source: PropTypes.object,
-        metadata: PropTypes.object
+    indicators: PropTypes.arrayOf(PropTypes.shape({
+        ds: PropTypes.number,
+        id: PropTypes.string
       }))
 };

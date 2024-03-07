@@ -1,5 +1,4 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { showMedataPopup } from '../components/description/MetadataPopup';
 import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { populateIndicatorOptions, validateSelectionsForSearch } from './SearchIndicatorOptionsHelper';
 import { getIndicatorMetadata } from './IndicatorHelper';
@@ -12,7 +11,6 @@ class SearchController extends StateHandler {
         this.instance = instance;
         this.stateHandler = stateHandler;
         this.setState(this.getInitialState());
-        this.metadataPopup = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.SearchHandler');
     }
@@ -87,7 +85,8 @@ class SearchController extends StateHandler {
                     }
                 },
                 error => {
-                    Messaging.error(this.loc(error));
+                    const errorMsg = this.loc('errors')[error] || this.loc('errors.indicatorListError');
+                    Messaging.error(errorMsg);
                     this.updateState({ loading: false });
                 });
         } catch (error) {
@@ -116,7 +115,7 @@ class SearchController extends StateHandler {
     setSearchTimeseries (searchTimeseries) {
         const { selectors } = this.getState().indicatorParams;
         if (selectors && searchTimeseries) {
-            const keyWithTime = Object.keys(selectors).find((key) => selectors[key].time);
+            const keyWithTime = selectors.find(sel => sel.time)?.id;
             if (!keyWithTime) {
                 Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
                 this.updateState({ searchTimeseries: false });
@@ -172,9 +171,6 @@ class SearchController extends StateHandler {
 
     setSelectedIndicators (selectedIndicators) {
         this.updateState({selectedIndicators});
-        if (this.metadataPopup) {
-            this.openMetadataPopup();
-        }
         if (!selectedIndicators.length) {
             this.updateState({ indicatorParams: {}, selectedRegionset: null });
             return;
@@ -186,61 +182,24 @@ class SearchController extends StateHandler {
         }
     }
 
-    // indicator is state handler's selected indicator (on map)
-    async openMetadataPopup (indicator = null) {
-        const datasource = indicator ? indicator.ds : this.getState().selectedDatasource;
-        const indicatorIds = indicator ? [indicator.id] : this.getState().selectedIndicators;
-
-        const data = await this.prepareMetadataPopupData(datasource, indicatorIds);
-        if (this.metadataPopup) {
-            this.metadataPopup.update(data);
-        } else {
-            this.metadataPopup = showMedataPopup(data, () => this.closeMetadataPopup());
-        }
-    }
-
-    async prepareMetadataPopupData (datasource, indicatorIds) {
-        const result = [];
-        for (const id of indicatorIds) {
-            try {
-                const data = await getIndicatorMetadata(datasource, id);
-                if (!data) {
-                    return;
-                }
-                result.push(data);
-            } catch (error) {
-                return;
-            }
-        }
-        return result;
-    }
-
-    closeMetadataPopup () {
-        if (this.metadataPopup) {
-            this.metadataPopup.close();
-        }
-        this.metadataPopup = null;
-    }
-
     handleMultipleIndicatorParams (indicators) {
-        const combinedSelectors = {};
+        const combinedSelectors = [];
         const regionsets = new Set();
 
         const promise = new Promise((resolve, reject) => {
             indicators.forEach((indId, index) => {
-                this.handleSingleIndicatorParams(indId, (data) => {
+                this.handleSingleIndicatorParams(indId, (params) => {
                     // include missing regionsets
-                    data.regionsets.forEach(rs => regionsets.add(rs));
-                    Object.keys(data.selectors).forEach((name) => {
-                        const { values, time } = data.selectors[name];
-                        const selector = combinedSelectors[name];
-                        if (!selector) {
-                            combinedSelectors[name] = { values, time };
+                    params.regionsets.forEach(rs => regionsets.add(rs));
+                    params.selectors.forEach((selector) => {
+                        const existing = combinedSelectors.find(s => s.id === selector.id);
+                        if (!existing) {
+                            combinedSelectors.push(selector);
                         } else {
-                            const existingIds = selector.values.map(s => s.id);
-                            const newValues = values.filter(v => !existingIds.includes(v.id));
+                            const existingIds = existing.values.map(s => s.id);
+                            const newValues = selector.values.filter(v => !existingIds.includes(v.id));
                             if (newValues.length) {
-                                selector.values = [...selector.values, ...newValues].sort((a,b) => b.id - a.id);
+                                existing.values = [...existing.values, ...newValues].sort((a,b) => b.value - a.value);
                             }
                         }
                     });
@@ -258,29 +217,11 @@ class SearchController extends StateHandler {
     }
 
     async handleSingleIndicatorParams (indicatorId, cb) {
-        const loc = this.loc('panels.newSearch.selectionValues');
         const { selectedDatasource } = this.getState();
         try {
-            // TODO: metadata selector allowedValue can be value or { name, id } => handle in one place and cache {id, title} or {value, label}
             const meta = await getIndicatorMetadata(selectedDatasource, indicatorId);
             const { selectors = [], regionsets = [] } = meta;
-            const combinedSelectors = {};
-            selectors.forEach((selector) => {
-                const { id, allowedValues, time = false } = selector;
-                const values = allowedValues.map(val => {
-                    // value or { name, id }
-                    const valueId = val.id || val;
-                    const name = val.name || valueId;
-                    const title = loc[id]?.[name] || name;
-                    return { id: valueId, title };
-                });
-                combinedSelectors[id] = { values, time };
-            });
-
-            const indicatorParams = {
-                selectors: combinedSelectors,
-                regionsets
-            };
+            const indicatorParams = { selectors, regionsets };
             if (typeof cb === 'function') {
                 cb(indicatorParams);
             } else {
@@ -299,30 +240,29 @@ class SearchController extends StateHandler {
 
     initParamSelections () {
         const { regionsetFilter, searchTimeseries, indicatorParams, selectedRegionset: rsId } = this.getState();
-        const { selectors = {}, regionsets = [], selections: current = {}} = indicatorParams;
+        const { selectors = [], regionsets = [], selections: current = {}} = indicatorParams;
         const selections = {};
-        const hasValidSelection = (key, allowed, time) => {
-            const cur = current[key];
+        const hasValidSelection = (id, allowed, time) => {
+            const cur = current[id];
             if (time) {
                 if (searchTimeseries) {
                     return cur.length === 2 && cur[0] < cur[1];
                 }
-                return Array.isArray(cur) && cur.some(id => allowed.includes(id));
+                return Array.isArray(cur) && cur.some(value => allowed.includes(value));
             }
             return allowed.includes(cur);
         };
         // use selectors to get rid of removed selectors' selections
-        Object.keys(selectors).forEach(key => {
-            const { time, values } = selectors[key];
-            const allowed = values.map(val => val.id);
-            if (hasValidSelection(key, allowed, time)) {
+        selectors.forEach(({ time, values, id }) => {
+            const allowed = values.map(v => v.value);
+            if (hasValidSelection(id, allowed, time)) {
                 // has valid selection already, use it
-                selections[key] = current[key];
+                selections[id] = current[id];
                 return;
             }
-            const id = allowed[0];
+            const value = allowed[0];
             // time has multi-select => use array
-            const selected = time ? [id] : id;
+            const selected = time ? [value] : value;
             if (time && searchTimeseries) {
                 if (allowed.length < 2) {
                     Messaging.error(this.loc('errors.cannotDisplayAsSeries'));
@@ -331,7 +271,7 @@ class SearchController extends StateHandler {
                     selected.unshift(allowed[allowed.length - 1]);
                 }
             }
-            selections[key] = selected;
+            selections[id] = selected;
         });
         // metadata regionsets doesn't have same order than all regionsets
         // select first allowed value from all regionsets
@@ -409,12 +349,12 @@ class SearchController extends StateHandler {
      */
     getRefinedSearch (id, metadata) {
         const { indicatorParams, searchTimeseries, selectedRegionset, selectedDatasource } = this.getState();
-        const { selections = {}, selectors = {}} = indicatorParams;
-        const keyWithTime = Object.keys(selections).find((key) => selectors[key].time);
+        const { selections = {}, selectors = []} = indicatorParams;
+        const keyWithTime = Object.keys(selections).find((key) => selectors.find(s=> s.id === key && s.time));
         const indSearchValues = {
             id,
             ds: selectedDatasource,
-            name: Oskari.getLocalized(metadata.name), // for showing error
+            name: metadata.name, // for showing error
             selections: {}
         };
 
@@ -424,10 +364,10 @@ class SearchController extends StateHandler {
         }
         const multiSelections = [];
         Object.keys(selections).forEach(key => {
-            const selector = metadata.selectors.find(selector => selector.id === key);
-            // TODO: simplify after metadata response is unified
-            const checkAllowed = value => selector.allowedValues.includes(value) || selector.allowedValues.find(obj => obj.id === value);
-            if (!selector) {
+            const metaSelector = metadata.selectors.find(selector => selector.id === key);
+            // use metadata for validity check. Params have combined selectors.
+            const checkAllowed = value => metaSelector.values.find(obj => obj.value === value);
+            if (!metaSelector) {
                 indSearchValues.error = 'indicatorMetadataError';
                 return;
             }
@@ -443,9 +383,10 @@ class SearchController extends StateHandler {
             // series
             if (key === keyWithTime && searchTimeseries) {
                 const [first, last] = values;
-                const range = selectors[key].values
-                    .map(val => val.id)
-                    .filter(id => id >= first && id <= last)
+                // should always find values as keyWithTime is selected from selectors
+                const range = selectors.find(s=> s.id === keyWithTime).values
+                    .map(val => val.value)
+                    .filter(val => val >= first && val <= last)
                     .reverse();
                 const allowedValues = range.filter(checkAllowed);
                 indSearchValues.series = {
@@ -492,12 +433,11 @@ class SearchController extends StateHandler {
         for (let i = 0; i < searchValues.length; i++) {
             const indicator = searchValues[i];
             indicator.hash = getHashForIndicator(indicator);
-            const success = await this.stateHandler.addIndicator(indicator, regionset);
-            // TODO: refactor to return error instead of boolean
+            const { success, error } = await this.stateHandler.addIndicator(indicator, regionset);
             if (success) {
                 latestHash = indicator.hash;
-            } else {
-                indicator.error = 'failedToAdd';
+            } else if (error) {
+                indicator.error = error;
             }
         };
         if (latestHash) {
@@ -508,12 +448,23 @@ class SearchController extends StateHandler {
 
     showIndicatorForm () {
         const { selectedDatasource, selectedIndicators } = this.getState();
-        const formHandler = this.instance.getViewHandler().formHandler;
+        const formHandler = this.instance.getViewHandler()?.formHandler;
         if (!formHandler) {
             return;
         }
         const indicator = selectedIndicators.length === 1 ? selectedIndicators[0] : null;
         formHandler.showIndicatorPopup(selectedDatasource, indicator);
+    }
+
+    openMetadataPopup (indicator) {
+        let indicators = [];
+        if (indicator) {
+            indicators = [indicator];
+        } else {
+            const { selectedIndicators, selectedDatasource: ds } = this.getState();
+            indicators = selectedIndicators.map(id =>({ id, ds }));
+        }
+        this.instance.getViewHandler()?.openMetadataPopup(indicators);
     }
 }
 

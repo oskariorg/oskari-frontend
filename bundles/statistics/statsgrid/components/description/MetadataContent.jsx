@@ -4,16 +4,14 @@ import { Message } from 'oskari-ui';
 import styled from 'styled-components';
 
 export const MetadataContent = ({description, source, metadata = {}}) => {
-    const desc = Oskari.getLocalized(description) || '';
-    const datasource = Oskari.getLocalized(source) || '';
-    if (!desc) {
+    if (!description) {
         return (<Message messageKey='metadataPopup.noMetadata' messageArgs={{ indicators: 1 }}/>);
     }
     // Description can include HTML so well have to wrap it as HTML content...
     return (<React.Fragment>
-        <p dangerouslySetInnerHTML={{__html: desc}} />
+        <p dangerouslySetInnerHTML={{__html: description}} />
         <p>
-            <DataLabel labelKey='panels.newSearch.datasourceTitle' value={datasource} />
+            <DataLabel labelKey='panels.newSearch.datasourceTitle' value={source} />
             <DataLabel labelKey='metadataPopup.updated' value={metadata.updated} />
             <DataLabel labelKey='metadataPopup.nextUpdate' value={metadata.nextUpdate} />
         </p>
@@ -32,7 +30,7 @@ const DataLabel = ({labelKey, value}) => {
 }
 
 MetadataContent.propTypes = {
-    description: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    description: PropTypes.string.isRequired,
+    source: PropTypes.string.isRequired,
     metadata: PropTypes.object
 };
