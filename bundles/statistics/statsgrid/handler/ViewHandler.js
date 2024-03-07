@@ -11,11 +11,12 @@ import { showHistogramPopup } from '../components/manualClassification/Histogram
 export const FLYOUTS = ['search', 'grid', 'diagram']; // to toggle tile
 
 const CLASSIFICATION = 'classification';
+const SERIES = 'series';
 const classificationDefaults = {
     editEnabled: true,
     transparent: false
 };
-const embeddedTools = [...FLYOUTS, CLASSIFICATION];
+const embeddedTools = [...FLYOUTS, CLASSIFICATION, SERIES];
 
 class UIHandler extends StateHandler {
     constructor (instance, stateHandler, searchHandler) {
@@ -86,6 +87,7 @@ class UIHandler extends StateHandler {
 
         // automaticly shown/closed views
         const hasClassificationButton = viewState.mapButtons.includes(CLASSIFICATION);
+        const hasSeriesButton = viewState.mapButtons.includes(SERIES);
         if (isActive) {
             if (classification) {
                 classification.update(state, viewState);
@@ -97,13 +99,14 @@ class UIHandler extends StateHandler {
             if (state.isSeriesActive) {
                 if (series) {
                     series.update(state);
-                } else {
-                    this.show('series');
+                } else if (!hasSeriesButton) {
+                    // series is always visible except when there is a button to show it
+                    this.show(SERIES);
                 }
             }
         } else {
             this.close(CLASSIFICATION);
-            this.close('series');
+            this.close(SERIES);
         }
         // create toggle plugin only when needed
         if (viewState.mapButtons.length > 0 && !this.togglePlugin) {
