@@ -1,6 +1,7 @@
 import { getHash, getHashForIndicator, getDataProviderKey, populateData, populateSeriesData } from '../helper/StatisticsHelper';
 import { updateIndicatorListInCache, removeIndicatorFromCache } from './SearchIndicatorOptionsHelper';
 import { getRegionsAsync } from '../helper/RegionsHelper';
+import { BUNDLE_KEY } from '../constants';
 
 const statsGridLocale = Oskari.getMsg.bind(null, 'StatsGrid');
 // cache storage object
@@ -14,54 +15,48 @@ const getDataCacheKey = (indicator, regionsetId) => {
 
 // for guest user's own indicators
 const updateIndicatorMetadataInCache = (indicator, regionsetId) => {
-    const { id, ds, selections = {} } = indicator;
-    const cacheKey = getMetaCacheKey(ds, id);
+    const { selections = {}, ...restToStore } = indicator;
+    const cacheKey = getMetaCacheKey(indicator.ds, indicator.id);
     const cachedResponse = indicatorMetadataStore[cacheKey];
-
-    const lang = Oskari.getLang();
+    // user indicator has actually only one selector 'year' which is time param
     const selectors = Object.keys(selections).map(id => {
         const value = selections[id];
         return {
             id,
-            name: id,
             time: true,
-            allowedValues: [{ name: value, id: value }]
+            values: [{ value, label: value }]
         };
     });
+    // store metadata like processMetadata
     if (!cachedResponse) {
         indicatorMetadataStore[cacheKey] = {
+            ...restToStore,
             public: true,
-            id,
-            ds,
-            name: { [lang]: indicator.name },
-            description: { [lang]: indicator.description },
-            source: { [lang]: indicator.source },
             regionsets: regionsetId ? [regionsetId] : [],
             selectors
         };
         return;
     }
-    cachedResponse.name[lang] = indicator.name;
-    cachedResponse.description[lang] = indicator.description;
-    cachedResponse.source[lang] = indicator.source;
+    cachedResponse.name = indicator.name;
+    cachedResponse.description = indicator.description;
+    cachedResponse.source = indicator.source;
     if (regionsetId && !cachedResponse.regionsets.includes(regionsetId)) {
         cachedResponse.regionsets.push(regionsetId);
     }
     // update allowed values
     const { selectors: cachedSelectors } = cachedResponse;
     selectors.forEach(selector => {
-        const { id, allowedValues } = selector;
-        const cached = cachedSelectors.find(s => s.id === id);
+        const cached = cachedSelectors.find(s => s.id === selector.id);
         if (!cached) {
             cachedSelectors.push(selector);
             return;
         }
-        allowedValues.forEach(value => {
-            if (cached.allowedValues.some(v => v.id === value.id)) {
+        selector.values.forEach(value => {
+            if (cached.values.some(v => v.id === value.id)) {
                 // already added
                 return;
             }
-            cached.allowedValues.push(value);
+            cached.values.push(value);
         });
     });
 };
@@ -70,6 +65,11 @@ const flushIndicatorMetadataCache = (indicator) => {
     const { id, ds } = indicator;
     const cacheKey = getMetaCacheKey(ds, id);
     indicatorMetadataStore[cacheKey] = null;
+};
+
+export const getCachedMetadata = (datasourceId, indicatorId) => {
+    const cacheKey = getMetaCacheKey(datasourceId, indicatorId);
+    return indicatorMetadataStore[cacheKey] || {};
 };
 
 export const getIndicatorMetadata = async (datasourceId, indicatorId) => {
@@ -97,16 +97,47 @@ export const getIndicatorMetadata = async (datasourceId, indicatorId) => {
             throw new Error(response.statusText);
         }
         const result = await response.json();
+        const processed = processMetadata(result);
         // cache results
-        indicatorMetadataStore[cacheKey] = result;
-        return result;
+        indicatorMetadataStore[cacheKey] = processed;
+        return processed;
     } catch (error) {
+        // TODO: indicatorMetadataError
         throw new Error(error);
     }
+};
+const processMetadata = (meta) => {
+    const locValues = Oskari.getMsg(BUNDLE_KEY, 'panels.newSearch.selectionValues');
+    const locParams = Oskari.getMsg(BUNDLE_KEY, 'parameters');
+    const metaSelectors = meta.selectors || [];
+    const selectors = [];
+    metaSelectors.forEach(metaSelector => {
+        const { id, allowedValues, time = false } = metaSelector;
+        const values = allowedValues.map(val => {
+            // value or { name, id }
+            const value = val.id || val;
+            const name = val.name || value;
+            const label = locValues[id]?.[name] || name;
+            // use value, label to use as Select option
+            return { value, label };
+        });
+        const label = locParams[id] || id;
+        const selector = { id, values, time, label};
+        if (time) {
+            selectors.unshift(selector);
+        } else {
+            selectors.push(selector);
+        }
+    });
+    const name = Oskari.getLocalized(meta.name) || '';
+    const source = Oskari.getLocalized(meta.source) || '';
+    const description = Oskari.getLocalized(meta.description) || '';
+    return {...meta, name, source, description, selectors};
 };
 
 export const getDataForIndicator = async (indicator, regionset) => {
     const regions = await getRegionsAsync(regionset);
+    // TODO: regionsetsIsEmpty
     let data = {};
     const fractionDigits = indicator?.classification?.fractionDigits;
     if (indicator.series) {
@@ -116,11 +147,13 @@ export const getDataForIndicator = async (indicator, regionset) => {
             const value = values[i];
             const selections = { ...indicator.selections, [id]: value };
             const rawData = await getIndicatorData({ ...indicator, selections }, regionset);
+            // TODO: noData
             dataBySelection[value] = rawData;
         }
         data = populateSeriesData(dataBySelection, regions, regionset, fractionDigits);
     } else {
         const rawData = await getIndicatorData(indicator, regionset);
+        // TODO: noData
         data = populateData(rawData, regions, regionset, fractionDigits);
     }
     return data;
@@ -295,71 +328,4 @@ export const deleteIndicator = async (indicator, regionsetId) => {
     } catch (error) {
         throw new Error('Error on server');
     }
-};
-
-export const getIndicatorObjectToAdd = async (datasourceId, indicatorId, selections, series) => {
-    const { name, selectors: availableIndicatorSelectors, source } = await getIndicatorMetadata(datasourceId, indicatorId);
-    const localizedIndicatorName = Oskari.getLocalized(name);
-    const uiLabels = [];
-    Object.keys(selections).forEach(selectorId => {
-        const currentParameter = selections[selectorId];
-        const indicatorSelector = getIndicatorSelector(availableIndicatorSelectors, selectorId);
-        if (!indicatorSelector) {
-            // function received a selection that the current indicator doesn't support
-            // this can happen when adding multiple indicators in one go
-            // selections are combined from all indicators for the UI when adding multiple indicators at once
-            // -> not all indicators might have all those parameters/selections -> just skip it in that case
-            return;
-        }
-        let selectorValue = indicatorSelector.allowedValues.find(v => currentParameter === v.id || currentParameter === v);
-        if (typeof selectorValue !== 'object') {
-            // normalize single value to object with id and value
-            selectorValue = {
-                id: selectorValue,
-                name: selectorValue
-            };
-        }
-        const label = getSelectorValueLocalization(indicatorSelector.id, selectorValue.id) || selectorValue.name;
-        uiLabels.push({
-            selectorId,
-            id: selectorValue.id,
-            label
-        });
-    });
-    let selectorsFormatted = ' (' + uiLabels.map(l => l.label).join(' / ') + ')';
-    if (series) {
-        const range = String(series.values[0]) + ' - ' + String(series.values[series.values.length - 1]);
-        selectorsFormatted = range + ' ' + selectorsFormatted;
-    }
-    return {
-        datasource: Number(datasourceId),
-        indicator: indicatorId,
-        // selections are the params like year=2020 etc
-        selections,
-        // series is the time range for time series selection
-        series,
-        hash: getHash(datasourceId, indicatorId, selections, series),
-        labels: {
-            indicator: localizedIndicatorName,
-            source: Oskari.getLocalized(source),
-            params: selectorsFormatted,
-            full: localizedIndicatorName + ' ' + selectorsFormatted,
-            paramsAsObject: uiLabels
-        }
-    };
-};
-
-const getSelectorValueLocalization = (paramName, paramValue) => {
-    const localeKey = 'panels.newSearch.selectionValues.' + paramName + '.' + paramValue;
-    const value = statsGridLocale(localeKey);
-    if (value === localeKey) {
-        // returned the localeKey -> we don't have a localized label for this
-        return null;
-    }
-    return value;
-};
-
-// returns the selector object from available IF it is supported
-const getIndicatorSelector = (availableSelectors, selectorId) => {
-    return availableSelectors.find(s => s.id === selectorId);
 };
