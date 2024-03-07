@@ -306,7 +306,7 @@ class SearchController extends StateHandler {
                         }
                         combinedValues[selectorName].values = addMissingElements(combinedValues[selectorName].values, value.selectors[selectorName].values, 'id');
                         if (value.selectors[selectorName].time) {
-                            combinedValues[selectorName].values.sort((a,b) => b.id - a.id);
+                            combinedValues[selectorName].values.sort((a, b) => b.id - a.id);
                         }
                     });
                 });
@@ -352,7 +352,7 @@ class SearchController extends StateHandler {
                     combinedValues[selector.id].values.push(valObject);
                 });
                 if (selector.time) {
-                    combinedValues[selector.id].values.sort((a,b) => b.id - a.id);
+                    combinedValues[selector.id].values.sort((a, b) => b.id - a.id);
                 }
             });
 
