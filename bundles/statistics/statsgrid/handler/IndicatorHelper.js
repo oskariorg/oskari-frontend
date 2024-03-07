@@ -1,4 +1,4 @@
-import { getHash, getHashForIndicator, getDataProviderKey, populateData, populateSeriesData } from '../helper/StatisticsHelper';
+import { getHash, getDataProviderKey, populateData, populateSeriesData } from '../helper/StatisticsHelper';
 import { updateIndicatorListInCache, removeIndicatorFromCache } from './SearchIndicatorOptionsHelper';
 import { getRegionsAsync } from '../helper/RegionsHelper';
 
@@ -8,7 +8,8 @@ const indicatorMetadataStore = {};
 const indicatorDataStore = {};
 const getMetaCacheKey = (datasourceId, indicatorId) => 'ds_' + datasourceId + '_ind_' + indicatorId;
 const getDataCacheKey = (indicator, regionsetId) => {
-    const hash = indicator.hash || getHashForIndicator(indicator);
+    // Don't use series for hash because every time is stored separately
+    const hash = getHash(indicator.ds, indicator.id, indicator.selections);
     return 'hash_' + hash + '_rs_' + regionsetId;
 };
 

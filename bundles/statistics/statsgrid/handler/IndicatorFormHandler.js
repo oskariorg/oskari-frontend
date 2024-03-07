@@ -26,6 +26,12 @@ class IndicatorFormController extends StateHandler {
         this.reset();
         await this.preparePopupData({ ds, id });
         this.instance.getViewHandler().show('indicatorForm');
+        if (!id && !Oskari.user().isLoggedIn()) {
+            Messaging.warn({
+                duration: 10,
+                content: this.loc('userIndicators.notLoggedInWarning')
+            });
+        }
     }
 
     showClipboardPopup () {
