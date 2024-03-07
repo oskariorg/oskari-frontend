@@ -219,8 +219,11 @@ class StatisticsController extends StateHandlerBase {
             // remove indicator first to get updated indicator and data
             this.removeIndicator(indicator);
         }
-        await this.addIndicator(indicator, regionset);
-        this.setActiveIndicator(indicator.hash);
+        const response = await this.addIndicator(indicator, regionset);
+        if (response.success) {
+            this.setActiveIndicator(indicator.hash);
+        }
+        return response;
     }
 
     async addIndicator (indicator, regionset) {
@@ -229,27 +232,24 @@ class StatisticsController extends StateHandlerBase {
             if (regionset !== this.getState().regionset) {
                 await this.setActiveRegionset(regionset);
             }
-            return true;
+            return { success: true };
         }
         try {
             this.updateState({ loading: true });
-            // TODO: SearchHandler should select first value
-            if (indicator.series) {
-                const { id, values } = indicator.series;
-                indicator.selections[id] = values[0];
-            }
             const indicatorToAdd = await this.getIndicatorToAdd(indicator, regionset);
+            if (indicatorToAdd.data.uniqueCount === 0) {
+                return { error: 'noData'};
+            }
             this.instance.addDataProviderInfo(indicatorToAdd);
             this.updateState({
                 regionset,
                 indicators: [...this.getState().indicators, indicatorToAdd]
             });
         } catch (error) {
-            this.log.warn(error.message);
-            return false;
+            return { error: error.message };
         }
         this.updateState({ loading: false });
-        return true;
+        return { success: true };
     }
 
     // gather all needed stuff for rendering components before adding indicator to state
