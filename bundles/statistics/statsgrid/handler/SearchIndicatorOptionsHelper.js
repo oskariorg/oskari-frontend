@@ -77,7 +77,7 @@ export const updateIndicatorListInCache = (indicator, regionsetId) => {
 export const populateIndicatorOptions = async (datasourceId, successCallback, errorCallback) => {
     if (!datasourceId) {
         if (typeof errorCallback === 'function') {
-            errorCallback('errors.myIndicatorDatasource');
+            errorCallback('myIndicatorDatasource');
         }
         return;
     }
@@ -107,7 +107,7 @@ export const populateIndicatorOptions = async (datasourceId, successCallback, er
         successCallback(value);
     } catch (error) {
         if (typeof errorCallback === 'function') {
-            errorCallback('errors.indicatorListError');
+            errorCallback('indicatorListError');
         } else {
             throw new Error(error);
         }
@@ -195,6 +195,6 @@ const getIndicatorListFromServer = async (datasourceId) => {
         }
         return await response.json();
     } catch (error) {
-        throw new Error('errors.indicatorListIsEmpty');
+        throw new Error(error);
     }
 };

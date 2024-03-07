@@ -37,7 +37,8 @@ class IndicatorsHandler extends StateHandler {
                 },
                 error => {
                     this.updateState({ loading: false });
-                    Messaging.error(this.loc(error));
+                    const errorMsg = this.loc('errors')[error] || this.loc('errors.indicatorListError');
+                    Messaging.error(errorMsg);
                 });
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorListError'));
