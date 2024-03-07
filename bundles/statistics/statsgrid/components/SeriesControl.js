@@ -50,6 +50,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
     updateState: function (state) {
         this._uiState = { ...this._uiState, ...state };
     },
+    resetState: function () {
+        this._uiState = {
+            values: [],
+            animating: false,
+            interval: 2000,
+            index: 0,
+            hash: null
+        };
+    },
     /**
      * @method _generateSelectOptions Generate localized options for <select> dropdowns
      * @private

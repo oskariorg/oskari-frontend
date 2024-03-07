@@ -100,7 +100,7 @@ class StatisticsController extends StateHandlerBase {
         const updated = [];
         // async/await doesn't work with map()
         for (let i = 0; i < indicators.length; i++) {
-            const indicator = {...indicators[i]};
+            const indicator = { ...indicators[i] };
             indicator.data = await getDataForIndicator(indicator, regionset);
             validateClassification(indicator.classification, indicator.data);
             indicator.classifiedData = getClassifiedData(indicator);

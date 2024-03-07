@@ -1,5 +1,5 @@
-import { MyIndicatorsHandler } from '../statsgrid/handler/MyIndicatorsHandler';
-import { MyIndicatorsTab } from '../statsgrid/MyIndicatorsTab';
+import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
+import { MyIndicatorsTab } from './MyIndicatorsTab';
 
 const TOGGLE_TOOL_SERIES = 'series';
 const TOGGLE_TOOL_CLASSIFICATION = 'classification';
@@ -108,13 +108,27 @@ Oskari.clazz.define(
         _addIndicatorsTabToMyData: function (sandbox, appStarted) {
             let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
 
+            const reqName = 'PersonalData.AddTabRequest';
             if (myDataService) {
                 myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this));
+            } else if (sandbox.hasHandler(reqName)) {
+                // fallback to old personaldata tabs
+                this._addIndicatorsTabToPersonalData(sandbox);
             } else if (!appStarted) {
                 // Wait for the application to load all bundles and try again
                 Oskari.on('app.start', () => {
                     this._addIndicatorsTabToMyData(sandbox, true);
                 });
+            }
+        },
+        _addIndicatorsTabToPersonalData: function (sandbox) {
+            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
+            if (typeof reqBuilder === 'function') {
+                var tab = Oskari.clazz.create('Oskari.statistics.statsgrid.PersonalDataIndicatorsTab', this);
+                tab.bindEvents();
+                var addAsFirstTab = false;
+                var req = reqBuilder(tab.getTitle(), tab.getContent(), addAsFirstTab, tab.getId());
+                sandbox.request(this, req);
             }
         },
         addMapPluginToggleTool: function (tool) {

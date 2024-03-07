@@ -176,8 +176,7 @@ Oskari.registerLocalization({
             'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}'
         },
         'missing': {
-            'regionsetName': 'Okänd',
-            'indicator': 'Okänd indikator'
+            'regionsetName': 'Okänd'
         },
         'datacharts': {
             'flyout': 'Sökta datamängden',

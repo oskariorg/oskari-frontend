@@ -351,7 +351,7 @@ class SearchController extends StateHandler {
             });
 
             if (result.regionsets.length === 0) {
-                Messaging.error('errors.regionsetsIsEmpty');
+                Messaging.error(this.loc('errors.regionsetsIsEmpty'));
             }
 
             const data = {
@@ -435,9 +435,9 @@ class SearchController extends StateHandler {
             }
         };
 
-        const keyWithTime = Object.keys(this.getState().indicatorParams.selected).find((key) => this.getState().indicatorParams.selectors[key].time);
+        const keyWithTime = Object.keys(this.getState().indicatorParams.selected).find((key) => this.getState().indicatorParams.selectors[key]?.time);
 
-        if (this.getState().searchTimeseries) {
+        if (keyWithTime && this.getState().searchTimeseries) {
             data.selections[keyWithTime] = this.getState().indicatorParams.selected[keyWithTime][0];
             const values = this.getState().indicatorParams.selectors[keyWithTime].values.filter(val => val.id >= this.getState().indicatorParams.selected[keyWithTime][0] && val.id <= this.getState().indicatorParams.selected[keyWithTime][1]).reverse();
             data.series = {
