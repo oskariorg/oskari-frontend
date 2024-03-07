@@ -305,6 +305,9 @@ class SearchController extends StateHandler {
                             };
                         }
                         combinedValues[selectorName].values = addMissingElements(combinedValues[selectorName].values, value.selectors[selectorName].values, 'id');
+                        if (value.selectors[selectorName].time) {
+                            combinedValues[selectorName].values.sort((a,b) => b.id - a.id);
+                        }
                     });
                 });
                 if (index === indicators.length - 1) resolve();
@@ -348,6 +351,9 @@ class SearchController extends StateHandler {
                     };
                     combinedValues[selector.id].values.push(valObject);
                 });
+                if (selector.time) {
+                    combinedValues[selector.id].values.sort((a,b) => b.id - a.id);
+                }
             });
 
             if (result.regionsets.length === 0) {
