@@ -15,15 +15,6 @@ const Tools = styled('div')`
     }
 `;
 
-//remove?
-const hasSubLayerMetadata = (layer) => {
-    const subLayers = layer.getSubLayers();
-    if (!subLayers || subLayers.length === 0) {
-        return false;
-    }
-    return !!subLayers.find((sub) => !!sub.getMetadataIdentifier());
-};
-
 const getBackendStatus = (layer) => {
     const backendStatus = layer.getBackendStatus() || 'UNKNOWN';
     const status = {

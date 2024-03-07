@@ -237,25 +237,6 @@ class ViewHandler extends StateHandler {
         this.updateState({ selectedLayerIds });
     }
 
-    // Is this deprecated?
-    showLayerMetadata (layer) {
-        const uuid = layer.getMetadataIdentifier();
-        const layerId = layer.id;
-        const subUuids = [];
-        if (layer.getSubLayers()) {
-            layer.getSubLayers().forEach(subLayer => {
-                const subUuid = subLayer.getMetadataIdentifier();
-                if (subUuid && subUuid !== uuid && !subUuids.includes[subUuid]) {
-                    subUuids.push(subUuid);
-                }
-            });
-        }
-        this.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [
-            { layerId: layerId },
-            subUuids.map(sub => ({ uuid: sub }))
-        ]);
-    }
-
     showLayerBackendStatus (layerId) {
         this.sandbox.postRequestByName('ShowMapLayerInfoRequest', [layerId]);
     }
@@ -356,7 +337,6 @@ export const LayerCollapseHandler = controllerMixin(ViewHandler, [
     'updateOpenGroupTitles',
     'updateLayerGroups',
     'updateSelectedLayerIds',
-    'showLayerMetadata',
     'showLayerBackendStatus',
     'addGroupLayersToMap',
     'removeGroupLayersFromMap',
