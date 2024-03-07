@@ -120,9 +120,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             const legends = layers
                 .filter(layer => typeof layer.getLegendImage === 'function' && !!layer.getLegendImage())
                 .map(layer => {
+                    const uuid = layer.getMetadataIdentifier();
                     const layerId = layer.getId();
                     return {
                         title: layer.getName(),
+                        uuid,
                         layerId,
                         legendImageURL: layer.getLegendImage(),
                         metadataUrl: layer.getAttributes().metadataUrl,
