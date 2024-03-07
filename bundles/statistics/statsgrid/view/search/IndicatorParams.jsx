@@ -23,14 +23,14 @@ const StyledSelect = styled(Select)`
     width: 100%;
 `;
 
-const TimeSeriesParams = ({name, options, selectedValues, controller}) => (
+const TimeSeriesParams = ({id, options, selectedValues, controller}) => (
     <Timeseries>
         <TimeseriesField>
             <b><Message messageKey='parameters.from' /></b>
             <StyledSelect
                 options={options}
                 value={selectedValues[0]}
-                onChange={(value) => controller.setParamSelection(name, [value, selectedValues[1]])}
+                onChange={(value) => controller.setParamSelection(id, [value, selectedValues[1]])}
             />
         </TimeseriesField>
         <TimeseriesField>
@@ -38,7 +38,7 @@ const TimeSeriesParams = ({name, options, selectedValues, controller}) => (
             <StyledSelect
                 options={options}
                 value={selectedValues[1]}
-                onChange={(value) => controller.setParamSelection(name, [selectedValues[0], value])}
+                onChange={(value) => controller.setParamSelection(id, [selectedValues[0], value])}
             />
         </TimeseriesField>
     </Timeseries>
@@ -46,9 +46,8 @@ const TimeSeriesParams = ({name, options, selectedValues, controller}) => (
 
 export const IndicatorParams = ({ state, allRegionsets, controller }) => {
     const { searchTimeseries, regionsetFilter, indicatorParams, selectedRegionset } = state;
-    const { selectors = {}, regionsets = [], selections = {} } = indicatorParams;
-    const paramKeys = Object.keys(selectors);
-    if (!paramKeys.length) {
+    const { selectors = [], regionsets = [], selections = {} } = indicatorParams;
+    if (!selectors.length) {
         return (
             <i><Message messageKey='panels.newSearch.refineSearchTooltip1' /></i>
         );
@@ -66,26 +65,24 @@ export const IndicatorParams = ({ state, allRegionsets, controller }) => {
 
     return (
         <div>
-            {paramKeys.map((param) => {
-                const value = selections[param];
-                const { values = [], time } = selectors[param] || {};
-                const options = values.map(value => ({ value: value.id, label: value.title }));
+            {selectors.map(({values, time, id, label}) => {
+                const value = selections[id];
                 if (time && searchTimeseries) {
                     return (
-                        <TimeSeriesParams key={param}
+                        <TimeSeriesParams key={id}
                             controller={controller}
-                            name={param}
-                            options={options}
+                            id={id}
+                            options={values}
                             selectedValues={value} />
                     );
                 }
                 return (
-                    <Field key={param}>
-                        <b><Message messageKey={`parameters.${param}`} defaultMsg={param} /></b>
+                    <Field key={id}>
+                        <b>{label}</b>
                         <StyledSelect
-                            options={options}
+                            options={values}
                             value={value}
-                            onChange={(value) => controller.setParamSelection(param, value)}
+                            onChange={(value) => controller.setParamSelection(id, value)}
                             mode={time ? 'multiple' : ''}
                         />
                     </Field>
