@@ -10,6 +10,10 @@ const StyledTable = styled(Table)`
 `;
 
 export const IndicatorDatasets = ({ state, controller }) => {
+    const { datasets, regionsetOptions } = state;
+    if (!datasets || !datasets.length) {
+        return null;
+    }
     const columnSettings = [
         {
             dataIndex: 'regionset',
@@ -17,7 +21,7 @@ export const IndicatorDatasets = ({ state, controller }) => {
             width: 250,
             title: <Message messageKey='userIndicators.modify.title' />,
             render: (title, item) => {
-                const regionset = state.regionsetOptions.find(r => r.id === item.regionset);
+                const regionset = regionsetOptions.find(r => r.id === item.regionset);
                 return (
                     <span><Message messageKey='parameters.year' /> {item.year} - {regionset.name}</span>
                 );
@@ -46,7 +50,7 @@ export const IndicatorDatasets = ({ state, controller }) => {
     return (
         <StyledTable
             columns={columnSettings}
-            dataSource={state.datasets?.map(ds => ({
+            dataSource={datasets?.map(ds => ({
                 key: `${ds.regionset}-${ds.year}`,
                 ...ds
             }))}
