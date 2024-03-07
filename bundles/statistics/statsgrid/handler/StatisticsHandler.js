@@ -224,11 +224,12 @@ class StatisticsController extends StateHandlerBase {
     }
 
     async addIndicator (indicator, regionset) {
+        // update existing indicators to changed regionset
+        if (regionset !== this.getState().regionset) {
+            await this.setActiveRegionset(regionset);
+        }
         if (this.isIndicatorSelected(indicator, true)) {
             // already selected
-            if (regionset !== this.getState().regionset) {
-                await this.setActiveRegionset(regionset);
-            }
             return true;
         }
         try {
@@ -241,14 +242,14 @@ class StatisticsController extends StateHandlerBase {
             const indicatorToAdd = await this.getIndicatorToAdd(indicator, regionset);
             this.instance.addDataProviderInfo(indicatorToAdd);
             this.updateState({
-                regionset,
+                loading: false,
                 indicators: [...this.getState().indicators, indicatorToAdd]
             });
         } catch (error) {
+            this.updateState({ loading: false });
             this.log.warn(error.message);
             return false;
         }
-        this.updateState({ loading: false });
         return true;
     }
 
