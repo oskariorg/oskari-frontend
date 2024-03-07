@@ -1,4 +1,4 @@
-import { getHash, getHashForIndicator, getDataProviderKey, populateData, populateSeriesData } from '../helper/StatisticsHelper';
+import { getHash, getDataProviderKey, populateData, populateSeriesData } from '../helper/StatisticsHelper';
 import { updateIndicatorListInCache, removeIndicatorFromCache } from './SearchIndicatorOptionsHelper';
 import { getRegionsAsync } from '../helper/RegionsHelper';
 
