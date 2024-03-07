@@ -7,6 +7,7 @@ import { showIndicatorForm } from '../view/Form/IndicatorForm';
 import { showClipboardPopup } from '../view/Form/ClipboardPopup';
 import { showClassificationContainer } from '../components/classification/Classification';
 import { showHistogramPopup } from '../components/manualClassification/HistogramForm';
+import { showMedataPopup } from '../components/description/MetadataPopup';
 
 export const FLYOUTS = ['search', 'grid', 'diagram']; // to toggle tile
 
@@ -144,9 +145,14 @@ class UIHandler extends StateHandler {
     }
 
     onSearchChange (state) {
-        const control = this.controls.search;
-        if (control) {
-            control.update(state, this.stateHandler.getState().indicators);
+        const { search, metadata} = this.controls;
+        if (search) {
+            search.update(state, this.stateHandler.getState().indicators);
+        }
+        if (metadata) {
+            const ds = state.selectedDatasource;
+            const indicators = state.selectedIndicators.map(id => ({ id, ds }));
+            metadata.update(indicators);
         }
     }
 
@@ -198,7 +204,16 @@ class UIHandler extends StateHandler {
         this.show('search');
     }
 
-    show (id) {
+    openMetadataPopup (indicators) {
+        const { metadata } = this.controls;
+        if (metadata) {
+            metadata.update(indicators);
+            return;
+        }
+        this.controls.metadata = showMedataPopup(indicators, () => this.close('metadata'));
+    }
+
+    show (id) { // TODO: use optional options/params??
         if (!id || this.controls[id]) {
             // already shown, do nothing
             return;
@@ -222,13 +237,6 @@ class UIHandler extends StateHandler {
             controls = showClassificationContainer(state, this.getState(), controller, opts, showHistogram, onClose);
         } else if (id === 'histogram') {
             controls = showHistogramPopup(state, this.getState(), controller, onClose);
-        /*
-        // For now search handler opens metadata popup
-        } else if (id === 'metadata') {
-            const { selectedDatasource, selectedIndicators } = this.searchHandler.getState();
-            const data = await this.prepareMetadataPopupData(selectedDatasource, selectedIndicators);
-            controls = showMedataPopup(data, onClose);
-        */
         } else if (id === 'indicatorForm' && this.formHandler) {
             const onCloseWrapper = () => {
                 this.close('clipboard');
@@ -302,7 +310,9 @@ const wrapped = controllerMixin(UIHandler, [
     'close',
     'closeAll',
     'updateClassificationState',
-    'updateLayer'
+    'updateLayer',
+    'openMetadataPopup',
+    'openSearchWithSelections'
 ]);
 
 export { wrapped as ViewHandler };
