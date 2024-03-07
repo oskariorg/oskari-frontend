@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { showPopup } from 'oskari-ui/components/window';
@@ -19,6 +19,7 @@ const StyledSelect = styled(Select)`
     margin-bottom: 10px;
 `;
 
+let activeBound = 1;
 const Form = ({
     state,
     pluginState,
@@ -35,7 +36,6 @@ const Form = ({
         );
     }
     const ref = useRef();
-    const [activeBound, setActiveBound] = useState();
     const disabled = !pluginState.classification.editEnabled;
     const error = indicator.classifiedData?.error;
 
@@ -51,7 +51,7 @@ const Form = ({
     const onBoundChange = (manualBounds, index) => {
         const { bounds = [] } = indicator.classifiedData;
         if (index !== activeBound) {
-            setActiveBound(index);
+            activeBound = index;
         }
         if (bounds[index] === manualBounds[index]) {
             // nothing to update
