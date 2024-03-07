@@ -14,15 +14,17 @@ const Content = styled.div`
 `;
 
 const Popup = ({errors}) => {
-    // TODO: show reason for error if available => errorLoc[indicator.error]
+    const errorLoc = Oskari.getMsg(BUNDLE_KEY, 'errors');
     return (
         <Content>
             {errors.map((indicator,i) => {
-                const { name, partialSeries, selections } = indicator;
+                const { name, partialSeries, selections, error } = indicator;
                 const selection = partialSeries
                     ? getInvalidSerie(partialSeries)
                     : getSelection(selections);
-                return <div key={i}>{`${name} (${selection})`}</div>
+                const cause = errorLoc[error];
+                const errorMsg = cause ? `: ${cause}` : '';
+                return <div key={i}>{`${name} (${selection})${errorMsg}`}</div>
             })}
         </Content>
     );
