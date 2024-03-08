@@ -276,7 +276,7 @@ class IndicatorFormController extends StateHandler {
 
     selectIndicator (dataset) {
         const selections = { [SELECTOR]: dataset[SELECTOR] };
-        const indicator = {...this.getSelectedIndicator(), selections };
+        const indicator = { ...this.getSelectedIndicator(), selections };
         indicator.hash = getHashForIndicator(indicator);
         this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, dataset.regionset);
     }
