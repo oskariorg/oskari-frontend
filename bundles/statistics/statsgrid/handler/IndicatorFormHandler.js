@@ -274,6 +274,12 @@ class IndicatorFormController extends StateHandler {
         this.instance.getSearchHandler()?.onCacheUpdate({ datasourceId, indicator });
     }
 
+    selectIndicator (dataset) {
+        const selections = { [SELECTOR]: dataset[SELECTOR] };
+        const indicator = { ...this.getSelectedIndicator(), selections };
+        indicator.hash = getHashForIndicator(indicator);
+        this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, dataset.regionset);
+    }
     selectSavedIndicator (indicator, regionset) {
         this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, regionset);
     }
@@ -354,10 +360,10 @@ const wrapped = controllerMixin(IndicatorFormController, [
     'showClipboardPopup',
     'saveForm',
     'importFromClipboard',
-    'setClipboardValue',
     'editDataset',
     'showIndicatorPopup',
-    'deleteDataset'
+    'deleteDataset',
+    'selectIndicator'
 ]);
 
 export { wrapped as IndicatorFormHandler };
