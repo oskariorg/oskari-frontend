@@ -65,7 +65,6 @@ class IndicatorFormController extends StateHandler {
             datasets: null,
             datasetYear: '',
             datasetRegionset: null,
-            selectedDataset: null,
             formData: {}
         };
     }
@@ -177,13 +176,15 @@ class IndicatorFormController extends StateHandler {
 
     async showDataTable () {
         const indicator = this.getSelectedIndicator();
-        const regionsetId = this.getState().datasetRegionset;
+        const { datasetRegionset: regionsetId, datasetYear } = this.getState();
         this.updateState({
             loading: true
         });
         const { name } = getRegionsets().find(rs => rs.id === regionsetId) || {};
-        const labels = {};
-        labels[regionsetId] = name;
+        const labels = {
+            regionset: name,
+            year: datasetYear
+        };
         let regions;
         try {
             regions = await getRegionsAsync(regionsetId);
@@ -204,8 +205,6 @@ class IndicatorFormController extends StateHandler {
             });
             this.updateState({
                 loading: false,
-                selectedDataset: data,
-                datasetRegionset: regionsetId,
                 formData: {
                     regions: formRegions,
                     labels
@@ -220,7 +219,6 @@ class IndicatorFormController extends StateHandler {
     cancelForm () {
         this.updateState({
             loading: false,
-            selectedDataset: null,
             datasetYear: '',
             datasetRegionset: null,
             formData: {}
