@@ -3,6 +3,7 @@ import { Message } from 'oskari-ui';
 import { Table } from 'oskari-ui/components/Table';
 import { IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
+import { getRegionsets } from '../../helper/ConfigHelper';
 
 const StyledTable = styled(Table)`
     max-height: 475px;
@@ -18,10 +19,11 @@ const ButtonContainer = styled.div`
 `;
 
 export const IndicatorDatasets = ({ state, controller }) => {
-    const { datasets, regionsetOptions } = state;
-    if (!datasets || !datasets.length) {
+    const { datasets } = state;
+    if (!datasets.length) {
         return null;
     }
+    const getRegionsetName = id => getRegionsets().find(rs => rs.id === id)?.name || '';
     const columnSettings = [
         {
             dataIndex: 'regionset',
@@ -29,10 +31,10 @@ export const IndicatorDatasets = ({ state, controller }) => {
             width: 250,
             title: <Message messageKey='userIndicators.modify.title' />,
             render: (title, item) => {
-                const regionset = regionsetOptions.find(r => r.id === item.regionset) || {};
+                const { year, regionset } = item;
                 return (
                     <a onClick={() => controller.selectIndicator(item)}>
-                        <Message messageKey='parameters.year' /> {item.year} - {regionset.name}
+                        <Message messageKey='parameters.year' /> {year} - {getRegionsetName(regionset)}
                     </a>
                 );
             }

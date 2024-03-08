@@ -58,12 +58,12 @@ class SearchController extends StateHandler {
         this.setSelectedIndicators(indicators);
     }
 
-    onCacheUpdate ({ datasourceId, indicator }) {
+    onCacheUpdate (indicator = {}) {
         const { selectedDatasource, selectedIndicators } = this.getState();
-        if (datasourceId && selectedDatasource === datasourceId) {
+        if (selectedDatasource === indicator.ds) {
             this.fetchindicatorOptions();
         }
-        if (indicator && selectedIndicators.includes(indicator.id)) {
+        if (selectedIndicators.includes(indicator.id)) {
             this.fetchIndicatorParams();
         }
     }
@@ -851,8 +851,8 @@ class SearchController extends StateHandler {
         if (!formHandler) {
             return;
         }
-        const indicator = selectedIndicators.length === 1 ? selectedIndicators[0] : null;
-        formHandler.showIndicatorPopup(selectedDatasource, indicator);
+        const indicatorId = selectedIndicators.length === 1 ? selectedIndicators[0] : null;
+        formHandler.showIndicatorPopup(selectedDatasource, indicatorId);
     }
 }
 

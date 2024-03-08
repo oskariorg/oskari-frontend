@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextInput, TextAreaInput } from 'oskari-ui';
 import styled from 'styled-components';
+import { BUNDLE_KEY } from '../../constants';
 
 const Content = styled('div')`
     display: flex;
@@ -15,23 +16,24 @@ const StyledTextArea = styled(TextAreaInput)`
 `;
 
 export const IndicatorInfo = ({ state, controller }) => {
+    const { name = '', description = '', source = '' } = state.indicator;
     return (
         <Content>
             <StyledInput
-                placeholder={Oskari.getMsg('StatsGrid', 'userIndicators.panelGeneric.formName')}
-                value={state.indicatorName}
-                onChange={(e) => controller.setIndicatorName(e.target.value)}
+                placeholder={Oskari.getMsg(BUNDLE_KEY, 'userIndicators.panelGeneric.formName')}
+                value={name}
+                onChange={(e) => controller.updateIndicator('name', e.target.value)}
             />
             <StyledTextArea
-                placeholder={Oskari.getMsg('StatsGrid', 'userIndicators.panelGeneric.formDescription')}
+                placeholder={Oskari.getMsg(BUNDLE_KEY, 'userIndicators.panelGeneric.formDescription')}
                 rows={2}
-                value={state.indicatorDescription}
-                onChange={(e) => controller.setIndicatorDescription(e.target.value)}
+                value={description}
+                onChange={(e) => controller.updateIndicator('description', e.target.value)}
             />
             <StyledInput
-                placeholder={Oskari.getMsg('StatsGrid', 'userIndicators.panelGeneric.formDatasource')}
-                value={state.indicatorSource}
-                onChange={(e) => controller.setindicatorSource(e.target.value)}
+                placeholder={Oskari.getMsg(BUNDLE_KEY, 'userIndicators.panelGeneric.formDatasource')}
+                value={source}
+                onChange={(e) => controller.updateIndicator('source', e.target.value)}
             />
         </Content>
     );
