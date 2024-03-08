@@ -99,7 +99,9 @@ Oskari.registerLocalization({
             'Vuosi': 'Year',
             'regionset': 'Regional division',
             'from': 'from',
-            'to': 'to'
+            'to': 'to',
+            'value': 'Value',
+            'region': 'Region'
         },
         'datatable': 'Table',
         'published': {

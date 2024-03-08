@@ -98,7 +98,9 @@ Oskari.registerLocalization(
             "year": "Année",
             "regionset": "Superficie",
             "from": "de",
-            "to": "à"
+            "to": "à",
+            "value": "Valeur",
+            "region": "Région"
         },
         "datatable": "Tableau",
         "published": {

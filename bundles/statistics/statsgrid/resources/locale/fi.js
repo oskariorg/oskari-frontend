@@ -99,7 +99,9 @@ Oskari.registerLocalization({
             'Vuosi': 'Vuosi',
             'regionset': 'Aluejako',
             'from': 'alkaen',
-            'to': 'päättyen'
+            'to': 'päättyen',
+            'value': 'Arvo',
+            'region': 'Alue'
         },
         'datatable': 'Taulukko',
         'published': {

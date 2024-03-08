@@ -104,7 +104,9 @@ Oskari.registerLocalization(
             "year": "Год",
             "regionset": "Облаcть",
             "from": "от",
-            "to": "до"
+            "to": "до",
+            "value": "Значение",
+            "region": "Облаcть"
         },
         "datatable": "Таблица",
         "published": {

@@ -99,7 +99,9 @@ Oskari.registerLocalization({
             'Vuosi': 'År',
             'regionset': 'Områdesindelning',
             'from': 'från',
-            'to': 'tills'
+            'to': 'tills',
+            'value': 'Värde',
+            'region': 'Område'
         },
         'datatable': 'Tabell',
         'published': {
