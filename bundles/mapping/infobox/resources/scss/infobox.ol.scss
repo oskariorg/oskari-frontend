@@ -148,7 +148,8 @@ div.popupHeader {
     }
 
     div.olPopupCloseBox {
-      flex: 0 0 16px;
+      flex-grow: 0;
+      flex-shrink: 0;
     }
   }
     div.coordinateWrapper {
