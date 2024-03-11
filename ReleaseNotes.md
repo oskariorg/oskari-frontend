@@ -7,77 +7,61 @@ https://github.com/oskariorg/oskari-frontend/milestone/45?closed=1
 
 ### Improvements for Mobile / small screen on geoportal
 
-- Adding a marker now only shows one popup at a time making it more usable on small screens/mobile devices
-- Marker and measurement tools now automatically hide the main navigation when used on small screens to show more of the map when using these tools are activated.
+- Adding a marker now only shows one popup at a time making it more usable on small screens/mobile devices.
+- Marker and measurement tools now automatically hide the main navigation on geoportal when used on small screens to show more of the map when these tools are activated.
 - The XY-tool now detects if the user has a mouse-controller and hides the "show coordinates at mouse location" toggle if mouse is not detected.
 - The main navigation now shows a scroll indicator to signal that there's more content on the navigation than fits the end-users screen. This helps users find functionalities that don't fit on their screen and are not familiar with the UI to know where to search them.
 - Banner-announcements are now more usable on small screens and work better with dark themes (https://github.com/oskariorg/oskari-frontend/pull/2481).
 - The announcements tile in main navigation is now hidden on small screens when there are no announcements to be listed.
-- Pinch zooming the page (outside the map/in the main navigation or flyout/popup content) on mobile devices can result the user losing access to part of the UI (usually the main navigation) as its rendered outside the device physical screen after pinch zooming. We now try to detect this condition and offer a button for reseting the page zoom when we do. This is experimental and unfortunately doesn't seem to work on all devices (notably not working on iOS based devices). See https://github.com/oskariorg/oskari-frontend/pull/2534 for more details.
-- The UI for browsing historical ortophotos/sparse timeseries data has been improved for small screens: https://github.com/oskariorg/oskari-frontend/pull/2565
+- The UI for browsing sparse timeseries data like historical ortophotos has been improved for small screens: https://github.com/oskariorg/oskari-frontend/pull/2565
+- Pinch zooming the page (outside the map/in the main navigation or flyout/popup content) on mobile devices can result the user losing access to part of the UI (usually the main navigation) as its rendered outside the device physical screen after pinch zooming. We now try to detect this condition and offer a button for reseting the page zoom when this happens. This is experimental and unfortunately doesn't seem to work on all devices (notably not working on iOS based devices). See https://github.com/oskariorg/oskari-frontend/pull/2534 for more details.
 
-### Stuff
+### Other improvements for end-users
+
+- Swipe tool for comparing layers side by side can now be published as part of an embedded map. Options are to add the tool, auto-activate it on startup (this can also be activated with a URL-parameter) and hide the UI (the end-user can't switch the tool off). 
+- Link tool includes the URL-parameter for activating the swipe tool when opening the link if the swipe tool was active when a link was generated.
+- The swipe tool now uses the accent color from theme for the splitter color instead of always being the default yellow color.
 - My data user details now shows account creation date and last login date.
-- Again fine-tuning tooltips when dragging layers on selected layers listing
+- Again fine-tuned tooltips when dragging layers on selected layers listing.
 - Layer coverage area can now be shown on the map. This is useful for locating content on the map when the layer content is on a smaller area. Relies on service capabilities/metadata to be correct on the service itself (https://github.com/oskariorg/oskari-frontend/pull/2429).
-- Admin: Button for adding announcements is now on the top of the announcements list instead of being at the bottom so it's easier to find when there are a lots of announcements and being more consistent for example with the layer admin tools.
-- Admin: layer admin permissions tab now always shows the column headers on screen even when there are roles that require scrolling.
-- Admin: the layer admininstration UI can now show the structure of the service when adding layers from a WMS-service: https://github.com/oskariorg/oskari-frontend/pull/2542
-
 - Fixed the map legend tool selection for embedded maps in publisher not being saved correctly. The map layer legends button can now be used on embedded maps again.
-
 - Reverse geocoding search now zooms the map to show results more clearly.
-
-- WMS-layers that offer GetFeatureInfo in JSON-format now benefit from the same formatting improvements as vector layers when looking at the GFI data on the infobox. The admin UI to select/rename properties and format values that is available for WFS-layers has not been added for WMS-layers but it's now technically possible to use the same formatting for this kind of WMS-layers and even by default is usually looks better than the default HTML returned by services (https://github.com/oskariorg/oskari-frontend/pull/2525).
-
-- Added swedish localizations for admin-users bundle.
-- Handle empty search result on admin-users bundle.
-- `admin-permissions` bundle now tries to maintain scroll position after permission change. This makes it more user-friendly as toggling a permission doesn't reset scrolling back to top.
-
-- Admins can now select a geometry type for vector layers. This cleans up the style editor for both admins and end-users by hiding for example point and area style forms from layers that only have lines etc.
-
 - Announcements are now polled by the frontend to allow showing any _new_ announcements that have been added/scheduled to be shown _after_ the page has been loaded and/or when the page has been left open for a long time without refreshing the page (https://github.com/oskariorg/oskari-frontend/pull/2519).
-
 - Fixed an issue where opening an infobox on the map _while_ panning the map resulted in the map moving to weird locations (mostly reproducible with wmts-layers https://github.com/oskariorg/oskari-frontend/pull/2523).
-
 - Markers can now be edited and removed by clicking on a marker when the marker tool is active.
-- Coordinates can now be included on a PDF-printout (https://github.com/oskariorg/oskari-frontend/pull/2537)
-
+- Coordinates can now be included on a PDF-printout (https://github.com/oskariorg/oskari-frontend/pull/2537).
 - Coordinates info can now be included on the infobox UI (https://github.com/oskariorg/oskari-frontend/pull/2566). Requires activating it on the database for any appsetups that wish to show the coordinates.
-
 - Reversed map layers legends listing order for consistency/matching the layer order on selected layers.
-
 - Fixed an issue with infobox header not growing with the content (https://github.com/oskariorg/oskari-frontend/pull/2577)
 
+### Admin functionalities
 
-
-### Admin
-- JSON-fields have been moved to new tab on layer admin. This also adds UI for managing the params-field for layers (https://github.com/oskariorg/oskari-frontend/pull/2438).
-- Added UI for managing vector layer hover-styling (https://github.com/oskariorg/oskari-frontend/pull/2439).
-- Optional metadata url: https://github.com/oskariorg/oskari-frontend/pull/2594 Allows admin to configure a layer specific url for fetching the layers metadata. This only supports showing the metadata for the layer. It doesn't add support for searching from multiple metadata services.
+- Layer admin now has a new tab for JSON-configuration fields (options/attributes/capabilities). This also adds UI for managing the params-field for layers (https://github.com/oskariorg/oskari-frontend/pull/2438).
+- Layer admin permissions tab now always shows the column headers on screen even when there are roles that require scrolling.
+- Layer admin can now show the structure of the service when adding layers from a WMS-service: https://github.com/oskariorg/oskari-frontend/pull/2542
+- Layer admin now allows selecting a geometry type for vector layers. This cleans up the style editor for both admins and end-users by hiding for example point and area style forms from layers that only have lines etc.
+- Layer admin now has a UI for managing vector layer hover-styling (https://github.com/oskariorg/oskari-frontend/pull/2439). Previously managed through JSON-based free text fields.
+- Button for adding announcements is now on the top of the announcements list instead of being at the bottom so it's easier to find when there are multiple announcements and for being more consistent for example with the layer admin tools.
+- User admin (`admin-users` bundle) now has swedish localizations and shows a nicer message for empty search result
+- `admin-permissions` bundle now tries to maintain scroll position after permission change. This makes it more user-friendly as toggling a permission doesn't reset scrolling back to top.
+- WMS-layers that offer GetFeatureInfo in JSON-format now benefit from the same formatting improvements as vector layers when looking at the GFI data on the `infobox`. The layer admin UI for selecting/renaming properties and format values that is available for WFS-layers has not been added for WMS-layers but it's now technically possible to use the same formatting for these kinds of WMS-layers and even by default is usually looks better than the default HTML returned by services (https://github.com/oskariorg/oskari-frontend/pull/2525).
+- Optional metadata url: https://github.com/oskariorg/oskari-frontend/pull/2594 Allows admin to configure a layer specific url for fetching the layers metadata through `layer.attributes`. This only supports showing the metadata for the layer. It doesn't add support for searching from multiple metadata services.
 
 ### New bundles
 
-- `metadatasearch` is a React-based drop-in replacement for jQuery-based `metadatacatalogue` for searching metadata
-- `featuredata` is a React-based drop-in replacement for jQuery-based `featuredata2` for feature data table. This was included in the last release as an optional preview version but is now working as intended and good for replacing the old one. This also adds pagination for results to make it usable in the case where the screen is full of features. It also adds a toggle for condensed view to show more rows on screen at once even when feature property values might have very long content.
+- `metadatasearch` is a React-based drop-in replacement for jQuery-based `metadatacatalogue` for searching metadata. Requires db migration as well as linking the new implementation on main.js as the bundle id changed.
+- `featuredata` is a React-based drop-in replacement for jQuery-based `featuredata2` for feature data table. This was included in the last release as an optional preview version but is now working as intended and good for replacing the old one. This also adds pagination for results to make it usable in the case where the screen is full of features. It also adds a toggle for condensed view to show more rows on screen at once even when feature property values might have very long content. Requires db migration as well as linking the new implementation on main.js as the bundle id changed.
+- `personaldata` bundle has been removed from the source code. The drop-in replacement is the `mydata` bundle that has been available for a couple of releases already. Requires db migration as well as linking the new implementation on main.js as the bundle id changed.
+- `statsgrid` full React rewrite for thematic maps/statistical data functionality https://github.com/oskariorg/oskari-frontend/pull/2599 Requires linking the new codebase (https://github.com/oskariorg/sample-application/pull/33), but doesn't require db migration since bundle id remains the same. This makes it easy to switch back if we discover any problems with the new implementation as it's fairly complex.
 
-- `personaldata` bundle has been removed from the source code. The drop-in replacement is the `mydata` bundle that has been available for a couple of releases already.
+### For developers
 
-
-- Added support for vertical scrollbar in React-based Flyouts (https://github.com/oskariorg/oskari-frontend/pull/2491).
-
-### Publisher React
-- ReactToolsPanel
-- Size setting panel
-- Swipe tool can now be published as part of an embedded map. Options are to add the tool, auto-activate it on startup (this can also be activated with a URL-parameter) and hide the UI (the end-user can't switch the tool off). Link tool also includes the URL-parameter so having the tool open on geoportal while generating a link will include the state of the swipe tool for anyone opening the link.
-- The swipe tool now uses the accent color from theme for the splitter color instead of always being the default yellow color.
-- statsgrid thematic maps https://github.com/oskariorg/oskari-frontend/pull/2599 Requires linking the new codebase (https://github.com/oskariorg/sample-application/pull/33)
-
-### devs
-
-- Added Oskari.util.mouseExists() to detect if user has a mouse present. This can be used to detect if we should hide UI-elements based on mouse like showing coordinates for pointer hovering the map (See [XY-tool](https://github.com/oskariorg/oskari-frontend/pull/2422)).
+- Added `Oskari.util.mouseExists()` for detecting if user has a mouse present. This can be used to determine if we should hide UI-elements based on mouse like showing coordinates for pointer hovering the map (See [XY-tool](https://github.com/oskariorg/oskari-frontend/pull/2422)).
 - New component under `mapping/mapmodule/MapModuleTextButton` for allowing text-based buttons on map that respect theming etc. Similar to MapModuleButton which handles icons, but this one is for buttons with text.
 - Moved layertype icons from `layerlist` to `src/react/components/icons/LayerIcon.jsx` so they can be accessed more easily from anywhere.
+- The publisher functionality now has generic ReactToolsPanel and ToolsHandler for React-based publisher tools.
+- The publisher size setting panel has been rewritten with React.js
+- Added support for vertical scrollbar in React-based Flyouts (https://github.com/oskariorg/oskari-frontend/pull/2491).
 
 ## 2.12.1
 
