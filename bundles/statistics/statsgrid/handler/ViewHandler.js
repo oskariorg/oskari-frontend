@@ -141,8 +141,16 @@ class UIHandler extends StateHandler {
                 control.update(state);
             }
         });
+        // on active indicator change single => serie  show
+        // update closes ui on series => single
         if (state.isSeriesActive && !this.controls.series) {
-            this.show('series');
+            const { layer, mapButtons } = this.getState();
+            const hasSeriesButton = mapButtons.includes(SERIES);
+            const isActive = layer.onMap && layer.visible && state.indicators.length > 0;
+            if (isActive && !hasSeriesButton) {
+                // series is always visible if active except when there is a button to show it
+                this.show(SERIES);
+            }
         }
     }
 
