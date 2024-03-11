@@ -116,12 +116,18 @@ export const getDataForIndicator = async (indicator, regionset) => {
         for (let i = 0; i < values.length; i++) {
             const value = values[i];
             const selections = { ...indicator.selections, [id]: value };
-            const rawData = await getIndicatorData({ ...indicator, selections }, regionset);
+            let rawData = {};
+            try {
+                rawData = await getIndicatorData({ ...indicator, selections }, regionset);
+            } catch (ignored) {}
             dataBySelection[value] = rawData;
         }
         data = populateSeriesData(dataBySelection, regions, regionset, fractionDigits);
     } else {
-        const rawData = await getIndicatorData(indicator, regionset);
+        let rawData = {};
+        try {
+            rawData = await getIndicatorData(indicator, regionset);
+        } catch (ignored) {}
         data = populateData(rawData, regions, regionset, fractionDigits);
     }
     return data;
