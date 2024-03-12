@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { getNavigationTheme } from 'oskari-ui/theme';
 import * as d3 from 'd3';
 dayjs.extend(customParseFormat);
 
@@ -215,6 +216,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _createControlElement: function () {
             const me = this;
+            this._createThematicStyling();
             const el = jQuery(
                 '<div class="mapplugin timeseriescontrolplugin">' +
                 '<div class="timeseries-timelines"><svg class="timeline-svg">' +
@@ -227,6 +229,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 '</svg></div>' +
                 '</div>');
             return el;
+        },
+        _createThematicStyling: function () {
+            const styleId = 'timeseries_style';
+            let styleEl = document.getElementById(styleId);
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.setAttribute('id', styleId);
+                document.head.appendChild(styleEl);
+            }
+
+            const themeObj = this.getMapModule().getMapTheme();
+            const theme = getNavigationTheme(themeObj);
+            const buttonColor = theme.getButtonColor();
+            // const textColor = theme.getTextColor();
+            const accentColor = theme.getButtonHoverColor();
+            styleEl.innerHTML = `
+            .mapplugin.timeseriescontrolplugin {
+                white-space: nowrap;
+                background-color: ${theme.getNavigationBackgroundColor()};
+                flex-direction: row;
+            }
+            @media (max-width: 600px) {
+                .mapplugin.timeseriescontrolplugin {
+                    flex-direction: column;
+                }
+            }
+            .mapplugin.timeseriescontrolplugin .timeseries-handle {
+                background-color: ${accentColor};
+                width: 15px;
+                height: 100px;
+                cursor: grab;
+            }
+            .mapplugin.timeseriescontrolplugin .timeline-svg g.full-axis-controls circle {
+                stroke: ${accentColor};
+                fill: ${buttonColor};
+                stroke-width: 2px;
+            }
+            .mapplugin.timeseriescontrolplugin .timeline-svg g.full-axis-controls line {
+                stroke: ${accentColor};
+                stroke-width: 3px;
+            }
+            .timeline-svg g.drag-handle circle{
+                fill: ${accentColor};
+                stroke: ${buttonColor};
+                stroke-width: 2px;
+            }
+            `;
         },
         /**
          * @method _getClosestTime Get closest time instant in timeseries relative to param
