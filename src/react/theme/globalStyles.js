@@ -44,7 +44,7 @@ export const setGlobalStyle = (theme = {}) => {
                 height: 45px;
                 width: ${navigationDimensions.width}px;
                 pointer-events: none;
-                position: absolute;
+                position: fixed;
                 bottom: -1em;
                 justify-content: center;
                 align-items: center;
