@@ -112,7 +112,7 @@ export const getClassifiedData = (indicator) => {
     const dataByRegions = getDataByRegions(indicator);
     const values = seriesValues || dataByRegions.map(d => d.value).filter(val => typeof val !== 'undefined');
     if (!values.length || (seriesValues && seriesValues.length < 3)) {
-        return { error: 'noEnough' };
+        return { error: 'noData' };
     }
     const isDivided = opts.type === 'div';
     const { format } = Oskari.getNumberFormatter(opts.fractionDigits);
