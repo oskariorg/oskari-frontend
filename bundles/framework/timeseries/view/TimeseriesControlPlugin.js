@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { getNavigationTheme } from 'oskari-ui/theme';
 import * as d3 from 'd3';
 dayjs.extend(customParseFormat);
 
@@ -16,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
      */
     function (delegate, conf) {
         conf = conf || {};
-        var me = this;
+        const me = this;
         me._clazz = 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin';
         me._defaultLocation = conf.location || 'top left';
         me._index = 90;
@@ -42,7 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me._setFrameInterval(me._uiState.frameInterval); // sets throttle for animation, too
         me._throttleNewTime = Oskari.util.throttle(me._requestNewTime.bind(me), 500);
         this._uiState.times = delegate.getTimes();
-        var range = delegate.getSubsetRange();
+        const range = delegate.getSubsetRange();
         this._uiState.rangeStart = range[0];
         this._uiState.rangeEnd = range[1];
         this._uiState.currentTime = delegate.getCurrentTime();
@@ -117,11 +118,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _filterSkipOptions: function (times) {
             times = times.map(function (t) { return dayjs(t); }); // optimization: parse time strings once
-            var shortestInterval = Number.MAX_VALUE;
-            for (var i = 0; i < times.length - 1; i++) {
-                var current = times[i];
-                var next = times[i + 1];
-                var difference = next.diff(current);
+            let shortestInterval = Number.MAX_VALUE;
+            for (let i = 0; i < times.length - 1; i++) {
+                const current = times[i];
+                const next = times[i + 1];
+                const difference = next.diff(current);
                 if (difference < shortestInterval) {
                     shortestInterval = difference;
                 }
@@ -144,8 +145,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @private
          */
         _requestNewTime: function () {
-            var me = this;
-            var nextTime = null;
+            const me = this;
+            let nextTime = null;
             if (me._uiState.isAnimating) {
                 nextTime = this._getNextTime(this._uiState.currentTime);
             }
@@ -176,7 +177,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             if (this._waitingForFrame) {
                 return;
             }
-            var nextTime = this._getNextTime(this._uiState.currentTime);
+            const nextTime = this._getNextTime(this._uiState.currentTime);
             if (!nextTime) {
                 this._setAnimationState(false);
                 return;
@@ -193,15 +194,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @return {String} time, ISO-string
          */
         _getNextTime: function (fromTime) {
-            var targetTime = dayjs(fromTime);
-            var index;
+            let targetTime = dayjs(fromTime);
+            let index;
             if (this._uiState.stepInterval) {
                 targetTime = targetTime.add(1, this._uiState.stepInterval);
                 index = d3.bisectLeft(this._uiState.times, targetTime.toISOString());
             } else {
                 index = d3.bisectRight(this._uiState.times, targetTime.toISOString());
             }
-            var endIndex = Math.max(d3.bisect(this._uiState.times, this._uiState.rangeEnd) - 1, 0);
+            const endIndex = Math.max(d3.bisect(this._uiState.times, this._uiState.rangeEnd) - 1, 0);
             if (targetTime.toISOString() > this._uiState.rangeEnd) {
                 return null;
             } else if (index > endIndex) {
@@ -214,19 +215,75 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @private
          */
         _createControlElement: function () {
-            var me = this,
-                el = jQuery(
-                    '<div class="mapplugin timeseriescontrolplugin">' +
-                    '<div class="timeseries-timelines"><svg class="timeline-svg">' +
-                    '<g class="full-axis"></g>' +
-                    '<g class="full-axis-controls"><line x1="0" y1="' + me.__fullAxisYPos + '" x2="0" y2="' + me.__fullAxisYPos + '" /><circle cx="0" cy="' + me.__fullAxisYPos + '" r="8"/><circle cx="0" cy="' + me.__fullAxisYPos + '" r="8"/></g>' +
-                    '<g class="full-axis-brush"></g>' +
-                    '<g class="subset-axis"></g>' +
-                    '<g class="subset-bg"><rect x="-10" y="-10" width="10" height="10"/></g>' +
-                    '<g class="drag-handle" cursor="ew-resize"><rect x="-15" y="-15" width="30" height="30" fill-opacity="0"/><circle cx="0" cy="0" r="8"/></g>' +
-                    '</svg></div>' +
-                    '</div>');
+            const me = this;
+            this._createThematicStyling();
+            const el = jQuery(
+                '<div class="mapplugin timeseriescontrolplugin">' +
+                '<div class="timeseries-timelines"><svg class="timeline-svg">' +
+                '<g class="full-axis"></g>' +
+                '<g class="full-axis-controls"><line x1="0" y1="' + me.__fullAxisYPos + '" x2="0" y2="' + me.__fullAxisYPos + '" /><circle cx="0" cy="' + me.__fullAxisYPos + '" r="8"/><circle cx="0" cy="' + me.__fullAxisYPos + '" r="8"/></g>' +
+                '<g class="full-axis-brush"></g>' +
+                '<g class="subset-axis"></g>' +
+                '<g class="subset-bg"><rect x="-10" y="-10" width="10" height="10"/></g>' +
+                '<g class="drag-handle" cursor="ew-resize"><rect x="-15" y="-15" width="30" height="30" fill-opacity="0"/><circle cx="0" cy="0" r="8"/></g>' +
+                '</svg></div>' +
+                '</div>');
             return el;
+        },
+        _createThematicStyling: function () {
+            const styleId = 'timeseries_style';
+            let styleEl = document.getElementById(styleId);
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.setAttribute('id', styleId);
+                document.head.appendChild(styleEl);
+            }
+
+            const themeObj = this.getMapModule().getMapTheme();
+            const theme = getNavigationTheme(themeObj);
+            const buttonColor = theme.getButtonColor();
+            const textColor = theme.getTextColor();
+            const accentColor = theme.getButtonHoverColor();
+            styleEl.innerHTML = `
+            .mapplugin.timeseriescontrolplugin {
+                white-space: nowrap;
+                background-color: ${theme.getNavigationBackgroundColor()};
+                flex-direction: row;
+                color: ${textColor};
+            }
+            @media (max-width: 600px) {
+                .mapplugin.timeseriescontrolplugin {
+                    flex-direction: column;
+                }
+            }
+            .mapplugin.timeseriescontrolplugin .timeseries-handle {
+                background-color: ${accentColor};
+                width: 15px;
+                height: 100px;
+                cursor: grab;
+            }
+            .mapplugin.timeseriescontrolplugin .timeline-svg g.full-axis-controls circle {
+                stroke: ${accentColor};
+                fill: ${buttonColor};
+                stroke-width: 2px;
+            }
+            .mapplugin.timeseriescontrolplugin .timeline-svg g.full-axis-controls line {
+                stroke: ${accentColor};
+                stroke-width: 3px;
+            }
+            .timeline-svg g.drag-handle circle{
+                fill: ${accentColor};
+                stroke: ${buttonColor};
+                stroke-width: 2px;
+            }
+            .timeline-svg g.subset-axis line, g.subset-axis path {
+                stroke: ${textColor};
+            }
+            .timeline-svg g.subset-axis text, g.full-axis text {
+                fill: ${textColor};
+                stroke: none;
+            }
+            `;
         },
         /**
          * @method _getClosestTime Get closest time instant in timeseries relative to param
@@ -235,9 +292,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @return {String} time, ISO-string
          */
         _getClosestTime: function (time) {
-            var index1 = Math.max(d3.bisectRight(this._uiState.times, time) - 1, 0);
-            var index2 = index1 + 1;
-            var index;
+            const index1 = Math.max(d3.bisectRight(this._uiState.times, time) - 1, 0);
+            const index2 = index1 + 1;
+            let index;
             if (index1 < this._uiState.times.length - 1 && Math.abs(dayjs(this._uiState.times[index1]).diff(time)) > Math.abs(dayjs(this._uiState.times[index2]).diff(time))) {
                 index = index2;
             } else {
@@ -252,8 +309,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @return {Number} index, rangeStart index or rangeEnd index if given index was outside the range.
          */
         _getRangeCheckedIndex: function (index) {
-            var rangeStartIndex = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeStart), 0);
-            var rangeEndIndex = Math.max(d3.bisect(this._uiState.times, this._uiState.rangeEnd) - 1, 0);
+            const rangeStartIndex = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeStart), 0);
+            const rangeEndIndex = Math.max(d3.bisect(this._uiState.times, this._uiState.rangeEnd) - 1, 0);
             if (index < rangeStartIndex) {
                 return rangeStartIndex;
             } else if (index > rangeEndIndex) {
@@ -270,8 +327,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             if (this.isAnimating) {
                 return;
             }
-            var index = d3.bisectLeft(this._uiState.times, this._uiState.currentTime);
-            var newTime = this._uiState.times[index + delta];
+            const index = d3.bisectLeft(this._uiState.times, this._uiState.currentTime);
+            const newTime = this._uiState.times[index + delta];
             if (newTime && newTime >= this._uiState.rangeStart && newTime <= this._uiState.rangeEnd) {
                 this._uiState.currentTime = newTime;
                 this._throttleNewTime();
@@ -304,8 +361,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             }
             this.setElement(this._createControlElement());
             this.addToPluginContainer(this.getElement());
-            var aux = '<div class="timeseries-aux"></div>';
-            var times = this._uiState.times;
+            const aux = '<div class="timeseries-aux"></div>';
+            const times = this._uiState.times;
             if (isMobile) {
                 this._timelineWidth = 260;
                 this._setRange(times[0], times[times.length - 1]);
@@ -323,7 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             this._updateTimeDisplay();
         },
         _makeDraggable: function () {
-            this._element.prepend('<div class="timeseries-handle oskari-flyoutheading"></div>');
+            this._element.prepend('<div class="timeseries-handle"></div>');
             this._element.draggable({
                 scroll: false,
                 handle: '.timeseries-handle'
@@ -336,7 +393,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param {Boolean} suppressUpdate true if no timelines update should be done
          */
         _setWidth: function (mapWidth, suppressUpdate) {
-            var targetWidth = Math.min(mapWidth - this._widthMargin, 860) - 260;
+            const targetWidth = Math.min(mapWidth - this._widthMargin, 860) - 260;
             if (!this._inMobileMode && this._timelineWidth !== targetWidth) {
                 this._timelineWidth = targetWidth;
                 if (!suppressUpdate) {
@@ -354,17 +411,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             if (!this._inMobileMode) {
                 if (typeof topMargin === 'string') {
                     if (topMargin.indexOf('%') !== -1) {
-                        var mapHeight = this.getSandbox().getMap().getHeight() || 200;
-                        var percetageFromTop = topMargin.substr(0, topMargin.length - 1);
+                        const mapHeight = this.getSandbox().getMap().getHeight() || 200;
+                        const percetageFromTop = topMargin.substring(0, topMargin.length - 1);
                         if (!isNaN(percetageFromTop)) {
-                            var margin = mapHeight / 100 * percetageFromTop;
+                            const margin = mapHeight / 100 * percetageFromTop;
                             this._element.css('margin-top', margin + 'px');
                         }
                     } else {
                         this._element.css('margin-top', topMargin);
                     }
                 } else if (typeof topMargin === 'number') {
-                    this._element.css('margin-top', margin + 'px');
+                    this._element.css('margin-top', topMargin + 'px');
                 }
             }
         },
@@ -376,7 +433,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @return {Object[]} key, value that has been localized
          */
         _generateSelectOptions: function (prefix, options) {
-            var me = this;
+            const me = this;
             return options.map(function (e) {
                 return {
                     title: me.loc(prefix + e.key),
@@ -389,10 +446,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @private
          */
         _initMenus: function () {
-            var me = this;
-            var template = jQuery('<div class="timeseries-menus"><div class="timeseries-menus-half"></div><div class="timeseries-menus-half"></div></div>');
+            const me = this;
+            const template = jQuery('<div class="timeseries-menus"><div class="timeseries-menus-half"></div><div class="timeseries-menus-half"></div></div>');
 
-            var speedMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
+            const speedMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
             speedMenu.setOptions(this._generateSelectOptions('animationSpeed.', this.__speedOptions));
             speedMenu.setTitle(this.loc('label.animationSpeed'));
             speedMenu.setValue(this._uiState.frameInterval);
@@ -402,7 +459,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             });
             template.find('.timeseries-menus-half').first().append(speedMenu.getElement());
 
-            var skipMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
+            const skipMenu = Oskari.clazz.create('Oskari.userinterface.component.Select');
             skipMenu.setOptions(this._generateSelectOptions('skip.', this._validSkipOptions));
             skipMenu.setTitle(this.loc('label.skipAhead'));
             skipMenu.setValue(this._uiState.stepInterval);
@@ -418,12 +475,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @private
          */
         _initStepper: function () {
-            var me = this;
-            var template = jQuery(
+            const me = this;
+            const template = jQuery(
                 '<div class="timeseries-stepper">' +
                 '<div class="timeseries-back"></div><div class="timeseries-playpause"></div><div class="timeseries-forward"></div><div class="timeseries-datetime"></div>' +
                 '</div>');
-            var dateTime = template.find('.timeseries-datetime');
+            const dateTime = template.find('.timeseries-datetime');
             me._updateTimeDisplay = function () {
                 const date = new Date(me._uiState.currentTime);
                 const diff = date.getTimezoneOffset() * 60000;
@@ -434,9 +491,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                     me._setAnimationState(false);
                     return;
                 }
-                var times = me._uiState.times;
-                var curIndex = Math.max(d3.bisectLeft(times, me._uiState.currentTime), 0);
-                var endIndex = Math.max(d3.bisect(times, me._uiState.rangeEnd) - 1, 0);
+                const times = me._uiState.times;
+                const curIndex = Math.max(d3.bisectLeft(times, me._uiState.currentTime), 0);
+                const endIndex = Math.max(d3.bisect(times, me._uiState.rangeEnd) - 1, 0);
                 if (curIndex >= endIndex) {
                     me._restartAnimation();
                 } else {
@@ -520,26 +577,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param  {Boolean} isMobile is in mobile mode?
          */
         _updateTimelines: function (isMobile) {
-            var me = this;
-            var margin = { left: 15, right: 15 };
-            var tickFormatter = me._getTickFormatter();
-            var tickCount = me._timelineWidth / 60;
-            var svg = d3.select(this._element.find('.timeline-svg').get(0));
+            const me = this;
+            const margin = { left: 15, right: 15 };
+            const tickFormatter = me._getTickFormatter();
+            const tickCount = me._timelineWidth / 60;
+            const svg = d3.select(this._element.find('.timeline-svg').get(0));
             svg
                 .attr('viewBox', isMobile ? '0 50 ' + this._timelineWidth + ' 50' : null)
                 .attr('width', this._timelineWidth)
                 .attr('height', isMobile ? 50 : 100);
 
-            var times = this._uiState.times;
-            var scaleFull = d3.scaleTime()
+            const times = this._uiState.times;
+            const scaleFull = d3.scaleTime()
                 .domain([new Date(times[0]), new Date(times[times.length - 1])])
                 .range([margin.left, this._timelineWidth - margin.right]);
 
-            var scaleSubset = d3.scaleTime()
+            const scaleSubset = d3.scaleTime()
                 .domain([new Date(this._uiState.rangeStart), new Date(this._uiState.rangeEnd)])
                 .range([margin.left, this._timelineWidth - margin.right]);
 
-            var axisFull = d3.axisTop(scaleFull)
+            const axisFull = d3.axisTop(scaleFull)
                 .ticks(tickCount)
                 .tickPadding(7)
                 .tickFormat(tickFormatter);
@@ -547,7 +604,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .attr('transform', 'translate(0,' + me.__fullAxisYPos + ')')
                 .call(axisFull);
 
-            var axisSubset = d3.axisTop(scaleSubset)
+            const axisSubset = d3.axisTop(scaleSubset)
                 .ticks(tickCount)
                 .tickPadding(7)
                 .tickFormat(tickFormatter);
@@ -555,18 +612,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .attr('transform', 'translate(0,80)')
                 .call(axisSubset);
 
-            var handle = svg.select('g.drag-handle')
+            const handle = svg.select('g.drag-handle')
                 .attr('transform', 'translate(' + scaleSubset(new Date(this._uiState.currentTime)) + ',80)')
                 .on('.drag', null); // remove old event handlers
 
             function renderHandle () {
-                var newX = scaleSubset(new Date(me._uiState.currentTime));
+                const newX = scaleSubset(new Date(me._uiState.currentTime));
                 handle.attr('transform', 'translate(' + newX + ',80)');
             }
             me._renderHandle = renderHandle;
 
             function timeFromMouse (newX) {
-                var scaleRange = scaleSubset.range();
+                const scaleRange = scaleSubset.range();
                 if (newX > scaleRange[1]) {
                     newX = scaleRange[1];
                 }
@@ -577,7 +634,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             }
 
             function updateFullAxisControls () {
-                var range = scaleSubset.domain().map(scaleFull);
+                const range = scaleSubset.domain().map(scaleFull);
                 svg.selectAll('.full-axis-controls circle').each(function (d, i) {
                     d3.select(this).attr('cx', range[i]);
                 });
@@ -594,23 +651,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .attr('height', 50)
                 .on('click', null) // remove old event handlers
                 .on('click', function (e) {
-                    var newX = d3.pointer(e)[0];
+                    const newX = d3.pointer(e)[0];
                     timeFromMouse(newX);
                 });
 
-            var dragBehavior = d3.drag()
+            const dragBehavior = d3.drag()
                 .subject(function (e) {
                     return { x: scaleSubset(new Date(me._uiState.currentTime)), y: e.y };
                 })
                 .on('drag', function (e) {
-                    var newX = e.x;
+                    const newX = e.x;
                     timeFromMouse(newX);
                 });
 
             handle.call(dragBehavior);
 
             if (!isMobile) {
-                var brush = d3.brushX()
+                const brush = d3.brushX()
                     .extent([[margin.left, 0], [this._timelineWidth - margin.right, 50]])
                     .handleSize(40)
                     .on('.brush', null) // remove old event handlers
@@ -627,12 +684,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             }
 
             function brushed (e) {
-                var selection = e.selection;
-                var inverted = selection.map(function (e) { return scaleFull.invert(e).toISOString(); });
+                const selection = e.selection;
+                const inverted = selection.map(function (e) { return scaleFull.invert(e).toISOString(); });
                 scaleSubset.domain(inverted.map(function (t) { return new Date(me._getClosestTime(t)); }));
                 svg.select('.subset-axis').call(axisSubset);
 
-                var changedTime = me._uiState.currentTime;
+                let changedTime = me._uiState.currentTime;
                 if (inverted[0] > me._uiState.currentTime) {
                     changedTime = inverted[0];
                 }
@@ -672,7 +729,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _createEventHandlers: function () {
             return {
-                MapSizeChangedEvent: function (evt) {
+                'MapSizeChangedEvent': function (evt) {
                     this._setWidth(evt.getWidth());
                 },
                 'Toolbar.ToolSelectedEvent': function (evt) {
@@ -694,6 +751,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             }
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
-        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
+        extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
+        protocol: ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

@@ -105,14 +105,7 @@ a:focus {
   color: #ff9100;
 }
 
-/* Selection colours */
-::selection {
-  background: #ffd400;
-}
-
-::-moz-selection {
-  background: #ffd400;
-}
+/* Selection colours (main ones in src\react\theme\globalStyles.js) */
 
 img::selection {
   background: transparent;
