@@ -452,8 +452,8 @@ export const COLOR_SETS = [{
     'name': 'Pastel1',
     'type': 'qual',
     'colors': [
-        'bb4ae,ccebc5',
-        'bb4ae,b3cde3,ccebc5',
+        'fbb4ae,ccebc5',
+        'fbb4ae,b3cde3,ccebc5',
         'fbb4ae,b3cde3,ccebc5,decbe4',
         'fbb4ae,b3cde3,ccebc5,decbe4,fed9a6',
         'fbb4ae,b3cde3,ccebc5,decbe4,fed9a6,ffffcc',
