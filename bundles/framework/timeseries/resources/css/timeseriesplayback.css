@@ -6,13 +6,6 @@
   stroke-width: 3px;
   stroke: #E4E6E7;
 }
-.timeline-svg g.subset-axis line, g.subset-axis path {
-  stroke: #333;
-}
-.timeline-svg g.subset-axis text, g.full-axis text {
-  fill: #333;
-  stroke: none;
-}
 .timeline-svg g.tick text.bold {
   font-weight: 600;
 }

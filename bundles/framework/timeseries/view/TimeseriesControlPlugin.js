@@ -242,7 +242,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             const themeObj = this.getMapModule().getMapTheme();
             const theme = getNavigationTheme(themeObj);
             const buttonColor = theme.getButtonColor();
-            // const textColor = theme.getTextColor();
+            const textColor = theme.getTextColor();
             const accentColor = theme.getButtonHoverColor();
             styleEl.innerHTML = `
             .mapplugin.timeseriescontrolplugin {
@@ -274,6 +274,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 fill: ${accentColor};
                 stroke: ${buttonColor};
                 stroke-width: 2px;
+            }
+            .timeline-svg g.subset-axis line, g.subset-axis path {
+                stroke: ${textColor};
+            }
+            .timeline-svg g.subset-axis text, g.full-axis text {
+                fill: ${textColor};
+                stroke: none;
             }
             `;
         },
