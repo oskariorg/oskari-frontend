@@ -249,6 +249,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 white-space: nowrap;
                 background-color: ${theme.getNavigationBackgroundColor()};
                 flex-direction: row;
+                color: ${textColor};
             }
             @media (max-width: 600px) {
                 .mapplugin.timeseriescontrolplugin {
