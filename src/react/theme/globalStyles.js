@@ -62,5 +62,9 @@ export const setGlobalStyle = (theme = {}) => {
                 width: 0;
             }
         }
+        ::selection {
+            background-color: ${headerTheme.getBgColor()};
+            color:  ${headerTheme.getTextColor()};
+        }
     `;
 };
