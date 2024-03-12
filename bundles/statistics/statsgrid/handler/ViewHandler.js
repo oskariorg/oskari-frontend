@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { getContainerOptions, createSeriesControlPlugin, createTogglePlugin, stopTogglePlugin } from '../helper/ViewHelper';
 import { showTableFlyout } from '../view/Table/TableFlyout';
 import { showSearchFlyout } from '../view/search/SearchFlyout';
@@ -199,9 +199,13 @@ class UIHandler extends StateHandler {
     toggle (id) {
         if (this.controls[id]) {
             this.close(id);
-        } else {
-            this.show(id);
+            return;
         }
+        if (id === SERIES && !this.stateHandler.getState().isSeriesActive) {
+            Messaging.warn(this.loc('errors.cannotDisplayAsSeries'));
+            return;
+        }
+        this.show(id);
     }
 
     openSearchWithSelections (indicator) {
