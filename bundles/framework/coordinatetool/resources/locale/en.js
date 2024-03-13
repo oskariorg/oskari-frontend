@@ -96,7 +96,7 @@ Oskari.registerLocalization(
             },
             "cannotTransformCoordinates": {
                 "title": "Error",
-                "message": "Coordinates cannot transformed"
+                "message": "Coordinates can not be transformed"
             },
             "publisher": {
                 "showTransformationTools": "Show coordinate transformation tools",
