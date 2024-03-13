@@ -1,5 +1,4 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-
 import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { getIndicatorMetadata, getIndicatorData, saveIndicator, saveIndicatorData, deleteIndicator } from './IndicatorHelper';
 import { getRegionsAsync } from '../helper/RegionsHelper';
@@ -25,12 +24,6 @@ class IndicatorFormController extends StateHandler {
         this.reset();
         await this.preparePopupData(ds, id);
         this.instance.getViewHandler()?.show('indicatorForm');
-        if (!id && !Oskari.user().isLoggedIn()) {
-            Messaging.warn({
-                duration: 10,
-                content: this.loc('userIndicators.notLoggedInWarning')
-            });
-        }
     }
 
     showClipboardPopup () {
@@ -44,7 +37,7 @@ class IndicatorFormController extends StateHandler {
             selection: '',
             regionset: null,
             dataByRegions: [],
-            showDataTable: 'todo add button',
+            showDataTable: false,
             loading: false
         };
     }
@@ -90,19 +83,19 @@ class IndicatorFormController extends StateHandler {
     addStatisticalData () {
         const { selection, regionset } = this.getState();
         if (selection.length === 0 || isNaN(selection)) {
-            Messaging.error(this.loc('errors.myIndicatorYearInput'));
+            Messaging.error(this.loc('userIndicators.validate.year'));
             return;
         }
         if (!regionset) {
-            Messaging.error(this.loc('errors.myIndicatorRegionselect'));
+            Messaging.error(this.loc('userIndicators.validate.regionset'));
             return;
         }
         this.showDataTable();
     }
 
-    updateRegionValue (id, value) {
+    updateRegionValue (key, value) {
         const dataByRegions = this.getState().dataByRegions
-            .map(region => region.id === id ? {...region, value } : region);
+            .map(region => region.key === key ? {...region, value } : region);
         this.updateState({ dataByRegions });
     }
 
@@ -117,11 +110,10 @@ class IndicatorFormController extends StateHandler {
                 try {
                     data = await getIndicatorData({...indicator, selections }, regionset);
                 } catch (e) {
-                    console.log(e.message);
                     // no data saved for selections
-                    // TODO: handle getIndicatorData properly
                 }
             }
+            // use key to use as datasource for Table
             const dataByRegions = regions
                 .map(({name, id}) => ({key: id, name, value: data[id]}))
                 .sort((a, b) => a.name.localeCompare(b.name));
@@ -149,10 +141,10 @@ class IndicatorFormController extends StateHandler {
             this.updateState({ indicator: updated, loading: false });
             this.notifyCacheUpdate(updated);
             this.log.info(`Saved indicator with id: ${id}`, updated);
-            Messaging.success(this.loc('userIndicators.dialog.successMsg'));
+            Messaging.success(this.loc('userIndicators.success.indicatorSave'));
         } catch (error) {
             this.updateState({ loading: false });
-            Messaging.error(this.loc('errors.indicatorSave'));
+            Messaging.error(this.loc('userIndicators.error.indicatorSave'));
         }
     }
     async saveData () {
@@ -162,8 +154,7 @@ class IndicatorFormController extends StateHandler {
         const indicator = { ...this.getState().indicator, selections };
 
         if (typeof indicator.name !== 'string' || indicator.name.trim().length === 0) {
-            // TODO: disable button, mark name as mandatory?
-            Messaging.warn(this.loc('errors.myIndicatorNameInput'));
+            Messaging.warn(this.loc('userIndicators.validate.name'));
             return;
         }
         const data = {};
@@ -178,14 +169,14 @@ class IndicatorFormController extends StateHandler {
             data[key] = Number(valString);
         });
         if (!Object.keys(data).length) {
-            Messaging.warn(this.loc('errors.myIndicatorNoData'));
+            Messaging.warn(this.loc('userIndicators.validate.noData'));
             return;
         }
         try {
             await saveIndicatorData(indicator, data, regionset);
             const indicatorInfo = `Indicator: ${indicator.id}, selection: ${selection}, regionset: ${regionset}.`;
             this.log.info('Saved data form values', data, indicatorInfo);
-            Messaging.success(this.loc('userIndicators.dialog.successMsg'));
+            Messaging.success(this.loc('userIndicators.success.datasetSave'));
             // add indicator only when data is saved
             const dataset = {...selections, regionset };
             this.selectIndicator(dataset);
@@ -195,7 +186,7 @@ class IndicatorFormController extends StateHandler {
             this.notifyCacheUpdate(indicator);
         } catch (error) {
             this.updateSate({ loading: false });
-            Messaging.error(this.loc('errors.indicatorSave'));
+            Messaging.error(this.loc('userIndicators.error.datasetSave'));
         }
     }
 
@@ -261,9 +252,9 @@ class IndicatorFormController extends StateHandler {
         }
         try {
             await deleteIndicator(indicator, item.regionset);
-            Messaging.success(this.loc('tab.popup.deleteSuccess'));
+            Messaging.success(this.loc('userIndicators.success.datasetDelete'));
         } catch (error) {
-            Messaging.error(this.loc('errors.datasetDelete'));
+            Messaging.error(this.loc('userIndicators.error.datasetDelete'));
         }
         this.preparePopupData(indicator);
         this.notifyCacheUpdate(indicator);

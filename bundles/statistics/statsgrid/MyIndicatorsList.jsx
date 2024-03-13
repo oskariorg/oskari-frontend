@@ -75,7 +75,7 @@ export const MyIndicatorsList = ({ controller, indicators = [], loading }) => {
         <>
             <ButtonContainer>
                 <Button type='primary' onClick={() => controller.addNewIndicator()}>
-                    <Message messageKey='userIndicators.buttonTitle' />
+                    <Message messageKey='userIndicators.add' />
                 </Button>
             </ButtonContainer>
             <Table

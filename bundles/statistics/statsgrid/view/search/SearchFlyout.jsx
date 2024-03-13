@@ -41,8 +41,7 @@ const IndicatorField = styled('div')`
 
 const UserIndicator = ({isSingle, onClick}) => {
     const type = isSingle ? 'edit' : 'add';
-    const title = isSingle ? 'userIndicators.modify.edit' : 'userIndicators.buttonTitle';
-    return <UserIndicatorButton bordered type={type} title={<Message messageKey={title} />} onClick={onClick} />
+    return <UserIndicatorButton bordered type={type} title={<Message messageKey={`userIndicators.${type}`} />} onClick={onClick} />
 };
 
 // For preventing checkbox clickable area from stretching to 100% of content width

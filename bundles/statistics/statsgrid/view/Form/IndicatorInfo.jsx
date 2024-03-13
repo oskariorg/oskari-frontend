@@ -20,18 +20,18 @@ export const IndicatorInfo = ({ state, controller }) => {
     return (
         <Content>
             <StyledInput
-                placeholder={Oskari.getMsg(BUNDLE_KEY, 'userIndicators.panelGeneric.formName')}
+                placeholder={Oskari.getMsg(BUNDLE_KEY, 'userIndicators.info.name')}
                 value={name}
                 onChange={(e) => controller.updateIndicator('name', e.target.value)}
             />
             <StyledTextArea
-                placeholder={Oskari.getMsg(BUNDLE_KEY, 'userIndicators.panelGeneric.formDescription')}
+                placeholder={Oskari.getMsg(BUNDLE_KEY, 'userIndicators.info.description')}
                 rows={2}
                 value={description}
                 onChange={(e) => controller.updateIndicator('description', e.target.value)}
             />
             <StyledInput
-                placeholder={Oskari.getMsg(BUNDLE_KEY, 'userIndicators.panelGeneric.formDatasource')}
+                placeholder={Oskari.getMsg(BUNDLE_KEY, 'userIndicators.info.source')}
                 value={source}
                 onChange={(e) => controller.updateIndicator('source', e.target.value)}
             />

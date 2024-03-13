@@ -77,7 +77,7 @@ export const updateIndicatorListInCache = (indicator, regionsetId) => {
 export const populateIndicatorOptions = async (datasourceId, successCallback, errorCallback) => {
     if (!datasourceId) {
         if (typeof errorCallback === 'function') {
-            errorCallback('errors.myIndicatorDatasource');
+            errorCallback('errors.datasourceIsEmpty');
         }
         return;
     }
