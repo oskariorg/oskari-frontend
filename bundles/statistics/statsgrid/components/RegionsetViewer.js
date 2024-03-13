@@ -18,27 +18,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     this._regionsAdded = [];
     this._lastRenderCache = {};
 
-    this.stateHandler.addStateListener(state => this.render(state));
+    // state handler's setActiveRegion doesn't use normal updateState
+    // it notifies listeners with updated key
+    // full render is heavy operation and causes blinking on map
+    this.stateHandler.addStateListener((state, updated) => updated === 'activeRegion'
+        ? this.updateActiveRegion(state.activeRegion)
+        : this.render(state));
 }, {
+    updateActiveRegion: function (activeRegion) {
+        const { highlightRegionId } = this._lastRenderCache;
+        // higlight feature
+        this._updateFeatureStyle(activeRegion, true);
+        if (highlightRegionId) {
+            // Remove previous highlight
+            this._updateFeatureStyle(highlightRegionId, false);
+        }
+        this._lastRenderCache.highlightRegionId = activeRegion;
+    },
     render: async function (state) {
         try {
             const { indicators, activeIndicator, activeRegion, regionset } = state;
             const currentIndicator = indicators.find(ind => ind.hash === activeIndicator);
             if (!currentIndicator) {
                 this.clearRegions();
-                return;
-            }
-            // assume that state update contains only active region change
-            // this is little dangerous but rendering whole layer is heavy operation
-            const { highlightRegionId: previous } = this._lastRenderCache;
-            if (previous && activeRegion && activeRegion !== previous) {
-                // higlight feature
-                this._updateFeatureStyle(activeRegion, true);
-                if (previous) {
-                    // Remove previous highlight
-                    this._updateFeatureStyle(previous, false);
-                }
-                this._lastRenderCache.highlightRegionId = activeRegion;
                 return;
             }
             const { classification, classifiedData } = currentIndicator;
