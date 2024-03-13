@@ -245,9 +245,9 @@ Oskari.registerLocalization({
             'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
             'info': {
                 'title': 'Information',
-                'formName': 'Namn',
-                'formDescription': 'Beskrivning',
-                'formDatasource': 'Källa'
+                'name': 'Namn',
+                'description': 'Beskrivning',
+                'source': 'Källa'
             },
             'datasets': {
                 'title': 'Statistisk information',

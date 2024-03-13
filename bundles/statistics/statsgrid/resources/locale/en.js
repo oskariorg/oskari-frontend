@@ -247,7 +247,7 @@ Oskari.registerLocalization({
                 'title': 'Indicator data',
                 'name': 'Name',
                 'description': 'Description',
-                'datasource': 'Datasource'
+                'source': 'Source'
             },
             'datasets': {
                 'title': 'Statistical data',
