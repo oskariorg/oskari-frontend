@@ -258,7 +258,7 @@ Oskari.registerLocalization({
             'buttonTitle': 'Skapa indikator',
             'buttonAddIndicator': 'Ange värden',
             'panelGeneric': {
-                'title': 'Information',
+                'title': 'Indikatorns uppgifter',
                 'formName': 'Namn',
                 'formDescription': 'Beskrivning',
                 'formDatasource': 'Källa'
