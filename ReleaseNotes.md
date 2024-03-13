@@ -5,14 +5,14 @@
 For a full list of changes see:
 https://github.com/oskariorg/oskari-frontend/milestone/45?closed=1
 
-### Improvements for Mobile / small screen on geoportal
+### Improvements for mobile devices / small screens
 
 - Adding a marker now only shows one popup at a time making it more usable on small screens/mobile devices.
 - Marker and measurement tools now automatically hide the main navigation on geoportal when used on small screens to show more of the map when these tools are activated.
 - The XY-tool now detects if the user has a mouse-controller and hides the "show coordinates at mouse location" toggle if mouse is not detected.
-- The main navigation now shows a scroll indicator to signal that there's more content on the navigation than fits the end-users screen. This helps users find functionalities that don't fit on their screen and are not familiar with the UI to know where to search them.
+- The main navigation on geoportal now shows a scroll indicator to signal that there's more content on the navigation than fits the end-users screen. This helps users find functionalities that don't fit on their screen and are not familiar with the UI to know where to search them.
 - Banner-announcements are now more usable on small screens and work better with dark themes (https://github.com/oskariorg/oskari-frontend/pull/2481).
-- The announcements tile in main navigation is now hidden on small screens when there are no announcements to be listed.
+- The announcements tile in geoportal main navigation is now hidden on small screens when there are no announcements to be listed.
 - The UI for browsing sparse timeseries data like historical ortophotos has been improved for small screens: https://github.com/oskariorg/oskari-frontend/pull/2565
 - Pinch zooming the page (outside the map/in the main navigation or flyout/popup content) on mobile devices can result the user losing access to part of the UI (usually the main navigation) as its rendered outside the device physical screen after pinch zooming. We now try to detect this condition and offer a button for reseting the page zoom when this happens. This is experimental and unfortunately doesn't seem to work on all devices (notably not working on iOS based devices). See https://github.com/oskariorg/oskari-frontend/pull/2534 for more details.
 
