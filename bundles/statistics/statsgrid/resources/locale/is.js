@@ -165,12 +165,7 @@ Oskari.registerLocalization({
             "regionsetsIsEmpty": "Area selections could not be fetched for chosen data.",
             "regionsDataError": "Error occurred in area value search.",
             "regionsDataIsEmpty": "Area values could not be fetched for chosen data.",
-            "datasetSave": "Error saving dataset.",
-            "datasetDelete": "Error deleting dataset.",
-            "indicatorSave": "Error saving indicator",
-            "myIndicatorYearInput": "Year field cannot be empty.",
-            "myIndicatorRegionselect": "Regionselect cannot be empty.",
-            "myIndicatorDatasource": "Datasource is empty.",
+            "datasourceIsEmpty": "Datasource is empty.",
             "cannotDisplayAsSeries": "Indicator cannot be inspected as a series.",
             "noDataForIndicators": "Service did not return data for {indicators, plural, one {the indicator} other {indicators}}"
         },
@@ -245,33 +240,6 @@ Oskari.registerLocalization({
             }
         },
         "userIndicators": {
-            "flyoutTitle": "Add new indicator",
-            "buttonTitle": "Add new indicator",
-            "buttonAddIndicator": "Add data",
-            "panelGeneric": {
-                "title": "Indicator data",
-                "formName": "Name",
-                "formDescription": "Description",
-                "formDatasource": "Datasource"
-            },
-            "panelData": {
-                "title": "Statistical data"
-            },
-            "dialog": {
-                "successTitle": "Saved",
-                "successMsg": "The data has been saved. Add the indicator to the map using the statistics search functionality."
-            },
-            "import": {
-                "title": "Import from the clipboard",
-                "placeholder": "Enter the indicators data here. Each row should contain a region and it's value. Enter the region's name or id. Use semicolon as a separator. Data can be imported in following formats:\nSample 1: Helsinki;1234\nSample 2: 011;5678"
-            },
-            "notLoggedInTitle": "Warning",
-            "notLoggedInWarning": "Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.",
-            "modify": {
-                "title": "Indicator",
-                "edit": "Edit",
-                "remove": "Remove"
-            }
         },
         "indicatorList": {
             "title": "Indicators",

@@ -169,14 +169,7 @@ Oskari.registerLocalization({
             'regionsetsIsEmpty': 'Områdesindelningarna kunde inte hämtas för den valda datamängden.',
             'regionsDataError': 'Ett fel uppstod vid sökningen av områdets värden.',
             'regionsDataIsEmpty': 'Områdenas värden kunde inte ges till de valda datamängderna.',
-            'datasetSave': 'Ett fel uppstod vid sparning av data.',
-            'datasetDelete': 'Ett fel uppstod vid radering av data.',
-            'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.',
-            'myIndicatorNameInput': 'Namnfält kan inte vara tom.',
-            'myIndicatorYearInput': 'Årsfält kan inte vara tom.',
-            'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.',
-            'myIndicatorDatasource': 'Datakällan är tom.',
-            'myIndicatorInvalidData': 'Datamängder har ogiltiga värden.',
+            'datasourceIsEmpty': 'Datakällan är tom.',
             'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.',
             'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}',
             'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}'
@@ -242,35 +235,25 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Ta bort indikatorn',
-                'deletemsg': 'Vill du ta bort indikatorn "{name}"?',
-                'deleteSuccess': 'Indikatorn borttagen'
-            },
-            'button': {
-                'cancel': 'Avbryt',
-                'ok': 'OK'
-            },
-            'error': {
-                'title': 'Fel',
-                'notfound': 'Indikator saknas',
-                'notdeleted': 'Borttagning av indikatorn misslyckades'
+                'deletemsg': 'Vill du ta bort indikatorn "{name}"?'
             }
         },
         'userIndicators': {
-            'flyoutTitle': 'Skapa indikator',
-            'buttonTitle': 'Skapa indikator',
-            'buttonAddIndicator': 'Ange värden',
-            'panelGeneric': {
+            'title': 'Mina indikatorer',
+            'add': 'Skapa indikator',
+            'edit': 'Redigera indikator',
+            'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
+            'info': {
                 'title': 'Information',
                 'formName': 'Namn',
                 'formDescription': 'Beskrivning',
                 'formDatasource': 'Källa'
             },
-            'panelData': {
-                'title': 'Statistisk information'
-            },
-            'dialog': {
-                'successTitle': 'Sparad',
-                'successMsg': 'Informationen sparad.'
+            'datasets': {
+                'title': 'Statistisk information',
+                'dataset': 'Datamängder',
+                'noIndicator': 'Tallenna indikaattorin tiedot lisätäksesi aineistoja.',
+                'noDatasets': 'Indikaattorilla ei ole tallennettuja aineistoja.'
             },
             'import': {
                 'title': 'Hämta från urklipp',
@@ -279,12 +262,25 @@ Oskari.registerLocalization({
                 'Exempel 1: Helsinki;1234 \n' +
                 'Exempel 2: 011;5678'
             },
-            'notLoggedInTitle': 'Varning',
-            'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
-            'modify': {
-                'title': 'Indikator',
-                'edit': 'Redigera',
-                'remove': 'Ta bort'
+            'success': {
+                'indicatorSave': 'Indikatorns information sparad',
+                'indicatorDelete': 'Indikatorn borttagen',
+                'datasetSave': 'Datamängder har sparats',
+                'datasetDelete': 'Datamängder har tagits bort',
+            },
+            'error': {
+                'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.',
+                'indicatorDelete': 'Borttagning av indikatorn misslyckades',
+                'indicatorNotfound': 'Indikator saknas',
+                'datasetSave': 'Ett fel uppstod vid sparning av data',
+                'datasetDelete': 'Ett fel uppstod vid radering av data.'
+            },
+            'validate': {
+                'name': 'Namnfält kan inte vara tom',
+                'year': 'Årsfält kan inte vara tom',
+                'regionset': 'Områdesindelning kan inte vara tom',
+                'noData': 'Datamängder har inga värden',
+                'invalidData': 'Datamängder har ogiltiga värden',
             }
         },
         'indicatorList': {

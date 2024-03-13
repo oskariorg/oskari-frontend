@@ -169,16 +169,7 @@ Oskari.registerLocalization({
             'regionsetsIsEmpty': 'Aluevalintoja ei saatu valitulle aineistolle.',
             'regionsDataError': 'Alueen arvojen haussa tapahtui virhe.',
             'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.',
-            'datasetSave': 'Virhe tallennetaessa aineistoa.',
-            'datasetDelete': 'Virhe poistaessa aineistoa.',
-            'indicatorSave': 'Virhe tallennettaessa muuttujaa.',
-            'indicatorDelete': 'Virhe poistaessa muuttujaa.',
-            'myIndicatorNameInput': 'Nimi kenttä ei voi olla tyhjä.',
-            'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
-            'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.',
-            'myIndicatorDatasource': 'Tietolähde on tyhjä.',
-            'myIndicatorNoData': 'Aineiston arvoja ei ole annettu.',
-            'myIndicatorInvalidData': 'Aineistossa on virheellisiä arvoja.',
+            'datasourceIsEmpty': 'Tietolähde on tyhjä.',
             'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana',
             'noDataForIndicators': 'Palvelusta ei saatu tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}',
             'onlyPartialDataForIndicators': 'Palvelusta ei saatu kaikkia tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}'
@@ -244,35 +235,25 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Poista indikaattori',
-                'deletemsg': 'Haluatko poistaa indikaattorin "{name}"?',
-                'deleteSuccess': 'Indikaattori poistettu'
-            },
-            'button': {
-                'cancel': 'Peruuta',
-                'ok': 'OK'
-            },
-            'error': {
-                'title': 'Virhe',
-                'notfound': 'Indikaattoria ei löytynyt',
-                'notdeleted': 'Indikaattorin poisto epäonnistui'
+                'deletemsg': 'Haluatko poistaa indikaattorin "{name}"?'
             }
         },
         'userIndicators': {
-            'flyoutTitle': 'Omat indikaattorit',
-            'buttonTitle': 'Lisää uusi indikaattori',
-            'buttonAddIndicator': 'Syötä dataa',
-            'panelGeneric': {
+            'title': 'Omat indikaattorit',
+            'add': 'Lisää uusi indikaattori',
+            'edit': 'Muokkaa indikaattoria',
+            'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
+            'info': {
                 'title': 'Indikaattorin tiedot',
-                'formName': 'Nimi',
-                'formDescription': 'Kuvaus',
-                'formDatasource': 'Lähde'
+                'name': 'Nimi',
+                'description': 'Kuvaus',
+                'source': 'Lähde'
             },
-            'panelData': {
-                'title': 'Tilastotieto'
-            },
-            'dialog': {
-                'successTitle': 'Tallennettu',
-                'successMsg': 'Tiedot tallennettu.'
+            'datasets': {
+                'title': 'Tilastotieto',
+                'dataset': 'Aineisto',
+                'noIndicator': 'Tallenna indikaattorin tiedot lisätäksesi aineistoja.',
+                'noDatasets': 'Indikaattorilla ei ole tallennettuja aineistoja.'
             },
             'import': {
                 'title': 'Tuo leikepöydältä',
@@ -280,12 +261,25 @@ Oskari.registerLocalization({
                 'Esimerkki 1: Helsinki;1234 \n' +
                 'Esimerkki 2: 011;5678'
             },
-            'notLoggedInTitle': 'Varoitus',
-            'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
-            'modify': {
-                'title': 'Indikaattori',
-                'edit': 'Muokkaa',
-                'remove': 'Poista'
+            'success': {
+                'indicatorSave': 'Indikaattorin tiedot tallennettu',
+                'indicatorDelete': 'Indikaattorin tiedot poistettu',
+                'datasetSave': 'Aineisto tallennettu',
+                'datasetDelete': 'Aineisto poistettu'
+            },
+            'error': {
+                'indicatorSave': 'Indikaattorin tallennus epäonnistui',
+                'indicatorDelete': 'Indikaattorin poisto epäonnistui',
+                'IndicatorNotfound': 'Indikaattoria ei löytynyt',
+                'datasetSave': 'Virhe tallennetaessa aineistoa',
+                'datasetDelete': 'Virhe poistaessa aineistoa'
+            },
+            'validate': {
+                'name': 'Nimi kenttä ei voi olla tyhjä',
+                'year': 'Vuosi kenttä ei voi olla tyhjä',
+                'regionset': 'Aluejako ei voi olla tyhjä',
+                'noData': 'Aineiston arvoja ei ole annettu',
+                'invalidData': 'Aineistossa on virheellisiä arvoja'
             }
         },
         'indicatorList': {

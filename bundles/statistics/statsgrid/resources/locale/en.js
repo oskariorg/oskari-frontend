@@ -169,14 +169,7 @@ Oskari.registerLocalization({
             'regionsetsIsEmpty': 'Area selections could not be fetched for chosen data.',
             'regionsDataError': 'Error occurred in area value search.',
             'regionsDataIsEmpty': 'Area values could not be fetched for chosen data.',
-            'datasetSave': 'Error saving dataset.',
-            'datasetDelete': 'Error deleting dataset.',
-            'indicatorSave': 'Error saving indicator',
-            'myIndicatorNameInput': 'Name field cannot be empty.',
-            'myIndicatorYearInput': 'Year field cannot be empty.',
-            'myIndicatorRegionselect': 'Regionselect cannot be empty.',
-            'myIndicatorDatasource': 'Datasource is empty.',
-            'myIndicatorInvalidData': 'Data has invalid values.',
+            'datasourceIsEmpty': 'Datasource is empty.',
             'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.',
             'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}',
             'onlyPartialDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}'
@@ -242,35 +235,25 @@ Oskari.registerLocalization({
             },
             'popup': {
                 'deletetitle': 'Delete Indicator',
-                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?',
-                'deleteSuccess': 'Indicator removed'
-            },
-            'button': {
-                'cancel': 'Cancel',
-                'ok': 'OK'
-            },
-            'error': {
-                'title': 'Error',
-                'notfound': 'The indicator was not found.',
-                'notdeleted': 'The indicator was not removed.'
+                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?'
             }
         },
         'userIndicators': {
-            'flyoutTitle': 'Add new indicator',
-            'buttonTitle': 'Add new indicator',
-            'buttonAddIndicator': 'Add data',
-            'panelGeneric': {
+            'title': 'My indicators',
+            'add': 'Add new indicator',
+            'edit': 'Edit indicator',
+            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
+            'info': {
                 'title': 'Indicator data',
-                'formName': 'Name',
-                'formDescription': 'Description',
-                'formDatasource': 'Datasource'
+                'name': 'Name',
+                'description': 'Description',
+                'datasource': 'Datasource'
             },
-            'panelData': {
-                'title': 'Statistical data'
-            },
-            'dialog': {
-                'successTitle': 'Saved',
-                'successMsg': 'The data has been saved.'
+            'datasets': {
+                'title': 'Statistical data',
+                'dataset': 'Dataset',
+                'noIndicator': 'Save indicator information to add datasets.',
+                'noDatasets': 'Indicator doesn\'t have any dataset.'
             },
             'import': {
                 'title': 'Import from the clipboard',
@@ -278,12 +261,25 @@ Oskari.registerLocalization({
                 'Sample 1: Helsinki;1234 \n' +
                 'Sample 2: 011;5678'
             },
-            'notLoggedInTitle': 'Warning',
-            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
-            'modify': {
-                'title': 'Indicator',
-                'edit': 'Edit',
-                'remove': 'Remove'
+            'success': {
+                'indicatorSave': 'Indicator saved',
+                'indicatorDelete': 'Indicator removed',
+                'datasetSave': 'The dataset has been saved',
+                'datasetDelete': 'The dataset has been removed',
+            },
+            'error': {
+                'indicatorSave': 'Error saving indicator',
+                'indicatorDelete': 'The indicator was not removed',
+                'indicatorNotfound': 'The indicator was not found',
+                'datasetSave': 'Error saving dataset',
+                'datasetDelete': 'Error deleting dataset'
+            },
+            'validate': {
+                'name': 'Name field cannot be empty',
+                'year': 'Year field cannot be empty',
+                'regionset': 'Regionselect cannot be empty',
+                'noData': 'Data doesn\'t have values',
+                'invalidData': 'Data has invalid values'
             }
         },
         'indicatorList': {

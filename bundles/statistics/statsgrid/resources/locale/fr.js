@@ -167,12 +167,7 @@ Oskari.registerLocalization(
             "regionsetsIsEmpty": "Impossible d'aller chercher les sélections de superficie pour les données choisies.",
             "regionsDataError": "Une erreur est survenue lors de la recherche des valeurs de superficie.",
             "regionsDataIsEmpty": "Impossible d'aller chercher les valeurs de superficie pour les données choisies.",
-            "datasetSave": "Erreur lors de l'enregistrement du jeu de données.",
-            "datasetDelete": "Erreur lors de la suppression du jeu de données.",
-            "indicatorSave": "Erreur lors de l'enregistrement de l'indicateur",
-            "myIndicatorYearInput": "Le champ Année ne peut pas être vide.",
-            "myIndicatorRegionselect": "Le champ Sélection de la région ne peut pas être vide.",
-            "myIndicatorDatasource": "Le champ Source de données est vide.",
+            "datasourceIsEmpty": "Le champ Source de données est vide.",
             "cannotDisplayAsSeries": "Impossible d'analyser l'indicateur en tant que série."
         },
         "datacharts": {
@@ -230,45 +225,41 @@ Oskari.registerLocalization(
             "popup": {
                 "deletetitle": "Supprimer l'indicateur",
                 "deletemsg": "Vous supprimez l'indicateur \"{name}\". Souhaitez-vous supprimer l'indicateur?",
-                "deleteSuccess": "Indicateur supprimé"
-            },
-            "button": {
-                "cancel": "Annuler",
-                "ok": "OK"
-            },
-            "error": {
-                "title": "Erreur",
-                "notfound": "Impossible de trouver l'indicateur.",
-                "notdeleted": "L'indicateur n'a pas été supprimé."
             }
         },
         "userIndicators": {
-            "flyoutTitle": "Ajouter un nouvel indicateur",
-            "buttonTitle": "Ajouter un nouvel indicateur",
-            "buttonAddIndicator": "Ajouter des données",
-            "panelGeneric": {
+            "title": "Mes indicateurs",
+            "add": "Ajouter un nouvel indicateur",
+            "edit": "Indicateur de modification",
+            "notLoggedInWarning": "Sans ouverture de session, impossible d'enregistrer les données, qui seront uniquement accessibles jusqu'à ce que la page soit rechargée. Ouvrir une session avant d'ajouter l'indicateur pour conserver les données.",
+            "info": {
                 "title": "Données de l'indicateur",
-                "formName": "Nom",
-                "formDescription": "Description",
-                "formDatasource": "Source de données"
+                "name": "Nom",
+                "description": "Description",
+                "source": "Source de données"
             },
-            "panelData": {
+            "datasets": {
                 "title": "Données statistiques"
-            },
-            "dialog": {
-                "successTitle": "Enregistré",
-                "successMsg": "Les données ont été enregistrées."
             },
             "import": {
                 "title": "Importation à partir du presse-papiers",
                 "placeholder": "Saisir les données de l'indicateur ici. Chaque rangée doit contenir une région et sa valeur. Saisir le nom ou l'identifiant de la région. Utiliser le point-virgule en tant que délimiteur. On peut importer les données dans les formats suivants : \nExemple 1 : Helsinki;1234 \nExample 2 : 011;5678"
             },
-            "notLoggedInTitle": "Avertissement",
-            "notLoggedInWarning": "Sans ouverture de session, impossible d'enregistrer les données, qui seront uniquement accessibles jusqu'à ce que la page soit rechargée. Ouvrir une session avant d'ajouter l'indicateur pour conserver les données.",
-            "modify": {
-                "title": "Indicateur",
-                "edit": "Modifier",
-                "remove": "Supprimer"
+            "success": {
+                "indicatorSave": "Les données ont été enregistrées",
+                "indicatorDelete": "Indicateur supprimé",
+                "datasetSave": "Les données ont été enregistrées"
+            },
+            "error": {
+                "indicatorSave": "Erreur lors de l'enregistrement de l'indicateur",
+                "indicatorDelete": "L'indicateur n'a pas été supprimé",
+                "IndicatorNotfound": "Impossible de trouver l'indicateur",
+                "datasetSave": "Erreur lors de l'enregistrement du jeu de données",
+                "datasetDelete": "Erreur lors de la suppression du jeu de données"
+            },
+            'validate': {
+                "year": "Le champ Année ne peut pas être vide.",
+                "regionset": "Le champ Sélection de la région ne peut pas être vide."
             }
         }
     }
