@@ -39,7 +39,7 @@ Oskari.registerLocalization(
                     "label": {
                         "name": "Namnge kartvyn",
                         "description": "Beskriv kartvyn",
-                        "default": "Förvalt kartvyn"
+                        "default": "Förvald kartvy"
                     },
                     "defaultName": "Egna kartvyn {now, date} {now, time, short}",
                     "noName": "Skriv namnet på kartvyn",
