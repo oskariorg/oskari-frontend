@@ -33,6 +33,8 @@ https://github.com/oskariorg/oskari-frontend/milestone/45?closed=1
 - Coordinates info can now be included on the infobox UI (https://github.com/oskariorg/oskari-frontend/pull/2566). Requires activating it on the database for any appsetups that wish to show the coordinates.
 - Reversed map layers legends listing order for consistency/matching the layer order on selected layers.
 - Fixed an issue with infobox header not growing with the content (https://github.com/oskariorg/oskari-frontend/pull/2577)
+- Text selection now uses theme colors
+- Timeseries UI now supports theme colors
 
 ### Admin functionalities
 
