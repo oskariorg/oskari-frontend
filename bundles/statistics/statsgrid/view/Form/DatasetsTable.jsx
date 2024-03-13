@@ -18,10 +18,10 @@ const ButtonContainer = styled.div`
     }
 `;
 
-export const IndicatorDatasets = ({ state, controller }) => {
+export const DatasetsTable = ({ state, controller }) => {
     const { datasets } = state;
     if (!datasets.length) {
-        return null;
+        return <Message messageKey='userIndicators.datasets.noDatasets'/>;
     }
     const getRegionsetName = id => getRegionsets().find(rs => rs.id === id)?.name || '';
     const columnSettings = [
@@ -29,7 +29,7 @@ export const IndicatorDatasets = ({ state, controller }) => {
             dataIndex: 'regionset',
             align: 'left',
             width: 250,
-            title: <Message messageKey='userIndicators.modify.title' />,
+            title: <Message messageKey='userIndicators.datasets.dataset' />,
             render: (title, item) => {
                 const { year, regionset } = item;
                 return (
@@ -59,14 +59,11 @@ export const IndicatorDatasets = ({ state, controller }) => {
         }
     ];
 
-    return (
-        <StyledTable
-            columns={columnSettings}
-            dataSource={datasets?.map(ds => ({
-                key: `${ds.regionset}-${ds.year}`,
-                ...ds
-            }))}
-            pagination={false}
-        />
-    );
+    return <StyledTable
+        columns={columnSettings}
+        dataSource={datasets?.map(ds => ({
+            key: `${ds.regionset}-${ds.year}`,
+            ...ds
+        }))}
+        pagination={false}/>;
 };
