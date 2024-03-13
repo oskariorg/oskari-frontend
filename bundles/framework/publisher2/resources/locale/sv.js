@@ -29,7 +29,7 @@ Oskari.registerLocalization(
             }
         },
         "BasicView": {
-            "title": "Skapa inbäddad karta",
+            "title": "Skapa publicerad karta",
             "titleEdit": "Redigera den inbäddade karta",
             "transfer": {
                 "label": "Överföra konfigurationen",
@@ -250,7 +250,7 @@ Oskari.registerLocalization(
             "additional": {
                 "label": "Ytterligare verktyg"
             },
-            "preview": "Den inbäddade kartans förhandsgranskningsvy",
+            "preview": "Den publicerade kartans förhandsgranskningsvy",
             "location": "Läge och skalnivå.",
             "zoomlevel": "Skalnivå",
             "help": "Hjälp",
@@ -268,7 +268,7 @@ Oskari.registerLocalization(
             "noUI": "Dölj användargränsnittet (Använd via RPC gränssnitt)"
         },
         "NotLoggedView": {
-            "text": "Du kan skapa inbäddade kartor efter att du har loggat in på tjänsten.",
+            "text": "Du kan skapa publicerade kartor efter att du har loggat in på tjänsten.",
             "signup": "Logga in",
             "register": "Registrera dig"
         },
