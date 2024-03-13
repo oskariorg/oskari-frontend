@@ -138,6 +138,7 @@ div.popupHeader {
     flex-direction: row;
     justify-content: space-between;
     float: left;
+    margin-bottom: 0.75em;
 
     div {
         vertical-align: top;
@@ -147,7 +148,8 @@ div.popupHeader {
     }
 
     div.olPopupCloseBox {
-      flex: 0 0 16px;
+      flex-grow: 0;
+      flex-shrink: 0;
     }
   }
     div.coordinateWrapper {

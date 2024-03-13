@@ -65,27 +65,15 @@ const HeaderTools = styled.div`
 const TableFlyout = ({ state, controller }) => {
     const { indicators, activeIndicator, regionset } = state;
     const regions = getRegions(regionset);
-    let initialSort = {
-        regionName: null
-    };
-    indicators?.forEach(indicator => {
-        initialSort[indicator.hash] = null;
-    });
-    const [sortOrder, setSortOrder] = useState(initialSort);
 
-    const changeSortOrder = (col) => {
-        let newOrder = { ...sortOrder };
-        if (newOrder[col] === 'descend' || newOrder[col] === null) {
-            newOrder[col] = 'ascend';
-        } else {
-            newOrder[col] = 'descend';
+    const [sortOrder, setSortOrder] = useState({ column: 'name', order: 'ascend' });
+
+    const changeSortOrder = (column) => {
+        let order = 'ascend';
+        if (column === sortOrder.column) {
+            order = sortOrder.order === 'ascend' ? 'descend' : 'ascend'
         }
-        for (const key of Object.keys(newOrder)) {
-            if (key !== col) {
-                newOrder[key] = null;
-            }
-        }
-        setSortOrder(newOrder);
+        setSortOrder({ column, order });
     };
     // every value is set by looping regions => same indexes
     const dataByHash = indicators.reduce((data, ind) => {
@@ -116,7 +104,7 @@ const TableFlyout = ({ state, controller }) => {
         align: 'left',
         width: COLUMN,
         sorter: getSorterFor('name'),
-        sortOrder: sortOrder['name'],
+        sortOrder: sortOrder.column === 'name' ? sortOrder.order : null,
         showSorterTooltip: false,
         onCell: (record, rowIndex) => ({
             style: { background: '#ffffff' }
@@ -144,8 +132,9 @@ const TableFlyout = ({ state, controller }) => {
                     </RegionHeader>
                     <HeaderTools>
                         <Sorter
-                            sortOrder={sortOrder['name']}
-                            changeSortOrder={() => changeSortOrder('name')} />
+                            column={'name'}
+                            sortOrder={sortOrder}
+                            changeSortOrder={changeSortOrder} />
                     </HeaderTools>
                 </HeaderCell>
             );
@@ -159,14 +148,15 @@ const TableFlyout = ({ state, controller }) => {
             if (a === b) return 0;
             if (typeof a === 'undefined') return -1;
             if (typeof b === 'undefined') return 1;
-            return sortOrder[hash] === 'descend' ? a - b : b - a;
+            return sortOrder.order === 'descend' ? a - b : b - a;
         };
         columnSettings.push({
             dataIndex: [hash, 'formatted'],
             align: 'right',
             width: COLUMN,
             sorter,
-            sortOrder: 'descend',
+            // use descend always for order as we are using own sorter which sorts undefined last
+            sortOrder: sortOrder.column === hash ? 'descend' : null,
             showSorterTooltip: false,
             onCell: (record, rowIndex) => ({
                 style: { background: activeIndicator === hash ? '#fafafa' : '#ffffff' }
@@ -182,8 +172,9 @@ const TableFlyout = ({ state, controller }) => {
                         </IndicatorHeader>
                         <HeaderTools>
                             <Sorter
-                                sortOrder={sortOrder[hash]}
-                                changeSortOrder={() => changeSortOrder(hash)}/>
+                                column={hash}
+                                sortOrder={sortOrder}
+                                changeSortOrder={changeSortOrder}/>
                             <StyledRemoveButton
                                 type='delete'
                                 onClick={() => controller.removeIndicator(indicator)}/>

@@ -53,9 +53,9 @@ export const getTextColor = (bgColor) => {
 };
 
 export const getFontClass = (theme) => {
-    let fontClassSuffix = theme.font || DEFAULT_FONT;
+    const fontClassSuffix = theme.font || DEFAULT_FONT;
     return 'oskari-theme-font-' + fontClassSuffix;
-}
+};
 
 /* ------------------------------------------------------------------------------ */
 // Note! Copy-pasted from bundles/mapping/mapmodule/oskariStyle!
@@ -66,7 +66,7 @@ export const getFontClass = (theme) => {
  * @param {String} effect Oskari style constant (auto, darken, lighten with specifiers minor, normal, major)
  * @return {String} Affected color or undefined if effect or color is missing
  */
- export const getColorEffect = (color, effect) => {
+export const getColorEffect = (color, effect) => {
     if (!effect || !color || effect === EFFECT.NONE) {
         return;
     }

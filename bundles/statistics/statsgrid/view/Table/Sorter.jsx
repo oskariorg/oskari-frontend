@@ -13,16 +13,19 @@ const Icon = styled('div')`
     margin-left: 5px;
 `;
 
-export const Sorter = ({ sortOrder, changeSortOrder }) => {
-    let icon = <CaretDownFilled />;
-    if (sortOrder === 'ascend') {
+export const Sorter = ({ sortOrder, changeSortOrder, column }) => {
+    const isActive = sortOrder.column === column;
+    const order =  isActive ? sortOrder.order : null;
+    let icon = null;
+    if ( order === 'ascend') {
         icon = <CaretUpFilled />;
+    } else if (order === 'descend') {
+        icon = <CaretDownFilled />;
     }
+    const tooltip = order === 'ascend' ? 'statsgrid.orderByDescending' : 'statsgrid.orderByAscending';
     return (
-        <Tooltip
-            title={sortOrder === 'ascend' ? <Message messageKey='statsgrid.orderByDescending' /> : <Message messageKey='statsgrid.orderByAscending' />}
-        >
-            <Content onClick={changeSortOrder}>
+        <Tooltip title={<Message messageKey={tooltip} />}>
+            <Content onClick={() => changeSortOrder(column)}>
                 <Message messageKey='statsgrid.orderBy' /><Icon>{icon}</Icon>
             </Content>
         </Tooltip>

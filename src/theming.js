@@ -1,4 +1,4 @@
-import { setGlobalStyle } from './react/theme'
+import { setGlobalStyle } from './react/theme';
 
 const DEFAULT_THEME = {
     color: {
@@ -14,27 +14,26 @@ let currentTheme = {
 let listeners = [];
 
 export const THEMING = {
-    getTheme() {
+    getTheme () {
         return cloneDeep(currentTheme);
     },
-    setTheme(newTheme = {}) {
+    setTheme (newTheme = {}) {
         // start with new object so we bust any memoized value for listeners and get a good value for reset as well
         currentTheme = merge({}, DEFAULT_THEME, newTheme);
         setGlobalStyle(currentTheme);
         listeners.forEach(l => l(currentTheme));
     },
     /**
-     * 
      * @param {Function} listener function to call with new theme object if theme changes
      * @returns function to call for removing the listener (for cleanup)
      */
-    addListener(listener) {
+    addListener (listener) {
         if (typeof listener === 'function') {
             listeners.push(listener);
         }
         return () => {
             listeners = [...listeners.filter(fn => fn !== listener)];
-        }
+        };
     }
 };
 
@@ -46,7 +45,7 @@ const cloneDeep = (original) => {
     const theClone = Array.isArray(original) ? [] : {};
     for (const key in original) {
         const value = original[key];
-        theClone[key] = (typeof value === "object") ? cloneDeep(value) : value;
+        theClone[key] = (typeof value === 'object') ? cloneDeep(value) : value;
     }
     return theClone;
 };

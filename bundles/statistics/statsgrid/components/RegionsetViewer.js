@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             // assume that state update contains only active region change
             // this is little dangerous but rendering whole layer is heavy operation
             const { highlightRegionId: previous } = this._lastRenderCache;
-            if (activeRegion && activeRegion !== previous) {
+            if (previous && activeRegion && activeRegion !== previous) {
                 // higlight feature
                 this._updateFeatureStyle(activeRegion, true);
                 if (previous) {
