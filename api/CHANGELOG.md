@@ -11,6 +11,18 @@ Some extra tags:
 
 ## 2.13.0
 
+### [add] Added `metadatasearch` bundle
+
+React-based drop-in replacement for jQuery-based `metadatacatalogue` for searching metadata. 
+
+### [add] Added `featuredata` bundle
+
+React-based drop-in replacement for jQuery-based `featuredata2` for feature data table.
+
+### [add] Added a parallel version for `statsgrid` bundle
+
+The new implementation is React-based and has the same bundle id so no db migration is required, but the frontend code is linked from the new path (https://github.com/oskariorg/sample-application/pull/33). This makes it easy to switch the implementation to test it out. One notable difference is that the new one doesn't send the events like the old did as it doesn't need them internally. However the events were not exposed in the RPC API so this should not be an issue for most applications. The bundle documentation still refers to the jQuery implementation with the events.
+
 ### [rem] Removed `personaldata` bundle
 
 Replaced by the `mydata` bundle.
