@@ -1,4 +1,3 @@
-
 # Oskari API changelog
 
 This document describes changes to the public API from Oskari frontend perspective (requests, events, conf/state, services). RPC-developers can check if the request/event API has changed
