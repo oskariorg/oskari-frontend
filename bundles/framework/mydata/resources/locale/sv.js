@@ -59,7 +59,7 @@ Oskari.registerLocalization(
                     "save": "Spara",
                     "cancel": "Avbryt",
                     "toolbarsave": "Spara kartvyn",
-                    "saveCurrent": "Save current view"
+                    "saveCurrent": "Spara nuvarande kartvy"
                 },
                 "error": {
                     "title": "Fel!",
