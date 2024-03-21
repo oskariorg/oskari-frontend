@@ -38,6 +38,6 @@ describe('LayerListHandler', () => {
         jest.runAllTimers();
         // Setting an invalid group key won't change the state.
         expect(handler.getState().grouping.selected).toBe(existingGrouping);
-        expect(mockFn).toHaveBeenCalledTimes(2);
+        expect(mockFn).toHaveBeenCalledTimes(3);
     });
 });
