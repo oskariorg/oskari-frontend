@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { AsyncStateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { getIndicatorMetadata, getIndicatorData, saveIndicator, saveIndicatorData, deleteIndicator } from './IndicatorHelper';
@@ -7,7 +7,7 @@ import { getRegionsAsync } from '../helper/RegionsHelper';
 
 const SELECTOR = 'year';
 
-class IndicatorFormController extends StateHandler {
+class IndicatorFormController extends AsyncStateHandler {
     constructor (instance) {
         super();
         this.instance = instance;

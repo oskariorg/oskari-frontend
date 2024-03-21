@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { AsyncStateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showMedataPopup } from '../components/description/MetadataPopup';
 import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
@@ -15,7 +15,7 @@ const getValueAsArray = (selection) => {
     return [selection];
 };
 
-class SearchController extends StateHandler {
+class SearchController extends AsyncStateHandler {
     constructor (instance, stateHandler) {
         super();
         this.instance = instance;
