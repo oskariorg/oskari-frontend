@@ -68,6 +68,7 @@ class IndicatorFormController extends StateHandler {
             formData: {}
         };
     }
+
     reset () {
         this.updateState(this.getInitState());
     }
@@ -280,6 +281,7 @@ class IndicatorFormController extends StateHandler {
         indicator.hash = getHashForIndicator(indicator);
         this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, dataset.regionset);
     }
+
     selectSavedIndicator (indicator, regionset) {
         this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, regionset);
     }
@@ -322,6 +324,7 @@ class IndicatorFormController extends StateHandler {
             }
         });
     }
+
     editDataset (item = {}) {
         const datasetYear = item[SELECTOR];
         const datasetRegionset = item.regionset;
