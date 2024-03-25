@@ -1,4 +1,4 @@
-import { AsyncStateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { getIndicatorMetadata, getIndicatorData, saveIndicator, saveIndicatorData, deleteIndicator } from './IndicatorHelper';
@@ -7,7 +7,7 @@ import { getRegionsAsync } from '../helper/RegionsHelper';
 
 const SELECTOR = 'year';
 
-class IndicatorFormController extends AsyncStateHandler {
+class IndicatorFormController extends StateHandler {
     constructor (instance) {
         super();
         this.instance = instance;
@@ -68,6 +68,7 @@ class IndicatorFormController extends AsyncStateHandler {
             formData: {}
         };
     }
+
     reset () {
         this.updateState(this.getInitState());
     }
@@ -280,6 +281,7 @@ class IndicatorFormController extends AsyncStateHandler {
         indicator.hash = getHashForIndicator(indicator);
         this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, dataset.regionset);
     }
+
     selectSavedIndicator (indicator, regionset) {
         this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, regionset);
     }
@@ -322,6 +324,7 @@ class IndicatorFormController extends AsyncStateHandler {
             }
         });
     }
+
     editDataset (item = {}) {
         const datasetYear = item[SELECTOR];
         const datasetRegionset = item.regionset;
