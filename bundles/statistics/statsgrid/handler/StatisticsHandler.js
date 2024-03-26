@@ -1,11 +1,11 @@
 import { getHashForIndicator, getUILabels, getUpdatedLabels, formatData } from '../helper/StatisticsHelper';
-import { StateHandler as StateHandlerBase, controllerMixin } from 'oskari-ui/util';
+import { AsyncStateHandler, controllerMixin } from 'oskari-ui/util';
 import { getClassification, getClassifiedData, validateClassification } from '../helper/ClassificationHelper';
 import { getDataForIndicator, getIndicatorMetadata } from './IndicatorHelper';
 import { LAYER_ID } from '../constants';
 import { getRegionsets } from '../helper/ConfigHelper';
 
-class StatisticsController extends StateHandlerBase {
+class StatisticsController extends AsyncStateHandler {
     constructor (instance) {
         super();
         this.instance = instance;
