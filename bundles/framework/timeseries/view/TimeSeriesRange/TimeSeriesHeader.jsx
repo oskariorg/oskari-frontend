@@ -48,16 +48,16 @@ export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = f
     const switchButtonMessage = <Message messageKey={switchButtonMessageKey} />;
     const modeIcon = mode === 'year' ? <LoginOutlined /> : <LogoutOutlined />;
     return (
-        <Header className="timeseries-range-drag-handle" textColor={textColor} hovercolor={hoverColor}>
+        <Header className="timeseries-range-drag-handle" textColor={textColor} hoverColor={hoverColor}>
             {getHeaderContent(title, loading, error, value)}
             <div className="header-mid-spacer"></div>
             <Tooltip title={getTooltipContent(mode, modeIcon)}>
-                <IconButton type="text" size="large" $textColor={textColor} $hoverColor={hoverColor}>
+                <IconButton type="text" size="large" textColor={textColor} hoverColor={hoverColor}>
                     <QuestionCircleOutlined />
                 </IconButton>
             </Tooltip>
             <Tooltip title={switchButtonMessage}>
-                <IconButton type="text" size="large" onClick={() => toggleMode()} $textColor={textColor} $hoverColor={hoverColor}>
+                <IconButton type="text" size="large" onClick={() => toggleMode()} textColor={textColor} hoverColor={hoverColor}>
                     {modeIcon}
                 </IconButton>
             </Tooltip>
