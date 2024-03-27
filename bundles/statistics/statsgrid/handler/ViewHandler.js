@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { AsyncStateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { getContainerOptions, createSeriesControlPlugin, createTogglePlugin, stopTogglePlugin } from '../helper/ViewHelper';
 import { showTableFlyout } from '../view/Table/TableFlyout';
 import { showSearchFlyout } from '../view/search/SearchFlyout';
@@ -18,7 +18,7 @@ const classificationDefaults = {
 };
 const embeddedTools = [...FLYOUTS, CLASSIFICATION, SERIES];
 
-class UIHandler extends StateHandler {
+class UIHandler extends AsyncStateHandler {
     constructor (instance, stateHandler, searchHandler) {
         super();
         this.instance = instance;
