@@ -27,12 +27,12 @@ export const Header = styled.h3`
 
 export const IconButton = styled(Button)`
     padding: 10px;
-    color: ${props => props?.$textColor ? props?.$textColor : primaryColor};
+    color: ${props => props?.textColor ? props?.textColor : primaryColor};
 
     &:hover,
     &:focus,
     &:active {
-        color: ${props => props?.$hovercolor ? props?.$hovercolor : primaryColor};
+        color: ${props => props?.hoverColor ? props?.hoverColor : primaryColor};
         background: transparent;
     }
 
