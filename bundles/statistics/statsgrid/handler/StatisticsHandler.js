@@ -109,8 +109,12 @@ class StatisticsController extends AsyncStateHandler {
         return updated;
     }
 
-    setActiveRegion (activeRegion) {
-        this.updateState({ activeRegion });
+    setActiveRegion (value) {
+        // toggle if already selected
+        const activeRegion = this.getState().activeRegion === value ? null : value;
+        // don't use normal updateState and notify with updated key to optimize map rendering
+        this.state = { ...this.getState(), activeRegion };
+        this.stateListeners.forEach(consumer => consumer(this.getState(), 'activeRegion'));
     }
 
     updateClassification (updated) {
