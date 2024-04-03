@@ -74,15 +74,13 @@ export const Classification = ({
                         values = {classification}
                         editEnabled = {editEnabled}
                         controller = {controller}
-                        showHistogram = {showHistogram}
-                        opacity = {layer.opacity}/>
+                        showHistogram = {showHistogram}/>
                 }
                 <LegendContainer className = "classification-legend">
                     <Legend
                         classifiedData = {classifiedData}
                         mapStyle = {classification.mapStyle}
-                        transparency = {layer.opacity}
-                    />
+                        transparency = {classification.transparency} />
                 </LegendContainer>
             </ContentWrapper>
         </Container>
