@@ -100,7 +100,7 @@ export const populateIndicatorOptions = async (datasourceId, successCallback, er
             indicatorListPerDatasource[cacheKey] = response;
         }
         // always signal complete when we are done with retries, even if server returned !complete
-        successCallback({...response, complete: true });
+        successCallback({ ...response, complete: true });
     } catch (error) {
         if (typeof errorCallback === 'function') {
             errorCallback('errors.indicatorListError');
@@ -118,7 +118,7 @@ export const populateIndicatorOptions = async (datasourceId, successCallback, er
 */
 const filterDuplicates = (indicators = []) => {
     const ids = new Set();
-    return indicators.filter(({id}) => ids.has(id) ? false : ids.add(id));
+    return indicators.filter(({ id }) => ids.has(id) ? false : ids.add(id));
 };
 
 const RETRY_LIMIT = 5;
