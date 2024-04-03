@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         const addFeaturesRequestParams = [];
         const handledRegions = [];
         const { groups } = classifiedData;
-        const { mapStyle, showValues } = classification;
+        const { mapStyle, showValues, transparency } = classification;
         groups.forEach(function (regiongroup, index) {
             const { color, sizePx, regionIds } = regiongroup;
             const optionalStyles = [];
@@ -139,6 +139,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 optionalStyles: optionalStyles,
                 layerId: LAYER_ID,
                 prio: REGION_PRIO + index,
+                opacity: typeof transparency !== 'undefined' ? transparency : 100,
                 animationDuration: 250
             };
             const borderRequestOptions = Object.assign({}, regionRequestOptions, {

@@ -29,7 +29,6 @@ class UIHandler extends AsyncStateHandler {
 
         this.setState({
             layer: {
-                opacity: 100, // store layer opacity to trigger update
                 visible: true,
                 onMap: false
             },

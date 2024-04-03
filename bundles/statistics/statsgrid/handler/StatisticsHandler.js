@@ -113,6 +113,10 @@ class StatisticsController extends AsyncStateHandler {
         this.updateState({ activeRegion });
     }
 
+    onLayerOpacityChange (transparency) {
+        this.updateClassification({ transparency });
+    }
+
     updateClassification (updated) {
         const { activeIndicator: hash, indicators } = this.getState();
         const indicator = indicators.find(ind => ind.hash === hash);
@@ -201,12 +205,8 @@ class StatisticsController extends AsyncStateHandler {
             };
             const isSeriesActive = active ? !!active.series : false;
             this.updateState({ activeIndicator, isSeriesActive, activeRegion, regionset, indicators: indicatorsToAdd, loading: false });
-            // backwards compatibility
-            if (active) {
-                const opacity = active.classification?.transparency || 100;
-                this.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [LAYER_ID, opacity]);
-            } else {
-                // reset active
+            // reset active
+            if (!active) {
                 this.setActiveIndicator();
             }
         } catch (error) {
