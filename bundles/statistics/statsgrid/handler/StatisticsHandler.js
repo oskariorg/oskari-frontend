@@ -109,8 +109,14 @@ class StatisticsController extends AsyncStateHandler {
         return updated;
     }
 
-    setActiveRegion (activeRegion) {
+    setActiveRegion (value) {
+        // toggle if already selected
+        const activeRegion = this.getState().activeRegion === value ? null : value;
         this.updateState({ activeRegion });
+    }
+
+    onLayerOpacityChange (transparency) {
+        this.updateClassification({ transparency });
     }
 
     updateClassification (updated) {
@@ -201,12 +207,8 @@ class StatisticsController extends AsyncStateHandler {
             };
             const isSeriesActive = active ? !!active.series : false;
             this.updateState({ activeIndicator, isSeriesActive, activeRegion, regionset, indicators: indicatorsToAdd, loading: false });
-            // backwards compatibility
-            if (active) {
-                const opacity = active.classification?.transparency || 100;
-                this.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [LAYER_ID, opacity]);
-            } else {
-                // reset active
+            // reset active
+            if (!active) {
                 this.setActiveIndicator();
             }
         } catch (error) {

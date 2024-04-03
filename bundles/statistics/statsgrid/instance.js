@@ -215,7 +215,7 @@ Oskari.clazz.define(
                     return;
                 }
                 const opacity = evt.getMapLayer().getOpacity();
-                this.getViewHandler().updateLayer('opacity', opacity);
+                this.getStateHandler().onLayerOpacityChange(opacity);
             },
             'FeatureEvent': function (event) {
                 if (event.getParams().operation !== 'click' || !event.hasFeatures() || !this.stateHandler) {
