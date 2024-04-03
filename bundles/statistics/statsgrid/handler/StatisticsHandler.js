@@ -114,7 +114,7 @@ class StatisticsController extends StateHandlerBase {
     }
 
     onLayerOpacityChange (transparency) {
-        this.updateClassification({transparency});
+        this.updateClassification({ transparency });
     }
 
     updateClassification (updated) {
