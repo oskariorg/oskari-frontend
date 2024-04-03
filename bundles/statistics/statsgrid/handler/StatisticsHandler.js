@@ -109,7 +109,9 @@ class StatisticsController extends AsyncStateHandler {
         return updated;
     }
 
-    setActiveRegion (activeRegion) {
+    setActiveRegion (value) {
+        // toggle if already selected
+        const activeRegion = this.getState().activeRegion === value ? null : value;
         this.updateState({ activeRegion });
     }
 
