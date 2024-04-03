@@ -1,5 +1,20 @@
 # Release Notes
 
+## 2.13.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/49?closed=1
+
+- Restored synchronous state updates to other parts of the frontend than thematic maps (an AsyncStateHandler is now an option for developers though). This fixes cursor jumping to the end of an input field while user is editing the input text. See https://github.com/oskariorg/oskari-frontend/pull/2626 for more details.
+- Added max-width for tooltips so they are more usable on large screens.
+- Fixed an issue where feature data table would not work properly when vector layers are present when starting the application (for example on embedded maps).
+- Fixed some icons on time series player that were not using theme variables properly.
+- Added default duration for announcements (one day).
+- Fixed an issue where thematic maps search UI breaks when indicator listing has duplicates of the same indicator.
+- Fixed an issue where thematic maps opacity was not properly restored on embedded maps/saved views.
+- Added highlighting for selected region on thematic maps table. Also highlights the region on map when user selects a region on the table.
+- Fine-tuned the session expired modal.
+
 ## 2.13.0
 
 For a full list of changes see:

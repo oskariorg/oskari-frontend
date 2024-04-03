@@ -51,13 +51,13 @@ export const EditClassification = ({
     controller,
     editEnabled,
     showHistogram,
-    values,
-    opacity
+    values
 }) => {
     const options = getEditOptions(values, data);
     const handleChange = (id, value) => controller.updateClassification({ [id]: value });
     const onOpacityChange = opacity => Oskari.getSandbox().postRequestByName('ChangeMapLayerOpacityRequest', [LAYER_ID, opacity]);
     const disabled = !editEnabled;
+    const opacity = typeof values.transparency !== 'undefined' ? values.transparency : 100;
     return (
         <Container className="t_classification-edit">
             <LabeledSelect
@@ -131,6 +131,5 @@ EditClassification.propTypes = {
     editEnabled: PropTypes.bool.isRequired,
     values: PropTypes.object.isRequired,
     showHistogram: PropTypes.func.isRequired,
-    controller: PropTypes.object.isRequired,
-    opacity: PropTypes.number.isRequired
+    controller: PropTypes.object.isRequired
 };
