@@ -17,13 +17,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     this._pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
     this._regionsAdded = [];
     this._lastRenderCache = {};
-
-    // state handler's setActiveRegion doesn't use normal updateState
-    // it notifies listeners with updated key
-    // full render is heavy operation and causes blinking on map
-    this.stateHandler.addStateListener((state, updated) => updated === 'activeRegion'
-        ? this.updateActiveRegion(state.activeRegion)
-        : this.render(state));
+    this._lastRenderStateForSelectedRegionOptimizing = {};
+    this.stateHandler.addStateListener((state) => this.render(state));
 }, {
     updateActiveRegion: function (activeRegion) {
         const { highlightRegionId } = this._lastRenderCache;
@@ -35,7 +30,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         }
         this._lastRenderCache.highlightRegionId = activeRegion;
     },
+    isOnlyActiveRegionChange: function (state = {}) {
+        const sameRegionset = this._lastRenderStateForSelectedRegionOptimizing.regionset === state.regionset;
+        const sameIndicator = this._lastRenderStateForSelectedRegionOptimizing.activeIndicator === state.activeIndicator;
+        const sameActiveRegion = this._lastRenderStateForSelectedRegionOptimizing.activeRegion === state.activeRegion;
+        return sameRegionset && sameIndicator && !sameActiveRegion;
+    },
     render: async function (state) {
+        const changeActiveRegion = this.isOnlyActiveRegionChange(state);
+        this._lastRenderStateForSelectedRegionOptimizing = state;
+        if (changeActiveRegion) {
+            // full render is heavy operation and causes blinking on map
+            // minor update, only update highlighted region and skip full re-render
+            this.updateActiveRegion(state.activeRegion);
+            return;
+        }
         try {
             const { indicators, activeIndicator, activeRegion, regionset } = state;
             const currentIndicator = indicators.find(ind => ind.hash === activeIndicator);
