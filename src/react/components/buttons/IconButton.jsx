@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message, Confirm, Button, Tooltip } from 'oskari-ui';
 import { ThemeConsumer } from '../../util';
-import { getColorEffect, EFFECT } from '../../theme';
+import { EFFECT } from '../../../constants';
 import styled from 'styled-components';
 import { PlusOutlined, EditOutlined, QuestionCircleOutlined, DeleteOutlined, CheckOutlined, StopOutlined} from '@ant-design/icons';
 import { Forward } from '../icons/Forward'
@@ -124,7 +124,7 @@ const ThemeButton = ThemeConsumer(({
     if (!hover) {
         hover = COLORS.hover;
     } else if (Oskari.util.isDarkColor(hover)) {
-        hover = getColorEffect(hover, EFFECT.LIGHTEN);
+        hover = Oskari.util.getColorEffect(hover, EFFECT.LIGHTEN);
     }
     const ButtonNode = bordered ? BorderedButton : BorderlessButton;
     const activeColor = active ? hover : null;
