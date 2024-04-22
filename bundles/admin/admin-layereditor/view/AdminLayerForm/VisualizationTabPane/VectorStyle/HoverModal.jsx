@@ -9,7 +9,7 @@ import { IconButton } from 'oskari-ui/components/buttons';
 import { Controller } from 'oskari-ui/util';
 import { getGeometryType } from '../../../LayerHelper';
 import { SUPPORTED_FORMATS } from 'oskari-ui/components/StyleEditor/constants';
-import { EFFECT } from '../../../../../../mapping/mapmodule/oskariStyle/constants.js';
+import { EFFECT } from '../../../../../../../src/constants';
 
 const Row = styled.div`
     display: flex;

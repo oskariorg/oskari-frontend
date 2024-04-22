@@ -1,5 +1,6 @@
 const jQuery = require('jquery');
 global.jQuery = jQuery;
+import { EFFECT, DELTA, DEFAULT_DELTA } from './constants';
 
 describe('isNumber function', () => {
     test('returns true when parameter is number', () => {
@@ -108,6 +109,11 @@ describe('hexToRgb function', () => {
         expect(Oskari.util.hexToRgb('03F')).toEqual({ "b": 255, "g": 51, "r": 0 });
     });
 
+    test('returns correct value with shorthand parameter #03F', () => {
+        expect.assertions(1);
+        expect(Oskari.util.hexToRgb('#03F')).toEqual({ "b": 255, "g": 51, "r": 0 });
+    });
+
     test('returns correct value with parameter 228B22 (= Green)', () => {
         expect.assertions(1);
         expect(Oskari.util.hexToRgb('228B22')).toEqual({ "b": 34, "g": 139, "r": 34 });
@@ -152,6 +158,180 @@ describe('rgbToHex function', () => {
         expect(() => Oskari.util.rgbToHex()).toThrowError(TypeError);
     });
 
+});
+
+describe('colorToArray function', () => {
+
+    test('returns correct parts with rgb(255,0,0) (= Red)', () => {
+        expect.assertions(1);
+        expect(Oskari.util.colorToArray('rgb(255,0,0)')).toEqual([255, 0, 0]);
+    });
+
+    test('returns correct parts with rgba(0,191,255, 0.5) (= Light blue)', () => {
+        expect.assertions(1);
+        expect(Oskari.util.colorToArray('rgba(0,191,255, 0.5)')).toEqual([0, 191, 255, 0.5]);
+    });
+
+    test('returns correct parts with parameter FFFFFF (= White)', () => {
+        expect.assertions(1);
+        expect(Oskari.util.colorToArray('FFFFFF')).toEqual([255, 255, 255]);
+    });
+
+    test('returns correct parts with shorthand parameter 03F', () => {
+        expect.assertions(1);
+        expect(Oskari.util.colorToArray('03F')).toEqual([0, 51, 255]);
+    });
+
+    test('returns correct parts with shorthand parameter #03F0', () => {
+        expect.assertions(1);
+        expect(Oskari.util.colorToArray('#03F0')).toEqual([0, 51, 255, 0]);
+    });
+
+    test('returns correct parts with parameter #FFFFFFFF', () => {
+        expect.assertions(1);
+        expect(Oskari.util.colorToArray('#FFFFFFFF')).toEqual([255, 255, 255, 1]);
+    });
+
+    test('returns empty array when invalid parameter is provided', () => {
+        expect.assertions(1);
+        expect(() => Oskari.util.colorToArray('invalid')).toHaveLength(0);
+    });
+
+    test('returns empty array when parameter is not provided', () => {
+        expect.assertions(1)
+        expect(() => Oskari.util.colorToArray()).toHaveLength(0);
+    });
+
+});
+
+describe('getColorEffect and alterBrightness functions should return same', () => {
+    test('hex and positive amount', () => {
+        expect.assertions(1);
+        const hex = '#9932cc';
+        const effect = 10;
+        expect(Oskari.util.getColorEffect(hex, effect)).toEqual(Oskari.util.alterBrightness(hex, effect));
+    });
+    test('hex and negative amount', () => {
+        expect.assertions(1);
+        const hex = '#9932cc';
+        const effect = -10;
+        expect(Oskari.util.getColorEffect(hex, effect)).toEqual(Oskari.util.alterBrightness(hex, effect));
+    });
+    test('hex and auto', () => {
+        expect.assertions(2);
+        const hex = '#9932cc';
+        const delta = DEFAULT_DELTA;
+        expect(Oskari.util.getDeltaForEffect(hex, EFFECT.AUTO)).toEqual(delta);
+        expect(Oskari.util.getColorEffect(hex, EFFECT.AUTO)).toEqual(Oskari.util.alterBrightness(hex, delta));
+    });
+    test('hex and lighten', () => {
+        expect.assertions(2);
+        const hex = '#9932cc';
+        const delta = 60;
+        expect(Oskari.util.getDeltaForEffect(hex, EFFECT.LIGHTEN_MINOR)).toEqual(delta);
+        expect(Oskari.util.getColorEffect(hex, EFFECT.LIGHTEN_MINOR)).toEqual(Oskari.util.alterBrightness(hex, delta));
+    });
+    test('hex and darken', () => {
+        expect.assertions(2);
+        const hex = '#9932cc';
+        const delta = -60;
+        expect(Oskari.util.getDeltaForEffect(hex, EFFECT.DARKEN_MINOR)).toEqual(delta);
+        expect(Oskari.util.getColorEffect(hex, EFFECT.DARKEN_MINOR)).toEqual(Oskari.util.alterBrightness(hex, delta));
+    });
+});
+
+describe('getColorEffect function', () => {
+
+    const rgb = 'rgb(153,50,204)';
+    const rgba = 'rgba(153,50,204,0.5)';
+    const hex = '#9932cc';
+    const a = '50'
+    const hexa = hex + a;
+    const alpha = parseInt(a, 16) / 255;
+
+    test('returns passed color when amount with value 0 is provided as parameters', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(rgb, 0)).toEqual(rgb);
+    });
+
+    test('returns passed color when effect is missing', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(hex)).toEqual(hex);
+    });
+
+    test('returns lighter color when rgb color and positive amount are provided as parameters', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(rgb, 5)).toEqual('#9e37d1');
+    });
+
+    test('returns darker color when rgb color and negative amount are provided as parameters', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(rgb, -5)).toEqual('#942dc7');
+    });
+
+    test('flips change when color is light and amount (auto effect) is provided as parameter', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect('ffffff', 5)).toEqual('#fafafa');
+    });
+
+    test('returns white in edge case when trying to lighter white', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect('ffffff', EFFECT.LIGHTEN)).toEqual('#ffffff');
+    });
+
+    test('returns black in edge case when trying to darker black', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect('000000', EFFECT.DARKEN)).toEqual('#000000');
+    });
+
+    test('returns lighter color when hex color and lighten effect are provided as parameters', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(hex, EFFECT.LIGHTEN)).toEqual('#f38cff');
+    });
+
+    test('returns darker color when hex color and negative amount are provided as parameters', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(hex, EFFECT.DARKEN)).toEqual('#3f0072');
+    });
+
+    test('returns lighter color when rgba color and positive amount are provided as parameters', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(rgba, 5)).toEqual('rgba(158,55,209,0.5)');
+    });
+
+    test('returns darker color when hex color and negative amount are provided as parameters', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(rgba, EFFECT.AUTO)).toEqual('rgba(243,140,255,0.5)');
+    });
+
+    test('returns darker color when hex color with alpha and negative amount are provided as parameters', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(hexa, -5)).toEqual(`rgba(148,45,199,${alpha})`);
+    });
+
+    test('returns darker color when hex color with alpha and darken effect are provided as parameters', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(hexa, EFFECT.DARKEN_MINOR)).toEqual(`rgba(93,0,144,${alpha})`);
+    });
+
+    test('returns darker color when hex color (without "#") with alpha and darken effect are provided as parameters', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(hexa.substring(1), EFFECT.LIGHTEN_MAJOR)).toEqual(`rgba(255,170,255,${alpha})`);
+    });
+
+    test('Returns passed color when rgb color is provided and amount parameter is not provided', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(rgb)).toEqual(rgb);
+    });
+
+    test('Returns passed color when hex color is provided and none effect is not provided', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect(hex, EFFECT.NONE)).toEqual(hex);
+    });
+    test('Returns undefined (passed color) when parameters are not provided', () => {
+        expect.assertions(1);
+        expect(Oskari.util.getColorEffect()).toEqual(undefined);
+    });
 });
 
 describe('alterBrightness function', () => {
