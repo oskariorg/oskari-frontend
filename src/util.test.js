@@ -177,7 +177,7 @@ describe('colorToArray function', () => {
         expect(Oskari.util.colorToArray('FFFFFF')).toEqual([255, 255, 255]);
     });
 
-    test('returns correct parts with shorthand parameter 03FF', () => {
+    test('returns correct parts with shorthand parameter 03F', () => {
         expect.assertions(1);
         expect(Oskari.util.colorToArray('03F')).toEqual([0, 51, 255]);
     });
