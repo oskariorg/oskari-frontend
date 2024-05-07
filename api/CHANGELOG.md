@@ -13,7 +13,7 @@ Some extra tags:
 
 ### [add] Added `metadatasearch` bundle
 
-React-based drop-in replacement for jQuery-based `metadatacatalogue` for searching metadata. 
+React-based drop-in replacement for jQuery-based `metadatacatalogue` for searching metadata.
 
 ### [add] Added `featuredata` bundle
 
@@ -73,8 +73,8 @@ The `limits` can be set with options:
 {
     ...,
     limits: {
-        area: `number in m2 limiting area size`,
-        length: `number in meters limiting line length`
+        area: 'number in m2 limiting area size',
+        length: 'number in meters limiting line length'
     }
 }
 ```
