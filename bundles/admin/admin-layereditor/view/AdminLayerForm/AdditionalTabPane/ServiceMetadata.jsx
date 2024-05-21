@@ -36,5 +36,5 @@ ServiceMetadata.propTypes = {
     hasHandler: PropTypes.bool.isRequired,
     capabilities: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired,
-    layerId: PropTypes.number.isRequired
+    layerId: PropTypes.number
 };
