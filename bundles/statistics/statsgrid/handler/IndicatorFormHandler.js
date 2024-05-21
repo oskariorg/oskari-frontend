@@ -311,8 +311,9 @@ class IndicatorFormController extends StateHandler {
 
         const formData = this.getState().formData.regions;
         validRows.forEach(row => {
+            const area = row.name.toLowerCase();
             formData.forEach((data, index) => {
-                if (data.name.toLowerCase() === row.name.toLowerCase()) {
+                if (data.name.toLowerCase() === area || data.id === area) {
                     formData[index].value = row.value;
                 }
             });
