@@ -21,7 +21,7 @@ export const MetadataId = ({ layer, controller }) => {
                 <StyledFormField>
                     <Message messageKey='metadata.overridden'/>
                     {renderButton &&
-                        <MetadataButton onClick={() => controller.showLayerMetadata(layer.id)}/>
+                        <MetadataButton onClick={() => controller.showLayerMetadata(layer.isNew ? layer.metadataid : layer.id)}/>
                     }
                     <TextInput
                         value={layer.metadataid}
