@@ -122,7 +122,7 @@ export const HoverModal = ({ layer, controller }) => {
         setContent(newContent);
     };
     const geometryType = getGeometryType(layer);
-    
+
     return (
         <Fragment>
             <ButtonContainer>

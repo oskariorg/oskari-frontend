@@ -65,7 +65,7 @@ const styleExceptionHandler = (exceptionStyle, oldStyle) => {
     return exceptionStyle;
 };
 
-export const StyleEditor = ({ oskariStyle, onChange, format, geometryType }) => {
+export const StyleEditor = ({ oskariStyle = {}, onChange, format, geometryType }) => {
     let [form] = Form.useForm();
     // if we don't clone the input here the mappings
     //  between form <> style, the values can get mixed up due to mutability
