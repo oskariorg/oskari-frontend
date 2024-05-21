@@ -1039,3 +1039,66 @@ describe('isValidDomain function', () => {
         expect(Oskari.util.isValidDomain('3434')).toEqual(false);
     });
 });
+
+describe('deepClone function', () => {
+    const obj = {foo: {bar : 1}};
+
+    test('returns new reference', () => {
+        expect(Oskari.util.deepClone(obj)).not.toBe(obj);
+    });
+
+    test('returns equal content', () => {
+        expect(Oskari.util.deepClone(obj)).toEqual(obj);
+    });
+
+    test('returns merged content', () => {
+        const merge1 = {foo: {baz: {test: true}}};
+        const merge2 = {foo: {bar: 2}};
+        const merge3 = {test: [2]};
+        const merged = {foo: {bar: 2, baz: {test: true}}, test: [2]};
+        expect(Oskari.util.deepClone(obj, merge1, merge2, merge3)).toEqual(merged);
+    });
+
+    test('returns whole style on merge', () => {
+        const color = '#000000';
+        const size = 1;
+        const style = {
+            "image": {
+                "shape": 5,
+                "size": 3,
+                "fill": {
+                    "color": "#FAEBD7"
+                }
+            },
+            "fill": {
+                "area": {
+                    "pattern": -1
+                },
+                "color": "#FAEBD7"
+            },
+            "stroke": {
+                "area": {
+                    "color": "#000000",
+                    "lineDash": "solid",
+                    "width": 1,
+                    "lineJoin": "round"
+                },
+                "color": "#000000",
+                "lineCap": "round",
+                "lineDash": "solid",
+                "width": 1,
+                "lineJoin": "round"
+            }
+        };
+        const merge = {
+            stroke: {},
+            fill: { color },
+            image: { size }
+        };
+
+        const merged = Oskari.util.deepClone(style, merge);
+        style.image.size = size;
+        style.fill.color = color;
+        expect(style).toEqual(merged);
+    });
+});
