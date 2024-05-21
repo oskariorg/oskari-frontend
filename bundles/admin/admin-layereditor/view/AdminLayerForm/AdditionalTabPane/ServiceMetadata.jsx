@@ -26,7 +26,7 @@ export const ServiceMetadata = ({ capabilities, controller, hasHandler, layerId 
         <Tooltip title={metadataUuid}>
             <Message messageKey='metadata.service' />
             {hasHandler &&
-                <MetadataButton onClick={() => controller.showLayerMetadata(layerId)}/>
+                <MetadataButton onClick={() => controller.showLayerMetadata(layerId || metadataUuid)}/>
             }
         </Tooltip>
     );
@@ -36,5 +36,5 @@ ServiceMetadata.propTypes = {
     hasHandler: PropTypes.bool.isRequired,
     capabilities: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired,
-    layerId: PropTypes.number.isRequired
+    layerId: PropTypes.number
 };
