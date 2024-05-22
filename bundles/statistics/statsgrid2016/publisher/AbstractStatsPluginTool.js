@@ -12,7 +12,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
     getStatsgridBundle: function () {
         return Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
     },
-
+    getComponent: function () {
+        return {};
+    },
     /**
     * @method @private _isStatsActive
     * @return true when stats layer is on the map, false if removed
