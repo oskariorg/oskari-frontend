@@ -8,7 +8,6 @@ import { recognizeChanges } from 'oskari-ui/components/StyleEditor/util'
 import { IconButton } from 'oskari-ui/components/buttons';
 import { Controller } from 'oskari-ui/util';
 import { getGeometryType } from '../../../LayerHelper';
-import { SUPPORTED_FORMATS } from 'oskari-ui/components/StyleEditor/constants';
 import { EFFECT } from '../../../../../../../src/constants';
 
 const Row = styled.div`
@@ -123,8 +122,7 @@ export const HoverModal = ({ layer, controller }) => {
         setContent(newContent);
     };
     const geometryType = getGeometryType(layer);
-    const styleTabs = SUPPORTED_FORMATS.includes(geometryType) ? [geometryType] : SUPPORTED_FORMATS;
-    
+
     return (
         <Fragment>
             <ButtonContainer>
@@ -169,7 +167,7 @@ export const HoverModal = ({ layer, controller }) => {
                     <Switch size='small' checked={useStyle} onChange={value => setUseStyle(value)} />
                     <Message messageKey='styles.hover.useStyle' />
                 </RowItem>
-                { useStyle && <StyleEditor tabs={styleTabs}
+                { useStyle && <StyleEditor geometryType={geometryType}
                     oskariStyle={ featureStyle }
                     onChange={updated => setFeatureStyle({ ...featureStyle, ...updated })}/>
                 }

@@ -908,5 +908,10 @@ Oskari.util = (function () {
         return false;
     };
 
+    util.deepClone = (source = {}, ...merges) => {
+        // TODO: remove jQuery dependency
+        return jQuery.extend(true, {}, source, ...merges);
+    };
+
     return util;
 }());
