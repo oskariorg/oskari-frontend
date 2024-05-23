@@ -15,6 +15,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
     getComponent: function () {
         return {};
     },
+    getTitle: function () {
+        return Oskari.getMsg('Publisher2', `BasicView.data.${this.title}`);
+    },
     /**
     * @method @private _isStatsActive
     * @return true when stats layer is on the map, false if removed
