@@ -3,6 +3,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
     index: 1,
     group: 'data',
     id: 'diagram',
+    title: 'displayDiagram',
 
     init: function (data) {
         const conf = this.getStatsgridConf(data);
@@ -11,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
     getTool: function () {
         return {
             id: 'Oskari.statistics.statsgrid.TogglePlugin',
-            title: 'displayDiagram',
+            title: this.getTitle(),
             config: {
                 diagram: true
             },

@@ -3,6 +3,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationToggleTool
     index: 1,
     group: 'data',
     id: 'classification',
+    title: 'allowHidingClassification',
 
     init: function (data) {
         const conf = this.getStatsgridConf(data);
@@ -11,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationToggleTool
     getTool: function () {
         return {
             id: 'Oskari.statistics.statsgrid.TogglePlugin',
-            title: 'allowHidingClassification',
+            title: this.getTitle(),
             config: {
                 classification: true
             },

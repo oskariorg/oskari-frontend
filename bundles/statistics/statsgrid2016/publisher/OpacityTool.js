@@ -3,6 +3,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
 {
     index: 1,
     group: 'data',
+    title: 'transparent',
 
     init: function (data) {
         const conf = this.getStatsgridConf(data);
@@ -11,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
     getTool: function () {
         return {
             id: 'Oskari.statistics.statsgrid.ClassificationPlugin',
-            title: 'transparent',
+            title: this.getTitle(),
             config: {
                 transparent: false
             },
