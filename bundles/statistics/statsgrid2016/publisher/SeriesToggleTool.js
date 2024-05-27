@@ -11,12 +11,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
     },
     getTool: function () {
         return {
-            id: 'Oskari.statistics.statsgrid.TogglePlugin',
-            title: this.getTitle(),
+            ...this.getToolInfo(),
             config: {
                 series: true
-            },
-            hasNoPlugin: true
+            }
         };
     },
     _setEnabledImpl: function (enabled) {

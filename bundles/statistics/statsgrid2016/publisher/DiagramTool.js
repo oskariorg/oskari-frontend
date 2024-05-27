@@ -11,12 +11,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
     },
     getTool: function () {
         return {
-            id: 'Oskari.statistics.statsgrid.TogglePlugin',
-            title: this.getTitle(),
+            ...this.getToolInfo(),
             config: {
                 diagram: true
-            },
-            hasNoPlugin: true
+            }
         };
     },
     _setEnabledImpl: function (enabled) {
