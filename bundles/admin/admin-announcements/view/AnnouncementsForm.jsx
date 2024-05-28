@@ -7,7 +7,7 @@ import { DateRange } from 'oskari-ui/components/DateRange';
 import { LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
-import { Jodit } from 'oskari-ui/components/Jodit';
+import { RichEditor } from 'oskari-ui/components/RichEditor';
 import { DATE_FORMAT, TIME_FORMAT, TYPE, OPTIONS } from './constants';
 import 'draft-js/dist/Draft.css';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -179,7 +179,7 @@ export const AnnouncementsForm = LocaleConsumer(({
                 value={state.locale}>
                 <LabeledInput type='text' name='title' label={getMessage('fields.locale.title')} mandatory={true}/>
                 { state.type === 'link' && <LabeledInput label={getMessage('fields.locale.link')} name='link' mandatory={false}/> }
-                { state.type === 'content' && <Jodit label={getMessage('fields.locale.content')} name='content' mandatory={false}/> }
+                { state.type === 'content' && <RichEditor label={getMessage('fields.locale.content')} name='content' mandatory={false}/> }
                 { state.type === 'content' && <PaddingTop/> }
             </LocalizationComponent>
 
