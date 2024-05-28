@@ -189,31 +189,10 @@ class MetadataStateHandler extends StateHandler {
         });
     }
 
-    updateAdvancedSearchValues (newValues) {
-        this.updateState({
-            advancedSearchValues: newValues
-        });
-    }
-
     advancedSearchParamsChanged (key, value) {
-        const { advancedSearchValues } = this.getState();
-        advancedSearchValues[key] = value;
-        this.updateAdvancedSearchValues(advancedSearchValues);
-    }
-
-    advancedSearchParamsChangedMulti (key, value) {
-        if (!value || !value.target) {
-            return;
-        }
-        const { advancedSearchValues } = this.getState();
-        const checked = !!value.target.checked;
-
-        const newMultiValue = advancedSearchValues[key]?.filter(item => item !== value.target.value) || [];
-        if (checked) {
-            newMultiValue.push(value.target.value);
-        }
-        advancedSearchValues[key] = newMultiValue;
-        this.updateAdvancedSearchValues(advancedSearchValues);
+        this.updateState({
+            advancedSearchValues: { ...this.getState().advancedSearchValues, [key]: value }
+        });
     }
 
     advancedSearchCoverageStartDrawing (evt) {
@@ -249,7 +228,6 @@ const wrapped = controllerMixin(MetadataStateHandler, [
     'toggleAdvancedSearch',
     'toggleSearchResultsFilter',
     'advancedSearchParamsChanged',
-    'advancedSearchParamsChangedMulti',
     'advancedSearchCoverageStartDrawing',
     'advancedSearchCoverageCancelDrawing',
     'updateCoverageFeature',
