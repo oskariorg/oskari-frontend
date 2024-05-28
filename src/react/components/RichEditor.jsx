@@ -10,7 +10,8 @@ export const RichEditor = (props) => {
             addNewLine: false,
             buttons: ['bold','italic','underline','strikethrough','eraser','ul','ol','paragraph','link','undo','redo'],
 			readonly: false, // all options from https://xdsoft.net/jodit/docs/,
-            toolbarAdaptive: false
+            toolbarAdaptive: false,
+			placeholder: ''
 		}),
 		[props.value]
 	);
