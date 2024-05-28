@@ -68,6 +68,7 @@
     "imports-loader": "0.8.0",
     "intl-messageformat": "9.11.4",
     "jest": "27.0.6",
+    "jodit-react": "^4.1.2",
     "jquery": "3.7.1",
     "jsts": "2.2.0",
     "less": "3.9.0",
