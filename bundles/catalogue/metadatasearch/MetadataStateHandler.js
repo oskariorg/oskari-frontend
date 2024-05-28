@@ -18,8 +18,7 @@ class MetadataStateHandler extends StateHandler {
             query: '',
             advancedSearchExpanded: false,
             advancedSearchOptions: null,
-            advancedSearchValues: {
-            },
+            advancedSearchValues: {},
             loading: false,
             drawing: false,
             searchResultsVisible: false,
@@ -179,10 +178,9 @@ class MetadataStateHandler extends StateHandler {
             const emptyOption = Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.emptyOption');
             options?.fields?.forEach((field) => {
                 const newField = Object.assign({}, field);
-                let sortedValues = field.values.sort((a, b) => Oskari.util.naturalSort(a.val, b.val));
-                sortedValues.forEach((value) => { value.value = value.val; });
-                if (!newField.multi) {
-                    sortedValues = [{ val: emptyOption, value: '' }].concat(sortedValues);
+                const sortedValues = field.values.sort((a, b) => Oskari.util.naturalSort(a.val, b.val)).map(({ val }) => ({ label: val, value: val }));
+                if (sortedValues.length && !newField.multi) {
+                    sortedValues.unshift({ label: emptyOption, value: '' });
                 }
                 newField.values = sortedValues;
                 sortedOptions.fields.push(newField);
