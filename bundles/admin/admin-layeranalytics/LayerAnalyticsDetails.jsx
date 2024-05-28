@@ -36,21 +36,21 @@ const generateLink = (item) => {
 export const LayerAnalyticsDetails = ({ layerData, isLoading, closeDetailsCallback, removeAnalyticsCallback }) => {
     const columnSettings = [
         {
-            title: <b><Message messageKey='flyout.successTitle' /></b>,
+            title: <b><Message messageKey='flyout.fields.success' /></b>,
             dataIndex: 'success',
             sortDirections: ['descend', 'ascend', 'descend'],
             sorter: (a, b) => a.success - b.success,
             showSorterTooltip: sorterTooltipOptions
         },
         {
-            title: <b><Message messageKey='flyout.failureTitle' /></b>,
+            title: <b><Message messageKey='flyout.fields.errors' /></b>,
             dataIndex: 'errors',
             sortDirections: ['descend', 'ascend', 'descend'],
             sorter: (a, b) => a.errors - b.errors,
             showSorterTooltip: sorterTooltipOptions
         },
         {
-            title: 'Aika',
+            title: <b><Message messageKey='flyout.fields.time' /></b>,
             dataIndex: 'time',
             defaultSortOrder: 'descend',
             sortDirections: ['descend', 'ascend', 'descend'],
