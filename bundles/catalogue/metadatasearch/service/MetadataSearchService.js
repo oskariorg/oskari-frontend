@@ -7,9 +7,8 @@ export class MetadataSearchService {
     }
 
     doSearch (params, onSuccess) {
-        const epsg = Oskari.getSandbox().getMap().getSrsName();
         if (!params.srs) {
-            params.srs = epsg;
+            params.srs = Oskari.getSandbox().getMap().getSrsName();
         }
         // create POST payload from params
         const payload = Object.keys(params)
