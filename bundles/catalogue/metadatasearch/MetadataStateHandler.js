@@ -45,13 +45,23 @@ class MetadataStateHandler extends StateHandler {
     }
 
     doSearch () {
-        const { query, advancedSearchValues } = this.getState();
-        if (!(query?.length || this.hasAdvancedSearchValues(advancedSearchValues))) {
+        const { query = '', advancedSearchValues } = this.getState();
+        const search = query.trim();
+        const params = search ? { search } : {};
+        Object.keys(advancedSearchValues).forEach(key => {
+            let value = advancedSearchValues[key];
+            if (Array.isArray(value)) {
+                value = value.join(',');
+            }
+            // eliminate nulls and empty values
+            if (value) {
+                params[key] = value;
+            }
+        });
+
+        if (!Object.keys(params).length) {
             return;
         }
-
-        const formdata = {};
-        formdata.search = query;
 
         this.updateState({
             loading: true,
@@ -59,23 +69,7 @@ class MetadataStateHandler extends StateHandler {
             searchResultsFilter: null
         });
 
-        Object.keys(advancedSearchValues).forEach(key => {
-            if (advancedSearchValues[key] instanceof Array) {
-                formdata[key] = advancedSearchValues[key].join(',');
-            } else {
-                // eliminate nulls
-                if (advancedSearchValues[key]) {
-                    formdata[key] = advancedSearchValues[key];
-                }
-            }
-        });
-
-        this.searchService.doSearch(formdata, (results) => this.updateSearchResults(results));
-    }
-
-    hasAdvancedSearchValues (advancedSearchValues) {
-        return !!Object.keys(advancedSearchValues)
-            .filter(key => !!advancedSearchValues[key])?.length;
+        this.searchService.doSearch(params, (results) => this.updateSearchResults(results));
     }
 
     updateSearchResults (json) {
