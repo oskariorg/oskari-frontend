@@ -7,12 +7,29 @@ import { AdvancedSearchCoverage } from './AdvancedSearchCoverage';
 
 const COVERAGE_FIELD_NAME = 'coverage';
 
+const showField = ({ field, shownIf }, advancedSearchValues) => {
+    if (field === COVERAGE_FIELD_NAME) {
+        // coverage should be rendered separately
+        return false;
+    }
+    if (!Array.isArray(shownIf)) {
+        return true;
+    }
+    // e.g. [{type:'service}]
+    return shownIf.some(obj => {
+        return Object.keys(obj).some(key => {
+            const selected = advancedSearchValues[key];
+            const value = obj[key];
+            return Array.isArray(selected) ? selected.includes(value) : selected === value;
+        });
+    });
+};
+
 export const AdvancedSearchOptions = (props) => {
     const { advancedSearchOptions, advancedSearchValues, drawing, controller } = props;
     const { fields = [] } = advancedSearchOptions || {};
     const hasCoverage = fields.some(({ field }) => field === COVERAGE_FIELD_NAME);
-    // coverage should be rendered separately
-    const fieldOptions = fields.filter(({ field }) => field !== COVERAGE_FIELD_NAME);
+    const fieldOptions = fields.filter(f => showField(f, advancedSearchValues));
 
     return <FlexColumnContainer>
         {
