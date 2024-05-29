@@ -94,10 +94,10 @@ export const LayerAnalyticsDetails = ({ layerData, isLoading, closeDetailsCallba
             </Button>
             <b>{ layerData.title }</b>
             { layerData.layerOrganization &&
-                <div><Message messageKey='flyout.layerDataProvider' />: { layerData.layerOrganization }</div>
+                <div><Message messageKey='flyout.fields.dataProducer' />: { layerData.layerOrganization }</div>
             }
-            <div><Message messageKey='flyout.successTitle' />: { layerData.success } ({ layerData.successPercentage }%)</div>
-            <div><Message messageKey='flyout.failureTitle' />: { layerData.errors }</div>
+            <div><Message messageKey='flyout.fields.success' />: { layerData.success } ({ layerData.successPercentage }%)</div>
+            <div><Message messageKey='flyout.fields.errors' />: { layerData.errors }</div>
             { layerData.details.length > 0 &&
                 <Table
                     columns={ columnSettings }
