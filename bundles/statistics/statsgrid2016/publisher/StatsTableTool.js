@@ -5,7 +5,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
 
     groupedSiblings: false,
     templates: {},
-    id: 'table',
+    id: 'grid',
+    title: 'grid',
     /**
      * Initialize tool
      * @params {} state data
@@ -26,12 +27,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
     */
     getTool: function () {
         return {
-            id: 'Oskari.statistics.statsgrid.TogglePlugin',
-            title: 'grid',
+            ...this.getToolInfo(),
             config: {
                 grid: true
-            },
-            hasNoPlugin: true
+            }
         };
     },
     /**
