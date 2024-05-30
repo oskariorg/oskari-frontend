@@ -16,8 +16,8 @@ Oskari.registerLocalization(
                 "sorterTooltip": "Sortera fallande / stigande",
                 "showDetailsTooltip": "Öppna detaljvyn",
                 "editLayerTooltip": "Editera kartlager",
-                "removeAllDataForLayer": "",
-                "removeSingleDataForLayer": "",
+                "removeAllDataForLayer": "Ta bort övervakningsinformationen för kartlagret",
+                "removeSingleDataForLayer": "Ta bort övervakninsinformationen, som är rapporterad av en enskild användare",
                 "filter": "Filtrera",
                 "fields": {
                     "title": "Namn",
