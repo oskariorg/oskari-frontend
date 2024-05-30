@@ -3,7 +3,7 @@ import { AbstractStatsPluginTool } from './AbstractStatsPluginTool';
 class DiagramTool extends AbstractStatsPluginTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
+        this.index = 5;
         this.group = 'data';
         this.id = 'diagram';
         this.title = 'displayDiagram';

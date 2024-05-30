@@ -1,4 +1,15 @@
 import { AbstractStatsPluginTool } from './AbstractStatsPluginTool';
+import React from 'react';
+import { Button, Message } from 'oskari-ui';
+import { BUNDLE_KEY } from '../constants';
+
+const Component = ({ controller }) => {
+    return (
+        <Button onClick={() => controller.show('search')}>
+            <Message bundleKey={BUNDLE_KEY} messageKey='tile.search' />;
+        </Button>
+    );
+};
 
 class ClassificationTool extends AbstractStatsPluginTool {
     constructor (...args) {
@@ -34,6 +45,13 @@ class ClassificationTool extends AbstractStatsPluginTool {
             return;
         }
         handler.updateClassificationState('editEnabled', true);
+    }
+
+    getComponent () {
+        return {
+            component: Component,
+            handler: this.getViewHandler()
+        };
     }
 
     // Classification is always present with thematic maps: either as a button toggle OR always on screen
