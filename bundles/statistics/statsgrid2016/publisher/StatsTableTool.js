@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
 
     groupedSiblings: false,
     templates: {},
-    id: 'grid',
+    id: 'table',
     title: 'grid',
     /**
      * Initialize tool
