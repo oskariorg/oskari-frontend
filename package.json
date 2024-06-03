@@ -51,8 +51,6 @@
     "css-loader": "3.2.0",
     "d3": "7.8.4",
     "dompurify": "2.3.6",
-    "draft-js": "0.11.7",
-    "draft-js-export-html": "1.4.1",
     "eslint": "8.35.0",
     "eslint-config-standard": "17.0.0",
     "eslint-import-resolver-webpack": "0.13.2",
