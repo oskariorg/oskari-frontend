@@ -26,6 +26,7 @@ div.announcements-content {
 }
 
 div.mapplugin.announcements {
+    padding: 10px 10px 0 10px;
     clear:both;
     height: 37px;
     overflow: visible;
@@ -157,6 +158,7 @@ div.mapplugin.announcements {
     }
       
     .announcement-content {
+        text-align: left;
         max-height: 0;
         overflow: hidden;
         transition: padding 0.2s ease-out;

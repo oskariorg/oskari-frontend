@@ -23,21 +23,21 @@ input::-ms-clear {
   display: none;
 }
 
-input[type=button]:not([class*="ant-"]), 
-input[type=email]:not([class*="ant-"]),
-input[type=number]:not([class*="ant-"]),
-input[type=file]:not([class*="ant-"]),
-input[type=password]:not([class*="ant-"]),
-input[type=reset]:not([class*="ant-"]),
-input[type=search]:not([class*="ant-"]),
-input[type=submit]:not([class*="ant-"]),
-input[type=tel]:not([class*="ant-"]),
-input[type=text]:not([class*="ant-"]),
-input[type=url]:not([class*="ant-"]),
-select:not([class*="ant-"]),
-textarea:not([class*="ant-"]),
+input[type=button]:not([class*="ant-"]):not([class*="jodit-"]), 
+input[type=email]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type=number]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type=file]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type=password]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type=reset]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type=search]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type=submit]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type=tel]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type=text]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type=url]:not([class*="ant-"]):not([class*="jodit-"]),
+select:not([class*="ant-"]):not([class*="jodit-"]),
+textarea:not([class*="ant-"]):not([class*="jodit-"]),
 .textarea,
-button:not([class*="ant-"]) {
+button:not([class*="ant-"]):not([class*="jodit-"]) {
   border: 1px solid;
   border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;
   padding: 8px 5px;
@@ -50,19 +50,19 @@ input[type="image"] {
   padding: 0;
 }
 
-button:not([class*="ant-"])::-moz-focus-inner,
-input[type="button"]:not([class*="ant-"])::-moz-focus-inner,
-input[type="submit"]:not([class*="ant-"])::-moz-focus-inner,
-input[type="reset"]:not([class*="ant-"])::-moz-focus-inner {
+button:not([class*="ant-"]):not([class*="jodit-"])::-moz-focus-inner,
+input[type="button"]:not([class*="ant-"]):not([class*="jodit-"])::-moz-focus-inner,
+input[type="submit"]:not([class*="ant-"]):not([class*="jodit-"])::-moz-focus-inner,
+input[type="reset"]:not([class*="ant-"]):not([class*="jodit-"])::-moz-focus-inner {
   padding: 0 !important;
   border: 0 none !important;
 }
 
 /* This is used in buttons */
-input[type="submit"]:not([class*="ant-"]),
-input[type="button"]:not([class*="ant-"]),
-input[type="reset"]:not([class*="ant-"]),
-button:not([class*="ant-"]) {
+input[type="submit"]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type="button"]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type="reset"]:not([class*="ant-"]):not([class*="jodit-"]),
+button:not([class*="ant-"]):not([class*="jodit-"]) {
   cursor: pointer;
   overflow: visible;
   padding: 8px 5px;
@@ -70,14 +70,14 @@ button:not([class*="ant-"]) {
   min-width: 4em;
   width: auto;
 }
-input[type="submit"]:not([class*="ant-"]):hover:enabled,
-input[type="submit"]:not([class*="ant-"]):focus,
-input[type="button"]:not([class*="ant-"]):hover:enabled,
-input[type="button"]:not([class*="ant-"]):focus,
-input[type="reset"]:not([class*="ant-"]):hover:enabled,
-input[type="reset"]:not([class*="ant-"]):focus,
-button:not([class*="ant-"]):hover:enabled,
-button:not([class*="ant-"]):focus {
+input[type="submit"]:not([class*="ant-"]):not([class*="jodit-"]):hover:enabled,
+input[type="submit"]:not([class*="ant-"]):not([class*="jodit-"]):focus,
+input[type="button"]:not([class*="ant-"]):not([class*="jodit-"]):hover:enabled,
+input[type="button"]:not([class*="ant-"]):not([class*="jodit-"]):focus,
+input[type="reset"]:not([class*="ant-"]):not([class*="jodit-"]):hover:enabled,
+input[type="reset"]:not([class*="ant-"]):not([class*="jodit-"]):focus,
+button:not([class*="ant-"]):not([class*="jodit-"]):hover:enabled,
+button:not([class*="ant-"]):not([class*="jodit-"]):focus {
   background: #DFF4FF;
   border: 1px solid #A7CEDF;
   /* Hover color doesn't really matter... */
@@ -85,10 +85,10 @@ button:not([class*="ant-"]):focus {
 }
 
 /* This is used in buttons */
-input[type="submit"]:not([class*="ant-"]),
-input[type="reset"]:not([class*="ant-"]),
-input[type="button"]:not([class*="ant-"]),
-button:not([class*="ant-"]),
+input[type="submit"]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type="reset"]:not([class*="ant-"]):not([class*="jodit-"]),
+input[type="button"]:not([class*="ant-"]):not([class*="jodit-"]),
+button:not([class*="ant-"]):not([class*="jodit-"]),
 .lfr-actions, .lfr-actions ul {
   background: #d4d4d4 url(../images/portlet/header_bg.png) repeat-x 0 0;
   border: 1px solid;
@@ -99,10 +99,10 @@ button:not([class*="ant-"]),
 }
 
 /* This is used in buttons */
-input[type="submit"]:not([class*="ant-"]):hover:enabled,
-input[type="reset"]:not([class*="ant-"]):hover:enabled,
-input[type="button"]:not([class*="ant-"]):hover:enabled,
-button:not([class*="ant-"]):hover:enabled,
+input[type="submit"]:not([class*="ant-"]):not([class*="jodit-"]):hover:enabled,
+input[type="reset"]:not([class*="ant-"]):not([class*="jodit-"]):hover:enabled,
+input[type="button"]:not([class*="ant-"]):not([class*="jodit-"]):hover:enabled,
+button:not([class*="ant-"]):not([class*="jodit-"]):hover:enabled,
 .lfr-actions:hover, .lfr-actions:hover ul {
   background: #b9ced9 url(../images/application/state_hover_bg.png) repeat-x 0 0;
   border-color: #627782;
@@ -111,18 +111,18 @@ button:not([class*="ant-"]):hover:enabled,
 }
 
 /* This is used in buttons */
-input[type="submit"]:not([class*="ant-"]):focus,
-input[type="button"]:not([class*="ant-"]):focus,
-input[type="reset"]:not([class*="ant-"]):focus,
-button:not([class*="ant-"]):focus,
+input[type="submit"]:not([class*="ant-"]):not([class*="jodit-"]):focus,
+input[type="button"]:not([class*="ant-"]):not([class*="jodit-"]):focus,
+input[type="reset"]:not([class*="ant-"]):not([class*="jodit-"]):focus,
+button:not([class*="ant-"]):not([class*="jodit-"]):focus,
 .lfr-actions:focus, .lfr-actions:focus ul {
   background: #ebebeb url(../images/application/state_active_bg.png) repeat-x 0 0;
   border-color: #555;
 }
 
 /* This is used in all primary buttons */
-button.primary:not([class*="ant-"]),
-input.primary:not([class*="ant-"]) {
+button.primary:not([class*="ant-"]):not([class*="jodit-"]),
+input.primary:not([class*="ant-"]):not([class*="jodit-"]) {
   background-color: #217ad4;
   background-image: url(../images/blue_button_liuku.png);
   border-color: #0000BF #0000DE #0000DE #0000BF;
@@ -131,13 +131,13 @@ input.primary:not([class*="ant-"]) {
 }
 
 /* Doesn't seem to be in use, nothing sets the focus class in oskari */
-input.focus:not([class*="ant-"]),
-textarea.focus:not([class*="ant-"]) {
+input.focus:not([class*="ant-"]):not([class*="jodit-"]),
+textarea.focus:not([class*="ant-"]):not([class*="jodit-"]) {
   background: #FFD400 none;
   border: 1px solid #FC0;
 }
 
-textarea:not([class*="ant-"]) {
+textarea:not([class*="ant-"]):not([class*="jodit-"]) {
   padding: 5px 5px;
 }
 
@@ -147,10 +147,10 @@ label > input:disabled + span {
     opacity: 0.5;
 }
 
-button:not([class*="ant-"]):disabled,
-input:not([class*="ant-"]):disabled,
-select:not([class*="ant-"]):disabled,
-textarea:not([class*="ant-"]):disabled {
+button:not([class*="ant-"]):not([class*="jodit-"]):disabled,
+input:not([class*="ant-"]):not([class*="jodit-"]):disabled,
+select:not([class*="ant-"]):not([class*="jodit-"]):disabled,
+textarea:not([class*="ant-"]):not([class*="jodit-"]):disabled {
     cursor: default;
     opacity: 0.5;
 }
@@ -174,4 +174,12 @@ label > span {
 
 .oskari-hidden {
   display: none;
+}
+
+.jodit-wysiwyg ol {
+  margin: 16px;
+}
+
+.jodit-wysiwyg ul {
+  margin: 16px;
 }
