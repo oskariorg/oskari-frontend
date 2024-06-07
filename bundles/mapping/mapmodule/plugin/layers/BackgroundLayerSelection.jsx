@@ -2,10 +2,9 @@ import React from 'react';
 import { Dropdown, Tooltip } from 'oskari-ui';
 import { LayersIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { MapModuleTextButton } from '../../MapModuleTextButton';
+import { MapModuleTextButton, BUTTON_WIDTH } from '../../MapModuleTextButton';
 import PropTypes from 'prop-types';
 
-const BUTTON_WIDTH = 150;
 const ButtonsContainer = styled('div')`
     display: flex;
     flex-direction: row;
