@@ -5,14 +5,17 @@ import * as olProj from 'ol/proj';
 import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
 // see oskari-frontend/webpack/config.js for additional config required by Cesium
-import * as Cesium from 'cesium/Source/Cesium';
-import OLCesium from 'olcs/OLCesium';
+import * as Cesium from 'cesium';
+
+// https://github.com/openlayers/ol-cesium/issues/1094#issuecomment-1710423741
+// import OLCesium from 'olcs/OLCesium.js';
+import OLCesium from 'ol-cesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID, VECTOR_STYLE } from './domain/constants';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import 'olcs/olcs.css';
-
+import 'ol-cesium/css/olcs.css';
+//import 'olcs/olcs.css';
 import './event/TimeChangedEvent';
 dayjs.extend(customParseFormat);
 // OL-cesium expects to find this global
@@ -199,7 +202,7 @@ class MapModuleOlCesium extends MapModuleOl {
                     url: Cesium.IonResource.fromAssetId(ionAssetId)
                 });
             } else {
-                terrainProvider = Cesium.createWorldTerrain({
+                terrainProvider = Cesium.createWorldTerrainAsync({
                     requestVertexNormals: true
                 });
             }
@@ -1035,6 +1038,11 @@ class MapModuleOlCesium extends MapModuleOl {
         location = olProj.transform(location, 'EPSG:4326', this.getProjection());
         const lonlat = { lon: location[0], lat: location[1] };
         return lonlat;
+    }
+
+    getVersion () {
+        const olVersion = super.getVersion();
+        return olVersion + ' - Cesium/' + Cesium.VERSION;
     }
 }
 
