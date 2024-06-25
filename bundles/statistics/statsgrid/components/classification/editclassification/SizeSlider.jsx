@@ -51,7 +51,7 @@ export const SizeSlider = ({
     disabled
 }) => {
     const { count, min, max } = values;
-    const [range, setRange] = useState([min, max]);
+    const [internalRange, setRange] = useState([min, max]);
     const minRange = count * SLIDER_PROPS.step;
     const onChange = (range) => {
         if (range[1] - range[0] < minRange) {
@@ -59,14 +59,14 @@ export const SizeSlider = ({
         }
         setRange(range);
     };
-    const onAfterChange = () => {
-        controller.updateClassificationObj({ min: range[0], max: range[1] });
+    const onAfterChange = (range) => {
+        controller.updateClassification({ min: range[0], max: range[1] });
     };
     return (
         <div>
             <Message messageKey="classify.labels.pointSize"/>
             <StyledSlider
-                value = {range}
+                value = {internalRange}
                 disabled = {disabled}
                 onChange={onChange}
                 onAfterChange={onAfterChange}

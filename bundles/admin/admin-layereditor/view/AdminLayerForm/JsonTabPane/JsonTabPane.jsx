@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, TextAreaInput, TextInput, Collapse, CollapsePanel } from 'oskari-ui';
+import { Message, TextAreaInput, TextInput, Collapse } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
 import { IconButton } from 'oskari-ui/components/buttons';
@@ -104,7 +104,7 @@ const ParsedCollapse = ({ json = {}, jsonKey, controller }) => {
     };
     const items = [{
         key: 'collapse_' + jsonKey,
-        label: <Message messageKey={`jsonFields.${jsonKey}`}/>,
+        label: <Message messageKey={`jsonTab.fields.${jsonKey}`}/>,
         extra: <PanelExtra setEdit={setEdit} skipEdit={!controller} />,
         children: <>
             { edit && <EditBlock edit={edit} onUpdate={onUpdate}/> }

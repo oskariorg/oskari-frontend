@@ -40,23 +40,18 @@ const IndicatorForm = ({ state, controller }) => {
                     />
                 </CollapsePanel>
                 <CollapsePanel key='data' header={<Message messageKey='userIndicators.panelData.title' />}>
-                    {state.selectedDataset ? (
+                    {state.formData.regions ? (
                         <StatisticalData
-                            state={state}
-                            controller={controller}
-                        />
+                            data={state.formData}
+                            controller={controller}/>
                     ) : (
                         <div>
-                            {state.datasets?.length > 0 && (
-                                <IndicatorDatasets
-                                    state={state}
-                                    controller={controller}
-                                />
-                            )}
+                            <IndicatorDatasets
+                                state={state}
+                                controller={controller}/>
                             <StatisticalInfo
                                 state={state}
-                                controller={controller}
-                            />
+                                controller={controller}/>
                         </div>
                     )}
                 </CollapsePanel>

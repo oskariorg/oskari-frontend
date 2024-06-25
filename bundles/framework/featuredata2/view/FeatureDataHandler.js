@@ -141,22 +141,21 @@ class ViewHandler extends StateHandler {
             return;
         }
         const selectedFeatures = this._getSelectedFeatureIds(layerId);
-        const layerState = this.getLayerState(layerId);
-        this.updateState({ layerId, selectedFeatures, ...layerState });
+        this.updateState({ layerId, selectedFeatures, ...this.getLayerState({ layerId }) });
     }
 
     setIsActive (isActive) {
         if (isActive === this.getState().isActive) {
             return;
         }
-        const layerState = isActive ? this.getLayerState() : {};
-        this.updateState({ isActive, ...layerState });
+        this.updateState({ isActive, ...this.getLayerState({ isActive }) });
     }
 
-    getLayerState (layerId = this.getState().layerId) {
+    getLayerState (state = {}) {
+        const { layerId, isActive } = { ...this.getState(), ...state };
         const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-        const features = this._getCurrentFeatureProperties(layerId);
-        const inScale = !!layer && layer.isInScale();
+        const features = isActive ? this._getCurrentFeatureProperties(layerId) : [];
+        const inScale = isActive ? !!layer && layer.isInScale() : false;
         return {
             inScale,
             features

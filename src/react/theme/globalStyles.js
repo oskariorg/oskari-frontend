@@ -1,5 +1,5 @@
 import { DEFAULT_COLORS } from './constants';
-import { getHeaderTheme } from './ThemeHelper';
+import { getHeaderTheme, getTextColor } from './ThemeHelper';
 import { getNavigationDimensions } from 'oskari-ui/components/window';
 
 const GLOBAL_STYLE = document.createElement('style');
@@ -7,9 +7,10 @@ document.head.appendChild(GLOBAL_STYLE);
 
 export const setGlobalStyle = (theme = {}) => {
     // default to dark gray
-    const navColor = theme.navigation?.color?.primary || DEFAULT_COLORS.NAV_BG;
+    const navColor = theme.navigation?.color?.bg || theme.navigation?.color?.primary || DEFAULT_COLORS.NAV_BG;
     const headerTheme = getHeaderTheme(theme);
     const navigationDimensions = getNavigationDimensions();
+    const scrollIconHeaderColor = getTextColor(navColor);
     // inject Theme support for jQuery-based UI-elements (navigation, flyout, popup)
     GLOBAL_STYLE.innerHTML = `
         .oskari-root-el > nav {
@@ -44,14 +45,14 @@ export const setGlobalStyle = (theme = {}) => {
                 height: 45px;
                 width: ${navigationDimensions.width}px;
                 pointer-events: none;
-                position: absolute;
+                position: fixed;
                 bottom: -1em;
                 justify-content: center;
                 align-items: center;
             }
             .scroll-icon {
                 border: solid 1em transparent;
-                border-top-color: white;
+                border-top-color: ${scrollIconHeaderColor};;
                 color: ${headerTheme.getTextColor()};
                 height: 0;
                 opacity: 0.6;
@@ -60,6 +61,10 @@ export const setGlobalStyle = (theme = {}) => {
                 transition: all .2s ease-out;
                 width: 0;
             }
+        }
+        ::selection {
+            background-color: ${headerTheme.getBgColor()};
+            color:  ${headerTheme.getTextColor()};
         }
     `;
 };

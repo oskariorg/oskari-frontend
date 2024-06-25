@@ -237,23 +237,6 @@ class ViewHandler extends StateHandler {
         this.updateState({ selectedLayerIds });
     }
 
-    showLayerMetadata (layer) {
-        const uuid = layer.getMetadataIdentifier();
-        const subUuids = [];
-        if (layer.getSubLayers()) {
-            layer.getSubLayers().forEach(subLayer => {
-                const subUuid = subLayer.getMetadataIdentifier();
-                if (subUuid && subUuid !== uuid && !subUuids.includes[subUuid]) {
-                    subUuids.push(subUuid);
-                }
-            });
-        }
-        this.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [
-            { uuid },
-            subUuids.map(sub => ({ uuid: sub }))
-        ]);
-    }
-
     showLayerBackendStatus (layerId) {
         this.sandbox.postRequestByName('ShowMapLayerInfoRequest', [layerId]);
     }
@@ -354,7 +337,6 @@ export const LayerCollapseHandler = controllerMixin(ViewHandler, [
     'updateOpenGroupTitles',
     'updateLayerGroups',
     'updateSelectedLayerIds',
-    'showLayerMetadata',
     'showLayerBackendStatus',
     'addGroupLayersToMap',
     'removeGroupLayersFromMap',

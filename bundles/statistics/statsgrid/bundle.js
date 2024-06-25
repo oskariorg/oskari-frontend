@@ -22,43 +22,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StatsGridBundle',
             'scripts': [{
                 'type': 'text/javascript',
                 'src': '../../../bundles/statistics/statsgrid/instance.js'
-            }, {
-                'type': 'text/css',
-                'src': '../../../bundles/statistics/statsgrid2016/resources/scss/style.scss'
-            }, {
-                'type': 'text/css',
-                'src': '../../../bundles/statistics/statsgrid2016/resources/css/seriesplayback.css'
-            }, {
-                'src': '../../../libraries/chosen/1.5.1/chosen.jquery.js',
-                'type': 'text/javascript'
-            }, {
-                'src': '../../../libraries/chosen/1.5.1/chosen.css',
-                'type': 'text/css'
             }],
             'locales': [{
                 'lang': 'en',
                 'type': 'text/javascript',
-                'src': '../../../bundles/statistics/statsgrid2016/resources/locale/en.js'
+                'src': '../../../bundles/statistics/statsgrid/resources/locale/en.js'
             }, {
                 'lang': 'fi',
                 'type': 'text/javascript',
-                'src': '../../../bundles/statistics/statsgrid2016/resources/locale/fi.js'
+                'src': '../../../bundles/statistics/statsgrid/resources/locale/fi.js'
             }, {
                 'lang': 'fr',
                 'type': 'text/javascript',
-                'src': '../../../bundles/statistics/statsgrid2016/resources/locale/fr.js'
+                'src': '../../../bundles/statistics/statsgrid/resources/locale/fr.js'
             }, {
                 'lang': 'sv',
                 'type': 'text/javascript',
-                'src': '../../../bundles/statistics/statsgrid2016/resources/locale/sv.js'
+                'src': '../../../bundles/statistics/statsgrid/resources/locale/sv.js'
             }, {
                 'lang': 'ru',
                 'type': 'text/javascript',
-                'src': '../../../bundles/statistics/statsgrid2016/resources/locale/ru.js'
+                'src': '../../../bundles/statistics/statsgrid/resources/locale/ru.js'
             }, {
                 'lang': 'is',
                 'type': 'text/javascript',
-                'src': '../../../bundles/statistics/statsgrid2016/resources/locale/is.js'
+                'src': '../../../bundles/statistics/statsgrid/resources/locale/is.js'
             }]
         },
         'bundle': {

@@ -247,7 +247,7 @@ Oskari.registerLocalization(
                 "noBaseLayers": "Ei valittuja taustakarttoja",
                 "noLayers": "Ei valittuja karttatasoja"
             },
-            "additionalTools": {
+            "additional": {
                 "label": "Lisätyökalut"
             },
             "preview": "Kartan esikatselu",

@@ -62,8 +62,41 @@ export class UrlInput extends React.Component {
             return newState;
         });
     }
+
+    onBlur (event) {
+        if (!this.props.onBlur) {
+            return;
+        }
+        const url = event.target.value;
+        this.setState((state) => {
+            const newState = {
+                ...state,
+                url
+            };
+            // in case user wrote the protocol in the field
+            const urlParts = url.split('://');
+            if (urlParts.length > 1) {
+                newState.protocol = urlParts.shift();
+                newState.url = urlParts.join('');
+            }
+
+            if (newState?.url && this.props?.urlCleanupFunction) {
+                const cleaned = this.props?.urlCleanupFunction(`${newState.protocol}://${newState.url}`);
+                newState.url = cleaned;
+            }
+
+            if (!newState.url.trim()) {
+                // If we only have protocol -> trigger "unset"
+                this.props.onBlur(undefined);
+            } else {
+                this.props.onBlur(`${newState.protocol}://${newState.url}`);
+            }
+            return newState;
+        });
+    }
+
     render () {
-        const { credentials = {}, ...other } = this.props;
+        const { credentials = {}, urlCleanupFunction = null, ...other } = this.props;
         const protocolSelect = (
             <Select
                 value={this.state.protocol}
@@ -77,7 +110,8 @@ export class UrlInput extends React.Component {
         const processedProps = {
             ...other,
             value: undefined,
-            onChange: this.onChange.bind(this)
+            onChange: this.onChange.bind(this),
+            onBlur: this.onBlur.bind(this)
         };
 
         let collapseProps = {}
@@ -119,6 +153,8 @@ export class UrlInput extends React.Component {
 
 UrlInput.propTypes = {
     onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    urlCleanupFunction: PropTypes.func,
     value: PropTypes.string,
     credentials: PropTypes.object
 };

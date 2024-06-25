@@ -30,13 +30,14 @@ describe('LayerListHandler', () => {
 
         const existingGrouping = GROUPING_PRESET[0].key;
         handler.getController().setGrouping(existingGrouping);
+        jest.runAllTimers();
         expect(handler.getState().grouping.selected).toBe(existingGrouping);
 
         const invalidGroupingKey = 'Not existing grouping';
         handler.getController().setGrouping(invalidGroupingKey);
-        expect(handler.getState().grouping.selected).toBe(existingGrouping);
-
+        jest.runAllTimers();
         // Setting an invalid group key won't change the state.
-        expect(mockFn).toHaveBeenCalledTimes(1);
+        expect(handler.getState().grouping.selected).toBe(existingGrouping);
+        expect(mockFn).toHaveBeenCalledTimes(3);
     });
 });

@@ -35,17 +35,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          * implements BundleInstance protocol start methdod
          */
         start: function () {
-            var me = this;
+            const me = this;
             if (me.started) {
                 return;
             }
             me.started = true;
 
-            var sandboxName = (me.conf ? me.conf.sandbox : null) || 'sandbox';
-            var sandbox = me._sandbox = Oskari.getSandbox(sandboxName);
+            const sandboxName = (me.conf ? me.conf.sandbox : null) || 'sandbox';
+            const sandbox = me._sandbox = Oskari.getSandbox(sandboxName);
 
             if (me.conf && me.conf.plugins) {
-                var plugin = me.conf.plugins.find(function (plugin) {
+                const plugin = me.conf.plugins.find(function (plugin) {
                     return plugin.id === 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin';
                 });
                 if (plugin) {
@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             });
             me._registerForLayerFiltering();
             Oskari.on('app.start', function () {
-                var active = me._timeseriesService.getActiveTimeseries();
+                const active = me._timeseriesService.getActiveTimeseries();
                 if (active) {
                     me._updateControl(active);
                 }
@@ -80,9 +80,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          * @private
          */
         _registerForLayerFiltering: function () {
-            var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+            const layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
             if (layerlistService) {
-                var loc = Oskari.getMsg.bind(null, 'timeseries');
+                const loc = Oskari.getMsg.bind(null, 'timeseries');
                 layerlistService.registerLayerlistFilterButton(
                     loc('layerFilter.timeseries'),
                     loc('layerFilter.tooltip'),
@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             if (!this._controlPlugin) {
                 return;
             }
-            var mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
+            const mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
             mapModule.stopPlugin(this._controlPlugin);
             mapModule.unregisterPlugin(this._controlPlugin);
             this._controlPlugin = null;

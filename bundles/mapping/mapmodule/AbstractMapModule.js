@@ -965,9 +965,14 @@ Oskari.clazz.define(
          */
         getVectorFeatures (geojson = {}, opts = {}) {
             const layerPlugins = this.getLayerPlugins();
+            const bbox = this.getSandbox().getMap().getBbox();
+            if (!bbox) {
+                this.log.info('Tried to get vector features before map is ready');
+                return {};
+            }
             // Detect if requested geojson is not on the current viewport
             if (geojson && geojson.geometry) {
-                const { left, bottom, right, top } = this.getSandbox().getMap().getBbox();
+                const { left, bottom, right, top } = bbox;
                 const extent = [left, bottom, right, top];
                 const features = filterFeaturesByExtent([geojson], extent);
                 if (!features.length) {
@@ -2073,8 +2078,6 @@ Oskari.clazz.define(
                 // no position given, add to end
                 content.append(element);
             }
-            // Make sure container is visible
-            container.css('display', '');
         },
 
         /**
@@ -2084,16 +2087,10 @@ Oskari.clazz.define(
          * @param {Boolean} detachOnly true to detach and preserve event handlers, false to remove element
          */
         removeMapControlPlugin: function (element, detachOnly) {
-            var container = element.parents('.mapplugins');
-            var content = element.parents('.mappluginsContent');
-            // TODO take this into use in all UI plugins so we can hide unused containers...
             if (detachOnly) {
                 element.detach();
             } else {
                 element.remove();
-            }
-            if (!this.isInLayerToolsEditMode() && content.children().length === 0) {
-                container.css('display', 'none');
             }
         },
 

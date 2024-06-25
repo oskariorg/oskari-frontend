@@ -4,9 +4,10 @@
  * @param {Object[]} handlesData values of bounds handles
  * @param {Function} xScale d3 scale function
  * @param {String[]} colorSet classification colors, hex without #
- * @param {Number} histoHeight height of histogram area in px
+ * @param {Object} opts
  */
-export function updateBandBlocks (svg, handlesData, xScale, colorSet, histoHeight) {
+export function updateBandBlocks (svg, handlesData, xScale, colorSet, opts) {
+    const { histoHeight, margin } = opts;
     const blockData = handlesData
         .sort((a, b) => {
             return a.value - b.value;
@@ -25,7 +26,7 @@ export function updateBandBlocks (svg, handlesData, xScale, colorSet, histoHeigh
     blocks.enter()
         .append('rect')
         .attr('class', 'block')
-        .attr('y', 0)
+        .attr('y', margin)
         .attr('height', histoHeight)
         .attr('fill', (d, i) => colorSet[i])
         .merge(blocks)

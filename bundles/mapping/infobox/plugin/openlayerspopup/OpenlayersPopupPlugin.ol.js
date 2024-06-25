@@ -57,6 +57,7 @@ Oskari.clazz.define(
             // templates
             me._arrow = jQuery('<div class="popupHeaderArrow"></div>');
             me._header = jQuery('<div></div>');
+            me._popupHeaderTitle = jQuery('<div class="popupHeaderTitle"></div>');
             me._headerWrapper = jQuery('<div class="popupHeader"></div>');
             // FIXME move styles to css
             me._headerCloseButton = jQuery(
@@ -164,7 +165,7 @@ Oskari.clazz.define(
             var me = this,
                 contentDiv = me._renderContentData(id, contentData),
                 sanitizedTitle = Oskari.util.sanitize(title),
-                popupContentHtml = me._renderPopupContent(id, sanitizedTitle, contentDiv, additionalTools),
+                popupContentHtml = me._renderPopupContent(id, sanitizedTitle, contentDiv, additionalTools, lonlat, options.showCoordinates),
                 popupElement = me._popupWrapper.clone(),
                 lonlatArray = [lonlat.lon, lonlat.lat],
                 colourScheme = options.colourScheme,
@@ -275,8 +276,6 @@ Oskari.clazz.define(
                 contentData: contentData,
                 lonlat: lonlat,
                 popup: popup,
-                colourScheme: colourScheme,
-                font: font,
                 options: options,
                 isInMobileMode: isInMobileMode,
                 type: popupType
@@ -332,6 +331,15 @@ Oskari.clazz.define(
             popup.dialog.addClass('mobile-infobox');
         },
 
+        _formatNumber: function (coordinate, decimalSeparator) {
+            if (typeof coordinate !== 'string') {
+                coordinate = coordinate + '';
+            }
+            coordinate = coordinate.replace('.', decimalSeparator);
+            coordinate = coordinate.replace(',', decimalSeparator);
+            return coordinate;
+        },
+
         /**
          * Wraps the content into popup and returns the html string.
          *
@@ -340,20 +348,24 @@ Oskari.clazz.define(
          * @param  {String} id
          * @param  {String} title
          * @param  {jQuery} contentDiv
+         * @param  {Object} additionalTools
+         * @param  {Object} lonlat
+         * @param  {Boolean} showCoordinates
          * @return {String}
          */
-        _renderPopupContent: function (id, title, contentDiv, additionalTools) {
+        _renderPopupContent: function (id, title, contentDiv, additionalTools, lonlat, showCoordinates) {
             var me = this,
                 arrow = this._arrow.clone(),
                 header = this._header.clone(),
+                popupHeaderTitle = this._popupHeaderTitle.clone(),
                 headerWrapper = this._headerWrapper.clone(),
                 closeButton = this._headerCloseButton.clone(),
                 resultHtml;
 
             closeButton.attr('id', 'oskari_' + id + '_headerCloseButton');
             header.append(title);
-            headerWrapper.append(header);
-            headerWrapper.append(closeButton);
+            popupHeaderTitle.append(header);
+            popupHeaderTitle.append(closeButton);
 
             // add additional btns
             jQuery.each(additionalTools, function (index, key) {
@@ -363,8 +375,52 @@ Oskari.clazz.define(
                     'class': key.iconCls,
                     'style': key.styles
                 });
-                headerWrapper.append(additionalButton);
+                popupHeaderTitle.append(additionalButton);
             });
+
+            headerWrapper.append(popupHeaderTitle);
+
+            // render coordinates to gfi header
+            if (showCoordinates) {
+                let mapModule = this.getMapModule();
+                let loc = Oskari.getLocalization('oskariui');
+                let crs = mapModule.getProjection();
+
+                let coordinateWrapper = jQuery('<div class="coordinateWrapper"></div>');
+
+                let lat = parseFloat(lonlat?.lat);
+                let lon = parseFloat(lonlat?.lon);
+
+                let lonlatString = '';
+
+                // Need to show degrees ?
+                if (mapModule.getProjectionUnits() === 'degrees' && !isNaN(lat) && !isNaN(lon)) {
+                    // Hard code restrict to 6 decimals
+                    const degreePoint = Oskari.util.coordinateMetricToDegrees([lon, lat], 6);
+                    lon = degreePoint[0];
+                    lat = degreePoint[1];
+                    lonlatString = loc.coordinates.lat + ': ' + lat + ' ' + loc.coordinates.lon + ': ' + lon;
+                }
+                // Otherwise show meter units
+                else if (!isNaN(lat) && !isNaN(lon)) {
+                    lat = lat.toFixed();
+                    lon = lon.toFixed();
+                    lat = me._formatNumber(lat, me.decimalSeparator);
+                    lon = me._formatNumber(lon, me.decimalSeparator);
+                    lonlatString = loc.coordinates.n + ': ' + lat + ' ' + loc.coordinates.e + ': ' + lon;
+                }
+
+                let crsText = loc.coordinates.crs[crs] || crs;
+                let crsDiv = crsText.length > 0 ? jQuery('<div>' + crsText + '</div>') : null;
+
+                if (crsDiv && lonlatString.length > 0) {
+                    coordinateWrapper.append(crsDiv);
+                    coordinateWrapper.append(lonlatString);
+                    headerWrapper.append(coordinateWrapper);
+                } else {
+                    me.log.warn('Error creating coordinate info for GFI popup.');
+                }
+            }
 
             resultHtml = arrow.outerHTML() +
                 headerWrapper.outerHTML() +
@@ -528,13 +584,13 @@ Oskari.clazz.define(
                     // No content left, close popup
                     this.close(popupId);
                 } else {
-                    const { colourScheme, font, title, lonlat } = popup;
+                    const { title, lonlat, options } = popup;
                     this._renderPopup(
                         popupId,
                         contentData,
                         title,
                         lonlat,
-                        { colourScheme, font },
+                        options || {},
                         true
                     );
                 }

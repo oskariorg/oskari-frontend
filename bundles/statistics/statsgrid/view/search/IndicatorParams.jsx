@@ -6,75 +6,89 @@ const Field = styled('div')`
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
-    width: 50%;
-    margin-right: 10px;
+    width: 180px;
 `;
-const TimeseriesField = styled('div')`
+const Timeseries = styled.div`
     display: flex;
     flex-direction: row;
-    width: 50%;
+    margin-bottom: 10px;
+`;
+const TimeseriesField = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    margin-right: 10px;
 `;
 const StyledSelect = styled(Select)`
     width: 100%;
 `;
 
-export const IndicatorParams = ({ state, controller }) => {
+const TimeSeriesParams = ({fieldName, timeOptions, selectedValues, controller}) => (
+    <Timeseries>
+        <TimeseriesField>
+            <b><Message messageKey='parameters.from' /></b>
+            <StyledSelect
+                options={timeOptions}
+                value={selectedValues[0]}
+                onChange={(value) => controller.setParamSelection(fieldName, value, 0)}
+            />
+        </TimeseriesField>
+        <TimeseriesField>
+            <b><Message messageKey='parameters.to' /></b>
+            <StyledSelect
+                options={timeOptions}
+                value={selectedValues[1]}
+                onChange={(value) => controller.setParamSelection(fieldName, value, 1)}
+            />
+        </TimeseriesField>
+    </Timeseries>
+);
 
-    const paramKeys = Object.keys(state.indicatorParams?.selectors);
-    const regionsets = [];
-    if (state.indicatorParams?.regionset && state.indicatorParams?.regionset.length > 0) {
-        for (const rs of state.indicatorParams.regionset) {
-            const rsData = state.regionsetOptions.find(rsd => rsd.id === rs);
-            if (rsData) regionsets.push(rsData);
-        }
-    }
+export const IndicatorParams = ({ params, allRegionsets = [], searchTimeseries, regionsetFilter, controller }) => {
+    const paramKeys = Object.keys(params.selectors);
+    const indicatorRegionsets = params.regionset || [];
+    const regionsetOptions = allRegionsets
+        .filter(rs => indicatorRegionsets.includes(rs.id))
+        .map(rs => {
+            const opt = { value: rs.id, label: rs.name };
+            if (regionsetFilter.length && !regionsetFilter.includes(rs.id)) {
+                opt.disabled = true;
+            }
+            return opt;
+        });
 
     return (
         <div>
             {paramKeys.map((param) => {
-                const selector = state.indicatorParams.selectors[param];
-                if (selector?.time) {
-                    if (state.searchTimeseries) {
-                        const timeOptions = selector?.values?.map(value => ({ value: value.id, label: value.title })); 
-                        return (
-                            <TimeseriesField key={param}>
-                                <Field>
-                                    <b><Message messageKey='parameters.from' /></b>
-                                    <StyledSelect
-                                        options={timeOptions}
-                                        value={state.indicatorParams?.selected[param][0]}
-                                        onChange={(value) => controller.setParamSelection(param, value, 0)}
-                                    />
-                                </Field>
-                                <Field>
-                                    <b><Message messageKey='parameters.to' /></b>
-                                    <StyledSelect
-                                        options={timeOptions}
-                                        value={state.indicatorParams?.selected[param][1]}
-                                        onChange={(value) => controller.setParamSelection(param, value, 1)}
-                                    />
-                                </Field>
-                            </TimeseriesField>
-                        )
-                    }
+                const selector = params.selectors[param];
+                if (selector?.time && searchTimeseries) {
+                    const timeOptions = selector?.values?.map(value => ({ value: value.id, label: value.title }));
+                    return (
+                        <TimeSeriesParams key={param}
+                            controller={controller}
+                            fieldName={param}
+                            timeOptions={timeOptions}
+                            selectedValues={params.selected[param]} />
+                    );
                 }
                 return (
                     <Field key={param}>
                         <b><Message messageKey={`parameters.${param}`} defaultMsg={param} /></b>
                         <StyledSelect
                             options={selector?.values?.map(value => ({ value: value.id, label: value.title }))}
-                            value={state.indicatorParams?.selected[param]}
+                            value={params.selected[param]}
                             onChange={(value) => controller.setParamSelection(param, value)}
+                            mode={selector?.time === true ? 'multiple' : ''}
                         />
                     </Field>
                 );
             })}
-            {regionsets.length > 0 && (
+            {regionsetOptions.length > 0 && (
                 <Field>
                     <b><Message messageKey='parameters.regionset' /></b>
                     <StyledSelect
-                        options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
-                        value={state.indicatorParams?.selected.regionsets}
+                        options={regionsetOptions}
+                        value={params.selected.regionsets}
                         onChange={(value) => controller.setParamSelection('regionsets', value)}
                     />
                 </Field>

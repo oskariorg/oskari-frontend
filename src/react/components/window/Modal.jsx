@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Header } from 'oskari-ui/components/window/Header';
 const StyledModal = styled(AntModal)`
     .ant-modal-body {
-        padding: 0.5em 0;
+        padding: 0 0 0.5em 0;
     }
 `;
 

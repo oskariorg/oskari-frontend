@@ -98,7 +98,13 @@ Oskari.registerLocalization(
                 "overridden": "Filtagg för metadatans"
             },
             "jsonTab": {
-                "info": "Dessa verktyg möjliggör avancerad konfiguration, använd med försiktighet."
+                "info": "Dessa verktyg möjliggör avancerad konfiguration, använd med försiktighet.",
+                "fields": {
+                    "attributes": "Attribut",
+                    "capabilities": "Utvald information från kartlagrets capabilities",
+                    "options": "Alternativen (options)",
+                    "params": "Parametrar"
+                }
             },
             "capabilities": {
                 "parsed": "Utvald information från kartlagrets capabilities",
@@ -209,6 +215,18 @@ Oskari.registerLocalization(
                         "noStyles": "Inga sparade stilar",
                         "json": "Stildefinitioner JSON-syntaxen är ogiltig.",
                         "optionalStyles": "Stilen har inte ett giltigt filter."
+                    }
+                },
+                "hover": {
+                    "title": "Framhävning av objekt och verktygstips",
+                    "tooltip": "Verktygstipsrader, som visas för objekt",
+                    "useStyle": "Använd stildefinitioner",
+                    "inherit": "Ärv stildefinitioner",
+                    "effect": "Använd effekten",
+                    "fromProperty": "Använd egenskapen som etikett",
+                    "labelTooltip": {
+                        "key": "Etiketten visas i sin ursprungliga form",
+                        "keyProperty": "Etikettinnehållet tas från den valda egenskapen"
                     }
                 }
             },

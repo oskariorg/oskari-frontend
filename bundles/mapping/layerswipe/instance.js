@@ -1,6 +1,5 @@
 import { getRenderPixel } from 'ol/render';
 import { unByKey } from 'ol/Observable';
-
 const SwipeAlertTypes = {
     NO_RASTER: 'noRaster',
     NOT_VISIBLE: 'notVisible'
@@ -14,7 +13,7 @@ Oskari.clazz.define(
         this.splitterWidth = 5;
         this.cropSize = null;
         this.mapModule = null;
-        this.layer = null; // ol layer
+        this.olLayers = null; // ol layers (always an array of ol layers bound to a given oskarilayer, e.g. clustering uses two layers)
         this.oskariLayerId = null;
         this.popupService = null;
         this.popup = null;
@@ -40,6 +39,8 @@ Oskari.clazz.define(
         _startImpl: function (sandbox) {
             this.mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
             this.popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
+
+            this.theme = this.mapModule.getMapTheme();
             Oskari.getSandbox().registerAsStateful(this.mediator.bundleId, this);
             if (Oskari.dom.isEmbedded()) {
                 const plugin = Oskari.clazz.create('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlugin', this.conf);
@@ -79,9 +80,6 @@ Oskari.clazz.define(
             }
             if (active) {
                 this.updateSwipeLayer();
-                if (this.layer === null) {
-                    return;
-                }
                 this.showSplitter();
                 if (this.cropSize === null) {
                     this.resetMapCropping();
@@ -122,13 +120,19 @@ Oskari.clazz.define(
             }
             return '';
         },
-        updateSwipeLayer: function () {
+        updateSwipeLayer: function (forceDeactivate) {
             this.unregisterEventListeners();
             const topLayer = this.getTopmostLayer();
-            this.layer = topLayer?.ol || null;
-            if (this?.layer === null) {
+
+            // no top layer & flag set === no layers & this is not a timing thing -> deactivate tool
+            if (forceDeactivate && !topLayer) {
+                this.setActive(false);
+            }
+            this.olLayers = topLayer?.ol || null;
+            if (this?.olLayers === null) {
                 return;
             }
+
             if (topLayer.layerId !== null) {
                 this.setSwipeStatus(topLayer.layerId, this.cropSize);
             }
@@ -136,7 +140,7 @@ Oskari.clazz.define(
             if (this.alertTimer) {
                 clearTimeout(this.alertTimer);
             }
-            if (this.layer === null) {
+            if (this?.olLayers === null) {
                 // When switching the background map, multiple events including
                 // remove, add and re-arrange will be triggered in order. The remove
                 // layer event causes the NO_RASTER alert to be shown when the
@@ -207,42 +211,45 @@ Oskari.clazz.define(
             }
             const olLayers = this.mapModule.getOLMapLayers(layerId);
             return {
-                ol: olLayers.length !== 0 ? olLayers[0] : null,
+                ol: olLayers.length !== 0 ? olLayers : null,
                 layerId
             };
         },
 
         registerEventListeners: function () {
-            if (this.layer === null) {
+            if (this.olLayers === null) {
                 return;
             }
-            const prerenderKey = this.layer.on('prerender', (event) => {
-                const ctx = event.context;
-                if (!this.isActive()) {
-                    ctx.restore();
-                    return;
-                }
 
-                const mapSize = this.mapModule.getMap().getSize();
-                const tl = getRenderPixel(event, [0, 0]);
-                const tr = getRenderPixel(event, [this.cropSize, 0]);
-                const bl = getRenderPixel(event, [0, mapSize[1]]);
-                const br = getRenderPixel(event, [this.cropSize, mapSize[1]]);
+            this.olLayers.forEach((olLayer) => {
+                const prerenderKey = olLayer.on('prerender', (event) => {
+                    const ctx = event.context;
+                    if (!this.isActive()) {
+                        ctx.restore();
+                        return;
+                    }
 
-                ctx.save();
-                ctx.beginPath();
-                ctx.moveTo(tl[0], tl[1]);
-                ctx.lineTo(bl[0], bl[1]);
-                ctx.lineTo(br[0], br[1]);
-                ctx.lineTo(tr[0], tr[1]);
-                ctx.closePath();
-                ctx.clip();
+                    const mapSize = this.mapModule.getMap().getSize();
+                    const tl = getRenderPixel(event, [0, 0]);
+                    const tr = getRenderPixel(event, [this.cropSize, 0]);
+                    const bl = getRenderPixel(event, [0, mapSize[1]]);
+                    const br = getRenderPixel(event, [this.cropSize, mapSize[1]]);
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(tl[0], tl[1]);
+                    ctx.lineTo(bl[0], bl[1]);
+                    ctx.lineTo(br[0], br[1]);
+                    ctx.lineTo(tr[0], tr[1]);
+                    ctx.closePath();
+                    ctx.clip();
+                });
+                this.eventListenerKeys.push(prerenderKey);
+                const postrenderKey = olLayer.on('postrender', (event) => {
+                    event.context.restore();
+                });
+                this.eventListenerKeys.push(postrenderKey);
             });
-            this.eventListenerKeys.push(prerenderKey);
-            const postrenderKey = this.layer.on('postrender', (event) => {
-                event.context.restore();
-            });
-            this.eventListenerKeys.push(postrenderKey);
         },
 
         unregisterEventListeners: function () {
@@ -252,7 +259,10 @@ Oskari.clazz.define(
 
         getSplitterElement: function () {
             if (!this.splitter) {
-                this.splitter = jQuery('<div class="layer-swipe-splitter"></div>');
+                // Use background color from theme in inline style. Fall back to paikkatietoikkuna-yellow.
+                // This is less than satisfying but we'll have a classier implementation when we reactify the whole component.
+                const splitterColor = this.theme?.color?.accent || '#ffd400';
+                this.splitter = jQuery('<div class="layer-swipe-splitter" style="background-color:' + splitterColor + ';"></div>');
                 this.splitter.draggable({
                     containment: this.mapModule.getMapEl(),
                     axis: 'x',
@@ -306,7 +316,7 @@ Oskari.clazz.define(
             },
             'AfterMapLayerRemoveEvent': function (event) {
                 if (this.isActive()) {
-                    this.updateSwipeLayer();
+                    this.updateSwipeLayer(true);
                 }
             },
             'AfterRearrangeSelectedMapLayerEvent': function (event) {
@@ -316,7 +326,7 @@ Oskari.clazz.define(
             },
             'MapLayerVisibilityChangedEvent': function (event) {
                 if (this.isActive()) {
-                    this.updateSwipeLayer();
+                    this.updateSwipeLayer(true);
                 }
             },
             'MapSizeChangedEvent': function (event) {

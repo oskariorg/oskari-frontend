@@ -23,6 +23,10 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         this.bannerControls = null;
         this.descriptionPopupControls = null;
     }, {
+        __name: 'announcements',
+        getName: function () {
+            return this.__name;
+        },
         afterStart: function () {
             const me = this;
             if (me.started) {
@@ -30,18 +34,19 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             }
             me.service = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
             me.sandbox.registerService(me.service);
-            const flyout = me.plugins['Oskari.userinterface.Flyout'];
-            // It looks like plugin (embedded map) handles announcements differently so render popups only if flyout is present
-            if (flyout) {
-                this.handler = new AnnouncementsHandler(this.service);
-                this.handler.addStateListener(state => this.stateChanged(state));
-                flyout.initHandler(this.handler);
-            }
             if (me.conf && me.conf.plugin) {
                 const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
                 const plugin = Oskari.clazz.create('Oskari.framework.announcements.plugin.AnnouncementsPlugin', me.conf.plugin.config);
                 mapModule.registerPlugin(plugin);
                 mapModule.startPlugin(plugin);
+            } else {
+                const flyout = me.plugins['Oskari.userinterface.Flyout'];
+                // It looks like plugin (embedded map) handles announcements differently so render popups only if flyout is present
+                if (flyout) {
+                    this.handler = new AnnouncementsHandler(this.service);
+                    this.handler.addStateListener(state => this.stateChanged(state));
+                    flyout.initHandler(this.handler);
+                }
             }
 
             // RPC function to get announcements

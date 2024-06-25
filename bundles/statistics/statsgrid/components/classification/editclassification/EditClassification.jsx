@@ -6,6 +6,8 @@ import { SizeSlider } from './SizeSlider';
 import { Color } from './Color';
 import { Checkbox, Message, Slider } from 'oskari-ui';
 import { EditTwoTone } from '@ant-design/icons';
+import { getEditOptions } from '../../../helper/ClassificationHelper';
+import { LAYER_ID } from '../../../constants';
 
 // remove mark dots (.ant-slider-dot)
 const Container = styled.div`
@@ -45,14 +47,17 @@ const TRANSPARENCY = {
 };
 
 export const EditClassification = ({
-    options,
+    data,
     controller,
     editEnabled,
-    startHistogramView,
+    showHistogram,
     values
 }) => {
-    const handleChange = (id, value) => controller.updateClassification(id, value);
+    const options = getEditOptions(values, data);
+    const handleChange = (id, value) => controller.updateClassification({ [id]: value });
+    const onOpacityChange = opacity => Oskari.getSandbox().postRequestByName('ChangeMapLayerOpacityRequest', [LAYER_ID, opacity]);
     const disabled = !editEnabled;
+    const opacity = typeof values.transparency !== 'undefined' ? values.transparency : 100;
     return (
         <Container className="t_classification-edit">
             <LabeledSelect
@@ -66,7 +71,7 @@ export const EditClassification = ({
                 <Message messageKey={`classify.labels.method`}/>
                 <span>: &nbsp;</span>
                 <Message messageKey={`classify.methods.${values.method}`}/>
-                <EditIcon disabled = {disabled} className='t_button-method' onClick={() => startHistogramView()}/>
+                <EditIcon disabled = {disabled} className='t_button-method' onClick={() => showHistogram()}/>
             </MethodContainer>
             <LabeledSelect
                 name = 'count'
@@ -99,9 +104,9 @@ export const EditClassification = ({
 
             <Message messageKey='classify.labels.transparency'/>
             <Slider
-                value = {values.transparency}
+                value = {opacity}
                 disabled = {disabled}
-                onChange = {value => handleChange('transparency', value)}
+                onChange = {onOpacityChange}
                 { ...TRANSPARENCY }
             />
             <LabeledSelect
@@ -122,9 +127,9 @@ export const EditClassification = ({
     );
 };
 EditClassification.propTypes = {
-    options: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired,
     editEnabled: PropTypes.bool.isRequired,
     values: PropTypes.object.isRequired,
-    startHistogramView: PropTypes.func.isRequired,
+    showHistogram: PropTypes.func.isRequired,
     controller: PropTypes.object.isRequired
 };

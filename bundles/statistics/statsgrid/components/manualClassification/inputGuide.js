@@ -4,10 +4,11 @@ const arrowSize = 8;
  * @param {Object} svg node into which to render
  * @param {Function} xScale d3 scale function
  * @param {Number} height box height
- * @param {Number} yZero loacation of box to edge
+ * @param {Number} svgHeight
  * @param {Number} cursorLocation pixel location in x direction where to draw triangle
  */
-export function inputGuide (svg, xScale, height, yZero, cursorLocation) {
+export function inputGuide (svg, xScale, height, svgHeight, cursorLocation) {
+    const yZero = svgHeight - height;
     const guide = svg.selectAll('.guide')
         .data([cursorLocation]);
 

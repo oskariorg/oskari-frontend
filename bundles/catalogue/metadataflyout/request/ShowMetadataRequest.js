@@ -13,12 +13,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.request.ShowMetadata
     function (config, additionalMetadata) {
         this._creator = null;
         this._uuid = config.uuid;
+        this._layerId = config.layerId;
         this._RS_Identifier_Code = config.RS_Identifier_Code;
         this._RS_Identifier_CodeSpace = config.RS_Identifier_CodeSpace;
         this._additionalMetadata = additionalMetadata;
         this._allMetadata = [];
 
-        if (!(config.uuid === undefined && config.RS_Identifier_Code === undefined && config.RS_Identifier_CodeSpace === undefined)) {
+        if (!(config.uuid === undefined && config.layerId === undefined && config.RS_Identifier_Code === undefined && config.RS_Identifier_CodeSpace === undefined)) {
             this._allMetadata.push(config);
         }
 
@@ -38,6 +39,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.request.ShowMetadata
 
         getUuid: function () {
             return this._uuid;
+        },
+
+        getLayerId: function () {
+            return this._layerId;
         },
 
         getRS_Identifier_Code: function () {

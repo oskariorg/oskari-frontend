@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Message, TextAreaInput } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import { PrimaryButton, ButtonContainer, SecondaryButton } from 'oskari-ui/components/buttons';
@@ -14,14 +14,19 @@ const Content = styled('div')`
     min-width: 365px;
 `;
 
-const ClipboardPopup = ({ state, controller, onClose }) => {
+const ClipboardPopup = ({ controller, onClose }) => {
+    const [data, setData] = useState('');
+    const onAdd = () => {
+        controller.importFromClipboard(data);
+        onClose();
+    };
     return (
         <Content>
             <TextAreaInput
                 placeholder={Oskari.getMsg('StatsGrid', 'userIndicators.import.placeholder')}
                 rows={8}
-                value={state.clipboardValue}
-                onChange={(e) => controller.setClipboardValue(e.target.value)}
+                value={data}
+                onChange={(e) => setData(e.target.value)}
             />
             <ButtonContainer>
                 <SecondaryButton
@@ -30,31 +35,21 @@ const ClipboardPopup = ({ state, controller, onClose }) => {
                 />
                 <PrimaryButton
                     type='add'
-                    onClick={() => controller.importFromClipboard()}
+                    onClick={onAdd}
                 />
             </ButtonContainer>
         </Content>
     );
 };
 
-export const showClipboardPopup = (state, controller, onClose) => {
+export const showClipboardPopup = (controller, onClose) => {
 
     const title = <Message messageKey='userIndicators.flyoutTitle' bundleKey={BUNDLE_KEY} />;
-    const controls = showPopup(
+    return showPopup(
         title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <ClipboardPopup state={state} controller={controller} onClose={onClose} />
+            <ClipboardPopup controller={controller} onClose={onClose} />
         </LocaleProvider>,
         onClose
     );
-
-    return {
-        ...controls,
-        update: (state) => controls.update(
-            title,
-            <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                <ClipboardPopup state={state} controller={controller} onClose={onClose} />
-            </LocaleProvider>
-        )
-    };
 };
