@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, TextAreaInput, Collapse, CollapsePanel, Link } from 'oskari-ui';
+import { Message, TextAreaInput, Collapse, Link } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Numeric } from '../Numeric';
 import { StyledFormField, SpacedLabel } from '../styled';
@@ -16,13 +16,14 @@ const parsedTextArea = {
 };
 const ParsedCapabilities = ({ capabilities = {} }) => {
     const prettier = JSON.stringify(capabilities, null, 4);
+    const items = [{
+        key: 'capabilities_collapse',
+        label: <Message messageKey='capabilities.parsed'/>,
+        children: <TextAreaInput value={prettier} autoSize={parsedTextArea} />
+    }];
     return (
         <StyledFormField>
-            <Collapse>
-                <CollapsePanel header={<Message messageKey='capabilities.parsed'/>}>
-                    <TextAreaInput value={prettier} autoSize={parsedTextArea} />
-                </CollapsePanel>
-            </Collapse>
+            <Collapse items={items}/>
         </StyledFormField>
     );
 };

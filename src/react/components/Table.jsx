@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table as AntTable } from 'antd';
-import 'antd/es/table/style/index.js';
+
 import { getMsg } from '../util/locale';
 import styled from 'styled-components';
 

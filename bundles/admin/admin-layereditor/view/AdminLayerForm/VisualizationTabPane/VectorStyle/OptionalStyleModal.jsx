@@ -77,6 +77,25 @@ export const OptionalStyleModal = ({ vectorStyle, geometryType, controller, onCl
     };
     const add = () => setStyles([...styles, {}]);
     const propertyNames = properties.map(p => p.name);
+    const items = styles.map((optStyle, i) => {
+        const { property, AND, OR, ...styleDef } = optStyle;
+        const filterDef = { property, AND, OR }; // TODO: sets undefined values, ok??
+
+        return {
+            key: `style_${i}`,
+            label: getDescription(filterDef),
+            extra: <PanelExtra onRemove={() => remove(i)}/>,
+            children: <>
+                <Divider><Message messageKey='styles.vector.optionalStylesFilter' /></Divider>
+                <FeatureFilter filter={filterDef} types={properties} properties={propertyNames}
+                    onChange={ updated => update({ ...styleDef, ...updated }, i)}/>
+                <Divider><Message messageKey='styles.vector.featureStyle' /></Divider>
+                <StyleEditor geometryType={geometryType}
+                    oskariStyle={ Object.keys(styleDef).length ? styleDef : featureStyle }
+                    onChange={updated => update({ ...filterDef, ...updated }, i)}/>
+            </>
+        };
+    });
     return (
         <Modal
             destroyOnClose
@@ -90,24 +109,7 @@ export const OptionalStyleModal = ({ vectorStyle, geometryType, controller, onCl
             title={<Header onAdd={add} />}
             closeIcon={<Hidden onClick={e => e.stopPropagation()}/>}
             width={ 800 }>
-            <Collapse accordion>
-                { styles.map((optStyle, i) => {
-                    const { property, AND, OR, ...styleDef } = optStyle;
-                    const filterDef = { property, AND, OR }; // TODO: sets undefined values, ok??
-                    return (
-                        <CollapsePanel key={`style_${i}`}
-                            header={getDescription(filterDef)}
-                            extra={<PanelExtra onRemove={() => remove(i)}/>}>
-                            <Divider><Message messageKey='styles.vector.optionalStylesFilter' /></Divider>
-                            <FeatureFilter filter={filterDef} types={properties} properties={propertyNames}
-                                onChange={ updated => update({ ...styleDef, ...updated }, i)}/>
-                            <Divider><Message messageKey='styles.vector.featureStyle' /></Divider>
-                            <StyleEditor geometryType={geometryType}
-                                oskariStyle={ Object.keys(styleDef).length ? styleDef : featureStyle }
-                                onChange={updated => update({ ...filterDef, ...updated }, i)}/>
-                        </CollapsePanel>
-                    )})
-                }
+            <Collapse items={items}>
             </Collapse>
         </Modal>
     );

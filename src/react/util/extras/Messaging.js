@@ -1,7 +1,5 @@
 import React from 'react';
 import { notification, message } from 'antd';
-import 'antd/es/notification/style/index.js';
-import 'antd/es/message/style/index.js';
 
 const NOTIFICATION = 'notification';
 const ALERT = 'message';
@@ -165,7 +163,7 @@ class Messaging {
         notification.destroy();
         message.destroy();
     }
-};
+}
 
 /**
  * @property {string} NOTIFICATION Notification with a title.

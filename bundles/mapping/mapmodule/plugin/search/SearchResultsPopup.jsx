@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
-import { Collapse, CollapsePanel, Message, Switch, Badge, Tooltip } from 'oskari-ui';
+import { Collapse, Message, Switch, Badge, Tooltip } from 'oskari-ui';
 import { ThemeConsumer, ThemeProvider } from 'oskari-ui/util';
 import { getHeaderTheme } from 'oskari-ui/theme';
 import { getPopupOptions } from '../pluginPopupHelper';
@@ -37,62 +37,63 @@ export const showResultsPopup = (results = {}, channels = [], featuresOnMap = []
     };
 };
 
-const StyledPanel = styled(CollapsePanel)`
-    .ant-collapse-header {
-        background-color: ${props => props.$headerColor};
-        color: ${props => props.$textColor} !important;
-    }
-    .ant-collapse-content-box {
-        padding-top: 0px;
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-`;
 const EmptyResult = styled('div')`
     padding-top: 16px;
     padding-left: 16px;
     padding-right: 16px;
 `;
 const BadgeFloater = styled('div')`
-float: right;
-margin-left: 8px;
+    float: right;
+    margin-left: 8px;
 `;
 
+const CollapseContainer = styled('div')`
+    .ant-collapse-header {
+        background-color: ${props => props.$headerColor};
+        color: ${props => props.$textColor} !important;
+    }
+
+    .ant-collapse-content-box {
+        padding-top: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+`;
 
 const PopupContent = ThemeConsumer(({ results, channels, featuresOnMap, showResult, columns, theme }) => {
     const channelIds = Object.keys(results);
     const mostResultsChannelId = getChannelWithMostResults(channelIds, results);
     const [activeTab, setActiveTab] = useState(mostResultsChannelId);
     const helper = getHeaderTheme(theme);
-    let loopChannelIds = [mostResultsChannelId, ...channelIds.filter(id => id !== mostResultsChannelId)];
+    const loopChannelIds = [mostResultsChannelId, ...channelIds.filter(id => id !== mostResultsChannelId)];
     useEffect(() => {
         // show the tab with most results if we get additional results after first render
         setActiveTab(mostResultsChannelId);
     }, [mostResultsChannelId]);
-    return (
-        <Collapse activeKey={activeTab} onChange={setActiveTab}>
-            { loopChannelIds.map(id => {
-                const channel = channels.find(chan => id === chan.id);
-                const channelResult = results[id];
-                return (
-                    <StyledPanel
-                        key={channel.id}
-                        $headerColor={helper.getBgColor()}
-                        $textColor={helper.getTextColor()}
-                        header={<Header
-                            channel={channel}
-                            showGeneric={channelIds.length === 1}
-                            count={channelResult?.totalCount}
-                            hasMore={channelResult?.hasMore} />}>
-                        <ChannelContent
-                            results={channelResult}
-                            featuresOnMap={featuresOnMap}
-                            showResult={showResult}
-                            columns={columns} />
-                    </StyledPanel>
-                );
-            })}
-        </Collapse>
+    const items = loopChannelIds.map(id => {
+        const channel = channels.find(chan => id === chan.id);
+        const channelResult = results[id];
+
+        return {
+            key: channel.id,
+            label: <Header
+                channel={channel}
+                showGeneric={channelIds.length === 1}
+                count={channelResult?.totalCount}
+                hasMore={channelResult?.hasMore} />,
+            children: <ChannelContent
+                results={channelResult}
+                featuresOnMap={featuresOnMap}
+                showResult={showResult}
+                columns={columns} />
+        };
+    });
+
+    return (<CollapseContainer
+        $headerColor={helper.getBgColor()}
+        $textColor={helper.getTextColor()}>
+        <Collapse activeKey={activeTab} onChange={setActiveTab} items={items}/>
+    </CollapseContainer>
     );
 });
 

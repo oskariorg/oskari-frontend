@@ -198,14 +198,15 @@ export const LocalizationComponent = ({
     }
     const firstLocalizedElement = localizedElements.shift();
     const panelKey = 'otherLanguages';
+    const items = [{
+        key: panelKey,
+        label: getCollapseHeader(),
+        children: localizedElements
+    }];
     return (
         <React.Fragment>
             { firstLocalizedElement }
-            <Collapse bordered defaultActiveKey={defaultOpen === true ? panelKey : null}>
-                <CollapsePanel header={getCollapseHeader()} key={panelKey}>
-                    { localizedElements }
-                </CollapsePanel>
-            </Collapse>
+            <Collapse bordered defaultActiveKey={defaultOpen === true ? panelKey : null} items={items}/>
         </React.Fragment>
     );
 };

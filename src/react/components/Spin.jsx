@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Spin as AntSpin } from 'antd';
 import { Message } from 'oskari-ui';
-import 'antd/es/spin/style/index.js';
 
 export const Spin = ({ children, showTip = false, ...other }) => {
     const tip = showTip ? <Message messageKey='Spin.loading' bundleKey='oskariui'/> : null;

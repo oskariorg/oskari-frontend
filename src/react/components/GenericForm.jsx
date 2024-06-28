@@ -6,9 +6,6 @@ import { Card } from './Card';
 import { Space } from './Space';
 import styled from 'styled-components';
 
-import 'antd/es/form/style/index.js';
-import 'antd/es/input/style/index.js';
-
 const { TextArea } = Input;
 
 // If the form is shown on popup the Select dropdown opens behind popup without this
@@ -43,7 +40,7 @@ const StyledFormItem = styled(Form.Item)`
         font-size: 12px;
 
         & > div {
-            margin: 5px 0 0; 
+            margin: 5px 0 0;
         }
     }
 
@@ -69,7 +66,7 @@ const StyledButton = styled(Button)`
 
 /**
  * Generate generic Oskari UI form
- * 
+ *
  * @param {Object} props props        - object containing all form settings
  * @param {Object} props.formSettings - object containing settings for the form
  * @param {Array} props.fields        - array of objects containing all single fields
@@ -88,12 +85,12 @@ export class GenericForm extends React.Component {
     /**
      * @method _addTooltip
      * @private
-     * 
+     *
      * Adds tooltip around provided form component
-     * 
+     *
      * @param {React.Component} formItem - provided form item to wrap with tooltip
      * @param {String} tooltipTitle      - title text for tooltip
-     * 
+     *
      * @returns {React.Component}        - field wrapped with Tooltip
      */
     _addTooltip (formItem, tooltipTitle) {
@@ -110,19 +107,19 @@ export class GenericForm extends React.Component {
                 <div>
                     { formItem }
                 </div>
-            </Tooltip>  
+            </Tooltip>
         );
     }
 
     /**
      * @method _createFormComponents
      * @private
-     * 
+     *
      * Create all form components
-     * 
+     *
      * @param {Object[]} fields - array containing all fields
-     * 
-     * @returns {React.Component} 
+     *
+     * @returns {React.Component}
      */
     _createFormComponents (fields) {
         return fields.map((field) => {
@@ -139,12 +136,12 @@ export class GenericForm extends React.Component {
     /**
      * @method _createFormItem
      * @private
-     * 
+     *
      * Creates single form item with provided field values
-     * 
+     *
      * @param {Object} field - single field
-     * 
-     * @returns {React.Component} - component with Tooltip or not 
+     *
+     * @returns {React.Component} - component with Tooltip or not
      */
     _createFormItem (field) {
         return (
@@ -164,7 +161,7 @@ export class GenericForm extends React.Component {
      * @method _createFormInput
      * @private
      * Create single input content with provided field values
-     * 
+     *
      * @param {Object} field                      - object containing information for single field
      * @param {String} field.name                 - unique name for the field
      * @param {String|Object} field.type          - field type as string {text / textarea / info / dropdown}
@@ -172,16 +169,16 @@ export class GenericForm extends React.Component {
      * @param {Number} field.maxLength            - input field max length
      * @param {String} field.optionalClass        - class name for the field
      * @param {String|Number} field.value         - value for current field used in info card / drowdown / submit button
-     * 
+     *
      * @returns {Component} React component for the provided field
      */
     _createFormInput (field) {
         if (!field) {
             return null;
         }
-    
+
         const fieldKey = field.name + '_' + field.type + '_field';
-    
+
         switch(field.type) {
             case 'text':
                 return (
@@ -243,7 +240,7 @@ export class GenericForm extends React.Component {
                     </Button>
                 );
             case 'buttongroup':
-                return ( 
+                return (
                 <Row justify={ 'center' }>
                     <Space>
                         { field.buttons.map((singleItem) => {
@@ -270,11 +267,11 @@ export class GenericForm extends React.Component {
     /**
      * @method _getFieldInitialValue
      * @private
-     * 
+     *
      * Get initial value for each field
-     * 
+     *
      * @param {Object} currentField - current field to find value from
-     * 
+     *
      * @return {String} fieldValue - return initial value for current field
      */
     _getFieldInitialValue (currentField) {
@@ -283,9 +280,9 @@ export class GenericForm extends React.Component {
             return currentValue;
         } else {
             return currentField.value;
-        }         
+        }
     }
-    
+
     render ()  {
         return (
             <Form
@@ -294,11 +291,11 @@ export class GenericForm extends React.Component {
             >
                 <Space direction="vertical">
                     { this._createFormComponents( this.props.fields, this.props.formSettings) }
-                </Space>     
+                </Space>
             </Form>
         );
     }
-};
+}
 
 GenericForm.propTypes = {
     formName: PropTypes.string,

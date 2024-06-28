@@ -12,8 +12,8 @@ import styled from 'styled-components';
 // One option would be to trigger a blur() on the component when active changes to non-active.
 // That way tab-focusing would work really nice if we don't force the button to "inactive colors"
 const StyledButton = styled(Button)`
-    width: ${props => props.size};
-    height: ${props => props.size};
+    width: ${props => props.size}!important;
+    height: ${props => props.size}!important;
     > * {
         font-size: ${props => props.$iconSize};
     }

@@ -1,4 +1,3 @@
-import { Input } from 'antd';
-import 'antd/es/input/style/index.js';
+import { Space } from 'antd';
 
-export const InputGroup = Input.Group;
+export const InputGroup = Space.Compact;

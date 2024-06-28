@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tooltip as AntTooltip } from 'antd';
-import 'antd/es/tooltip/style/index.js';
+
 import { createGlobalStyle } from 'styled-components';
 
 const TooltipStyle = createGlobalStyle`

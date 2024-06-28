@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, Collapse, CollapsePanel } from 'oskari-ui';
+import { Message, Collapse } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { OptionInput } from './OptionInput';
 import { StyledFormField } from '../styled';
 
-export const CesiumIon = ({ layer, controller, defaultOpen = false }) => (
-    <Collapse defaultActiveKey={(layer.options.assetId || defaultOpen) ? 'open' : 'closed'}>
-        <CollapsePanel key='open' header={<Message messageKey='ion.title'/>} defaultOpen>
+export const CesiumIon = ({ layer, controller, defaultOpen = false }) => {
+    // defaultOpoen ?
+    const items = [{
+        key: 'open',
+        label: <Message messageKey='ion.title'/>,
+        children: <>
             <Message messageKey='ion.assetId' />
             <StyledFormField>
                 <OptionInput layer={layer} controller={controller} propKey='ionAssetId'/>
@@ -20,9 +23,10 @@ export const CesiumIon = ({ layer, controller, defaultOpen = false }) => (
             <StyledFormField>
                 <OptionInput layer={layer} controller={controller} propKey='ionAssetServer'/>
             </StyledFormField>
-        </CollapsePanel>
-    </Collapse>
-);
+        </>
+    }];
+    return <Collapse defaultActiveKey={(layer.options.assetId || defaultOpen) ? 'open' : 'closed'} items={items}/>;
+};
 CesiumIon.propTypes = {
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired,
