@@ -174,7 +174,7 @@ Oskari.clazz.define(
         },
 
         _createControlElement: function () {
-            return this.template.clone();
+            return this._template.clone();
         },
 
         refresh: function () {
