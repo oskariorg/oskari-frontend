@@ -5,17 +5,18 @@ import * as olProj from 'ol/proj';
 import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
 // see oskari-frontend/webpack/config.js for additional config required by Cesium
-import * as Cesium from 'cesium';
+
+import 'cesium/Build/Cesium/Cesium';
 
 // https://github.com/openlayers/ol-cesium/issues/1094#issuecomment-1710423741
 // import OLCesium from 'olcs/OLCesium.js';
-import OLCesium from 'ol-cesium';
+import OLCesium from 'olcs';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID, VECTOR_STYLE } from './domain/constants';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import 'ol-cesium/css/olcs.css';
-//import 'olcs/olcs.css';
+// import 'ol-cesium/css/olcs.css';
+import 'olcs/olcs.css';
 import './event/TimeChangedEvent';
 dayjs.extend(customParseFormat);
 // OL-cesium expects to find this global

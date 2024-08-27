@@ -15,7 +15,7 @@ const isDirectory = source => lstatSync(source).isDirectory();
 const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
 
 // The path to the CesiumJS source code (normal and dev mode)
-const cesiumSourceOptions = ['../cesium/Source', 'node_modules/cesium/Source'];
+const cesiumSourceOptions = ['../cesium/Build', 'node_modules/cesium/Build'];
 const cesiumTarget = 'cesium';
 
 module.exports = (env, argv) => {
@@ -34,11 +34,11 @@ module.exports = (env, argv) => {
     // Copy Cesium Assets, Widgets, and Workers to a static directory
     cesiumSourceOptions.forEach(possibleSrcPath => {
         plugins.push(new CopywebpackPlugin([
-            { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/Workers'), to: cesiumTarget + '/Workers' },
+            { from: path.join(__dirname, possibleSrcPath, 'Workers'), to: cesiumTarget + '/Workers' },
             { from: path.join(__dirname, possibleSrcPath, 'Assets'), to: cesiumTarget + '/Assets' },
             { from: path.join(__dirname, possibleSrcPath, 'Widgets'), to: cesiumTarget + '/Widgets' },
             // copy Cesium's minified third-party scripts
-            { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty' }
+            { from: path.join(__dirname, possibleSrcPath, 'ThirdParty'), to: cesiumTarget + '/ThirdParty' }
         ]));
     });
 
