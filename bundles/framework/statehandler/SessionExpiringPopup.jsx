@@ -32,12 +32,11 @@ const MessagePopup = (props) => {
         newSeconds = newSeconds < 10 ? 0 + newSeconds : newSeconds;
 
         if (newSeconds < 1) {
-            const modalController = showSessionExpiredModal();
+            showSessionExpiredModal();
             closeCallback();
             clearTimeout(timer);
             if (Oskari.user().isLoggedIn()) {
                 setTimeout(() => {
-                    modalController.close();
                     cancelCallback();
                 }, MODAL_DELAY_MS);
             } else {

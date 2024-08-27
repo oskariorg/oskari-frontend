@@ -5,9 +5,11 @@
  * @param {Function} xScale d3 scale function
  * @param {Function} dragBehavior d3 drag behavior
  * @param {Function} isSelected for checking if handleData is selected
- * @param {Number} histoHeight height of histogram area in px
+ * @param {Object} opts
  */
-export function updateDragHandles (svg, handlesData, xScale, dragBehavior, isSelected, isBase, histoHeight) {
+export function updateDragHandles (svg, handlesData, xScale, dragBehavior, isSelected, isBase, opts) {
+    const { histoHeight, margin } = opts;
+    const y = histoHeight + 40;
     const handles = svg.selectAll('.handle')
         .data(handlesData.slice(1, -1), (d) => d.id);
 
@@ -19,11 +21,11 @@ export function updateDragHandles (svg, handlesData, xScale, dragBehavior, isSel
     handlesEnter
         .append('path')
         .classed('handle-line', true)
-        .attr('d', `M0 0 v${histoHeight + 25}`);
+        .attr('d', `M0 ${margin} v${y - margin}`);
 
     handlesEnter
         .append('circle')
-        .attr('cy', histoHeight + 25);
+        .attr('cy', y);
 
     const mergedHandles = handlesEnter
         .merge(handles);

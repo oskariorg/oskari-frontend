@@ -6,24 +6,29 @@ import { updateDragHandles } from './updateDragHandles';
 import * as d3 from 'd3';
 
 const width = 500;
-const height = 303;
+const height = 310;
 const margin = 12;
 const histoHeight = 200;
 
 /**
  * Creates classification editor into given DOM node
  * @param {HTMLElement} el DOM node
- * @param {Number[]} manualBounds class bounds at start of editing
- * @param {Number[]} indicatorData dataset values
- * @param {String[]} colorSet colors corresponding to classes
+ * @param {Object} indicator active indicator
+ * @param {Number} activeIndex index of active bound
+ * @param {Boolean} disabled controls disabled
  * @param {Function} changeCallback function that is called with updated bounds, when user makes changes
  */
-export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, activeId, fractionDigits, base, changeCallback, disabled) {
+export function manualClassificationEditor (el, indicator, activeIndex, disabled, changeCallback) {
+    const { classification, classifiedData, data } = indicator;
+    const { fractionDigits, base } = classification;
+    const { groups = [], bounds = [] } = classifiedData;
+    const colorSet = groups.map(group => group.color);
+    const indicatorData = data.seriesValues ? data.seriesValues : data.dataByRegions.map(d => d.value);
+
     const svg = d3.select(el)
         .append('svg')
         .attr('width', width)
         .attr('height', height);
-
     const histoClip = svg.append('defs').append('clipPath').attr('id', 'histoClip');
     const guide = svg.append('g');
     const histoGroup = svg.append('g').attr('clip-path', 'url(#histoClip)');
@@ -32,24 +37,25 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
 
     const histogramGenerator = d3.histogram().thresholds(50);
     const histoData = histogramGenerator(indicatorData);
-
+    const highestBar = d3.max(histoData, (d) => d.length);
     const y = d3.scaleLinear()
-        .domain([0, d3.max(histoData, (d) => d.length)])
+        .domain([0, highestBar])
         .range([histoHeight, 0]);
 
     const x = d3.scaleLinear()
-        .domain([manualBounds[0], manualBounds[manualBounds.length - 1]])
+        .domain([bounds[0], bounds[bounds.length - 1]])
         .clamp(true)
         .range([margin * 2, width - margin]); // double left margin to get more space for tick labels
 
+    const opts = { histoHeight, height, margin, highestBar, fractionDigits };
     // HISTOGRAM CLIP PATH
-    histogram(histoClip, histoData, x, y, height);
+    histogram(histoClip, histoData, x, y, opts);
 
-    const handlesData = manualBounds.map((d, i) => ({ value: d, id: i }));
+    const handlesData = bounds.map((d, i) => ({ value: d, id: i }));
 
     let selected = handlesData[1];
-    if (activeId && activeId > 0 && activeId < manualBounds.length - 1) {
-        selected = handlesData[activeId];
+    if (activeIndex && activeIndex > 0 && activeIndex < bounds.length - 1) {
+        selected = handlesData[activeIndex];
     }
     const isSelected = d => d.id === selected.id;
     const isBase = d => typeof base !== 'undefined' && base === d.value;
@@ -76,7 +82,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         .on('end', notify);
 
     // BOUNDS EDGES
-    edgeLines(boundsLines, handlesData, x, y, histoHeight);
+    edgeLines(boundsLines, handlesData, x, y, opts);
 
     // VALUE INPUT INIT & INTERACTION
 
@@ -115,8 +121,8 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         });
 
     function update (skipInput) {
-        updateBandBlocks(histoGroup, handlesData, x, colorSet, histoHeight);
-        updateDragHandles(dragHandles, handlesData, x, dragBehavior, isSelected, isBase, histoHeight);
+        updateBandBlocks(histoGroup, handlesData, x, colorSet, opts);
+        updateDragHandles(dragHandles, handlesData, x, dragBehavior, isSelected, isBase, opts);
 
         if (skipInput) {
             return;
@@ -128,7 +134,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         valueInput.property('value', fixed).classed('fail', false);
 
         // VALUE INPUT GUIDE BOX
-        inputGuide(guide, x, 50, histoHeight + 50, x(value));
+        inputGuide(guide, x, 50, height, x(value));
     }
     update();
 }

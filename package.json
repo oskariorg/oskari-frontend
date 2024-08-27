@@ -1,6 +1,6 @@
 {
   "name": "oskari-frontend",
-  "version": "2.13.0-dev",
+  "version": "2.14.0-dev",
   "description": "Oskari frontend",
   "keywords": [
     "oskari",
@@ -33,10 +33,10 @@
   },
   "dependencies": {
     "@ant-design/icons": "4.6.3",
-    "@babel/core": "7.23.3",
-    "@babel/preset-env": "7.23.3",
+    "@babel/core": "7.23.5",
+    "@babel/preset-env": "7.23.5",
     "@babel/preset-react": "7.23.3",
-    "@babel/runtime-corejs3": "7.23.2",
+    "@babel/runtime-corejs3": "7.23.5",
     "@storybook/react": "6.3.7",
     "@testing-library/jest-dom": "5.7.0",
     "@testing-library/react": "12.1.5",

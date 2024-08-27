@@ -39,7 +39,6 @@ const StyledButton = styled(Button)`
     {
         color: ${props => props.hover};
         background: ${props => props.bg};
-
         path {
             fill: ${props => props.hover};
         }
@@ -52,14 +51,23 @@ const StyledButton = styled(Button)`
     }
 `;
 
-const ThemeButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
+const ThemeButton = ThemeConsumer(({ theme = {}, active, icon, ...rest }) => {
     const helper = getNavigationTheme(theme);
     const bgColor = helper.getButtonColor();
-    const icon = helper.getTextColor();
+    const iconColor = helper.getTextColor();
     const hover = helper.getButtonHoverColor();
     const rounding = helper.getButtonRoundness();
     const opacity = helper.getButtonOpacity();
-    return <StyledButton bg={bgColor} iconcolor={icon} hover={hover} rounding={rounding} opacity={opacity} { ...rest }/>
+    return <StyledButton
+        bg={bgColor}
+        iconcolor={iconColor}
+        hover={hover}
+        rounding={rounding}
+        opacity={opacity}
+        $active={active}
+        icon={React.cloneElement(icon, { active })}
+        { ...rest }
+    />
 });
 
 export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, iconSize = '18px', children, position, ...rest }) => {
@@ -77,7 +85,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
                         icon={icon}
                         onClick={onClick}
                         size={size}
-                        $active={iconActive}
+                        active={iconActive ? 1 : 0}
                         $iconSize={iconSize}
                         disabled={disabled}
                         { ...rest }
@@ -90,7 +98,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
                     icon={icon}
                     onClick={onClick}
                     size={size}
-                    $active={iconActive}
+                    active={iconActive ? 1 : 0}
                     $iconSize={iconSize}
                     disabled={disabled}
                     { ...rest }

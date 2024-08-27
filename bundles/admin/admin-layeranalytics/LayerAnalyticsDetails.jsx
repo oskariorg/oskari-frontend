@@ -36,21 +36,21 @@ const generateLink = (item) => {
 export const LayerAnalyticsDetails = ({ layerData, isLoading, closeDetailsCallback, removeAnalyticsCallback }) => {
     const columnSettings = [
         {
-            title: <b><Message messageKey='flyout.successTitle' /></b>,
+            title: <b><Message messageKey='flyout.fields.success' /></b>,
             dataIndex: 'success',
             sortDirections: ['descend', 'ascend', 'descend'],
             sorter: (a, b) => a.success - b.success,
             showSorterTooltip: sorterTooltipOptions
         },
         {
-            title: <b><Message messageKey='flyout.failureTitle' /></b>,
+            title: <b><Message messageKey='flyout.fields.errors' /></b>,
             dataIndex: 'errors',
             sortDirections: ['descend', 'ascend', 'descend'],
             sorter: (a, b) => a.errors - b.errors,
             showSorterTooltip: sorterTooltipOptions
         },
         {
-            title: 'Aika',
+            title: <b><Message messageKey='flyout.fields.time' /></b>,
             dataIndex: 'time',
             defaultSortOrder: 'descend',
             sortDirections: ['descend', 'ascend', 'descend'],
@@ -94,10 +94,10 @@ export const LayerAnalyticsDetails = ({ layerData, isLoading, closeDetailsCallba
             </Button>
             <b>{ layerData.title }</b>
             { layerData.layerOrganization &&
-                <div><Message messageKey='flyout.layerDataProvider' />: { layerData.layerOrganization }</div>
+                <div><Message messageKey='flyout.fields.dataProducer' />: { layerData.layerOrganization }</div>
             }
-            <div><Message messageKey='flyout.successTitle' />: { layerData.success } ({ layerData.successPercentage }%)</div>
-            <div><Message messageKey='flyout.failureTitle' />: { layerData.errors }</div>
+            <div><Message messageKey='flyout.fields.success' />: { layerData.success } ({ layerData.successPercentage }%)</div>
+            <div><Message messageKey='flyout.fields.errors' />: { layerData.errors }</div>
             { layerData.details.length > 0 &&
                 <Table
                     columns={ columnSettings }

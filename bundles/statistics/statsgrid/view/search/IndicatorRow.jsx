@@ -20,18 +20,18 @@ const RemoveButton = styled(IconButton)`
     margin-right: 10px;
 `;
 
-export const IndicatorRow = ({ indicator, controller }) => {
+export const IndicatorRow = ({ indicator, removeIndicator, showMetadata }) => {
     return (
         <Row>
             <IndicatorName indicator={indicator} />
             <Actions>
                 <RemoveButton
                     type='delete'
-                    onClick={() => controller.removeIndicator(indicator)}
+                    onClick={() => removeIndicator(indicator)}
                 />
                 <IconButton
                     icon={<InfoCircleOutlined />}
-                    onClick={() => controller.openMetadataPopup(indicator)}
+                    onClick={() => showMetadata(indicator)}
                 />
             </Actions>
         </Row>

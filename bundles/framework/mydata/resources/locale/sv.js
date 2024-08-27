@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Mina uppgifter",
         "desc": "Mina uppgifter",
-        "notLoggedIn": "Mina uppgifter innehåller din användarprofil och alla dina sparade funktioner, kartvyer, inbäddade kartor, indikatorer, analys och dataset.",
+        "notLoggedIn": "Mina uppgifter innehåller din användarprofil och alla dina sparade funktioner, kartvyer, publicerade kartor, indikatorer, analys och dataset.",
         "notLoggedInText": "Logga in.",
         "register": "Registrera dig",
         "projectionError": {
@@ -39,7 +39,7 @@ Oskari.registerLocalization(
                     "label": {
                         "name": "Namnge kartvyn",
                         "description": "Beskriv kartvyn",
-                        "default": "Förvalt kartvyn"
+                        "default": "Förvald kartvy"
                     },
                     "defaultName": "Egna kartvyn {now, date} {now, time, short}",
                     "noName": "Skriv namnet på kartvyn",
@@ -59,7 +59,7 @@ Oskari.registerLocalization(
                     "save": "Spara",
                     "cancel": "Avbryt",
                     "toolbarsave": "Spara kartvyn",
-                    "saveCurrent": "Save current view"
+                    "saveCurrent": "Spara nuvarande kartvy"
                 },
                 "error": {
                     "title": "Fel!",
@@ -72,7 +72,7 @@ Oskari.registerLocalization(
                 }
             },
             "publishedmaps": {
-                "title": "Inbäddade kartor",
+                "title": "Publicerade kartor",
                 "show": "Visa på kartan",
                 "getHTML": "HTML-kod",
                 "edit": "Redigera",
@@ -102,9 +102,9 @@ Oskari.registerLocalization(
                     "save": "Spara",
                     "cancel": "Avbryt",
                     "error_noname": "Namnge kartan",
-                    "deletetitle": "Ta bort den inbäddade kartan",
-                    "deletemsg": "Vill du ta bort den inbäddade kartan \"{name}\"? Efter radering kartan kommer inte längre att visas på din webbplats.",
-                    "unpublishmsg": "Är du säker på att du vill avbryta kartpubliceringen \"{name}\"? Den inbäddade kartan syns därefter inte mera på din webbsida, men du kan återställa den senare.",
+                    "deletetitle": "Ta bort den publicerade kartan",
+                    "deletemsg": "Vill du ta bort den publicerade kartan \"{name}\"? Efter radering kartan kommer inte längre att visas på din webbplats.",
+                    "unpublishmsg": "Är du säker på att du vill avbryta kartpubliceringen \"{name}\"? Den publicerade kartan syns därefter inte mera på din webbsida, men du kan återställa den senare.",
                     "showErrorTitle": "Ofullständig kartvy",
                     "showConfirmMissing": "Kartvyn är ofullständig. Några av kartlagren är inte tillgängliga. Vill du fortfarande öppna den här kartvyn?",
                     "showConfirmNotLoaded": "Alla kartlager har ännu inte laddats ned. Försök på nytt senare."
@@ -126,11 +126,11 @@ Oskari.registerLocalization(
                 "error": {
                     "title": "Fel!",
                     "generic": "Systemfel inträffade. Försök på nytt senare.",
-                    "notsaved": "Den inbäddade kartan kunde inte sparas. Försök på nytt senare.",
-                    "notdeleted": "Den inbäddade kartan kunde inte tas bort. Försök på nytt senare.",
-                    "makePublic": "Den inbäddade kartan kunde inte publiceras. Försök på nytt senare.",
-                    "makePrivate": "Den inbäddade kartan kunde inte avpubliceras. Försök på nytt senare.",
-                    "loadfailed": "De inbäddade kartor kunde inte laddas ned. Försök på nytt senare."
+                    "notsaved": "Den publicerade kartan kunde inte sparas. Försök på nytt senare.",
+                    "notdeleted": "Den publicerade kartan kunde inte tas bort. Försök på nytt senare.",
+                    "makePublic": "Den publicerade kartan kunde inte publiceras. Försök på nytt senare.",
+                    "makePrivate": "Den publicerade kartan kunde inte avpubliceras. Försök på nytt senare.",
+                    "loadfailed": "De publicerade kartor kunde inte laddas ned. Försök på nytt senare."
                 }
             },
             "account": {
@@ -153,7 +153,7 @@ Oskari.registerLocalization(
         },
         "guidedTour": {
             "title": "Min data",
-            "message": "\"Min data\"-menyn innehåller alla dina sparade platser, kartvyer, inbäddade kartor, indikatorer, analys och dataset. Där kan du också kontrollera din kontoinformation. Mina data visas endast för inloggade användare.",
+            "message": "\"Min data\"-menyn innehåller alla dina sparade platser, kartvyer, publicerade kartor, indikatorer, analys och dataset. Där kan du också kontrollera din kontoinformation. Mina data visas endast för inloggade användare.",
             "openLink": "Visa Mina data",
             "closeLink": "Göm Mina data",
             "tileText": "Min data"

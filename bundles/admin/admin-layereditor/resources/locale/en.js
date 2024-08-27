@@ -10,7 +10,10 @@ Oskari.registerLocalization(
                 "typeDescription": "Select the type of the service for layer you are adding",
                 "serviceDescription": "Fill in the url and version for the service",
                 "layersDescription": "These are the layers that are available in the service. Please select one to add as a map layer",
-                "details": "Map layer details"
+                "details": "Map layer details",
+                "toggleFlatView": "List view",
+                "toggleTreeView": "Tree view"
+
             },
             "layertype": {
                 "wmslayer": "WMS",
@@ -61,6 +64,7 @@ Oskari.registerLocalization(
             "generalTabTitle": "General",
             "visualizationTabTitle": "Visualization",
             "additionalTabTitle": "Additional",
+            "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Permissions",
             "interfaceVersionDesc": "Select an appropriate version. Prioritize the newest version that is supported.",
             "attributions": "Attributions",
@@ -92,6 +96,15 @@ Oskari.registerLocalization(
                 "desc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
                 "service": "File identifier defined in the service",
                 "overridden": "Replaced file identifier"
+            },
+            "jsonTab": {
+                "info": "These tools enable advanced configuration, use with caution.",
+                "fields": {
+                    "attributes": "Attributes",
+                    "capabilities": "Capabilities parsed for layer",
+                    "options": "Options",
+                    "params": "Params"
+                }
             },
             "capabilities": {
                 "parsed": "Capabilities parsed for layer",
@@ -203,6 +216,18 @@ Oskari.registerLocalization(
                         "noStyles": "No saved styles",
                         "json": "Invalid JSON syntax in Style definitions.",
                         "optionalStyles": "Style doesn't have valid filter."
+                    }
+                },
+                "hover": {
+                    "title": "Feature highlighting and tooltip",
+                    "tooltip": "Tooltip rows shown for feature",
+                    "useStyle": "Use style definitions",
+                    "inherit": "Inherit style definitions",
+                    "effect": "Use effect",
+                    "fromProperty": "Use property as label",
+                    "labelTooltip": {
+                        "key": "Label is shown as it is",
+                        "keyProperty": "Label content is received from property"
                     }
                 }
             },

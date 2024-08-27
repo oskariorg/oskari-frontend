@@ -1,11 +1,12 @@
 import React from 'react';
-import { Checkbox, Select, Message, Spin, Button } from 'oskari-ui';
+import { Checkbox, Select, Message, Spin } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
-import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
+import { ButtonContainer, PrimaryButton, SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { LocaleProvider } from 'oskari-ui/util';
 import { IndicatorParams } from './IndicatorParams';
 import { IndicatorCollapse } from './IndicatorCollapse';
+import { getDatasources, getRegionsets } from '../../helper/ConfigHelper';
 
 const BUNDLE_KEY = 'StatsGrid';
 const Content = styled('div')`
@@ -29,25 +30,36 @@ const Row = styled('div')`
     width: 100%;
     align-items: end;
 `;
-const AddIndicatorBtn = styled(Button)`
-    max-width: 40%;
+const UserIndicatorButton = styled(IconButton)`
+    margin-left: 10px;
 `;
 const IndicatorField = styled('div')`
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-right: 10px;
 `;
+
+const UserIndicator = ({isSingle, onClick}) => {
+    const type = isSingle ? 'edit' : 'add';
+    const title = isSingle ? 'userIndicators.modify.edit' : 'userIndicators.buttonTitle';
+    return <UserIndicatorButton bordered type={type} title={<Message messageKey={title} />} onClick={onClick} />
+};
 
 // For preventing checkbox clickable area from stretching to 100% of content width
 const ClickableArea = ({ children }) => <div>{children}</div>;
 
 const SearchFlyout = ({ state, controller }) => {
+    const datasources = getDatasources();
+    const regionsets = getRegionsets();
+    if (!datasources.length || !regionsets.length) {
+        // Nothing to show -> show generic "data missing" message
+        return (<b><Message messageKey='errors.indicatorListError' /></b>);
+    }
+    const singleIndicatorSelected = state.selectedIndicators?.length === 1;
+    const multipleRegionsetsAvailable = regionsets.length > 1;
+    const multipleDatasourcesAvailable = datasources.length > 1;
     const Component = (
-        <Content>
-            {state.indicators?.length < 1 && (
-                <Message messageKey='statsgrid.noIndicators' />
-            )}
+        <React.Fragment>
             <Field>
                 <b><Message messageKey='panels.newSearch.seriesTitle' /></b>
                 <ClickableArea>
@@ -59,50 +71,45 @@ const SearchFlyout = ({ state, controller }) => {
                     </Checkbox>
                 </ClickableArea>
             </Field>
-            <Field>
-                <b><Message messageKey='panels.newSearch.regionsetTitle' /></b>
-                <StyledSelect
-                    mode='multiple'
-                    filterOption={false}
-                    options={state?.regionsetOptions?.map(rs => ({ value: rs.id, label: rs.name }))}
-                    placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
-                    value={state?.selectedRegionsets}
-                    onChange={(value) => controller.setSelectedRegionsets(value)}
-                />
-            </Field>
-            <Field>
-                <b><Message messageKey='panels.newSearch.datasourceTitle' /></b>
-                <StyledSelect
-                    options={state?.datasourceOptions?.map(ds => ({ value: ds.id, label: ds.name, disabled: state.disabledDatasources.includes(ds.id) }))}
-                    placeholder={<Message messageKey='panels.newSearch.selectDatasourcePlaceholder' />}
-                    value={state?.selectedDatasource}
-                    onChange={(value) => controller.setSelectedDatasource(value)}
-                />
-            </Field>
+            { multipleRegionsetsAvailable &&
+                <Field>
+                    <b><Message messageKey='panels.newSearch.regionsetTitle' /></b>
+                    <StyledSelect
+                        mode='multiple'
+                        optionFilterProp='label'
+                        options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
+                        placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
+                        value={state?.regionsetFilter}
+                        onChange={(value) => controller.setRegionsetFilter(value)}
+                    />
+                </Field>
+            }
+            { multipleDatasourcesAvailable &&
+                <Field>
+                    <b><Message messageKey='panels.newSearch.datasourceTitle' /></b>
+                    <StyledSelect
+                        options={datasources.map(ds => ({ value: ds.id, label: ds.name, disabled: state.disabledDatasources.includes(ds.id) }))}
+                        placeholder={<Message messageKey='panels.newSearch.selectDatasourcePlaceholder' />}
+                        value={state?.selectedDatasource}
+                        onChange={(value) => controller.setSelectedDatasource(value)}
+                    />
+                </Field>
+            }
             <Field>
                 <Row>
                     <IndicatorField>
                         <b><Message messageKey='panels.newSearch.indicatorTitle' /></b>
                         <StyledSelect
                             mode='multiple'
-                            options={state?.indicatorOptions?.map(i => ({ value: i.id, label: i.title, disabled: state.disabledIndicators.includes(i.id) }))}
+                            optionFilterProp='label'
+                            options={state?.indicatorOptions?.map(i => ({ value: i.id, label: i.title, disabled: !!i.disabled }))}
                             placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
                             disabled={!state?.indicatorOptions || state?.indicatorOptions?.length < 1}
                             value={state?.selectedIndicators}
                             onChange={(value) => controller.setSelectedIndicators(value)}
                         />
                     </IndicatorField>
-                    {state.isUserDatasource && (
-                        <AddIndicatorBtn
-                            onClick={() => controller.showIndicatorForm()}
-                        >
-                            {state.selectedIndicators?.length === 1 ? (
-                                <Message messageKey='userIndicators.modify.edit' />
-                            ) : (
-                                <Message messageKey='userIndicators.buttonTitle' />
-                            )}
-                        </AddIndicatorBtn>
-                    )}
+                    {state.isUserDatasource && <UserIndicator onClick={controller.showIndicatorForm} isSingle={singleIndicatorSelected} /> }
                 </Row>
             </Field>
             {state.selectedIndicators && state.selectedIndicators.length > 0 && (
@@ -118,7 +125,10 @@ const SearchFlyout = ({ state, controller }) => {
             )}
             {state.indicatorParams && (
                 <IndicatorParams
-                    state={state}
+                    allRegionsets={regionsets}
+                    params={state.indicatorParams}
+                    regionsetFilter={state.regionsetFilter}
+                    searchTimeseries={state.searchTimeseries}
                     controller={controller}
                 />
             )}
@@ -133,8 +143,7 @@ const SearchFlyout = ({ state, controller }) => {
                     onClick={() => controller.search()}
                 />
             </ButtonContainer>
-            <IndicatorCollapse state={state} controller={controller} />
-        </Content>
+        </React.Fragment>
     );
 
     if (state.loading) {
@@ -143,24 +152,37 @@ const SearchFlyout = ({ state, controller }) => {
     return Component;
 };
 
-export const showSearchFlyout = (state, controller, onClose) => {
-
+export const showSearchFlyout = (state, indicators = [], searchController, stateController, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.search' />;
     const controls = showFlyout(
         title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <SearchFlyout state={state} controller={controller} />
+            <Content>
+                {!indicators.length && (<Message messageKey='statsgrid.noIndicators' />)}
+                <SearchFlyout state={state} controller={searchController} />
+                <IndicatorCollapse indicators={indicators}
+                    removeIndicator={stateController.removeIndicator}
+                    removeAll={stateController.resetState}
+                    showMetadata={searchController.openMetadataPopup}/>
+            </Content>
         </LocaleProvider>,
         onClose
     );
 
     return {
         ...controls,
-        update: (state) => controls.update(
+        update: (state, indicators = []) => controls.update(
             title,
             <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                <SearchFlyout state={state} controller={controller} />
+                <Content>
+                    {!indicators.length && (<Message messageKey='statsgrid.noIndicators' />)}
+                    <SearchFlyout state={state} controller={searchController} />
+                    <IndicatorCollapse indicators={indicators}
+                        removeIndicator={stateController.removeIndicator}
+                        removeAll={stateController.resetState}
+                        showMetadata={searchController.openMetadataPopup}/>
+                </Content>
             </LocaleProvider>
         )
-    }
-}
+    };
+};

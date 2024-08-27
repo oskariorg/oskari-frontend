@@ -1,11 +1,22 @@
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
-import { Button } from 'oskari-ui';
+import { Button, Select, Option } from 'oskari-ui';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Col, ColFixed, Row } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
+import { ThemeConsumer } from 'oskari-ui/util';
+import { getNavigationTheme } from 'oskari-ui/theme/ThemeHelper';
 
-export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobile }) => {
+const ForwardIcon = () => {
+    return <StepForwardOutlined style={{ fontSize: '125%' }}/>;
+};
+
+const BackwardIcon = () => {
+    return <StepBackwardOutlined style={{ fontSize: '125%' }}/>;
+};
+
+export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, dataYears, isMobile, theme }) => {
+    const currentYearIntValue = parseInt(value);
     // when current value is after last data layer
     let prevDataYear = dataYears[dataYears.length - 1] || null;
     let nextDataYear = null;
@@ -23,16 +34,64 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
             break;
         }
     }
-    return (
-        <Row>
-            <Col>
+
+    const navigationTheme = getNavigationTheme(theme);
+    const textColor = navigationTheme.getTextColor();
+    const hoverColor = navigationTheme.getButtonHoverColor();
+    const backgroundColor = navigationTheme.getNavigationBackgroundColor();
+    if (isMobile) {
+        const currentYearDisabled = !dataYears?.includes(currentYearIntValue);
+        // need to clone this, otherwise the "current year" will remain even if we switch to a valid year without panning the map
+        const newDataYears = [].concat(dataYears);
+        if (currentYearDisabled) {
+            newDataYears.push(currentYearIntValue);
+        }
+
+        const options = newDataYears
+            .sort()
+            .map((item) => {
+                return item === currentYearIntValue && currentYearDisabled
+                    ? <Option key={item} disabled>{item}</Option>
+                    : <Option key={item}>{item}</Option>;
+            });
+
+        return <Row>
+            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
                 <Button
                     type="primary"
                     shape="circle"
                     disabled={prevDataYear === null}
                     onClick={() => onChange(prevDataYear)}
                 >
-                    <StepBackwardOutlined />
+                    <BackwardIcon />
+                </Button>
+            </Col>
+            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
+                <Select value={currentYearIntValue} onChange={(value) => onChange(parseInt(value))}>{options}</Select>
+            </Col>
+            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
+                <Button
+                    type="primary"
+                    shape="circle"
+                    disabled={nextDataYear === null}
+                    onClick={() => onChange(nextDataYear)}
+                >
+                    <ForwardIcon/>
+                </Button>
+            </Col>
+        </Row>;
+    }
+
+    return (
+        <Row>
+            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
+                <Button
+                    type="primary"
+                    shape="circle"
+                    disabled={prevDataYear === null}
+                    onClick={() => onChange(prevDataYear)}
+                >
+                    <BackwardIcon />
                 </Button>
             </Col>
             <ColFixed>
@@ -43,23 +102,23 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
                     start={start}
                     end={end}
                     dataYears={dataYears}
-                    value={value}
+                    value={currentYearIntValue}
                     onChange={(val) => onChange(val)}
                 />
             </ColFixed>
-            <Col>
+            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
                 <Button
                     type="primary"
                     shape="circle"
                     disabled={nextDataYear === null}
                     onClick={() => onChange(nextDataYear)}
                 >
-                    <StepForwardOutlined />
+                    <ForwardIcon/>
                 </Button>
             </Col>
         </Row>
     );
-};
+});
 
 TimeSeriesYear.propTypes = {
     onChange: PropTypes.func.isRequired,

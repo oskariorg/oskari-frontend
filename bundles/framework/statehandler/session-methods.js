@@ -14,7 +14,7 @@ Oskari.clazz.category(
 
             sandbox.setSessionExpiring((minutes - 1), function () {
                 const popupController = showSessionExpiringPopup(minutes, () => {
-                    document.querySelector("form[action='/logout']").submit();
+                    document.querySelector("form[action='/logout']")?.submit();
                     popupController.close();
                 }, () => {
                     // continue session

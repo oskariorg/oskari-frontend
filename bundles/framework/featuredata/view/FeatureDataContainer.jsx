@@ -8,6 +8,7 @@ import { ShowSelectedItemsFirst } from './ShowSelectedItemsFirst';
 import { TabTitle } from './TabStatusIndicator';
 import { FilterVisibleColumns } from './FilterVisibleColumns';
 import { ExportButton } from './ExportData';
+import { CompressedView } from './CompressedView';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
 export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
@@ -35,6 +36,35 @@ const StyledTable = styled(Table)`
         display: none;
     }
 
+    td.table-cell-compressed-view {
+        white-space: nowrap;
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 3em;
+        max-width: 8em;
+    }
+
+    th.table-cell-compressed-view {
+        white-space: nowrap;
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 3em;
+        max-width: 8em;
+
+        span.ant-table-column-title {
+            max-width: 75%;
+            white-space: nowrap;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        span.ant-table-column-sorter {
+            max-width: 25%;
+        }
+    }
+
     overflow-y: auto;
     flex: 1 1 auto;
 `;
@@ -49,13 +79,21 @@ const FeatureDataTable = styled('div')`
 const SelectionRow = styled('div')`
     display: flex;
     flex-direction: row;
+    margin: auto 0;
     padding-bottom: 1em;
 `;
-const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, showExportButton, controller) => {
+
+const SelectionRowGroup = styled('div')`
+    display: flex;
+    flex-direction: row;
+    margin: auto 0;
+`;
+
+const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, controller) => {
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
     };
-    const columnSettings = createColumnSettings(selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings);
+    const columnSettings = createColumnSettings(selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings);
     const dataSource = createDatasourceFromFeatures(features);
     const featureTable = <FeatureDataTable>
         <SelectionsContainer>
@@ -66,19 +104,25 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
                 </SelectionRow>
                 <SelectionRow>
                     <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+                    <CompressedView showCompressed={showCompressed} toggleShowCompressed={controller.toggleShowCompressed}/>
                 </SelectionRow>
             </>}
 
-            { !showExportButton &&
+            { !showExportButton && <>
                 <SelectionRow>
-                    <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+                    <SelectionRowGroup>
+                        <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+                        <CompressedView showCompressed={showCompressed} toggleShowCompressed={controller.toggleShowCompressed}/>
+                    </SelectionRowGroup>
                     <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
                 </SelectionRow>
-            }
+                <SelectionRow>
+                </SelectionRow>
+            </>}
         </SelectionsContainer>
         <StyledTable
             columns={ columnSettings }
-            size={ 'large '}
+            size={ 'small'}
             dataSource={ dataSource }
             pagination={{ defaultPageSize: DEFAULT_PAGE_SIZE, hideOnSinglePage: true, simple: true }}
             onChange={(pagination, filters, sorter, extra) => {
@@ -97,13 +141,14 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     return featureTable;
 };
 
-const createColumnSettings = (selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings) => {
+const createColumnSettings = (selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings) => {
     const { allColumns, visibleColumns, activeLayerPropertyLabels } = visibleColumnsSettings;
     return allColumns
         .filter(key => visibleColumns.includes(key))
         .map(key => {
             return {
                 align: 'left',
+                className: showCompressed ? 'table-cell-compressed-view' : '',
                 title: activeLayerPropertyLabels && activeLayerPropertyLabels[key] ? activeLayerPropertyLabels[key] : key,
                 key,
                 dataIndex: key,
@@ -136,7 +181,7 @@ const createDatasourceFromFeatures = (features) => {
     });
 };
 
-const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, visibleColumnsSettings, controller) => {
+const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, loadingStatus, visibleColumnsSettings, controller) => {
     const tabs = layers?.map(layer => {
         const status = loadingStatus[layer.getId()];
         const showExportButton = layer.hasPermission('download');
@@ -148,7 +193,7 @@ const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSele
                 openSelectByPropertiesPopup={controller.openSelectByPropertiesPopup}
             />,
             children: layer.getId() === layerId
-                ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, showExportButton, controller)
+                ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, controller)
                 : null
         };
     }) || [];
@@ -164,8 +209,26 @@ const ContainerDiv = styled('div')`
     }
 `;
 export const FeatureDataContainer = ({ state, controller }) => {
-    const { layers, activeLayerId, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, loadingStatus, visibleColumnsSettings, sorting } = state;
-    const tabs = createLayerTabs(activeLayerId, layers, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, visibleColumnsSettings, controller);
+    const { layers,
+        activeLayerId,
+        activeLayerFeatures,
+        selectedFeatureIds,
+        showSelectedFirst,
+        showCompressed,
+        loadingStatus,
+        visibleColumnsSettings,
+        sorting } = state;
+    const tabs = createLayerTabs(
+        activeLayerId,
+        layers,
+        activeLayerFeatures,
+        selectedFeatureIds,
+        showSelectedFirst,
+        showCompressed,
+        sorting,
+        loadingStatus,
+        visibleColumnsSettings,
+        controller);
     return (
         <ContainerDiv isMobile={Oskari.util.isMobile()}>
             <Tabs

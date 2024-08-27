@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
 import styled from 'styled-components';
+import { UnorderedListOutlined, TableOutlined, BarChartOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 const Container = styled('div')`
     display: flex;
@@ -9,19 +10,26 @@ const Container = styled('div')`
     align-items: center;
 `;
 
-export const ThematicControls = ({ tools }) => {
+const ICONS = {
+    series: <ClockCircleOutlined />,
+    grid: <TableOutlined />,
+    classification: <UnorderedListOutlined />,
+    diagram: <BarChartOutlined />
+};
+
+export const ThematicControls = ({ mapButtons, active, toggle }) => {
     return (
         <Container>
-            {tools.map((tool, index) => (
-                <div key={index}>
+            {mapButtons.map(id => (
+                <div key={id}>
                     <MapModuleButton
-                        onClick={() => tool.clickHandler()}
-                        icon={tool.icon}
-                        className={`t_${tool.name}`}
-                        iconActive={tool.active}
+                        onClick={() => toggle(id)}
+                        icon={ICONS[id]}
+                        className={`t_${id}`}
+                        iconActive={active.includes(id)}
                     />
                 </div>
             ))}
         </Container>
-    )
-}
+    );
+};

@@ -5,11 +5,11 @@ import { LegendImage } from './LegendImage';
 import { MetadataIcon } from 'oskari-ui/components/icons';
 
 export const MapLegendList = ({ legendList }) => {
-    const composeHeader = (title, uuid) => {
+    const composeHeader = (title, uuid, layerId) => {
         return (
             <Fragment>
                 { title }
-                <MetadataIcon metadataId={uuid} style={{ margin: '0 0 0 10px' }} />
+                <MetadataIcon metadataId={uuid} layerId={layerId} style={{ margin: '0 0 0 10px' }} />
             </Fragment>
         );
     };
@@ -18,7 +18,7 @@ export const MapLegendList = ({ legendList }) => {
         <Collapse>
             { legendList.length > 0 && legendList.map((item) => {
                 return (
-                    <CollapsePanel key={ item.title } header={ composeHeader(item.title, item.uuid) }>
+                    <CollapsePanel key={ item.title } header={ composeHeader(item.title, item.uuid, item.layerId) }>
                         <LegendImage url={ item.legendImageURL } />
                     </CollapsePanel>
                 );

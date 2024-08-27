@@ -38,6 +38,9 @@ Oskari.registerLocalization(
                     "close": "Закрыть"
                 }
             },
+            "BackgroundLayerSelectionPlugin": {
+                "emptyOption": "Нет выбора"
+            },
             "LayerSelectionPlugin": {
                 "title": "Слои карты",
                 "chooseDefaultBaseLayer": "Выбрать картографическую основу",

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Dropdown, Tooltip } from 'oskari-ui';
+import { Dropdown, Tooltip, Message } from 'oskari-ui';
 import { LayersIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { MapModuleTextButton } from '../../MapModuleTextButton';
+import { MapModuleTextButton, BUTTON_WIDTH } from '../../MapModuleTextButton';
 import PropTypes from 'prop-types';
 
-const BUTTON_WIDTH = 150;
+const BUNDLE_KEY = 'MapModule';
+
 const ButtonsContainer = styled('div')`
     display: flex;
     flex-direction: row;
@@ -17,30 +18,24 @@ const BackgroundLayerSelectionButtonText = styled('div')`
     white-space: nowrap;
     text-overflow: ellipsis;
 `;
-const getDropDownItems = (layers = []) => {
-    return layers.map(layer => ({
-        title: layer.title,
-        action: () => layer.onClick(layer.id)
-    }));
-};
-
 const isWiderThanMap = (mapWidth, numberOfLayers) => {
     return (numberOfLayers * BUTTON_WIDTH) >= mapWidth;
 };
 
-export const BackgroundLayerSelection = ({ isMobile = false, layers, current, mapWidth, ...rest }) => {
-    if (isMobile || (mapWidth && isWiderThanMap(mapWidth, layers.length))) {
+export const BackgroundLayerSelection = ({ isMobile = false, baseLayers, selectedId, mapWidth, ...rest }) => {
+    if (isMobile || (mapWidth && isWiderThanMap(mapWidth, baseLayers.length))) {
+        const title = baseLayers.find(({ id }) => id === selectedId)?.title || <Message bundleKey={BUNDLE_KEY} messageKey='plugin.BackgroundLayerSelectionPlugin.emptyOption' />;
         return (
             <ButtonsContainer className='layerSelection'>
-                <Dropdown items={getDropDownItems(layers)}>
+                <Dropdown items={baseLayers}>
                     <MapModuleTextButton
                         visible={true}
                         icon={<LayersIcon />}
                         $isDropdown={true}
-                        data-layerid={current?.getId()}
+                        data-layerid={selectedId}
                         {...rest}
                     >
-                        <BackgroundLayerSelectionButtonText>{current?.getName()}</BackgroundLayerSelectionButtonText>
+                        <BackgroundLayerSelectionButtonText>{title}</BackgroundLayerSelectionButtonText>
                     </MapModuleTextButton>
                 </Dropdown>
             </ButtonsContainer>
@@ -48,20 +43,20 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
     }
     return (
         <ButtonsContainer className='layerSelection'>
-            {layers.map(layer => (
-                <Tooltip key={layer.id} title={layer.title}>
+            {baseLayers.map(({ id, title, action }) => (
+                <Tooltip key={id} title={title}>
                     <MapModuleTextButton
                         visible={true}
-                        onClick={() => layer.onClick(layer.id)}
+                        onClick={action}
                         icon={null}
-                        active={Number.parseInt(layer.id, 10) === current?.getId()}
+                        active={selectedId === id}
                         loading={false}
                         $isDropdown={false}
                         $minWidth={BUTTON_WIDTH}
-                        data-layerid={layer.id}
+                        data-layerid={id}
                         {...rest}
                     >
-                        <BackgroundLayerSelectionButtonText>{layer.title}</BackgroundLayerSelectionButtonText>
+                        <BackgroundLayerSelectionButtonText>{title}</BackgroundLayerSelectionButtonText>
                     </MapModuleTextButton>
                 </Tooltip>
             ))}
@@ -71,7 +66,7 @@ export const BackgroundLayerSelection = ({ isMobile = false, layers, current, ma
 
 BackgroundLayerSelection.propTypes = {
     isMobile: PropTypes.bool,
-    layers: PropTypes.array,
-    current: PropTypes.object,
+    baseLayers: PropTypes.array,
+    selectedId: PropTypes.string,
     mapWidth: PropTypes.number
 };

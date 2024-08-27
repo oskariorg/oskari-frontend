@@ -34,6 +34,12 @@ Oskari.registerLocalization({
             "service-OGC:WFS": "WFS service",
             "dataset": "Dataset",
             "series": "Dataset series",
+            "service": "Service",
+            "discovery": "Discovery",
+            "download": "Download",
+            "other": "Other",
+            "transformation": "Transformation",
+            "view": "View",
             "resourceTypes": {
                 "service-discovery": "Discovery service",
                 "service-download": "Download service",

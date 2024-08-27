@@ -1,5 +1,6 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool', function () {
 }, {
+    id: 'AbstractStatsPluginTool',
     getStatsgridConf: function (initialData) {
         const conf = initialData?.configuration?.statsgrid?.conf || {};
         // Setup the plugin location whenever any of the stats tools parse initial config.
@@ -12,7 +13,16 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
     getStatsgridBundle: function () {
         return Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
     },
-
+    getComponent: function () {
+        return {};
+    },
+    getToolInfo: function () {
+        return {
+            id: 'Oskari.statistics.statsgrid.Plugin.' + this.id,
+            title: Oskari.getMsg('Publisher2', `BasicView.data.${this.title}`),
+            hasNoPlugin: true
+        };
+    },
     /**
     * @method @private _isStatsActive
     * @return true when stats layer is on the map, false if removed

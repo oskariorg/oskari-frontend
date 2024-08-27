@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Tooltip, Message, Select, Option } from 'oskari-ui';
+import { Tooltip, Message, Select } from 'oskari-ui';
 import { EditOutlined } from '@ant-design/icons';
 
 const Component = styled.div`
@@ -30,17 +30,19 @@ const editStyle = {
 };
 
 export const Header = ({ selected, indicators, isEdit, toggleEdit, onChange }) => {
-    const { title = '' } = indicators.find(indicator => indicator.hash === selected) || {};
     const renderSelect = indicators.length > 1;
-
     return (
         <Component className='classification-header'>
-            {!renderSelect && <Single>{title}</Single>}
+            {!renderSelect && <Single>{selected.labels.full}</Single>}
             {renderSelect && (
-                // TODO: Use IndicatorName component here once data comes from same place as diagram/table etc.
-                <Select value={selected} onChange={onChange}>
-                    {indicators.map(opt => <Option key={opt.hash} value={opt.hash}>{opt.title}</Option>)}
-                </Select>
+                <Select
+                    value={selected.hash}
+                    onChange={onChange}
+                    options={indicators.map(opt => ({
+                        value: opt.hash,
+                        label: opt.labels.full
+                    }))}
+                />
             )}
             <Tooltip placement='topRight' title={<Message messageKey={`classify.edit.${isEdit ? 'close' : 'open'}`}/>}>
                 <div style={isEdit ? editStyle : {}}>
@@ -52,7 +54,7 @@ export const Header = ({ selected, indicators, isEdit, toggleEdit, onChange }) =
 };
 
 Header.propTypes = {
-    selected: PropTypes.string.isRequired,
+    selected: PropTypes.object.isRequired,
     indicators: PropTypes.array.isRequired,
     isEdit: PropTypes.bool.isRequired,
     toggleEdit: PropTypes.func.isRequired,

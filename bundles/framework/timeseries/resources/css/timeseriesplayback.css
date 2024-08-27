@@ -1,14 +1,4 @@
 /* override these to theme component */
-.timeseriescontrolplugin {
-  background-color: rgba(255, 255, 255, 1);
-}
-
-.timeseries-handle {
-  width: 15px;
-  height: 100px;
-  cursor: grab;
-}
-
 .timeline-svg g.full-axis .tick line {
   visibility: hidden;
 }
@@ -16,39 +6,10 @@
   stroke-width: 3px;
   stroke: #E4E6E7;
 }
-.timeline-svg g.full-axis-controls circle {
-  stroke: #E4E6E7;
-  stroke-width: 2px;
-  fill: #5C6160;
-}
-.timeline-svg g.full-axis-controls line {
-  stroke: #FAD500;
-  stroke-width: 3px;
-}
-.timeline-svg g.drag-handle circle{
-  fill: #FAD500;
-  stroke: #4E4E4E;
-  stroke-width: 2px;
-}
-.timeline-svg g.subset-axis line, g.subset-axis path {
-  stroke: #333;
-}
-.timeline-svg g.subset-axis text, g.full-axis text {
-  fill: #333;
-  stroke: none;
-}
 .timeline-svg g.tick text.bold {
   font-weight: 600;
 }
-.timeseries-menus label.oskari-select {
-  color: #333;
-}
 /* end theming */
-
-.timeseriescontrolplugin {
-  white-space: nowrap;
-  z-index: 15002!important;
-}
 
 .timeseries-aux{
   display: inline-block;

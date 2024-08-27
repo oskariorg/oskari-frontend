@@ -8,6 +8,10 @@ const Label = styled.label`
     & button {
         margin-right: 10px;
     }
+
+    .ant-switch-small {
+        margin: auto 10px auto 0;
+    }
 `;
 
 export const Switch = ({ label, ...props }) => {

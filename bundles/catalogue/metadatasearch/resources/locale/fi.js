@@ -34,6 +34,12 @@ Oskari.registerLocalization({
             "service-OGC:WFS": "WFS-palvelu",
             "dataset": "Aineisto",
             "series": "Aineistosarja",
+            "service": "Palvelu",
+            "discovery": "Haku",
+            "download": "Lataus",
+            "other": "Muu",
+            "transformation": "Muunnos",
+            "view": "Katselu",
             "resourceTypes": {
                 "service-discovery": "Hakupalvelu",
                 "service-download": "Latauspalvelu",

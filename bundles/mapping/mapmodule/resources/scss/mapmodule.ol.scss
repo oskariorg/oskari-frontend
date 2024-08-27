@@ -103,6 +103,7 @@ div.olMap {
     left: 0;
     display: flex;
     flex-wrap: wrap;
+    pointer-events: none;
 }
 
 div.mapplugins {

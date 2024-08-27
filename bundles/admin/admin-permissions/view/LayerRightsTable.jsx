@@ -41,16 +41,26 @@ const getPermissionNames = (nameToLabel) => {
     return [...names, ...additionalNames];
 };
 
+const VIEW_LAYER = 'VIEW_LAYER';
+const VIEW_PUBLISHED = 'VIEW_PUBLISHED';
+const PUBLISH = 'PUBLISH';
+const DOWNLOAD = 'DOWNLOAD';
+
+const DEFAULT_PERMISSIONS = [VIEW_LAYER, VIEW_PUBLISHED, PUBLISH, DOWNLOAD];
+const isDefaultPermissionType = (permissionName) => {
+    return DEFAULT_PERMISSIONS.includes(permissionName);
+};
+
 const getPermissionTableHeader = (permissionType, permissionName) => {
     const translation = <Message messageKey={`rights.${permissionType}`} defaultMsg={permissionName} bundleKey='admin-permissions' />;
     switch (permissionType) {
-        case 'VIEW_LAYER':
+        case VIEW_LAYER:
             return <Tooltip title={translation}><StyledIcon><UnorderedListOutlined /></StyledIcon></Tooltip>
-        case 'VIEW_PUBLISHED':
+        case VIEW_PUBLISHED:
             return <Tooltip title={translation}><StyledIcon><EyeOutlined /></StyledIcon></Tooltip>
-        case 'PUBLISH':
+        case PUBLISH:
             return <Tooltip title={translation}><StyledIcon><ImportOutlined /></StyledIcon></Tooltip>
-        case 'DOWNLOAD':
+        case DOWNLOAD:
             return <Tooltip title={translation}><StyledIcon><ExportOutlined /></StyledIcon></Tooltip>
         default:
             // permissions might have server side localization as "name" that defaults to id if not given
@@ -78,6 +88,9 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             });
         return checked;
     };
+
+    const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+
     const columnSettings = [];
     const permissionNames = getPermissionNames(state.permissions?.names);
     if (permissionNames.length) {
@@ -87,6 +100,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             dataIndex: 'name',
             sorter: getSorterFor('name'),
             render: (title, item) => {
+                const layer = mapLayerService.findMapLayer(item.id);
                 let layerType = item.layerType;
                 if (layerType !== 'analysislayer' && layerType !== 'userlayer' && layerType?.includes('layer')) {
                     // Change 'wmslayer' to 'wms' etc. for translations & icons
@@ -97,6 +111,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
                         {layerType && (
                             <StyledLayerIcon
                                 type={layerType}
+                                hasTimeseries={layer?.hasTimeseries()}
                             />
                         )}
                         {title}
@@ -105,13 +120,15 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             }
         });
         permissionNames.forEach((permissionType, index) => {
+            const permissionName = state.permissions.names[permissionType];
             columnSettings.push({
                 align: 'left',
+                width: isDefaultPermissionType(permissionName) ? '5em' : '10em',
                 title: () => {
                     const allCurrentLayersHavePermission = allChecked(permissionType);
                     return (
                         <HeaderCell>
-                            {getPermissionTableHeader(permissionType, state.permissions.names[permissionType])}
+                            {getPermissionTableHeader(permissionType, permissionName)}
                             <CheckAllCheckbox
                                 checked={allCurrentLayersHavePermission}
                                 onChange={() => controller.setCheckAllForPermission(permissionType, !allCurrentLayersHavePermission)}

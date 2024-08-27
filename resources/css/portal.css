@@ -105,14 +105,7 @@ a:focus {
   color: #ff9100;
 }
 
-/* Selection colours */
-::selection {
-  background: #ffd400;
-}
-
-::-moz-selection {
-  background: #ffd400;
-}
+/* Selection colours (main ones in src\react\theme\globalStyles.js) */
 
 img::selection {
   background: transparent;
@@ -504,6 +497,7 @@ select:not([class*="ant-"]) {
 
 .ant-tooltip {
   z-index: 999999 !important;
+  max-width: 400px !important;
 }
 /*
 So confirm doesn't open behind flyouts (in admin for example)
