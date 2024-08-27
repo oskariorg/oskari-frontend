@@ -1,34 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, TextAreaInput, Collapse, CollapsePanel, Link } from 'oskari-ui';
+import { Message, Link } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Numeric } from '../Numeric';
-import { StyledFormField, SpacedLabel } from '../styled';
+import { SpacedLabel } from '../styled';
 import styled from 'styled-components';
 
 const StyledNumeric = styled(Numeric)`
     min-width: 120px;
 `;
-
-const parsedTextArea = {
-    minRows: 4,
-    maxRows: 12
-};
-const ParsedCapabilities = ({ capabilities = {} }) => {
-    const prettier = JSON.stringify(capabilities, null, 4);
-    return (
-        <StyledFormField>
-            <Collapse>
-                <CollapsePanel header={<Message messageKey='capabilities.parsed'/>}>
-                    <TextAreaInput value={prettier} autoSize={parsedTextArea} />
-                </CollapsePanel>
-            </Collapse>
-        </StyledFormField>
-    );
-};
-ParsedCapabilities.propTypes = {
-    capabilities: PropTypes.object.isRequired
-};
 
 const Info = ({ cron }) => (
     <Fragment>
@@ -58,7 +38,6 @@ export const Capabilities = ({ layer, metadata, controller }) => {
                     </Fragment>
                 }
             </StyledNumeric>
-            <ParsedCapabilities capabilities = {layer.capabilities} />
         </Fragment>
     );
 };
