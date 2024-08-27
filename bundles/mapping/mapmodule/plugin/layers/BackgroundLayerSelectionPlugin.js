@@ -30,7 +30,11 @@ Oskari.clazz.define(
     }, {
         /** @static @property __name module name */
         __name: 'BackgroundLayerSelectionPlugin',
-
+        _initImpl: function () {
+            if (!this._getBaseLayerIds().length) {
+                Oskari.log(this.getName()).error('No baseLayers defined in configuration');
+            }
+        },
         /**
          * @method _createEventHandlers
          * Create eventhandlers.
