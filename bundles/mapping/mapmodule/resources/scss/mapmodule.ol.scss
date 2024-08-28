@@ -206,7 +206,7 @@ div.mapplugins {
 
                 .mapplugin {
                     display: inline-block;
-                    margin: 0 $pluginMargin / 2;
+                    margin: 0 calc($pluginMargin / 2);
 
                     &.search {
                         text-align: center;
