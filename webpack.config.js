@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const OskariConfig = require('./webpack/config.js');
 const parseParams = require('./webpack/parseParams.js');
-const { lstatSync, readdirSync } = require('fs');
+const { lstatSync, readdirSync, existsSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
 const { DefinePlugin } = require('webpack');
 const CopywebpackPlugin = require('copy-webpack-plugin');
@@ -91,6 +91,11 @@ module.exports = (env, argv) => {
     } else {
         config.devServer = {
             port: proxyPort,
+            client: {
+                logging: 'info',
+                overlay: false,
+                progress: true
+            },
             proxy: [{
                 context: ['**', `!/Oskari/dist/${version}/**`, '!/Oskari/bundles/bundle.js'],
                 target: 'http://localhost:8080',
