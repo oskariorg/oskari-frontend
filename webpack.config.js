@@ -32,15 +32,17 @@ module.exports = (env, argv) => {
     }));
 
     // Copy Cesium Assets, Widgets, and Workers to a static directory
-    cesiumSourceOptions.forEach(possibleSrcPath => {
-        plugins.push(new CopywebpackPlugin([
-            { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/Workers'), to: cesiumTarget + '/Workers' },
-            { from: path.join(__dirname, possibleSrcPath, 'Assets'), to: cesiumTarget + '/Assets' },
-            { from: path.join(__dirname, possibleSrcPath, 'Widgets'), to: cesiumTarget + '/Widgets' },
-            // copy Cesium's minified third-party scripts
-            { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty' }
-        ]));
-    });
+    cesiumSourceOptions
+        .filter(possiblePath => existsSync(path.join(__dirname, possiblePath)))
+        .forEach(possibleSrcPath => {
+            plugins.push(new CopywebpackPlugin([
+                { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/Workers'), to: cesiumTarget + '/Workers' },
+                { from: path.join(__dirname, possibleSrcPath, 'Assets'), to: cesiumTarget + '/Assets' },
+                { from: path.join(__dirname, possibleSrcPath, 'Widgets'), to: cesiumTarget + '/Widgets' },
+                // copy Cesium's minified third-party scripts
+                { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty' }
+            ]));
+        });
 
     // Define relative base path in Cesium for loading assets
     plugins.push(new DefinePlugin({
