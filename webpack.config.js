@@ -15,7 +15,6 @@ const isDirectory = source => lstatSync(source).isDirectory();
 const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
 
 // The path to the CesiumJS source code (normal and dev mode)
-// newer cesium: const cesiumSourceOptions = ['../@cesium/engine/Build', 'node_modules/@cesium/engine/Build'];
 const cesiumSourceOptions = ['../@cesium/engine/Build', 'node_modules/@cesium/engine/Build'];
 const cesiumTarget = 'cesium';
 
