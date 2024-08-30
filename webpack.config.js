@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const OskariConfig = require('./webpack/config.js');
 const parseParams = require('./webpack/parseParams.js');
-const { lstatSync, readdirSync } = require('fs');
+const { lstatSync, readdirSync, existsSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
 const { DefinePlugin } = require('webpack');
 const CopywebpackPlugin = require('copy-webpack-plugin');
@@ -32,15 +32,17 @@ module.exports = (env, argv) => {
     }));
 
     // Copy Cesium Assets, Widgets, and Workers to a static directory
-    cesiumSourceOptions.forEach(possibleSrcPath => {
-        plugins.push(new CopywebpackPlugin([
-            { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/Workers'), to: cesiumTarget + '/Workers' },
-            { from: path.join(__dirname, possibleSrcPath, 'Assets'), to: cesiumTarget + '/Assets' },
-            { from: path.join(__dirname, possibleSrcPath, 'Widgets'), to: cesiumTarget + '/Widgets' },
-            // copy Cesium's minified third-party scripts
-            { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty' }
-        ]));
-    });
+    cesiumSourceOptions
+        .filter(possiblePath => existsSync(path.join(__dirname, possiblePath)))
+        .forEach(possibleSrcPath => {
+            plugins.push(new CopywebpackPlugin([
+                { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/Workers'), to: cesiumTarget + '/Workers' },
+                { from: path.join(__dirname, possibleSrcPath, 'Assets'), to: cesiumTarget + '/Assets' },
+                { from: path.join(__dirname, possibleSrcPath, 'Widgets'), to: cesiumTarget + '/Widgets' },
+                // copy Cesium's minified third-party scripts
+                { from: path.join(__dirname, possibleSrcPath, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty' }
+            ]));
+        });
 
     // Define relative base path in Cesium for loading assets
     plugins.push(new DefinePlugin({
@@ -91,6 +93,11 @@ module.exports = (env, argv) => {
     } else {
         config.devServer = {
             port: proxyPort,
+            client: {
+                logging: 'info',
+                overlay: false,
+                progress: true
+            },
             proxy: [{
                 context: ['**', `!/Oskari/dist/${version}/**`, '!/Oskari/bundles/bundle.js'],
                 target: 'http://localhost:8080',
