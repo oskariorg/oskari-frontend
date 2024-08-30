@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, TextAreaInput, TextInput, Collapse, CollapsePanel } from 'oskari-ui';
+import { Message, TextAreaInput, TextInput, Collapse } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
 import { IconButton } from 'oskari-ui/components/buttons';
@@ -102,14 +102,17 @@ const ParsedCollapse = ({ json = {}, jsonKey, controller }) => {
         }
         setEdit();
     };
+    const items = [{
+        key: 'collapse_' + jsonKey,
+        label: <Message messageKey={`jsonTab.fields.${jsonKey}`}/>,
+        extra: <PanelExtra setEdit={setEdit} skipEdit={!controller} />,
+        children: <>
+            { edit && <EditBlock edit={edit} onUpdate={onUpdate}/> }
+            <TextAreaInput value={prettier} autoSize={textAreaSize} />
+        </>
+    }];
     return (
-        <Collapse>
-            <CollapsePanel header={<Message messageKey={`jsonTab.fields.${jsonKey}`}/>}
-                extra={<PanelExtra setEdit={setEdit} skipEdit={!controller} />}>
-                { edit && <EditBlock edit={edit} onUpdate={onUpdate}/> }
-                <TextAreaInput value={prettier} autoSize={textAreaSize} />
-            </CollapsePanel>
-        </Collapse>
+        <Collapse items={items}/>
     );
 };
 ParsedCollapse.propTypes = {
@@ -125,16 +128,14 @@ export const JsonTabPane = ({ layer, propertyFields, controller }) => {
                 <Message messageKey='jsonTab.info'/>
             </StyledFormField>
             <StyledFormField>
-                <Collapse>
-                    { propertyFields.includes(ATTRIBUTES) &&
-                        <ParsedCollapse json={layer.attributes} jsonKey='attributes' controller={controller}/>
-                    }
-                    { propertyFields.includes(CAPABILITIES) &&
-                        <ParsedCollapse skipEdit json={layer.capabilities} jsonKey='capabilities'/>
-                    }
-                    <ParsedCollapse json={layer.options} jsonKey='options' controller={controller}/>
-                    <ParsedCollapse json={layer.params} jsonKey='params' controller={controller}/>
-                </Collapse>
+                { propertyFields.includes(ATTRIBUTES) &&
+                    <ParsedCollapse json={layer.attributes} jsonKey='attributes' controller={controller}/>
+                }
+                { propertyFields.includes(CAPABILITIES) &&
+                    <ParsedCollapse skipEdit json={layer.capabilities} jsonKey='capabilities'/>
+                }
+                <ParsedCollapse json={layer.options} jsonKey='options' controller={controller}/>
+                <ParsedCollapse json={layer.params} jsonKey='params' controller={controller}/>
             </StyledFormField>
         </Fragment>
     );

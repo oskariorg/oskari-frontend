@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Badge as AntBadge } from 'antd';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getTextColor, getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
-import 'antd/es/badge/style/index.js';
 
 const STYLE = {
     fontWeight: '700',

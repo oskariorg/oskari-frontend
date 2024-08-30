@@ -57,7 +57,6 @@ export const FilterVisibleColumns = (props) => {
             options={options}
             defaultValue={visibleColumns}
             value={visibleColumns}
-            showArrow='true'
             tagRender={() => null}
             maxTagCount={0}
             maxTagPlaceholder={() => focused ? null : <BlurredMessage allColumns={allColumns} visibleColumns={visibleColumns} /> }
