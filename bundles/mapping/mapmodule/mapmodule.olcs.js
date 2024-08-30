@@ -185,42 +185,40 @@ class MapModuleOlCesium extends MapModuleOl {
     /**
      * @method _initTerrainProvider Initializes the terrain defined in module options.
      */
-    _initTerrainProvider () {
+    async _initTerrainProvider () {
         if (!this.getCesiumScene() || !this._options.terrain) {
             return;
         }
         const { providerUrl, ionAssetId, ionAccessToken } = this._options.terrain;
         let terrainProvider = null;
         if (providerUrl) {
-            terrainProvider = new Cesium.CesiumTerrainProvider({ url: providerUrl });
+            terrainProvider = await Cesium.CesiumTerrainProvider.fromUrl(providerUrl);
         }
         if (ionAccessToken) {
             Cesium.Ion.defaultAccessToken = ionAccessToken;
             jQuery('.cesium-credit-container .cesium-credit-logoContainer').css('visibility', 'visible');
 
             if (ionAssetId) {
-                terrainProvider = new Cesium.CesiumTerrainProvider({
-                    url: Cesium.IonResource.fromAssetId(ionAssetId)
+                terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(ionAssetId, {
+                    requestVertexNormals: false
                 });
             } else {
-                terrainProvider = Cesium.createWorldTerrainAsync({
-                    requestVertexNormals: true
+                terrainProvider = await Cesium.createWorldTerrainAsync({
+                    requestVertexNormals: false
                 });
             }
         }
         if (!terrainProvider) {
             return;
         }
-        terrainProvider.readyPromise.then(() => {
-            this.getCesiumScene().terrainProvider = terrainProvider;
-        });
+        this.getCesiumScene().terrainProvider = terrainProvider;
     }
 
     /**
      * Fire operations that have been waiting for the map to initialize.
      */
     _notifyMapReadySubscribers () {
-        var me = this;
+        const me = this;
         this._mapReadySubscribers.forEach(function (fireOperation) {
             fireOperation.operation.apply(me, fireOperation.arguments);
         });
