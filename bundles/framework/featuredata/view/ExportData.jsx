@@ -45,8 +45,7 @@ const ColumnHeader = styled('h3')`
     padding-bottom: 0.25em;
 `;
 
-
-const SEPARATORS = {
+export const SEPARATORS = {
     semicolon: ';',
     comma: ',',
     tabulator: 'tab'
@@ -184,8 +183,12 @@ export const showExportDataPopup = (state, controller) => {
     };
 };
 
+const ButtonWithMargin = styled(Button)`
+    margin-right: 1em;
+`;
+
 export const ExportButton = (props) => {
-    return <Button type='primary' {...props}>
+    return <ButtonWithMargin type='primary' {...props}>
         <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'exportDataPopup.openButtonLabel'}/>
-    </Button>;
+    </ButtonWithMargin>;
 };

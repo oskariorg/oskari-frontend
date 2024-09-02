@@ -2,7 +2,7 @@ export const ID_PREFIX = 'M_';
 export const BUNDLE_KEY = 'MapModule';
 export const PLUGIN_NAME = 'MarkersPlugin';
 export const TOOL_GROUP = 'selectiontools';
-export const STYLE_TYPE = 'point';
+export const GEOMETRY_TYPE = 'point';
 
 export const SEPARATORS = {
     FIELD: '|',
@@ -18,10 +18,11 @@ export const DEFAULT_DATA = {
     transient: false
 };
 
+// use size 3 for add marker UI
 export const DEFAULT_STYLE = {
     image: {
         shape: DEFAULT_DATA.shape,
-        size: DEFAULT_DATA.size,
+        size: 3,
         fill: {
             color: '#' + DEFAULT_DATA.color
         }

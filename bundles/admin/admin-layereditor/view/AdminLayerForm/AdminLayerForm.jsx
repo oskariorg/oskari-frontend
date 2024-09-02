@@ -4,6 +4,7 @@ import { GeneralTabPane } from './GeneralTabPane';
 import { VisualizationTabPane } from './VisualizationTabPane';
 import { AdditionalTabPane } from './AdditionalTabPane';
 import { PermissionsTabPane } from './PermissionsTabPane';
+import { JsonTabPane } from './JsonTabPane/JsonTabPane.jsx';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Button, Tabs, Message, Tooltip } from 'oskari-ui';
 import { DeleteButton, ButtonContainer } from 'oskari-ui/components/buttons';
@@ -55,7 +56,8 @@ const AdminLayerForm = ({
     rolesAndPermissionTypes,
     validators = {},
     validationErrors = [],
-    scales
+    scales,
+    metadata
 }) => {
     const isLayerTypeSupported = propertyFields.length > 0;
     // For returning to add multiple layers from service endpoint
@@ -102,7 +104,18 @@ const AdminLayerForm = ({
                         <AdditionalTabPane
                             layer={layer}
                             propertyFields={propertyFields}
+                            metadata={metadata}
                             controller={controller} />
+                    )
+                },
+                {
+                    key: 'json',
+                    label: <Message messageKey='jsonTabTitle'/>,
+                    children: (
+                        <JsonTabPane
+                            layer={layer}
+                            propertyFields={propertyFields}
+                            controller={controller}/>
                     )
                 },
                 {

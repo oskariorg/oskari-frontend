@@ -153,8 +153,10 @@ if (typeof jQuery !== 'undefined') {
                 Oskari.setDecimalSeparator(setup.env.decimalSeparator);
             }
 
-            if (typeof Oskari.setMarkers === 'function') {
-                Oskari.setMarkers(setup.env.svgMarkers || []);
+            if (typeof Oskari.custom === 'object') {
+                Oskari.custom.setMarkers(setup.env.svgMarkers);
+                Oskari.custom.setDefaultStyle(setup.env.oskariStyle);
+                Oskari.custom.setThemeColors(setup.env.app?.theme);
             }
 
             if (typeof Oskari.user === 'function') {

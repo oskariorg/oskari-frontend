@@ -13,7 +13,15 @@ Oskari.registerLocalization({
             yes: 'Já',
             no: 'Nei',
             next: 'Næst',
-            previous: 'Fyrri'
+            previous: 'Fyrri',
+            print: 'Prenta',
+            search: 'Leita',
+            reset: 'Hreinsa',
+            copy: 'Afrita á klemmuspjald',
+            clear: 'Hreinsa',
+            accept: 'Samþykkja',
+            reject: 'Hafna',
+            info: 'Sýna frekari upplýsingar'
         },
         messages: {
             confirmDelete: 'Viss um að eyða?'
@@ -53,6 +61,20 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading: 'Hleður...'
+        },
+        coordinates: {
+            lon: "Lon",
+            lat: "Lat",
+            n: "N",
+            e: "E",
+            p: "N",
+            i: "E", 
+            crs: {
+              'EPSG:3067': "ETRS89-TM35FIN hnit",
+              'EPSG:3575': "Norðurpóll LAEA Evrópuhnit",
+              'EPSG:3857': "WGS 84 / Pseudo-Mercator hnit",
+              default: "{crs} hnit"
+          },
         }
     }
 });

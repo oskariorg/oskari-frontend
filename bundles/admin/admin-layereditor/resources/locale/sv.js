@@ -10,7 +10,10 @@ Oskari.registerLocalization(
                 "typeDescription": "Välj vilken typ av gränssnitt du vill lägga till",
                 "serviceDescription": "Ange adress och versionnummer för gränssnittet du vill lägga till",
                 "layersDescription": "Från lagren i gränssnittet väljer du det du vill lägga till som kartlager",
-                "details": "Uppgifter om kartlagret"
+                "details": "Uppgifter om kartlagret",
+                "toggleFlatView": "Listvy",
+                "toggleTreeView": "Trädvy"
+
             },
             "layertype": {
                 "wmslayer": "WMS",
@@ -62,6 +65,7 @@ Oskari.registerLocalization(
             "visualizationTabTitle": "Visualisering",
             "additionalTabTitle": "Ytterligare",
             "permissionsTabTitle": "Rättigheter",
+            "jsonTabTitle": "JSON",
             "interfaceVersionDesc": "Välj primärt den nyaste versionen som stöds av gränssnittet.",
             "attributions": "Tillskrivningar",
             "usernameAndPassword": "Användarnamn och lösenord",
@@ -93,12 +97,22 @@ Oskari.registerLocalization(
                 "service": "Definierad i tjänsten",
                 "overridden": "Filtagg för metadatans"
             },
+            "jsonTab": {
+                "info": "Dessa verktyg möjliggör avancerad konfiguration, använd med försiktighet.",
+                "fields": {
+                    "attributes": "Attribut",
+                    "capabilities": "Utvald information från kartlagrets capabilities",
+                    "options": "Alternativen (options)",
+                    "params": "Parametrar"
+                }
+            },
             "capabilities": {
                 "parsed": "Utvald information från kartlagrets capabilities",
                 "show": "Visa getCapabilities svar",
                 "update": "Hämta nu",
                 "updateRate": "Capabilities uppdateringsfrekvens",
-                "updateRateDesc": "Uppdateringsfrekvens i sekunder",
+                "updateRateDesc": "Uppdateringsfrekvensen i minuter.",
+                "updateRateCronMsg": "Uppdatering schemalagd med cron: {cron}, du kan ändra uppdateringsfrekvensen med 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' värdet i oskari-ext.properties.",
                 "updatedSuccesfully": "Uppdatering lyckades.",
                 "updateFailed": "Uppdatering misslyckades.",
                 "updateFailedWithReason": "Uppdatering misslyckades: {reason}",
@@ -106,6 +120,62 @@ Oskari.registerLocalization(
                     "defaultStyle" : "Den valda standardstilen finns inte längre i tjänsten. Vänligen välj en ny standardstil.",
                     "additionalLegend": "För kartlagret finns en teckenförklaring utan giltig stil. Vänligen uppdatera förklaringen. Den icke fungerande stilen är markerad med ( ! ) ",
                     "globalWithStyles": "Till kartlagret har endast en standard teckenförklaring fastställts, men det finns ytterliga stilar med förklaringar tillgängliga på gränssnittet. Du kan ta bort standardvalet för att kunna utnyttja dessa."
+                }
+            },
+            "attributes": {
+                "label": "Attribut",
+                "properties": "Användning object attribut",
+                "presentation": "Presentationsmetod",
+                "presentationTooltip": "Presentationsmetoden påverkar GetFeatureInfo förfrågan och objektuppgifter tabell.",
+                "showAll": "Visa alla attribut",
+                "idProperty": "Använd funktionsegenskap som identifierare",
+                "idPropertyTooltip": "Tjänsten bör returnera unik identifierare för objekt. Be först tjänsteleverantören att använda unika identifierare. Fungerar endast för typen 'Stora objekt' (GeoJSON).",
+                "geometryType": {
+                    "label": "Typ av geometri",
+                    "sourceAttributes": "Källa: kartlagrets attribut",
+                    "sourceCapabilities": "Källa: kartlagrets capabilities",
+                    "unknown":"Okänd",
+                    "point": "Punkten",
+                    "line": "Linje",
+                    "area":"Området",
+                    "collection":"All"
+                },
+                "featureFilter": {
+                    "title": "Filtrera begärda objekt baserat på attribut",
+                    "button": "Filtrering av objekt"
+                },
+                "filter": {
+                    "title": "Visning av attribut",
+                    "lang": "Välj attribut som visas och ordning",
+                    "default": "för standardfilter",
+                    "fromDefault": "Inget filter har lagts till för det valda språket. Standardfiltret används för det valda språket. Redigera alternativen för att skapa ditt eget filter för språket.",
+                    "button": "Välj attribut"
+                },
+                "locale": {
+                    "title": "Märkningar för attribut",
+                    "button": "Märkning"
+                },
+                "format": {
+                    "title": "Formatera värden för attribut",
+                    "button": "Formatering",
+                    "type": {
+                        "label": "Typ",
+                        "typeFormats": "Värde typ",
+                        "textFormats": "Textformatering",
+                        "link": "Länk",
+                        "image": "Image",
+                        "number": "Nummer",
+                        "phone": "Telefonnummer"
+                    },
+                    "options": {
+                        "noLabel": "Visa endast värde",
+                        "skipEmpty": "Skippa tomt värde"
+                    },
+                    "params": {
+                        "link": "Visa som länk",
+                        "fullUrl": "Visa hela URL",
+                        "label": "Etikett för länk"
+                    }
                 }
             },
             "styles": {
@@ -121,9 +191,15 @@ Oskari.registerLocalization(
                     "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten"
                 },
                 "vector": {
+                    "newStyleName": "Ny stil",
                     "name": "Stilnamn",
                     "selectDefault": "Välj förvalt stil",
                     "deleteStyle": "Ta bort stilen",
+                    "featureStyle": "Stildefinitioner",
+                    "optionalStyles": "Attribut baserad stildefinitioner",
+                    "optionalStylesFilter": "Välj objekt som använder stil baserat på attribut",
+                    "cesium": "Stildefinitioner av 3D Tiles/Cesium",
+                    "mapbox": "Stildefinitioner av Mapbox",
                     "edit": {
                         "editor": "Redigera",
                         "json": "Redigera JSON"
@@ -137,13 +213,20 @@ Oskari.registerLocalization(
                     "validation": {
                         "name": "Fyll i namnet på stilen",
                         "noStyles": "Inga sparade stilar",
-                        "json": "Stildefinitioner JSON-syntaxen är ogiltig."
-                    },
-                    "json": {
-                        "featureStyle": "Stildefinitioner (JSON)",
-                        "optionalStyles": "",
-                        "cesium": "Stildefinitioner av 3D Tiles/Cesium (JSON)",
-                        "mapbox": "Stildefinitioner av Mapbox (JSON)"
+                        "json": "Stildefinitioner JSON-syntaxen är ogiltig.",
+                        "optionalStyles": "Stilen har inte ett giltigt filter."
+                    }
+                },
+                "hover": {
+                    "title": "Framhävning av objekt och verktygstips",
+                    "tooltip": "Verktygstipsrader, som visas för objekt",
+                    "useStyle": "Använd stildefinitioner",
+                    "inherit": "Ärv stildefinitioner",
+                    "effect": "Använd effekten",
+                    "fromProperty": "Använd egenskapen som etikett",
+                    "labelTooltip": {
+                        "key": "Etiketten visas i sin ursprungliga form",
+                        "keyProperty": "Etikettinnehållet tas från den valda egenskapen"
                     }
                 }
             },
@@ -156,7 +239,6 @@ Oskari.registerLocalization(
             "gfiTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
-            "attributes": "Attribut",
             "clusteringDistance": "Punktavstånd i kluster",
             "forcedSRS": "Tvingade SRS",
             "forcedSRSInfo": "Tvångs SRS jämfört med GetCapabilites",
@@ -215,7 +297,7 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "Gruppen du försöker ta bort innehåller undergrupper. Ta bort undergrupperna först.",
                 "errorFetchCoverage": "Kan inte hämtas kartlagrets täckningsområde från tjänsten.",
                 "noCoverage": "Kartlagrets täckningsområde är inte begränsat.",
-                "invalidScale": "Tarkista tason mittakaavarajat."
+                "invalidScale": "Kontrollera skalbegränsningarna för kartlagret."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

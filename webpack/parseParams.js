@@ -20,10 +20,13 @@ module.exports = function parseParams (env) {
     }
 
     const version = getVersion(parts);
+    const isDevServer = version === 'devapp';
     const pathParam = parts.length > 1 ? parts[1] : parts[0];
 
     const externalDomain = getParam(env, 'domain') || '';
-    const publicPath = getParam(env, 'absolutePublicPath') === 'true' || externalDomain ? '/' : '';
+    // https://v4.webpack.js.org/configuration/dev-server/#devserverpublic
+    // -> "Make sure devServer.publicPath always starts and ends with a forward slash."
+    const publicPath = getParam(env, 'absolutePublicPath') === 'true' || externalDomain || isDevServer ? '/' : '';
 
     const params = {
         version,

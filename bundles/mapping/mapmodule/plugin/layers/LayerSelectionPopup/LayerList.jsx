@@ -16,6 +16,7 @@ export const LayerList = ({ layers, showMetadata, styleSelectable, setLayerVisib
     if (!layers || !layers.length) {
         return null;
     }
+
     return (
         <div className='t_otherlayers'>
             { showHeading && <h3><Message messageKey='plugin.LayerSelectionPlugin.chooseOtherLayers' /></h3> }
@@ -27,10 +28,10 @@ export const LayerList = ({ layers, showMetadata, styleSelectable, setLayerVisib
                                 checked={layer.isVisible()}
                                 value={layer.getId()}
                                 onChange={e => setLayerVisibility(layer, e.target.checked, false)}
-                                >{layer.getName()}</Checkbox>
-                            {showMetadata && (<MetadataIcon metadataId={layer.getMetadataIdentifier()} />)}
+                            >{layer.getName()}</Checkbox>
+                            {showMetadata && (<MetadataIcon metadataId={layer.getMetadataIdentifier()} layerId={layer.getId()} />)}
                         </LayerRow>
-                            {layer.isVisible() && styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}
+                        {layer.isVisible() && styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}
                     </div>
                 );
             })}

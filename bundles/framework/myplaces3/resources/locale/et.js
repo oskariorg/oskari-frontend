@@ -10,13 +10,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Objektid",
-            "nocategories": "Sul ei ole veel salvestatud objekte.",
-            "maxFeaturesExceeded": "Liiga palju objekte, jätkamiseks eemalda mõned.",
             "publishCategory": {
                 "privateTooltip": "See kiht on avalikustamata, vajuta siia, et avalikustada.",
                 "publicTooltip": "See kiht on avalik, vajuta siia et muuta kiht mitteavalikuks."
             },
-            "addCategoryFormButton": "Uus kaardikiht",
             "addCategory": "Lisa kaardikiht",
             "editCategory": "Muuda kaardikihti",
             "deleteCategory": "Kustuta kaardikiht",
@@ -175,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Kustuta kaardikiht",
-                "deleteConfirmMove": "Kustutad kaardikihti{0}.Kaardikiht {0} sisaldab {1} objekti. Kas soovid: <br/>1. kustutada kaardikihi ja selle objektid? <br/> 2. Kopeerida objektid vaikimisi kaardikihile, enne kui kustutad kaardikihi?",
                 "deleteConfirm": "Kas kaardikiht {0} kustutada?",
                 "deleted": "Kaardikiht kustutatud"
             },

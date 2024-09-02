@@ -3,7 +3,6 @@ import 'antd/dist/antd.less';
 
 export { Alert } from './components/Alert';
 export { Badge } from './components/Badge';
-export { ThemedBadge } from './components/ThemedBadge';
 export { Button } from './components/Button';
 export { Checkbox } from './components/Checkbox';
 export { Collapse, Panel as CollapsePanel } from './components/Collapse';
@@ -40,3 +39,5 @@ export { CopyField } from './components/CopyField';
 // TODO: consider moving these out of index.js so we don't pack them in for embedded maps
 // or in components that are used on embedded maps we could import the components directly and NOT use this index file for imports
 export { UrlInput } from './components/UrlInput';
+export { Header } from './components/window/Header';
+export { FeatureFilter } from './components/FeatureFilter';

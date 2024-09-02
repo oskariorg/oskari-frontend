@@ -10,13 +10,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Orte",
-            "nocategories": "Sie haben bisher keine Orte gespeichert.",
-            "maxFeaturesExceeded": "Sie haben die maximale Anzahl eigener Orte erreicht. Die Orte wurden nicht geladen.",
             "publishCategory": {
                 "privateTooltip": "Die Kartenebene ist nicht öffentlich. Klicken Sie hier, um sie öffentlich zu machen.",
                 "publicTooltip": "Die Kartenebene ist öffentlich. Klicken Sie hier, um sie nicht öffentlich zu machen."
             },
-            "addCategoryFormButton": "",
             "addCategory": "Kartenebene hinzufügen",
             "editCategory": "Kartenebene bearbeiten",
             "deleteCategory": "Kartenebene löschen",
@@ -175,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Kartenebene löschen",
-                "deleteConfirmMove": "Kartenebene {0} beinhaltet {1} Orte. Möchten Sie die Kartenebene löschen und die Orte zur Standardkartenebene {2} verschieben oder die Karteneben und Orte löschen?",
                 "deleteConfirm": "Karteneben {0} löschen?",
                 "deleted": "Kartenebene gelöscht"
             },

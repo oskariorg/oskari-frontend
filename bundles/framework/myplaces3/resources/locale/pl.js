@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Miejsca",
-            "nocategories": "",
             "publishCategory": {
                 "privateTooltip": "",
                 "publicTooltip": ""
@@ -173,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Usuń warstwę mapy",
-                "deleteConfirmMove": "Warstwa {0} mapy zawiera {1} obiekt. Czy chcesz usunąć warstwę mapy i przenieść a niej miejsca na domyślną warstwę mapy {2}?",
                 "deleteConfirm": "Usunąć warstwę {0} mapy?",
                 "deleted": "Warstwa mapy została usunięta"
             },

@@ -1,6 +1,4 @@
 import './throwPropTypeErrors';
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 // Oskari global
 import '../../src/global';
 
@@ -59,12 +57,11 @@ jQuery.fn.outerHTML = function (arg) {
 };
 // --- /setup global jQuery --
 
-configure({ adapter: new Adapter() });
 
 // --- overwrite logging to prevent spamming from warning
 global.console = {
     log: jest.fn(), // console.log are ignored in tests
-  
+
     // Keep native behaviour for other methods, use those to print out things in your own tests, not `console.log`
     error: console.error,
     warn: (...args) => console.info('WARN', ...args),

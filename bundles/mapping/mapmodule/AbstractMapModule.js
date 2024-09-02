@@ -15,12 +15,14 @@ import './service/VectorFeatureService.ol';
 // plugins
 import './plugin/Plugin';
 import './plugin/fullscreen/FullScreen';
+import './plugin/pinchzoomreset/PinchZoomResetPlugin';
 import './plugin/getinfo/GetInfoPlugin';
 import './plugin/search/SearchPlugin';
 import './plugin/logo/LogoPlugin';
 import './plugin/datasource/DataSourcePlugin';
 import './plugin/layers/LayerSelectionPlugin';
 import './plugin/layers/BackgroundLayerSelectionPlugin';
+import './plugin/layers/coveragetool/CoverageToolPlugin';
 import './plugin/location/GeoLocationPlugin';
 import './plugin/publishertoolbar/PublisherToolbarPlugin';
 import './plugin/realtime/RealtimePlugin';
@@ -473,7 +475,7 @@ Oskari.clazz.define(
             'RPCUIEvent': function (event) {
                 var me = this;
                 if (event.getBundleId() === 'mapmodule.crosshair') {
-                    me.toggleCrosshair(isCrosshairActive(this.getMapDOMEl()));
+                    me.toggleCrosshair(!isCrosshairActive(this.getMapDOMEl()));
                 }
             }
         },
@@ -963,9 +965,14 @@ Oskari.clazz.define(
          */
         getVectorFeatures (geojson = {}, opts = {}) {
             const layerPlugins = this.getLayerPlugins();
+            const bbox = this.getSandbox().getMap().getBbox();
+            if (!bbox) {
+                this.log.info('Tried to get vector features before map is ready');
+                return {};
+            }
             // Detect if requested geojson is not on the current viewport
             if (geojson && geojson.geometry) {
-                const { left, bottom, right, top } = this.getSandbox().getMap().getBbox();
+                const { left, bottom, right, top } = bbox;
                 const extent = [left, bottom, right, top];
                 const features = filterFeaturesByExtent([geojson], extent);
                 if (!features.length) {
@@ -1775,20 +1782,14 @@ Oskari.clazz.define(
             var isWellknownMarker = false;
             // marker shape is number --> find it from Oskari.getMarkers()
             if (!isNaN(style.shape)) {
-                var markers = Oskari.getMarkers();
-                if (markers[style.shape]) {
-                    svgObject = { ...markers[style.shape] };
-                } else {
-                    this.log.warn('Requested marker:', style.shape, 'does not exist. Using default marker instead.');
-                    svgObject = { ...Oskari.getDefaultMarker() };
-                }
-
-                if (style.color) {
-                    svgObject.data = this.__changePathAttribute(svgObject.data, 'fill', style.color);
-                }
-                if (style.stroke) {
-                    svgObject.data = this.__changePathAttribute(svgObject.data, 'stroke', style.stroke);
-                }
+                this.log.deprecated('getSvg', 'Use Oskari.custom.getSvg()');
+                svgObject = Oskari.custom.getMarker(style.shape);
+                const svg = jQuery(svgObject.data);
+                svg.find('path').attr({
+                    'fill': style.color || '#000000',
+                    'stroke': style.stroke || '#000000'
+                });
+                svgObject.data = svg.outerHTML();
             } else if ((typeof style.shape === 'object' && style.shape !== null &&
                 style.shape.data) || (typeof style.shape === 'string' && style.shape.indexOf('<svg') > -1)) {
                 // marker shape is svg
@@ -1853,7 +1854,6 @@ Oskari.clazz.define(
             marker.attr('width', style.size || this._defaultMarker.size);
 
             var svgSrc = 'data:image/svg+xml,' + encodeURIComponent(marker.outerHTML());
-
             return svgSrc;
         },
 
@@ -1954,30 +1954,6 @@ Oskari.clazz.define(
                 return htmlObject;
             }
             // if string was given, return string as well
-            return htmlObject.outerHTML();
-        },
-        /**
-         * Changes svg path attributes
-         * @method  @private __changePathAttribute description]
-         * @param  {String|jQuery} svg   svg format
-         * @param  {String} attr  attribute name
-         * @param  {String} value attribute value
-         * @return {String|jQuery} svg string or jQuery object if parameter was jQuery object
-         */
-        __changePathAttribute: function (svg, attr, value) {
-            if (typeof svg === 'object') {
-                // assume jQuery object
-                svg.find('path').attr(attr, value);
-                return svg;
-            }
-            // assume svg is string
-            var htmlObject = jQuery(svg);
-            htmlObject.find('path').attr(attr, value);
-
-            if (htmlObject.find('path').length > 1) {
-                this.log.warn(`Found more than one <path> in SVG. Replaced all ${attr} attributes in SVG paths to ${value}.`);
-            }
-
             return htmlObject.outerHTML();
         },
         /**
@@ -2102,8 +2078,6 @@ Oskari.clazz.define(
                 // no position given, add to end
                 content.append(element);
             }
-            // Make sure container is visible
-            container.css('display', '');
         },
 
         /**
@@ -2113,16 +2087,10 @@ Oskari.clazz.define(
          * @param {Boolean} detachOnly true to detach and preserve event handlers, false to remove element
          */
         removeMapControlPlugin: function (element, detachOnly) {
-            var container = element.parents('.mapplugins');
-            var content = element.parents('.mappluginsContent');
-            // TODO take this into use in all UI plugins so we can hide unused containers...
             if (detachOnly) {
                 element.detach();
             } else {
                 element.remove();
-            }
-            if (!this.isInLayerToolsEditMode() && content.children().length === 0) {
-                container.css('display', 'none');
             }
         },
 

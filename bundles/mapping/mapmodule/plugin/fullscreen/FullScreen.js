@@ -57,9 +57,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
          * @method _startPluginImpl
          */
         _startPluginImpl: function () {
-            this.setElement(this._createControlElement());
-            this.addToPluginContainer(this.getElement());
-            this.refresh();
+            if (!Oskari.util.isMobile()) {
+                this.setElement(this._createControlElement());
+                this.addToPluginContainer(this.getElement());
+                this.refresh();
+            }
         },
 
         /**
@@ -79,6 +81,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
             if (!el) {
                 return;
             }
+
+            if (Oskari.util.isMobile()) {
+                this.teardownUI();
+                return;
+            }
+
             const isFullscreen = !!this.state.fullscreen;
             ReactDOM.render(
                 <StyledButton
@@ -118,6 +126,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
         createRequestHandlers: function () {
             return {
                 'MapModulePlugin.ToggleFullScreenControlRequest': this
+            };
+        },
+        /**
+         * @method _createEventHandlers
+         * Create eventhandlers.
+         *
+         *
+         * @return {Object.<string, Function>} EventHandlers
+         */
+        _createEventHandlers: function () {
+            return {
+                MapSizeChangedEvent: function (evt) {
+                    this.refresh();
+                }
             };
         },
         /**

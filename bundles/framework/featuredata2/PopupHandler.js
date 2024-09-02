@@ -118,5 +118,62 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
 
             // Set default draw mode active
             this.buttons[Object.keys(this.buttons)[0]].callback(true);
+        },
+        /**
+         * @method renderSelectionToolButtonsToContainer
+         * This function renders selection buttons to given content
+         * Note! This is the old way of doing things and is only kept for backwards compatibility with analysis-bundle
+         * @param {html element} container
+         */
+        renderSelectionToolButtonsToContainer: function (container) {
+            let activeTool = null;
+            let startDrawing;
+
+            container.addClass('selectionToolsDiv');
+
+            Object.keys(this.buttons).forEach(key => {
+                const button = this.buttons[key];
+                const btnContainer = jQuery('<div style= "display: inline-block;"></div>');
+                btnContainer.attr('title', button.tooltip);
+                btnContainer.addClass(button.iconCls);
+                btnContainer.addClass('tool');
+                // TODO cb select/deselect
+                btnContainer.on('click', (evt, deselect) => {
+                    this.removeButtonSelectionFromContainer(container);
+                    if (deselect) {
+                        activeTool = null;
+                        startDrawing = false;
+                        this.selectionPlugin.clearDrawing();
+                        return;
+                    }
+                    if (button === activeTool) {
+                        activeTool = null;
+                        startDrawing = false;
+                        button.callback(startDrawing);
+                    } else {
+                        activeTool = button;
+                        btnContainer.addClass('active');
+                        startDrawing = true;
+                        button.callback(startDrawing);
+                    }
+                });
+                this.btnContainer = btnContainer;
+                container.append(btnContainer);
+            });
+        },
+        /**
+         * @method removeButtonSelectionFromContainer
+         * This function deactivates button in an external container
+         * Note! This is the old way of doing things and is only kept for backwards compatibility with analysis-bundle
+         * @param {html element} container
+         */
+        removeButtonSelectionFromContainer: function (container) {
+            if (!container) {
+                container = jQuery('.selectionToolsDiv');
+            }
+            const isActive = jQuery(container).find('.tool').hasClass('active');
+            if (isActive) {
+                jQuery(container).find('.active').removeClass('active');
+            }
         }
     });

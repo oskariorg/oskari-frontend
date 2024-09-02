@@ -45,7 +45,7 @@ Oskari.registerLocalization(
             "title": "Conjuntos de datos",
             "grid": {
                 "name": "Nombre",
-                "description": "Descripción",
+                "desc": "Descripción",
                 "source": "Fuente de datos",
                 "remove": "Borrar",
                 "removeButton": "Borrar"

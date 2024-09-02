@@ -59,7 +59,7 @@ Oskari.registerLocalization(
             "deleteLayer": "Poista karttataso",
             "grid": {
                 "name": "Nimi",
-                "description": "Kuvaus",
+                "desc": "Kuvaus",
                 "source": "Tietolähde",
                 "edit": "Muokkaa",
                 "editButton": "Muokkaa",

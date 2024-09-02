@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.BasicBundle', function () {
      */
     init: function () { },
 
-    /** 
+    /**
      * Called from sandbox.
      * @memberof BasicBundle
      */

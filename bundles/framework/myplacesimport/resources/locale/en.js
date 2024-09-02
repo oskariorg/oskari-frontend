@@ -60,7 +60,7 @@ Oskari.registerLocalization(
             "deleteLayer": "Delete map layer",
             "grid": {
                 "name": "Name",
-                "description": "Description",
+                "desc": "Description",
                 "source": "Data source",
                 "edit": "Edit",
                 "editButton": "Edit",

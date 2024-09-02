@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { IconButton } from 'oskari-ui/components/buttons';
-import { CloseCircleFilled } from '@ant-design/icons';
 import { ThemeConsumer } from '../../util/contexts';
-import { getFontClass, getHeaderTheme } from '../../theme/ThemeHelper';
+import { getFontClass } from '../../theme/ThemeHelper';
+import { Header } from './Header';
 
 const StyledPanel = styled('div')`
     background: #FFF;
@@ -13,7 +12,7 @@ const StyledPanel = styled('div')`
     top: 0;
     /* sidebar has 3, we want to open it on top of this */
     z-index: 2;
-    width: 252px;
+    width: ${props => props.width || 252}px;
     display: flex;
     flex-direction: column;
     font-family: ${props => props.font};
@@ -24,44 +23,22 @@ const StyledPanel = styled('div')`
         height: calc(100% - 46px);
     }
 `;
-
 const Content = styled('div')`
     overflow: auto;
     padding-bottom: 20px;
 `;
-
-const StyledHeader = styled('div')`
-    background: ${props => props.theme.getBgColor()};
-    color: ${props => props.theme.getTextColor()};
-    padding: 5px 10px;
+const StyledHeader = styled(Header)`
+    padding: 15px 15px 10px 10px;
 `;
 
-const StyledIconButton = styled(IconButton)`
-    float: right;
-`;
-
-const Header = ({ title, onClose, theme }) => {
+export const SidePanel = ThemeConsumer(({ title, onClose, children, theme = {}, options }) => {
     return (
-        <StyledHeader
-            className="header"
-            theme={theme}
-        >
-            <StyledIconButton
-                onClick={onClose}
-                icon={<CloseCircleFilled />}
-            />
-            {title && (
-                <h3>{title}</h3>
-            )}
-        </StyledHeader>);
-};
-
-export const SidePanel = ThemeConsumer(({ title, onClose, children, theme = {} }) => {
-    const headerTheme = getHeaderTheme(theme);
-    return (
-        <StyledPanel className={`t_print_panel ${getFontClass(theme)}`}>
+        <StyledPanel className={`t_print_panel ${getFontClass(theme)}`} width={options.width}>
             <Content>
-                <Header title={title} onClose={onClose} theme={headerTheme} />
+                <StyledHeader
+                    title={title}
+                    onClose={onClose}
+                />
                 {children}
             </Content>
         </StyledPanel>

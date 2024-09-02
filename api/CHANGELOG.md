@@ -9,13 +9,35 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.13.0
+
+### [add] Added `metadatasearch` bundle
+
+React-based drop-in replacement for jQuery-based `metadatacatalogue` for searching metadata.
+
+### [add] Added `featuredata` bundle
+
+React-based drop-in replacement for jQuery-based `featuredata2` for feature data table.
+
+### [add] Added a parallel version for `statsgrid` bundle
+
+The new implementation is React-based and has the same bundle id so no db migration is required, but the frontend code is linked from the new path (https://github.com/oskariorg/sample-application/pull/33). This makes it easy to switch the implementation to test it out. One notable difference is that the new one doesn't send the events like the old did as it doesn't need them internally. However the events were not exposed in the RPC API so this should not be an issue for most applications. The bundle documentation still refers to the jQuery implementation with the events.
+
+### [rem] Removed `personaldata` bundle
+
+Replaced by the `mydata` bundle.
+
 ## 2.11.0
 
-###  [mod] AddMapLayerRequest
+### [mod] AddMapLayerRequest
 
 The layer is no longer added to map synchronously. Additional metadata is loaded from the server when a layer is added to map so sending additional requests directly after sending `AddMapLayerRequest` might not work as they did before.
 
 Introduced a second parameter for the request called `options`. This is used to restore vector layer styles on embedded maps for guest users in a way the user that published the map sees them on the publisher functionality. It can also be used to trigger `MapModulePlugin.MapMoveByLayerContentRequest` after the layer has been added to map (workaround for asynchronous operation).
+
+### [mod] ShowFilteredLayerListRequest
+
+Added third parameter to open the selected layer listing directly.
 
 ## 2.10.0
 
@@ -51,8 +73,8 @@ The `limits` can be set with options:
 {
     ...,
     limits: {
-        area: `number in m2 limiting area size`,
-        length: `number in meters limiting line length`
+        area: 'number in m2 limiting area size',
+        length: 'number in meters limiting line length'
     }
 }
 ```

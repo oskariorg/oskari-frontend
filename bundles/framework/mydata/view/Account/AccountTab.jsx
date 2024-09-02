@@ -32,6 +32,12 @@ export const AccountTab = ({ state }) => {
     }, {
         label: <Message messageKey='tabs.account.email' />,
         value: user.getEmail()
+    }, {
+        label: <Message messageKey='tabs.account.created' />,
+        value: user.getCreated()
+    }, {
+        label: <Message messageKey='tabs.account.lastLogin' />,
+        value: user.getLastLogin()
     }];
 
     return (

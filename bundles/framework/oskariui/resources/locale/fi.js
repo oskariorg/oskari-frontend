@@ -18,7 +18,11 @@ Oskari.registerLocalization({
             print: 'Tulosta',
             search: 'Etsi',
             reset: 'Tyhjennä',
-            copy: 'Kopioi leikepöydälle'
+            copy: 'Kopioi leikepöydälle',
+            clear: 'Tyhjennä',
+            accept: 'Hyväksy',
+            reject: 'Hylkää',
+            info: 'Näytä lisätietoa'
         },
         messages: {
             confirm: 'Haluatko varmasti jatkaa?',
@@ -106,6 +110,60 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading: 'Ladataan...'
+        },
+        FeatureFilter: {
+            single: 'Yksi ominaisuus',
+            and: 'AND-operaattori',
+            or: 'OR-operaattori',
+            range: {
+                true: 'Älä käytä arvoaluetta',
+                false: 'Käytä arvoaluetta'
+            },
+            addTooltip: 'Lisää suodattimeen uusi rivi',
+            clearTooltip: 'Tyhjennä suodatin',
+            caseSensitive: {
+                true: 'Kirjainkoko vaikuttaa',
+                false: 'Kirjainkoko ei vaikuta'
+            },
+            operators: {
+                value: 'on',
+                in: 'jokin',
+                notIn: 'ei mikään',
+                like: 'kuten',
+                notLike: 'ei kuten',
+                greaterThan: 'suurempi kuin',
+                atLeast: 'vähintään',
+                lessThan: 'pienempi kuin',
+                atMost: 'enintään'
+            }
+        },
+        coordinates: {
+            lon: "Lon",
+            lat: "Lat",
+            n: "N",
+            e: "E",
+            p: "N",
+            i: "E", 
+            crs: {
+              'EPSG:3067': "ETRS89-TM35FIN -koordinaatit",
+              'EPSG:3575': "North Pole LAEA Europe -koordinaatit",
+              'EPSG:3857': "WGS 84 / Pseudo-Mercator -koordinaatit",
+              default: "{crs} -koordinaatit"
+          },
+        },
+        layerTooltipTitle: {
+            'wms': 'Rasteritaso',
+            'wmts': 'Rasteritaso',
+            'arcgis93': 'Rasteritaso',
+            'arcgis': 'Rasteritaso',
+            'vectortile': 'Rasteritaso',
+            'bingmaps': 'Rasteritaso',
+            'wfs': 'Vektoritaso',
+            'vector': 'Vektoritaso',
+            'userlayer': 'Oma aineisto',
+            'myplaces': 'Oma karttataso',
+            'analysislayer': 'Oma analyysi',
+            'tiles3d': '3D-taso'
         }
     }
 });

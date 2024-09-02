@@ -13,7 +13,15 @@ Oskari.registerLocalization({
             yes: 'Oui',
             no: 'Non',
             next: 'Suivant',
-            previous: 'Précédent'
+            previous: 'Précédent',
+            print: 'Imprimer',
+            search: 'Recherche',
+            reset: 'Effacer',
+            copy: 'Copier dans le presse-papier',
+            clear: 'Effacer',
+            accept: 'Accepter',
+            reject: 'Refuser',
+            info: 'Afficher plus d\'informations'
         },
         table: {
             sort: {
@@ -66,7 +74,20 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading: 'Chargement en cours...'
+        },
+        coordinates: {
+            lon: "Lon",
+            lat: "Lat",
+            n: "N",
+            e: "E",
+            p: "N",
+            i: "E", 
+            crs: {
+              'EPSG:3067': "Coordonnées ETRS89-TM35FIN",
+              'EPSG:3575': "Coordonnées de la projection équivalente de Lambert de l'Europe centrée sur le pôle Nord",
+              'EPSG:3857': "Coordonnées WGS 84 / Pseudo-Mercator",
+              default: "Coordonnées {crs}"
+          },
         }
-        
     }
 });

@@ -71,6 +71,7 @@ Oskari.clazz.define(
         this._styleCache = {};
         this._animatingFeatures = {};
         this._name = 'VectorLayerPlugin';
+        this._asyncLayers = {};
     }, {
         __name: 'Oskari.mapframework.mapmodule.VectorLayerPlugin',
         /**
@@ -129,7 +130,7 @@ Oskari.clazz.define(
                     olLayer.set(LAYER_ID, layerId, true);
                     olLayer.setOpacity(opacity);
 
-                    me.getMapModule().addLayer(olLayer);
+                    me.getMapModule().addOverlayLayer(olLayer);
                     me._olLayers[layerId] = olLayer;
                     me._layerStyles[layerId] = layerStyle;
                 }
@@ -151,6 +152,20 @@ Oskari.clazz.define(
                 },
                 AfterChangeMapLayerOpacityEvent: function (event) {
                     me._afterChangeMapLayerOpacityEvent(event);
+                },
+                AfterMapLayerAddEvent: function (event) {
+                    const layer = event.getMapLayer();
+                    if (!layer.isLayerOfType('VECTOR')) {
+                        return;
+                    }
+                    const layerId = layer.getId();
+                    // registered layer can be added without request
+                    // create/get ol layer if async isn't stored
+                    const olLayer = me._asyncLayers[layerId] || me._getOlLayer(layer);
+                    if (olLayer) {
+                        me.getMapModule().addLayer(olLayer);
+                        delete me._asyncLayers[layerId];
+                    }
                 }
             };
         },
@@ -441,7 +456,6 @@ Oskari.clazz.define(
             if (!layer || layer.getLayerType() !== 'vector') {
                 return null;
             }
-
             var olLayer = me._olLayers[layer.getId()];
             if (!olLayer) {
                 olLayer = new olLayerVector({
@@ -456,7 +470,11 @@ Oskari.clazz.define(
                 const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
                 // Set min max zoom levels that layer should be visible in
                 zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
-                me.getMapModule().addLayer(olLayer);
+                if (layer.getOptions().showLayer) {
+                    me._asyncLayers[layer.getId()] = olLayer;
+                } else {
+                    me.getMapModule().addOverlayLayer(olLayer);
+                }
             }
             olLayer.setOpacity(layer.getOpacity() / 100);
             olLayer.setVisible(layer.isVisible());
@@ -535,6 +553,7 @@ Oskari.clazz.define(
                     layer.setOpacity(options.opacity);
                 }
                 layer.setVisible(true);
+                layer.setOptions({ showLayer: options.showLayer });
                 this._setHoverOptions(layer, options);
                 // scale limits
                 const mapModule = this.getMapModule();
@@ -569,7 +588,6 @@ Oskari.clazz.define(
                         };
                         mapLayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
                     }
-
                     mapLayerService.addLayer(layer);
                 }
                 if (options.showLayer !== 'registerOnly' && !this._sandbox.findMapLayerFromSelectedMapLayers(layer.getId())) {
@@ -614,7 +632,8 @@ Oskari.clazz.define(
                 return layer;
             }
             let layerUpdate = false;
-            const { layerName, layerOrganizationName, layerDescription } = options;
+            let olUpdate = false;
+            const { layerName, layerOrganizationName, layerDescription, showLayer } = options;
             if (layerName && layer.getName() !== layerName) {
                 layer.setName(layerName);
                 layerUpdate = true;
@@ -629,6 +648,14 @@ Oskari.clazz.define(
             }
             if (typeof options.opacity !== 'undefined') {
                 layer.setOpacity(options.opacity);
+                olUpdate = true;
+            }
+            if (typeof showLayer !== 'undefined') {
+                const layerOpts = layer.getOptions() || {};
+                layer.setOptions({ ...layerOpts, showLayer });
+                olUpdate = true;
+            }
+            if (olUpdate) {
                 // Apply changes to ol layer
                 this._getOlLayer(layer);
             }
@@ -1018,6 +1045,7 @@ Oskari.clazz.define(
             var vectorLayer = this._olLayers[layer.getId()];
             this.getMap().removeLayer(vectorLayer);
             delete this._olLayers[layer.getId()];
+            delete this._asyncLayers[layer.getId()];
         },
         /**
          * @method getOLMapLayers

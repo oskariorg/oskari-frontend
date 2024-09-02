@@ -781,7 +781,7 @@ Oskari.clazz.define(
             const inputlayer = this.instance.getSandbox().findMapLayerFromAllAvailable(inputid);
             let message;
             if (inputlayer && inputlayer.getLayerType().toUpperCase() === 'WFS') {
-                const noData = inputlayer.getWpsLayerParams().no_data;
+                const noData = inputlayer.getWpsLayerParams().noDataValue;
                 if (noData) {
                     message = this.instance.loc('gridFooter.noDataCommonMessage') + ' (' + noData + ').';
                     const locales = Object.values(layer.getPropertyLabels());

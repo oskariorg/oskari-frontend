@@ -13,12 +13,13 @@ import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import { easeOut } from 'ol/easing';
 import olMap from 'ol/Map';
-import 'ol/ol.css';
+import { VERSION as olVersion } from 'ol/util.js';
 import { defaults as olControlDefaults } from 'ol/control';
 import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
+import 'ol/ol.css';
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyles, getOlStyleForLayer, setDefaultStyle } from './oskariStyle/generator.ol';
 import { STYLE_TYPE } from './oskariStyle/constants';
@@ -30,7 +31,12 @@ import './AbstractMapModule';
 import './plugin/BasicMapModulePlugin';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
-const INTERNAL_LAYER_Z_INDEX = 1;
+const LAYER_Z_INDEX = {
+    normal: 0, // When undefined, a zIndex of 0 is assumed
+    overlay: 1,
+    markers: 2,
+    draw: 3
+};
 
 if (!window.proj4) {
     window.proj4 = proj4;
@@ -655,6 +661,9 @@ export class MapModule extends AbstractMapModule {
      */
     zoomToExtent (bounds, suppressStart, suppressEnd, maxZoomLevel = -1) {
         var extent = this.__boundsToArray(bounds);
+
+        if (olExtent.isEmpty(extent)) return;
+
         const opts = {};
 
         if (maxZoomLevel !== -1) {
@@ -977,8 +986,8 @@ export class MapModule extends AbstractMapModule {
      * Orders layers by Z-indexes.
      */
     orderLayersByZIndex () {
-        // getZIndex returns undefined if z indez isn't set even default is 0.
-        const layerZ = l => l.getZIndex() || 0;
+        // When undefined, a zIndex of 0 is assumed
+        const layerZ = l => l.getZIndex() || LAYER_Z_INDEX.normal;
         this.getMap().getLayers().getArray().sort(function (a, b) {
             return layerZ(a) - layerZ(b);
         });
@@ -1153,12 +1162,14 @@ export class MapModule extends AbstractMapModule {
      * Adds overlay layer to map. These layers aren't listed in selected layers and are always above those.
      * @method addOverlayLayer
      * @param {ol/layer/Layer} layer ol specific!
+     * @param {String} type (optional) for reserved z-indexes
      */
-    addOverlayLayer (layerImpl) {
+    addOverlayLayer (layerImpl, type) {
         if (!layerImpl) {
             return;
         }
-        layerImpl.setZIndex(INTERNAL_LAYER_Z_INDEX);
+        const zIndex = LAYER_Z_INDEX[type] || LAYER_Z_INDEX.overlay;
+        layerImpl.setZIndex(zIndex);
         this.getMap().addLayer(layerImpl);
     }
 
@@ -1379,6 +1390,10 @@ export class MapModule extends AbstractMapModule {
             return olGeom;
         }
         return null;
+    }
+
+    getVersion () {
+        return 'OpenLayers/' + olVersion;
     }
     /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 }

@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
          * handlers/templates.
          */
         init: function () {
-            var me = this;
+            const me = this;
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
 
             me.templates.main = jQuery(
@@ -72,6 +72,38 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                     me.addAnnouncements();
                 }
             });
+            // listen to application started event and register RPC functions.
+            Oskari.on('app.start', function () {
+                // Register RPC functions
+                me._registerRPCFunctions();
+            });
+        },
+
+        /**
+         * @private @method registerRPCFunctions
+         * Register RPC functions
+         */
+        _registerRPCFunctions () {
+            const me = this;
+
+            const rpcService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.rpc.service.RpcService');
+            if (!rpcService) {
+                return;
+            }
+            rpcService.addFunction('getSelectedAnnouncements', function () {
+                const announcementsIds = me._config.announcements;
+                const announcements = me.allAnnouncements.filter(ann => announcementsIds.includes(ann.id));
+                return announcements;
+            });
+        },
+
+        /**
+         * Check at has UI configured to shown
+         * @method @private _hasUI
+         * @returns {Boolean} has UI visible
+         */
+        _hasUI: function () {
+            return !this._config.noUI;
         },
 
         /**
@@ -119,6 +151,10 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 el = me.templates.main.clone(),
                 header = el.find('div.announcements-header');
 
+            if (me._config.noUI) {
+                return null;
+            }
+
             header.append(me._loc.plugin.title);
             me._bindHeader(header);
             return el;
@@ -158,7 +194,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
             var me = this;
             const announcementsIds = me._config.announcements;
 
-            const announcements = this.allAnnouncements.filter(ann => announcementsIds.includes(ann.id));
+            const announcements = me.allAnnouncements.filter(ann => announcementsIds.includes(ann.id));
 
             if (!me.open) {
                 delete me.announcementsContent;
@@ -199,7 +235,6 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 me.annRefs[announcement.id] = div;
                 announcementsDiv.append(div);
             });
-            jQuery.isEmptyObject(me.annRefs) ? jQuery('div.mapplugin.announcements').hide() : jQuery('div.mapplugin.announcements').show();
         },
 
         /**

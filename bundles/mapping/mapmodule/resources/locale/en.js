@@ -38,6 +38,9 @@ Oskari.registerLocalization(
                     "close": "Close"
                 }
             },
+            "BackgroundLayerSelectionPlugin": {
+                "emptyOption": "No selection"
+            },
             "LayerSelectionPlugin": {
                 "title": "Map layers",
                 "chooseDefaultBaseLayer": "Select background map",
@@ -145,12 +148,16 @@ Oskari.registerLocalization(
         "guidedTour": {
             "help1": {
                 "title": "Pan Map View",
-                "message": "You can pan the map view in several ways. <br/><br/>  Select a hand tool and drag the map view with a mouse.<br/><br/>  Use arrow keys on your keyboard. <br/><br/>  Click arrows in the panning tool. You can find it in the upper right corner."
+                "message": "You can pan the map view in several ways. <br/><br/>  Select a hand tool and drag the map view with a mouse.<br/><br/>  Use arrow keys on your keyboard."
             },
             "help2": {
                 "title": "Zoom In and Out Map View",
                 "message": "You can zoom in and out the map view in several ways. <br/><br/> Select a scale from the zoom bar. You can also click (+) and (-) buttons in the heads of the zoom bar. <br/> <br/> Use (+) and (-) keys in your keyboard. <br/> <br/> Double-click the map view or use a \"magnifier tool\" to zoom in the map view."
             }
+        },
+        "layerCoverageTool": {
+            "name": "Show coverage area",
+            "removeCoverageFromMap": "Hide coverage area"
         }
     }
 });

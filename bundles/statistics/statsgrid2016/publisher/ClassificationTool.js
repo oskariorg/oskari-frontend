@@ -2,6 +2,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
 }, {
     index: 1,
     group: 'data',
+    id: 'allowClassification',
+    title: 'allowClassification',
 
     init: function (data) {
         const conf = this.getStatsgridConf(data);
@@ -14,12 +16,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
     },
     getTool: function () {
         return {
-            id: 'Oskari.statistics.statsgrid.ClassificationPlugin',
-            title: 'allowClassification',
+            ...this.getToolInfo(),
             config: {
                 allowClassification: false
-            },
-            hasNoPlugin: true
+            }
         };
     },
     _setEnabledImpl: function (enabled) {

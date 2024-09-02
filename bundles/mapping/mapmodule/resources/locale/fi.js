@@ -38,6 +38,9 @@ Oskari.registerLocalization(
                     "close": "Sulje"
                 }
             },
+            "BackgroundLayerSelectionPlugin": {
+                "emptyOption": "Ei valintaa"
+            },
             "LayerSelectionPlugin": {
                 "title": "Karttatasot",
                 "chooseDefaultBaseLayer": "Valitse taustakartta",
@@ -144,12 +147,16 @@ Oskari.registerLocalization(
         "guidedTour": {
             "help1": {
                 "title": "Kartan liikuttaminen",
-                "message": "Kartan liikuttaminen onnistuu kolmella eri tavalla. <br/> Raahaa karttaa hiirellä, kun käsi-työkalu on valittuna. <br/> Liikuta karttaa näppäimistön nuolinäppäimillä. <br/> Klikkaa nuolia oikeassa yläkulmassa olevassa panorointityökalussa."
+                "message": "Kartan liikuttaminen onnistuu kahdella eri tavalla. <br/> Raahaa karttaa hiirellä, kun käsi-työkalu on valittuna. <br/> Liikuta karttaa näppäimistön nuolinäppäimillä."
             },
             "help2": {
                 "title": "Lähentäminen ja loitontaminen",
                 "message": "Lähentämällä voit tarkentaa karttanäkymää. Loitontamalla saat näkyviin suuremman alueen. Nämä onnistuvat usealla eri tavalla. <br/> <br/> Valitse mittakaava mittakaavasäätimestä. Voit myös käyttää (+)- ja (-)-painikkeita mittakaavasäätimen päissä. <br/> <br/>  Käytä näppäimistön (+)- ja (-)-painikkeita. <br/> <br/>  Kaksoisklikkaa karttanäkymää tai käytä suurennuslasi-työkalua lähentääksesi karttaa."
             }
+        },
+        "layerCoverageTool": {
+            "name": "Näytä kattavuusalue",
+            "removeCoverageFromMap": "Piilota kattavuusalue"
         }
     }
 });

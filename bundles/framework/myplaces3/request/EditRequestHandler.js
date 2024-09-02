@@ -1,3 +1,9 @@
+import './EditPlaceRequest';
+import './DeletePlaceRequest';
+import './EditCategoryRequest';
+import './DeleteCategoryRequest';
+import './PublishCategoryRequest';
+import { getCategoryId } from '../service/LayerHelper';
 /**
  * @class Oskari.mapframework.bundle.myplaces3.request.EditRequestHandler
  * Handles sequests for a saved "my place" or my places categorires to be opened for editing
@@ -59,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditRequestHan
             handler.deletePlace(id);
         },
         _handleEditCategory: function (sandbox, request) {
-            const id = request.getId();
+            const id = getCategoryId(request.getId());
             this.log.debug('edit requested for category ' + id);
             const handler = this.instance.getMyPlacesHandler();
             if (!handler) {
@@ -72,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditRequestHan
             this.log.warn(`Delete requested for category: ${id}. This handler doesn't ask for move places or confirm. Skipping!`);
         },
         _handlePublishCategory: function (sandbox, request) {
-            const id = request.getId();
+            const id = getCategoryId(request.getId());
             this.log.debug('(un/)publish requested for category ' + id);
             const service = this.instance.getService();
             if (!service) {

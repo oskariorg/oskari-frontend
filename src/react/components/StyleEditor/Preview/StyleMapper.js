@@ -3,7 +3,8 @@
  * @param {String} format point, line or area
  * @param {Object} props flags for style selection based on format
  */
-const getAsDataAttributes = (format, props) => {
+export const getAsDataAttributes = (format, style) => {
+    const props = getPropsForFormat(format, style);
     const testAttrs = {
         'data-format': format
     };
@@ -31,13 +32,15 @@ const getPropsForFormat = (format, style) => {
 }
 
 const getAreaPropsFromStyle = (style) => {
+    const { fill = {} } = style;
+    const stroke = style.stroke?.area || {};
     return {
-        color: style.fill.color,
-        strokecolor: style.stroke.area.color,
-        size: style.stroke.area.width,
-        strokestyle: style.stroke.area.lineDash,
-        linejoin: style.stroke.area.lineJoin,
-        pattern: style.fill.area.pattern
+        color: fill.color,
+        strokecolor: stroke.color,
+        size: stroke.width,
+        strokestyle: stroke.lineDash,
+        linejoin: stroke.lineJoin,
+        pattern: fill.area?.pattern
     };
 };
 
@@ -60,9 +63,4 @@ const getPointPropsFromStyle = (style = {}) => {
         size: image.size,
         shape: image.shape
     };
-};
-
-export const StyleMapper = {
-    getPropsForFormat,
-    getAsDataAttributes
 };

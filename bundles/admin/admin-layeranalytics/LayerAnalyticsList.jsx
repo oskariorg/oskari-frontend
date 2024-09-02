@@ -1,10 +1,11 @@
 import React, { Fragment, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
-import { Message, Space, Spin, Tooltip, TextInput, Select, Option } from 'oskari-ui';
-import { DeleteButton, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
-import { EditOutlined, SearchOutlined } from '@ant-design/icons';
+import { Message, Space, Spin, Tooltip, TextInput, Select, Option, Button } from 'oskari-ui';
+import { DeleteButton, SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
+import { SearchOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import { ThemeConsumer } from 'oskari-ui/util';
 
 const TitleArea = styled.span`
     & {
@@ -28,14 +29,16 @@ const StyledSelect = styled(Select)`
 `;
 
 const SearchIcon = styled(SearchOutlined)`
-    color: ${props => props.$filtered ? '#3c3c3c' : '#bfbfbf'}
+    color: ${props => props.$filtered ? props?.$theme?.color?.accent || '#3c3c3c' : '#bfbfbf'};
+    ${props => props.$filtered && ('border-radius: 3px;')}
+    font-size: ${props => props.$filtered ? '16px' : '12px'};
 `;
 
 const sorterTooltipOptions = {
     title: <Message messageKey='flyout.sorterTooltip' />
 };
 
-export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallback, layerDetailsCallback, removeAnalyticsCallback }) => {
+export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoading, layerEditorCallback, layerDetailsCallback, removeAnalyticsCallback }) => {
     const searchInput = useRef(null);
     const selectInput = useRef(null);
 
@@ -63,28 +66,33 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
                         value={selectedKeys[0]}   
                         onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                         onPressEnter={() => confirm({ closeDropdown: true })}
+                        allowClear
                     />
                 )}
             </FilterFields>
             <Space>
                 {dataIndex !== 'dataProducer' && (
-                    <PrimaryButton
-                    type="search"
-                    onClick={() => confirm({ closeDropdown: true })}
-                    icon={<SearchOutlined />}
-                    size="small"
-                    />
+                    <Button
+                        type="primary"
+                        onClick={() => confirm({ closeDropdown: true })}
+                        size="small"
+                    >
+                        <Message messageKey='flyout.filter' />
+                    </Button>
                 )}
                 <SecondaryButton
-                    type="reset"
-                    onClick={() => clearFilters()}
+                    type="clear"
+                    onClick={() => {
+                        clearFilters();
+                        confirm({ closeDropdown: true });
+                    }}
                     size="small"
                 />
             </Space>
           </FilterContainer>
         ),
         filterIcon: (filtered) => (
-          <SearchIcon $filtered={filtered} />
+          <SearchIcon $filtered={filtered} $theme={theme} />
         ),
         onFilter: (value, record) =>
           record[dataIndex]
@@ -92,9 +100,8 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
             .toLowerCase()
             .includes((value).toLowerCase()),
         onFilterDropdownOpenChange: (visible) => {
-          if (visible) {
-            const ref = dataIndex === 'dataProducer' ? selectInput : searchInput;
-            setTimeout(() => ref.current?.select(), 100);
+          if (visible && dataIndex !== 'dataProducer') {
+            setTimeout(() => searchInput.current?.select(), 100);
           }
         },
         render: (text) => text
@@ -119,7 +126,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
         },
         {
             align: 'left',
-            title: <Message messageKey='flyout.idTitle' />,
+            title: <Message messageKey='flyout.fields.title' />,
             dataIndex: 'title',
             defaultSortOrder: 'ascend',
             sortDirections: ['descend', 'ascend', 'descend'],
@@ -138,7 +145,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
         },
         {
             align: 'left',
-            title: <Message messageKey='flyout.layerDataProvider' />,
+            title: <Message messageKey='flyout.fields.dataProducer' />,
             dataIndex: 'dataProducer',
             defaultSortOrder: 'ascend',
             sortDirections: ['descend', 'ascend', 'descend'],
@@ -151,7 +158,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
         },
         {
             align: 'left',
-            title: 'Type',
+            title: <Message messageKey='flyout.fields.layerType' />,
             dataIndex: 'layerType',
             defaultSortOrder: 'ascend',
             sortDirections: ['descend', 'ascend', 'descend'],
@@ -163,7 +170,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
         },
         {
             align: 'left',
-            title: <Message messageKey='flyout.totalDisplaysTitle' />,
+            title: <Message messageKey='flyout.fields.total' />,
             dataIndex: 'total',
             sortDirections: ['descend', 'ascend', 'descend'],
             sorter: (a, b) => a.total - b.total,
@@ -171,7 +178,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
         },
         {
             align: 'left',
-            title: <Message messageKey='flyout.failurePercentage' />,
+            title: <Message messageKey='flyout.fields.failurePercentage' />,
             dataIndex: 'failurePercentage',
             sortDirections: ['descend', 'ascend', 'descend'],
             sorter: (a, b, sortOrder) => {
@@ -197,9 +204,9 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
                     <React.Fragment>
                         <TitleArea>
                             <Space>
-                                <Tooltip title={ <Message messageKey='flyout.editLayerTooltip' /> }>
-                                    <EditOutlined onClick={ () => layerEditorCallback(item.id) } />
-                                </Tooltip>
+                                <IconButton type='edit'
+                                    title={ <Message messageKey='flyout.editLayerTooltip' /> }
+                                    onClick={ () => layerEditorCallback(item.id) } />
                                 <DeleteButton
                                     type='icon'
                                     title={<Message messageKey='flyout.removeAllDataForLayer' />}
@@ -229,7 +236,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
             pagination={{ position: ['none', 'bottomCenter'] }}
         />
     );
-};
+});
 
 LayerAnalyticsList.propTypes = {
     analyticsData: PropTypes.array.isRequired,

@@ -200,7 +200,7 @@ Oskari.registerLocalization(
                     "gfiDialog": {
                         "title": "Feature Info",
                         "featureName": "Preview",
-                        "featureDesc": "The selected color scheme affects a graphic layout of feature and map layer popup info wimdows."
+                        "featureDesc": "The selected color scheme affects a graphic layout of feature and map layer popup info windows."
                     }
                 }
             },
@@ -246,6 +246,9 @@ Oskari.registerLocalization(
                 "baseLayers": "Background maps",
                 "noBaseLayers": "No selected background maps",
                 "noLayers": "No selected map layers"
+            },
+            "additional": {
+                "label": "Additional tools"
             },
             "preview": "Map preview",
             "location": "Location and zoom level",

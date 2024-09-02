@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Message, TextInput, Link } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { InfoTooltip } from '../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { StyledFormField, Border } from './styled';
 import { RasterStyleSelect } from './RasterStyle/RasterStyleSelect';
 import { ServiceLegend } from './RasterStyle/ServiceLegend';
@@ -42,7 +42,10 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
     return (
         <Fragment>
             <Message messageKey='styles.raster.title'/>
-            <InfoTooltip messageKeys={['styles.raster.styleDesc', 'styles.desc']} />
+            <InfoIcon>
+                <Message messageKey='styles.raster.styleDesc'/>
+                <Message messageKey='styles.desc'/>
+            </InfoIcon>
             <Border>
                 <Fragment>
                     <RasterStyleSelect
@@ -58,7 +61,7 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
                     <StyledFormField>
                         <Fragment>
                             <Message messageKey='styles.raster.overriddenLegend' />
-                            <InfoTooltip messageKeys='styles.raster.overrideTooltip' />
+                            <InfoIcon title={<Message messageKey='styles.raster.overrideTooltip'/>} />
                             { legendUrl && <Link url = {legendUrl} /> }
                             <TextInput
                                 value = {legendUrl}

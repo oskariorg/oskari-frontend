@@ -11,8 +11,6 @@ Oskari.registerLocalization(
         "tab": {
             "title": "Kohteet",
             "categoryTitle": "Karttataso",
-            "nocategories": "Sinulla ei ole tallennettuja omia kohteita.", // PersonalData removal
-            "maxFeaturesExceeded": "Sinulla on liikaa omia kohteita. Poista osa kohteista.", // PersonalData removal
             "publishCategory": {
                 "privateTooltip": "Karttataso on yksityinen. Muuta karttataso julkiseksi klikkaamalla tästä.",
                 "publicTooltip": "Karttataso on julkinen. Muuta karttataso yksityiseksi klikkaamalla tästä."
@@ -21,7 +19,6 @@ Oskari.registerLocalization(
                 "title":"Vie kohteet",
                 "tooltip": "Lataa karttatason kohteet GeoJSON-muodossa."
             },
-            "addCategoryFormButton": "Uusi karttataso", // PersonalData removal
             "addCategory": "Lisää karttataso",
             "editCategory": "Muokkaa karttatasoa",
             "deleteCategory": "Poista karttataso",
@@ -38,7 +35,6 @@ Oskari.registerLocalization(
             },
             "confirm": {
                 "deleteCategory": "Haluatko poistaa karttatason {name}?",
-                "deleteConfirmMove": "Olet poistamassa karttatasoa \"{0}\". Karttatasolla on {1, plural, one {# kohde} other {# kohdetta}}. Haluatko: <br/> 1. poistaa karttatason kohteineen <br/> 2. siirtää {1, plural, one {kohteen} other {kohteet}} oletuskarttatasolle \"{2}\" ennen karttatason poistoa?", // PersonalData removal
                 "categoryToPrivate": "Olet muuttamassa karttatasoa {name} yksityiseksi. Karttataso ei ole enää julkisesti jaettavissa ja sitä ei voi liittää toiseen verkkopalveluun. Karttataso ei ole enää muiden palvelun käyttäjien nähtävissä.",
                 "categoryToPublic": "Olet muuttamassa karttatasoa {name} julkiseksi. Karttataso on tämän jälkeen julkisesti jaettavissa ja sen voi liittää toiseen verkkopalveluun. Karttataso on myös muiden palvelun käyttäjien nähtävissä.",
                 "deletePlace": "Haluatko poistaa kohteen \"{name}\"?"
@@ -69,10 +65,11 @@ Oskari.registerLocalization(
             "area": {
                 "title": "Lisää alue omiin kohteisiin",
                 "tooltip": "Piirrä alue ja lisää se omiin kohteisiin.",
-                "add": "Piirrä alue kartalle. Klikkaa alueen reunapisteitä. Lopuksi kaksoisklikkaa viimeistä pistettä tai paina \"Tallenna kohde\".",
+                "add": "Piirrä alue kartalle klikkaamalla alueen reunapisteitä. Lopuksi kaksoisklikkaa viimeistä pistettä. Voit piirtää samaan kohteeseen useita alueita. Lopuksi paina \"Tallenna kohde\".",
                 "next": "Voit piirtää samaan kohteeseen useita alueita.",
                 "edit": "Voit siirtää taitepisteitä raahaamalla niitä hiirellä.",
-                "noResult": "0 m²"
+                "noResult": "0 m²",
+                "save": "Tallenna kohde"
             }
         },
         "buttons": {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Message, Checkbox, NumberInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from './styled';
-import { InfoTooltip } from '../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 
 const StyledDynamicScreenSpaceErrorOptionsContainer = styled.div`
     display: flex;
@@ -57,11 +57,9 @@ const DynamicScreenSpaceError = ({ layer, controller }) => (
                 }
             />
         </StyledInputContainer>
-        <InfoTooltip message={
-            <Fragment>
-                <pre>{dynamicScreenSpaceErrorTemplate}</pre>
-            </Fragment>
-        } />
+        <InfoIcon>
+            <pre>{dynamicScreenSpaceErrorTemplate}</pre>
+        </InfoIcon>
     </StyledDynamicScreenSpaceErrorOption>
 );
 
@@ -80,11 +78,9 @@ const DynamicScreenSpaceErrorDensity = ({ layer, controller, defaultValue }) => 
                 }
             />
         </StyledInputContainer>
-        <InfoTooltip message={
-            <Fragment>
-                <pre>{dynamicScreenSpaceErrorDensityTemplate}</pre>
-            </Fragment>
-        } />
+        <InfoIcon>
+            <pre>{dynamicScreenSpaceErrorDensityTemplate}</pre>
+        </InfoIcon>
     </StyledDynamicScreenSpaceErrorOption>
 );
 
@@ -103,11 +99,9 @@ const DynamicScreenSpaceErrorFactor = ({ layer, controller, defaultValue }) => (
                 }
             />
         </StyledInputContainer>
-        <InfoTooltip message={
-            <Fragment>
-                <pre>{dynamicScreenSpaceErrorFactorTemplate}</pre>
-            </Fragment>
-        } />
+        <InfoIcon>
+            <pre>{dynamicScreenSpaceErrorFactorTemplate}</pre>
+        </InfoIcon>
     </StyledDynamicScreenSpaceErrorOption>
 );
 
@@ -126,11 +120,9 @@ const DynamicScreenSpaceErrorHeightFalloff = ({ layer, controller, defaultValue 
                 }
             />
         </StyledInputContainer>
-        <InfoTooltip message={
-            <Fragment>
-                <pre>{dynamicScreenSpaceErrorHeightFalloffTemplate}</pre>
-            </Fragment>
-        } />
+        <InfoIcon>
+            <pre>{dynamicScreenSpaceErrorHeightFalloffTemplate}</pre>
+        </InfoIcon>
     </StyledDynamicScreenSpaceErrorOption>
 );
 
@@ -154,11 +146,9 @@ const MaximumScreenSpaceError = ({ layer, controller, defaultValue }) => {
                     }
                 />
             </StyledInputContainer>
-            <InfoTooltip message={
-                <Fragment>
-                    <pre>{maximumScreenSpaceErrorTemplate}</pre>
-                </Fragment>
-            } />
+            <InfoIcon>
+                <pre>{maximumScreenSpaceErrorTemplate}</pre>
+            </InfoIcon>
         </StyledDynamicScreenSpaceErrorOption>
     );
 };

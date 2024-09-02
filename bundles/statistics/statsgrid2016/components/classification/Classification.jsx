@@ -11,7 +11,7 @@ const Container = styled.div`
     border: 1px solid rgba(0,0,0,0.2);
     pointer-events: auto;
     text-align: left;
-
+    max-height: 100vh;
     &.transparent-classification {
         background-color: transparent;
         border: 1px solid transparent;
@@ -31,7 +31,10 @@ const Container = styled.div`
         }
     }
 `;
-
+const ContentWrapper = styled.div`
+    overflow-y: auto;
+    max-height: 80vh;
+`;
 const LegendContainer = styled.div`
     margin-bottom: 6px;
     cursor: grab;
@@ -56,13 +59,6 @@ export const Classification = ({
     });
 
     const toggleEdit = () => setEdit(!isEdit);
-    const getContentWrapperStyle = () => {
-        const docHeight = document.documentElement.offsetHeight;
-        return {
-            maxHeight: docHeight - 50 + 'px', // header + border,
-            overflowY: 'auto'
-        };
-    };
 
     return (
         <Container className={transparent && !isEdit ? 'transparent-classification' : ''}>
@@ -72,7 +68,7 @@ export const Classification = ({
                 toggleEdit = {toggleEdit}
                 indicators = {indicators}
                 onChange = {controller.setActiveIndicator}/>
-            <div style={getContentWrapperStyle()}>
+            <ContentWrapper>
                 {isEdit &&
                     <EditClassification
                         options = {editOptions}
@@ -88,7 +84,7 @@ export const Classification = ({
                         transparency = {classification.transparency}
                     />
                 </LegendContainer>
-            </div>
+            </ContentWrapper>
         </Container>
     );
 };

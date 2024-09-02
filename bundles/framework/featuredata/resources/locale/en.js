@@ -5,7 +5,8 @@ Oskari.registerLocalization(
         "value": {
             "title": "Feature Data",
             "layer": {
-                "outOfContentArea": "The map layer has no features at the map view area."
+                "outOfContentArea": "The map layer has no features at the map view area.",
+                "featureData": "Feature data",
             },
             "flyout": {
                 "sorterTooltip": "Click to sort descending/ascending",
@@ -36,6 +37,7 @@ Oskari.registerLocalization(
                 "openButtonLabel": "Export data",
                 "exportButtonLabel": "Export",
                 "exportFailed": "Exporting the data failed.",
+                "datasetTooLargeForExcel": "Dataset is too large for generating an excel file. Limit the number of features or choose csv as format.",
                 "fileFormat": {
                     "title": "File format",
                     "excel": "Excel",
@@ -60,6 +62,43 @@ Oskari.registerLocalization(
                     "layerName": "Map layer name"
                 }
             },
-            "showSelectedFirst": "Show selected first"
-        }
+            "showSelectedFirst": "Show selected first",
+            "toggleCompressedView": "Condensed view",
+            "selectionTools": {
+                "title": "Select Features",
+                "instructions": " ",
+                "selectFromTop": "From topmost layer",
+                "selectAll": "From all layers",
+                "link": {
+                    "title": "Select more features"
+                },
+                "button": {
+                    "cancel": "Close",
+                    "empty": "Deselect All",
+                    "show": "Show features",
+                    "close": "Close",
+                    "edit": "Edit"
+                },
+                "tools": {
+                    "point": {
+                        "tooltip": "Draw a point. If the point is inside a feature, the feature will be selected."
+                    },
+                    "line": {
+                        "tooltip": "Draw a line. If the line intersects a feature, the feature will be selected."
+                    },
+                    "polygon": {
+                        "tooltip": "Draw a polygon. If the polygon intersects a feature, the feature will be selected."
+                    },
+                    "square": {
+                        "tooltip": "Draw a square. If the square intersects a feature, the square will be selected."
+                    },
+                    "circle": {
+                        "tooltip": "Draw a circle. If the circle intersects a feature, the feature will be selected."
+                    },
+                    "select": {
+                        "tooltip": "Draw a geometry and select features based on that geometry."
+                    }
+                }
+            },
+            }
     });

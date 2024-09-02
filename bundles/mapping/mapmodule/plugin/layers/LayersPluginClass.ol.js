@@ -8,6 +8,7 @@ import './request/MapMoveByLayerContentRequest';
 import './request/MapMoveByLayerContentRequestHandler';
 
 import olFormatWKT from 'ol/format/WKT';
+import { CoverageHelper } from './coveragetool/CoverageHelper';
 
 const WKT_READER = new olFormatWKT();
 const AbstractMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin');
@@ -34,6 +35,7 @@ export class LayersPlugin extends AbstractMapModulePlugin {
         this._visibilityCheckOrder = 0;
         this._previousTimer = null;
         this._supportedTimer = null;
+        this.coverageHelper = new CoverageHelper();
     }
 
     _createEventHandlers () {
@@ -111,6 +113,7 @@ export class LayersPlugin extends AbstractMapModulePlugin {
             if (geometry) {
                 layer.setGeometryWKT(coverage);
                 layer.setGeometry([geometry]);
+                this.coverageHelper.addCoverageTool(layer);
             }
         }
         // set visibility info
@@ -223,14 +226,15 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      * @param {Number} orderNumber checks orderNumber against
      * #_visibilityCheckOrder
      *      to see if this is the latest check, if not - does nothing
+     * @param {boolean} isRequest triggered by a request
      */
-    _checkLayersVisibility (orderNumber) {
+    _checkLayersVisibility (orderNumber, isRequest) {
         if (orderNumber !== this._visibilityCheckOrder) {
             return;
         }
         this._sandbox.findAllSelectedMapLayers().forEach(layer => {
             if (layer.isVisible()) {
-                this.handleMapLayerVisibility(layer);
+                this.handleMapLayerVisibility(layer, isRequest);
             }
         });
         this._visibilityCheckScheduled = false;

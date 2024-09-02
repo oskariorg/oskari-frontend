@@ -47,14 +47,15 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
     },
     showPopup (requestOpts) {
         const { id, addToLayer, layerId } = requestOpts;
+        const layerStyles = this.service.getStylesByLayer(layerId);
         const showEditor =
             typeof id !== 'undefined' ||
             typeof addToLayer === 'number' ||
-            this.service.getStylesByLayer(layerId).length === 0;
+            layerStyles.length === 0;
         const requestedLayer = addToLayer || layerId;
 
         const onClose = (wasEditor) => {
-            if (wasEditor === true) {
+            if (wasEditor === true && layerStyles.length > 1) {
                 this.updateStyleList(requestedLayer);
                 return;
             }
@@ -65,6 +66,10 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
             layerId: requestedLayer,
             showEditor
         };
+        if (showEditor) {
+            options.geometryType = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService')
+                ?.findMapLayer(requestedLayer)?.getGeometryType();
+        }
         if (this.popupController) {
             this.popupController.update(options);
         } else {

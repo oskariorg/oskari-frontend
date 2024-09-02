@@ -22,6 +22,10 @@ Oskari.clazz.category(
                 return false;
             }
             // Without a conf, all buttons are included
+            if (pGroup === 'basictools' && pId === 'zoombox') {
+                // except for zoombox on mobile
+                return !Oskari.util.isMobile();
+            }
             return true;
         },
         /**

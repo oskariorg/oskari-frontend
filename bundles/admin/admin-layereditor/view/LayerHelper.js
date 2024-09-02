@@ -1,3 +1,29 @@
+// oskari-server WFSLayerAttributes
+export const DATA = {
+    GEOMETRY: 'simpleGeometryType',
+    REPLACE_ID: 'replaceFeatureId',
+    NO_DATA: 'noDataValue',
+    COMMON_ID: 'commonId'
+};
+
+export const GEOMETRY_TYPES = ['unknown', 'point', 'line', 'area', 'collection'];
+const AREA_TYPES = ['surface', 'polygon'];
+
+export const getGeometryType = layer => {
+    const { attributes, capabilities } = layer;
+    const attrGeometry = attributes.data?.[DATA.GEOMETRY];
+    if (attrGeometry) {
+        return attrGeometry;
+    }
+    const { geomName, featureProperties = [] } = capabilities;
+    const capaType = featureProperties.find(prop => prop.name === geomName)?.type.toLowerCase() || '';
+    // SurfacePropertyType, GeometryPropertyType, PointPropertyType, MultiLineStringPropertyType, MultiPolygon,...
+    if (AREA_TYPES.find(type => capaType.includes(type))) {
+        return 'area';
+    }
+    return GEOMETRY_TYPES.find(type => capaType.includes(type)) || 'unknown';
+};
+
 // keys are the server side expected keys and values are the keys used by frontend
 const APIMapping = {
     dataprovider_id: 'dataProviderId',

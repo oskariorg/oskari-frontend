@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { StyledFormField } from '../styled';
 import { JsonInput } from '../../JsonInput';
-import { InfoTooltip } from '../../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 
 const featureStyle =
 `{
@@ -39,8 +39,11 @@ export const VectorStyleJson = ({ style, type, onChange }) => {
     const template = TEMPLATES[type];
     return (
         <Fragment>
-            <Message messageKey={`styles.vector.json.${type}`}/>
-            <InfoTooltip message={<pre>{template}</pre>} />
+            <Message messageKey={`styles.vector.${type}`}/>
+            <span> (JSON)</span>
+            <InfoIcon>
+                <pre>{template}</pre>
+            </InfoIcon>
             <StyledFormField>
                 <JsonInput
                     rows={6}

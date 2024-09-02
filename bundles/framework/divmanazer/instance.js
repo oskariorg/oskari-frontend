@@ -1,4 +1,5 @@
 import { getNavigationDimensions, getPositionForCentering, PLACEMENTS } from 'oskari-ui/components/window';
+import './plugin/ToggleNavigation';
 /**
  * @class Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance
  *
@@ -139,6 +140,28 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 me.requestHandlers.modal
             );
 
+            this.eventHandlers = this._createEventHandlers();
+
+            for (const p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(me, p);
+                }
+            }
+
+            // Hide navigation if starts in mobile mode
+            const nav = Oskari.dom.getNavigationEl();
+            if (nav) {
+                Oskari.dom.showNavigation(!Oskari.util.isMobile());
+                const mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                const ToggleNavigationPlugin = Oskari.clazz.create('Oskari.userinterface.plugin.ToggleNavigationPlugin');
+                mapModule.registerPlugin(ToggleNavigationPlugin);
+                mapModule.startPlugin(ToggleNavigationPlugin);
+            }
+
+            Oskari.on('app.start', () => {
+                Oskari.dom.setMenuScrollIndicator();
+            });
+
             /* removed for some reason or another */
             // sandbox.registerAsStateful(me.mediator.bundleId, me);
         },
@@ -179,6 +202,11 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             );
 
             // this.sandbox.unregisterStateful(this.mediator.bundleId);
+            for (const p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    this.sandbox.unregisterFromEventByName(this, p);
+                }
+            }
 
             this.sandbox.unregister(this);
             this.started = false;
@@ -1294,6 +1322,35 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
              * finally bump the requested flyout to top
              */
             toTop.css('z-index', min + zarray.length + 2);
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event
+         * object
+         * Event is handled forwarded to correct #eventHandlers if found
+         * or discarded if not.
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+
+            return handler.apply(this, [event]);
+        },
+        /**
+         * @method _createEventHandlers
+         * Create eventhandlers.
+         *
+         *
+         * @return {Object.<string, Function>} EventHandlers
+         */
+        _createEventHandlers: function () {
+            return {
+                MapSizeChangedEvent: function (evt) {
+                    Oskari.dom.setMenuScrollIndicator();
+                }
+            };
         },
         ieFixClasses: [{
             min: 400,

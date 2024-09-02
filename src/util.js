@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify';
+import { DELTA, EFFECT, DEFAULT_DELTA } from './constants';
 const MobileDetect = require('mobile-detect');
 
 /*
@@ -14,7 +15,7 @@ Oskari.util = (function () {
     // break points for "mobile mode"
     const mobileDefs = {
         width: 650,
-        height: 650
+        height: 500
     };
     const isMobileDevice = !!(new MobileDetect(window.navigator.userAgent).mobile());
 
@@ -214,6 +215,47 @@ Oskari.util = (function () {
     };
 
     /**
+     * Convert color to array
+     *
+     * @method colorToArray
+     * @param {String} color hex, rgb or rgba
+     * @return {Array} color as an array [r, g, b(,a)]. Where r,g,b are int 0-255 and a is float 0-1.
+     */
+    util.colorToArray = function (color) {
+        if (typeof color !== 'string') {
+            return [];
+        }
+        const bracket = color.indexOf('(');
+        if (bracket !== -1) {
+            const parts = color.substring(bracket + 1, color.indexOf(')')).split(',');
+            return parts.map((part, i) => {
+                if (i === 3) {
+                    return parseFloat(part);
+                }
+                return parseInt(part);
+            });
+        }
+        let hex = color.charAt(0) === '#' ? color.substring(1) : color;
+        let a;
+        // parse alpha if exists
+        if (hex.length === 4 || hex.length === 8) {
+            const isShort = hex.length === 4;
+            const i = isShort ? 3 : 6;
+            const hexA = isShort ? hex[i] + hex[i] : hex.substring(i);
+            a = parseInt(hexA, 16) / 255;
+            // don't pass alpha to hexToRgb
+            hex = hex.substring(0, i);
+        }
+        // supports short and full hex
+        const parts = util.hexToRgb(hex);
+        if (!parts) {
+            return [];
+        }
+        const { r, g, b } = parts;
+        return typeof a === 'undefined' ? [r,g,b] : [r,g,b,a];
+    };
+
+    /**
      * Convert rgb values to hexadecimal color values
      *
      * @method rgbToHex
@@ -236,6 +278,63 @@ Oskari.util = (function () {
         return parts.join('');
     };
 
+    /**
+     * @method getDeltaForEffect
+     * @param {String} color Color to apply the effect on
+     * @param {String|Number} effect Oskari style constant (auto, darken, lighten with specifiers minor, normal, major) or delta (auto is used)
+     * @return {Number} delta
+     */
+    util.getDeltaForEffect = function (color = '', effect = '') {
+        if (typeof effect === 'number') {
+            return this.isLightColor(color) ? -effect : effect;
+        }
+
+        let delta = DEFAULT_DELTA;
+        Object.keys(DELTA).forEach(key => {
+            if (effect.includes(key)) {
+                delta = DELTA[key];
+            }
+        });
+        if (effect.includes(EFFECT.DARKEN) || (effect.includes(EFFECT.AUTO) && this.isLightColor(color))) {
+            return -delta;
+        }
+        return delta;
+    };
+
+    /**
+     * @method getColorEffect
+     * @param {String} color Color to apply the effect on
+     * @param {String} effect Oskari style constant
+     * @return {String} Affected color (hex or rgba) or original color if failed to apply effect
+     */
+    util.getColorEffect = function (color, effect) {
+        if (!effect || !color || effect === EFFECT.NONE) {
+            return color;
+        }
+        const delta = this.getDeltaForEffect(color, effect);
+        const colors = Oskari.util.colorToArray(color).map((part, i) => {
+            if (i >= 3) {
+                return part;
+            }
+            const clr = part + delta;
+            if (clr > 255) {
+                return 255;
+            } else if (clr < 0) {
+                return 0;
+            }
+            return clr;
+        });
+        if (colors.length === 3) {
+            return '#' + colors.map(part => {
+                const hex = part.toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('');
+        } else if (colors.length === 4) {
+            const [r,g,b,a] = colors;
+            return `rgba(${r},${g},${b},${a})`;
+        }
+        return color;
+    };
     /**
      * Returns a new color string for lighter or darker color than the original.
      * @param {String} colorStr color to change
@@ -274,7 +373,6 @@ Oskari.util = (function () {
         var green = (num & 0x0000FF) + amount;
         if (green > 255) green = 255;
         else if (green < 0) green = 0;
-
         var color = (green | (blue << 8) | (red << 16)).toString(16);
         // Pad with leading zeros
         color = String('000000' + color).slice(-6);
@@ -410,11 +508,11 @@ Oskari.util = (function () {
             r = color[0];
             g = color[1];
             b = color[2];
-        } else if (color[0] === '#' && color.length === 7) {
+        } else if (color[0] === '#' && color.length === 7 || color.length === 9) {
             r = parseInt(color.slice(1, 3), 16);
             g = parseInt(color.slice(3, 5), 16);
             b = parseInt(color.slice(5, 7), 16);
-        } else if (color[0] === '#' && color.length === 4) {
+        } else if (color[0] === '#' && color.length === 4 || color.length === 5) {
             r = parseInt(color[1] + color[1], 16);
             g = parseInt(color[2] + color[2], 16);
             b = parseInt(color[3] + color[3], 16);
@@ -799,6 +897,20 @@ Oskari.util = (function () {
         const localeDate = dateTime.toLocaleDateString(locales, date);
         const localeTime = dateTime.toLocaleTimeString(locales, {...defaults, ...time});
         return `${localeDate} ${localeTime}`;
+    };
+
+    util.mouseExists = () => {
+        if (window.matchMedia("(pointer: fine)").matches) {
+            // Has a mouse-like device
+            return true;
+        }
+        // Probably mobile
+        return false;
+    };
+
+    util.deepClone = (source = {}, ...merges) => {
+        // TODO: remove jQuery dependency
+        return jQuery.extend(true, {}, source, ...merges);
     };
 
     return util;

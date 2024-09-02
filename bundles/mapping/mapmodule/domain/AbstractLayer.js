@@ -141,6 +141,7 @@ Oskari.clazz.define(
             unsupported: null // {UnsupportedLayerReason} most severe reason if unsupported
         };
         this._describeLayerStatus = DESCRIBE_LAYER.UNDEFINED;
+        this._describeLayerInfo = null;
     }, {
         /**
          * @method setId
@@ -1289,6 +1290,12 @@ Oskari.clazz.define(
         },
         handleDescribeLayer: function (info) {
             // to override in AbstarctVectorLayer
+        },
+        getDescribeLayerInfo: function () {
+            return this._describeLayerInfo;
+        },
+        setDescribeLayerInfo: function (info) {
+            this._describeLayerInfo = info;
         }
     }
 );

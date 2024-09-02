@@ -11,8 +11,6 @@ Oskari.registerLocalization(
         "tab": {
             "title": "Platser",
             "categoryTitle": "Kartlager",
-            "nocategories": "Du har inte några sparade platser ännu.", // PersonalData removal
-            "maxFeaturesExceeded": "Du har överskridit det maximala beloppet för de egna platserna. Alla platser har inte laddats.", // PersonalData removal
             "publishCategory": {
                 "privateTooltip": "Detta kartlager är privat. Klicka här för att publicera den.",
                 "publicTooltip": "Detta kartlager är offentlig. Klicka här för att avpublicera det."
@@ -21,7 +19,6 @@ Oskari.registerLocalization(
                 "title":"Exportera objekt",
                 "tooltip": "Ladda kartlagets objekt som GeoJSON."
             },
-            "addCategoryFormButton": "Nytt kartlager", // PersonalData removal
             "addCategory": "Lägg till kartlagret",
             "editCategory": "Redigera kartlagret",
             "deleteCategory": "Ta bort kartlagret",
@@ -38,7 +35,6 @@ Oskari.registerLocalization(
             },
             "confirm": {
                 "deleteConfirm": "Vill du ta bort kartlagret \"{name}\"?",
-                "deleteConfirmMove": "Kartlager \"{0}\" innehåller {1} st. objekt. Vill du ta bort nivån och flytta objekten på den till det förvalda kartlagret \"{2}\" eller vill du ta bort kartlagret och dess platser?", // PersonalData removal
                 "categoryToPrivate": "Du håller på att avpublicera kartlagret \"{name}\". Efter detta kan du inte längre dela kart-lagret eller inbädda det som en karta. Andra användare kan inte heller titta på det i Paikkatietoikkuna.",
                 "categoryToPublic": "Du publicerar kartlagret \"{name}\". Du kan dela ett offentligt kartlager till andra internetanvändare eller inbädda det som en karta i en annan webbtjänst. Andra användare kan även titta på kartlagret i Paikkatietoikkuna.",
                 "deletePlace": "Vill du ta bort denna plats \"{name}\"?"
@@ -67,12 +63,13 @@ Oskari.registerLocalization(
                 "noResult": "0 m"
             },
             "area": {
-                "title": "Lägg till område",
+                "title": "Lägg till ett eget område",
                 "tooltip": "Lägg till ett område till \"Mina platser\".",
-                "add": "Rita ett område genom att lägga till kantlinjens brytpunkter till kartan. Du kan lägga till brytpunkter genom att klicka på kartan. Sluta dra genom att dubbelklicka eller genom att klicka på \"Spara som min plats\".",
+                "add": "Rita ett område genom att klicka på kartan. Dubbelklicka för att avsluta. Ett objekt kan innehålla flera områden. Klicka till sist på \"Spara som mitt objekt\".",
                 "next": "En plats kan innehålla en eller flera områden.",
                 "edit": "Redigera området genom att klicka och dra i brytningspunkterna.",
-                "noResult": "0 m²"
+                "noResult": "0 m²",
+                "save": "Spara som mitt objekf"
             }
         },
         "buttons": {

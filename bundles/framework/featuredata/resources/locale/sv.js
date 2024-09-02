@@ -5,7 +5,8 @@ Oskari.registerLocalization(
         "value": {
             "title": "Objektuppgifter",
             "layer": {
-                "outOfContentArea": "Detta kartlager saknar innehåll vid dessa koordinater."
+                "outOfContentArea": "Detta kartlager saknar innehåll vid dessa koordinater.",
+                "featureData": "Objektdata",
             },
             "flyout": {
                 "sorterTooltip": "Sortera fallande / stigande",
@@ -36,6 +37,7 @@ Oskari.registerLocalization(
                 "openButtonLabel": "Exportera data",
                 "exportButtonLabel": "Exportera",
                 "exportFailed": "Exporting the data failed.",
+                "datasetTooLargeForExcel": "Dataset is too large for generating an excel file. Limit the number of features or choose csv as format.",
                 "fileFormat": {
                     "title": "Filformat",
                     "excel": "Excel",
@@ -60,6 +62,43 @@ Oskari.registerLocalization(
                     "layerName": "Kartlagrets namn"
                 }
             },
-            "showSelectedFirst": "Visa de valda först"
+            "showSelectedFirst": "Visa de valda först",
+            "toggleCompressedView": "Förtätad vy",
+            "selectionTools": {
+                "title": "Markera objekt på kartan",
+                "instructions": " ",
+                "selectFromTop": "Välj från topplager",
+                "selectAll": "Välj från alla lagern",
+                "link": {
+                    "title": "Välj fler funktioner"
+                },
+                "button": {
+                    "cancel": "Stäng",
+                    "empty": "Ta bort valda objekt",
+                    "show": "Visa funktioner",
+                    "close": "Stäng",
+                    "edit": "Redigera"
+                },
+                "tools": {
+                    "point": {
+                        "tooltip": "Lägg en punkt på kartan."
+                    },
+                    "line": {
+                        "tooltip": "Lägg till en linje på kartan."
+                    },
+                    "polygon": {
+                        "tooltip": "Lägg till ett område på kartan."
+                    },
+                    "square": {
+                        "tooltip": "Lägg ett rektangulärt område på kartan."
+                    },
+                    "circle": {
+                        "tooltip": "Lägg ett cirkulärt område på kartan."
+                    },
+                    "select": {
+                        "tooltip": "Välj funktioner"
+                    }
+                }
+            }
         }
     });

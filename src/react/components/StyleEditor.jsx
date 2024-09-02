@@ -5,7 +5,7 @@ import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 import 'antd/es/form/style/index.js';
 
-import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE, PreviewButton } from './StyleEditor/';
+import { constants, PointTab, LineTab, AreaTab, PreviewButton } from './StyleEditor/';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
 const { TRANSPARENT, SOLID } = constants.FILLS;
@@ -58,23 +58,21 @@ const styleExceptionHandler = (exceptionStyle, oldStyle) => {
             exceptionStyle.fill.color = '';
         }
     } else if (!isTransparent && !hasColor) {
-        exceptionStyle.fill.color = tempFillColor || OSKARI_BLANK_STYLE.fill.color;
+        exceptionStyle.fill.color = tempFillColor || Oskari.custom.getFillColor();
         tempFillColor = null;
     }
 
     return exceptionStyle;
 };
 
-export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
+export const StyleEditor = ({ oskariStyle = {}, onChange, format, geometryType }) => {
     let [form] = Form.useForm();
     // if we don't clone the input here the mappings
     //  between form <> style, the values can get mixed up due to mutability
-    const style = {
-        ...OSKARI_BLANK_STYLE,
-        ...oskariStyle
-    };
+    const style = Oskari.util.deepClone(Oskari.custom.getDefaultStyle(), oskariStyle);
 
-    const formats = tabs || constants.SUPPORTED_FORMATS;
+    const formats = constants.SUPPORTED_FORMATS.includes(geometryType)
+        ? [geometryType] : constants.SUPPORTED_FORMATS;
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
@@ -122,6 +120,6 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
 StyleEditor.propTypes = {
     oskariStyle: PropTypes.object,
     format: PropTypes.oneOf(constants.SUPPORTED_FORMATS),
-    tabs: PropTypes.array,
+    geometryType: PropTypes.string,
     onChange: PropTypes.func.isRequired
 };

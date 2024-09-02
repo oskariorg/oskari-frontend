@@ -3,6 +3,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
     index: 1,
     group: 'data',
     id: 'series',
+    title: 'allowHidingSeriesControl',
 
     init: function (data) {
         const conf = this.getStatsgridConf(data);
@@ -10,12 +11,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
     },
     getTool: function () {
         return {
-            id: 'Oskari.statistics.statsgrid.TogglePlugin',
-            title: 'allowHidingSeriesControl',
+            ...this.getToolInfo(),
             config: {
                 series: true
-            },
-            hasNoPlugin: true
+            }
         };
     },
     _setEnabledImpl: function (enabled) {

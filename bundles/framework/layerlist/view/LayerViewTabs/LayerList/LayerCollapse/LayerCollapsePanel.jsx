@@ -35,6 +35,7 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
         <StyledCollapsePanelTools>
             {group.description && (
                 <InfoIcon
+                    space={false}
                     title={group.description}
                     size={20}
                     style={{ marginRight: '5px', marginTop: '3px' }}
@@ -140,7 +141,6 @@ const SubGroupList = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts,
 const StyledCollapsePanel = styled(CollapsePanel)`
     > .ant-collapse-content > .ant-collapse-content-box {
         padding: 0px;
-        display: flex;
         & > .ant-list {
             width: 100%;
         }
@@ -170,7 +170,7 @@ const LayerCollapsePanel = (props) => {
     const { group, selectedLayerIds, openGroupTitles, opts, controller, ...propsNeededForPanel } = props;
     const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
     // set group switch active if all layers in group are selected
-    const allLayersOnMap = layerRows.every(layer => selectedLayerIds.includes(layer.id));
+    const allLayersOnMap = layerRows.length > 0 && layerRows.every(layer => selectedLayerIds.includes(layer.id));
     // Note! Not rendering layerlist/subgroups when the panel is closed is a trade-off for performance
     //   between render as whole vs render when the panel is opened.
     const isPanelOpen = propsNeededForPanel.isActive;

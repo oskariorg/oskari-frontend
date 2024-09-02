@@ -7,7 +7,7 @@ import { SelectedTime } from './SelectedTime';
 import { GfiType } from './GfiType';
 import { GfiContent } from './GfiContent';
 import { GfiStyle } from './GfiStyle';
-import { Attributes } from './Attributes';
+import { VectorLayerAttributes } from './VectorLayerAttributes';
 import { Attributions } from './Attributions';
 import { MetadataId } from './MetadataId';
 import { Capabilities } from './Capabilities';
@@ -24,10 +24,10 @@ const {
     GFI_TYPE,
     GFI_XSLT,
     ATTRIBUTIONS,
-    ATTRIBUTES
+    WFS_LAYER
 } = LayerComposingModel;
 
-export const AdditionalTabPane = ({ layer, propertyFields, controller }) => {
+export const AdditionalTabPane = ({ layer, propertyFields, metadata, controller }) => {
     const { capabilities = {}, attributes = {}} = layer;
     const isQueryable = attributes.isQueryable || capabilities.isQueryable || capabilities.queryable;
     return (
@@ -36,7 +36,7 @@ export const AdditionalTabPane = ({ layer, propertyFields, controller }) => {
                 <LayerGeneralInfo layer={layer} />
             }
             { propertyFields.includes(CAPABILITIES) &&
-                <Capabilities layer={layer} controller={controller} />
+                <Capabilities layer={layer} controller={controller} metadata={metadata} />
             }
             { propertyFields.includes(ATTRIBUTIONS) &&
                 <Attributions layer={layer} controller={controller} />
@@ -62,8 +62,8 @@ export const AdditionalTabPane = ({ layer, propertyFields, controller }) => {
             { isQueryable && propertyFields.includes(GFI_XSLT) &&
                 <GfiStyle layer={layer} controller={controller} />
             }
-            { propertyFields.includes(ATTRIBUTES) &&
-                <Attributes layer={layer} controller={controller} />
+            { propertyFields.includes(WFS_LAYER) &&
+                <VectorLayerAttributes layer={layer} controller={controller} />
             }
         </Fragment>
     );

@@ -10,7 +10,10 @@ Oskari.registerLocalization(
                 "typeDescription": "Select the type of the service for layer you are adding",
                 "serviceDescription": "Fill in the url and version for the service",
                 "layersDescription": "These are the layers that are available in the service. Please select one to add as a map layer",
-                "details": "Map layer details"
+                "details": "Map layer details",
+                "toggleFlatView": "List view",
+                "toggleTreeView": "Tree view"
+
             },
             "layertype": {
                 "wmslayer": "WMS",
@@ -61,6 +64,7 @@ Oskari.registerLocalization(
             "generalTabTitle": "General",
             "visualizationTabTitle": "Visualization",
             "additionalTabTitle": "Additional",
+            "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Permissions",
             "interfaceVersionDesc": "Select an appropriate version. Prioritize the newest version that is supported.",
             "attributions": "Attributions",
@@ -93,12 +97,22 @@ Oskari.registerLocalization(
                 "service": "File identifier defined in the service",
                 "overridden": "Replaced file identifier"
             },
+            "jsonTab": {
+                "info": "These tools enable advanced configuration, use with caution.",
+                "fields": {
+                    "attributes": "Attributes",
+                    "capabilities": "Capabilities parsed for layer",
+                    "options": "Options",
+                    "params": "Params"
+                }
+            },
             "capabilities": {
                 "parsed": "Capabilities parsed for layer",
                 "show": "Show GetCapabilities response",
                 "update": "Update now",
                 "updateRate": "Capabilities update rate",
-                "updateRateDesc": "Update rate in seconds",
+                "updateRateDesc": "Update frequency in minutes.",
+                "updateRateCronMsg": "Update scheduled with cron: {cron}, you can change the update frequency with the 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' value of oskari-ext.properties.",
                 "updatedSuccesfully": "Capabilities re-check succeeded.",
                 "updateFailed": "Capablities re-check failed.",
                 "updateFailedWithReason": "Capablities re-check failed: {reason}",
@@ -107,6 +121,62 @@ Oskari.registerLocalization(
                     "defaultStyle" : "Selected default style doesn't exist anymore. Please select a new default style.",
                     "additionalLegend": "The map layer has been given a legend that overrides the default legend provided by the service. The overriding legend was linked to a style that is no longer available. Please update the layer legend. The problematic style is marked with a ( ! ).",
                     "globalWithStyles": "The layer has more than one style available in the service. However, the layer has been defined with a single default legend. Consider removing the current default legend to be able to use the style based legends."
+                }
+            },
+            "attributes": {
+                "label": "Attributes",
+                "properties": "Using properties of features",
+                "presentation": "Presentation",
+                "presentationTooltip": "Presentation affects GetFeatureInfo request and feature data table.",
+                "showAll": "Show all properties",
+                "idProperty": "Use feature property as identifier",
+                "idPropertyTooltip": "Service should return unique identifier for features. Firstly ask service provider to use unique identifiers. Works only for 'Big objects' type (GeoJSON).",
+                "geometryType": {
+                    "label": "Geometry type",
+                    "sourceAttributes": "Source: layer attributes",
+                    "sourceCapabilities": "Source: layer capabilities",
+                    "unknown":"Unknown",
+                    "point": "Point",
+                    "line": "Line",
+                    "area":"Area",
+                    "collection":"Collection"
+                },
+                "featureFilter": {
+                    "title": "Filter requested features by properties",
+                    "button": "Feature filter"
+                },
+                "filter": {
+                    "title": "Display of properties",
+                    "lang": "Select properties displayed and order",
+                    "default": "for default filter",
+                    "fromDefault": "No filter added for the selected language. The default filter is used for the selected language. Edit the options to create your own filter for the language.",
+                    "button": "Select properties"
+                },
+                "locale": {
+                    "title": "Labels for properties",
+                    "button": "Labeling"
+                },
+                "format": {
+                    "title": "Formatting values of properties",
+                    "button": "Formatting",
+                    "type": {
+                        "label": "Type",
+                        "typeFormats": "Value type",
+                        "textFormats": "Text formatting",
+                        "link": "Link",
+                        "image": "Image",
+                        "number": "Number",
+                        "phone": "Phone number"
+                    },
+                    "options": {
+                        "noLabel": "Show only value",
+                        "skipEmpty": "Skip empty value"
+                    },
+                    "params": {
+                        "link": "Show as link",
+                        "fullUrl": "Show full URL",
+                        "label": "Label for link"
+                    }
                 }
             },
             "styles": {
@@ -126,6 +196,11 @@ Oskari.registerLocalization(
                     "name": "Style name",
                     "selectDefault": "Select default style",
                     "deleteStyle": "Delete style",
+                    "featureStyle": "Style definitions",
+                    "optionalStyles": "Property based style definitions",
+                    "optionalStylesFilter": "Select features using style based on properties",
+                    "cesium": "3D Tiles/Cesium style definitions",
+                    "mapbox": "Mapbox style definitions",
                     "edit": {
                         "editor": "Edit by using editor",
                         "json": "Edit JSON"
@@ -139,13 +214,20 @@ Oskari.registerLocalization(
                     "validation": {
                         "name": "Please enter a name for the style",
                         "noStyles": "No saved styles",
-                        "json": "Invalid JSON syntax in Style definitions."
-                    },
-                    "json": {
-                        "featureStyle": "Style definitions (JSON)",
-                        "optionalStyles": "Property based style definitions (JSON)",
-                        "cesium": "3D Tiles/Cesium style definitions (JSON)",
-                        "mapbox": "Mapbox style definitions (JSON)"
+                        "json": "Invalid JSON syntax in Style definitions.",
+                        "optionalStyles": "Style doesn't have valid filter."
+                    }
+                },
+                "hover": {
+                    "title": "Feature highlighting and tooltip",
+                    "tooltip": "Tooltip rows shown for feature",
+                    "useStyle": "Use style definitions",
+                    "inherit": "Inherit style definitions",
+                    "effect": "Use effect",
+                    "fromProperty": "Use property as label",
+                    "labelTooltip": {
+                        "key": "Label is shown as it is",
+                        "keyProperty": "Label content is received from property"
                     }
                 }
             },
@@ -158,7 +240,6 @@ Oskari.registerLocalization(
             "gfiTypeDesc": "Select a format for Get Feature Information (GFI). Possible formats are fetched automatically from the GetCapabilities response.",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",
-            "attributes": "Attributes",
             "clusteringDistance": "Point distance in cluster",
             "forcedSRS": "Forced SRS",
             "forcedSRSInfo": "View projections override compared to capabilities",
@@ -217,7 +298,8 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first.",
                 "errorFetchCoverage": "Failed to get the map layer coverage from the service.",
                 "noCoverage": "The map layer coverage isn't restricted.",
-                "invalidScale": "Tarkista tason mittakaavarajat."
+                "invalidScale": "Check the layer scale limits.",
+                "noFeatureProperties": "Layer doesn't have feature properties information."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

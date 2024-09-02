@@ -10,7 +10,6 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Místa",
-            "nocategories": "Místa jste ještě neuložil.",
             "publishCategory": {
                 "privateTooltip": "Mapa je soukromá| Klikněte na mapovou vrstvu pro její veřejné zpřístupnění.",
                 "publicTooltip": "Mapa je veřejná| Klikněte na mapovou vrstvu pro její změnu na soukromou."
@@ -127,7 +126,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Smazat mapovou vrstvu",
-                "deleteConfirmMove": "Mapová vrstva {0} obsahuje {1} objektů. Chcete smazat mapovou vrstvu a přenést místa v ní do defaultní mapové vrstvy {2}?",
                 "deleteConfirm": "Smazat mapovou vrstvu {0}?",
                 "deleted": "Mapová vrstva smazána"
             },

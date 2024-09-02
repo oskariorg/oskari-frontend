@@ -6,7 +6,7 @@ import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
 import { Message, Tooltip } from 'oskari-ui';
-import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
+import { EyeOpen, EyeShut, DragIcon } from 'oskari-ui/components/icons';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const Container = styled.div`
@@ -14,6 +14,9 @@ const Container = styled.div`
 `;
 const Content = styled.div`
     padding: 10px;
+    display: flex;
+    flex-direction: row;
+
 `;
 const StyledBox = styled.div`
     min-height: 100px;
@@ -38,14 +41,19 @@ const VisibilityIcon = styled('div')`
     margin-right: 15px;
     margin-left: 10px;
 `;
-const CloseButton = styled('div')`
-    position: absolute;
-    right: 0;
-    margin-right: 20px;
-`;
 const DragContainer = styled('div')`
     margin-top: 10px;
     margin-right: 10px;
+`;
+
+/**
+ * Fixes tooltip on disappearing after letting go of the drag handle
+ */
+const StyledDragIcon = styled(DragIcon)`
+    pointer-events: none;
+`;
+const DragWrapper = styled('div')`
+    cursor: grab;
 `;
 
 const LayerBox = ({ layer, index, controller }) => {
@@ -75,48 +83,48 @@ const LayerBox = ({ layer, index, controller }) => {
                     <Container $isMobile={isMobile} style={{ backgroundColor: '#fafafa' }}>
                         <DragContainer>
                             <Tooltip title={<Message messageKey='layer.drag' />} getPopupContainer={(triggerNode) => triggerNode.parentElement} placement='topRight'>
-                                <DragIcon {...provided.dragHandleProps} />
+                                <DragWrapper {...provided.dragHandleProps}>
+                                    <StyledDragIcon />
+                                </DragWrapper>
                             </Tooltip>
                         </DragContainer>
                         <Col>
                             <StyledBox>
                                 <Content>
-                                    <Row>
-                                        <VisibilityIcon>
+                                    <VisibilityIcon>
+                                        <ColAuto>
+                                            {visible ? <Tooltip title={<Message messageKey='layer.hide' />}><EyeOpen onClick={handleToggleVisibility} /></Tooltip>
+                                                : <Tooltip title={<Message messageKey='layer.show' />}><EyeShut onClick={handleToggleVisibility} /></Tooltip>}
+                                        </ColAuto>
+                                    </VisibilityIcon>
+                                    <Col>
+                                        <Row>
                                             <ColAuto>
-                                                {visible ? <Tooltip title={<Message messageKey='layer.hide' />}><EyeOpen onClick={handleToggleVisibility} /></Tooltip>
-                                                    : <Tooltip title={<Message messageKey='layer.show' />}><EyeShut onClick={handleToggleVisibility} /></Tooltip>}
+                                                {getName()}
                                             </ColAuto>
-                                        </VisibilityIcon>
-                                        <Col>
-                                            <Row>
-                                                <ColAuto>
-                                                    {getName()}
-                                                </ColAuto>
-                                            </Row>
-                                            <Row>
-                                                <ColAuto>
-                                                    {organizationName}
-                                                </ColAuto>
-                                                <PublishableCol>
-                                                    {publishable &&
-                                                        <Fragment>
-                                                            <CheckOutlined style={{ color: '#01ca79' }} />
-                                                            <Publishable>
-                                                                <Message messageKey={'layer.publishable'} />
-                                                            </Publishable>
-                                                        </Fragment>
-                                                    }
-                                                </PublishableCol>
-                                            </Row>
-                                        </Col>
-                                        <CloseButton>
-                                            <CloseOutlined
-                                                onClick={handleRemoveLayer}
-                                                style={{ fontSize: '12px' }}
-                                            />
-                                        </CloseButton>
-                                    </Row>
+                                        </Row>
+                                        <Row>
+                                            <ColAuto>
+                                                {organizationName}
+                                            </ColAuto>
+                                            <PublishableCol>
+                                                {publishable &&
+                                                    <Fragment>
+                                                        <CheckOutlined style={{ color: '#01ca79' }} />
+                                                        <Publishable>
+                                                            <Message messageKey={'layer.publishable'} />
+                                                        </Publishable>
+                                                    </Fragment>
+                                                }
+                                            </PublishableCol>
+                                        </Row>
+                                    </Col>
+                                    <ColAutoRight>
+                                        <CloseOutlined
+                                            onClick={handleRemoveLayer}
+                                            style={{ fontSize: '12px' }}
+                                        />
+                                    </ColAutoRight>
                                 </Content>
                                 <Footer layer={layer} controller={controller}/>
                             </StyledBox>

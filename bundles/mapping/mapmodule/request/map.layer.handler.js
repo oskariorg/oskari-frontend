@@ -95,9 +95,12 @@ Oskari.clazz.define('map.layer.handler',
                 // add layers from front of queue to map
                 this.__processLayerQueue();
                 // zoom to content or center/supported zoom level
+                const sandbox = this.layerService.getSandbox();
                 if (opts.zoomContent) {
-                    const sandbox = this.layerService.getSandbox();
                     sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, opts.zoomContent]);
+                }
+                if (typeof opts.toPosition === 'number') {
+                    sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, opts.toPosition]);
                 }
             };
             this._loadLayerInfo(layer, opts, done);
@@ -124,20 +127,14 @@ Oskari.clazz.define('map.layer.handler',
             }
             const layerId = layer.getId();
             const status = layer.getDescribeLayerStatus();
-            if (status === DESCRIBE_LAYER.LOADED) {
-                // already processed, we can proceed with adding the layer to map
+            if (status === DESCRIBE_LAYER.PREDEFINED) {
+                this.__handleLayerInfoSuccess(layer, layer.getDescribeLayerInfo());
                 done();
                 return;
             }
-            if (typeof layerId === 'string' && layerId.startsWith('userlayer')) {
-                // process coverage WKT for userlayers
-                // it is included in the layer data for userlayers and DescribeLayer is not used
-                this.__handleLayerInfoSuccess(layer, {
-                    coverage: layer.getGeometryWKT()
-                });
-            }
-            // only layers that have numeric ids can have reasonable response for DescribeLayer
-            if (isNaN(layerId)) {
+            if (status === DESCRIBE_LAYER.LOADED || isNaN(layerId)) {
+                // only layers that have numeric ids can have reasonable response for DescribeLayer
+                // already processed, we can proceed with adding the layer to map
                 done();
                 return;
             }
@@ -158,7 +155,7 @@ Oskari.clazz.define('map.layer.handler',
                 done();
             });
         },
-        __handleLayerInfoSuccess: function (layer, describeInfo) {
+        __handleLayerInfoSuccess: function (layer, describeInfo = {}) {
             const sandbox = this.layerService.getSandbox();
             const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             layer.setDescribeLayerStatus(DESCRIBE_LAYER.LOADED);

@@ -7,9 +7,6 @@ import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
 
 const StyledListItem = styled(ListItem)`
-    &:first-child > div {
-        font-weight: bold;
-    }
     &:not(:first-child) {
         &:nth-child(even) {
             background-color: #ffffff;
@@ -19,26 +16,40 @@ const StyledListItem = styled(ListItem)`
         }
     }
 `;
+const StyledIcon = styled('div')`
+    font-size: 18px;
+`;
 
 // Overflow makes additional/customized permission types available by scrolling
 // It is not ideal at least when there are both many roles and additional permission types
 // But most instances don't have them so it's not a huge issue for first version of the UI
 const ListDiv = styled.div`
     margin-bottom: 20px;
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: 50vh;
+`;
+
+const ListDivHeader = styled('div')`
+    flex 0 0 auto;
+`;
+
+const ListDivContent = styled('div')`
+    flex 1 1 auto;
+    overflow-y: auto;
 `;
 
 const getPermissionTableHeader = (permission) => {
     const translation = <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} bundleKey='admin-layereditor' />;
     switch (permission.id) {
         case 'VIEW_LAYER':
-            return <Tooltip title={translation}><UnorderedListOutlined /></Tooltip>
+            return <Tooltip title={translation}><StyledIcon><UnorderedListOutlined /></StyledIcon></Tooltip>
         case 'VIEW_PUBLISHED':
-            return <Tooltip title={translation}><EyeOutlined /></Tooltip>
+            return <Tooltip title={translation}><StyledIcon><EyeOutlined /></StyledIcon></Tooltip>
         case 'PUBLISH':
-            return <Tooltip title={translation}><ImportOutlined /></Tooltip>
+            return <Tooltip title={translation}><StyledIcon><ImportOutlined /></StyledIcon></Tooltip>
         case 'DOWNLOAD':
-            return <Tooltip title={translation}><ExportOutlined /></Tooltip>
+            return <Tooltip title={translation}><StyledIcon><ExportOutlined /></StyledIcon></Tooltip>
         default:
             // permissions might have server side localization as "name" that defaults to id if not given
             return translation;
@@ -95,7 +106,8 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
         permissions: getHeaderPermissions(dataRows, roles),
         permissionTypes: localizedPermissionTypes
     };
-    const permissionDataModel = [headerRow, ...dataRows];
+    const headerDataModel = [headerRow];
+    const permissionDataModel = [...dataRows];
 
     const renderRow = (modelRow) => {
         const checkboxes = modelRow.permissionTypes.map(permission => {
@@ -110,8 +122,9 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
             }
             // the actual role-based rows
             const role = modelRow.role.name;
+            const tooltip = <span>{role}: <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} /></span>;
             return (<Tooltip key={permission.id + '_' + role}
-                title={<span>{role}: {permission.localizedText}</span>}>
+                title={tooltip}>
                 <Checkbox
                     permissionDescription={permission.localizedText}
                     permission={permission.id}
@@ -134,7 +147,12 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
 
     return (
         <ListDiv>
-            <List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/>
+            <ListDivHeader>
+                <List bordered={false} dataSource={headerDataModel} renderItem={renderRow}/>
+            </ListDivHeader>
+            <ListDivContent>
+                <List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/>
+            </ListDivContent>
         </ListDiv>
     );
 };

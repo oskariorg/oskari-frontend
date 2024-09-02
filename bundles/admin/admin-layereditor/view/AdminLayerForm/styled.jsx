@@ -4,7 +4,8 @@ export { StyledFormField, StyledAlert, StyledButton } from '../styled';
 
 export const StyledRoot = styled('div')`
     padding: 20px;
-    max-width: 700px;
+    max-width: 100%;
+    min-width: 451px;
 `;
 
 export const Border = styled('div')`

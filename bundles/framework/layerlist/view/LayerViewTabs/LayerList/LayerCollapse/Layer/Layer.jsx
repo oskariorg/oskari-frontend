@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Switch, Tooltip } from 'oskari-ui';
-import { Controller } from 'oskari-ui/util';
+import { Controller, ThemeConsumer } from 'oskari-ui/util';
 import { LayerTools } from './LayerTools';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 const Flex = styled('div')`
     display: flex;
@@ -12,7 +13,6 @@ const Flex = styled('div')`
 const LayerDiv = styled(Flex)`
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     clear: both;
     padding: 6px;
     min-height: 16px;
@@ -35,6 +35,13 @@ const Label = styled('label')`
 `;
 const Body = styled(Flex)`
     flex-grow: 1;
+    word-break: break-word;
+`;
+const IconContainer = styled.div`
+    display: inline-block;
+    &:hover {
+        color: ${props => props.$hoverColor};
+    }
 `;
 
 const onSelect = (checked, layerId, controller) => {
@@ -48,7 +55,9 @@ const onToolClick = tool => {
     }
 };
 
-const Layer = ({ model, selected, opts, controller }) => {
+const Layer = ThemeConsumer(({ theme = {}, model, selected, opts, controller }) => {
+    const themeHelper = getNavigationTheme(theme);
+    const hoverColor = themeHelper.getButtonHoverColor();
     return (
         <LayerDiv className="t_layer" data-id={model.getId()}>
             <CustomTools className="custom-tools">
@@ -57,9 +66,9 @@ const Layer = ({ model, selected, opts, controller }) => {
                         .filter(tool => tool.getTypes().includes('layerList'))
                         .map((tool, i) =>
                             <Tooltip key={`${tool.getName()}_${i}`} title={tool.getTooltip()}>
-                                <div onClick={() => onToolClick(tool)}>
+                                <IconContainer onClick={() => onToolClick(tool)} $hoverColor={hoverColor}>
                                     {tool.getIconComponent()}
-                                </div>
+                                </IconContainer>
                             </Tooltip>
                         )
                 }
@@ -75,7 +84,7 @@ const Layer = ({ model, selected, opts, controller }) => {
             <LayerTools model={model} controller={controller} opts={opts}/>
         </LayerDiv>
     );
-};
+});
 
 Layer.propTypes = {
     model: PropTypes.any.isRequired,

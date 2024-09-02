@@ -11,20 +11,11 @@ export const createDefaultStyle = (name) => {
     return new VectorStyle(style);
 };
 
-// constructor like function for layer options styles (oskari styles only)
-export const parseStylesFromOptions = (options) => {
-    const { styles = {} } = options || {};
-    return Object.keys(styles).map(id => {
-        const { title, ...style } = styles[id];
-        return new VectorStyle({ id, type: VECTOR_STYLE.OSKARI, style, name: title });
-    });
-};
-
 export class VectorStyle extends Style {
     constructor ({ id, name: title, style, type }) {
         const name = id.toString();
         super(name, title);
-        this._type = type;
+        this._type = type || VECTOR_STYLE.OSKARI;
         this._styleDef = style || {};
     }
 

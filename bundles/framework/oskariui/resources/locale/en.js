@@ -18,7 +18,11 @@ Oskari.registerLocalization({
             print: 'Print',
             search: 'Search',
             reset: 'Reset',
-            copy: 'Copy to clipboard'
+            copy: 'Copy to clipboard',
+            clear: 'Clear',
+            accept: 'Accept',
+            reject: 'Reject',
+            info: 'Show more information'
         },
         messages: {
             confirm: 'Are you sure you want to continue?',
@@ -106,6 +110,60 @@ Oskari.registerLocalization({
         },
         Spin: {
             loading: 'Loading...'
+        },
+        FeatureFilter: {
+            single: 'One property',
+            and: 'AND operator',
+            or: 'OR operator',
+            range: {
+                true: 'Don\'t use value range',
+                false: 'Use value range'
+            },
+            addTooltip: 'Add new row for filter',
+            clearTooltip: 'Clear filter',
+            caseSensitive: {
+                true: 'Case sensitive',
+                false: 'Case insensitive'
+            },
+            operators: {
+                value: 'is',
+                in: 'in',
+                notIn: 'not in',
+                like: 'like',
+                notLike: 'not like',
+                greaterThan: 'greater than',
+                atLeast: 'at least',
+                lessThan: 'less than',
+                atMost: 'at most'
+            }
+        },
+        coordinates: {
+            lon: "Lon",
+            lat: "Lat",
+            n: "N",
+            e: "E",
+            p: "N",
+            i: "E", 
+            crs: {
+              'EPSG:3067': "ETRS89-TM35FIN coordinates",
+              'EPSG:3575': "North Pole LAEA Europe coordinates",
+              'EPSG:3857': "WGS 84 / Pseudo-Mercator coordinates",
+              default: "{crs} coordinates"
+          },
+        },
+        layerTooltipTitle: {
+            'wms': 'Raster layer',
+            'wmts': 'Raster layer',
+            'arcgis93': 'Raster layer',
+            'arcgis': 'Raster layer',
+            'vectortile': 'Raster layer',
+            'bingmaps': 'Raster layer',
+            'wfs': 'Vector layer',
+            'vector': 'Vector layer',
+            'userlayer': 'Own dataset',
+            'myplaces': 'My map layer',
+            'analysislayer': 'Own analysis',
+            'tiles3d': '3D layer'
         }
     }
 });

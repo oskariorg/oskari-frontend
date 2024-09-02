@@ -48,10 +48,14 @@ Oskari.registerLocalization(
             "buttonLabel": "Select Announcements",
             "popup": {
                 "title": "Announcements",
-                "close": "Close"
+                "close": "Close",
+                "disclaimer": "You can choose only current or future announcements."
             },
             "announcementsName": "Title",
             "announcementsTime": "Valid"
+        },
+        "publisher": {
+            "noUI": "Hide user interface (Use RPC interface)"
         }
     }
 });

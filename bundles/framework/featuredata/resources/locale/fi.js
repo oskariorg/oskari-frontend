@@ -5,7 +5,8 @@ Oskari.registerLocalization(
         "value": {
             "title": "Kohdetiedot",
             "layer": {
-                "outOfContentArea": "Karttatasolla ei ole kohteita karttanäkymän alueella."
+                "outOfContentArea": "Karttatasolla ei ole kohteita karttanäkymän alueella.",
+                "featureData": "Kohdetiedot",
             },
             "flyout": {
                 "sorterTooltip": "Järjestä laskevasti/nousevasti",
@@ -36,6 +37,7 @@ Oskari.registerLocalization(
                 "openButtonLabel": "Aineiston vienti",
                 "exportButtonLabel": "Vie",
                 "exportFailed": "Aineiston vienti epäonnistui.",
+                "datasetTooLargeForExcel": "Dataset is too large for generating an excel file. Limit the number of features or choose csv as format.",
                 "fileFormat": {
                     "title": "Tiedostomuoto",
                     "excel": "Excel",
@@ -60,7 +62,43 @@ Oskari.registerLocalization(
                     "layerName": "Karttatason nimi"
                 }
             },
-            "showSelectedFirst": "Näytä valitut ensin"
-
+            "showSelectedFirst": "Näytä valitut ensin",
+            "toggleCompressedView": "Tiivistetty näkymä",
+            "selectionTools": {
+                "title": "Valitse kohteita",
+                "instructions": " ",
+                "selectFromTop": "päällimmäiseltä karttatasolta",
+                "selectAll": "kaikilta avoinna olevilta karttatasoilta",
+                "link": {
+                    "title": "Valitse lisää kohteita"
+                },
+                "button": {
+                    "cancel": "Sulje",
+                    "empty": "Poista valinnat",
+                    "show": "Näytä kohteet",
+                    "close": "Sulje",
+                    "edit": "Muokkaa"
+                },
+                "tools": {
+                    "point": {
+                        "tooltip": "Piirrä piste. Valintaan otetaan mukaan kaikki kohteet, joiden alueella piirtämäsi piste sijaitsee."
+                    },
+                    "line": {
+                        "tooltip": "Piirrä viiva. Valintaan otetaan mukaan kaikki kohteet, joiden aluetta piirtämäsi viiva leikkaa."
+                    },
+                    "polygon": {
+                        "tooltip": "Piirrä alue. Valintaan otetaan mukaan kaikki kohteet, joiden aluetta piirtämäsi alue leikkaa."
+                    },
+                    "square": {
+                        "tooltip": "Piirrä suorakulmio. Valintaan otetaan mukaan kaikki kohteet, joiden aluetta piirtämäsi suorakulmio leikkaa."
+                    },
+                    "circle": {
+                        "tooltip": "Piirrä ympyrä. Valintaan otetaan mukaan kaikki kohteet, joiden aluetta piirtämäsi ympyrä leikkaa."
+                    },
+                    "select": {
+                        "tooltip": "Piirrä geometria ja valitse sen avulla kohteet."
+                    }
+                }
+            }
         }
     });

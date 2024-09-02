@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { List, Radio, Tooltip } from 'antd';
-import { EditOutlined, DeleteOutlined, BgColorsOutlined } from '@ant-design/icons';
-import { Button, Message } from 'oskari-ui';
+import { FilterOutlined, BgColorsOutlined } from '@ant-design/icons';
+import { Message, List, ListItem, Radio, Tooltip, Badge } from 'oskari-ui';
+import { IconButton } from 'oskari-ui/components/buttons';
 import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 
-const StyledItem = styled(List.Item)`
+const StyledItem = styled(ListItem)`
     & {
         background: #ffffff;
         line-height: 30px;
@@ -16,6 +16,7 @@ const StyledItem = styled(List.Item)`
 
 const ButtonContainer = styled.div`
     margin-left: auto;
+    display: flex;
     Button {
         margin-left: 10px;
     }
@@ -44,7 +45,7 @@ const renderStatus = (status) => {
     );
 };
 
-export const VectorStyleSelect = ({ layer, controller, editStyle }) => {
+export const VectorStyleSelect = ({ layer, controller, editStyle, editOptional }) => {
     const { vectorStyles = [], vectorStyleStatus = {} } = layer;
 
     if (vectorStyles.length === 0) {
@@ -65,11 +66,14 @@ export const VectorStyleSelect = ({ layer, controller, editStyle }) => {
             dataSource={ sortedStyles }
             renderItem={ (style) => {
                 const status = vectorStyleStatus[style.id];
-                const disabled = status === 'DELETED';
+                const btnProps = {
+                    disabled: status === 'DELETED',
+                    bordered: true
+                };
                 return (
                     <StyledItem>
                         <Tooltip title={ <Message messageKey='styles.vector.selectDefault' /> }>
-                            <Radio onClick={ () => controller.setStyle(style.id) } checked={ style.id === selectedStyle }>{ style.name || style.id }</Radio>
+                            <Radio.Choice onClick={ () => controller.setStyle(style.id) } checked={ style.id === selectedStyle }>{ style.name || style.id }</Radio.Choice>
                         </Tooltip>
 
                         <StyledText>
@@ -82,23 +86,23 @@ export const VectorStyleSelect = ({ layer, controller, editStyle }) => {
                         }
                         { status && renderStatus(status) }
                         <ButtonContainer>
-                            { style.type === 'oskari' &&
-                                <Tooltip title={ <Message messageKey='styles.vector.edit.editor' /> }>
-                                    <Button disabled={disabled} onClick={ () => editStyle('editor', style) } >
-                                        <BgColorsOutlined />
-                                    </Button>
-                                </Tooltip>
+                            { style.type === 'oskari' && (
+                                <Fragment>
+                                    <Badge count={style.style.optionalStyles?.length || 0} showZero={false}>
+                                        <IconButton { ...btnProps } icon={<FilterOutlined />}
+                                            title={ <Message messageKey='styles.vector.optionalStyles' /> }
+                                            onClick={ () => editOptional(style) } />
+                                    </Badge>
+                                    <IconButton { ...btnProps } icon={<BgColorsOutlined />}
+                                        title={ <Message messageKey='styles.vector.edit.editor' /> }
+                                        onClick={ () => editStyle('editor', style) } />
+                                </Fragment>)
                             }
-                            <Tooltip title={ <Message messageKey='styles.vector.edit.json' /> }>
-                                <Button disabled={disabled} onClick={ () => editStyle('json', style) } >
-                                    <EditOutlined />
-                                </Button>
-                            </Tooltip>
-                            <Tooltip title={ <Message messageKey='styles.vector.deleteStyle' /> }>
-                                <Button disabled={disabled} onClick={ () => controller.removeVectorStyleFromLayer(style.id) }>
-                                    <DeleteOutlined />
-                                </Button>
-                            </Tooltip>
+                            <IconButton type='edit' { ...btnProps }
+                                title={ <Message messageKey='styles.vector.edit.json' /> }
+                                onClick={ () => editStyle('json', style) } />
+                            <IconButton type='delete' { ...btnProps }
+                                onClick={ () => controller.removeVectorStyleFromLayer(style.id) } />
                         </ButtonContainer>
                     </StyledItem>
                 );
@@ -110,5 +114,6 @@ export const VectorStyleSelect = ({ layer, controller, editStyle }) => {
 VectorStyleSelect.propTypes = {
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired,
-    editStyle: PropTypes.func
+    editStyle: PropTypes.func.isRequired,
+    editOptional: PropTypes.func
 };

@@ -48,10 +48,14 @@ Oskari.registerLocalization(
                 "buttonLabel": "Valitse Ilmoitukset",
                 "popup": {
                     "title": "Ilmoitukset",
-                    "close": "Sulje"
+                    "close": "Sulje",
+                    "disclaimer": "Voit valita vain nykyiset tai tulevat ilmoitukset."
                 },
                 "announcementsName": "Otsikko",
                 "announcementsTime": "Voimasssa"
+            },
+            "publisher": {
+                "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
             }
         }
     });

@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
             this.layersPlugin.getMapModule().notifyMoveEnd();
             // force visibility check immediately bypassing the performance
             // scheduler thats triggered by notifymoveend
-            this.layersPlugin._checkLayersVisibility(this.layersPlugin._visibilityCheckOrder);
+            this.layersPlugin._checkLayersVisibility(this.layersPlugin._visibilityCheckOrder, true);
         }
 
     }, {

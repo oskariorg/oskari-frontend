@@ -37,7 +37,13 @@ const Row = styled('div')`
 const ControlsRow = styled(Row)`
     > * {
         min-width: 200px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        flex-grow: 1;
     }
+`;
+const SearchRow = styled(Row)`
+    flex-wrap: nowrap;
 `;
 
 const InfoContainer = styled('div')`
@@ -70,7 +76,15 @@ const LayerList = React.forwardRef((props, ref) => {
         <Content spacing={'15px'}>
             <Row spacing={'8px'}>
                 <Column spacing={'10px'}>
-                    <Search ref={ref} searchText={searchText} controller={filter.controller} />
+                    <SearchRow spacing={'8px'}>
+                        <Search ref={ref} searchText={searchText} controller={filter.controller} />
+                        <InfoContainer>
+                            <InfoIcon space={false} size={20}>
+                                <Message messageKey='filter.search.tooltip'/>
+                            </InfoIcon>
+                        </InfoContainer>
+                        <CreateTools tools={createTools} />
+                    </SearchRow>
                     <ControlsRow spacing={'10px'}>
                         <Grouping
                             selected={grouping.selected}
@@ -82,16 +96,6 @@ const LayerList = React.forwardRef((props, ref) => {
                             controller={filter.controller}/>
                     </ControlsRow>
                 </Column>
-                <div>
-                    <InfoContainer>
-                        <InfoIcon size={20}>
-                            <Message messageKey='filter.search.tooltip'/>
-                        </InfoIcon>
-                    </InfoContainer>
-                </div>
-                <div>
-                    <CreateTools tools={createTools} />
-                </div>
             </Row>
             { loading && <Spinner/> }
             { !loading &&

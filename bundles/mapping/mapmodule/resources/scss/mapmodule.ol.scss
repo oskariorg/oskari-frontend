@@ -26,7 +26,7 @@ $pluginMargin: 10px;
 }
 
 /* This is the drag-n-drop handle on publisher */
-.mapplugin.ui-draggable-handle > div::after {
+.mapplugin.toollayoutedit.ui-draggable-handle > div::after {
     content: url("../images/holder-icon.svg");
     width: 24px;
     height: 24px;
@@ -96,6 +96,16 @@ div.olMap {
   background-color: rgba(255,255,255,0.4);
 }
 
+.plugins-bottom {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    pointer-events: none;
+}
+
 div.mapplugins {
     pointer-events: none;
     position: absolute;
@@ -154,11 +164,7 @@ div.mapplugins {
                 }
 
                 &.logoplugin {
-                    margin-top: $pluginMargin * 2;
-                }
-
-                &.scalebar {
-                    margin-bottom: 0;
+                    margin-top: $pluginMargin;
                 }
 
                 &.zoombar {
@@ -200,7 +206,7 @@ div.mapplugins {
 
                 .mapplugin {
                     display: inline-block;
-                    margin: 0 $pluginMargin / 2;
+                    margin: 0 calc($pluginMargin / 2);
 
                     &.search {
                         text-align: center;
@@ -274,45 +280,46 @@ div.mapplugins {
     }
 
     &.bottom {
-        bottom: 0;
-
+        position: relative;
         .mappluginsContainer .mappluginsContent {
             margin-bottom: $pluginMargin;
             align-items: center;
         }
 
+
         &.center {
-            width: 100%;
+            display: flex;
+            order: 2;
+            align-self: self-end;
+            align-self: flex-end;
 
             .mappluginsContainer .mappluginsContent {
-                margin-right: auto;
-                margin-left: auto;
-                display: inline-block;
+                display: flex;
+                margin-left: 10px;
+                margin-right: 10px;
 
                 &.ui-droppable {
                     min-height: 120px;
                 }
 
                 .mapplugin {
-                    display: inline-block;
-                    vertical-align: top;
-                    margin: 0 $pluginMargin / 2;
-
+                    z-index: 15001;
                     &.layerselection,
                     &.search {
                         float: right;
                     }
-
                 }
-
             }
 
         }
 
         &.right {
-            .mappluginsContainer .mappluginsContent {
-                margin-top: $pluginMargin;
-            }
+            display: flex;
+            order: 3;
+            flex: 1;
+            justify-content: flex-end;
+            align-self: flex-end;
+
             .mapplugin {
 
                 &.logoplugin {
@@ -337,6 +344,11 @@ div.mapplugins {
         }
 
         &.left {
+            display: flex;
+            order: 1;
+            flex: 1;
+            justify-content: flex-start;
+            align-self: flex-end;
 
             .mapplugin {
 

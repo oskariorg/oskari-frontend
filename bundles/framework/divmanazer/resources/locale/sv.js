@@ -327,7 +327,8 @@ Oskari.registerLocalization(
                 "attribute_missing": "Attributet saknas.",
                 "operator_missing": "Operatören saknas.",
                 "value_missing": "Värdet saknas.",
-                "boolean_operator_missing": "Den logiska operatören saknas."
+                "boolean_operator_missing": "Den logiska operatören saknas.",
+                "failedToLoadPropertiesAndPropTypes": "Öppnandet av Välj objekt verktyget misslyckades. Kartlagrets id är:"
             }
         },
         "fileInput": {

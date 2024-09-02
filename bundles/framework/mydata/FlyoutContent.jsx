@@ -4,7 +4,7 @@ import { Message } from 'oskari-ui';
 import styled from 'styled-components';
 
 const StyledContent = styled.div`
-    width: 750px;
+    width: 100%;
 `;
 
 export const FlyoutContent = ({ loginStatus, children }) => {

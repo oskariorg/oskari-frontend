@@ -113,6 +113,66 @@ const isEmbedded = () => {
     return getMapContainerEl().classList.contains(APP_EMBEDDED_CLASS);
 };
 
+const showNavigation = (show) => {
+    const nav = getNavigationEl();
+    if (nav) {
+        if (show) {
+            nav.style.display = 'block';
+            setMenuScrollIndicator();
+        } else {
+            nav.style.display = 'none';
+        }
+    }
+};
+
+const isNavigationVisible = () => {
+    const nav = getNavigationEl();
+    if (!nav) return false;
+    const style = window.getComputedStyle(nav);
+    return style.getPropertyValue('display') !== 'none';
+}
+
+const getNavigationEl = () => {
+    return [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
+}
+
+const setMenuScrollIndicator = () => {
+    const indicatorNotNeeded = () => {
+        const navEl = Oskari.dom.getNavigationEl();
+        if (!navEl) return true;
+        const scrollTop = navEl.scrollTop;
+        const scrollHeight = navEl.scrollHeight;
+        const offsetHeight = navEl.offsetHeight;
+        const contentHeight = scrollHeight - offsetHeight;
+        return contentHeight <= scrollTop;
+    };
+    const setIndicator = (event) => {
+        window.requestAnimationFrame(() => {
+            if (indicatorNotNeeded()) {
+                getNavigationEl().classList.remove('show-scroll-icon');
+            } else {
+                getNavigationEl().classList.add('show-scroll-icon');
+            }
+        });
+    };
+    const navElement = getNavigationEl();
+    if (navElement) {
+        setIndicator();
+        if (!navElement.querySelector('.scroll-indicator')) {
+            const scrollIndicator = document.createElement('div');
+            scrollIndicator.className = 'scroll-indicator';
+            const scrollIcon = document.createElement('div');
+            scrollIcon.className = 'scroll-icon';
+            scrollIndicator.appendChild(scrollIcon);
+            navElement.appendChild(scrollIndicator);
+            navElement.addEventListener('scroll', setIndicator);
+            if (indicatorNotNeeded()) {
+                getNavigationEl().classList.remove('show-scroll-icon');
+            }
+        }
+    }
+}
+
 export const DOMHelper = {
     setRootEl,
     getRootEl,
@@ -121,5 +181,9 @@ export const DOMHelper = {
     isEmbedded,
     getWidth,
     getHeight,
+    showNavigation,
+    isNavigationVisible,
+    getNavigationEl,
+    setMenuScrollIndicator,
     APP_EMBEDDED_CLASS
 };

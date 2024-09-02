@@ -20,6 +20,27 @@ body {
 */
 /* flyout toolbar */
 
+.oskari-root-el > nav {
+    padding-bottom: 35px;
+
+    &.show-scroll-icon {
+        .scroll-indicator {
+            display: flex;
+        }
+        .scroll-icon {
+            animation:flash 2s 5 linear;
+        }
+        }
+        @keyframes flash {
+        0%, 100% {
+            opacity: 0.6;
+        }
+        50% {
+            opacity: .1;
+        }
+    }
+}
+
 .oskari-flyoutheading {
     background-color: #ffd400;
     border-top: 1px solid #ffdf00;
@@ -40,6 +61,7 @@ body {
 .oskari-flyout-title {
     float: left;
     margin-left: 20px;
+    margin-right: 20px;
     margin-top: 12px;
     height: 20px;
     display: inline-block;
@@ -143,7 +165,7 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.2);
     max-width: 100%;
     max-height: 100%;
-    @media only screen and (max-width: 950px) {
+    @media only screen and (max-width: 650px) {
         width: 100%;
         height: 100%;
         min-width: 0;
@@ -152,6 +174,13 @@ body {
         left: 0 !important;
         .oskari-flyouttools {
             margin-right: 45px;
+        }
+        .oskari-flyoutcontentcontainer {
+            width: 100%;
+            padding: 0;
+            border: 0;
+            overflow: auto;
+            max-height: 85%;
         }
     }
 }
@@ -229,6 +258,10 @@ body {
     &.disabled {
         opacity: 0.25;
         cursor: default;
+    }
+
+    &.display-none {
+        display: none;
     }
 }
 
@@ -391,60 +424,4 @@ body {
         overflow: auto;
         max-height: 1300px;
     }
-}
-
-/* IE8 TEMP fixes */
-/* FIXME remove these, check that IE9+ doesn't blow up */
-.oskari-flyoutcontentcontainer_IE_400_599 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 300px;
-}
-
-.oskari-flyoutcontentcontainer_IE_600_799 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 500px;
-}
-
-.oskari-flyoutcontentcontainer_IE_800_999 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 700px;
-}
-
-.oskari-flyoutcontentcontainer_IE_1000_1199 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 900px;
-}
-
-.oskari-flyoutcontentcontainer_IE_1200_1399 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 1100px;
-}
-
-.oskari-flyoutcontentcontainer_IE_1400 {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    overflow: auto;
-    max-height: 1300px;
 }

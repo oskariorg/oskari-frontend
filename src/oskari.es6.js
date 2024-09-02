@@ -7,8 +7,7 @@ import Sequence from './counter.es6.js';
 import Logger from './logger.es6.js';
 import pkg from '../package.json';
 import { DOMHelper } from './oskari.dom.js';
-
-let _markers = [];
+import { Customization } from './oskari.customization.js';
 
 let defaultSequence = new Sequence();
 let sequences = {};
@@ -49,16 +48,21 @@ function appendQueryToURL(url, query) {
 const Oskari = {
     VERSION: pkg.version,
     setMarkers (markers) {
-        _markers = markers || [];
+        Oskari.log('Oskari').deprecated('setMarkers', 'Use Oskari.custom.setMarkers() instead');
+        Customization.setMarkers(markers);
     },
     getMarkers () {
-        return _markers;
+        Oskari.log('Oskari').deprecated('getMarkers', 'Use Oskari.custom.getMarkers() instead');
+        return Customization.getMarkers();
     },
+    getDefaultMarker () {
+        Oskari.log('Oskari').deprecated('getDefaultMarker', 'Use Oskari.custom.getMarker() instead');
+        return Customization.getMarker();
+    },
+    // from oskari.customization.js
+    custom: Customization,
     // from oskari.dom
     dom: DOMHelper,
-    getDefaultMarker () {
-        return (_markers.length >= 3) ? _markers[2] : _markers[0];
-    },
     seq: defaultSequence,
     getSeq (type) {
         if(typeof type === 'undefined') {

@@ -2,22 +2,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Badge as AntBadge } from 'antd';
+import { ThemeConsumer } from 'oskari-ui/util';
+import { getTextColor, getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 import 'antd/es/badge/style/index.js';
 
-export const Badge = ({ count, inversed, ...rest }) => {
-    const style = {
-        backgroundColor: inversed ? '#333' : '#999',
-        color: '#fff',
-        fontWeight: '700',
-        whiteSpace: 'nowrap',
-        textShadow: '0 -1px 0 rgba(0,0,0,.25)'
-    };
-    return <AntBadge count={count} style={style} overflowCount={999} showZero={true} {...rest} />;
+const STYLE = {
+    fontWeight: '700',
+    whiteSpace: 'nowrap',
+    textShadow: '0 -1px 0 rgba(0,0,0,.25)'
 };
+
+const ZERO = {
+    badge: '#999',
+    text: '#fff'
+};
+
+export const Badge = ThemeConsumer(({
+    theme,
+    count,
+    showZero = true,
+    overflowCount = 999,
+    color = getHeaderTheme(theme).getAccentColor(theme),
+    ...rest
+}) => {
+    const badgeColor = count ? color : ZERO.badge;
+    const textColor = count ? getTextColor(color) : ZERO.text;
+
+    return <AntBadge count={count} color={badgeColor} showZero={showZero}
+        style={{ ...STYLE, color: textColor }}
+        overflowCount={overflowCount} {...rest} />;
+});
+
 Badge.propTypes = {
     count: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number
     ]),
-    inversed: PropTypes.bool
+    color: PropTypes.string,
+    showZero: PropTypes.bool,
+    overflowCount: PropTypes.number
 };

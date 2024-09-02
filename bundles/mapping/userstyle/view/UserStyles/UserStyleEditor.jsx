@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import { Message, TextInput, Tooltip, Divider } from 'oskari-ui';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
-import { generateBlankStyle } from 'oskari-ui/components/StyleEditor/index';
 import { BUNDLE_KEY } from '../../constants';
-import { ThemeConsumer } from 'oskari-ui/util';
 
-export const UserStyleEditor = ThemeConsumer(({ theme, style, onAdd, onCancel }) => {
+export const UserStyleEditor = ({ style, geometryType, onAdd, onCancel }) => {
     const { style: { featureStyle = {} } = {}, name } = style;
-    const defaultStyle = generateBlankStyle(theme);
+    const defaultStyle = Oskari.custom.generateBlankStyle();
     const [state, setState] = useState({
         featureStyle: Object.keys(featureStyle).length > 0 ? featureStyle : defaultStyle,
         name
@@ -32,6 +30,7 @@ export const UserStyleEditor = ThemeConsumer(({ theme, style, onAdd, onCancel })
             </Divider>
             <StyleEditor
                 oskariStyle={ state.featureStyle }
+                geometryType={ geometryType }
                 onChange={ updateStyle }
             />
             <ButtonContainer>
@@ -40,10 +39,11 @@ export const UserStyleEditor = ThemeConsumer(({ theme, style, onAdd, onCancel })
             </ButtonContainer>
         </div>
     );
-});
+};
 
 UserStyleEditor.propTypes = {
     onAdd: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
-    style: PropTypes.object.isRequired
+    style: PropTypes.object.isRequired,
+    geometryType: PropTypes.string
 };

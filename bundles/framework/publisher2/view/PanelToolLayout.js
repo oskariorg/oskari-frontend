@@ -113,6 +113,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             );
         },
         _switchControlSides: function () {
+            // bookkeeping for unique plugins, so we don't switch more than once in case there are multiple tools using the same plugin (case statsgrid)
+            const uniquePlugins = {};
+
             // toggle left <> right
             this.tools
                 .filter(tool => tool.isEnabled())
@@ -122,6 +125,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                         // for example center cross on map does not have a plugin
                         return;
                     }
+
+                    if (uniquePlugins && uniquePlugins[plugin.getClazz()]) {
+                        return;
+                    }
+                    uniquePlugins[plugin.getClazz()] = true;
+
                     const currentLoc = plugin.getLocation();
                     if (!currentLoc) {
                         // some plugins like GetInfo have the method but no location

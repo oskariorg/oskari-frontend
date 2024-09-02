@@ -10,13 +10,10 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Miesta",
-            "nocategories": "Zatiaľ nemáte uložené žiadne miesta.",
-            "maxFeaturesExceeded": "Máte priveľa vlastných miest. Prosím odstráňte niektoré.",
             "publishCategory": {
                 "privateTooltip": "Táto mapová vrstva je súkromná. Na jej zverejnenie kliknite sem.",
                 "publicTooltip": "Táto mapová vrstva je verejná. Na jej odverejnenie kliknite sem."
             },
-            "addCategoryFormButton": "Nová mapová vrstva",
             "addCategory": "Pridať mapovú vrstvu",
             "editCategory": "Editovať mapovú vrstvu",
             "deleteCategory": "Zmazať mapovú vrstvu",
@@ -175,7 +172,6 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Vymazať mapovú vrstvu",
-                "deleteConfirmMove": "Vymazávate mapovú vrstvu {0}. Mapová vrstva obsahuje {1} miesta. Chcete: <br/> 1. vymazať mapovú vrstvu a jej miesta <br/> 2. presunúť miesta do predvolenej mapovej vrstvy predtým než odstránite tú mapovú vrstvu?",
                 "deleteConfirm": "Chcete vymazať mapovú vrstvu {0}?",
                 "deleted": "Mapová vrstva je vymazaná"
             },

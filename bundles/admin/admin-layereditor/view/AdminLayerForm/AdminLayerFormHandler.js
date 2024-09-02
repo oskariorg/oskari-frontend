@@ -290,6 +290,28 @@ class UIHandler extends StateHandler {
         this.updateLayerAttributes(attributes, layer);
     }
 
+    setFeatureFilter (filter = {}) {
+        const layer = { ...this.getState().layer };
+        let attributes = layer.attributes || {};
+        if (Object.keys(filter).length === 0) {
+            delete attributes.filter;
+        } else {
+            attributes = { ...attributes, filter };
+        }
+        this.updateLayerAttributes(attributes, layer);
+    }
+
+    setAttributesData (key, value) {
+        const layer = { ...this.getState().layer };
+        const { data = {} } = layer.attributes || {};
+        if (typeof value === 'undefined') {
+            delete data[key];
+        } else {
+            data[key] = value;
+        }
+        this.updateLayerAttributes({ ...layer.attributes, data }, layer);
+    }
+
     setLocalizedNames (locale) {
         this.updateState({
             layer: { ...this.getState().layer, locale }
@@ -371,6 +393,16 @@ class UIHandler extends StateHandler {
         this.updateOptionsJsonProperty(json, 'tempHoverJSON', 'hover');
     }
 
+    setHover (json) {
+        const options = { ...this.getState().layer.options };
+        if (!json) {
+            delete options.hover;
+        } else {
+            options.hover = json;
+        }
+        this.setOptions(options);
+    }
+
     setTileGridJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempTileGridJSON', 'tileGrid');
     }
@@ -398,6 +430,12 @@ class UIHandler extends StateHandler {
     setOptions (options) {
         this.updateState({
             layer: { ...this.getState().layer, options }
+        });
+    }
+
+    setValueForLayer (key, value) {
+        this.updateState({
+            layer: { ...this.getState().layer, [key]: value }
         });
     }
 
@@ -452,7 +490,7 @@ class UIHandler extends StateHandler {
         }
 
         // Delete missing attibute keys but keep managed attributes
-        const managedAttributes = ['forcedSRS'];
+        const managedAttributes = ['forcedSRS', 'data', 'filter'];
         Object.keys(layer.attributes)
             .filter(key => !managedAttributes.includes(key))
             .forEach(key => delete layer.attributes[key]);
@@ -534,28 +572,25 @@ class UIHandler extends StateHandler {
         return composingModel ? composingModel.getPropertyFields(version) : [];
     }
 
-    // http://localhost:8080/action?action_route=GetWFSLayerFields&layer_id=888
+    // http://localhost:8080/action?action_route=LayerAdmin&layer_id=888
     fetchWFSLayerAttributes (layerId) {
         this.ajaxStarted();
-        return fetch(Oskari.urls.getRoute('GetWFSLayerFields', { layer_id: layerId }), {
+        return fetch(Oskari.urls.getRoute('LayerAdmin', { id: layerId }), {
             method: 'GET',
             headers: {
-                'Accept': 'application/json'
+                Accept: 'application/json'
             }
         }).then(response => {
             this.ajaxFinished();
             if (!response.ok) {
-                Messaging.error(getMessage('messages.errorFetchWFSLayerAttributes'));
+                Messaging.error(getMessage('messages.updateCapabilitiesFail'));
             }
             return response.json();
         }).then(json => {
-            const { types, locale } = json;
-            const attributeIdentifiers = Object.keys(types);
-            const currentLocale = Oskari.getLang();
-            const labelMapping = locale && locale[currentLocale] ? locale[currentLocale] : {};
-            return attributeIdentifiers.reduce((choices, identifier) => {
-                // use the attribute identifier as the label if no label is provided for current locale
-                choices[identifier] = labelMapping[identifier] || identifier;
+            const { capabilities } = json;
+            const { featureProperties } = capabilities;
+            return featureProperties?.reduce((choices, property) => {
+                choices[property.name] = property.name;
                 return choices;
             }, {});
         });
@@ -749,8 +784,7 @@ class UIHandler extends StateHandler {
         // if layer was found from the selected layers remove it from map and re-add it
         // this handles everything that needs to be updated on the map without separate code to update and potentially changed data separately
         if (originalLayerIndex !== -1) {
-            this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
-            this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, originalLayerIndex]);
+            this.sandbox.postRequestByName('AddMapLayerRequest', [layerId, { toPosition: originalLayerIndex }]);
         }
     }
 
@@ -1143,9 +1177,16 @@ class UIHandler extends StateHandler {
         layer.vectorStyleStatus[id] = status;
     }
 
-    showLayerMetadata (uuid) {
+    showLayerMetadata (layerId) {
+        // this works even when the layer hasn't been saved yet
+        let payload = { uuid: layerId };
+        if (typeof layerId === 'number') {
+            // this works only when layer has been saved
+            // (and supports the attributes override for metadata service url)
+            payload = { layerId };
+        }
         Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
-            { uuid }
+            payload
         ]);
     }
 
@@ -1193,6 +1234,8 @@ const wrapped = controllerMixin(UIHandler, [
     'removeVectorStyleFromLayer',
     'saveVectorStyleToLayer',
     'setAttributes',
+    'setAttributesData',
+    'setFeatureFilter',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
     'setClusteringDistance',
@@ -1203,6 +1246,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setGfiXslt',
     'setGroup',
     'setHoverJSON',
+    'setHover',
     'setLayerName',
     'setLayerUrl',
     'setLegendUrl',
@@ -1211,6 +1255,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setMinAndMaxScale',
     'setOpacity',
     'setOptions',
+    'setValueForLayer',
     'setPassword',
     'setPermissionForAll',
     'setSingleTile',

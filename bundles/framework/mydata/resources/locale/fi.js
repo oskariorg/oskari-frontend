@@ -139,6 +139,8 @@ Oskari.registerLocalization(
                 "lastName": "Sukunimi",
                 "nickName": "Nimimerkki",
                 "email": "Sähköpostiosoite",
+                "created": "Tili luotu",
+                "lastLogin": "Edellinen kirjautuminen",
                 "changeInfo": "Päivitä tietosi",
                 "changePassword": "Vaihda salasana",
                 "removeAccount": "Poista käyttäjätili",

@@ -157,15 +157,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             }
         },
         _updateLayer: function (layerJson) {
-            const { id, locale, options } = layerJson;
+            const { id } = layerJson;
             const layer = this.mapLayerService.findMapLayer(id);
             if (!layer) {
                 this.log.warn('tried to update layer which does not exist, id: ' + id);
                 return;
             }
-            layer.setLocale(locale);
-            layer.setOptions(options);
-            layer.setStylesFromOptions(options);
+            layer.handleUpdatedLayer(layerJson);
             const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
             this.sandbox.notifyAll(evt);
             if (this.sandbox.isLayerAlreadySelected(id)) {

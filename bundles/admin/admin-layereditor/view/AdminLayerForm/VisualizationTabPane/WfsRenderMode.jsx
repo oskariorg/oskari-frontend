@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Message, Radio } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from './styled';
-import { InfoTooltip } from '../InfoTooltip';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../../../../mapping/mapmodule/domain/constants';
 
 export const WfsRenderMode = ({ layer, controller }) => {
@@ -19,7 +19,7 @@ export const WfsRenderMode = ({ layer, controller }) => {
                     </Radio.Button>
                     <Radio.Button value={RENDER_MODE_MVT}>
                         <Message messageKey='renderMode.mvt'/>
-                        <InfoTooltip messageKeys='renderMode.info'/>
+                        <InfoIcon title={<Message messageKey='renderMode.info'/>} />
                     </Radio.Button>
                 </Radio.Group>
             </StyledFormField>

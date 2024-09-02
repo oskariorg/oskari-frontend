@@ -1,6 +1,6 @@
 {
   "name": "oskari-frontend",
-  "version": "2.11.0-dev",
+  "version": "2.14.0-dev",
   "description": "Oskari frontend",
   "keywords": [
     "oskari",
@@ -18,7 +18,11 @@
   "license": "(MIT OR EUPL-1.1)",
   "main": "grunt.js",
   "engines": {
+<<<<<<< HEAD
     "node": "^12.22.10 || ^14.17.0 || >=16.0.0",
+=======
+    "node": ">=16.20.0",
+>>>>>>> develop
     "npm": ">=6.0.0"
   },
   "scripts": {
@@ -29,9 +33,11 @@
     "lint": "eslint . --quiet",
     "test": "eslint . --quiet && jest",
     "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "postinstall": "node webpack/hacks/postinstall.js"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@ant-design/icons": "4.7.0",
     "@babel/core": "7.19.6",
     "@babel/preset-env": "7.19.4",
@@ -41,17 +47,29 @@
     "antd": "4.24.8",
     "babel-loader": "8.2.3",
     "babel-plugin-styled-components": "2.0.5",
+=======
+    "@ant-design/icons": "4.6.3",
+    "@babel/core": "7.25.2",
+    "@babel/preset-env": "7.25.4",
+    "@babel/preset-react": "7.24.7",
+    "@babel/runtime-corejs3": "7.25.0",
+    "@cesium/engine": "10.1.0",
+    "@storybook/react": "6.3.7",
+    "@testing-library/jest-dom": "5.7.0",
+    "@testing-library/react": "12.1.5",
+    "@testing-library/user-event": "14.4.3",
+    "antd": "4.24.8",
+    "babel-loader": "8.3.0",
+    "babel-plugin-styled-components": "2.1.4",
+>>>>>>> develop
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
-    "cesium": "1.91.0",
     "copy-webpack-plugin": "5.0.4",
-    "core-js": "3.26.0",
+    "core-js": "3.33.2",
     "css-loader": "3.2.0",
     "d3": "7.8.4",
     "dompurify": "2.3.6",
     "draft-js": "0.11.7",
     "draft-js-export-html": "1.4.1",
-    "enzyme": "3.11.0",
-    "enzyme-adapter-react-16": "1.15.6",
     "eslint": "8.35.0",
     "eslint-config-standard": "17.0.0",
     "eslint-import-resolver-webpack": "0.13.2",
@@ -66,33 +84,34 @@
     "gm": "1.23.1",
     "imports-loader": "1.2.0",
     "intl-messageformat": "9.11.4",
-    "jest": "27.0.6",
-    "jquery": "3.6.0",
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0",
+    "jquery": "3.7.1",
     "jsts": "2.2.0",
     "less": "3.9.0",
     "less-loader": "5.0.0",
-    "loader-utils": "2.0.2",
     "lodash": "4.17.21",
     "merge": "2.1.1",
     "mini-css-extract-plugin": "1.6.2",
     "mobile-detect": "1.4.5",
-    "node-sass": "6.0.1",
-    "ol": "7.2.2",
-    "olcs": "2.13.1",
+    "ol": "9.2.4",
+    "ol-mapbox-style": "12.3.5",
+    "olcs": "2.20",
     "optimize-css-assets-webpack-plugin": "5.0.8",
     "query-string": "6.8.3",
     "react": "16.14.0",
     "react-beautiful-dnd": "13.1.0",
     "react-dom": "16.14.0",
-    "sass-loader": "10.2.1",
+    "sass": "1.77.8",
+    "sass-loader": "10.5.2",
     "script-loader": "0.7.2",
     "style-loader": "2.0.0",
     "styled-components": "5.3.3",
     "sumoselect": "3.0.5",
     "uglifyjs-webpack-plugin": "2.2.0",
-    "webpack": "4.46.0",
+    "webpack": "4.47.0",
     "webpack-cli": "4.10.0",
-    "webpack-dev-server": "4.7.4",
+    "webpack-dev-server": "4.15.2",
     "webpackbar": "5.0.2"
   }
 }

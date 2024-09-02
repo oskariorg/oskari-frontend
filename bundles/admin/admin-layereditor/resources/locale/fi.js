@@ -10,7 +10,9 @@ Oskari.registerLocalization(
                 "typeDescription": "Valitse lisättävän rajapinnan tyyppi",
                 "serviceDescription": "Syötä lisättävän rajapinnan osoite ja versionumero",
                 "layersDescription": "Valitse rajapinnasta löytyvistä tasoista se jonka haluat lisätä karttatasoksi",
-                "details": "Tason tiedot"
+                "details": "Tason tiedot",
+                "toggleFlatView": "Listanäkymä",
+                "toggleTreeView": "Puunäkymä"
             },
             "layertype": {
                 "wmslayer": "WMS",
@@ -61,6 +63,7 @@ Oskari.registerLocalization(
             "generalTabTitle": "Yleiset",
             "visualizationTabTitle": "Visualisointi",
             "additionalTabTitle": "Lisätiedot",
+            "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Oikeudet",
             "interfaceVersionDesc": "Valitse ensisijaisesti uusin rajapinnan tukema versio.",
             "attributions": "Lähdeviitteet",
@@ -94,12 +97,22 @@ Oskari.registerLocalization(
                 "service": "Palvelussa määritelty",
                 "overridden": "Korvaava tiedostotunniste"
             },
+            "jsonTab": {
+                "info": "Nämä työkalut mahdollistavat lisäkonfiguraation, käytä harkiten.",
+                "fields": {
+                    "attributes": "Attribuutit",
+                    "capabilities": "Tasolle parsitut Capabilities-tiedot",
+                    "options": "Valinnat (options)",
+                    "params": "Parametrit"
+                }
+            },
             "capabilities": {
                 "parsed": "Tasolle parsitut Capabilities-tiedot",
                 "show": "Näytä palvelun GetCapabilities-vastaus",
                 "update": "Päivitä nyt",
                 "updateRate": "Capabilities päivitystiheys",
-                "updateRateDesc": "Päivitystiheys sekunteina",
+                "updateRateDesc": "Päivitystiheys minuutteina.",
+                "updateRateCronMsg": "Päivitys ajastettu cronilla: {cron}, voit muuttaa päivitystiheyttä oskari-ext.propertiesin 'oskari.scheduler.job.UpdateCapabilitiesJob.cronLine' arvolla.",
                 "updatedSuccesfully": "GetCapabilities päivitys onnistui.",
                 "updateFailed": "GetCapabilities päivitys epäonnistui.",
                 "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}",
@@ -108,6 +121,62 @@ Oskari.registerLocalization(
                     "defaultStyle" : "Nyt valittua oletustyyliä ei löydy palvelusta. Valitse uusi oletustyyli.",
                     "additionalLegend": "Tasolle on tallennettu erikseen rajapintapalvelun oman karttaselitteen yliajava karttaselite, jolle ei löydy tyyliä. Päivitä karttaselitteen tiedot. Poistuneen/ei-toimivan karttaselitteen nimessä on ( ! )-merkki.",
                     "globalWithStyles": "Tasolle on määritetty vain yksi yleinen oletuskarttaselite, vaikka sillä olisi rajapintapalvelusta useita tyylejä käytettävissä. Poista oletuskarttaselite ja määritä mahdolliset tyylikohtaiset karttaselitteet."
+                }
+            },
+            "attributes": {
+                "label": "Attribuutit",
+                "properties": "Kohteiden ominaisuuksien käyttö",
+                "presentation": "Esitystapa",
+                "presentationTooltip": "Esitystapa vaikuttaa kohdetietojen kyselyyn ja kohdetietotaulukkoon.",
+                "showAll": "Näytä kaikki ominaisuustiedot",
+                "idProperty": "Käytä ominaisuustietoa kohteiden yksilöimiseen",
+                "idPropertyTooltip": "Rajapinnan tulee palauttaa yksilöivä tunniste kohteille. Pyydä ensisijaisesti palveluntarjoajaa ottamaan käyttöön yksilöivät tunnisteet. Toimii vain 'Suuria kohteita' tyypille (GeoJSON).",
+                "geometryType": {
+                    "label": "Geometriatyyppi",
+                    "sourceAttributes": "Lähde: tason attribuutit",
+                    "sourceCapabilities": "Lähde: tason Capabilities-tiedot",
+                    "unknown":"Ei tiedossa",
+                    "point": "Piste",
+                    "line": "Viiva",
+                    "area":"Alue",
+                    "collection":"Kaikki"
+                },
+                "featureFilter": {
+                    "title": "Suodata rajapinnasta haettavia kohteita ominaisuuksien mukaan",
+                    "button": "Kohteiden suodatus"
+                },
+                "filter": {
+                    "title": "Kohteiden ominaisuuksien näyttäminen",
+                    "lang": "Valitse tason kohteille näytettävät ominaisuudet ja niiden järjestys",
+                    "default": "oletussuodattimelle",
+                    "fromDefault": "Valitulle kielelle ei ole lisätty suodatinta. Valitulla kielellä käytetään oletussuodatinta. Muokkaa valintoja luodaksesi kielelle oman suodattimen.",
+                    "button": "Valitse kentät"
+                },
+                "locale": {
+                    "title": "Nimet käyttöliittymässä ominaisuuksille",
+                    "button": "Nimeäminen"
+                },
+                "format": {
+                    "title": "Kohteiden ominaisuuksien arvojen muotoilu",
+                    "button": "Muotoilu",
+                    "type": {
+                        "label": "Tyyppi",
+                        "typeFormats": "Arvon tyyppi",
+                        "textFormats": "Tekstin muotoilu",
+                        "link": "Linkki",
+                        "image": "Kuva",
+                        "number": "Numero",
+                        "phone": "Puhelinnumero"
+                    },
+                    "options": {
+                        "noLabel": "Näytä vain arvo",
+                        "skipEmpty": "Älä näytä tyhjää"
+                    },
+                    "params": {
+                        "link": "Näytä linkkinä",
+                        "fullUrl": "Näytä koko osoite",
+                        "label": "Linkin label"
+                    }
                 }
             },
             "styles": {
@@ -127,6 +196,11 @@ Oskari.registerLocalization(
                     "name": "Tyylin nimi",
                     "selectDefault": "Valitse oletustyyli",
                     "deleteStyle": "Poista tyyli",
+                    "optionalStyles": "Tyylittely ominaisuuksien mukaan",
+                    "optionalStylesFilter": "Valitse tyyliä käyttävät kohteet ominaisuuksien mukaan",
+                    "featureStyle": "Tyylimääritykset",
+                    "cesium": "3D Tiles/Cesium tyylimääritykset",
+                    "mapbox": "Mapbox tyylimääritykset",
                     "edit": {
                         "editor": "Muokkaa editorilla",
                         "json": "Muokkaa JSON"
@@ -140,13 +214,20 @@ Oskari.registerLocalization(
                     "validation": {
                         "name": "Täytä nimi tyylille",
                         "noStyles": "Ei tallennettuja tyylejä",
-                        "json": "Tyylimääritysten JSON-syntaksi on virheellinen."
-                    },
-                    "json": {
-                        "featureStyle": "Tyylimääritykset (JSON)",
-                        "optionalStyles": "Tyylittely ominaisuustietojen mukaan (JSON)",
-                        "cesium": "3D Tiles/Cesium tyylimääritykset (JSON)",
-                        "mapbox": "Mapbox tyylimääritykset (JSON)"
+                        "json": "Tyylimääritysten JSON-syntaksi on virheellinen.",
+                        "optionalStyles": "Tyylille ei ole sopivaa suodatinta."
+                    }
+                },
+                "hover": {
+                    "title": "Kohteen korostus ja tooltip",
+                    "tooltip": "Kohteelle näytettävät tooltip rivit",
+                    "useStyle": "Käytä tyylimäärityksiä",
+                    "inherit": "Peri tyylimääritykset",
+                    "effect": "Käytä tehostetta",
+                    "fromProperty": "Käytä ominaisuutta labelinä",
+                    "labelTooltip": {
+                        "key": "Label näytetään sellaisenaan",
+                        "keyProperty": "Labelin sisältö haetaan valitusta ominaisuudesta"
                     }
                 }
             },
@@ -159,7 +240,6 @@ Oskari.registerLocalization(
             "gfiTypeDesc": "Valitse listalta formaatti, jossa kohdetiedot (GFI) haetaan. Mahdolliset formaatit on määritelty WMS-palvelun GetCapabilities-vastausviestissä.",
             "gfiStyle": "GFI-tyyli (XSLT)",
             "gfiStyleDesc": "Määrittele kohdetietojen esitystapa XSLT-muunnoksen avulla.",
-            "attributes": "Attribuutit",
             "clusteringDistance": "Pisteiden etäisyys klusteroidessa",
             "forcedSRS": "Pakotetut projektiot",
             "forcedSRSInfo": "Pakotetut projektiot verrattuna GetCapabilites-määritykseen",
@@ -218,7 +298,8 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
                 "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
                 "noCoverage": "Karttatason kattavuutta ei ole rajoitettu.",
-                "invalidScale": "Tarkista tason mittakaavarajat."
+                "invalidScale": "Tarkista tason mittakaavarajat.",
+                "noFeatureProperties": "Kohteiden ominaisuustietoja ei ole saatavilla tasolle."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",

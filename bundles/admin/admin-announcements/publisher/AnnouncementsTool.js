@@ -27,6 +27,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 '</div>'),
             announcementsPopup: jQuery(
                 '<div>' +
+                    '<div class="publisher-announcements-disclaimer">' + this.localization.tool.popup.disclaimer + '</div>' +
                     '<div class="publisher-announcements-inputs">' +
                         '<h4>' + this.localization.tool.announcementsName + '</h4><h4>' + this.localization.tool.announcementsTime + '</h4>' +
                         '<div class="ann-column ann-title"></div>' +
@@ -35,12 +36,15 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 '</div>'),
             inputCheckbox: jQuery('<div><input type="checkbox" name="announcement"/><label></label></div>')
         };
+        this.noUI = false;
     }, {
 
         init: function (data) {
             const me = this;
             me.data = data;
             me.selectedAnnouncements = [];
+
+            me.noUI = data?.configuration?.announcements?.conf?.plugin?.config?.noUI === true;
 
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
 
@@ -59,10 +63,14 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 const toolPluginAnnouncementsConf = me._getToolPluginAnnouncementsConf();
                 if (toolPluginAnnouncementsConf !== null) {
                     me.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
-                    toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
-                        const filteredAnnouncement = me.announcements.filter(ann => ann.id === announcement);
-                        if (me.isAnnouncementValid(filteredAnnouncement[0])) {
-                            me.selectedAnnouncements.push(filteredAnnouncement[0]);
+                    toolPluginAnnouncementsConf.config.announcements.forEach(announcementId => {
+                        const announcement = me.announcements.find(ann => ann.id === announcementId);
+                        if (announcement !== undefined && me.isAnnouncementValid(announcement)) {
+                            // make sure there are no duplicates
+                            const alreadyAdded = me.selectedAnnouncements.some(ann => ann.id === announcement.id);
+                            if (!alreadyAdded) {
+                                me.selectedAnnouncements.push(announcement);
+                            }
                         }
                     });
                 }
@@ -77,6 +85,18 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
 
         getName: function () {
             return 'Oskari.framework.announcements.publisher.AnnouncementsTool';
+        },
+
+        /**
+         * Check if Announcement is inside the given timeframe
+         * @method @private isAnnouncementValid
+         * @param  {Object} announcement announcement
+         * @return {Boolean} true if announcement is valid
+         */
+        isAnnouncementValid: function (announcement) {
+            const announcementEnd = new Date(announcement.endDate);
+            const currentDate = new Date();
+            return currentDate.getTime() <= announcementEnd.getTime();
         },
 
         /**
@@ -124,6 +144,32 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     me._openAnnouncementsDialog(jQuery(this));
                 }
             });
+
+            const labelNoUI = me.localization.publisher.noUI;
+
+            var input = Oskari.clazz.create(
+                'Oskari.userinterface.component.CheckboxInput'
+            );
+
+            input.setTitle(labelNoUI);
+            input.setHandler(function (checked) {
+                if (checked === 'on') {
+                    me.noUI = true;
+                    me.getPlugin().teardownUI();
+                } else {
+                    me.noUI = false;
+                    me.getPlugin().redrawUI(Oskari.util.isMobile());
+                }
+            });
+
+            input.setChecked(me.noUI);
+
+            var inputEl = input.getElement();
+            if (inputEl.style) {
+                inputEl.style.width = 'auto';
+            }
+
+            template.append(inputEl);
 
             return template;
         },
@@ -196,9 +242,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
         },
         // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
         updateSelectedInput: function () {
-            jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(this.selectedAnnouncements.map(i => i.locale[this.lang].title).toString());
+            jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(this.selectedAnnouncements.map(i => Oskari.getLocalized(i.locale, this.lang)?.title).toString());
         },
-
         /**
          * @private @method _getToolPluginAnnouncementsConf
          * @return {Object / null} config or null if not found
@@ -244,6 +289,11 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             if (announcementsSelection && !jQuery.isEmptyObject(announcementsSelection)) {
                 pluginConfig.config.announcements = announcementsSelection.announcements;
             }
+
+            if (me.noUI) {
+                pluginConfig.config.noUI = me.noUI;
+            }
+
             return {
                 configuration: {
                     announcements: {

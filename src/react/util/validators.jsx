@@ -7,7 +7,7 @@ const isReactComponent = (el) => el && el.$$typeof === Symbol.for('react.element
 const isNonEmptyString = value => typeof value === 'string' && value.trim().length > 0;
 
 export const getMandatoryIcon = (mandatory, elementValue) => {
-    if (typeof mandatory === 'boolean') {
+    if (typeof mandatory === 'boolean' && mandatory) {
         // generate default check for mandatory field
         return (<MandatoryIcon isValid={isNonEmptyString(elementValue)} />);
     } else if (isReactComponent(mandatory)) {

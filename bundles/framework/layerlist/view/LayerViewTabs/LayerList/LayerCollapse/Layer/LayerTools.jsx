@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { WarningIcon } from 'oskari-ui';
+import { WarningIcon, Message } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
-import { LayerIcon } from '../../../LayerIcon';
+import { LayerIcon } from 'oskari-ui/components/icons';
 import { MetadataIcon } from 'oskari-ui/components/icons';
 import { BACKEND_STATUS_AVAILABLE } from '../../../../../constants';
 
@@ -14,14 +14,6 @@ const Tools = styled('div')`
         margin-left: 3px;
     }
 `;
-
-const hasSubLayerMetadata = (layer) => {
-    const subLayers = layer.getSubLayers();
-    if (!subLayers || subLayers.length === 0) {
-        return false;
-    }
-    return !!subLayers.find((sub) => !!sub.getMetadataIdentifier());
-};
 
 const getBackendStatus = (layer) => {
     const backendStatus = layer.getBackendStatus() || 'UNKNOWN';
@@ -52,13 +44,13 @@ const LayerTools = ({ model, controller, opts }) => {
     const backendStatus = backendAvailable ? getBackendStatus(model) : {};
     const statusOnClick =
         backendAvailable && backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
-
     return (
         <Tools className="layer-tools">
             {unsupported && <WarningIcon tooltip={unsupported.getDescription()} />}
             <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
             <MetadataIcon
                 metadataId={model.getMetadataIdentifier()}
+                layerId={model.getId()}
                 style={{ marginBottom: '1px', marginLeft: '5px' }}
             />
         </Tools>
@@ -77,7 +69,7 @@ const LayerStatus = ({ backendStatus, model, onClick }) => {
         type={ model.getLayerType() }
         hasTimeseries={ model.hasTimeseries() }
         onClick={ onClick ? () => onClick() : undefined }
-        additionalTooltipKey={ backendStatus.messageKey }
+        additionalTooltip={ <Message messageKey={backendStatus.messageKey} /> }
     />;
 };
 

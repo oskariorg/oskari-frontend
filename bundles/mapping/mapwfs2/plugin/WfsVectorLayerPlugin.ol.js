@@ -45,10 +45,12 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         this.layertypes.add(layertype);
         this.getMapModule().setLayerPlugin(layertype, this);
         this.getMapModule().registerDefaultFeatureStyle(layertype, DEFAULT_STYLES.style);
-        this.mapLayerService.registerLayerModel(layertype, modelClass);
-        this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
         this.vectorFeatureService.registerLayerType(layertype, this);
         this.vectorFeatureService.registerDefaultStyles(layertype, DEFAULT_STYLES);
+        this.mapLayerService.registerLayerModel(layertype, modelClass);
+        if (modelBuilder) {
+            this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
+        }
         this._registerEventHandlers(eventHandlers);
     }
 
@@ -91,7 +93,7 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
             LayerComposingModel.VECTOR_STYLES,
             LayerComposingModel.URL,
             LayerComposingModel.VERSION,
-            LayerComposingModel.WFS_RENDER_MODE
+            LayerComposingModel.WFS_LAYER
         ], ['1.1.0', '2.0.0', '3.0.0']);
 
         const layerClass = 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';
@@ -336,45 +338,6 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
             if (this.renderMode === RENDER_MODE_VECTOR && this.getMapModule().getSupports3D()) {
                 // Trigger features changed to synchronize 3D view
                 lyr.getSource().getFeatures().forEach(ftr => ftr.changed());
-            }
-        });
-    }
-
-    /**
-     * @method updateLayerProperties
-     * Requests and sets feature properties
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer wfs layer
-     * @param {Array} fields
-     */
-    updateLayerProperties (layer) {
-        if (!layer) {
-            return;
-        }
-        const onSuccess = response => {
-            const lang = Oskari.getLang();
-            const { types = {}, locale = {}, selection } = response;
-            if (Array.isArray(selection)) {
-                layer.setPropertyFilter(selection);
-            } else if (selection) {
-                const selectionArray = selection[lang] || selection.default || [];
-                layer.setPropertySelection(selectionArray);
-            }
-            const labels = locale[lang] || locale.default || {};
-            layer.setPropertyLabels(labels);
-            layer.setPropertyTypes(types);
-            // TODO: event should have only locale object not separate arrays
-            this.notify('WFSPropertiesEvent', layer, layer.getLocales(), layer.getFields());
-        };
-        jQuery.ajax({
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                layer_id: layer.getId()
-            },
-            url: Oskari.urls.getRoute('GetWFSLayerFields'),
-            success: onSuccess,
-            error: () => {
-                this._log.warn('Error getting fields for wfs layer ' + layer.getId());
             }
         });
     }

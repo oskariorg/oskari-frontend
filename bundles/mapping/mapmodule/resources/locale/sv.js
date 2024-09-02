@@ -38,6 +38,9 @@ Oskari.registerLocalization(
                     "close": "Stäng"
                 }
             },
+            "BackgroundLayerSelectionPlugin": {
+                "emptyOption": "Inget val"
+            },
             "LayerSelectionPlugin": {
                 "title": "Kartlager",
                 "chooseDefaultBaseLayer": "Välj bakgrundskarta",
@@ -146,6 +149,10 @@ Oskari.registerLocalization(
                 "title": "Zooma in och zooma ut",
                 "message": "Du kan zooma in och ut på kartan med skalans glidreglage eller med hjälp av plus- och minusknapparna bredvid glidreglaget. Tips: Du kan även zooma genom att använda plus och minus på tangentbordet eller med rullhjulet på musen. Du kan också zooma in genom att dubbelklicka på kartan."
             }
+        },
+        "layerCoverageTool": {
+            "name": "Visa kartlagrets utsträckning",
+            "removeCoverageFromMap": "Göm kartlagrets utsträckning"
         }
     }
 });
