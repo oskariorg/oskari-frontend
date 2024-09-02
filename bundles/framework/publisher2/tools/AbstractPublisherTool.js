@@ -1,4 +1,3 @@
-
 export class AbstractPublisherTool {
     constructor (sandbox, mapmodule, localization = {}) {
         // override to change group (tool panel is created for each unique group)

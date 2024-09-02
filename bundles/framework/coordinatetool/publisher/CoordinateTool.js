@@ -1,4 +1,3 @@
-
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
     function () {
     }, {

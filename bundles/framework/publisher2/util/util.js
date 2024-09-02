@@ -1,4 +1,3 @@
-
 export const isEmpty = (value) => {
     if (value === null) {
         return true;

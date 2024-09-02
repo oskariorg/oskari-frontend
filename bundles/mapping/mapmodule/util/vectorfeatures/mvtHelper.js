@@ -1,4 +1,3 @@
-
 export const getMVTFeaturesInExtent = (source, extent, idPropName = 'id') => {
     const featuresById = new Map();
     const features = source.getFeaturesInExtent(extent);
