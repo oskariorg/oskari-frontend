@@ -1,4 +1,3 @@
-
 import { DEFAULT_COLORS } from 'oskari-ui/theme';
 
 const CSS_CLASS_PREFIX_FONT = 'oskari-theme-font-';

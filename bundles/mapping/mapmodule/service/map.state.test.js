@@ -1,4 +1,3 @@
-
 import '../../../../src/global';
 import '../domain/AbstractLayer';
 import '../resources/locale/en.js';

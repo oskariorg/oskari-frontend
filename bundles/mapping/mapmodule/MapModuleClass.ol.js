@@ -1,4 +1,3 @@
-
 import * as olExtent from 'ol/extent';
 import { defaults as olInteractionDefaults } from 'ol/interaction';
 import KeyboardPan from 'ol/interaction/KeyboardPan';

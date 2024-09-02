@@ -1,4 +1,3 @@
-
 import { FLYOUTS } from './handler/ViewHandler';
 import './resources/scss/tile.scss';
 
