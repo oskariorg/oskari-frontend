@@ -84,6 +84,7 @@ const getExcludedNodeModules = (modules, blacklisted = true) => {
 };
 
 const BABEL_LOADER_RULE = {
+    /* eslint-disable array-bracket-spacing */
     test: /\.(js|jsx)$/,
     exclude: [
         /libraries/,
@@ -123,7 +124,14 @@ const getModuleRules = (isProd = false, antThemeFile) => {
     const rules = [
         {
             test: require.resolve('sumoselect'),
-            use: 'imports-loader?define=>undefined,exports=>undefined'
+            use: [{
+                loader: 'imports-loader',
+                options: {
+                    imports: [
+                        'side-effects sumoselect'
+                    ]
+                }
+            }]
         },
         BABEL_LOADER_RULE,
         ...styleFileRules,
