@@ -1,7 +1,7 @@
 /* eslint-disable import/no-webpack-loader-syntax, import/no-unresolved */
 // libraries
 
-import 'expose-loader?jQuery!jquery';
+import 'expose-loader?exposes=jQuery!jquery';
 import '../src/polyfills.js';
 
 // Oskari global
