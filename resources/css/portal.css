@@ -514,3 +514,27 @@ This seems to only happen on the Firefox browser
 .ant-tabs .ant-tabs-nav-wrap {
     padding-right: 2em;
 }
+
+/*
+  Fixes antd v5 dropdown menus opening under flyouts
+  z-index values copied from the old .less implementation
+*/
+.ant-select-dropdown {
+  z-index: 30050 !important;
+}
+
+.ant-dropdown {
+  z-index: 30050 !important;
+}
+
+.ant-popover {
+  z-index: 30030 !important;
+}
+
+.ant-picker-dropdown {
+  z-index: 30050 !important;
+}
+
+.ant-message, .ant-notification {
+  z-index: 30010 !important;
+}

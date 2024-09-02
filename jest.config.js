@@ -15,6 +15,6 @@ module.exports = {
     },
     verbose: true,
     transformIgnorePatterns: [
-        'node_modules/(?!(ol|color-parse|color-space|color-rgba|color-name|jsts|geotiff|quick-lru)).+\\.js$'
+        'node_modules/(?!(ol|color-parse|color-space|color-rgba|color-name|antd|rc-util|jsts|geotiff|quick-lru)).+\\.js$'
     ]
 };

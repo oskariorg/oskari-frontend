@@ -10,6 +10,9 @@ import { getNavigationTheme } from 'oskari-ui/theme';
 // filtering class means that the search uses other channels than what are used by default
 // -> highlight the button
 const StyledButton = styled(Button)`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin-left: 7px;
     height: 35px;
     border-radius: calc(${props => props.$rounding || 0} * 35px);
@@ -47,13 +50,20 @@ const SearchContainer = styled('div')`
     background: ${props => props.backgroundColor};
     opacity: ${props => props.opacity};
     align-items: center;
-    padding: 3px 7px 3px 3px;
+    padding: 0px 7px 3px 3px;
     border-radius: calc(${props => props.rounding || 0} * 40px);
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
 
     .ant-btn-icon-only > * {
-        font-size: 20px;
+        font-size: 20px !important;
+        margin-left: 0.25em;
+        margin-top: 0.1em;
     }
+
+    .ant-btn.ant-btn-icon-only .anticon {
+        font-size: 20px!important;
+    }
+
     input {
         font-size: 15px;
     }
