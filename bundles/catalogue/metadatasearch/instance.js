@@ -179,16 +179,18 @@ Oskari.clazz.define(
 
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 const isShown = event.getViewState() !== 'close';
+                const name = event.getExtension().getName();
 
                 // ExtensionUpdateEvents are fired a lot, only let metadatacatalogue extension event to be handled when enabled
-                if (![this.getName(), 'Search'].includes(event.getExtension().getName())) {
+                if (![this.getName(), 'Search'].includes(name)) {
                     // wasn't me or disabled -> do nothing
                     return;
                 }
                 if ((!isShown && this.drawCoverage === false) || event.getViewState() === 'close') {
                     this._teardownMetaSearch();
                 }
-                if (isShown) {
+                if (this.getName() === name && isShown) {
+                    // own flyout so Search.TabChangedEvent doesn't trigger load options
                     this.handler.loadOptions();
                 }
             },
