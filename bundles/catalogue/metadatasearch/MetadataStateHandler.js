@@ -140,15 +140,10 @@ class MetadataStateHandler extends StateHandler {
      * Advanced search
      */
     toggleAdvancedSearch () {
-        const { advancedSearchExpanded, advancedSearchOptions } = this.getState();
-        // toggling open and haven't fetched options yet -> fetch.
+        const { advancedSearchExpanded } = this.getState();
         this.updateState({
             advancedSearchExpanded: !advancedSearchExpanded
         });
-
-        if (!advancedSearchExpanded && !advancedSearchOptions) {
-            this.fetchOptions();
-        }
     }
 
     /**
@@ -166,21 +161,31 @@ class MetadataStateHandler extends StateHandler {
         });
     }
 
+    loadOptions () {
+        const { advancedSearchOptions } = this.getState();
+        if (!advancedSearchOptions) {
+            this.fetchOptions();
+        }
+    }
+
     async fetchOptions () {
+        this.updateState({ advancedSearchOptions: { loading: true } });
+        const fields = [];
+        const emptyOption = Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.emptyOption');
         await this.optionsService.getOptions((options) => {
-            const sortedOptions = { fields: [] };
-            const emptyOption = Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.emptyOption');
             options?.fields?.forEach((field) => {
-                const newField = Object.assign({}, field);
                 const sortedValues = field.values.sort((a, b) => Oskari.util.naturalSort(a.val, b.val)).map(({ val }) => ({ label: val, value: val }));
-                if (sortedValues.length && !newField.multi) {
+                if (!sortedValues.length) {
+                    // don't store field with no values
+                    return;
+                }
+                if (!field.multi) {
                     sortedValues.unshift({ label: emptyOption, value: '' });
                 }
-                newField.values = sortedValues;
-                sortedOptions.fields.push(newField);
+                fields.push({ ...field, values: sortedValues });
             });
-            this.updateState({ advancedSearchOptions: sortedOptions });
         });
+        this.updateState({ advancedSearchOptions: { fields } });
     }
 
     advancedSearchParamsChanged (key, value) {
