@@ -185,7 +185,7 @@ class MetadataStateHandler extends StateHandler {
                 fields.push({ ...field, values: sortedValues });
             });
         });
-        this.updateState({ advancedSearchOptions: { fields } });
+        this.updateState({ advancedSearchOptions: { fields, loading: false } });
     }
 
     advancedSearchParamsChanged (key, value) {

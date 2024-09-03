@@ -185,15 +185,18 @@ Oskari.clazz.define(
                     // wasn't me or disabled -> do nothing
                     return;
                 }
-
                 if ((!isShown && this.drawCoverage === false) || event.getViewState() === 'close') {
                     this._teardownMetaSearch();
+                }
+                if (isShown) {
+                    this.handler.loadOptions();
                 }
             },
             'Search.TabChangedEvent': function (event) {
                 if (event.getNewTabId() !== this.id) {
                     this._teardownMetaSearch();
                 } else {
+                    this.handler.loadOptions();
                     this.removeFeaturesFromMap();
                 }
             },
