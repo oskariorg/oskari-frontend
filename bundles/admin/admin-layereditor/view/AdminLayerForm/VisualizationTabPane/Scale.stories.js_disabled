@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { storiesOf } from '@storybook/react';
+// See .storybook/README.md
+// import { storiesOf } from '@storybook/react';
 import { Scale } from './Scale';
 
 import '../../../../../../src/global';

@@ -39,7 +39,6 @@
     "@babel/preset-react": "7.24.7",
     "@babel/runtime-corejs3": "7.25.0",
     "@cesium/engine": "10.1.0",
-    "@storybook/react": "6.3.7",
     "@testing-library/jest-dom": "5.7.0",
     "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "14.4.3",
