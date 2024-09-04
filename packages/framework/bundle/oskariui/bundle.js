@@ -46,10 +46,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.oskariui.OskariUIBundle", functi
 			"type" : "text/css",
 			"src" : "../../../../bundles/framework/oskariui/resources/bootstrap-grid.css"
         },{
-            "type" : "text/javascript",
-            "expose" : "_",
-            "src" : "../../../../libraries/lodash/2.3.0/lodash.js"
-        },{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/oskariui/DomManager.js"
 		}, {
