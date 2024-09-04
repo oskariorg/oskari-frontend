@@ -25,8 +25,7 @@ const showField = ({ field, shownIf }, advancedSearchValues) => {
     });
 };
 
-export const AdvancedSearchOptions = (props) => {
-    const { advancedSearchOptions, advancedSearchValues, drawing, controller } = props;
+export const AdvancedSearchOptions = ({ advancedSearchOptions, advancedSearchValues, drawing, controller }) => {
     const { fields = [] } = advancedSearchOptions || {};
     const hasCoverage = fields.some(({ field }) => field === COVERAGE_FIELD_NAME);
     const fieldOptions = fields.filter(f => showField(f, advancedSearchValues));
