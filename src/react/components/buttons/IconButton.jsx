@@ -82,10 +82,10 @@ const getPredefinedIcon = (type) => {
         return <Backward/>;
     }
     if (type === 'delete') {
-        return <DeleteOutlined />
+        return <DeleteOutlined />;
     }
     return null;
-}
+};
 
 const getConfirmProps = (type) => {
     if (type === 'delete') {
