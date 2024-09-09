@@ -19,6 +19,11 @@ footer, header, nav, section, audio, video {
   display: block;
 }
 
+/* Resets margins to proper values on for example thematic maps search flyout */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 a img {
   border: 0;
 }
