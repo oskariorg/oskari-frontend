@@ -37,17 +37,17 @@ const StyledButton = styled(Button)`
     }
     &:hover
     {
-        color: ${props => props.hover};
-        background: ${props => props.bg};
+        color: ${props => props.hover} !important;
+        background: ${props => props.bg}  !important;
         path {
-            fill: ${props => props.hover};
+            fill: ${props => props.hover} !important;
         }
     }
     &:focus,
     &:active
     {
-        color: ${props => props.$active ? props.hover : props.iconcolor};
-        background: ${props => props.bg};
+        color: ${props => props.$active ? props.hover : props.iconcolor} !important;
+        background: ${props => props.bg} !important;
     }
 `;
 

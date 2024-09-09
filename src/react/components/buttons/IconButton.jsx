@@ -33,7 +33,7 @@ const BorderlessButton = styled(Button)`
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
     &:hover {
-        color: ${props => props.$hover};
+        color: ${props => props.$hover} !important;
         background: none;
     }
     &:disabled {
@@ -41,12 +41,12 @@ const BorderlessButton = styled(Button)`
     }
 `;
 const BorderedButton = styled(Button)`
-    color:  ${props => props.$active || props.$color};
+    color:  ${props => props.$active || props.$color} !important;
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
     border-color: ${props => props.$active};
     &:hover {
-        color: ${props => props.$hover};
+        color: ${props => props.$hover} !important;
         border-color: ${props => props.$hover};
     }
 `;
