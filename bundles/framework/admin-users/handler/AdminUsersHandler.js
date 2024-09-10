@@ -16,6 +16,7 @@ class UIHandler extends StateHandler {
             userFormState: null,
             users: [],
             roles: [],
+            systemRoles: [],
             editingRole: null,
             usersByRole: {},
             userPagination: {
@@ -114,21 +115,21 @@ class UIHandler extends StateHandler {
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
-            const result = await response.json();
-            let guestRole = result.systemRoles['anonymous'];
-            let roles = result.rolelist.map(role => ({
-                ...role,
-                systemRole: Object.values(result.systemRoles).includes(role.name)
-            }));
-            if (guestRole) {
-                roles = roles.filter(r => r.name !== guestRole);
-            }
-            this.updateState({ roles });
+            const { rolelist, systemRoles } = await response.json();
+            const systemRoleList = Object.keys(systemRoles)
+                .map(type => {
+                    const name = systemRoles[type];
+                    const role = rolelist.find(r => r.name === name) || {};
+                    return { ...role, type };
+                });
+            const systemRoleNames = Object.values(systemRoles);
+            const roles = rolelist
+                .filter(role => !systemRoleNames.includes(role.name))
+                .sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+            this.updateState({ roles, systemRoles: systemRoleList });
         } catch (e) {
+            this.updateState({ roles: [], systemRoles: [] });
             Messaging.error(Oskari.getMsg('AdminUsers', 'roles.errors.fetch'));
-            this.updateState({
-                roles: []
-            });
         }
     }
 
