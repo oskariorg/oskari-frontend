@@ -6,16 +6,27 @@ import { Block, Content } from './styled';
 const StyledSelect = styled(Select)`
     margin-bottom: 20px;
 `;
+const ADMIN = 'admin';
+
+const getOptionGroup = (type, roles) => {
+    const options = roles.map(({ name, id }) => ({ label: name, value: id }));
+    return {
+        title: type,
+        label: <Message messageKey={`roles.types.${type}`} />,
+        options
+    };
+};
 
 export const UsersByRoleTab = ({ state, controller }) => {
-    const { usersByRole, roles } = state;
+    const { usersByRole, roles, systemRoles } = state;
     const { users = [], roleId } = usersByRole;
 
-    const roleOptions = roles.map(role => ({
-        label: role.name,
-        value: role.id
-    }));
     const showNoUsers = roleId && users.length === 0;
+    const onlyAdmin = systemRoles.filter(role => role.type === ADMIN);
+    const options = [
+        getOptionGroup('system', onlyAdmin),
+        getOptionGroup('other', roles)
+    ];
     return (
         <Content>
             <StyledSelect
@@ -23,7 +34,7 @@ export const UsersByRoleTab = ({ state, controller }) => {
                 onChange={(value) => controller.showUsersByRole(value)}
                 placeholder={<Message messageKey='usersByRole.selectRole' />}
                 defaultValue={roleId}
-                options={roleOptions}/>
+                options={options}/>
             {users.map(item => {
                 const { id, user, firstName, lastName } = item;
                 const details = firstName || lastName ? ` (${firstName} ${lastName})` : '';
