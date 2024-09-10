@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { AdvancedSearchOptions } from './AdvancedSearchOptions';
 import styled from 'styled-components';
-import { Message, Spin } from 'oskari-ui';
+import { Message, Spin, Button } from 'oskari-ui';
 
 const ContainerWithMargin = styled('div')`
     margin-top: 1em;
+`;
+const LinkButton = styled(Button)`
+    padding: 0px;
 `;
 
 export const AdvancedSearchContainer = ({
@@ -25,9 +28,9 @@ export const AdvancedSearchContainer = ({
     }
     return (
         <ContainerWithMargin>
-            <a onClick={toggleAdvancedSearch}>
+            <LinkButton onClick={toggleAdvancedSearch} type='link'>
                 <Message messageKey={isExpanded ? 'advancedSearch.showLess' : 'advancedSearch.showMore'} />
-            </a>
+            </LinkButton>
             { isExpanded && <AdvancedSearchOptions
                 advancedSearchOptions={advancedSearchOptions}
                 advancedSearchValues={advancedSearchValues}
