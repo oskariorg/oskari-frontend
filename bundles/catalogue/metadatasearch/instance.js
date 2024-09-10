@@ -1,5 +1,5 @@
 import { MetadataStateHandler } from './MetadataStateHandler';
-import { Messaging, LocaleProvider } from 'oskari-ui/util';
+import { Messaging, LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { MetadataSearchContainer } from './view/MetadataSearchContainer';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -369,7 +369,9 @@ Oskari.clazz.define(
         renderSearch: function () {
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: METADATA_BUNDLE_LOCALIZATION_ID }}>
-                    <MetadataSearchContainer state={this.handler.getState()} controller={this.handler.getController()} />
+                    <ThemeProvider>
+                        <MetadataSearchContainer state={this.handler.getState()} controller={this.handler.getController()} />
+                    </ThemeProvider>
                 </LocaleProvider>, this.contentElement);
         },
 
