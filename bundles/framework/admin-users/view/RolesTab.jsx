@@ -25,9 +25,7 @@ export const RolesTab = ({ state, controller }) => {
         setStatus('');
         setRoleName('');
     }
-    const { roles, editingRole } = state;
-    const systemRoles = roles.filter(role => role.systemRole === true);
-    const otherRoles = roles.filter(role => role.systemRole === false);
+    const { roles, systemRoles, editingRole } = state;
     return (
         <Content>
             <LabelledField>
@@ -43,9 +41,10 @@ export const RolesTab = ({ state, controller }) => {
                 />
             </LabelledField>
             <Margin />
-            { systemRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} isSystemRole/>) }
+            { roles.map(role => <RoleBlock key={role.id} role={role} controller={controller} editingRole={editingRole}/>) }
             <Margin />
-            { otherRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} editingRole={editingRole}/>) }
+            <StyledLabel><Message messageKey='roles.types.system' /></StyledLabel>
+            { systemRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} isSystemRole/>) }
         </Content>
     );
 };
