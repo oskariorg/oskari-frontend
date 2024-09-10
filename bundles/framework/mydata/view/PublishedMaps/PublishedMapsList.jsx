@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Message, Confirm } from 'oskari-ui';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { EditOutlined, EyeOutlined, EyeInvisibleOutlined, CopyOutlined, PictureOutlined } from '@ant-design/icons';
+import { EditOutlined, EyeOutlined, EyeInvisibleOutlined, CopyOutlined } from '@ant-design/icons';
 
 const ICON_STYLE = {
     fontSize: '16px'
@@ -62,18 +62,12 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
                 return (
                     <ToolsContainer>
                         <IconButton
-                            className='t_show'
-                            icon={<PictureOutlined style={ICON_STYLE} />}
-                            title={<Message messageKey='tabs.publishedmaps.show' />}
-                            onClick={() => controller.showOnMap(item)}
-                        />
-                        <IconButton
                             className='t_html'
                             icon={<CopyOutlined style={ICON_STYLE} />}
                             title={<Message messageKey='tabs.publishedmaps.grid.html' />}
                             onClick={() => controller.showHtml(item)}
                         />
-                        {item.isPublic ? (
+                        { item.isPublic ? (
                             <Confirm
                                 title={<Message messageKey='tabs.publishedmaps.popup.unpublishmsg' messageArgs={{ name: item.name }} />}
                                 onConfirm={() => controller.setPublished(item)}
