@@ -29,6 +29,7 @@ Oskari.registerLocalization(
             },
             "selectValue": "Select value"
         },
+        "unsavedChangesConfirm": "Your unsaved changes will be lost, do you want to continue?",
         "save": "Save",
         "selectRole": "Role"
     }

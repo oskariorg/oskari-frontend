@@ -29,6 +29,7 @@ Oskari.registerLocalization(
             },
             "selectValue": "Markera värdet"
         },
+        "unsavedChangesConfirm": "Du kommer att förlora dina osparade ändringar, vill du fortsätta?",
         "save": "Lagra",
         "selectRole": "Roll"
     }
