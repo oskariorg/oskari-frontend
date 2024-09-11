@@ -28,7 +28,7 @@ class UIHandler extends StateHandler {
         const hasMetadata = this._initMetadataLayer(this._layer);
         this._timer = null;
         this._debounceTime = 300;
-        this._autoSelectMidDataYear = true;
+        this._shouldAutoSelectMidDataYear = true;
         const [start, end] = delegate.getYearRange();
         const dataYears = hasMetadata ? [] : this._getDataYearsFromWMS();
         this.state = {
@@ -46,7 +46,7 @@ class UIHandler extends StateHandler {
     setInitialValue (value, mode) {
         // no need to auto select mid data year if an initial
         // value is provided through e.g. map link or map view
-        this._autoSelectMidDataYear = false;
+        this._shouldAutoSelectMidDataYear = false;
         this.updateValue(value, mode);
     }
 
@@ -68,49 +68,33 @@ class UIHandler extends StateHandler {
         }
         if (this._metadataHandler.getToggleLevel() > zoomLevel) {
             const dataYears = this._getDataYearsFromWMS();
-            const state = {
-                dataYears,
-                error: false
-            };
-            if (this._autoSelectMidDataYear && dataYears.length > 0) {
-                this._autoSelectMidDataYear = false;
-                state.value = this._getMidWayDataYear(dataYears);
-            }
-            this.updateState(state);
+            this._autoSelectMidDataYear(dataYears);
+            this.updateState({ dataYears, error: false });
             return;
         }
-        this.updateState({
-            error: false,
-            loading: true
-        });
+        this.updateState({ error: false, loading: true });
         this._metadataHandler.setBbox(
             bbox,
-            (data) => {
-                const state = {
-                    dataYears: data,
-                    loading: false
-                };
-                if (this._autoSelectMidDataYear && data.length > 0) {
-                    this._autoSelectMidDataYear = false;
-                    state.value = this._getMidWayDataYear(data);
-                    this._requestNewTime(state.value);
-                }
-                this.updateState(state);
+            (dataYears) => {
+                this._autoSelectMidDataYear(dataYears);
+                this.updateState({ dataYears, loading: false });
                 const [start, end] = this._getTimeRange();
                 this._updateFeaturesByTime(start, end);
             },
             (error) => {
-                this.updateState({
-                    error: true,
-                    loading: false
-                });
+                this.updateState({ error: true, loading: false });
                 Oskari.log('TimeSeries').warn('Error updating features', error);
             }
         );
     }
 
-    _getMidWayDataYear (dataYears) {
-        return dataYears[Math.ceil(dataYears.length / 2)];
+    _autoSelectMidDataYear (dataYears) {
+        if (!this._shouldAutoSelectMidDataYear || !dataYears.length) {
+            return;
+        }
+        this._shouldAutoSelectMidDataYear = false;
+        const value = dataYears[Math.ceil(dataYears.length / 2)];
+        this.updateValue(value);
     }
 
     _teardown () {
