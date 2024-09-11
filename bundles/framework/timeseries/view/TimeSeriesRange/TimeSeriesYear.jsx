@@ -1,21 +1,22 @@
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
-import { Button, Select, Option } from 'oskari-ui';
+import { Select } from 'oskari-ui';
 import PropTypes from 'prop-types';
 import React from 'react';
+import styled from 'styled-components';
 import { Col, ColFixed, Row } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
-import { ThemeConsumer } from 'oskari-ui/util';
-import { getNavigationTheme } from 'oskari-ui/theme/ThemeHelper';
+import { IconButton } from 'oskari-ui/components/buttons';
 
-const ForwardIcon = () => {
-    return <StepForwardOutlined style={{ fontSize: '125%' }}/>;
+const ICON_PROPS = {
+    iconSize: 18,
+    shape: 'circle',
+    bordered: true
 };
+const StyledIcon = styled(IconButton)`
+    border-width: 2px;
+`;
 
-const BackwardIcon = () => {
-    return <StepBackwardOutlined style={{ fontSize: '125%' }}/>;
-};
-
-export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, dataYears, isMobile, theme }) => {
+export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobile, iconColor }) => {
     const currentYearIntValue = parseInt(value);
     // when current value is after last data layer
     let prevDataYear = dataYears[dataYears.length - 1] || null;
@@ -34,65 +35,46 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
             break;
         }
     }
+    const iconProps = { ...ICON_PROPS, color: iconColor };
 
-    const navigationTheme = getNavigationTheme(theme);
-    const textColor = navigationTheme.getTextColor();
-    const hoverColor = navigationTheme.getButtonHoverColor();
-    const backgroundColor = navigationTheme.getNavigationBackgroundColor();
     if (isMobile) {
-        const currentYearDisabled = !dataYears?.includes(currentYearIntValue);
+        const disabledYear = dataYears.includes(currentYearIntValue) ? null : currentYearIntValue;
         // need to clone this, otherwise the "current year" will remain even if we switch to a valid year without panning the map
-        const newDataYears = [].concat(dataYears);
-        if (currentYearDisabled) {
-            newDataYears.push(currentYearIntValue);
-        }
+        const years = disabledYear ? [...dataYears, disabledYear].sort() : dataYears;
+        const options = years.map(value => ({
+            label: value,
+            value,
+            disabled: value === disabledYear
+        }));
 
-        const options = newDataYears
-            .sort()
-            .map((item) => {
-                return item === currentYearIntValue && currentYearDisabled
-                    ? <Option key={item} disabled>{item}</Option>
-                    : <Option key={item}>{item}</Option>;
-            });
-
-        return <Row>
-            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
-                <Button
-                    type="primary"
-                    shape="circle"
-                    disabled={prevDataYear === null}
-                    onClick={() => onChange(prevDataYear)}
-                >
-                    <BackwardIcon />
-                </Button>
-            </Col>
-            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
-                <Select value={currentYearIntValue} onChange={(value) => onChange(parseInt(value))}>{options}</Select>
-            </Col>
-            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
-                <Button
-                    type="primary"
-                    shape="circle"
-                    disabled={nextDataYear === null}
-                    onClick={() => onChange(nextDataYear)}
-                >
-                    <ForwardIcon/>
-                </Button>
-            </Col>
-        </Row>;
+        return (
+            <Row>
+                <Col>
+                    <StyledIcon
+                        icon={<StepBackwardOutlined/>}
+                        disabled={prevDataYear === null}
+                        onClick={() => onChange(prevDataYear)} />
+                </Col>
+                <Col>
+                    <Select value={currentYearIntValue} onChange={(value) => onChange(parseInt(value))} options={options} />
+                </Col>
+                <Col>
+                    <StyledIcon
+                        icon={<StepForwardOutlined/>}
+                        disabled={nextDataYear === null}
+                        onClick={() => onChange(nextDataYear)}/>
+                </Col>
+            </Row>
+        );
     }
 
     return (
         <Row>
-            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
-                <Button
-                    type="primary"
-                    shape="circle"
+            <Col>
+                <StyledIcon { ...iconProps }
+                    icon={<StepBackwardOutlined/>}
                     disabled={prevDataYear === null}
-                    onClick={() => onChange(prevDataYear)}
-                >
-                    <BackwardIcon />
-                </Button>
+                    onClick={() => onChange(prevDataYear)} />
             </Col>
             <ColFixed>
                 <YearRangeSlider
@@ -106,19 +88,15 @@ export const TimeSeriesYear = ThemeConsumer(({ onChange, start, end, value, data
                     onChange={(val) => onChange(val)}
                 />
             </ColFixed>
-            <Col textColor={textColor} hoverColor={hoverColor} backgroundColor={backgroundColor}>
-                <Button
-                    type="primary"
-                    shape="circle"
+            <Col>
+                <StyledIcon { ...iconProps }
+                    icon={<StepForwardOutlined/>}
                     disabled={nextDataYear === null}
-                    onClick={() => onChange(nextDataYear)}
-                >
-                    <ForwardIcon/>
-                </Button>
+                    onClick={() => onChange(nextDataYear)} />
             </Col>
         </Row>
     );
-});
+};
 
 TimeSeriesYear.propTypes = {
     onChange: PropTypes.func.isRequired,
@@ -126,5 +104,6 @@ TimeSeriesYear.propTypes = {
     end: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
     dataYears: PropTypes.arrayOf(PropTypes.number).isRequired,
-    isMobile: PropTypes.bool.isRequired
+    isMobile: PropTypes.bool.isRequired,
+    iconColor: PropTypes.string
 };
