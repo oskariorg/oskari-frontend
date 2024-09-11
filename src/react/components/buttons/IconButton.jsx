@@ -47,7 +47,7 @@ const BorderedButton = styled(Button)`
     border-color: ${props => props.$active};
     &:hover {
         color: ${props => props.$hover} !important;
-        border-color: ${props => props.$hover};
+        border-color: ${props => props.$hover} !important;
     }
 `;
 
