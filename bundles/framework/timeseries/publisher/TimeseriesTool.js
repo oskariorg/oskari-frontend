@@ -110,15 +110,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
         * @returns {Object} tool value object
         */
         getValues: function () {
-            var me = this;
-
-            if (me.state.enabled) {
+            if (this.state.enabled) {
                 return {
                     configuration: {
                         timeseries: {
                             conf: {
                                 plugins: [{ id: this.getTool().id, config: this.controlConfig }]
-                            }
+                            },
+                            state: this.getSandbox().getStatefulComponents().timeseries.getState()
                         }
                     }
                 };
