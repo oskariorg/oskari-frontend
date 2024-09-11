@@ -2,7 +2,7 @@ import { SELECTION_SERVICE_CLASSNAME } from '../plugin/FeatureDataPluginHandler'
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
 import { showSelectToolPopup } from './SelectToolPopup';
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
-import { getFeatureId } from '../../../mapping/mapmodule/util/vectorfeatures/feature';
+import { getFeatureId } from '../../../mapping/mapmodule/util/vectorfeatures';
 
 export const DRAW_REQUEST_ID = 'FeatureData.featureselection';
 export const DRAW_TOOLS = ['point', 'line', 'area', 'square', 'circle'];
