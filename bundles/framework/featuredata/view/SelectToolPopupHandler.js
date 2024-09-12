@@ -5,13 +5,13 @@ import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { getFeatureId } from '../../../mapping/mapmodule/util/vectorfeatures';
 
 export const DRAW_REQUEST_ID = 'FeatureData.featureselection';
-export const DRAW_TOOLS = ['point', 'line', 'area', 'square', 'circle'];
+export const DRAW_TOOLS = ['point', 'line', 'polygon', 'square', 'circle'];
 export const SELECT_ALL_ID = -1;
 
 const DRAW_REQUEST = {
     point: 'Point',
     line: 'LineString',
-    area: 'Polygon',
+    polygon: 'Polygon',
     square: 'Square',
     circle: 'Circle'
 };
