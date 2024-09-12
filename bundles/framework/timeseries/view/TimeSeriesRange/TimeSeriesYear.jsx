@@ -50,7 +50,7 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
         return (
             <Row>
                 <Col>
-                    <StyledIcon
+                    <StyledIcon { ...iconProps }
                         icon={<StepBackwardOutlined/>}
                         disabled={prevDataYear === null}
                         onClick={() => onChange(prevDataYear)} />
@@ -59,7 +59,7 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobil
                     <Select value={currentYearIntValue} onChange={(value) => onChange(parseInt(value))} options={options} />
                 </Col>
                 <Col>
-                    <StyledIcon
+                    <StyledIcon { ...iconProps }
                         icon={<StepForwardOutlined/>}
                         disabled={nextDataYear === null}
                         onClick={() => onChange(nextDataYear)}/>
