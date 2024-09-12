@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { showPopup, getNavigationDimensions, PLACEMENTS } from 'oskari-ui/components/window';
-import { ButtonContainer, PrimaryButton } from 'oskari-ui/components/buttons';
-import { Message, Button, Radio, Tooltip } from 'oskari-ui';
+import { ButtonContainer, PrimaryButton, IconButton } from 'oskari-ui/components/buttons';
+import { Message, Button, Radio } from 'oskari-ui';
 import styled from 'styled-components';
 import { DRAW_TOOLS, SELECT_ALL_ID } from './SelectToolPopupHandler';
 import { LocaleProvider } from 'oskari-ui/util';
+import point from './icons/selection-point.png';
+import line from './icons/selection-line.png';
+import polygon from './icons/selection-polygon.png';
+import square from './icons/selection-square.png';
+import circle from './icons/selection-circle.png';
 
 const BUNDLE_NAME = 'FeatureData';
 
@@ -18,15 +23,28 @@ const DrawOptions = styled('div')`
     flex-direction: row;
     margin-bottom: 15px;
 `;
-const DrawOption = styled('div')`
-    cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-`;
 
 const Info = styled.div`
     margin-top: 15px;
     font-style: italic;
     font-size: 12px;
 `;
+
+const Tool = styled(IconButton)`
+    border-width: 2px;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    margin-right: 6px;
+`;
+
+const getImageSrc = key => {
+    if (key === 'point') return point;
+    if (key === 'line') return line;
+    if (key === 'polygon') return polygon;
+    if (key === 'square') return square;
+    if (key === 'circle') return circle;
+};
 
 const PopupContent = ({ tool, layerId, vectorLayerIds, controller, onClose }) => {
     const layerCount = vectorLayerIds.length;
@@ -36,17 +54,16 @@ const PopupContent = ({ tool, layerId, vectorLayerIds, controller, onClose }) =>
         <LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
             <StyledContent>
                 <DrawOptions>
-                    {DRAW_TOOLS.map(key => {
-                        const iconCls = `selection-${key}`;
-                        return (
-                            <Tooltip key={key} title={<Message messageKey={`selectionTools.tools.${key}.tooltip`}/> }>
-                                <DrawOption disabled={disabled}
-                                    className={tool === key ? `${iconCls} tool active` : iconCls}
-                                    onClick={() => disabled || controller.setTool(key)}
-                                />
-                            </Tooltip>
-                        );
-                    })}
+                    {DRAW_TOOLS.map(key =>
+                        <Tool key={key}
+                            bordered
+                            active={tool === key}
+                            title={<Message messageKey={`selectionTools.tools.${key}.tooltip`}/> }
+                            disabled={disabled}
+                            icon={<img src={getImageSrc(key)} />}
+                            className={`t_${key}`}
+                            onClick={() => controller.setTool(key)} />
+                    )}
                 </DrawOptions>
                 <Radio.Group
                     value={layerId}
