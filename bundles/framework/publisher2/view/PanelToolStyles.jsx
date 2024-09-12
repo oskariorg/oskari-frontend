@@ -169,7 +169,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 <StyledColorPicker>
                     <ColorPicker
                         value={buttonBackground}
-                        onChange={(e) => setButtonBackground(e.target.value)}
+                        onChange={setButtonBackground}
                     />
                 </StyledColorPicker>
             </Field>
@@ -178,7 +178,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 <StyledColorPicker>
                     <ColorPicker
                         value={buttonText}
-                        onChange={(e) => setButtonText(e.target.value)}
+                        onChange={setButtonText}
                     />
                 </StyledColorPicker>
             </Field>
@@ -187,7 +187,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 <StyledColorPicker>
                     <ColorPicker
                         value={buttonAccent}
-                        onChange={(e) => setButtonAccent(e.target.value)}
+                        onChange={setButtonAccent}
                     />
                 </StyledColorPicker>
             </Field>
@@ -226,7 +226,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 <StyledColorPicker>
                     <ColorPicker
                         value={popupHeader}
-                        onChange={(e) => setPopupHeader(e.target.value)}
+                        onChange={setPopupHeader}
                     />
                 </StyledColorPicker>
             </Field>
@@ -235,7 +235,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 <StyledColorPicker>
                     <ColorPicker
                         value={popupHeaderText}
-                        onChange={(e) => setPopupHeaderText(e.target.value)}
+                        onChange={setPopupHeaderText}
                     />
                 </StyledColorPicker>
             </Field>
