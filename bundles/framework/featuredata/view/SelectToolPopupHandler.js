@@ -116,7 +116,7 @@ class SelectToolPopupHandler extends StateHandler {
         this.updateState(this.initState());
     }
 
-    setLayerdId (layerId) {
+    setLayerId (layerId) {
         this.updateState({ layerId });
     }
 
