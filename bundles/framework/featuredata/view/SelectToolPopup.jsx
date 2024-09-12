@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { showPopup, getNavigationDimensions, PLACEMENTS } from 'oskari-ui/components/window';
 import { ButtonContainer, PrimaryButton, IconButton } from 'oskari-ui/components/buttons';
 import { Message, Button, Radio } from 'oskari-ui';
-import styled from 'styled-components';
 import { DRAW_TOOLS, SELECT_ALL_ID } from './SelectToolPopupHandler';
 import { LocaleProvider } from 'oskari-ui/util';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import point from './icons/selection-point.png';
 import line from './icons/selection-line.png';
 import polygon from './icons/selection-polygon.png';
@@ -46,9 +47,11 @@ const getImageSrc = key => {
     if (key === 'circle') return circle;
 };
 
-const PopupContent = ({ tool, layerId, vectorLayerIds, controller, onClose }) => {
-    const layerCount = vectorLayerIds.length;
-    const topId = vectorLayerIds[layerCount - 1];
+const PopupContent = ({ tool, layerId, vectorLayers, controller, onClose }) => {
+    const layerCount = vectorLayers.length;
+    const topLayer = vectorLayers[layerCount - 1];
+    const topName = topLayer?.getName();
+    const topId = topLayer?.getId();
     const disabled = layerCount === 0;
     return (
         <LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
@@ -71,6 +74,7 @@ const PopupContent = ({ tool, layerId, vectorLayerIds, controller, onClose }) =>
                 >
                     <Radio.Choice value={topId} disabled={disabled}>
                         <Message messageKey={'selectionTools.selectFromTop'} />
+                        {topName && <InfoIcon title={topName} /> }
                     </Radio.Choice>
                     <Radio.Choice value={SELECT_ALL_ID} disabled={layerCount < 2}>
                         <Message messageKey={'selectionTools.selectAll'} />
@@ -99,7 +103,7 @@ const PopupContent = ({ tool, layerId, vectorLayerIds, controller, onClose }) =>
 PopupContent.propTypes = {
     tool: PropTypes.string,
     layerId: PropTypes.any,
-    vectorLayerIds: PropTypes.array.isRequired,
+    vectorLayers: PropTypes.array.isRequired,
     controller: PropTypes.object,
     onClose: PropTypes.func
 };

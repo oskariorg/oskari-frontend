@@ -35,12 +35,16 @@ class SelectToolPopupHandler extends StateHandler {
     }
 
     initState () {
-        const vectorLayerIds = this.getVectorLayerIds();
+        const vectorLayers = this.getVectorLayers();
         return {
-            layerId: vectorLayerIds[vectorLayerIds.length - 1],
+            layerId: this.getTopLayerId(vectorLayers),
             tool: null,
-            vectorLayerIds
+            vectorLayers
         };
+    }
+
+    getTopLayerId (vectorLayers) {
+        return vectorLayers[vectorLayers.length - 1]?.getId();
     }
 
     createEventHandlers () {
@@ -49,14 +53,15 @@ class SelectToolPopupHandler extends StateHandler {
                 return;
             }
             const { layerId: current } = this.getState();
-            const vectorLayerIds = this.getVectorLayerIds();
-            const layerId = current === SELECT_ALL_ID ? current : vectorLayerIds[vectorLayerIds.length - 1];
-            this.updateState({ vectorLayerIds, layerId });
+            const vectorLayers = this.getVectorLayers();
+            const layerId = current === SELECT_ALL_ID ? current : this.getTopLayerId(vectorLayers);
+            this.updateState({ vectorLayers, layerId });
         };
         const handlers = {
             AfterMapLayerAddEvent: onMapLayerEvent,
             AfterMapLayerRemoveEvent: onMapLayerEvent,
             MapLayerVisibilityChangedEvent: onMapLayerEvent,
+            AfterRearrangeSelectedMapLayerEvent: onMapLayerEvent,
             DrawingEvent: evt => {
                 if (!evt.getIsFinished() || !this.selectionPopup || DRAW_REQUEST_ID !== evt.getId()) {
                     // only interested in finished own drawings when active
@@ -78,16 +83,15 @@ class SelectToolPopupHandler extends StateHandler {
         return handler.apply(this, [event]);
     }
 
-    getVectorLayerIds () {
+    getVectorLayers () {
         return this.instance.getSandbox()
             .findAllSelectedMapLayers()
-            .filter(layer => layer.isVisible() && layer.hasFeatureData())
-            .map(layer => layer.getId());
+            .filter(layer => layer.isVisible() && layer.hasFeatureData());
     }
 
     setTool (newTool) {
-        const { tool: current, vectorLayerIds } = this.getState();
-        if (!vectorLayerIds.length) {
+        const { tool: current, vectorLayers } = this.getState();
+        if (!vectorLayers.length) {
             // tools are disabled
             return;
         }
@@ -189,7 +193,7 @@ class SelectToolPopupHandler extends StateHandler {
         if (this.selectionPopup) {
             return;
         }
-        if (!this.getVectorLayerIds().length) {
+        if (!this.getVectorLayers().length) {
             Messaging.warn(Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectionTools.noVectorLayers'));
         } else {
             // Set default draw mode active
