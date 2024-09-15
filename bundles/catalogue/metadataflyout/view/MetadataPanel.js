@@ -772,7 +772,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             if (!Oskari.dom.isEmbedded()) {
                 var me = this,
                     container = me._tabs['actions'].getContainer(),
-                    layers = me._maplayerService.getLayersByMetadataId(me._model.uuid);
+                    layers = me._maplayerService.getLayersByMetadataId(me._model.fileIdentifier);
 
                 container.find('table.metadataSearchResult').remove();
                 container.append(me._templates['layerList']());
