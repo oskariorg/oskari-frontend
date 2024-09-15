@@ -143,7 +143,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadata.MetadataBundleInstance',
                 return;
             }
             const state = this.handler.getState();
-            console.log(state);
             const controller = this.handler.getController();
             const onClose = () => this.closeMetadata();
             this.flyoutControls = showMetadataFlyout(state, controller, onClose);

@@ -49,7 +49,6 @@ const getNodes = (content, renderList) => {
 
 export const LabeledItem = ({ source, labelKey, dataKey, renderList }) => {
     const content = source[dataKey];
-    !content && console.log(dataKey, source);
     if (!content) {
         return null;
     }
