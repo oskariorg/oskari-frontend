@@ -976,9 +976,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Oskari.mapframework.domain.AbstractLayer[]}
          */
         getLayersByMetadataId: function (metadataIdentifier) {
-            return this._loadedLayersList.filter(function (layer) {
-                return layer.getMetadataIdentifier() === metadataIdentifier;
-            });
+            if (!metadataIdentifier) {
+                return [];
+            }
+            return this._loadedLayersList.filter(layer => layer.getMetadataIdentifier() === metadataIdentifier);
         },
         /**
          * @method  @public registerLayerFilter Register layer filter
