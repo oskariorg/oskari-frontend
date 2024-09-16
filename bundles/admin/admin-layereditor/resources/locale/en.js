@@ -118,7 +118,7 @@ Oskari.registerLocalization(
                 "updateFailedWithReason": "Capablities re-check failed: {reason}",
                 "validate": "Layer definitions doesn't respond to service's capabilities",
                 "rasterStyle" : {
-                    "defaultStyle" : "Selected default style doesn't exist anymore. Please select a new default style.",
+                    "defaultStyle" : "Selected default style doesn't exist anymore. Please select a new default style or remove default style.",
                     "additionalLegend": "The map layer has been given a legend that overrides the default legend provided by the service. The overriding legend was linked to a style that is no longer available. Please update the layer legend. The problematic style is marked with a ( ! ).",
                     "globalWithStyles": "The layer has more than one style available in the service. However, the layer has been defined with a single default legend. Consider removing the current default legend to be able to use the style based legends."
                 }
@@ -186,6 +186,7 @@ Oskari.registerLocalization(
                     "title": "Styles and map legends",
                     "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
                     "unavailable": "Style defined in the service: not available",
+                    "removeDefault": "Remove default style",
                     "legendImage": "Default legend",
                     "serviceLegend": "Map legend defined in the service",
                     "overriddenLegend": "Replaced legend URL",
