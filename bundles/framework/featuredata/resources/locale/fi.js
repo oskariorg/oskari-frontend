@@ -66,9 +66,10 @@ Oskari.registerLocalization(
             "toggleCompressedView": "Tiivistetty näkymä",
             "selectionTools": {
                 "title": "Valitse kohteita",
-                "instructions": " ",
+                "instructions": "Huom! Voit valita kohteita ainoastaan vektoritasoilta.",
                 "selectFromTop": "päällimmäiseltä karttatasolta",
                 "selectAll": "kaikilta avoinna olevilta karttatasoilta",
+                "noVectorLayers": "Avaa vähintään yksi vektoritaso, jotta voit valita kohteita.",
                 "link": {
                     "title": "Valitse lisää kohteita"
                 },
