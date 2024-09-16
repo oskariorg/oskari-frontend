@@ -36,9 +36,9 @@ export class TimeseriesMetadataService {
      * @param {Function} success called with updated years array based on the loaded features
      * @param {Function} error called if there's a problem loading the features
      */
-    setBbox (bbox = {}, success, error) {
+    setBbox (bbox, success, error) {
         const sandbox = Oskari.getSandbox();
-        if (Object.keys(bbox).length !== 4) {
+        if (!bbox || Object.keys(bbox).length !== 4) {
             this.clearPreviousFeatures();
             error('Invalid bbox');
             return;

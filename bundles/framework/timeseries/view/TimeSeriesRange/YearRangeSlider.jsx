@@ -3,8 +3,7 @@ import React from 'react';
 import { TimeSeriesSlider } from 'oskari-ui/components/TimeSeries/TimeSeriesSlider';
 import { ThemeProvider } from 'oskari-ui/util';
 
-export const YearRangeSlider = (props) => {
-    const { start, end, dataYears, isMobile, onChange, value, range } = props;
+export const YearRangeSlider = ({ start, end, dataYears, isMobile, onChange, value, range }) => {
     const marks = {
         [start]: start,
         [end]: end
@@ -45,5 +44,8 @@ YearRangeSlider.propTypes = {
     start: PropTypes.number.isRequired,
     end: PropTypes.number.isRequired,
     dataYears: PropTypes.arrayOf(PropTypes.number).isRequired,
-    isMobile: PropTypes.bool.isRequired
+    isMobile: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired,
+    value: PropTypes.any,
+    range: PropTypes.bool
 };
