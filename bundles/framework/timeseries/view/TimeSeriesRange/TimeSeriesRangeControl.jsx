@@ -29,14 +29,12 @@ export const TimeSeriesRangeControl = ThemeConsumer(({
     };
     const navigationTheme = getNavigationTheme(theme);
     const textColor = navigationTheme.getTextColor();
-    const hoverColor = navigationTheme.getButtonHoverColor();
     const backgroundColor = navigationTheme.getNavigationBackgroundColor();
 
     return (
         <Background textColor={textColor} backgroundColor={backgroundColor} isMobile={isMobile}>
             <TimeSeriesHeader
-                textColor={textColor}
-                hoverColor={hoverColor}
+                iconColor={textColor}
                 toggleMode={() => toggleMode()}
                 title={title}
                 mode={mode}
@@ -52,6 +50,7 @@ export const TimeSeriesRangeControl = ThemeConsumer(({
                     value={value}
                     dataYears={dataYears}
                     isMobile={isMobile}
+                    iconColor={textColor}
                 />
             )}
             {mode === 'range' && (

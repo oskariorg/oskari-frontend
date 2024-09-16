@@ -1,16 +1,27 @@
-import { LoginOutlined, LogoutOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Message, Tooltip, Spin } from 'oskari-ui';
+import { LoginOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Message, Spin } from 'oskari-ui';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Header, IconButton } from './styled';
+import { Header } from './styled';
 import styled from 'styled-components';
+import { IconButton } from 'oskari-ui/components/buttons';
 
-export const TooltipContent = styled.div`
+const TooltipContent = styled.div`
     p:not(:first-child) {
         padding-top: 1em;
     }
 `;
-export const Paragraph = styled('p')``;
+const Paragraph = styled('p')``;
+
+const Space = styled.div`
+    flex: 1;
+`;
+
+const StyledIcon = styled(IconButton)`
+    padding: 10px;
+`;
+
+const ICON_SIZE = 20;
 
 const getHeaderContent = (title, loading = false, error = false, value) => {
     let content = title;
@@ -42,25 +53,23 @@ const getTooltipContent = (mode, modeIcon) => {
     );
 }
 
-export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false, value, textColor, hoverColor }) => {
+export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false, value, iconColor }) => {
     const helpMessage = <Message messageKey="rangeControl.helpMessage" />;
     const switchButtonMessageKey = mode === 'year' ? 'rangeControl.switchToRange' : 'rangeControl.switchToYear';
-    const switchButtonMessage = <Message messageKey={switchButtonMessageKey} />;
     const modeIcon = mode === 'year' ? <LoginOutlined /> : <LogoutOutlined />;
+    const iconProps = { iconSize: ICON_SIZE, color: iconColor };
     return (
-        <Header className="timeseries-range-drag-handle" textColor={textColor} hoverColor={hoverColor}>
+        <Header className="timeseries-range-drag-handle">
             {getHeaderContent(title, loading, error, value)}
-            <div className="header-mid-spacer"></div>
-            <Tooltip title={getTooltipContent(mode, modeIcon)}>
-                <IconButton type="text" size="large" textColor={textColor} hoverColor={hoverColor}>
-                    <QuestionCircleOutlined />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title={switchButtonMessage}>
-                <IconButton type="text" size="large" onClick={() => toggleMode()} textColor={textColor} hoverColor={hoverColor}>
-                    {modeIcon}
-                </IconButton>
-            </Tooltip>
+            <Space className="header-mid-spacer"></Space>
+            <StyledIcon type='info' { ...iconProps }
+                title={getTooltipContent(mode, modeIcon)}
+                color={iconColor}/>
+            <StyledIcon { ...iconProps }
+                title={<Message messageKey={switchButtonMessageKey} />}
+                onClick={() => toggleMode()}
+                icon={modeIcon}
+                color={iconColor}/>
         </Header>
     );
 };
@@ -72,6 +81,5 @@ TimeSeriesHeader.propTypes = {
     loading: PropTypes.bool,
     error: PropTypes.bool,
     value: PropTypes.any,
-    textColor: PropTypes.string,
-    hoverColor: PropTypes.string
+    iconColor: PropTypes.string
 };
