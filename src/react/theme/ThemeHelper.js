@@ -17,6 +17,7 @@ export const getHeaderTheme = (theme) => {
     return funcs;
 };
 
+// https://ant.design/docs/react/customize-theme
 export const getAntdTheme = (theme) => {
     // Note! The theme parameter is not used here,
     //  but the Oskari theme is passed here so we _could_ make some adjustments based on that
