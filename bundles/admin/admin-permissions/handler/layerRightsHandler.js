@@ -140,12 +140,12 @@ class UIHandler extends StateHandler {
             const result = await response.json();
             this.updateState({
                 roles: [
-                    { id: 0, name: `-- ${Oskari.getMsg('admin-permissions', 'rights.selectValue')} --` },
+                    { id: 0, name: `-- ${Oskari.getMsg('admin-permissions', 'roles.placeholder')} --` },
                     ...result.rolelist
                 ]
             });
         } catch (e) {
-            Messaging.error(Oskari.getMsg('admin-permissions', 'rights.error.title'));
+            Messaging.error(Oskari.getMsg('admin-permissions', 'roles.error.fetch'));
             this.updateState({
                 roles: []
             });
@@ -179,7 +179,7 @@ class UIHandler extends StateHandler {
             });
             this.setLoading(false);
         } catch (e) {
-            Messaging.error(Oskari.getMsg('admin-permissions', 'rights.error.title'));
+            Messaging.error(Oskari.getMsg('admin-permissions', 'permissions.error.fetch'));
             this.updateState({
                 permissions: [],
                 resources: [],
@@ -220,10 +220,10 @@ class UIHandler extends StateHandler {
                     throw new Error(response.statusText);
                 }
             }
-            Messaging.success(Oskari.getMsg('admin-permissions', 'rights.success.message'));
+            Messaging.success(Oskari.getMsg('admin-permissions', 'permissions.success.save'));
             this.fetchPermissions();
         } catch (e) {
-            Messaging.error(Oskari.getMsg('admin-permissions', 'rights.error.message'));
+            Messaging.error(Oskari.getMsg('admin-permissions', 'permissions.error.save'));
             this.updateState({
                 changedIds: new Set()
             });

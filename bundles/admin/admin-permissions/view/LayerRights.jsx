@@ -31,11 +31,11 @@ export const LayerRights = ({ controller, state }) => {
     const [searchValue, setSearchValue] = useState(state.pagination.filter);
     return (
         <div>
-            { !state.selectedRole && <b><Message messageKey={`flyout.instructionText`} bundleKey='admin-permissions' /></b> }
+            { !state.selectedRole && <b><Message messageKey='flyout.instruction' bundleKey='admin-permissions' /></b> }
             <SelectContainer>
-                <Message messageKey='selectRole' />
+                <Message messageKey='roles.title' />
                 <ConfirmWrapper
-                    title={<Message messageKey='unsavedChangesConfirm'/>}
+                    title={<Message messageKey='flyout.unsavedChangesConfirm'/>}
                     open={roleConfirmOpen}
                     onConfirm={() => {
                         setRoleConfirmOpen(false);
@@ -78,7 +78,7 @@ export const LayerRights = ({ controller, state }) => {
                             onChange={(e) => setSearchValue(e.target.value)}
                         />
                         <Confirm
-                            title={<Message messageKey='unsavedChangesConfirm'/>}
+                            title={<Message messageKey='flyout.unsavedChangesConfirm'/>}
                             open={searchConfirmOpen}
                             onConfirm={() => {
                                 setSearchConfirmOpen(false);

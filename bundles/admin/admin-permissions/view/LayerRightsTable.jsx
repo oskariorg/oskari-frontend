@@ -96,7 +96,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
     if (permissionNames.length) {
         columnSettings.push({
             align: 'left',
-            title: <Message messageKey='rights.name' />,
+            title: <Message messageKey='flyout.name' />,
             dataIndex: 'name',
             sorter: getSorterFor('name'),
             render: (title, item) => {
@@ -138,7 +138,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
                 },
                 dataIndex: 'permissions',
                 render: (title, item) => {
-                    const tooltip = <span>{state.roles.find(role => role.id === state.selectedRole)?.name}: <Message messageKey={`rights.${permissionType}`} defaultMsg={state.permissions.names[permissionType]} /></span>;
+                    const tooltip = <span>{state.roles.find(role => role.id === state.selectedRole)?.name}: <Message messageKey={`permissions.type.${permissionType}`} defaultMsg={state.permissions.names[permissionType]} /></span>;
                     const checked = item.permissions[state.selectedRole]?.findIndex(p => p === permissionType) > -1;
                     return (
                         <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={tooltip}>
