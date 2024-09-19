@@ -4,31 +4,35 @@ Oskari.registerLocalization(
     "key": "admin-permissions",
     "value": {
         "title": "Laga réttindi",
-        "desc": "EKKI ÞÝTT",
+        "desc": "",
         "tile": {
             "title": "Kortalaga réttindi"
         },
         "flyout": {
-            "title": "Kortalaga réttindi",
-            "message": "Stjórnun laga réttinda"
-        },
-        "rights": {
+            "title": "Stjórnun laga réttinda",
             "name": "Kortalag",
-            "PUBLISH": "Gefa út",
-            "VIEW_LAYER": "Skoða",
-            "DOWNLOAD": "Hala niður",
-            "VIEW_PUBLISHED": "Skoða í innfelld kort.",
+        },
+        "permissions": {
+            "type": {
+                "PUBLISH": "Gefa út",
+                "VIEW_LAYER": "Skoða",
+                "DOWNLOAD": "Hala niður",
+                "VIEW_PUBLISHED": "Skoða í innfelld kort."
+            },
             "success": {
-                "title": "Réttindi laga vistuð.",
-                "message": "Réttindi kortalaga hafa verið uppfærð."
+                "save": "Réttindi kortalaga hafa verið uppfærð."
             },
             "error": {
-                "title": "Villa",
-                "message": "Ekki tókst að uppfæra réttindi kortalaga."
-            },
-            "selectValue": "Velja gildi"
+                "fetch": "Tókst ekki að ná í réttindi.",
+                "save": "Ekki tókst að uppfæra réttindi kortalaga."
+            }
         },
-        "save": "Vista",
-        "selectRole": "Hlutverk"
+        "roles": {
+            "title": "Hlutverk",
+            "placeholder": "Velja gildi",
+            "error": {
+                "fetch": "Tókst ekki að ná í hlutverk.",
+            }
+        }
     }
 });
