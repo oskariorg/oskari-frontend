@@ -166,9 +166,18 @@ class UIHandler extends StateHandler {
                 throw new Error(response.statusText);
             }
             const result = await response.json();
+            const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+            const layers = result?.layers.map(json => {
+                const layer = mapLayerService.findMapLayer(json.id);
+                return {
+                    ...json,
+                    layerType: layer?.getLayerType() || json.layerType.replace('layer', ''),
+                    hasTimeseries: layer?.hasTimeseries() || false
+                };
+            });
             this.updateState({
-                permissions: result,
-                resources: structuredClone(result?.layers) || [],
+                permissions: { ...result, layers },
+                resources: layers || [],
                 changedIds: new Set(),
                 pagination: {
                     ...this.state.pagination,
