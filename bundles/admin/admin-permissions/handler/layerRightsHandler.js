@@ -8,7 +8,7 @@ class UIHandler extends StateHandler {
             roles: [],
             permissions: [],
             resources: [],
-            selectedRole: 0,
+            selectedRole: null,
             loading: false,
             changedIds: new Set(),
             pagination: {
@@ -29,7 +29,7 @@ class UIHandler extends StateHandler {
         this.updateState({
             selectedRole: roleId
         });
-        if (roleId !== 0) {
+        if (roleId) {
             this.fetchPermissions();
         } else {
             this.updateState({
@@ -50,7 +50,7 @@ class UIHandler extends StateHandler {
         this.updateState({
             resources: structuredClone(this.state.permissions?.layers) || [],
             changedIds: new Set(),
-            selectedRole: 0,
+            selectedRole: null,
             pagination: {
                 ...this.state.pagination,
                 filter: '',
@@ -137,13 +137,12 @@ class UIHandler extends StateHandler {
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
-            const result = await response.json();
-            this.updateState({
-                roles: [
-                    { id: 0, name: `-- ${Oskari.getMsg('admin-permissions', 'roles.placeholder')} --` },
-                    ...result.rolelist
-                ]
-            });
+            const { rolelist, systemRoles } = await response.json();
+            const systemRoleNames = Object.values(systemRoles);
+            const roles = rolelist
+                .map(({ name, id }) => ({ value: id, label: name, isSystem: systemRoleNames.includes(name) }))
+                .sort((a, b) => Oskari.util.naturalSort(a.label, b.label));
+            this.updateState({ roles });
         } catch (e) {
             Messaging.error(Oskari.getMsg('admin-permissions', 'roles.error.fetch'));
             this.updateState({

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Select, Option, Message, Confirm, TextInput } from 'oskari-ui';
+import { Select, Message, Confirm, TextInput } from 'oskari-ui';
 import { PrimaryButton, ButtonContainer, SecondaryButton } from 'oskari-ui/components/buttons';
 import { LayerRightsTable } from './LayerRightsTable';
 import styled from 'styled-components';
@@ -23,6 +23,17 @@ const SearchContainer = styled('div')`
     width: 300px;
     margin-bottom: 10px;
 `;
+const getRoleOptions = roles => {
+    return [{
+        title: 'system',
+        label: <Message messageKey='roles.type.system' />,
+        options: roles.filter(r => r.isSystem)
+    }, {
+        title: 'other',
+        label: <Message messageKey='roles.type.other' />,
+        options: roles.filter(r => !r.isSystem)
+    }];
+};
 
 export const LayerRights = ({ controller, state }) => {
     const [roleConfirmOpen, setRoleConfirmOpen] = useState(false);
@@ -52,7 +63,9 @@ export const LayerRights = ({ controller, state }) => {
                     popupStyle={{zIndex: '999999'}}
                 >
                     <StyledSelect
+                        placeholder={<Message messageKey='roles.placeholder'/>}
                         value={state.selectedRole}
+                        options={getRoleOptions(state.roles)}
                         onChange={(value) => {
                             if (state.changedIds.size !== 0) {
                                 setPendingRole(value);
@@ -60,14 +73,7 @@ export const LayerRights = ({ controller, state }) => {
                             } else {
                                 controller.setSelectedRole(value);
                             }
-                        }}
-                    >
-                        {state.roles.map(role => (
-                            <Option key={role.id} value={role.id}>
-                                {role.name}
-                            </Option>
-                        ))}
-                    </StyledSelect>
+                        }} />
                 </ConfirmWrapper>
             </SelectContainer>
             { !!state.selectedRole &&
