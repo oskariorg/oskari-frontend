@@ -32,7 +32,7 @@ Oskari.registerLocalization(
         "roles": {
             "title": "Roll",
             "placeholder": "Markera värdet",
-            "types": {
+            "type": {
                 "system": "Systemroller",
                 "other": "Övriga roller"
             },

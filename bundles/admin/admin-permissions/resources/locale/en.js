@@ -32,7 +32,7 @@ Oskari.registerLocalization(
         "roles": {
             "title": "Role",
             "placeholder": "Select role",
-            "types": {
+            "type": {
                 "system": "System roles",
                 "other": "Additional roles"
             },
