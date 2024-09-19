@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Select, Message, Confirm, TextInput } from 'oskari-ui';
 import { PrimaryButton, ButtonContainer, SecondaryButton } from 'oskari-ui/components/buttons';
 import { LayerRightsTable } from './LayerRightsTable';
@@ -23,6 +24,7 @@ const SearchContainer = styled('div')`
     width: 300px;
     margin-bottom: 10px;
 `;
+
 const getRoleOptions = roles => {
     return [{
         title: 'system',
@@ -39,41 +41,60 @@ export const LayerRights = ({ controller, state }) => {
     const [roleConfirmOpen, setRoleConfirmOpen] = useState(false);
     const [searchConfirmOpen, setSearchConfirmOpen] = useState(false);
     const [pendingRole, setPendingRole] = useState(null);
-    const [searchValue, setSearchValue] = useState(state.pagination.filter);
+    const [searchValue, setSearchValue] = useState('');
+    const hasChanges = Object.keys(state.unSavedChanges).length > 0;
+
+    const onRoleChange = role => {
+        if (hasChanges) {
+            setPendingRole(role);
+            setRoleConfirmOpen(true);
+        } else {
+            controller.setSelectedRole(role);
+        }
+    };
+    const onRoleConfirm = confirm => {
+        if (confirm) {
+            controller.setSelectedRole(pendingRole);
+        }
+        setPendingRole(null);
+        setRoleConfirmOpen(false);
+    };
+    const onSearchConfirm = confirm => {
+        if (confirm) {
+            controller.search(searchValue);
+        }
+        setSearchConfirmOpen(false);
+    };
+
+    const search = (value = '') => {
+        // update internal state
+        setSearchValue(value);
+        if (hasChanges) {
+            setSearchConfirmOpen(true);
+        } else {
+            controller.search(value);
+        }
+    };
+
     return (
         <div>
-            { !state.selectedRole && <b><Message messageKey='flyout.instruction' bundleKey='admin-permissions' /></b> }
+            { !state.selectedRole && <b><Message messageKey={`flyout.instruction`} /></b> }
             <SelectContainer>
                 <Message messageKey='roles.title' />
                 <ConfirmWrapper
                     title={<Message messageKey='flyout.unsavedChangesConfirm'/>}
                     open={roleConfirmOpen}
-                    onConfirm={() => {
-                        setRoleConfirmOpen(false);
-                        controller.setSelectedRole(pendingRole);
-                        setPendingRole(null);
-                    }}
-                    onCancel={() => {
-                        setRoleConfirmOpen(false);
-                        setPendingRole(null);
-                    }}
+                    onConfirm={() => onRoleConfirm(true) }
+                    onCancel={() => onRoleConfirm(false) }
                     okText={<Message bundleKey='oskariui' messageKey='buttons.yes'/>}
                     cancelText={<Message bundleKey='oskariui' messageKey='buttons.cancel'/>}
                     placement='top'
-                    popupStyle={{zIndex: '999999'}}
-                >
+                    popupStyle={{ zIndex: '999999' }}>
                     <StyledSelect
                         placeholder={<Message messageKey='roles.placeholder'/>}
                         value={state.selectedRole}
                         options={getRoleOptions(state.roles)}
-                        onChange={(value) => {
-                            if (state.changedIds.size !== 0) {
-                                setPendingRole(value);
-                                setRoleConfirmOpen(true);
-                            } else {
-                                controller.setSelectedRole(value);
-                            }
-                        }} />
+                        onChange={value => onRoleChange(value)}/>
                 </ConfirmWrapper>
             </SelectContainer>
             { !!state.selectedRole &&
@@ -86,29 +107,24 @@ export const LayerRights = ({ controller, state }) => {
                         <Confirm
                             title={<Message messageKey='flyout.unsavedChangesConfirm'/>}
                             open={searchConfirmOpen}
-                            onConfirm={() => {
-                                setSearchConfirmOpen(false);
-                                controller.search(searchValue);
-                            }}
-                            onCancel={() => {
-                                setSearchConfirmOpen(false);
-                            }}
+                            onConfirm={() => onSearchConfirm(true)}
+                            onCancel={() => onSearchConfirm(false)}
                             okText={<Message bundleKey='oskariui' messageKey='buttons.yes'/>}
                             cancelText={<Message bundleKey='oskariui' messageKey='buttons.cancel'/>}
                             placement='top'
-                            popupStyle={{zIndex: '999999'}}
+                            popupStyle={{ zIndex: '999999' }}
                         >
                             <PrimaryButton
                                 type='search'
-                                onClick={() => state.changedIds.size !== 0 ? setSearchConfirmOpen(true) : controller.search(searchValue)}
-                                disabled={!state.permissions?.layers || state.permissions?.layers?.length < 1}
+                                onClick={() => search(searchValue)}
+                                disabled={state.resources.length === 0}
                             />
 
                         </Confirm>
-                        {state.pagination.filter && state.pagination.filter !== '' && (
+                        {searchValue && (
                             <SecondaryButton
                                 type='clear'
-                                onClick={controller.clearSearch}
+                                onClick={() => search()}
                             />
                         )}
                     </SearchContainer>
@@ -130,4 +146,9 @@ export const LayerRights = ({ controller, state }) => {
             }
         </div>
     );
+};
+
+LayerRights.propTypes = {
+    controller: PropTypes.object.isRequired,
+    state: PropTypes.object.isRequired
 };
