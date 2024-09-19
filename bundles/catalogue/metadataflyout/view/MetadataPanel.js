@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 /**
  * @class Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel
  *
@@ -53,7 +54,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
         this._templates = {
             // TODO add ifExists type of thing to all of these...
             tabs: {
-                'abstract': _.template(
+                'abstract': template(
                     '<article>' +
                     '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
                     '        <div class="browseGraphic">' +
@@ -79,7 +80,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '</article>'
                 ),
 
-                'jhs': _.template(
+                'jhs': template(
                     '<article>' +
                     '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
                     '        <div class="browseGraphic">' +
@@ -245,7 +246,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '</article>'
                 ),
 
-                'inspire': _.template(
+                'inspire': template(
                     '<article>' +
                     '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
                     '        <div class="browseGraphic">' +
@@ -447,7 +448,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '    <% } %>' +
                     '</article>'
                 ),
-                'quality': _.template(
+                'quality': template(
                     '<article>' +
                     '    <% if (lineageStatements.length) { %>' +
                     '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
@@ -523,12 +524,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '    <% } %> ' +
                     '</article>'
                 ),
-                'actions': _.template(
+                'actions': template(
                     '<article>' +
                     '</article>'
                 )
             },
-            'layerList': _.template(
+            'layerList': template(
                 '<table class="metadataSearchResult">' +
                 '   <tr>' +
                 '       <td>' +
@@ -539,7 +540,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 '   </tr>' +
                 '</table>'
             ),
-            'layerItem': _.template(
+            'layerItem': template(
                 '<li>' +
                 '   <%=Oskari.util.sanitize(layer.getName())%>&nbsp;&nbsp;' +
                 '   <a href="JavaScript:void(0);" class="layerLink">' +
@@ -720,12 +721,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          *   //key is used as the tab's title and must map to a key in localization file
          *   'key' : {
          *     //content as an underscore template, optional
-         *     template: {_.template}
+         *     template: {template}
          *     //a callback to call when tab gets activated. Will take a reference to the panel and get the content asynchronously
          *     tabActivatedCallback: function(panel)
          *   },
          *   'key2': {
-         *     template: {_.template}
+         *     template: {template}
          *     tabActivatedCallback: function(panel)
          *   }
          * }
