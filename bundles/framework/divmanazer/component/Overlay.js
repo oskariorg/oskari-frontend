@@ -24,11 +24,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         overlay: function (elementSelector, addSpinner) {
             const me = this;
             const targetSelector = elementSelector || 'body';
-            this._overlays = jQuery(targetSelector).each(function () {
-                return {
+            this._overlays = [];
+            jQuery(targetSelector).each(function () {
+                me._overlays.push({
                     overlay: me.template.clone(),
                     target: jQuery(this)
-                };
+                });
             });
             this._overlays.forEach(overlay => {
                 overlay.target.append(overlay.overlay);
