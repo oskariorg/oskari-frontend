@@ -1,3 +1,5 @@
+import { template } from 'lodash';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instance) {
     this.instance = instance;
     this.sb = instance.getSandbox();
@@ -12,11 +14,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
     _template: {
         wrapper: jQuery('<div></div>'),
         filterContainer: jQuery('<div class="filter"></div>'),
-        filterIndicator: _.template('<div class="filterIndicator left"><h5><%= indicatorToFilter %></h5></div>'),
-        filterCondition: _.template('<div class="filterCondition"><h5><%= condition %></h5></div>'),
-        filterValue: _.template('<div class="filterValue"><h5><%= value %> </h5> <input class="value" type="number"></input></div>'),
-        filterButton: _.template('<input class="filter-button" type="button" value="<%= filter %>"></input>'),
-        appliedHeader: _.template('<div class="oskari-table-header">' +
+        filterIndicator: template('<div class="filterIndicator left"><h5><%= indicatorToFilter %></h5></div>'),
+        filterCondition: template('<div class="filterCondition"><h5><%= condition %></h5></div>'),
+        filterValue: template('<div class="filterValue"><h5><%= value %> </h5> <input class="value" type="number"></input></div>'),
+        filterButton: template('<input class="filter-button" type="button" value="<%= filter %>"></input>'),
+        appliedHeader: template('<div class="oskari-table-header">' +
                                         '<table id="oskari-tbl-header" cellpadding="0" cellspacing="0" border="0">' +
                                             '<thead>' +
                                                 '<tr>' +
@@ -28,13 +30,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
                                              '</thead>' +
                                         ' </table>' +
                                      '</div>'),
-        appliedFilters: _.template('<div class="active-filters">' +
+        appliedFilters: template('<div class="active-filters">' +
                                         '<table id="oskari-active-filters" hoverable  style="border: 1px solid black;" cellpadding="0" cellspacing="0" border="0">' +
                                             '<tbody></tbody' +
                                         '</table>' +
                                     '</div>' +
                                 '</div>'),
-        tablerow: _.template('<tr id="active-filters-row">' +
+        tablerow: template('<tr id="active-filters-row">' +
                                 '<td class="remove"> <div class="removerow"></div></td>' +
                                 '<td class="cell indicator" headers="indicator" > <%= options.indicator %> </td>' +
                                 '<td class="cell condition" headers="condition" style=" border: 1px solid black ;" > <%= options.condition %> </td>' +

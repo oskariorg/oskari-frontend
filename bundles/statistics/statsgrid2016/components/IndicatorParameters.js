@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 import { SelectList } from './SelectList';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (locale, sandbox) {
@@ -34,9 +35,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
     });
 }, {
     __templates: {
-        main: _.template('<div class="stats-ind-params"></div>'),
-        select: _.template('<div class="parameter margintop"><div class="label" id=${id}>${label}</div><div class="clear"></div></div>'),
-        option: _.template('<option value="${id}">${name}</option>')
+        main: template('<div class="stats-ind-params"></div>'),
+        select: template('<div class="parameter margintop"><div class="label" id=${id}>${label}</div><div class="clear"></div></div>'),
+        option: template('<option value="${id}">${name}</option>')
     },
 
     /** **** PUBLIC METHODS ******/

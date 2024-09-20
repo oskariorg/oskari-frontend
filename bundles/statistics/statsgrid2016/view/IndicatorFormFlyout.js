@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
 }, {
     _templates: {
         main: '<div></div>',
-        notLoggedIn: _.template('<div class="stats-not-logged-in">${warning}</div>'),
+        notLoggedIn: template('<div class="stats-not-logged-in">${warning}</div>'),
         spinner: '<div class="spinner-holder"></div>'
     },
     /**

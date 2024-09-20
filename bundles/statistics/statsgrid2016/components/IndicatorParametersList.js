@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 /**
  * This component manage the different year/regionset combinations listing for indicator data.
  * Also asks for selector values/regionset when user adds another dataset (selector combination for indicator)
@@ -14,16 +15,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     Oskari.makeObservable(this);
 }, {
     __templates: {
-        main: _.template('<div class="user-indicator-main"><div class="my-indicator"></div><div class="new-indicator-dataset-params"></div></div>'),
+        main: template('<div class="user-indicator-main"><div class="my-indicator"></div><div class="new-indicator-dataset-params"></div></div>'),
         table: '<table><tbody></tbody></table>',
-        tableHeader: _.template(
+        tableHeader: template(
             '<thead>' +
                 '<tr>' +
                     '<th style="float:left"> ${title} </th> ' +
                 '</tr>' +
              '</thead>'
         ),
-        tableRow: _.template(
+        tableRow: template(
             '<tr> ' +
                 '<td class="user-dataset"> ${year} - ${regionset} </td> ' +
                 '<td class="user-dataset-edit"> <a href="#"> ${edit} </a> </td> ' +
@@ -31,7 +32,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             '</tr>'
         ),
         form: '<div class="userchoice-container"></div>',
-        input: _.template('<input type="text" name="${name}" placeholder="${label}">')
+        input: template('<input type="text" name="${name}" placeholder="${label}">')
     },
     getElement: function () {
         return this.element;
