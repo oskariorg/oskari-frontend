@@ -741,32 +741,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
         },
         addActionLinks: function () {
-            var me = this,
-                locale = me.locale,
-                model = me._model,
-                links,
-                entry;
-            if (!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
-                entry = jQuery('<a /><br/>');
-                entry.html(locale.xml);
-                entry.attr('href', model.metadataURL);
+            if (!this.instance.conf.hideMetadataXMLLink || this.instance.conf.hideMetadataXMLLink !== true) {
+                const entry = jQuery('<a /><br/>');
+                entry.html(this.locale.xml);
+                entry.attr('href', this._model.metadataURL);
                 entry.attr('target', '_blank');
-                links = entry;
+                this._tabs.actions.getContainer().append(entry);
             }
-
-            me.addActions(links);
-        },
-        /**
-         * @method addActions
-         *
-         * set up actions tab content based on conf
-         */
-        addActions: function (links) {
-            var me = this,
-                container = me._tabs['actions'].getContainer();
-            _.each(links, function (link) {
-                container.append(link);
-            });
         },
 
         renderMapLayerList: function () {
@@ -782,9 +763,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 container.find('h2').html(layerListHeader);
 
                 var layerListElement = container.find('ul.layerList');
-                _.each(layers, function (layer) {
-                    var layerListItem = jQuery(me._templates['layerItem']({
-                        layer: layer,
+                layers.forEach(layer => {
+                    const layerListItem = jQuery(me._templates['layerItem']({
+                        layer,
                         hidden: (!me.isLayerSelected(layer) || !layer.isVisible()),
                         locale: me.locale
                     }));
