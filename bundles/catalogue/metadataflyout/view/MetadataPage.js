@@ -37,28 +37,21 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          *
          */
         _createContent: function (data) {
-            var me = this,
-                i,
-                model,
-                panel,
-                template;
-
+            const me = this;
             if (data === null || data === undefined) {
                 throw new TypeError('_createContent(): missing data.');
             }
+            const { identifications, ...template } = data;
 
-            template = _.extend({}, data);
-            delete template.identifications;
-
-            if (data.identifications.length === 0) {
+            if (identifications.length === 0) {
                 //  No identifications, show metadata not found message
                 me._showMetadataNotFoundMessage();
             } else {
                 // Create a panel for each identification
-                for (i = 0; i < data.identifications.length; i += 1) {
-                    model = _.extend({}, template);
-                    model.identification = data.identifications[i];
-                    panel = Oskari.clazz.create(
+                for (let i = 0; i < identifications.length; i += 1) {
+                    const identification = identifications[i];
+                    const model = { ...template, identification };
+                    const panel = Oskari.clazz.create(
                         'Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                         me.instance,
                         me.locale,
@@ -78,9 +71,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             var me = this;
 
             if (me.panels && me.panels.length) {
-                _.each(me.panels, function (panel) {
-                    panel.addTabsAsync(data);
-                });
+                me.panels.forEach(panel => panel.addTabsAsync(data));
             } else {
                 for (var key in data) {
                     if (data.hasOwnProperty(key)) {
@@ -145,7 +136,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 useLimitations: []
             };
 
-            data = _.extend(dataTemplate, metadataJson);
+            data = Oskari.util.deepClone(dataTemplate, metadataJson);
 
             data.lineageStatements.forEach(function (lineage, index) {
                 data.lineageStatements[index] = me._prettify(lineage);
@@ -157,7 +148,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             for (i = 0; i < data.identifications.length; i += 1) {
                 data.identifications[i] =
-                    _.extend(identificationTemplate, data.identifications[i]);
+                    Oskari.util.deepClone(identificationTemplate, data.identifications[i]);
             }
 
             data.identifications.forEach(function (identification) {
