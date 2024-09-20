@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 import { Messaging } from 'oskari-ui/util';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', function (title, options, instance) {
