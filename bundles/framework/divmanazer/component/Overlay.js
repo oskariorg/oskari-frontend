@@ -22,20 +22,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
          * @param {String} elementSelector, selector for element to overlay
          */
         overlay: function (elementSelector, addSpinner) {
-            var me = this,
-                targetSelector = elementSelector,
-                targets;
-            if (!targetSelector) {
-                targetSelector = 'body';
-            }
-            targets = jQuery(targetSelector);
-            me._overlays = _.map(targets, function (target) {
+            const me = this;
+            const targetSelector = elementSelector || 'body';
+            this._overlays = jQuery(targetSelector).each(function () {
                 return {
                     overlay: me.template.clone(),
-                    target: jQuery(target)
+                    target: jQuery(this)
                 };
             });
-            _.forEach(me._overlays, function (overlay) {
+            this._overlays.forEach(overlay => {
                 overlay.target.append(overlay.overlay);
                 if (addSpinner) {
                     var spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
@@ -45,15 +40,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
                 }
             });
             me._setupSizeAndLocation();
-            _.forEach(me._overlays, function (overlay) {
+            this._overlays.forEach(overlay => {
                 overlay.overlay.on('click', function (event) {
                     event.preventDefault();
                 });
             });
         },
         _setupSizeAndLocation: function () {
-            var me = this;
-            _.forEach(me._overlays, function (overlay) {
+            this._overlays.forEach(overlay => {
                 overlay.overlay.css({
                     'left': '0px',
                     'top': '0px',
@@ -63,8 +57,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             });
         },
         resize: function () {
-            var me = this;
-            _.forEach(me._overlays, function (overlay) {
+            this._overlays.forEach(overlay => {
                 overlay.overlay.height(overlay.target.height());
                 overlay.overlay.width(overlay.target.width());
             });
@@ -87,7 +80,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         },
         close: function () {
             var me = this;
-            _.forEach(me._overlays, function (overlay) {
+            this._overlays.forEach(overlay => {
                 overlay.overlay.remove();
                 if (overlay.spinner) {
                     overlay.spinner.stop();
@@ -100,8 +93,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         },
 
         bindClickToClose: function () {
-            var me = this;
-            _.forEach(me._overlays, function (overlay) {
+            const me = this;
+            this._overlays.forEach(overlay => {
                 overlay.overlay.on('click', function () {
                     me.close();
                 });
@@ -137,12 +130,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             if (!type) {
                 return;
             }
-            if (!this.__listeners[type]) {
+            const listeners = this.__listeners[type];
+            if (!listeners) {
                 return;
             }
-            _.each(this.__listeners[type], function (cb) {
-                cb(event);
-            });
+            listeners.forEach(cb => cb(event));
         },
         /**
          * Returns an array of listeners for given type.
