@@ -1,3 +1,5 @@
+import { template } from 'lodash';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, locale) {
     this.locale = locale;
     this.sb = sandbox;
@@ -18,21 +20,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
     this._sortOrder = null;
 }, {
     __templates: {
-        main: _.template('<div class="stats-table">' +
+        main: template('<div class="stats-table">' +
             '<div class="noresults">' +
             '   <div class="title"></div>' +
             '   <div class="content"></div>' +
             '</div>' +
             '<div class="grid"></div>' +
             '</div>'),
-        tableHeader: _.template('<div class="statsgrid-grid-table-header">' +
+        tableHeader: template('<div class="statsgrid-grid-table-header">' +
                 '<div class="title"></div>' +
                 '<div class="header">' +
                 '   <div class="selection"></div>' +
                 '</div>' +
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>'),
-        tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">' +
+        tableHeaderWithContent: template('<div class="statsgrid-grid-table-header-content">' +
                 '<div class="header"></div>' +
                 '<div class="icon icon-close-dark"></div>' +
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +

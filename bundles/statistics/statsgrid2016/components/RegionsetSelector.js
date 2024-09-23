@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 import { SelectList } from './SelectList';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function (service, locale) {
@@ -10,8 +11,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function (s
     this.dropdown = null;
 }, {
     __templates: {
-        select: _.template('<div class="parameter"><div class="label">${label}</div><div class="clear"></div></div>'),
-        option: _.template('<option value="${id}">${name}</option>')
+        select: template('<div class="parameter"><div class="label">${label}</div><div class="clear"></div></div>'),
+        option: template('<option value="${id}">${name}</option>')
     },
     /**
      * Get regionset selection.
