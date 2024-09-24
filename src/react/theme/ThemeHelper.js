@@ -1,4 +1,3 @@
-
 import { DEFAULT_COLORS, DEFAULT_FONT } from './constants';
 import { EFFECT } from '../../constants';
 
@@ -16,6 +15,36 @@ export const getHeaderTheme = (theme) => {
         getToolHoverColor: () => accentColor
     };
     return funcs;
+};
+
+// https://ant.design/docs/react/customize-theme
+export const getAntdTheme = (theme) => {
+    // Note! The theme parameter is not used here,
+    //  but the Oskari theme is passed here so we _could_ make some adjustments based on that
+    return {
+        // algorithm: antdTheme.defaultAlgorithm,
+        components: {
+            Button: {
+                // colorPrimary: accentColor,
+                // controlItemBgHover: headerTextColor,
+                // colorFillContentHover: accentColor
+                // fixes an issue where close icon has white bg while hovering
+                colorBgContainer: 'inherit'
+            }
+        },
+        token: {
+            // Seed Token
+            // colorPrimary: '#00b96b',
+            // colorPrimary "antD blue" seems to work better than using accent from Oskari theme at the moment
+            colorPrimary: 'rgb(24, 144, 255)', // accentColor,
+            // use the font selected from Oskari theme/global, otherwise antd defaults to its own font spec
+            fontFamily: 'inherit',
+            // make buttons more like v4, the default is a bit more rounder
+            borderRadius: 2
+            // Setting colorBgContainer: 'inherit' here makes the table th column bg color black for some reason
+            // colorBgContainer: 'inherit'
+        }
+    };
 };
 
 export const getNavigationTheme = (theme) => {

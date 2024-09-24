@@ -1,4 +1,3 @@
-
 const errorCodes = { 1: 'denied', 2: 'unavailable', 3: 'timeout' };
 const sandbox = Oskari.getSandbox();
 const log = Oskari.log('Oskari.mapframework.module.LocationModule');

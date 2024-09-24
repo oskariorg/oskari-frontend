@@ -1,4 +1,3 @@
-
 import { AdminAnnouncementsHandler } from './service/AdminAnnouncementsHandler';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');

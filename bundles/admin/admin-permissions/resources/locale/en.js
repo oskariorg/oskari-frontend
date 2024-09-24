@@ -3,33 +3,42 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "admin-permissions",
     "value": {
-        "title": "Layer Rights",
+        "title": "Map Layer Permissions",
         "desc": "",
         "tile": {
-            "title": "Map Layer Rights"
+            "title": "Map Layer Permissions"
         },
         "flyout": {
-            "title": "Map Layer Rights",
-            "message": "Layer Rights Management",
-            "instructionText": "Start by selecting a role"
+            "title": "Map Layer Permissions Management",
+            "instruction": "Start by selecting a role",
+            "unsavedChangesConfirm": "Your unsaved changes will be lost, do you want to continue?",
+            "name": "Map Layer"
         },
-        "rights": {
-            "name": "Map Layer",
-            "PUBLISH": "Publish",
-            "VIEW_LAYER": "View",
-            "DOWNLOAD": "Download",
-            "VIEW_PUBLISHED": "View in Embedded map",
+        "permissions": {
+            "type": {
+                "PUBLISH": "Publish",
+                "VIEW_LAYER": "View",
+                "DOWNLOAD": "Download",
+                "VIEW_PUBLISHED": "View in Embedded map"
+            },
             "success": {
-                "title": "Layer Rights Saved",
-                "message": "Map layer rights have been updated."
+                "save": "Map layer permissions have been updated."
             },
             "error": {
-                "title": "Error",
-                "message": "Map layer rights could not been updated."
-            },
-            "selectValue": "Select value"
+                "fetch": "Failed to get map layer permissions",
+                "save": "Map layer permissions could not been updated."
+            }
         },
-        "save": "Save",
-        "selectRole": "Role"
+        "roles": {
+            "title": "Role",
+            "placeholder": "Select role",
+            "type": {
+                "system": "System roles",
+                "other": "Additional roles"
+            },
+            "error": {
+                "fetch": "Failed to get roles."
+            }
+        }
     }
 });

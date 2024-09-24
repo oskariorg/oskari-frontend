@@ -50,42 +50,45 @@ const Container = ({ state, controller }) => {
         displayedCoverageId,
         drawing,
         selectedLayers } = state;
-    return <div>
-        { loading && <FlexRowCentered><Spin/></FlexRowCentered>}
-        {
-            !(loading || searchResultsVisible) &&
-            <>
-                <Description/>
-                <SearchContainer
-                    disabled={drawing}
-                    query={query}
-                    onChange={controller.updateQuery}
-                    onSearch={controller.doSearch}/>
-                <AdvancedSearchContainer
-                    isExpanded={advancedSearchExpanded}
-                    toggleAdvancedSearch={controller.toggleAdvancedSearch}
-                    advancedSearchOptions={advancedSearchOptions}
-                    advancedSearchValues={advancedSearchValues}
-                    controller={controller}
-                    drawing={drawing}/>
-            </>
-        }
-        {
-            (!loading && searchResultsVisible) &&
-            <>
-                <MetadataSearchResultListContainer
-                    searchResults={searchResults}
-                    searchResultsFilter={searchResultsFilter}
-                    displayedCoverageId={displayedCoverageId}
-                    toggleSearch={controller.toggleSearch}
-                    toggleSearchResultsFilter={controller.toggleSearchResultsFilter}
-                    showMetadata={controller.showMetadata}
-                    toggleCoverageArea={controller.toggleCoverageArea}
-                    selectedLayers={selectedLayers}
-                    toggleLayerVisibility={controller.toggleLayerVisibility}/>
-            </>
-        }
-    </div>;
+
+    if (loading) {
+        return (
+            <FlexRowCentered>
+                <Spin/>
+            </FlexRowCentered>
+        );
+    }
+
+    if (searchResultsVisible) {
+        return <MetadataSearchResultListContainer
+            searchResults={searchResults}
+            searchResultsFilter={searchResultsFilter}
+            displayedCoverageId={displayedCoverageId}
+            toggleSearch={controller.toggleSearch}
+            toggleSearchResultsFilter={controller.toggleSearchResultsFilter}
+            showMetadata={controller.showMetadata}
+            toggleCoverageArea={controller.toggleCoverageArea}
+            selectedLayers={selectedLayers}
+            toggleLayerVisibility={controller.toggleLayerVisibility}/>;
+    }
+
+    return (
+        <div>
+            <Description/>
+            <SearchContainer
+                disabled={drawing}
+                query={query}
+                onChange={controller.updateQuery}
+                onSearch={controller.doSearch}/>
+            <AdvancedSearchContainer
+                isExpanded={advancedSearchExpanded}
+                toggleAdvancedSearch={controller.toggleAdvancedSearch}
+                advancedSearchOptions={advancedSearchOptions}
+                advancedSearchValues={advancedSearchValues}
+                controller={controller}
+                drawing={drawing}/>
+        </div>
+    );
 };
 
 Container.propTypes = {

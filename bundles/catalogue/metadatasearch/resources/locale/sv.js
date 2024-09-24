@@ -34,6 +34,12 @@ Oskari.registerLocalization({
             "service-OGC:WFS": "WFS-tjänst",
             "dataset": "Dataset",
             "series": "Serie",
+            "service": "Tjänst",
+            "discovery": "Upptäck",
+            "download": "Ladda ned",
+            "other": "Annan",
+            "transformation": "Omvandling",
+            "view": "Visa",
             "resourceTypes": {
                 "service-discovery": "Söktjänst",
                 "service-download": "Nedladdningstjänst",

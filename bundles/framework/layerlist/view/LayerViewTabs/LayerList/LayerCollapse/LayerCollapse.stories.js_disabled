@@ -1,5 +1,6 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
+// See .storybook/README.md
+// import { storiesOf } from '@storybook/react';
 import { initServices, getBundleInstance } from '../../test.util';
 import { LayerCollapse, LayerCollapseHandler } from '.';
 import { LocaleProvider } from 'oskari-ui/util';

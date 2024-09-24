@@ -1,5 +1,5 @@
 import { MetadataStateHandler } from './MetadataStateHandler';
-import { Messaging } from 'oskari-ui/util';
+import { Messaging, LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { MetadataSearchContainer } from './view/MetadataSearchContainer';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -179,21 +179,26 @@ Oskari.clazz.define(
 
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 const isShown = event.getViewState() !== 'close';
+                const name = event.getExtension().getName();
 
                 // ExtensionUpdateEvents are fired a lot, only let metadatacatalogue extension event to be handled when enabled
-                if (![this.getName(), 'Search'].includes(event.getExtension().getName())) {
+                if (![this.getName(), 'Search'].includes(name)) {
                     // wasn't me or disabled -> do nothing
                     return;
                 }
-
                 if ((!isShown && this.drawCoverage === false) || event.getViewState() === 'close') {
                     this._teardownMetaSearch();
+                }
+                if (this.getName() === name && isShown) {
+                    // own flyout so Search.TabChangedEvent doesn't trigger load options
+                    this.handler.loadOptions();
                 }
             },
             'Search.TabChangedEvent': function (event) {
                 if (event.getNewTabId() !== this.id) {
                     this._teardownMetaSearch();
                 } else {
+                    this.handler.loadOptions();
                     this.removeFeaturesFromMap();
                 }
             },
@@ -362,7 +367,12 @@ Oskari.clazz.define(
         },
 
         renderSearch: function () {
-            ReactDOM.render(<MetadataSearchContainer state={this.handler.getState()} controller={this.handler.getController()} />, this.contentElement);
+            ReactDOM.render(
+                <LocaleProvider value={{ bundleKey: METADATA_BUNDLE_LOCALIZATION_ID }}>
+                    <ThemeProvider>
+                        <MetadataSearchContainer state={this.handler.getState()} controller={this.handler.getController()} />
+                    </ThemeProvider>
+                </LocaleProvider>, this.contentElement);
         },
 
         /* ----------- Tile and Flyout ------------- */

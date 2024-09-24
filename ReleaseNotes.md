@@ -1,5 +1,19 @@
 # Release Notes
 
+## 2.13.2
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/50?closed=1
+
+- Fixed an issue when importing statistical data from clipboard with region ids: https://github.com/oskariorg/oskari-frontend/pull/2640
+- Fixed an issue with the older jQuery version of statistical data functionality where the publisher tools for statistical data were not properly shown on the publisher.
+- Fixed issues when showing layer metadata properly from metadata search results and layer admin.
+- Fixed some localization issues on metadata search functionality.
+- Fixed an issue where clicks on the map were not properly received by the map on the lower part of the map. For example GFI didn't work at the bottom of the map etc.
+- Fixed an issue where setting a custom cursor on map was not properly reseted for popups on the map: https://github.com/oskariorg/oskari-frontend/pull/2644
+- Fixed an issue with layer admin vector hover style form where editing the hover style could lead to a situation where it could no longer be edited.
+- Added handling for colors with alpha channel under the hood (no UI yet). This enables a polygon style with semi-transparent fill and fully opaque strokes.
+
 ## 2.13.1
 
 For a full list of changes see:

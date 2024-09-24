@@ -1,4 +1,3 @@
-
 /**
  * @class Oskari.mapframework.mapmodule.getinfoplugin.request.SwipeStatusRequestHandler
  *

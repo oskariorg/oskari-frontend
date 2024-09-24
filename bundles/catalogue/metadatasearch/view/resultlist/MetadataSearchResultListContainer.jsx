@@ -45,7 +45,7 @@ export const MetadataSearchResultListContainer = (props) => {
 
     const searchResultsFiltered = searchResultsFilter && searchResultsFilter.length ? searchResults.filter((item) => searchResultsFilter.includes(item.natureofthetarget)) : searchResults;
     const hasSearchResults = !!(searchResults && searchResults.length);
-    return <>
+    return <div>
         <FlexRow>
             <SearchResultTitle>{Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'searchResults.resultTitle')}</SearchResultTitle>
             <FlexRight>
@@ -65,7 +65,7 @@ export const MetadataSearchResultListContainer = (props) => {
             displayedCoverageId={displayedCoverageId}
             selectedLayers={selectedLayers}
             toggleLayerVisibility={toggleLayerVisibility}/>
-    </>;
+    </div>;
 };
 
 MetadataSearchResultListContainer.propTypes = {

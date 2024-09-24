@@ -89,29 +89,21 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
         return checked;
     };
 
-    const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-
     const columnSettings = [];
     const permissionNames = getPermissionNames(state.permissions?.names);
     if (permissionNames.length) {
         columnSettings.push({
             align: 'left',
-            title: <Message messageKey='rights.name' />,
+            title: <Message messageKey='flyout.name' />,
             dataIndex: 'name',
             sorter: getSorterFor('name'),
-            render: (title, item) => {
-                const layer = mapLayerService.findMapLayer(item.id);
-                let layerType = item.layerType;
-                if (layerType !== 'analysislayer' && layerType !== 'userlayer' && layerType?.includes('layer')) {
-                    // Change 'wmslayer' to 'wms' etc. for translations & icons
-                    layerType = layerType.replace('layer', '');
-                }
+            render: (title, { hasTimeseries, layerType }) => {
                 return (
                     <LayerName>
                         {layerType && (
                             <StyledLayerIcon
                                 type={layerType}
-                                hasTimeseries={layer?.hasTimeseries()}
+                                hasTimeseries={hasTimeseries}
                             />
                         )}
                         {title}
@@ -138,7 +130,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
                 },
                 dataIndex: 'permissions',
                 render: (title, item) => {
-                    const tooltip = <span>{state.roles.find(role => role.id === state.selectedRole)?.name}: <Message messageKey={`rights.${permissionType}`} defaultMsg={state.permissions.names[permissionType]} /></span>;
+                    const tooltip = <span>{state.roles.find(role => role.id === state.selectedRole)?.name}: <Message messageKey={`permissions.type.${permissionType}`} defaultMsg={state.permissions.names[permissionType]} /></span>;
                     const checked = item.permissions[state.selectedRole]?.findIndex(p => p === permissionType) > -1;
                     return (
                         <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={tooltip}>

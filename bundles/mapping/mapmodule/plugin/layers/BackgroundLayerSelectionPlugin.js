@@ -19,51 +19,22 @@ Oskari.clazz.define(
      *
      */
     function (config) {
-        var i;
         this._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayerSelectionPlugin';
         this._defaultLocation = 'bottom center';
         this._index = 0;
         this._name = 'BackgroundLayerSelectionPlugin';
-        this.error = !(this._config && this._config.baseLayers && this._config.baseLayers.length);
-        // Hackhack, make sure baseLayers aren't numbers.
-        if (!this.error) {
-            for (i = 0; i < this._config.baseLayers.length; i += 1) {
-                if (typeof this._config.baseLayers[i] === 'number') {
-                    this._config.baseLayers[i] =
-                        this._config.baseLayers[i].toString();
-                }
-            }
-        }
+        // make sure baseLayers aren't numbers.
+        this._baseLayerIds = this._config?.baseLayers?.map(id => typeof id === 'number' ? id.toString() : id);
+        this._template = jQuery('<div class="backgroundLayerSelectionPlugin oskariui mapplugin"/>');
     }, {
         /** @static @property __name module name */
         __name: 'BackgroundLayerSelectionPlugin',
-
-        /**
-         * @private @method _initImpl
-         * Interface method for the module protocol. Initializes the request
-         * handlers/templates.
-         *
-         *
-         */
         _initImpl: function () {
-            // selected layer's li is marked by selected-class
-            // if dropdown is open, li with selected-class will be hidden
-            // currentSelection stores the current selection so we don't have to reorder the list elements
-            this.template = jQuery(
-                '<div class="backgroundLayerSelectionPlugin oskariui mapplugin">' +
-                '<div class="content">' +
-                '</div></div>'
-            );
-            // used in case the module config is faulty
-            this.errorTemplate = jQuery(
-                '<div class="backgroundLayerSelectionPlugin oskariui mapplugin">' +
-                '  <div class="bg"></div>' +
-                '  <div class="error">No baseLayers defined in configuration</div>' +
-                '</div>'
-            );
+            if (!this._getBaseLayerIds().length) {
+                Oskari.log(this.getName()).error('No baseLayers defined in configuration');
+            }
         },
-
         /**
          * @method _createEventHandlers
          * Create eventhandlers.
@@ -138,31 +109,34 @@ Oskari.clazz.define(
          *
          * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
          */
-        _getBottomLayer: function () {
-            return this.getSandbox().findAllSelectedMapLayers()[0];
+        _getBottomLayerId: function () {
+            return this.getSandbox().findAllSelectedMapLayers()[0]?.getId().toString();
         },
-
+        _getSelectedId: function () {
+            const ids = this._getBaseLayerIds();
+            // base layer is handled as base layer only when it's bottom layer
+            const bottomId = this._getBottomLayerId();
+            return ids.includes(bottomId) ? bottomId : undefined;
+        },
+        _getBaseLayerIds: function () {
+            return this._baseLayerIds || [];
+        },
         /**
          * Does the actual layer selection update
          * @param  {String} newId Id of the new base layer
          * @private
          */
-        _updateSelection: function (newId) {
-            if (this.error) {
-                return;
-            }
-            const currentBottomId = this._getBottomLayer()?.getId();
-            if (newId === currentBottomId) {
+        _onSelect: function (newId) {
+            const selectedId = this._getSelectedId();
+            if (newId === selectedId) {
                 // user clicked already selected option, do nothing
                 return;
             }
             const sb = this.getSandbox();
-            const { baseLayers = [] } = this.getConfig();
-
             // switch bg layer (no need to call update on ui, we should catch the event)
             // - check if current bottom layer exists & is in our list (if so, remove)
-            if (currentBottomId && baseLayers.includes(currentBottomId.toString())) {
-                sb.postRequestByName('RemoveMapLayerRequest', [currentBottomId]);
+            if (selectedId) {
+                sb.postRequestByName('RemoveMapLayerRequest', [selectedId]);
             }
             // - check if new selection is already selected, remove if so as rearrange doesn't seem to work
             if (sb.isLayerAlreadySelected(newId)) {
@@ -179,41 +153,24 @@ Oskari.clazz.define(
          *
          */
         _createLayerSelectionElements: function () {
-            if (this.error) {
+            const element = this.getElement();
+            const ids = this._getBaseLayerIds();
+            if (!element || !ids.length) {
                 return;
             }
-            var me = this,
-                element = me.getElement();
-            if (!element) {
-                return;
-            }
-            var layer,
-                layerIds = me.getConfig().baseLayers,
-                i;
-            // remove children, this function is called on update
-            let layers = [];
-            for (i = 0; i < layerIds.length; i += 1) {
-                layer = me.getSandbox().findMapLayerFromAllAvailable(
-                    layerIds[i]
-                );
-                if (layer) {
-                    layers.push({
-                        id: layerIds[i],
-                        title: layer.getName(),
-                        onClick: (id) => this._updateSelection(id)
-                    });
-                }
-            }
-
-            const mapWidth = this.getSandbox().getMap().getWidth();
-
+            const sb = this.getSandbox();
+            const baseLayers = ids.map(id => ({
+                id,
+                title: sb.findMapLayerFromAllAvailable(id)?.getName(),
+                action: () => this._onSelect(id)
+            }));
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <BackgroundLayerSelection
                         isMobile={Oskari.util.isMobile()}
-                        layers={layers}
-                        current={this._getBottomLayer()}
-                        mapWidth={mapWidth}
+                        baseLayers={baseLayers}
+                        selectedId={this._getSelectedId()}
+                        mapWidth={sb.getMap().getWidth()}
                     />
                 </ThemeProvider>,
                 element[0]
@@ -221,17 +178,7 @@ Oskari.clazz.define(
         },
 
         _createControlElement: function () {
-            var me = this,
-                el;
-
-            if (me.error) {
-                // No baseLayers in config, show error.
-                el = me.errorTemplate.clone();
-            } else {
-                el = me.template.clone();
-            }
-
-            return el;
+            return this._template.clone();
         },
 
         refresh: function () {

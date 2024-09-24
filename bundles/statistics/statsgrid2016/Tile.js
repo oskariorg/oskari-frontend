@@ -1,4 +1,3 @@
-
 Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, service) {
     this.instance = instance;
     this.sb = this.instance.getSandbox();

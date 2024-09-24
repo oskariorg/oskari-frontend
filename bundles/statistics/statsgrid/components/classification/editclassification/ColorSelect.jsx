@@ -31,8 +31,7 @@ export const ColorSelect = ({
     if (isSimple) {
         return (
             <ColorPicker disabled={disabled} value={value} hideTextInput
-                onChange={evt => handleColorChange(evt.target.value)}
-            />
+                onChange={handleColorChange} />
         );
     }
     // coloret: {name:'Blues', colors:['#deebf7','#9ecae1','#3182bd']}

@@ -5,14 +5,18 @@ import * as olProj from 'ol/proj';
 import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
 // see oskari-frontend/webpack/config.js for additional config required by Cesium
-import * as Cesium from 'cesium/Source/Cesium';
-import OLCesium from 'olcs/OLCesium';
+
+import * as Cesium from 'cesium';
+
+// https://github.com/openlayers/ol-cesium/issues/1094#issuecomment-1710423741
+// import OLCesium from 'olcs/OLCesium.js';
+import OLCesium from 'olcs';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID, VECTOR_STYLE } from './domain/constants';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import 'olcs/olcs.css';
-
+// import 'ol-cesium/css/olcs.css';
+import 'olcs/css/olcs.css';
 import './event/TimeChangedEvent';
 dayjs.extend(customParseFormat);
 // OL-cesium expects to find this global
@@ -181,42 +185,40 @@ class MapModuleOlCesium extends MapModuleOl {
     /**
      * @method _initTerrainProvider Initializes the terrain defined in module options.
      */
-    _initTerrainProvider () {
+    async _initTerrainProvider () {
         if (!this.getCesiumScene() || !this._options.terrain) {
             return;
         }
         const { providerUrl, ionAssetId, ionAccessToken } = this._options.terrain;
         let terrainProvider = null;
         if (providerUrl) {
-            terrainProvider = new Cesium.CesiumTerrainProvider({ url: providerUrl });
+            terrainProvider = await Cesium.CesiumTerrainProvider.fromUrl(providerUrl);
         }
         if (ionAccessToken) {
             Cesium.Ion.defaultAccessToken = ionAccessToken;
             jQuery('.cesium-credit-container .cesium-credit-logoContainer').css('visibility', 'visible');
 
             if (ionAssetId) {
-                terrainProvider = new Cesium.CesiumTerrainProvider({
-                    url: Cesium.IonResource.fromAssetId(ionAssetId)
+                terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(ionAssetId, {
+                    requestVertexNormals: false
                 });
             } else {
-                terrainProvider = Cesium.createWorldTerrain({
-                    requestVertexNormals: true
+                terrainProvider = await Cesium.createWorldTerrainAsync({
+                    requestVertexNormals: false
                 });
             }
         }
         if (!terrainProvider) {
             return;
         }
-        terrainProvider.readyPromise.then(() => {
-            this.getCesiumScene().terrainProvider = terrainProvider;
-        });
+        this.getCesiumScene().terrainProvider = terrainProvider;
     }
 
     /**
      * Fire operations that have been waiting for the map to initialize.
      */
     _notifyMapReadySubscribers () {
-        var me = this;
+        const me = this;
         this._mapReadySubscribers.forEach(function (fireOperation) {
             fireOperation.operation.apply(me, fireOperation.arguments);
         });
@@ -1035,6 +1037,11 @@ class MapModuleOlCesium extends MapModuleOl {
         location = olProj.transform(location, 'EPSG:4326', this.getProjection());
         const lonlat = { lon: location[0], lat: location[1] };
         return lonlat;
+    }
+
+    getVersion () {
+        const olVersion = super.getVersion();
+        return olVersion + ' - Cesium/' + Cesium.VERSION;
     }
 }
 

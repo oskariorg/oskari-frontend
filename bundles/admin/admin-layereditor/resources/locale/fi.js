@@ -118,7 +118,7 @@ Oskari.registerLocalization(
                 "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}",
                 "validate": "Tason tiedot eivät vastaa rajapinnan määrityksiä",
                 "rasterStyle" : {
-                    "defaultStyle" : "Nyt valittua oletustyyliä ei löydy palvelusta. Valitse uusi oletustyyli.",
+                    "defaultStyle" : "Nyt valittua oletustyyliä ei löydy palvelusta. Valitse uusi oletustyyli tai poista oletustyyli.",
                     "additionalLegend": "Tasolle on tallennettu erikseen rajapintapalvelun oman karttaselitteen yliajava karttaselite, jolle ei löydy tyyliä. Päivitä karttaselitteen tiedot. Poistuneen/ei-toimivan karttaselitteen nimessä on ( ! )-merkki.",
                     "globalWithStyles": "Tasolle on määritetty vain yksi yleinen oletuskarttaselite, vaikka sillä olisi rajapintapalvelusta useita tyylejä käytettävissä. Poista oletuskarttaselite ja määritä mahdolliset tyylikohtaiset karttaselitteet."
                 }
@@ -186,6 +186,7 @@ Oskari.registerLocalization(
                     "title": "Esitystyylit ja karttaselitteet",
                     "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestissä, josta ne haetaan valintalistalle.",
                     "unavailable": "Palvelussa määritelty esitystyyli: ei saatavilla",
+                    "removeDefault": "Poista oletustyyli",
                     "legendImage": "Oletuskarttaselite",
                     "serviceLegend": "Palvelussa määritelty karttaselite",
                     "overriddenLegend": "Korvaava karttaselite",
