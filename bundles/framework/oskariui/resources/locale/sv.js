@@ -22,7 +22,8 @@ Oskari.registerLocalization({
             clear: 'Rensa',
             accept: 'Acceptera',
             reject: 'Avvisa',
-            info: 'Visa mera information'
+            info: 'Visa mera information',
+            move: 'Flytta'
         },
         messages: {
             confirm: 'Är du säker på att du vill fortsätta?',
