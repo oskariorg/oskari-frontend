@@ -40,7 +40,7 @@ class UIHandler extends StateHandler {
     */
 
     setAutoStart (value) {
-        this.tool.getPlugin().toggleToolState(!!value);
+        this.tool.getPlugin().setToolState(!!value);
         this.updateConfig2State();
     }
 
