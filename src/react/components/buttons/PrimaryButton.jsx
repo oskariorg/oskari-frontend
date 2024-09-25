@@ -14,5 +14,5 @@ export const PrimaryButton = ({ type, ...other }) => (
 );
 
 PrimaryButton.propTypes = {
-    type: PropTypes.oneOf(['add', 'close', 'delete', 'edit', 'save', 'yes', 'submit', 'import', 'next', 'print', 'search', 'copy']).isRequired
+    type: PropTypes.oneOf(['add', 'close', 'delete', 'edit', 'save', 'yes', 'submit', 'import', 'next', 'print', 'search', 'copy', 'move']).isRequired
 };
