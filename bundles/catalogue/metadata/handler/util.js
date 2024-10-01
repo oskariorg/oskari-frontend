@@ -4,15 +4,15 @@ const WWW = /(^|[^/])(www\.[\S]+(\b|$))/gim;
 const loc = Oskari.getMsg.bind(null, 'catalogue.metadata');
 let langLoc = null;
 
-const getLocalizedLang = lang => {
+const getLocalizedLanguage = lang => {
     if (langLoc) {
         return langLoc[lang] || lang;
     }
     langLoc = Oskari.getMsg('DivManazer', 'LanguageSelect.languages');
     if (typeof langLoc === 'string') {
-        Oskari.log('MetadataHandler').warn('Failed to get localization for languages.');
+        Oskari.log('MetadataHandler').warn('Failed to get localization object for languages.');
     }
-    return getLocalizedLang(lang);
+    return getLocalizedLanguage(lang);
 };
 
 const prettifyString = value => typeof value === 'string' ? value.split('\n').filter(notEmpty => notEmpty).map(str => linkify(str)) : '';
@@ -20,6 +20,20 @@ const prettifyString = value => typeof value === 'string' ? value.split('\n').fi
 const prettifyList = value => Array.isArray(value) ? value.map(prettifyString).flat() : [];
 
 const getTypedString = (value, type) => type ? `${value} (${type})` : value;
+
+const getRangeList = (list = []) => {
+    return list.map(obj => {
+        const { begin, end } = obj || {};
+        if (!begin && !end) {
+            return '';
+        }
+        return `${begin} - ${end}`;
+    }).filter(notEmpty => notEmpty);
+};
+
+const getParties = (parties = []) => {
+    return parties.map(p => ({ label: p.organisationName, items: p.electronicMailAddresses }));
+};
 
 const getCodes = (codes = [], type) => {
     const locCodes = loc(`codes.${type}`);
@@ -81,19 +95,20 @@ export const mapResponseForRender = response => {
         citation: {
             ...ide.citation,
             date: getCitationDate(ide.citation),
-            resourceIdentifiers: ide.citation.resourceIdentifiers.map(ind => `${ind.codeSpace}.${ind.code}`)
+            resourceIdentifiers: ide.citation.resourceIdentifiers?.map(ind => `${ind.codeSpace}.${ind.code}`)
         },
         classifications: getCodes(ide.classifications, 'gmd:MD_ClassificationCode'),
         descriptiveKeywords: prettifyList(ide.descriptiveKeywords),
-        languages: ide.languages?.map(getLocalizedLang),
+        languages: ide.languages?.map(getLocalizedLanguage),
         operatesOn: ide.operatesOn,
         otherConstraints: prettifyList(ide.otherConstraints),
-        responsibleParties: ide.responsibleParties.map(p => ({ label: p.organisationName, items: p.electronicMailAddresses })),
+        responsibleParties: getParties(ide.responsibleParties),
         serviceType: getTypedString(ide.serviceType, ide.serviceTypeVersion),
         spatialRepresentationTypes: getCodes(ide.spatialRepresentationTypes, 'gmd:MD_SpatialRepresentationTypeCode'),
-        spatialResolutions: ide.spatialResolutions.map(res => `1:${res}`),
-        temporalExtents: ide.temporalExtents.map(ext => `${ext.begin} - ${ext.end}`),
+        spatialResolutions: ide.spatialResolutions?.map(res => `1:${res}`),
+        temporalExtents: getRangeList(ide.temporalExtents),
         topicCategories: getCodes(ide.topicCategories, 'gmd:MD_TopicCategoryCode'),
+        type: ide.type,
         useLimitations: prettifyList(ide.useLimitations)
     });
 
@@ -114,10 +129,10 @@ export const mapResponseForRender = response => {
         scopeCodes: getCodes(scopeCodes, 'gmd:MD_ScopeCode'),
         lineageStatements: prettifyList(lineageStatements),
         metadataDateStamp: Oskari.util.formatDate(metadataDateStamp),
-        metadataLanguage: getLocalizedLang(metadataLanguage),
-        distributionFormats: distributionFormats.map(format => getTypedString(format.name, format.version)),
+        metadataLanguage: getLocalizedLanguage(metadataLanguage),
+        distributionFormats: distributionFormats?.map(format => getTypedString(format.name, format.version)),
         metadataCharacterSet: loc('codes.gmd:MD_CharacterSetCode')[metadataCharacterSet] || metadataCharacterSet,
-        metadataResponsibleParties: metadataResponsibleParties.map(p => ({ label: p.organisationName, items: p.electronicMailAddresses }))
+        metadataResponsibleParties: getParties(metadataResponsibleParties)
     };
     return { identifications: identifications.map(mapIdentification), metadata };
 };
