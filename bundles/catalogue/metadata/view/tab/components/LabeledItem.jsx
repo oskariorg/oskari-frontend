@@ -14,26 +14,29 @@ const Item = styled.p`
     margin-bottom: 18px;
 `;
 
-const getContent = (item, key, Node) => {
+const getContent = (item) => {
     if (typeof item !== 'object') {
         return item;
     }
+    if (Array.isArray(item)) {
+        return item.map((child, i) => <Fragment key={i}>{getContent(child)}</Fragment>);
+    }
     const { label, description, url, items, name } = item;
-    const desc = description ? <InfoIcon title={description} /> : null;
+    const descIcon = description ? <InfoIcon title={description} /> : null;
     if (url) {
-        return <Link key={key} url={url} >{label || name}</Link>;
+        return <Link url={url} >{label || name || url}</Link>;
     }
     if (items) {
         return (
             <Fragment>
-                {label || name}{desc}
+                {label || name}{descIcon}
                 <List>
-                    {items.map((item, i) => <li key={i}>{item}{desc}</li>)}
+                    {items.map((item, i) => <li key={i}>{item}{descIcon}</li>)}
                 </List>
             </Fragment>
         );
     }
-    return <Fragment key={key}>{label || name}{desc}</Fragment>;
+    return <Fragment>{label || name}{descIcon}</Fragment>;
 };
 
 const getNodes = (content, renderList) => {
