@@ -17,7 +17,6 @@ const Container = styled('div')`
 const StyledSlider = styled(Slider)`
     height: 150px;
     opacity: ${props => props.opacity};
-    padding-left: 2px;
     .ant-slider-mark-text {
         color: #ffffff;
     }
@@ -26,7 +25,7 @@ const StyledSlider = styled(Slider)`
         background: ${props => props.dotColor};
         border: none;
         width: 7px;
-        left: 2px;
+        left: 0;
         opacity: 50%;
     }
     .ant-slider-rail,
@@ -53,6 +52,7 @@ const StyledSlider = styled(Slider)`
         border-radius: ${props => props.rounding || '0%'};
         width: 14px;
         height: 14px;
+        left: 0;
         &:hover {
             background: ${props => props.handleBackground};
             border: 4px solid ${props => props.handleBorder};
@@ -79,14 +79,6 @@ const MobileContainer = styled('div')`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-`;
-
-const PlusIcon = styled(PlusOutlined)`
-    font-size: 12px;
-`;
-
-const MinusIcon = styled(MinusOutlined)`
-    font-size: 12px;
 `;
 
 const ThemedSlider = ThemeConsumer(({theme = {}, ...rest}) => {
@@ -141,12 +133,13 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
     return (
         <Container>
             <MapModuleButton
-                icon={<PlusIcon />}
+                icon={<PlusOutlined />}
                 className='t_plus'
                 onClick={() => {
                     changeZoom(zoom < 100 ? zoom + 1 : 100);
                 }}
                 size='18px'
+                iconSize='12px'
                 noMargin
             />
             {!isMobile && (
@@ -167,12 +160,13 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
                 </ThemeProvider>
             )}
             <MapModuleButton
-                icon={<MinusIcon />}
+                icon={<MinusOutlined />}
                 className='t_minus'
                 onClick={() => {
                     changeZoom(zoom > 0 ? zoom - 1 : 0);
                 }}
                 size='18px'
+                iconSize='12px'
                 noMargin
             />
         </Container>
