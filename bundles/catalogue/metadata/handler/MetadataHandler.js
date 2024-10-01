@@ -1,4 +1,5 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { mapResponseForRender } from './util';
 
 class MetadataHandler extends StateHandler {
     constructor (instance) {
@@ -64,7 +65,7 @@ class MetadataHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
-            const { metadata, identifications } = this._mapResponseForRender(json);
+            const { metadata, identifications } = mapResponseForRender(json);
             const layers = this._getLayers(uuid || metadata.fileIdentifier);
             this.updateState({ loading: false, metadata, layers, identifications });
         }).catch(error => {
@@ -84,83 +85,6 @@ class MetadataHandler extends StateHandler {
             name: l.getName(),
             isSelected: selected.includes(l.getId())
         })) || [];
-    }
-
-    _mapResponseForRender (response) {
-        let langLoc = Oskari.getMsg('DivManazer', 'LanguageSelect.languages');
-        if (typeof langLoc === 'string') {
-            langLoc = {};
-            Oskari.log('MetadataHandler').warn('Failed to get localization for languages.');
-        }
-        const prettifyString = value => typeof value === 'string' ? value.split('\n').filter(notEmpty => notEmpty) : '';
-        const prettifyList = value => Array.isArray(value) ? value.map(prettifyString).flat() : [];
-        const linkify = value => {
-            const separator = value.indexOf('://');
-            if (separator === -1) {
-                // TODO: how to mark url inside paragraph
-                // linkifyjs or replace with a tag doesn't work with react (without dangerous insert)
-                // splitting to [...p, { url, label }, p...] => handle list of lists (new tag on for parent list)
-            }
-        };
-        const getCodes = (codes = [], type) => {
-            const locCodes = this.instance.loc(`codes.${type}`);
-            return codes.map(code => locCodes[code] || { label: code });
-        };
-        const getTypedString = (value, type) => type ? `${value} (${type})` : value;
-
-        const getCitationDate = citation => {
-            const { date, dateType } = citation?.date || {};
-            const formatted = Oskari.util.formatDate(date);
-            const { label, description } = this.instance.loc(`codes.gmd:CI_DateTypeCode.${dateType}`) || {};
-            return { label: getTypedString(formatted, label), description };
-        };
-
-        const mapIdentification = ide => ({
-            abstractText: prettifyString(ide.abstractText),
-            accessConstraints: getCodes(ide.accessConstraints, 'gmd:MD_RestrictionCode'),
-            browseGraphics: ide.browseGraphics,
-            citation: {
-                ...ide.citation,
-                date: getCitationDate(ide.citation),
-                resourceIdentifiers: ide.citation.resourceIdentifiers.map(ind => `${ind.codeSpace}.${ind.code}`)
-            },
-            classifications: getCodes(ide.classifications, 'gmd:MD_ClassificationCode'),
-            descriptiveKeywords: prettifyList(ide.descriptiveKeywords),
-            languages: ide.languages?.map(lang => langLoc[lang] || lang),
-            operatesOn: ide.operatesOn,
-            otherConstraints: prettifyList(ide.otherConstraints),
-            responsibleParties: ide.responsibleParties.map(p => ({ label: p.organisationName, items: p.electronicMailAddresses })),
-            serviceType: getTypedString(ide.serviceType, ide.serviceTypeVersion),
-            spatialRepresentationTypes: getCodes(ide.spatialRepresentationTypes, 'gmd:MD_SpatialRepresentationTypeCode'),
-            spatialResolutions: ide.spatialResolutions.map(res => `1:${res}`),
-            temporalExtents: ide.temporalExtents.map(ext => `${ext.begin} - ${ext.end}`),
-            topicCategories: getCodes(ide.topicCategories, 'gmd:MD_TopicCategoryCode'),
-            useLimitations: prettifyList(ide.useLimitations)
-        });
-
-        const {
-            identifications = [],
-            scopeCodes,
-            metadataCharacterSet,
-            metadataResponsibleParties,
-            distributionFormats,
-            lineageStatements,
-            metadataDateStamp,
-            metadataLanguage,
-            ...noNeedToModify
-        } = response;
-
-        const metadata = {
-            ...noNeedToModify,
-            scopeCodes: getCodes(scopeCodes, 'gmd:MD_ScopeCode'),
-            lineageStatements: prettifyList(lineageStatements),
-            metadataDateStamp: Oskari.util.formatDate(metadataDateStamp),
-            metadataLanguage: langLoc[metadataLanguage] || metadataLanguage,
-            distributionFormats: distributionFormats.map(format => getTypedString(format.name, format.version)),
-            metadataCharacterSet: this.instance.loc('codes.gmd:MD_CharacterSetCode')[metadataCharacterSet] || metadataCharacterSet,
-            metadataResponsibleParties: metadataResponsibleParties.map(p => ({ label: p.organisationName, items: p.electronicMailAddresses }))
-        };
-        return { identifications: identifications.map(mapIdentification), metadata };
     }
 }
 
