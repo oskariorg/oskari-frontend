@@ -87,6 +87,11 @@ class MetadataHandler extends StateHandler {
     }
 
     _mapResponseForRender (response) {
+        let langLoc = Oskari.getMsg('DivManazer', 'LanguageSelect.languages');
+        if (typeof langLoc === 'string') {
+            langLoc = {};
+            Oskari.log('MetadataHandler').warn('Failed to get localization for languages.');
+        }
         const prettifyString = value => typeof value === 'string' ? value.split('\n').filter(notEmpty => notEmpty) : '';
         const prettifyList = value => Array.isArray(value) ? value.map(prettifyString).flat() : [];
         const linkify = value => {
@@ -113,6 +118,7 @@ class MetadataHandler extends StateHandler {
         const mapIdentification = ide => ({
             ...ide,
             abstractText: prettifyString(ide.abstractText),
+            languages: ide.languages?.map(lang => langLoc[lang] || lang),
             otherConstraints: prettifyList(ide.otherConstraints),
             useLimitations: prettifyList(ide.useLimitations),
             topicCategories: getCodes(ide.topicCategories, 'gmd:MD_TopicCategoryCode'),
@@ -138,6 +144,7 @@ class MetadataHandler extends StateHandler {
             distributionFormats,
             lineageStatements,
             metadataDateStamp,
+            metadataLanguage,
             ...noNeedToModify
         } = response;
 
@@ -146,6 +153,7 @@ class MetadataHandler extends StateHandler {
             scopeCodes: getCodes(scopeCodes, 'gmd:MD_ScopeCode'),
             lineageStatements: prettifyList(lineageStatements),
             metadataDateStamp: Oskari.util.formatDate(metadataDateStamp),
+            metadataLanguage: langLoc[metadataLanguage] || metadataLanguage,
             distributionFormats: distributionFormats.map(format => getTypedString(format.name, format.version)),
             metadataCharacterSet: this.instance.loc('codes.gmd:MD_CharacterSetCode')[metadataCharacterSet] || metadataCharacterSet,
             metadataResponsibleParties: metadataResponsibleParties.map(p => ({ label: p.organisationName, items: p.electronicMailAddresses }))
