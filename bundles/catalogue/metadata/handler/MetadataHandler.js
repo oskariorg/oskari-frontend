@@ -116,24 +116,26 @@ class MetadataHandler extends StateHandler {
         };
 
         const mapIdentification = ide => ({
-            ...ide,
             abstractText: prettifyString(ide.abstractText),
-            languages: ide.languages?.map(lang => langLoc[lang] || lang),
-            otherConstraints: prettifyList(ide.otherConstraints),
-            useLimitations: prettifyList(ide.useLimitations),
-            topicCategories: getCodes(ide.topicCategories, 'gmd:MD_TopicCategoryCode'),
-            temporalExtents: ide.temporalExtents.map(ext => `${ext.begin} - ${ext.end}`),
-            spatialResolutions: ide.spatialResolutions.map(res => `1:${res}`),
+            accessConstraints: getCodes(ide.accessConstraints, 'gmd:MD_RestrictionCode'),
+            browseGraphics: ide.browseGraphics,
             citation: {
                 ...ide.citation,
                 date: getCitationDate(ide.citation),
                 resourceIdentifiers: ide.citation.resourceIdentifiers.map(ind => `${ind.codeSpace}.${ind.code}`)
             },
-            serviceType: getTypedString(ide.serviceType, ide.serviceTypeVersion),
-            accessConstraints: getCodes(ide.accessConstraints, 'gmd:MD_RestrictionCode'),
             classifications: getCodes(ide.classifications, 'gmd:MD_ClassificationCode'),
+            descriptiveKeywords: prettifyList(ide.descriptiveKeywords),
+            languages: ide.languages?.map(lang => langLoc[lang] || lang),
+            operatesOn: ide.operatesOn,
+            otherConstraints: prettifyList(ide.otherConstraints),
+            responsibleParties: ide.responsibleParties.map(p => ({ label: p.organisationName, items: p.electronicMailAddresses })),
+            serviceType: getTypedString(ide.serviceType, ide.serviceTypeVersion),
             spatialRepresentationTypes: getCodes(ide.spatialRepresentationTypes, 'gmd:MD_SpatialRepresentationTypeCode'),
-            responsibleParties: ide.responsibleParties.map(p => ({ label: p.organisationName, items: p.electronicMailAddresses }))
+            spatialResolutions: ide.spatialResolutions.map(res => `1:${res}`),
+            temporalExtents: ide.temporalExtents.map(ext => `${ext.begin} - ${ext.end}`),
+            topicCategories: getCodes(ide.topicCategories, 'gmd:MD_TopicCategoryCode'),
+            useLimitations: prettifyList(ide.useLimitations)
         });
 
         const {
