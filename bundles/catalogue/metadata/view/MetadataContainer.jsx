@@ -21,7 +21,6 @@ export const MetadataContainer = ({
     layers,
     showFullGraphics,
     hideMetadataXMLLink,
-    isEmbedded,
     controller
 }) => {
     if (loading) {
@@ -37,7 +36,7 @@ export const MetadataContainer = ({
     // TODO: should we support multiple identifications => render accordion || select || tabs??
     const identification = identifications[0];
     const hideLink = hideMetadataXMLLink || !metadata.metadataURL;
-    const skipActions = isEmbedded || (hideLink && layers.length === 0);
+    const skipActions = Oskari.dom.isEmbedded() || (hideLink && layers.length === 0);
 
     const items = [
         {
@@ -80,7 +79,6 @@ MetadataContainer.propTypes = {
     loading: PropTypes.bool.isRequired,
     showFullGraphics: PropTypes.bool.isRequired,
     hideMetadataXMLLink: PropTypes.bool.isRequired,
-    isEmbedded: PropTypes.bool.isRequired,
     identifications: PropTypes.array.isRequired,
     controller: PropTypes.object.isRequired
 };

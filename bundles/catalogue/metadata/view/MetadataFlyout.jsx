@@ -8,10 +8,11 @@ const BUNDLE_ID = 'catalogue.metadata';
 
 const theme = getHeaderTheme(Oskari.app.getTheming().getTheme());
 
-export const showMetadataFlyout = (state, controller, onClose) => {
+export const showMetadataFlyout = (state, conf, controller, onClose) => {
+    const { hideMetadataXMLLink = false } = conf || {};
     const content = (
         <LocaleProvider value={{ bundleKey: BUNDLE_ID }}>
-            <MetadataContainer {...state} controller = { controller }/>
+            <MetadataContainer {...state} hideMetadataXMLLink={hideMetadataXMLLink} controller = { controller }/>
         </LocaleProvider>
     );
     const title = Oskari.getMsg(BUNDLE_ID, 'title');
@@ -22,7 +23,7 @@ export const showMetadataFlyout = (state, controller, onClose) => {
             controls.update(
                 title,
                 <LocaleProvider value={{ bundleKey: BUNDLE_ID }}>
-                    <MetadataContainer { ...state } controller = { controller }/>
+                    <MetadataContainer { ...state } hideMetadataXMLLink={hideMetadataXMLLink} controller = { controller }/>
                 </LocaleProvider>
             );
         }

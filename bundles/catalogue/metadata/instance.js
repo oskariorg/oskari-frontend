@@ -22,14 +22,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadata.MetadataBundleInstance',
             return this.sandbox;
         },
 
-        start: function () {
+        start: function (sandbox) {
             if (this.started) {
                 return;
             }
             this.started = true;
 
-            const sandboxName = this.conf.sandbox || 'sandbox';
-            this.sandbox = Oskari.getSandbox(sandboxName);
+            this.sandbox = sandbox || Oskari.getSandbox(this.conf.sandbox || 'sandbox');
             this.mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
 
             this.sandbox.register(this);
@@ -100,6 +99,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadata.MetadataBundleInstance',
 
         onMapLayerEvent: function (event) {
             if (!this.flyoutControls || Oskari.dom.isEmbedded()) {
+                // handle events only when flyout is opened
+                // action tab isn't shown in embedded map, no need to update state
                 return;
             }
             this.handler.onMapLayerEvent(event.getMapLayer());
@@ -140,12 +141,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadata.MetadataBundleInstance',
             }
             this.handler.fetchMetadata(data);
             if (this.flyoutControls) {
+                // already opened, fetch triggers state update
                 return;
             }
             const state = this.handler.getState();
             const controller = this.handler.getController();
             const onClose = () => this.closeMetadata();
-            this.flyoutControls = showMetadataFlyout(state, controller, onClose);
+            this.flyoutControls = showMetadataFlyout(state, this.conf, controller, onClose);
         },
         closeMetadata: function () {
             if (this.flyoutControls) {

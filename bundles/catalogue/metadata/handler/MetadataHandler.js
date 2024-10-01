@@ -10,8 +10,6 @@ class MetadataHandler extends StateHandler {
             loading: false,
             layers: [],
             showFullGraphics: false,
-            hideMetadataXMLLink: !!instance.conf?.hideMetadataXMLLink,
-            isEmbedded: Oskari.dom.isEmbedded(),
             metadata: {},
             identifications: []
         });
