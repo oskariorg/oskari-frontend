@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Title, LabeledItem, Images, Content } from './';
+import { Title, LabeledItem, Images, Content, ResponsibleParties } from './';
 
 export const JHSTabPane = ({ metadata, identification, showFullGraphics, controller }) => {
     return (
@@ -15,7 +15,7 @@ export const JHSTabPane = ({ metadata, identification, showFullGraphics, control
             <LabeledItem dataKey='temporalExtents' source={identification} renderList/>
             <LabeledItem dataKey='lineageStatements' source={metadata} />
             <LabeledItem dataKey='spatialResolutions' source={identification} renderList/>
-            <LabeledItem dataKey='responsibleParties' source={identification} renderList/>
+            <ResponsibleParties dataKey='responsibleParties' source={identification}/>
             <LabeledItem dataKey='date' source={identification.citation}/>
             <LabeledItem dataKey='distributionFormats' source={metadata} renderList/>
             <LabeledItem dataKey='spatialRepresentationTypes' source={identification} renderList/>
@@ -24,7 +24,7 @@ export const JHSTabPane = ({ metadata, identification, showFullGraphics, control
             <LabeledItem dataKey='metadataStandardVersion' source={metadata}/>
             <LabeledItem dataKey='metadataLanguage' source={metadata}/>
             <LabeledItem dataKey='metadataCharacterSet' source={metadata}/>
-            <LabeledItem dataKey='metadataResponsibleParties' source={metadata} renderList/>
+            <ResponsibleParties dataKey='metadataResponsibleParties' source={metadata}/>
         </Content>
     );
 };

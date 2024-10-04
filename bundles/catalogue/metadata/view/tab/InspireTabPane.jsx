@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Title, LabeledItem, Images, Content, DataQualities } from './';
+import { Title, LabeledItem, Images, Content, DataQualities, ResponsibleParties } from './';
 
 export const InspireTabPane = ({ metadata, identification, showFullGraphics, controller }) => {
     return (
@@ -15,7 +15,7 @@ export const InspireTabPane = ({ metadata, identification, showFullGraphics, con
             <LabeledItem dataKey='temporalExtents' source={identification} renderList/>
             <LabeledItem dataKey='lineageStatements' source={metadata} />
             <LabeledItem dataKey='spatialResolutions' source={identification} renderList/>
-            <LabeledItem dataKey='responsibleParties' source={identification} renderList/>
+            <ResponsibleParties dataKey='responsibleParties' source={identification}/>
             <LabeledItem dataKey='date' source={identification.citation}/>
             <LabeledItem dataKey='scopeCodes' source={metadata} renderList/>
             <LabeledItem dataKey='resourceIdentifiers' source={identification.citation} renderList />

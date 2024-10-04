@@ -56,10 +56,6 @@ const getRangeList = (list = []) => {
     }).filter(notEmpty => notEmpty);
 };
 
-const getParties = (parties = []) => {
-    return parties.map(p => ({ label: p.organisationName, items: p.electronicMailAddresses }));
-};
-
 const getCodes = (codes = [], type) => {
     const locCodes = loc(`codes.${type}`);
     return codes.map(code => locCodes[code] || { label: code });
@@ -145,7 +141,7 @@ export const mapResponseForRender = response => {
         languages: ide.languages?.map(getLocalizedLanguage),
         operatesOn: ide.operatesOn,
         otherConstraints: prettifyList(ide.otherConstraints),
-        responsibleParties: getParties(ide.responsibleParties),
+        responsibleParties: ide.responsibleParties,
         serviceType: getTypedString(ide.serviceType, ide.serviceTypeVersion),
         spatialRepresentationTypes: getCodes(ide.spatialRepresentationTypes, 'gmd:MD_SpatialRepresentationTypeCode'),
         spatialResolutions: ide.spatialResolutions?.map(res => `1:${res}`),
@@ -159,7 +155,6 @@ export const mapResponseForRender = response => {
         identifications = [],
         scopeCodes,
         metadataCharacterSet,
-        metadataResponsibleParties,
         distributionFormats,
         lineageStatements,
         metadataDateStamp,
@@ -174,8 +169,7 @@ export const mapResponseForRender = response => {
         metadataDateStamp: Oskari.util.formatDate(metadataDateStamp),
         metadataLanguage: getLocalizedLanguage(metadataLanguage),
         distributionFormats: distributionFormats?.map(format => getTypedString(format.name, format.version)),
-        metadataCharacterSet: loc('codes.gmd:MD_CharacterSetCode')[metadataCharacterSet] || metadataCharacterSet,
-        metadataResponsibleParties: getParties(metadataResponsibleParties)
+        metadataCharacterSet: loc('codes.gmd:MD_CharacterSetCode')[metadataCharacterSet] || metadataCharacterSet
     };
     return { identifications: identifications.map(mapIdentification), metadata };
 };

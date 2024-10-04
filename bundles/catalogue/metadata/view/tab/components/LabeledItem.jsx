@@ -1,18 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Label } from '..';
+import { Label, List, Paragraph } from '..';
 import { Link } from 'oskari-ui';
 import { InfoIcon } from 'oskari-ui/components/icons';
-
-const List = styled.ul`
-    margin-left: 20px;
-    margin-bottom: 18px;
-`;
-
-const Item = styled.p`
-    margin-bottom: 18px;
-`;
 
 const getContent = (item) => {
     if (typeof item !== 'object') {
@@ -21,20 +11,10 @@ const getContent = (item) => {
     if (Array.isArray(item)) {
         return item.map((child, i) => <Fragment key={i}>{getContent(child)}</Fragment>);
     }
-    const { label, description, url, items, name } = item;
+    const { label, description, url, name } = item;
     const descIcon = description ? <InfoIcon title={description} /> : null;
     if (url) {
         return <Link url={url} >{label || name || url}</Link>;
-    }
-    if (items) {
-        return (
-            <Fragment>
-                {label || name}{descIcon}
-                <List>
-                    {items.map((item, i) => <li key={i}>{item}{descIcon}</li>)}
-                </List>
-            </Fragment>
-        );
     }
     return <Fragment>{label || name}{descIcon}</Fragment>;
 };
@@ -47,7 +27,7 @@ const getNodes = (content, renderList) => {
             </List>
         );
     }
-    return content.map((item, i) => <Item key={i}>{getContent(item)}</Item>);
+    return content.map((item, i) => <Paragraph key={i}>{getContent(item)}</Paragraph>);
 };
 
 export const LabeledItem = ({ source, labelKey, dataKey, renderList }) => {
