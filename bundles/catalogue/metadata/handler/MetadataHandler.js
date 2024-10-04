@@ -47,6 +47,7 @@ class MetadataHandler extends StateHandler {
     }
 
     fetchMetadata ({ layerId, uuid }) {
+        // clear previous
         this.updateState({ loading: true, metadata: {}, identifications: [], layers: [] });
 
         const srs = this.instance.getSandbox().getMap().getSrsName();
