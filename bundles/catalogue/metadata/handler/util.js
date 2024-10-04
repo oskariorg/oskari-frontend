@@ -4,6 +4,21 @@ const WWW = /(^|[^/])(www\.[\S]+(\b|$))/gim;
 const loc = Oskari.getMsg.bind(null, 'catalogue.metadata');
 let langLoc = null;
 
+export const getUrl = content => {
+    if (typeof content !== 'string') {
+        return '';
+    }
+    const url = content.match(PROTOCOL);
+    if (url && url.length) {
+        return url[0];
+    }
+    const www = content.match(WWW);
+    if (www && www.length) {
+        return 'http://' + www[0];
+    }
+    return '';
+};
+
 const getLocalizedLanguage = lang => {
     if (langLoc) {
         return langLoc[lang] || lang;
@@ -15,9 +30,9 @@ const getLocalizedLanguage = lang => {
     return getLocalizedLanguage(lang);
 };
 
-const prettifyString = value => typeof value === 'string' ? value.split('\n').filter(notEmpty => notEmpty).map(str => linkify(str)) : '';
+export const prettifyParagraph = value => typeof value === 'string' ? value.split('\n').map(p => p.trim()).filter(notEmpty => notEmpty).map(str => linkifyParagraph(str)) : '';
 
-const prettifyList = value => Array.isArray(value) ? value.map(prettifyString).flat() : [];
+const prettifyList = value => Array.isArray(value) ? value.map(prettifyParagraph).flat() : [];
 
 const getTypedString = (value, type) => type ? `${value} (${type})` : value;
 
@@ -47,49 +62,67 @@ const getCitationDate = citation => {
     return { label: getTypedString(formatted, label), description };
 };
 
-const linkify = value => {
-    const parts = [];
-    // some metadata has a-tags inside content
-    const aTagStart = value.indexOf('<a');
-    if (aTagStart !== -1) {
+export const linkifyParagraph = value => {
+    const parseATags = (value) => {
+        const start = typeof value === 'string' ? value.indexOf('<a') : -1;
+        if (start === -1) {
+            return value;
+        }
         const end = value.indexOf('</a>') + 4;
-        const content = value.substring(aTagStart, end);
+        const content = value.substring(start, end);
         const label = content.substring(content.indexOf('>') + 1, content.lastIndexOf('<'));
-        const url = content.match(PROTOCOL)[0] || content.match(WWW)[0];
-        if (aTagStart > 0) {
-            parts.push(value.substring(0, aTagStart));
+        const url = getUrl(content);
+        const parts = [];
+        if (start > 0) {
+            parts.push(value.substring(0, start));
         }
         parts.push({ label, url });
         const rest = value.substring(end);
         if (rest) {
-            parts.push(rest);
+            const parsed = parseATags(rest);
+            if (Array.isArray(parsed)) {
+                parts.push(...parsed);
+            } else {
+                parts.push(parsed);
+            }
         }
         return parts;
-    }
-
-    const url = (value.match(PROTOCOL) || value.match(WWW))?.[0];
-    if (url) {
-        if (url.length === value.length) {
-            return { url };
+    };
+    const parseUrls = (value) => {
+        const url = typeof value === 'string' ? getUrl(value) : null;
+        if (!url) {
+            return value;
         }
         const start = value.indexOf(url);
         const end = start + url.length;
+        const parts = [];
         if (start > 0) {
             parts.push(value.substring(0, start));
         }
         parts.push({ url });
         const rest = value.substring(end);
         if (rest) {
-            parts.push(rest);
+            const parsed = parseUrls(rest);
+            if (Array.isArray(parsed)) {
+                parts.push(...parsed);
+            } else {
+                parts.push(parsed);
+            }
         }
         return parts;
-    }
-    return value;
+    };
+    // some metadata has a-tags inside content
+    // parse first a-tags as them contains urls
+    let parsed = parseATags(value);
+    parsed = Array.isArray(parsed)
+        ? parsed.map(parseUrls).flat()
+        : parseUrls(parsed);
+    return Array.isArray(parsed) && parsed.length === 1 ? parsed[0] : parsed;
 };
 
 export const mapResponseForRender = response => {
     const mapIdentification = ide => ({
-        abstractText: prettifyString(ide.abstractText),
+        abstractText: prettifyParagraph(ide.abstractText),
         accessConstraints: getCodes(ide.accessConstraints, 'gmd:MD_RestrictionCode'),
         browseGraphics: ide.browseGraphics,
         citation: {
