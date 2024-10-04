@@ -30,7 +30,17 @@ const getLocalizedLanguage = lang => {
     return getLocalizedLanguage(lang);
 };
 
-export const prettifyParagraph = value => typeof value === 'string' ? value.split('\n').map(p => p.trim()).filter(notEmpty => notEmpty).map(str => linkifyParagraph(str)) : '';
+export const prettifyParagraph = (value, linkify) => {
+    if (typeof value !== 'string') {
+        return '';
+    }
+    // Paragraphs are rendered to own elements => trim and remove empty
+    let splitted = value.split('\n').map(p => p.trim()).filter(notEmpty => notEmpty);
+    if (linkify !== false) {
+        splitted = splitted.map(p => linkifyParagraph(p));
+    }
+    return splitted.length === 1 ? splitted[0] : splitted;
+};
 
 const prettifyList = value => Array.isArray(value) ? value.map(prettifyParagraph).flat() : [];
 
