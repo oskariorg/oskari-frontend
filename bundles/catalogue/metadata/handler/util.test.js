@@ -7,7 +7,7 @@ const dolor = 'Curabitur blandit.';
 describe('getUrl function', () => {
     test('returns url', () => {
         expect.assertions(1);
-        const content = 'https://example.com/index.html';
+        const content = 'http://example.com/index.html';
         const url = getUrl(content);
         expect(url).toEqual(content);
     });
@@ -19,7 +19,15 @@ describe('getUrl function', () => {
         expect(url).toEqual(content);
     });
 
-    test('returns url from content', () => {
+    test('returns www url prefixed with http://', () => {
+        expect.assertions(1);
+        const content = 'www.example.com/index.html';
+        const url = getUrl(content);
+        const prefix = 'http://';
+        expect(url).toEqual(prefix + content);
+    });
+
+    test('returns url from content without white spaces', () => {
         expect.assertions(1);
         const url = 'https://foo-bar.exa_mple.com/path?query=true';
         const content = `${lorem} ${url} ${ipsum}`;
@@ -89,13 +97,14 @@ describe('linkifyParagraph function', () => {
     test('returns array containing paragraphs and links in right order', () => {
         expect.assertions(2);
         const content = [lorem, url, ipsum, aTag, dolor, url, url, `${lorem} ${ipsum} ${dolor}`, aTag, aTag, `${lorem} ${ipsum}`, url, aTag, ipsum];
+        const paragraph = content.join(' ');
         const expected = content.map(p => {
             if (p === url) return ulrLink;
             if (p === aTag) return aLink;
             return p;
         });
-        const parsed = linkifyParagraph(content.join(' '));
-        // There is white space separator between link and/or aTag, filter them
+        const parsed = linkifyParagraph(paragraph);
+        // Trim white spaces added in join and filter empty strings between link and/or aTag
         const trimmed = parsed.map(p => typeof p === 'string' ? p.trim() : p).filter(nonEmpty => nonEmpty);
         expect(trimmed.length).toEqual(expected.length);
         expect(trimmed).toEqual(expected);
