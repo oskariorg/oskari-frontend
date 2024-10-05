@@ -13,10 +13,18 @@ const Container = styled('div')`
     align-items: center;
     margin: 0 10px 10px 10px;
 `;
+const StyledMinus = styled(MinusOutlined)`
+    shape-rendering: optimizespeed;
+`;
+const StyledPlus = styled(PlusOutlined)`
+    shape-rendering: optimizespeed;
+`;
 
 const StyledSlider = styled(Slider)`
     height: 150px;
     opacity: ${props => props.opacity};
+    margin: 6px 10px;
+    left: -1px;
     .ant-slider-mark-text {
         color: #ffffff;
     }
@@ -133,7 +141,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
     return (
         <Container>
             <MapModuleButton
-                icon={<PlusOutlined />}
+                icon={<StyledPlus />}
                 className='t_plus'
                 onClick={() => {
                     changeZoom(zoom < 100 ? zoom + 1 : 100);
@@ -142,25 +150,25 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
                 iconSize='12px'
                 noMargin
             />
-            {!isMobile && (
-                <ThemeProvider value={mapModule.getMapTheme()}>
-                    <ThemedSlider
-                        className='t_zoomslider'
-                        vertical={true}
-                        value={zoom}
-                        step={1}
-                        dots
-                        max={maxZoom}
-                        min={0}
-                        onChange={value => {
-                            changeZoom(value);
-                        }}
-                        {...rest}
-                    />
-                </ThemeProvider>
-            )}
+
+            <ThemeProvider value={mapModule.getMapTheme()}>
+                <ThemedSlider
+                    className='t_zoomslider'
+                    vertical={true}
+                    value={zoom}
+                    step={1}
+                    dots
+                    max={maxZoom}
+                    min={0}
+                    onChange={value => {
+                        changeZoom(value);
+                    }}
+                    {...rest}
+                />
+            </ThemeProvider>
+
             <MapModuleButton
-                icon={<MinusOutlined />}
+                icon={<StyledMinus />}
                 className='t_minus'
                 onClick={() => {
                     changeZoom(zoom > 0 ? zoom - 1 : 0);
