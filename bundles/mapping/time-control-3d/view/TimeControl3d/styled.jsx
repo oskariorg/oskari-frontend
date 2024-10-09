@@ -41,21 +41,30 @@ export const StyledInput = styled.input`
     text-align: center;
 `;
 
-export const StyledButton = styled(Button)`
+const ThemedButton = styled(Button)`
     background: ${primaryColor};
-    color: #3c3c3c;
-    width: 100%;
-    height: 40px;
-    border: 0;
+    border: none;
     font-size: 16px;
-    font-weight: 500;
+    fill: currentColor;
+
     &:focus,
     &:active,
-    &:hover {
+    &&&:hover {
         background: #ecb900;
-        color: #3c3c3c;
-        border: 0;
+        color: inherit;
+        border: none;
     }
+`;
+
+export const StyledButton = styled(ThemedButton)`
+    width: 100%;
+    height: 40px;
+`;
+
+export const StyledPlayButton = styled(ThemedButton)`
+    padding: 0;
+    height: 42px;
+    width: 40px;
 `;
 
 const StyledSlider = styled(Slider)`
@@ -82,18 +91,19 @@ const StyledSlider = styled(Slider)`
     }
     .ant-slider-rail {
         ${props => props.useThick ? 'height: ' + thickSlider + 'px;' : ''}
-        background: #ffffff;
+        background: #ffffff !important;
     }
     .ant-slider-track {
         ${props => props.useThick ? 'height: ' + thickSlider + 'px;' : ''}
         background: ${primaryColor};
     }
     .ant-slider-handle {
+        top: -2px;
         width: 8px;
         height: ${props => props.useThick ? 12 + thickSlider : 16}px;
         border-radius: 6px;
         border: solid 1px #3c3c3c;
-        background-color: ${primaryColor};
+        background-color: ${primaryColor} !important;
         &:focus,
         &:active,
         &:hover {
@@ -104,6 +114,9 @@ const StyledSlider = styled(Slider)`
         &:active .ant-slider-track,
         &:hover .ant-slider-track {
             background: #ecb900 !important;
+        }
+        ::after {
+            display: none;
         }
     }
     &:hover .ant-slider-track {
@@ -155,19 +168,3 @@ export const TimeBorder = styled.div(({ isMobile }) => ({
     width: isMobile ? '72%' : '80%',
     padding: isMobile ? '12px 15px 8px 15px' : '20px 15px 4px 15px'
 }));
-
-export const StyledPlayButton = styled(Button)`
-    padding: 0;
-    border: 0;
-    background: ${primaryColor};
-    height: 42px;
-    width: 40px;
-    fill: #3c3c3c;
-    &:focus,
-    &:active,
-    &:hover {
-        background: #ecb900;
-        fill: #3c3c3c;
-        border: 0;
-    }
-`;
