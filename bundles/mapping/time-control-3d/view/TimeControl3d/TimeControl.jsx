@@ -41,7 +41,6 @@ export const TimeControl = ({ isMobile, changeHandler, timeValue, sliderTimeValu
                     sliderTimeValue = {sliderTimeValue}
                     playing = {playing}
                     playHandler = {playHandler}
-                    tooltip={{ open: false }}
                 ></TimeSlider>
             </ColFixed>
             <Col>

@@ -10,7 +10,7 @@ const MINUTES = 1439;
 export const TimeSlider = ThemeConsumer(({ theme, isMobile, changeHandler, sliderTimeValue, playing, playHandler }) => {
     const helper = getHeaderTheme(theme);
     const color = helper.getAccentColor();
-    const hover = Oskari.util.getColorEffect(color, 25);
+    const hover = Oskari.util.getColorEffect(color, 30);
     const clickPlayButton = () => {
         playHandler(!playing);
     };
@@ -34,7 +34,15 @@ export const TimeSlider = ThemeConsumer(({ theme, isMobile, changeHandler, slide
                 <PlayButton initial={playing} />
             </StyledPlayButton>
             <TimeBorder isMobile={isMobile}>
-                <StyledTimeSlider useThick={isMobile} marks = {marksForTime} min={0} max={MINUTES} value={sliderTimeValue} onChange={changeSliderTime} tooltip={{ open: false }}/>
+                <StyledTimeSlider
+                    color={color}
+                    hover={hover}
+                    useThick={isMobile}
+                    marks={marksForTime}
+                    min={0} max={MINUTES}
+                    value={sliderTimeValue}
+                    onChange={changeSliderTime}
+                    tooltip={{ open: false }}/>
             </TimeBorder>
         </InputGroup>
     );

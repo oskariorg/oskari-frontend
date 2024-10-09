@@ -17,7 +17,7 @@ const DAYS = 365;
 export const DateControl = ThemeConsumer(({ theme, isMobile, changeHandler, sliderDateValue, dateValue, currentTimeHandler }) => {
     const helper = getHeaderTheme(theme);
     const color = helper.getAccentColor();
-    const hover = Oskari.util.getColorEffect(color, 25);
+    const hover = Oskari.util.getColorEffect(color, 30);
     const changeSliderDate = (val) => {
         const d = new Date(2019, 0, val);
         const timeToSet = dayjs(d).format('D/M');
@@ -53,7 +53,14 @@ export const DateControl = ThemeConsumer(({ theme, isMobile, changeHandler, slid
             </Col>
             {!isMobile &&
                 <ColFixed>
-                    <StyledDateSlider marks={marksForDate()} min={1} max={DAYS} step={1} value={sliderDateValue} onChange={changeSliderDate} />
+                    <StyledDateSlider
+                        color={color}
+                        hover={hover}
+                        marks={marksForDate()}
+                        min={1} max={DAYS} step={1}
+                        value={sliderDateValue}
+                        onChange={changeSliderDate}
+                        tooltip={{ open: false }}/>
                 </ColFixed>
             }
             <Col>

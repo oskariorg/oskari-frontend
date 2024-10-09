@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { Button, Slider, Select } from 'oskari-ui';
 import { CalendarOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
-const primaryColor = '#ffd400';
 const thickSlider = 8; // default is 4
 
 export const CalendarIcon = styled(CalendarOutlined)`
@@ -42,7 +41,7 @@ export const StyledInput = styled.input`
 `;
 
 const ThemedButton = styled(Button)`
-    background: ${primaryColor};
+    background: ${props => props.color};
     border: none;
     font-size: 16px;
     fill: currentColor;
@@ -50,7 +49,7 @@ const ThemedButton = styled(Button)`
     &:focus,
     &:active,
     &&&:hover {
-        background: #ecb900;
+        background: ${props => props.hover};
         color: inherit;
         border: none;
     }
@@ -95,7 +94,7 @@ const StyledSlider = styled(Slider)`
     }
     .ant-slider-track {
         ${props => props.useThick ? 'height: ' + thickSlider + 'px;' : ''}
-        background: ${primaryColor};
+        background: ${props => props.color};
     }
     .ant-slider-handle {
         top: -2px;
@@ -103,28 +102,23 @@ const StyledSlider = styled(Slider)`
         height: ${props => props.useThick ? 12 + thickSlider : 16}px;
         border-radius: 6px;
         border: solid 1px #3c3c3c;
-        background-color: ${primaryColor} !important;
-        &:focus,
-        &:active,
-        &:hover {
-            border: solid 1px #3c3c3c !important;
-            background-color: ${primaryColor} !important;
-        }
+        background-color: ${props => props.color} !important;
+
         &:focus .ant-slider-track,
         &:active .ant-slider-track,
         &:hover .ant-slider-track {
-            background: #ecb900 !important;
+            background: ${props => props.hover} !important;
         }
         ::after {
             display: none;
         }
     }
     &:hover .ant-slider-track {
-        background: #ecb900 !important;
+        background: ${props => props.hover} !important;
     }
     &:hover .ant-slider-handle {
         border: solid 1px #3c3c3c !important;
-        background-color: ${primaryColor} !important;
+        background-color: ${props => props.color} !important;
     }
 `;
 
