@@ -53,6 +53,8 @@ const StyledSlider = styled(Slider)`
         border-radius: ${props => props.rounding || '0%'};
         width: 14px;
         height: 14px;
+        /*override antd default misalignment*/
+        inset-inline-start: 0px!important;
         &:hover {
             background: ${props => props.handleBackground};
             border: 4px solid ${props => props.handleBorder};
