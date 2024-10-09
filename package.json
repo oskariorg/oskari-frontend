@@ -33,7 +33,7 @@
     "postinstall": "node webpack/hacks/postinstall.js"
   },
   "dependencies": {
-    "@ant-design/icons": "5.2.6",
+    "@ant-design/icons": "5.5.1",
     "@babel/core": "7.25.2",
     "@babel/preset-env": "7.25.4",
     "@babel/preset-react": "7.24.7",
@@ -42,7 +42,7 @@
     "@testing-library/jest-dom": "5.7.0",
     "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "14.4.3",
-    "antd": "5.20.4",
+    "antd": "5.21.2",
     "babel-loader": "8.3.0",
     "babel-plugin-styled-components": "2.1.4",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
