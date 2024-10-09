@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Controller } from 'oskari-ui/util';
+import { Controller, ThemeConsumer } from 'oskari-ui/util';
+import { getNavigationTheme } from 'oskari-ui/theme';
+import { CloseIcon } from '../../../../src/react/components/window/CloseIcon';
+import { Message } from 'oskari-ui';
 import styled from 'styled-components';
 import { TimeControl } from './TimeControl3d/TimeControl';
 import { DateControl } from './TimeControl3d/DateControl';
@@ -38,21 +41,32 @@ function useInterval (callback, delay) {
             savedCallback.current();
         }
         if (delay !== null) {
-            let id = setInterval(tick, delay);
+            const id = setInterval(tick, delay);
             return () => clearInterval(id);
         }
     }, [delay]);
 }
 
-const Background = styled.div(({ isMobile }) => ({
-    minHeight: isMobile ? '120px !important' : '90px !imoprtant',
-    width: isMobile ? '260px !important' : '720px !important',
-    backgroundColor: '#3c3c3c',
-    padding: '20px',
-    margin: '-10px'
-}));
+const Background = styled.div`
+    cursor: grab;
+    width: ${props => props.isMobile ? '260px' : '720px'} !important;
+    background-color: ${props => props.theme.getNavigationBackgroundColor()};
+    padding: 10px 20px 20px;
+`;
 
-export const TimeControl3d = ({ controller, date, time, isMobile }) => {
+const Header = styled.div`
+    color: ${props => props.theme.getTextColor()};
+    display: flex;
+    justify-content: space-between;
+    > button {
+        margin-top: -5px;
+        color: ${props => props.theme.getTextColor()};
+    }
+`;
+
+export const TimeControl3d = ThemeConsumer(({ theme, controller, date, time, isMobile, onClose }) => {
+    const navigationTheme = getNavigationTheme(theme);
+
     const [timeValue, setTime] = useState(time);
     const [dateValue, setDate] = useState(date);
     const [sliderTimeValue, setSliderTime] = useState(sliderValueForTime(time));
@@ -122,7 +136,11 @@ export const TimeControl3d = ({ controller, date, time, isMobile }) => {
     };
 
     return (
-        <Background isMobile={isMobile}>
+        <Background isMobile={isMobile} theme={navigationTheme}>
+            <Header theme={navigationTheme}>
+                <h3><Message messageKey='title'/></h3>
+                <CloseIcon onClose={onClose}/>
+            </Header>
             <DateControl
                 isMobile={isMobile}
                 changeHandler={changeDate}
@@ -142,7 +160,7 @@ export const TimeControl3d = ({ controller, date, time, isMobile }) => {
             />
         </Background>
     );
-};
+});
 
 TimeControl3d.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired,
