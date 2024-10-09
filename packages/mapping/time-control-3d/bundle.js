@@ -22,9 +22,6 @@ Oskari.clazz.define("Oskari.mapping.time-control-3d.bundle", function () {
         }, {
             "type": "text/javascript",
             "src": "../../../bundles/mapping/time-control-3d/tool/TimeControl3dTool.js"
-        }, {
-            "type": "text/css",
-            "src": "../../../bundles/mapping/time-control-3d/resources/scss/style.scss"
         }],
         "locales": [{
             "lang": "fi",
