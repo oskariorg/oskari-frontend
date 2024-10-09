@@ -73,7 +73,7 @@ class MetadataHandler extends StateHandler {
         });
     }
 
-    _getLayers(uuid) {
+    _getLayers (uuid) {
         if (Oskari.dom.isEmbedded()) {
             return [];
         }
