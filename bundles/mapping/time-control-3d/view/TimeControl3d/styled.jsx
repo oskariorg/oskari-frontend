@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { Button, Slider, Select } from 'oskari-ui';
 import { CalendarOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
-const primaryColor = '#ffd400';
 const thickSlider = 8; // default is 4
 
 export const CalendarIcon = styled(CalendarOutlined)`
@@ -41,21 +40,30 @@ export const StyledInput = styled.input`
     text-align: center;
 `;
 
-export const StyledButton = styled(Button)`
-    background: ${primaryColor};
-    color: #3c3c3c;
-    width: 100%;
-    height: 40px;
-    border: 0;
+const ThemedButton = styled(Button)`
+    background: ${props => props.color};
+    border: none;
     font-size: 16px;
-    font-weight: 500;
+    fill: currentColor;
+
     &:focus,
     &:active,
-    &:hover {
-        background: #ecb900;
-        color: #3c3c3c;
-        border: 0;
+    &&&:hover {
+        background: ${props => props.hover};
+        color: inherit;
+        border: none;
     }
+`;
+
+export const StyledButton = styled(ThemedButton)`
+    width: 100%;
+    height: 40px;
+`;
+
+export const StyledPlayButton = styled(ThemedButton)`
+    padding: 0;
+    height: 42px;
+    width: 40px;
 `;
 
 const StyledSlider = styled(Slider)`
@@ -82,36 +90,35 @@ const StyledSlider = styled(Slider)`
     }
     .ant-slider-rail {
         ${props => props.useThick ? 'height: ' + thickSlider + 'px;' : ''}
-        background: #ffffff;
+        background: #ffffff !important;
     }
     .ant-slider-track {
         ${props => props.useThick ? 'height: ' + thickSlider + 'px;' : ''}
-        background: ${primaryColor};
+        background: ${props => props.color};
     }
     .ant-slider-handle {
+        top: -2px;
         width: 8px;
         height: ${props => props.useThick ? 12 + thickSlider : 16}px;
         border-radius: 6px;
         border: solid 1px #3c3c3c;
-        background-color: ${primaryColor};
-        &:focus,
-        &:active,
-        &:hover {
-            border: solid 1px #3c3c3c !important;
-            background-color: ${primaryColor} !important;
-        }
+        background-color: ${props => props.color} !important;
+
         &:focus .ant-slider-track,
         &:active .ant-slider-track,
         &:hover .ant-slider-track {
-            background: #ecb900 !important;
+            background: ${props => props.hover} !important;
+        }
+        ::after {
+            display: none;
         }
     }
     &:hover .ant-slider-track {
-        background: #ecb900 !important;
+        background: ${props => props.hover} !important;
     }
     &:hover .ant-slider-handle {
         border: solid 1px #3c3c3c !important;
-        background-color: ${primaryColor} !important;
+        background-color: ${props => props.color} !important;
     }
 `;
 
@@ -155,19 +162,3 @@ export const TimeBorder = styled.div(({ isMobile }) => ({
     width: isMobile ? '72%' : '80%',
     padding: isMobile ? '12px 15px 8px 15px' : '20px 15px 4px 15px'
 }));
-
-export const StyledPlayButton = styled(Button)`
-    padding: 0;
-    border: 0;
-    background: ${primaryColor};
-    height: 42px;
-    width: 40px;
-    fill: #3c3c3c;
-    &:focus,
-    &:active,
-    &:hover {
-        background: #ecb900;
-        fill: #3c3c3c;
-        border: 0;
-    }
-`;
