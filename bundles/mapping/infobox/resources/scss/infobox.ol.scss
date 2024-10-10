@@ -75,6 +75,8 @@ div.olPopup {
     overflow: auto/*\0/ !important*/;
     /*height: 400px*//*\0/ !important*/;
     z-index: 16000;
+    /* Reset cursor for popups when map cursor has been set */
+    cursor: auto;
 
     &.center-left {
       margin-left:10px;

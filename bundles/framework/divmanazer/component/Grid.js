@@ -1228,7 +1228,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                     if (Oskari.util.isNumber(value)) {
                         if (decimalCount === -1) {
-                            var fieldValues = _.pluck(me.getDataModel().data, field);
+                            const fieldValues = me.getDataModel().data.map(f => f[field]); // pluck
                             decimalCount = Oskari.util.decimals(fieldValues);
                         }
                         if (fixedCount) {

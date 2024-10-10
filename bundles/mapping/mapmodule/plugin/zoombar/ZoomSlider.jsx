@@ -53,7 +53,8 @@ const StyledSlider = styled(Slider)`
         border-radius: ${props => props.rounding || '0%'};
         width: 14px;
         height: 14px;
-        left: 3px;
+        /*override antd default misalignment*/
+        inset-inline-start: 0px!important;
         &:hover {
             background: ${props => props.handleBackground};
             border: 4px solid ${props => props.handleBorder};
@@ -67,7 +68,14 @@ const StyledSlider = styled(Slider)`
             border: 4px solid ${props => props.handleBorder};
         }
     }
-`;
+    .ant-slider-handle::after, .ant-slider-handle:hover::after {
+        background: none;
+        box-shadow: none !important;
+    }
+    .ant-slider:hover .ant-slider-handle::after {
+        box-shadow: none!important;
+    }
+    `;
 
 const MobileContainer = styled('div')`
     display: flex;

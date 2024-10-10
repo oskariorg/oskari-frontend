@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 /**
  * @class Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel
  *
@@ -53,7 +54,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
         this._templates = {
             // TODO add ifExists type of thing to all of these...
             tabs: {
-                'abstract': _.template(
+                'abstract': template(
                     '<article>' +
                     '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
                     '        <div class="browseGraphic">' +
@@ -79,7 +80,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '</article>'
                 ),
 
-                'jhs': _.template(
+                'jhs': template(
                     '<article>' +
                     '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
                     '        <div class="browseGraphic">' +
@@ -245,7 +246,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '</article>'
                 ),
 
-                'inspire': _.template(
+                'inspire': template(
                     '<article>' +
                     '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
                     '        <div class="browseGraphic">' +
@@ -447,7 +448,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '    <% } %>' +
                     '</article>'
                 ),
-                'quality': _.template(
+                'quality': template(
                     '<article>' +
                     '    <% if (lineageStatements.length) { %>' +
                     '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
@@ -523,12 +524,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '    <% } %> ' +
                     '</article>'
                 ),
-                'actions': _.template(
+                'actions': template(
                     '<article>' +
                     '</article>'
                 )
             },
-            'layerList': _.template(
+            'layerList': template(
                 '<table class="metadataSearchResult">' +
                 '   <tr>' +
                 '       <td>' +
@@ -539,7 +540,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 '   </tr>' +
                 '</table>'
             ),
-            'layerItem': _.template(
+            'layerItem': template(
                 '<li>' +
                 '   <%=Oskari.util.sanitize(layer.getName())%>&nbsp;&nbsp;' +
                 '   <a href="JavaScript:void(0);" class="layerLink">' +
@@ -720,12 +721,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          *   //key is used as the tab's title and must map to a key in localization file
          *   'key' : {
          *     //content as an underscore template, optional
-         *     template: {_.template}
+         *     template: {template}
          *     //a callback to call when tab gets activated. Will take a reference to the panel and get the content asynchronously
          *     tabActivatedCallback: function(panel)
          *   },
          *   'key2': {
-         *     template: {_.template}
+         *     template: {template}
          *     tabActivatedCallback: function(panel)
          *   }
          * }
@@ -740,39 +741,20 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
         },
         addActionLinks: function () {
-            var me = this,
-                locale = me.locale,
-                model = me._model,
-                links,
-                entry;
-            if (!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
-                entry = jQuery('<a /><br/>');
-                entry.html(locale.xml);
-                entry.attr('href', model.metadataURL);
+            if (!this.instance.conf.hideMetadataXMLLink || this.instance.conf.hideMetadataXMLLink !== true) {
+                const entry = jQuery('<a /><br/>');
+                entry.html(this.locale.xml);
+                entry.attr('href', this._model.metadataURL);
                 entry.attr('target', '_blank');
-                links = entry;
+                this._tabs.actions.getContainer().append(entry);
             }
-
-            me.addActions(links);
-        },
-        /**
-         * @method addActions
-         *
-         * set up actions tab content based on conf
-         */
-        addActions: function (links) {
-            var me = this,
-                container = me._tabs['actions'].getContainer();
-            _.each(links, function (link) {
-                container.append(link);
-            });
         },
 
         renderMapLayerList: function () {
             if (!Oskari.dom.isEmbedded()) {
                 var me = this,
                     container = me._tabs['actions'].getContainer(),
-                    layers = me._maplayerService.getLayersByMetadataId(me._model.uuid);
+                    layers = me._maplayerService.getLayersByMetadataId(me._model.fileIdentifier);
 
                 container.find('table.metadataSearchResult').remove();
                 container.append(me._templates['layerList']());
@@ -781,9 +763,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 container.find('h2').html(layerListHeader);
 
                 var layerListElement = container.find('ul.layerList');
-                _.each(layers, function (layer) {
-                    var layerListItem = jQuery(me._templates['layerItem']({
-                        layer: layer,
+                layers.forEach(layer => {
+                    const layerListItem = jQuery(me._templates['layerItem']({
+                        layer,
                         hidden: (!me.isLayerSelected(layer) || !layer.isVisible()),
                         locale: me.locale
                     }));

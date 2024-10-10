@@ -38,6 +38,9 @@ Oskari.registerLocalization(
                     "close": "Stäng"
                 }
             },
+            "BackgroundLayerSelectionPlugin": {
+                "emptyOption": "Inget val"
+            },
             "LayerSelectionPlugin": {
                 "title": "Kartlager",
                 "chooseDefaultBaseLayer": "Välj bakgrundskarta",

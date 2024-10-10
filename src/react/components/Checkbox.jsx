@@ -1,6 +1,6 @@
 import React from 'react';
 import { Checkbox as AntCheckbox } from 'antd';
-import 'antd/es/checkbox/style/index.js';
+
 import styled from 'styled-components';
 
 const StyledCheckbox = styled(AntCheckbox)`
@@ -9,6 +9,7 @@ const StyledCheckbox = styled(AntCheckbox)`
     }
 
     .ant-checkbox {
+        margin-top: auto;
         margin-bottom: auto;
     }
 `;

@@ -66,9 +66,10 @@ Oskari.registerLocalization(
             "toggleCompressedView": "Förtätad vy",
             "selectionTools": {
                 "title": "Markera objekt på kartan",
-                "instructions": " ",
+                "instructions": "Obs! Du kan välja objekter endast från vektorlager.",
                 "selectFromTop": "Välj från topplager",
                 "selectAll": "Välj från alla lagern",
+                "noVectorLayers": "Öppna minst ett vektorlager för att välja objekter.",
                 "link": {
                     "title": "Välj fler funktioner"
                 },

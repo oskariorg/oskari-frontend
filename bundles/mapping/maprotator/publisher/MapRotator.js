@@ -1,4 +1,3 @@
-
 Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
     function () {
     }, {

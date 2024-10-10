@@ -21,6 +21,8 @@ body {
 /* flyout toolbar */
 
 .oskari-root-el > nav {
+    padding-bottom: 35px;
+
     &.show-scroll-icon {
         .scroll-indicator {
             display: flex;
@@ -37,7 +39,6 @@ body {
             opacity: .1;
         }
     }
-    padding-bottom: 35px;
 }
 
 .oskari-flyoutheading {

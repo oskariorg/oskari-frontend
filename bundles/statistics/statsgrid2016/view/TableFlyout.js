@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 /*
  * Creates a flyout with tabs for different ways of visualizing data
  */
@@ -17,7 +18,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.TableFlyout', function (ti
     });
 }, {
     _template: {
-        error: _.template('<div class="datacharts-noactive">${ msg }</div>'),
+        error: template('<div class="datacharts-noactive">${ msg }</div>'),
         container: jQuery('<div></div>')
     },
     setUiElement: function (el) {

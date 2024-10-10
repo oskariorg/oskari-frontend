@@ -10,19 +10,25 @@ Oskari.registerLocalization(
             },
             "flyout": {
                 "title": "Övervakning för kartlager",
-                "totalDisplaysTitle": "Totala vyn",
-                "failurePercentage": "Misslyckade vyn %",
-                "successTitle": "Framgångsrika vyn",
-                "failureTitle": "Misslyckade vyn",
-                "idTitle": "Id",
                 "moveToScale": "Situation",
                 "moveToScaleTooltip": "Öppna kartvy som förorsakade misslyckad funktion.",
                 "backToList": "Återgå till listvyn",
-                "layerDataProvider": "Dataproducent",
                 "sorterTooltip": "Sortera fallande / stigande",
                 "showDetailsTooltip": "Öppna detaljvyn",
                 "editLayerTooltip": "Editera kartlager",
-                "filter": "Filtrera"
+                "removeAllDataForLayer": "Ta bort övervakningsinformationen för kartlagret",
+                "removeSingleDataForLayer": "Ta bort övervakninsinformationen, som är rapporterad av en enskild användare",
+                "filter": "Filtrera",
+                "fields": {
+                    "title": "Namn",
+                    "time": "Tid",
+                    "layerType": "Lagertyp",
+                    "dataProducer": "Dataproducent",
+                    "total": "Totala vyn",
+                    "success": "Framgångsrika vyn",
+                    "errors": "Misslyckade vyn",
+                    "failurePercentage": "Misslyckade vyn %"
+                }
             },
             "messages": {
                 "errorFetchingLayerAnalytics": "Layer analytics couldn't be fetched.",

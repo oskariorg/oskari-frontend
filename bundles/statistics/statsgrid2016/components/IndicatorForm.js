@@ -1,9 +1,11 @@
+import { template } from 'lodash';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (locale) {
     this.locale = locale;
     this.element = null;
 }, {
     __templates: {
-        form: _.template('<form class="stats-indicator-details">' +
+        form: template('<form class="stats-indicator-details">' +
                             // should there be a datasource row here?
                             '   <input class="stats-indicator-form-item" type="text" name="name" placeholder="${name}">' +
                             '   <textarea class="stats-indicator-form-item" name="description" form="stats-user-indicator" placeholder="${description}"></textarea>' +

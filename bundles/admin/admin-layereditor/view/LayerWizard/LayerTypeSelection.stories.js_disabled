@@ -1,10 +1,12 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
+// See .storybook/README.md
+// import { storiesOf } from '@storybook/react';
 import { LayerTypeSelection } from './LayerTypeSelection';
 
 const defaultProps = {
     types: ['WFS', 'WMS', 'WMTS']
 };
+
 storiesOf('LayerTypeSelection', module)
     .add('with text', () => {
         const storyProps = {

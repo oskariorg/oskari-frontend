@@ -1,4 +1,3 @@
-
 import * as olExtent from 'ol/extent';
 import { defaults as olInteractionDefaults } from 'ol/interaction';
 import KeyboardPan from 'ol/interaction/KeyboardPan';
@@ -13,12 +12,13 @@ import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import { easeOut } from 'ol/easing';
 import olMap from 'ol/Map';
-import 'ol/ol.css';
+import { VERSION as olVersion } from 'ol/util.js';
 import { defaults as olControlDefaults } from 'ol/control';
 import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
+import 'ol/ol.css';
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyles, getOlStyleForLayer, setDefaultStyle } from './oskariStyle/generator.ol';
 import { STYLE_TYPE } from './oskariStyle/constants';
@@ -1389,6 +1389,10 @@ export class MapModule extends AbstractMapModule {
             return olGeom;
         }
         return null;
+    }
+
+    getVersion () {
+        return 'OpenLayers/' + olVersion;
     }
     /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
 }

@@ -42,6 +42,9 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterRearrangeSelectedMapL
         getMovedMapLayer: function () {
             return this._movedMapLayer;
         },
+        getMapLayer: function () {
+            return this._movedMapLayer;
+        },
         /**
          * @method getFromPosition
          * @return  {Number} previous position

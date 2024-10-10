@@ -166,10 +166,11 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             }, []);
         },
         _collectResponseMessages: function (responseItems) {
-            var responseArray = [];
+            const responseArray = [];
             jQuery.each(responseItems, function (index) {
-                if (!_.contains(responseArray, responseItems[index].name)) {
-                    responseArray.push(responseItems[index].name);
+                const { name } = responseItems[index];
+                if (name && !responseArray.includes(name)) {
+                    responseArray.push(name);
                 }
             });
             return responseArray;
@@ -431,7 +432,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             for (var i = 0; i < arrayClean.length; i++) {
                 for (var j = 0; j < arrayClean[0].permissions.length; j++) {
                     if (arrayClean[i].permissions[j].allow !== arrayDirty[i].permissions[j].value) {
-                        if (!_.contains(changedvalues, arrayDirty[i])) {
+                        if (!changedvalues.includes(arrayDirty[i])) {
                             changedvalues.push(arrayDirty[i]);
                         }
                     }

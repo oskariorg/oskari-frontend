@@ -1,4 +1,3 @@
-
 module.exports = {
     testEnvironment: 'jsdom',
     setupFilesAfterEnv: [
@@ -10,14 +9,11 @@ module.exports = {
         '\\.(css|less)$': '<rootDir>/tests/jest/styleMock.js',
         '^d3$': '<rootDir>/node_modules/d3/dist/d3.min.js'
     },
-    timers: 'fake',
+    fakeTimers: {
+        enableGlobally: true
+    },
     verbose: true,
     transformIgnorePatterns: [
-        'node_modules/(?!(ol|jsts|geotiff|quick-lru)).+\\.js$'
+        'node_modules/(?!(ol|color-parse|color-space|color-rgba|color-name|antd|rc-util|jsts|geotiff|quick-lru)).+\\.js$'
     ]
-    /*
-    ,transform: {
-        '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/jest/fileTransformer.js'
-    }
-    */
 };

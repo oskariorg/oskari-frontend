@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { sliderTypes, timeUnits } from './util/constants';
 import { getDifferenceCalculator, calculateSvgX } from './util/calculation';
@@ -226,7 +226,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
                         )}
                         {markers.map((mark, index) => {
                             return (
-                                <>
+                                <Fragment key={mark}>
                                     <Marker
                                         key={mark}
                                         transform={`translate(${calcDataPointX(mark, widthUnit, min, 35, calculator)}, -10)`}
@@ -236,7 +236,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
                                         {mark}
                                     </Marker>
                                     <LineMarker key={`line-marker-${index}`} $theme={navigationTheme} width={2} height={3} transform={`translate(${calcDataPointX(mark, widthUnit, min, 2, calculator)}, 0)`} />
-                                </>
+                                </Fragment>
                             )
                         })}
                     </g>

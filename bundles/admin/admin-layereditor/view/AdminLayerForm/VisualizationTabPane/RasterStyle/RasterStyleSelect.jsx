@@ -1,9 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { Message, Option } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
+import { IconButton } from 'oskari-ui/components/buttons';
 import { DefaultStyle, StyleField, StyleSelect, StyledFormField } from '../styled';
 import { GLOBAL_LEGEND } from './helper';
+
+const UnavailableWrapper = styled.div`
+    display: flex;
+    & button {
+        margin-left: 1em;
+    }
+`;
 
 const RasterStyleSelect = ({ selected, styles, defaultName, setSelected, controller, getMessage }) => {
     const isDefaultStyle = name => name === defaultName;
@@ -20,17 +29,24 @@ const RasterStyleSelect = ({ selected, styles, defaultName, setSelected, control
         controller.setStyle(defaultStyle);
     };
 
-    let showInvailable = false;
+    let showUnavailable = false;
     if (styles.length === 0) {
-        showInvailable = true;
+        showUnavailable = true;
     } else if (styles.length === 1 && styles[0].name === GLOBAL_LEGEND) {
-        showInvailable = true;
+        showUnavailable = true;
     }
-
-    if (showInvailable) {
+    if (showUnavailable) {
         return (
             <StyledFormField>
-                <Message messageKey='styles.raster.unavailable'/>
+                <UnavailableWrapper>
+                    <Message messageKey='styles.raster.unavailable'/>
+                    { defaultName &&
+                        <IconButton type='delete'
+                            onClick={() => onDefaultStyleChange(defaultName, false)}
+                            title={<Message messageKey='styles.raster.removeDefault' />}
+                        />
+                    }
+                </UnavailableWrapper>
             </StyledFormField>
         );
     }
