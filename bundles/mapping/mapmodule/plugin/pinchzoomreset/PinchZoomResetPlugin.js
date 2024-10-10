@@ -2,20 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ZoomOutOutlined } from '@ant-design/icons';
 import { MapModuleButton } from '../../MapModuleButton';
-import styled from 'styled-components';
-
-// Icon is too small with defaults (18x18px)
-const StyledButton = styled(MapModuleButton)`
-> span {
-    font-size: 22px;
-    max-height: 22px;
-    max-width: 22px;
-    > svg {
-        max-height: 22px;
-        max-width: 22px;
-    }
-}
-`;
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomReset
@@ -111,10 +97,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
             }
 
             ReactDOM.render(
-                <StyledButton
+                <MapModuleButton
                     className='t_pinchzoom_reset'
                     visible={this.isVisible()}
                     icon={<ZoomOutOutlined />}
+                    iconSize='22px'
                     onClick={() => {
                         this.resetPinchZoom();
                     }}
