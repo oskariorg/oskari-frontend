@@ -39,8 +39,7 @@ class UIHandler extends StateHandler {
                     component: toolComponent.component,
                     handler: toolComponent.handler,
                     publisherTool: tool,
-                    id: tool.getTool().id,
-                    title: tool.getTool().title
+                    ...tool.getTool()
                 }
             ]
         });
