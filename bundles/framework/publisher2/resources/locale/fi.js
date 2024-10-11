@@ -136,6 +136,11 @@ Oskari.registerLocalization(
                 "usereditmode": "Muokkaa asettelua",
                 "usereditmodeoff": "Lopeta muokkaus"
             },
+            "statsgrid": {
+                "label": "Teemakartat",
+                "tooltip": "Näytä tilastotiedot taulukossa kartan yhteydessä."
+            },
+            /* for deprecated statsgrid2016 */
             "data": {
                 "label": "Teemakartat",
                 "tooltip": "Näytä tilastotiedot taulukossa kartan yhteydessä.",

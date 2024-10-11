@@ -136,6 +136,11 @@ Oskari.registerLocalization(
                 "usereditmode": "Starta redigering",
                 "usereditmodeoff": "Sluta redigering"
             },
+            "statsgrid": {
+                "label": "Statistik",
+                "tooltip": "Visa kartstatistik"
+            },
+            /* for deprecated statsgrid2016 */
             "data": {
                 "label": "Statistik",
                 "tooltip": "Visa kartstatistik",

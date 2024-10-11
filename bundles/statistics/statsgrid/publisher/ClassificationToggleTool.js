@@ -3,10 +3,8 @@ import { AbstractStatsPluginTool } from './AbstractStatsPluginTool';
 class ClassificationToggleTool extends AbstractStatsPluginTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
-        this.group = 'data';
+        this.index = 3;
         this.id = 'classification';
-        this.title = 'allowHidingClassification';
     }
 };
 

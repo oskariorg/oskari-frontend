@@ -26,6 +26,17 @@ Oskari.registerLocalization({
                 'title': 'Tilastot'
             }
         },
+        'publisher': {
+            "label": "Teemakartat",
+            "tooltip": "Näytä tilastotiedot taulukossa kartan yhteydessä.",
+            "grid": "Näytä tilastotiedot taulukossa",
+            "allowClassification": "Salli luokittelu",
+            "transparent": "Aseta luokittelun tausta läpinäkyväksi",
+            "diagram": "Näytä pylväsdiagrammi",
+            "classification": "Salli luokittelun piilottaminen",
+            "series": "Salli sarjatoistimen piilottaminen",
+            "statistics": 'Avaa aineistohaku'
+        },
         'panels': {
             'newSearch': {
                 'title': 'AINEISTOHAKU',

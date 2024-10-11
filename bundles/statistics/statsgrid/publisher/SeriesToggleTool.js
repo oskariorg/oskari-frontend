@@ -3,10 +3,8 @@ import { AbstractStatsPluginTool } from './AbstractStatsPluginTool';
 class SeriesToggleTool extends AbstractStatsPluginTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
-        this.group = 'data';
+        this.index = 6;
         this.id = 'series';
-        this.title = 'allowHidingSeriesControl';
     }
 
     isDisplayed (data) {
