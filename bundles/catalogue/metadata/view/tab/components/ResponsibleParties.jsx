@@ -15,7 +15,7 @@ export const ResponsibleParties = ({ source, dataKey }) => {
                     <li key={i}>
                         {party.organisationName}
                         <List>
-                            {party.electronicMailAddresses.map((address, i) => <li key={i}>{address}</li>)}
+                            {party.electronicMailAddresses?.map((address, i) => <li key={i}>{address}</li>)}
                         </List>
                     </li>
                 ))}
