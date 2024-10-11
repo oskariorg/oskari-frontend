@@ -1,23 +1,10 @@
 import { AbstractStatsPluginTool } from './AbstractStatsPluginTool';
-import React from 'react';
-import { Button, Message } from 'oskari-ui';
-import { BUNDLE_KEY } from '../constants';
-
-const Component = ({ controller }) => {
-    return (
-        <Button onClick={() => controller.show('search')}>
-            <Message bundleKey={BUNDLE_KEY} messageKey='tile.search' />;
-        </Button>
-    );
-};
 
 class ClassificationTool extends AbstractStatsPluginTool {
     constructor (...args) {
         super(...args);
         this.index = 1;
-        this.group = 'data';
         this.id = 'allowClassification';
-        this.title = 'allowClassification';
     }
 
     init (data) {
@@ -45,37 +32,6 @@ class ClassificationTool extends AbstractStatsPluginTool {
             return;
         }
         handler.updateClassificationState('editEnabled', true);
-    }
-
-    getComponent () {
-        return {
-            component: Component,
-            handler: this.getViewHandler()
-        };
-    }
-
-    // Classification is always present with thematic maps: either as a button toggle OR always on screen
-    // That is why _this tool_ writes the "main config/state" for embedded map
-    // Other statsgrid tools assume that the state (selected indicators etc) is written by something else and
-    // their getValues() only return a mergeable change that controls their setting
-    getValues () {
-        if (!this._isStatsActive()) {
-            return null;
-        }
-        const { location } = this.getPlugin()?.getConfig() || {};
-        return {
-            configuration: {
-                statsgrid: {
-                    conf: {
-                        allowClassification: this.isEnabled(),
-                        location: location || {
-                            classes: 'bottom right'
-                        }
-                    },
-                    state: this.getSandbox().getStatefulComponents().statsgrid.getState()
-                }
-            }
-        };
     }
 };
 
