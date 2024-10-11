@@ -27,15 +27,8 @@ const StyledSlider = styled(Slider)`
     .ant-slider-track {
         background-color: #0091ff;
     }
-    .ant-slider-handle {
-        border: #0091ff solid 2px;
-        margin-top: -6px;
-    }
     &:hover .ant-slider-track {
         background-color: #003fc3 !important;
-    }
-    &:hover .ant-slider-handle {
-        border: #003fc3 solid 2px !important;
     }
 `;
 
@@ -169,7 +162,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 <StyledColorPicker>
                     <ColorPicker
                         value={buttonBackground}
-                        onChange={(e) => setButtonBackground(e.target.value)}
+                        onChange={setButtonBackground}
                     />
                 </StyledColorPicker>
             </Field>
@@ -178,7 +171,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 <StyledColorPicker>
                     <ColorPicker
                         value={buttonText}
-                        onChange={(e) => setButtonText(e.target.value)}
+                        onChange={setButtonText}
                     />
                 </StyledColorPicker>
             </Field>
@@ -187,7 +180,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 <StyledColorPicker>
                     <ColorPicker
                         value={buttonAccent}
-                        onChange={(e) => setButtonAccent(e.target.value)}
+                        onChange={setButtonAccent}
                     />
                 </StyledColorPicker>
             </Field>
@@ -226,7 +219,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 <StyledColorPicker>
                     <ColorPicker
                         value={popupHeader}
-                        onChange={(e) => setPopupHeader(e.target.value)}
+                        onChange={setPopupHeader}
                     />
                 </StyledColorPicker>
             </Field>
@@ -235,7 +228,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 <StyledColorPicker>
                     <ColorPicker
                         value={popupHeaderText}
-                        onChange={(e) => setPopupHeaderText(e.target.value)}
+                        onChange={setPopupHeaderText}
                     />
                 </StyledColorPicker>
             </Field>

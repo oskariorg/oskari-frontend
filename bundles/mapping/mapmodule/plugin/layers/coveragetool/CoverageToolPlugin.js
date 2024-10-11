@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Message } from 'oskari-ui';
+import { DeleteOutlined } from '@ant-design/icons';
 import { COVERAGE_LAYER_ID, CoverageHelper } from './CoverageHelper';
 import { ThemeProvider } from 'oskari-ui/util';
-// import { MapModuleTextButton } from '../../../MapModuleTextButton';
 import { MapModuleButton } from '../../../MapModuleButton';
-import { IconButton } from 'oskari-ui/components/buttons';
 const FEATURE_EVENT_ADD = 'add';
 const FEATURE_EVENT_REMOVE = 'remove';
 const LOCALIZATION_BUNDLE_ID = 'MapModule';
@@ -62,7 +60,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
                     <MapModuleButton
                         className='t_coveragetoolbutton'
                         visible={this.isVisible()}
-                        icon={<IconButton type={'delete'} title={<Message bundleKey={LOCALIZATION_BUNDLE_ID} messageKey='layerCoverageTool.removeCoverageFromMap'/>}/>}
+                        icon={<DeleteOutlined />}
+                        title={Oskari.getMsg(LOCALIZATION_BUNDLE_ID, 'layerCoverageTool.removeCoverageFromMap')}
                         onClick={() => this._coverageButtonClicked()}
                         iconActive={!!this.popupOpen}
                         position={this.getLocation()}

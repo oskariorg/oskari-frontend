@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 import * as d3 from 'd3';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandbox, locale) {
@@ -7,7 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.seriesService = this.service.getSeriesService();
     this.__templates = {
-        main: _.template(
+        main: template(
             '<div class="statsgrid-series-control-container">' +
                 '<svg class="line-svg">' +
                     '<g class="axis"></g>' +
@@ -20,7 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
                 '<div class="value-controls">' +
                 '</div>' +
             '</div>'),
-        stepper: _.template(
+        stepper: template(
             '<div class="stats-series-stepper">' +
                 '<div class="stats-series-back"></div>' +
                 '<div class="stats-series-playpause"></div>' +

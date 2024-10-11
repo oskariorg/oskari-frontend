@@ -31,7 +31,7 @@ export const ColorSelect = ({
     if (isSimple) {
         return (
             <ColorPicker disabled={disabled} value={value} hideTextInput
-                onChange={evt => handleColorChange(evt.target.value)}
+                onChange={handleColorChange}
             />
         );
     }

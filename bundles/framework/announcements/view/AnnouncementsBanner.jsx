@@ -37,9 +37,6 @@ const InfoIcon = styled(InfoCircleOutlined)`
 `;
 
 const StyledCheckbox = styled(Checkbox)`
-    margin-left: 10px;
-    margin-bottom: 10px;
-
 `;
 
 const StyledTitle = styled.span`
@@ -56,6 +53,7 @@ const InfoContainer = styled.div`
     display: flex;
     flex-direction: row;
     color: ${props => props.textColor ? props.textColor : DEFAULT_GREY_TEXT};
+    align-items: center;
 `;
 
 const Row = styled.div`
@@ -63,6 +61,10 @@ const Row = styled.div`
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
+`;
+
+const AlignCenter = styled.div`
+margin: auto 0;
 `;
 
 const Margin = styled.div`
@@ -117,7 +119,7 @@ const ThemedNotificationContent = ThemeConsumer(({ theme, state, link, content, 
         </InfoContainer>
         <Margin/>
         { isMobile && <Row>{pagingSection}</Row> }
-        { !isMobile && <Column style={{ whiteSpace: 'nowrap' }}>{pagingSection}</Column> }
+        { !isMobile && <Column><AlignCenter>{pagingSection}</AlignCenter></Column> }
     </>;
 });
 
