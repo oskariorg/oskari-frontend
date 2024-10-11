@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Message } from 'oskari-ui';
 import { BUNDLE_KEY } from '../constants';
 import { AbstractStatsPluginTool } from './AbstractStatsPluginTool';
@@ -8,6 +9,9 @@ const Component = ({ controller }) => (
         <Message bundleKey={BUNDLE_KEY} messageKey='publisher.statistics' />
     </Button>
 );
+Component.propTypes = {
+    controller: PropTypes.object.isRequired
+};
 
 class StatisticsTool extends AbstractStatsPluginTool {
     constructor (...args) {
