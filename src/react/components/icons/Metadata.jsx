@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
 
-
 const StyledMetadataIcon = styled(InfoCircleOutlined)`
     cursor: pointer;
     color: #0290ff;
@@ -20,7 +19,7 @@ const StyledMetadataIcon = styled(InfoCircleOutlined)`
  * @param {Number} metadataId Metadata ID
  * @param {Number} size Font size in pixels
  * @param {Object} style Additional styles
- * @returns 
+ * @returns
  */
 export const Metadata = ThemeConsumer(({ theme = {}, metadataId, layerId, size = 16, style }) => {
     if (!metadataId || !Oskari.getSandbox().hasHandler('catalogue.ShowMetadataRequest')) return null;
@@ -31,8 +30,8 @@ export const Metadata = ThemeConsumer(({ theme = {}, metadataId, layerId, size =
 
     const onClick = () => {
         Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
-            { layerId:layerId }
-    ]);
+            { layerId }
+        ]);
     };
 
     return (
