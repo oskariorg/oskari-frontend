@@ -1,10 +1,10 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import JoditEditor from 'jodit-react';
 
 export const RichEditor = (props) => {
     const editor = useRef(null);
-    const [content, setContent] = useState('');
+    const content = props.value || '';
     const config = useMemo(
         () => ({
             language: Oskari.getLang(),
@@ -22,20 +22,17 @@ export const RichEditor = (props) => {
                 'redo'],
             readonly: false, // all options from https://xdsoft.net/jodit/docs/,
             toolbarAdaptive: false,
+            // Init field with empty placeholder
+            // TODO: use some placeholder by lang?
+            // would require localizations on oskariui loc bundle/key
             placeholder: ''
         }),
-        [props.value]
+        [Oskari.getLang()]
+        // Never really changes, but might change if we add placeholders AND lang is changed
     );
-
-    useEffect(() => {
-        if (props.value !== undefined) {
-            setContent(props.value);
-        }
-    }, []);
 
     function onBlur (newContent) {
         props.onChange({ target: { value: newContent } });
-        setContent(newContent);
     }
 
     return (
