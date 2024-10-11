@@ -106,7 +106,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
                 dataIndex: 'permissions',
                 render: (permissions, item) => {
                     const tooltip = <span>{roleName}: <Message messageKey={`rights.${permission.type}`} defaultMsg={permission.name} /></span>;
-                    const stored = permissions[selectedRole]?.includes(permission.type);
+                    const stored = permissions[selectedRole]?.includes(permission.type) || false;
                     const modified = unSavedChanges[item.id]?.includes(permission.type);
                     const checked = (typeof modified === 'boolean' ? modified : stored) || false;
                     const isModified = typeof modified === 'boolean' && stored !== modified;

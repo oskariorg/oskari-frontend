@@ -66,7 +66,7 @@ class UIHandler extends StateHandler {
 
     getUpdatedPermissions (id, type, enabled) {
         const { resources, selectedRole, unSavedChanges } = this.getState();
-        const current = unSavedChanges[id] || resources.find(p => p.id === id)?.permissions?.[selectedRole];
+        const current = unSavedChanges[id] || resources.find(p => p.id === id)?.permissions?.[selectedRole] || [];
         if (!current) {
             return;
         }
