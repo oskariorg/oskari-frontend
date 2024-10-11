@@ -131,11 +131,12 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
             columns={columnSettings}
             dataSource={dataSource}
             pagination={{
-                defaultPageSize: pagination.pageSize,
+                pageSize: pagination.pageSize,
                 hideOnSinglePage: true,
                 simple: true,
+                showSizeChanger: false,
                 current: pagination.page,
-                onChange: (page) => controller.setPage(page)
+                onChange: (page, pageSize) => controller.setPagination({ page, pageSize })
             }}
             scroll={{ y: 500 }}
             loading={loading}

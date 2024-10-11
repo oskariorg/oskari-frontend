@@ -78,14 +78,8 @@ class UIHandler extends StateHandler {
         this.updateState({ unSavedChanges: { ...this.getState().unSavedChanges, [id]: permissions } });
     }
 
-    setPage (page) {
-        const { pagination } = this.getState();
-        this.updateState({
-            pagination: {
-                ...pagination,
-                page
-            }
-        });
+    setPagination (pagination) {
+        this.updateState({ pagination });
     }
 
     search (searchText) {
@@ -257,7 +251,7 @@ const wrapped = controllerMixin(UIHandler, [
     'togglePermission',
     'savePermissions',
     'setCheckAllForPermission',
-    'setPage',
+    'setPagination',
     'search',
     'clearSearch',
     'resetTable',
