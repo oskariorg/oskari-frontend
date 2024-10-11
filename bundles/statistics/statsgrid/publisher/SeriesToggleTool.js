@@ -4,9 +4,7 @@ class SeriesToggleTool extends AbstractStatsPluginTool {
     constructor (...args) {
         super(...args);
         this.index = 6;
-        this.group = 'data';
         this.id = 'series';
-        this.title = 'allowHidingSeriesControl';
     }
 
     isDisplayed (data) {

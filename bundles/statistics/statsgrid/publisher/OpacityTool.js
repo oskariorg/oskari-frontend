@@ -4,9 +4,7 @@ class OpacityTool extends AbstractStatsPluginTool {
     constructor (...args) {
         super(...args);
         this.index = 2;
-        this.group = 'data';
         this.id = 'transparent';
-        this.title = 'transparent';
         this.pluginId = 'Oskari.statistics.statsgrid.ClassificationPlugin';
     }
 

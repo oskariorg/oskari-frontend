@@ -4,9 +4,7 @@ class DiagramTool extends AbstractStatsPluginTool {
     constructor (...args) {
         super(...args);
         this.index = 5;
-        this.group = 'data';
         this.id = 'diagram';
-        this.title = 'displayDiagram';
     }
 };
 

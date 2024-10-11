@@ -4,9 +4,7 @@ class ClassificationToggleTool extends AbstractStatsPluginTool {
     constructor (...args) {
         super(...args);
         this.index = 3;
-        this.group = 'data';
         this.id = 'classification';
-        this.title = 'allowHidingClassification';
     }
 };
 
