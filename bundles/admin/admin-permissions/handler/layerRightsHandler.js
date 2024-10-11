@@ -13,7 +13,7 @@ class UIHandler extends StateHandler {
             filtered: null,
             selectedRole: null,
             loading: false,
-            unSavedChanges: {}, // [{id, roleId, permissions}] || {[id]: permissions }
+            unSavedChanges: {}, // {[id]: [permissions] }
             pagination: {
                 pageSize: 20,
                 page: 1
