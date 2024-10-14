@@ -54,7 +54,7 @@ export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
                     <Message messageKey={'layer.styles.title'} LabelComponent={Label} />
                 )}
                 <Col>
-                    <InputGroup compact>
+                    <InputGroup>
                         {!editStyle && (
                             <StyledSelect
                                 value={currentStyle.getName()}
