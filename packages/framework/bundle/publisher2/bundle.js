@@ -135,7 +135,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/tools/LogoTool.js"
+            "src": "./../../../bundles/mapping/mapmodule/plugin/logo/publisher/LogoTool.js"
         },
         {
             "type": "text/javascript",
