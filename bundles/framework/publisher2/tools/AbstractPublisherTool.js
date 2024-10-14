@@ -38,6 +38,11 @@ export class AbstractPublisherTool {
         };
     }
 
+    // override when the tool has a component / handler
+    getComponent () {
+        return {};
+    };
+
     // deprecated - new (React based) tools should use getTool().title instead
     getTitle () {
         const toolTitle = this.getTool().title;
