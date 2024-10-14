@@ -39,6 +39,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadata.MetadataBundleInstance',
             Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.registerForEventByName(this, p));
 
             this._setupLayerTools();
+            const { current } = this.state || {};
+            if (current) {
+                const metadata = Array.isArray(current) ? current[0] : current;
+                this.showMetadata(metadata);
+            }
         },
         /**
          * Fetches reference to the map layer service
