@@ -6,8 +6,8 @@ const ALERT = 'message';
 const SUCCESS = 'success';
 const INFO = 'info';
 const LOADING = 'loading';
-const WARN = 'warn';
-const WARNING = 'warn';
+const WARN = 'warning';
+const WARNING = 'warning';
 const ERROR = 'error';
 
 const getBroker = (options = {}) => {
@@ -64,7 +64,7 @@ const validate = (options) => {
  * The options object for Messaging.
  * @typedef {Object} Messaging~Options
  * @property {string} [type] - Message type. One of ('notification'|'message').
- * @property {string} [level] - Message level. One of ('success'|'info'|'loading'|'warn'|'error').
+ * @property {string} [level] - Message level. One of ('success'|'info'|'loading'|'warning'|'error').
  * @property {ReactNode} content - Content for the message.
  * @property {string} [key] - Message identifier.
  * @property {number} [duration] - Duration for auto-closing. Null means no auto-closing.
@@ -141,11 +141,11 @@ class Messaging {
     }
     /** @param {Messaging~Options} options */
     warn (options) {
-        this.open({ ...validate(options), level: WARN });
+        this.warning(options);
     }
     /** @param {Messaging~Options} options */
     warning (options) {
-        this.warn(options);
+        this.open({ ...validate(options), level: WARNING });
     }
     /** @param {Messaging~Options} options */
     error (options) {
@@ -157,7 +157,7 @@ class Messaging {
     }
     /** @param {string} key */
     close (key) {
-        notification.close(key);
+        notification.destroy(key);
     }
     destroy () {
         notification.destroy();
@@ -183,8 +183,8 @@ Object.defineProperty(Messaging, 'TYPE', {
  * @property {string} SUCCESS Message with success icon.
  * @property {string} INFO Message with info icon.
  * @property {string} LOADING Message with warning loading icon. Only valid for ALERT and MESSAGE types.
- * @property {string} WARN Message with warning icon.
- * @property {string} WARNING Alias for WARN.
+ * @property {string} WARN Alias for WARNING.
+ * @property {string} WARNING Message with warning icon.
  * @property {string} ERROR Message with error icon.
  * @memberof Messaging
  **/
