@@ -28,7 +28,7 @@ export const OpacitySlider = ({ value, onChange }) => {
     }, [value]);
     const isMobile = Oskari.util.isMobile();
     return (
-        <InputGroup compact>
+        <InputGroup>
             <Container $isMobile={isMobile}>
                 <Opacity bordered defaultValue={sliderValue} onChange={instantValueChange} inputOnly={isMobile} />
             </Container>
