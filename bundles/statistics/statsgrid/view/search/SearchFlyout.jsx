@@ -68,7 +68,7 @@ const SearchFlyout = ({ state, controller }) => {
         // Nothing to show -> show generic "data missing" message
         return (<b><Message messageKey='errors.indicatorListError' /></b>);
     }
-    const singleIndicatorSelected = state.selectedIndicators?.length === 1;
+    const singleIndicatorSelected = state.selectedIndicators.length === 1;
     const multipleRegionsetsAvailable = regionsets.length > 1;
     const multipleDatasourcesAvailable = datasources.length > 1;
     const Component = (
@@ -92,7 +92,7 @@ const SearchFlyout = ({ state, controller }) => {
                         optionFilterProp='label'
                         options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
                         placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
-                        value={state?.regionsetFilter}
+                        value={state.regionsetFilter}
                         onChange={(value) => controller.setRegionsetFilter(value)}
                     />
                 </Field>
@@ -103,7 +103,7 @@ const SearchFlyout = ({ state, controller }) => {
                     <StyledSelect
                         options={datasources.map(ds => ({ value: ds.id, label: ds.name, disabled: state.disabledDatasources.includes(ds.id) }))}
                         placeholder={<Message messageKey='panels.newSearch.selectDatasourcePlaceholder' />}
-                        value={state?.selectedDatasource}
+                        value={state.selectedDatasource}
                         onChange={(value) => controller.setSelectedDatasource(value)}
                     />
                 </Field>
@@ -114,11 +114,12 @@ const SearchFlyout = ({ state, controller }) => {
                         <b><Message messageKey='panels.newSearch.indicatorTitle' /></b>
                         <StyledSelect
                             mode='multiple'
+                            loading={!state.complete}
                             optionFilterProp='label'
-                            options={state?.indicatorOptions?.map(i => ({ value: i.id, label: i.name, disabled: !!i.disabled }))}
+                            options={state.indicatorOptions.map(i => ({ value: i.id, label: i.name, disabled: !!i.disabled }))}
                             placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
-                            disabled={!state?.indicatorOptions || state?.indicatorOptions?.length < 1}
-                            value={state?.selectedIndicators}
+                            disabled={!state.indicatorOptions.length}
+                            value={state.selectedIndicators}
                             onChange={(value) => controller.setSelectedIndicators(value)}
                         />
                     </IndicatorField>
@@ -132,8 +133,8 @@ const SearchFlyout = ({ state, controller }) => {
             )}
             <b><Message messageKey='panels.newSearch.refineSearchLabel' /></b>
             <IndicatorParams
+                { ...state }
                 allRegionsets={regionsets}
-                state={state}
                 controller={controller}/>
             <ButtonContainer>
                 <SecondaryButton

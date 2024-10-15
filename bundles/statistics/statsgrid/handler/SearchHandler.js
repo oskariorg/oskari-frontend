@@ -35,7 +35,8 @@ class SearchController extends AsyncStateHandler {
             indicatorOptions: ds && isReset ? this.getState().indicatorOptions : [],
             indicatorParams: {}, // selectors, selected, selections
             isUserDatasource: ds ? ds.type === 'user' : false,
-            loading: false
+            loading: false, // flyout is disabled while loading
+            complete: true // to show that more indicators will be loaded
         };
     }
 
@@ -77,7 +78,9 @@ class SearchController extends AsyncStateHandler {
                     const { indicators = [], complete = false } = response;
                     this.updateState({
                         indicatorOptions: this.validateIndicatorList(indicators),
-                        loading: !complete
+                        // set loading false if we got got some indicators or empty list on complete
+                        loading: indicators.length === 0 && !complete,
+                        complete
                     });
                     if (complete && !isUserDatasource && !indicators.length) {
                         // show notification about empty indicator list for non-myindicators datasource
@@ -87,13 +90,14 @@ class SearchController extends AsyncStateHandler {
                 error => {
                     const errorMsg = this.loc('errors')[error] || this.loc('errors.indicatorListError');
                     Messaging.error(errorMsg);
-                    this.updateState({ loading: false });
+                    this.updateState({ loading: false, complete: true });
                 });
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorListError'));
             this.updateState({
                 indicatorOptions: [],
-                loading: false
+                loading: false,
+                complete: true
             });
         }
     }
