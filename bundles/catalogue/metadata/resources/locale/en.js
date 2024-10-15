@@ -44,7 +44,7 @@ Oskari.registerLocalization({
                 "errorStatistic": "Error statistic",
                 "value": "Value"
             },
-            "heading": {
+            "label": {
                 "layerList": "Map layers",
                 "abstractTextData": "Abstract text (data)",
                 "abstractTextService": "Abstract text (service)",
