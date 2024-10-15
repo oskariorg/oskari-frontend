@@ -1,5 +1,5 @@
 import { Form as AntForm } from 'antd';
-import 'antd/es/form/style/index.js';
+
 import styled from 'styled-components';
 
 export const FormItem = styled(AntForm.Item)`

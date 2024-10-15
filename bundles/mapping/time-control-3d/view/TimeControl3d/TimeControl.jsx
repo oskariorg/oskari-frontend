@@ -5,8 +5,7 @@ import { SpeedSelect } from './SpeedSelect';
 import { Input } from './Input';
 import { TimeSlider } from './TimeSlider';
 
-export const TimeControl = props => {
-    const { isMobile, changeHandler, timeValue, sliderTimeValue, playing, playHandler, speedHandler, speed } = props;
+export const TimeControl = ({ isMobile, changeHandler, timeValue, sliderTimeValue, playing, playHandler, speedHandler, speed }) => {
     if (isMobile) {
         return (
             <div>

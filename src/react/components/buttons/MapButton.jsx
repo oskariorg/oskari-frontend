@@ -12,8 +12,8 @@ import styled from 'styled-components';
 // One option would be to trigger a blur() on the component when active changes to non-active.
 // That way tab-focusing would work really nice if we don't force the button to "inactive colors"
 const StyledButton = styled(Button)`
-    width: ${props => props.size};
-    height: ${props => props.size};
+    width: ${props => props.size} !important;
+    height: ${props => props.size} !important;
     > * {
         font-size: ${props => props.$iconSize};
     }
@@ -22,55 +22,78 @@ const StyledButton = styled(Button)`
     ${(props) => props.rounding && `border-radius: ${props.rounding};`}
     border-radius: ${props => props.rounding};
     color: ${props => props.$active ? props.hover : props.iconcolor};
-    fill: ${props => props.$active ? props.hover : props.iconcolor};
-    path {
-        fill: ${props => props.$active ? props.hover : props.iconcolor};
-    }
     background: ${props => props.bg};
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
     display: flex;
     align-items: center;
     justify-content: center;
-    svg {
-        max-width: ${props => props.$iconSize};
-        max-height: ${props => props.$iconSize};
-    }
-    &:hover
-    {
-        color: ${props => props.hover};
-        background: ${props => props.bg};
-        path {
-            fill: ${props => props.hover};
-        }
+    &:hover {
+        color: ${props => props.hover} !important;
+        background: ${props => props.bg}  !important;
     }
     &:focus,
-    &:active
-    {
-        color: ${props => props.$active ? props.hover : props.iconcolor};
-        background: ${props => props.bg};
+    &:active {
+        color: ${props => props.$active ? props.hover : props.iconcolor} !important;
+        background: ${props => props.bg} !important;
+    }
+`;
+const FilledButton = styled(StyledButton)`
+    fill: ${props => props.$active ? props.hover : props.iconcolor};
+    path {
+        fill: ${props => props.$active ? props.hover : props.iconcolor};
+    }
+    &:hover,
+    &:focus,
+    &:active {
+        path {
+            fill: ${props => props.hover} !important;
+        }
     }
 `;
 
-const ThemeButton = ThemeConsumer(({ theme = {}, active, icon, ...rest }) => {
+const StrokedButton = styled(StyledButton)`
+    fill: none !important;
+    path {
+        fill: none !important;
+        stroke: ${props => props.$active ? props.hover : props.iconcolor};
+    }
+    line {
+        stroke: ${props => props.hover};
+    }
+    &:focus,
+    &:active,
+    &:hover {
+        path {
+            fill: none !important;
+            stroke: ${props => props.hover};
+        }
+    }
+`
+
+
+const ThemeButton = ThemeConsumer(({ theme = {}, active, highlight='fill', icon, iconSize = '18px', size = '32px', ...rest }) => {
     const helper = getNavigationTheme(theme);
     const bgColor = helper.getButtonColor();
     const iconColor = helper.getTextColor();
     const hover = helper.getButtonHoverColor();
     const rounding = helper.getButtonRoundness();
     const opacity = helper.getButtonOpacity();
-    return <StyledButton
+    const ButtonNode = highlight === 'fill' ? FilledButton : StrokedButton;
+    const style = { fontSize: iconSize };
+    return <ButtonNode
         bg={bgColor}
         iconcolor={iconColor}
         hover={hover}
         rounding={rounding}
         opacity={opacity}
         $active={active}
-        icon={React.cloneElement(icon, { active })}
-        { ...rest }
-    />
+        icon={React.cloneElement(icon, { active, style })}
+        size={size}
+        $iconSize={iconSize}
+        { ...rest }/>
 });
 
-export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, iconSize = '18px', children, position, ...rest }) => {
+export const MapButton = ({ title, iconActive, position, ...rest }) => {
     let tooltipPosition = 'top';
     if (position && position.includes('right')) {
         tooltipPosition = 'left';
@@ -82,12 +105,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
         return (
             <Tooltip title={title} placement={tooltipPosition}>
                     <ThemeButton
-                        icon={icon}
-                        onClick={onClick}
-                        size={size}
                         active={iconActive ? 1 : 0}
-                        $iconSize={iconSize}
-                        disabled={disabled}
                         { ...rest }
                     />
             </Tooltip>
@@ -95,12 +113,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
     } else {
         return (
                 <ThemeButton
-                    icon={icon}
-                    onClick={onClick}
-                    size={size}
                     active={iconActive ? 1 : 0}
-                    $iconSize={iconSize}
-                    disabled={disabled}
                     { ...rest }
                 />
         );

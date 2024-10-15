@@ -38,6 +38,9 @@ Oskari.registerLocalization(
                     "close": "Sulje"
                 }
             },
+            "BackgroundLayerSelectionPlugin": {
+                "emptyOption": "Ei valintaa"
+            },
             "LayerSelectionPlugin": {
                 "title": "Karttatasot",
                 "chooseDefaultBaseLayer": "Valitse taustakartta",

@@ -26,6 +26,17 @@ Oskari.registerLocalization({
                 'title': 'Tilastot'
             }
         },
+        'publisher': {
+            "label": "Teemakartat",
+            "tooltip": "Näytä tilastotiedot taulukossa kartan yhteydessä.",
+            "grid": "Näytä tilastotiedot taulukossa",
+            "allowClassification": "Salli luokittelu",
+            "transparent": "Aseta luokittelun tausta läpinäkyväksi",
+            "diagram": "Näytä pylväsdiagrammi",
+            "classification": "Salli luokittelun piilottaminen",
+            "series": "Salli sarjatoistimen piilottaminen",
+            "statistics": 'Avaa aineistohaku'
+        },
         'panels': {
             'newSearch': {
                 'title': 'AINEISTOHAKU',
@@ -168,6 +179,7 @@ Oskari.registerLocalization({
             'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
             'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.',
             'myIndicatorDatasource': 'Tietolähde on tyhjä.',
+            'myIndicatorNoData': 'Aineiston arvoja ei ole annettu.',
             'myIndicatorInvalidData': 'Aineistossa on virheellisiä arvoja.',
             'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana',
             'noDataForIndicators': 'Palvelusta ei saatu tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}',

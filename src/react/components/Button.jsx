@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button as AntButton } from 'antd';
-import 'antd/es/button/style/index.js';
 
 export const Button = ({ children, className, loading = false, ...other }) => {
     let modifiedClass = className || '';

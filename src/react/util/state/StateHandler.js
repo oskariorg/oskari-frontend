@@ -77,13 +77,6 @@ export class StateHandler {
      * @private
      */
     notify () {
-        if (this.timeout) {
-            clearTimeout(this.timeout);
-        }
-        // This allows multiple small state updates to be run one after another before re-rendering is triggered
-        this.timeout = setTimeout(() => {
-            this.stateListeners.forEach(consumer => consumer(this.getState()));
-            this.timeout = null;
-        }, 10);
+        this.stateListeners.forEach(consumer => consumer(this.getState()));
     }
 }

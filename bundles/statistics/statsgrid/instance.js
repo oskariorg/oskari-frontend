@@ -21,6 +21,7 @@ import './publisher/ClassificationToggleTool.js';
 import './publisher/OpacityTool.js';
 import './publisher/DiagramTool.js';
 import './publisher/SeriesToggleTool.js';
+import './publisher/StatisticsTool.js';
 
 /**
  * @class Oskari.statistics.statsgrid.StatsGridBundleInstance
@@ -215,7 +216,7 @@ Oskari.clazz.define(
                     return;
                 }
                 const opacity = evt.getMapLayer().getOpacity();
-                this.getViewHandler().updateLayer('opacity', opacity);
+                this.getStateHandler().onLayerOpacityChange(opacity);
             },
             'FeatureEvent': function (event) {
                 if (event.getParams().operation !== 'click' || !event.hasFeatures() || !this.stateHandler) {

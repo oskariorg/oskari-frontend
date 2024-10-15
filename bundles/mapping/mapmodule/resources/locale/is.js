@@ -39,6 +39,9 @@ Oskari.registerLocalization(
                     "close": "Loka"
                 }
             },
+            "BackgroundLayerSelectionPlugin": {
+                "emptyOption": "Ekkert valið"
+            },
             "LayerSelectionPlugin": {
                 "title": "Kortalög",
                 "chooseDefaultBaseLayer": "Veldu kortalag fyrir bakgrunninn",

@@ -27,6 +27,15 @@ Oskari.registerLocalization(
                 "title": "Statistiques"
             }
         },
+        'publisher': {
+            "label": "Cartes thématiques",
+            "tooltip": "Afficher les cartes thématiques sur la carte.",
+            "grid": "Afficher les données thématiques dans le tableau",
+            "allowClassification": "Permettre la classification",
+            "transparent": "Établir l'arrière-plan transparent de la classification",
+            "diagram": "Afficher les schémas",
+            "statistics": "Données de recherche"
+        },
         "panels": {
             "newSearch": {
                 "title": "DONNÉES DE RECHERCHE",

@@ -2,20 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ZoomOutOutlined } from '@ant-design/icons';
 import { MapModuleButton } from '../../MapModuleButton';
-import styled from 'styled-components';
-
-// Icon is too small with defaults (18x18px)
-const StyledButton = styled(MapModuleButton)`
-> span {
-    font-size: 22px;
-    max-height: 22px;
-    max-width: 22px;
-    > svg {
-        max-height: 22px;
-        max-width: 22px;
-    }
-}
-`;
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomReset
@@ -30,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
      *
      */
     function () {
-        var me = this;
+        const me = this;
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetPlugin';
         me._defaultLocation = 'top center';
@@ -43,9 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
         me._templates = {
             plugin: jQuery('<div class="mapplugin pinchzoomresetcontainer"></div>')
         };
-
-        window.visualViewport.addEventListener('resize', () => this.reposition());
-        window.visualViewport.addEventListener('scroll', () => this.reposition());
+        // store to keep reference to function to allow removing
+        this.handler = () => this.reposition();
     },
     {
         /**
@@ -65,6 +50,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
          * @return {Boolean} true if page is zoomed in
          */
         reposition: function () {
+            const jQueryElement = this.getElement();
+            if (!jQueryElement) {
+                return;
+            }
             if (!this.isZoomedIn()) {
                 this.setVisible(false);
                 this.refresh();
@@ -75,7 +64,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
                 this.setVisible(true);
                 this.refresh();
             }
-            const jQueryElement = this.getElement();
             jQueryElement.css('position', 'fixed');
             jQueryElement.css('top', window.visualViewport.offsetTop + 'px');
             jQueryElement.css('left', window.visualViewport.width / 2 + window.visualViewport.offsetLeft + 'px');
@@ -96,9 +84,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
         _startPluginImpl: function () {
             this.setElement(this._createControlElement());
             this.addToPluginContainer(this.getElement());
+            this._setEventListeners(true);
             this.refresh();
             if (this.isVisible()) {
                 this.reposition();
+            }
+        },
+        _setEventListeners: function (enabled) {
+            if (enabled) {
+                window.visualViewport.addEventListener('resize', this.handler);
+                window.visualViewport.addEventListener('scroll', this.handler);
+            } else {
+                window.visualViewport.removeEventListener('resize', this.handler);
+                window.visualViewport.removeEventListener('scroll', this.handler);
             }
         },
         /**
@@ -111,10 +109,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
             }
 
             ReactDOM.render(
-                <StyledButton
+                <MapModuleButton
                     className='t_pinchzoom_reset'
                     visible={this.isVisible()}
                     icon={<ZoomOutOutlined />}
+                    iconSize='22px'
                     onClick={() => {
                         this.resetPinchZoom();
                     }}
@@ -132,6 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
          */
         _stopPluginImpl: function (sandbox) {
             this.removeFromPluginContainer(this.getElement());
+            this._setEventListeners(false);
         },
         isVisible: function () {
             return Oskari.util.isMobile() && this._isVisible;

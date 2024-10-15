@@ -223,20 +223,6 @@ class MapsHandler extends StateHandler {
         }
     }
 
-    showOnMap (data) {
-        const srs = data.state.mapfull.state.srs;
-        const supported = this.isCurrentProjectionSupportedForView(data);
-        if (!supported) {
-            this.createProjectionChangeDialog(() => {
-                window.location.href = this.constructUrlWithUuid(srs, null, data);
-            });
-        } else {
-            this.setMapState(data, false, () => {
-                this.setMapState(data, true);
-            });
-        }
-    }
-
     editRequestSender (data) {
         const sandbox = Oskari.getSandbox();
         const publishMapEditorRequestBuilder = Oskari.requestBuilder(
@@ -257,26 +243,6 @@ class MapsHandler extends StateHandler {
             );
             sandbox.request(this.instance.getName(), closeFlyoutRequest);
         }
-    }
-
-    setMapState (data, forced, confirmCallback) {
-        const sandbox = this.instance.getSandbox();
-        const setStateRequestBuilder = Oskari.requestBuilder(
-            'StateHandler.SetStateRequest'
-        );
-        // error handling: check if the layers referenced in view are
-        // loaded
-        const resp = this.viewService.isViewLayersLoaded(data, sandbox);
-        if (resp.status || forced === true) {
-            if (setStateRequestBuilder) {
-                const req = setStateRequestBuilder(data.state);
-                req.setCurrentViewId(data.id);
-                sandbox.request(this.instance, req);
-                return true;
-            }
-            return false;
-        }
-        this.confirmSetState(confirmCallback, resp.msg === 'missing');
     }
 
     createEventHandlers () {
@@ -303,7 +269,6 @@ const wrapped = controllerMixin(MapsHandler, [
     'deleteView',
     'editView',
     'setPublished',
-    'showOnMap',
     'showHtml'
 ]);
 

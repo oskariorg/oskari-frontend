@@ -4,31 +4,35 @@ Oskari.registerLocalization(
     "key": "admin-permissions",
     "value": {
         "title": "Droits sur la couche",
-        "desc": "NON TRADUIT",
+        "desc": "",
         "tile": {
             "title": "Droits sur la couche cartographique"
         },
         "flyout": {
-            "title": "Droits sur la couche cartographique",
-            "message": "Gestion des droits sur les couches cartographiques"
+            "title": "Gestion des droits sur les couches cartographiques",
+            "name": "Couche cartographique"
         },
-        "rights": {
-            "name": "Couche cartographique",
-            "PUBLISH": "Publier",
-            "VIEW_LAYER": "Visualiser",
-            "DOWNLOAD": "Téléchargement",
-            "VIEW_PUBLISHED": "Voir dans la carte intégrée",
+        "permissions": {
+            "type": {
+                "PUBLISH": "Publier",
+                "VIEW_LAYER": "Visualiser",
+                "DOWNLOAD": "Téléchargement",
+                "VIEW_PUBLISHED": "Voir dans la carte intégrée"
+            },
             "success": {
-                "title": "Droits sur la couche enregistrés",
-                "message": "Les droits sur la couche cartographiques ont été mis à jour"
+                "save": "Les droits sur la couche cartographiques ont été mis à jour"
             },
             "error": {
-                "title": "Erreur",
-                "message": "Les droits sur la couche cartographiques n'ont pu être mis à jour"
-            },
-            "selectValue": "Sélectionner la valeur"
+                "fetch": "Erreur",
+                "save": "Les droits sur la couche cartographiques n'ont pu être mis à jour"
+            }
         },
-        "save": "Enregistrer",
-        "selectRole": "Role"
+        "roles": {
+            "title": "Role",
+            "placeholder": "Sélectionner la valeur",
+            "error": {
+                "fetch": "Erreur",
+            }
+        }
     }
 });

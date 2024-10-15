@@ -5,7 +5,7 @@ import olStyleCircle from 'ol/style/Circle';
 import olStyleIcon from 'ol/style/Icon';
 import olStyleText from 'ol/style/Text';
 
-import { LINE_DASH, LINE_JOIN, EFFECT, FILL_STYLE, STYLE_TYPE, PATTERN_STROKE } from './constants';
+import { LINE_DASH, LINE_JOIN, FILL_STYLE, STYLE_TYPE, PATTERN_STROKE } from './constants';
 import { filterOptionalStyle, getOptionalStyleFilter } from './filter';
 
 const log = Oskari.log('MapModule.util.style');
@@ -315,7 +315,7 @@ const getFillStyle = styleDef => {
     if (!color) {
         return new olStyleFill({ color: TRANSPARENT });
     }
-    color = getColorEffect(styleDef.effect, color) || color;
+    color = Oskari.util.getColorEffect(color, styleDef.effect);
 
     if (Oskari.util.keyExists(styleDef, 'fill.area.pattern')) {
         const pattern = getFillPattern(styleDef.fill.area.pattern, color);
@@ -411,7 +411,7 @@ const getStrokeStyle = styleDef => {
     if (width === 0) {
         return null;
     }
-    stroke.color = color ? getColorEffect(effect, color) || color : TRANSPARENT;
+    stroke.color = color ? Oskari.util.getColorEffect(color, effect) : TRANSPARENT;
     if (width) {
         stroke.width = width;
     }
@@ -467,7 +467,7 @@ const getImageStyle = (mapModule, styleDef, requestedStyle) => {
     const opacity = styleDef.image.opacity || 1;
     // Oskari marker
     if (!isNaN(styleDef.image.shape)) {
-        const effect = getColorEffect(styleDef.effect, styleDef.image.fill?.color);
+        const effect = Oskari.util.getColorEffect(styleDef.image.fill?.color, styleDef.effect);
         const imageDef = { ...styleDef.image };
         if (effect) {
             imageDef.fill = { color: effect };
@@ -500,7 +500,7 @@ const getImageStyle = (mapModule, styleDef, requestedStyle) => {
     styleDef.image.size = size;
 
     let fillColor = styleDef.image.fill ? styleDef.image.fill.color : undefined;
-    fillColor = getColorEffect(styleDef.effect, fillColor) || fillColor;
+    fillColor = Oskari.util.getColorEffect(fillColor, styleDef.effect);
 
     if (mapModule.isSvg(styleDef.image)) {
         styleDef.image.color = fillColor;
@@ -597,7 +597,7 @@ const getTextStyle = styleDef => {
     }
     if (fill && fill.color) {
         text.fill = new olStyleFill({
-            color: getColorEffect(styleDef.effect, fill.color) || fill.color
+            color: Oskari.util.getColorEffect(fill.color, styleDef.effect)
         });
     }
     if (stroke) {
@@ -611,34 +611,4 @@ const getTextStyle = styleDef => {
         }
     }
     return new olStyleText(text);
-};
-
-/**
- * @method getColorEffect
- * @param {String} effect Oskari style constant
- * @param {String} color Color to apply the effect on
- * @return {String} Affected color or undefined if effect or color is missing
- */
-const getColorEffect = (effect, color) => {
-    if (!effect || !color || effect === EFFECT.NONE) {
-        return;
-    }
-    const minor = 60;
-    const normal = 90;
-    const major = 120;
-    const getEffect = (delta, auto) => Oskari.util.alterBrightness(color, delta, auto);
-    switch (effect) {
-    case EFFECT.AUTO : return getEffect(normal, true);
-    case EFFECT.AUTO_MINOR : return getEffect(minor, true);
-    case EFFECT.AUTO_NORMAL : return getEffect(normal, true);
-    case EFFECT.AUTO_MAJOR : return getEffect(major, true);
-    case EFFECT.DARKEN : return getEffect(-normal);
-    case EFFECT.DARKEN_MINOR : return getEffect(-minor);
-    case EFFECT.DARKEN_NORMAL : return getEffect(-normal);
-    case EFFECT.DARKEN_MAJOR : return getEffect(-major);
-    case EFFECT.LIGHTEN : return getEffect(normal);
-    case EFFECT.LIGHTEN_MINOR : return getEffect(minor);
-    case EFFECT.LIGHTEN_NORMAL : return getEffect(normal);
-    case EFFECT.LIGHTEN_MAJOR : return getEffect(major);
-    }
 };

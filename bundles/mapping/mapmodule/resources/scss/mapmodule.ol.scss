@@ -103,6 +103,7 @@ div.olMap {
     left: 0;
     display: flex;
     flex-wrap: wrap;
+    pointer-events: none;
 }
 
 div.mapplugins {
@@ -205,7 +206,7 @@ div.mapplugins {
 
                 .mapplugin {
                     display: inline-block;
-                    margin: 0 $pluginMargin / 2;
+                    margin: 0 calc($pluginMargin / 2);
 
                     &.search {
                         text-align: center;

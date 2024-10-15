@@ -10,21 +10,25 @@ Oskari.registerLocalization(
             },
             "flyout": {
                 "title": "Tasoseuranta",
-                "totalDisplaysTitle": "Näytöt yhteensä",
-                "failurePercentage": "Virheelliset näytöt %",
-                "successTitle": "Onnistuneet näytöt",
-                "failureTitle": "Virheelliset näytöt",
-                "idTitle": "Nimi",
                 "moveToScale": "Tilanne",
                 "moveToScaleTooltip": "Avaa karttanäkymä jossa virhetilanne syntyi.",
                 "backToList": "Paluu listausnäkymään",
-                "layerDataProvider": "Tiedontuottaja",
                 "sorterTooltip": "Järjestä laskevasti/nousevasti",
                 "showDetailsTooltip": "Avaa yksityiskohtaiset tiedot",
                 "editLayerTooltip": "Muokkaa tasoa",
                 "removeAllDataForLayer": "Poista tason kaikki seurantatiedot",
                 "removeSingleDataForLayer": "Poista yksittäisen käyttäjän raportoimat seurantatiedot",
-                "filter": "Suodata"
+                "filter": "Suodata",
+                "fields": {
+                    "title": "Nimi",
+                    "time": "Aika",
+                    "layerType": "Tason tyyppi",
+                    "dataProducer": "Tiedontuottaja",
+                    "total": "Näytöt yhteensä",
+                    "success": "Onnistuneet näytöt",
+                    "errors": "Virheelliset näytöt",
+                    "failurePercentage": "Virheelliset näytöt %"
+                }
             },
             "messages": {
                 "errorFetchingLayerAnalytics": "Tason analytiikka tietoja ei voitu hakea.",

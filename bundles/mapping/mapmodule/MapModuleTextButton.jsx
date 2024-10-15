@@ -5,7 +5,7 @@ import { Button } from 'oskari-ui';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const BUTTON_WIDTH = 150;
+export const BUTTON_WIDTH = 150;
 const StyledButton = styled(Button)`
     height: 28px;
     min-width: ${props => props.$minWidth}px;
@@ -25,21 +25,21 @@ const StyledButton = styled(Button)`
     path {
         fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
     }
-    &:hover {
+    &&&:hover {
         color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
         path {
             fill: ${props => props.$hoverColor};
         }
     }
-    &:active {
+    &&&:active {
         color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
         path {
             fill: ${props => props.$active ? props.$hoverColor : props.$iconColor};
         }
     }
-    &:focus {
+    &&&:focus {
         color: ${props => props.$hoverColor};
         background: ${props => props.$backgroundColor};
         path {

@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 import { SelectList } from './SelectList';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, id, label, values, options) {
@@ -14,8 +15,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, 
     this._createUI();
 }, {
     __templates: {
-        main: _.template('<div class="parameter margintop"><div class="clear"></div></div>'),
-        select: _.template('<div class="label">${label}</div>')
+        main: template('<div class="parameter margintop"><div class="clear"></div></div>'),
+        select: template('<div class="label">${label}</div>')
     },
     getId: function () {
         return this.id;

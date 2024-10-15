@@ -244,9 +244,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
                     }
                 }
             }
+
             tool.setCallback(function () {
                 me.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
-                    uuid: layer.getMetadataIdentifier()
+                    layerId: layer.getId()
                 },
                 additionalUuids
                 ]);

@@ -38,6 +38,9 @@ Oskari.registerLocalization(
                     "close": "Close"
                 }
             },
+            "BackgroundLayerSelectionPlugin": {
+                "emptyOption": "No selection"
+            },
             "LayerSelectionPlugin": {
                 "title": "Map layers",
                 "chooseDefaultBaseLayer": "Select background map",

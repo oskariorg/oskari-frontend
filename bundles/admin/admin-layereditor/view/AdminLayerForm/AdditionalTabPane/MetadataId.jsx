@@ -16,12 +16,12 @@ export const MetadataId = ({ layer, controller }) => {
             <InfoIcon title={<Message messageKey='metadata.desc'/>} />
             <Border>
                 <StyledFormField>
-                    <ServiceMetadata capabilities={layer.capabilities} controller={controller} hasHandler={hasHandler} />
+                    <ServiceMetadata capabilities={layer.capabilities} controller={controller} hasHandler={hasHandler} layerId={layer.id} />
                 </StyledFormField>
                 <StyledFormField>
                     <Message messageKey='metadata.overridden'/>
                     {renderButton &&
-                        <MetadataButton onClick={() => controller.showLayerMetadata(layer.metadataid)}/>
+                        <MetadataButton onClick={() => controller.showLayerMetadata(layer.isNew ? layer.metadataid : layer.id)}/>
                     }
                     <TextInput
                         value={layer.metadataid}

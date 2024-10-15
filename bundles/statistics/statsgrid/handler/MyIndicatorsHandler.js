@@ -1,8 +1,8 @@
-import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { AsyncStateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { populateIndicatorOptions } from './SearchIndicatorOptionsHelper';
 import { deleteIndicator } from './IndicatorHelper';
 
-class IndicatorsHandler extends StateHandler {
+class IndicatorsHandler extends AsyncStateHandler {
     constructor (instance, formHandler, userDsId) {
         super();
         this.instance = instance;

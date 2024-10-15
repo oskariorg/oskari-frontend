@@ -43,9 +43,9 @@ This will produce optimized files for production under `dist/devapp/servlet/`. T
 
 Note: The version number given for the build command needs to match the client version (`oskari.client.version`) in Oskari-server `oskari-ext.properties`.
 
-Special case: If on your production server your application index.jsp location is mapped to something else than the root (eg. `http://yourdomain.com/my-oskari-app/`), but the assets are mapped relative to the root (eg. `http://yourdomain.com/Oskari/dist/...`), you need to add the build parameter `--env.absolutePublicPath=true` like this:
+Special case: If on your production server your application index.jsp location is mapped to something else than the root (eg. `http://yourdomain.com/my-oskari-app/`), but the assets are mapped relative to the root (eg. `http://yourdomain.com/Oskari/dist/...`), you need to add the build parameter `--env absolutePublicPath=true` like this:
 
-    npm run build -- --env.absolutePublicPath=true
+    npm run build -- --env absolutePublicPath=true
 
 ## Customizing Oskari
 

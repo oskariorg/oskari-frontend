@@ -1,4 +1,3 @@
-
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { LayerListHandler } from './LayerList';
 import { SelectedLayersHandler } from './SelectedLayers';

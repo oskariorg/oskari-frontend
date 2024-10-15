@@ -1,4 +1,4 @@
-import { getHash, getHashForIndicator, getDataProviderKey, populateData, populateSeriesData } from '../helper/StatisticsHelper';
+import { getHash, getDataProviderKey, populateData, populateSeriesData } from '../helper/StatisticsHelper';
 import { updateIndicatorListInCache, removeIndicatorFromCache } from './SearchIndicatorOptionsHelper';
 import { getRegionsAsync } from '../helper/RegionsHelper';
 import { BUNDLE_KEY } from '../constants';
@@ -9,7 +9,8 @@ const indicatorMetadataStore = {};
 const indicatorDataStore = {};
 const getMetaCacheKey = (datasourceId, indicatorId) => 'ds_' + datasourceId + '_ind_' + indicatorId;
 const getDataCacheKey = (indicator, regionsetId) => {
-    const hash = indicator.hash || getHashForIndicator(indicator);
+    // Don't use series for hash because every time is stored separately
+    const hash = getHash(indicator.ds, indicator.id, indicator.selections);
     return 'hash_' + hash + '_rs_' + regionsetId;
 };
 
@@ -146,14 +147,18 @@ export const getDataForIndicator = async (indicator, regionset) => {
         for (let i = 0; i < values.length; i++) {
             const value = values[i];
             const selections = { ...indicator.selections, [id]: value };
-            const rawData = await getIndicatorData({ ...indicator, selections }, regionset);
-            // TODO: noData
+            let rawData = {};
+            try {
+                rawData = await getIndicatorData({ ...indicator, selections }, regionset);
+            } catch (ignored) {}
             dataBySelection[value] = rawData;
         }
         data = populateSeriesData(dataBySelection, regions, regionset, fractionDigits);
     } else {
-        const rawData = await getIndicatorData(indicator, regionset);
-        // TODO: noData
+        let rawData = {};
+        try {
+            rawData = await getIndicatorData(indicator, regionset);
+        } catch (ignored) {}
         data = populateData(rawData, regions, regionset, fractionDigits);
     }
     return data;
@@ -271,7 +276,6 @@ export const saveIndicatorData = async (indicator, data, regionsetId) => {
         // Flush cache as update is implemented only for quest user
         removeIndicatorFromCache({ ds: indicator.ds });
         flushIndicatorMetadataCache(indicator);
-        return;
     } catch (error) {
         throw new Error('Error saving data to server');
     }
@@ -324,7 +328,6 @@ export const deleteIndicator = async (indicator, regionsetId) => {
         flushDataCache();
         // Flush caches as update is implemented only for quest user
         removeIndicatorFromCache({ ds: indicator.ds });
-        return;
     } catch (error) {
         throw new Error('Error on server');
     }

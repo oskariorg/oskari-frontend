@@ -15,23 +15,20 @@ const StyledTable = styled(Table)`
     overflow-y: scroll;
 `;
 
-export const StatisticalData = ({ state, controller }) => {
+export const StatisticalData = ({ data, controller }) => {
+    const { regions = [], labels = {} } = data;
     const columnSettings = [
         {
             dataIndex: 'name',
             align: 'left',
             width: 250,
-            title: () => {
-                return <span><Message messageKey='parameters.regionset' />: {state.formData?.labels[state.selectedDataset?.regionset]}</span>
-            }
+            title: <span><Message messageKey='parameters.regionset' />: {labels.regionset}</span>
         },
         {
             dataIndex: 'value',
             align: 'left',
             width: 125,
-            title: () => {
-                return <span><Message messageKey='parameters.year' />: {state.selectedDataset?.year}</span>
-            },
+            title: <span><Message messageKey='parameters.year' />: {labels.year}</span>,
             render: (title, item) => {
                 return (
                     <TextInput
@@ -47,7 +44,7 @@ export const StatisticalData = ({ state, controller }) => {
         <Content>
             <StyledTable
                 columns={columnSettings}
-                dataSource={state.formData?.regions?.map(region => ({
+                dataSource={regions.map(region => ({
                     key: region.id,
                     ...region
                 }))}

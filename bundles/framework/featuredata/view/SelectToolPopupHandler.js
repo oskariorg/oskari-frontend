@@ -1,83 +1,108 @@
-import { FilterSelector } from '../FilterSelector';
 import { SELECTION_SERVICE_CLASSNAME } from '../plugin/FeatureDataPluginHandler';
 import { FEATUREDATA_BUNDLE_ID } from './FeatureDataContainer';
 import { showSelectToolPopup } from './SelectToolPopup';
+import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
+import { getFeatureId } from '../../../mapping/mapmodule/util/vectorfeatures';
 
 export const DRAW_REQUEST_ID = 'FeatureData.featureselection';
-const DRAW_MODES = {
-    point: 'point',
-    line: 'line',
-    polygon: 'polygon',
-    square: 'square',
-    circle: 'circle'
-};
+export const DRAW_TOOLS = ['point', 'line', 'polygon', 'square', 'circle'];
+export const SELECT_ALL_ID = -1;
 
-const DRAW_REQUEST_TOOLS = {
+const DRAW_REQUEST = {
     point: 'Point',
     line: 'LineString',
     polygon: 'Polygon',
     square: 'Square',
     circle: 'Circle'
 };
+const DRAW_OPTIONS = {
+    allowMultipleDrawing: 'single'
+};
 
-export class SelectToolPopupHandler {
+class SelectToolPopupHandler extends StateHandler {
     constructor (instance) {
-        this.buttons = {
-            point: {
-                iconCls: 'selection-point',
-                name: DRAW_MODES.point,
-                tooltip: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectionTools.tools.point.tooltip'),
-                sticky: false,
-                callback: start => this.selectToolHandler(DRAW_MODES.point, start)
-            },
-            line: {
-                iconCls: 'selection-line',
-                name: DRAW_MODES.line,
-                tooltip: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectionTools.tools.line.tooltip'),
-                sticky: false,
-                callback: start => this.selectToolHandler(DRAW_MODES.line, start)
-            },
-            polygon: {
-                iconCls: 'selection-area',
-                name: DRAW_MODES.polygon,
-                tooltip: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectionTools.tools.polygon.tooltip'),
-                sticky: false,
-                callback: start => this.selectToolHandler(DRAW_MODES.polygon, start)
-            },
-            square: {
-                iconCls: 'selection-square',
-                name: DRAW_MODES.square,
-                tooltip: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectionTools.tools.square.tooltip'),
-                sticky: false,
-                callback: start => this.selectToolHandler(DRAW_MODES.square, start)
-            },
-            circle: {
-                iconCls: 'selection-circle',
-                name: DRAW_MODES.circle,
-                tooltip: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectionTools.tools.circle.tooltip'),
-                sticky: false,
-                callback: start => this.selectToolHandler(DRAW_MODES.circle, start)
-            }
-        };
-
+        super();
         this.instance = instance;
-        this.selectFromAllLayers = false;
-        this.selectionService = this.instance.getMapModule().getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
-        const featureQueryFn = (geojson, opts) => this.instance.getMapModule().getVectorFeatures(geojson, opts);
-        this.filterSelector = new FilterSelector(featureQueryFn, this.selectionService);
+        this.selectionService = null;
+        this.selectionPopup = null;
+        this.setState(this.initState());
+        this.eventHandlers = this.createEventHandlers();
+        this.addStateListener(state => this.onStateUpdate(state));
     }
 
-    selectToolHandler (drawMode, startDrawing) {
-        if (startDrawing) {
-            this.selectedTool = drawMode;
-            this.startDrawing({ drawMode });
+    getName () {
+        return 'SelectToolPopupHandler';
+    }
+
+    initState () {
+        const vectorLayers = this.getVectorLayers();
+        return {
+            layerId: this.getTopLayerId(vectorLayers),
+            tool: null,
+            vectorLayers
+        };
+    }
+
+    getTopLayerId (vectorLayers) {
+        return vectorLayers[vectorLayers.length - 1]?.getId();
+    }
+
+    createEventHandlers () {
+        const onMapLayerEvent = evt => {
+            if (!evt.getMapLayer().hasFeatureData()) {
+                return;
+            }
+            const { layerId: current } = this.getState();
+            const vectorLayers = this.getVectorLayers();
+            const layerId = current === SELECT_ALL_ID ? current : this.getTopLayerId(vectorLayers);
+            this.updateState({ vectorLayers, layerId });
+        };
+        const handlers = {
+            AfterMapLayerAddEvent: onMapLayerEvent,
+            AfterMapLayerRemoveEvent: onMapLayerEvent,
+            MapLayerVisibilityChangedEvent: onMapLayerEvent,
+            AfterRearrangeSelectedMapLayerEvent: onMapLayerEvent,
+            DrawingEvent: evt => {
+                if (!evt.getIsFinished() || !this.selectionPopup || DRAW_REQUEST_ID !== evt.getId()) {
+                    // only interested in finished own drawings when active
+                    return;
+                }
+                this.onFinishedDrawing(evt.getGeoJson().features[0]);
+            }
+        };
+        const sb = this.instance.getSandbox();
+        Object.getOwnPropertyNames(handlers).forEach(p => sb.registerForEventByName(this, p));
+        return handlers;
+    }
+
+    onEvent (event) {
+        const handler = this.eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+        return handler.apply(this, [event]);
+    }
+
+    getVectorLayers () {
+        return this.instance.getSandbox()
+            .findAllSelectedMapLayers()
+            .filter(layer => layer.isVisible() && layer.hasFeatureData());
+    }
+
+    setTool (newTool) {
+        const { tool: current, vectorLayers } = this.getState();
+        if (!vectorLayers.length) {
+            // tools are disabled
+            return;
+        }
+        // toggle if already selected
+        const tool = current === newTool ? null : newTool;
+        if (tool) {
+            this.startDrawing(tool);
         } else {
-            this.selectedTool = null;
             this.stopDrawing();
         }
-        if (this.selectionPopup) {
-            this.selectionPopup.update(this.selectedTool, this.isSelectFromAllLayers());
-        }
+        this.updateState({ tool });
     }
 
     clearSelectionPopup (resetTool = true) {
@@ -92,25 +117,14 @@ export class SelectToolPopupHandler {
         }
         this.stopDrawing();
         this.selectionPopup = null;
+        this.updateState(this.initState());
     }
 
-    setSelectFromAllLayers (selectFromAll) {
-        this.selectFromAllLayers = selectFromAll;
-        this.selectionPopup.update(this.selectedTool, this.isSelectFromAllLayers());
+    setLayerId (layerId) {
+        this.updateState({ layerId });
     }
 
-    isSelectFromAllLayers () {
-        return this.selectFromAllLayers;
-    }
-
-    /*
-        "Plugin"
-    */
-    startDrawing (params) {
-        this.toggleControl(params.drawMode);
-    }
-
-    clearDrawing () {
+    stopDrawing () {
         this.instance.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [
             DRAW_REQUEST_ID,
             true,
@@ -118,39 +132,18 @@ export class SelectToolPopupHandler {
         ]);
     }
 
-    /**
-     * @method stopDrawing
-     * Disables all draw controls and
-     * clears the layer of any drawn features
-     */
-    stopDrawing (keepDrawMode = false) {
-        this.clearDrawing();
-        // disable all draw controls
-        this.toggleControl(null, keepDrawMode);
+    startDrawing (tool) {
+        this.instance.getSandbox().postRequestByName('DrawTools.StartDrawingRequest', [
+            DRAW_REQUEST_ID,
+            DRAW_REQUEST[tool],
+            DRAW_OPTIONS
+        ]);
     }
 
-    /**
-     * @method toggleControl
-     * Enables the given draw control
-     * Disables all the other draw controls
-     * @param {String} drawMode draw control to activate (if undefined, disables all
-     * controls)
-     */
-    toggleControl (drawMode, keepDrawMode = false) {
-        if (keepDrawMode && !drawMode) {
-            // keep previous draw mode active
-        } else {
-            this.currentDrawMode = drawMode;
-        }
-
-        Object.keys(DRAW_MODES).forEach((key) => {
-            if (this.currentDrawMode === key) {
-                this.instance.getSandbox().postRequestByName('DrawTools.StartDrawingRequest', [
-                    DRAW_REQUEST_ID,
-                    DRAW_REQUEST_TOOLS[this.currentDrawMode]
-                ]);
-            }
-        });
+    clearFinishedDrawing () {
+        const { tool } = this.getState();
+        this.stopDrawing();
+        this.startDrawing(tool);
     }
 
     getSelectionService () {
@@ -160,38 +153,62 @@ export class SelectToolPopupHandler {
         return this.selectionService;
     }
 
-    removeAllFeatureSelections () {
-        const service = this.getSelectionService();
-        if (!service) {
-            return;
-        }
-        service.removeSelection();
+    clearSelections () {
+        this.getSelectionService()?.removeSelection();
     }
 
-    selectWithGeometry (filterFeature = {}) {
-        const layers = this.filterSelector.getLayersToQuery(
-            this.instance.getSandbox().findAllSelectedMapLayers(),
-            this.isSelectFromAllLayers());
-        this.filterSelector.selectWithGeometry(filterFeature, layers);
-        this.stopDrawing(true);
+    onFinishedDrawing (feature) {
+        const { geometry } = feature || {};
+        if (!geometry) {
+            return;
+        }
+
+        const { layerId, vectorLayerIds } = this.getState();
+        const layers = layerId === SELECT_ALL_ID ? vectorLayerIds : [layerId];
+        const { error, ...layerData } = this.instance.getMapModule().getVectorFeatures({ geometry }, { layers });
+        const selectionService = this.getSelectionService();
+        if (error || !selectionService) {
+            Oskari.log(this.getName()).warn('Error querying features:', error || 'failed to get selection service');
+            return;
+        }
+        Object.keys(layerData).forEach(layerId => {
+            const fids = layerData[layerId]?.features.map(getFeatureId) || [];
+            selectionService.setSelectedFeatureIds(layerId, fids);
+        });
+
+        this.clearFinishedDrawing();
+    }
+
+    onStateUpdate (state) {
+        if (this.selectionPopup) {
+            this.selectionPopup.update(state);
+        }
     }
 
     /**
      * @method showSelectionTools
      * Handles tool button click -> opens selection tool dialog
      */
-    showSelectionTools () {
-        if (this.selectionPopup) return;
-        this.selectionPopup = showSelectToolPopup(
-            this.selectedTool,
-            this.isSelectFromAllLayers(),
-            this.buttons,
-            () => this.removeAllFeatureSelections(),
-            (selectFromAll) => this.setSelectFromAllLayers(selectFromAll),
-            () => this.clearSelectionPopup()
-        );
+    showSelectionPopup () {
+        if (this.selectionPopup) {
+            return;
+        }
+        if (!this.getVectorLayers().length) {
+            Messaging.warn(Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectionTools.noVectorLayers'));
+        } else {
+            // Set default draw mode active
+            this.setTool(DRAW_TOOLS[0]);
+        }
 
-        // Set default draw mode active
-        this.selectToolHandler(DRAW_MODES.point, true);
+        const onClose = () => this.clearSelectionPopup();
+        this.selectionPopup = showSelectToolPopup(this.getState(), this.getController(), onClose);
     }
 }
+
+const wrapped = controllerMixin(SelectToolPopupHandler, [
+    'setTool',
+    'setLayerId',
+    'clearSelections'
+]);
+
+export { wrapped as SelectToolPopupHandler };

@@ -94,17 +94,13 @@ export const populateIndicatorOptions = async (datasourceId, successCallback, er
 
     try {
         const response = await populateIndicatorListFromServer(datasourceId, successCallback);
-        const value = {
-            // always signal complete when we are done with retries, even if server returned !complete
-            complete: true,
-            indicators: response.indicators || []
-        };
         if (response.complete) {
             // cache result if complete
             // this allows the server to continue processing and return updated list when available
-            indicatorListPerDatasource[cacheKey] = value;
+            indicatorListPerDatasource[cacheKey] = response;
         }
-        successCallback(value);
+        // always signal complete when we are done with retries, even if server returned !complete
+        successCallback({ ...response, complete: true });
     } catch (error) {
         if (typeof errorCallback === 'function') {
             errorCallback('indicatorListError');
@@ -145,6 +141,10 @@ export const validateSelectionsForSearch = (state) => {
 /*
 ------------------ INTERNAL HELPERS ------------------------
 */
+const filterDuplicates = (indicators = []) => {
+    const ids = new Set();
+    return indicators.filter(({ id }) => ids.has(id) ? false : ids.add(id));
+};
 
 const RETRY_LIMIT = 5;
 const populateIndicatorListFromServer = async (datasourceId, successCallback, retryCount = RETRY_LIMIT, previousResult = {}) => {
@@ -193,7 +193,11 @@ const getIndicatorListFromServer = async (datasourceId) => {
         if (!response.ok) {
             throw new Error(response.statusText);
         }
-        return await response.json();
+        const { indicators, ...rest } = await response.json();
+        return {
+            ...rest,
+            indicators: filterDuplicates(indicators)
+        };
     } catch (error) {
         throw new Error(error);
     }

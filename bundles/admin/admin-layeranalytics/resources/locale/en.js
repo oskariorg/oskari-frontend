@@ -10,21 +10,25 @@ Oskari.registerLocalization(
             },
             "flyout": {
                 "title": "Layer monitor",
-                "totalDisplaysTitle": "Total displays",
-                "failurePercentage": "Failed displays %",
-                "successTitle": "Successes",
-                "failureTitle": "Failures",
-                "idTitle": "Id",
                 "moveToScale": "Situation",
                 "moveToScaleTooltip": "Open the map view in which the problem occured.",
                 "backToList": "Back to list",
-                "layerDataProvider": "Dataprovider",
                 "sorterTooltip": "Click to sort descending/ascending",
                 "showDetailsTooltip": "Open detailed view",
                 "editLayerTooltip": "Edit layer",
                 "removeAllDataForLayer": "Remove all tracking data for layer",
                 "removeSingleDataForLayer": "Remove tracking data from single user report",
-                "filter": "Filter"
+                "filter": "Filter",
+                "fields": {
+                    "title": "Name",
+                    "time": "Time",
+                    "layerType": "Layer type",
+                    "dataProducer": "Dataprovider",
+                    "total": "Total displays",
+                    "success": "Successes",
+                    "errors": "Failures",
+                    "failurePercentage": "Failed displays %"
+                }
             },
             "messages": {
                 "errorFetchingLayerAnalytics": "Layer monitor data couldn't be fetched.",

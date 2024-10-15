@@ -1,3 +1,4 @@
+import { bind } from 'lodash';
 import { FeatureDataHandler, DEFAULT_PROPERTY_LABELS, DEFAULT_HIDDEN_FIELDS, ID_FIELD } from './view/FeatureDataHandler';
 /**
  * @class Oskari.mapframework.bundle.featuredata2.Flyout
@@ -270,12 +271,12 @@ Oskari.clazz.define(
                 );
 
                 me.filterDialog.createFilterDialog(layer, prevJson, function () {
-                    me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
+                    me.service._returnAnalysisOfTypeAggregate(bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
                 });
             } else {
                 me.filterDialog.createFilterDialog(layer);
             }
-            me.filterDialog.setCloseButtonHandler(_.bind(me.turnOnClickOff, me));
+            me.filterDialog.setCloseButtonHandler(bind(me.turnOnClickOff, me));
         },
 
         // function gives value to addLinkToAggregateValues (true/false)

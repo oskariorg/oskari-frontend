@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../mapmodule/MapModuleButton';
-import { LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { TimeControl3d, TimeControl3dHandler } from '../view';
 import { ControlIcon } from '../view/icons';
 import { getNavigationTheme } from 'oskari-ui/theme';
@@ -106,11 +106,11 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
 
     _createUI (forced) {
-        let el;
-        el = this._createControlElement();
+        const el = this._createControlElement();
         this.addToPluginContainer(el);
         this.refresh();
     }
+
     _createControlElement () {
         const el = this._mountPoint.clone();
         this._element = el;
@@ -125,6 +125,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             popup.close(true);
         }
     }
+
     refresh () {
         const el = this.getElement();
         if (!el) {
@@ -135,7 +136,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             <MapModuleButton
                 className='t_timecontrol'
                 title={this.loc('tooltip')}
-                icon={<ControlIcon isMobile={this._isMobile} controlIsActive={this.isOpen()} />}
+                icon={<ControlIcon />}
                 onClick={() => this._toggleToolState()}
                 iconActive={this.isOpen()}
             />,
@@ -147,10 +148,11 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         const popupContent = this._popupTemplate.clone();
         ReactDOM.render(
             <LocaleProvider value={{ bundleKey: 'TimeControl3d' }}>
-                <TimeControl3d {... this.stateHandler.getState()}
-                    controller={this.stateHandler.getController()}
-                    isMobile = {Oskari.util.isMobile()}
-                />
+                <ThemeProvider>
+                    <TimeControl3d {... this.stateHandler.getState()}
+                        controller={this.stateHandler.getController()}
+                        isMobile = {Oskari.util.isMobile()} />
+                </ThemeProvider>
             </LocaleProvider>,
             popupContent.get(0));
         this._popupContent = popupContent;

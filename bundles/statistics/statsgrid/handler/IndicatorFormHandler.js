@@ -26,6 +26,12 @@ class IndicatorFormController extends StateHandler {
         this.reset();
         await this.preparePopupData({ ds, id });
         this.instance.getViewHandler().show('indicatorForm');
+        if (!id && !Oskari.user().isLoggedIn()) {
+            Messaging.warn({
+                duration: 10,
+                content: this.loc('userIndicators.notLoggedInWarning')
+            });
+        }
     }
 
     showClipboardPopup () {
@@ -59,10 +65,10 @@ class IndicatorFormController extends StateHandler {
             datasets: null,
             datasetYear: '',
             datasetRegionset: null,
-            selectedDataset: null,
             formData: {}
         };
     }
+
     reset () {
         this.updateState(this.getInitState());
     }
@@ -154,13 +160,15 @@ class IndicatorFormController extends StateHandler {
 
     async showDataTable () {
         const indicator = this.getSelectedIndicator();
-        const regionsetId = this.getState().datasetRegionset;
+        const { datasetRegionset: regionsetId, datasetYear } = this.getState();
         this.updateState({
             loading: true
         });
         const { name } = getRegionsets().find(rs => rs.id === regionsetId) || {};
-        const labels = {};
-        labels[regionsetId] = name;
+        const labels = {
+            regionset: name,
+            year: datasetYear
+        };
         let regions;
         try {
             regions = await getRegionsAsync(regionsetId);
@@ -181,8 +189,6 @@ class IndicatorFormController extends StateHandler {
             });
             this.updateState({
                 loading: false,
-                selectedDataset: data,
-                datasetRegionset: regionsetId,
                 formData: {
                     regions: formRegions,
                     labels
@@ -197,7 +203,6 @@ class IndicatorFormController extends StateHandler {
     cancelForm () {
         this.updateState({
             loading: false,
-            selectedDataset: null,
             datasetYear: '',
             datasetRegionset: null,
             formData: {}
@@ -253,6 +258,13 @@ class IndicatorFormController extends StateHandler {
         this.instance.getSearchHandler()?.onCacheUpdate({ datasourceId, indicator });
     }
 
+    selectIndicator (dataset) {
+        const selections = { [SELECTOR]: dataset[SELECTOR] };
+        const indicator = { ...this.getSelectedIndicator(), selections };
+        indicator.hash = getHashForIndicator(indicator);
+        this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, dataset.regionset);
+    }
+
     selectSavedIndicator (indicator, regionset) {
         this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, regionset);
     }
@@ -282,8 +294,9 @@ class IndicatorFormController extends StateHandler {
 
         const formData = this.getState().formData.regions;
         validRows.forEach(row => {
+            const area = row.name.toLowerCase();
             formData.forEach((data, index) => {
-                if (data.name.toLowerCase() === row.name.toLowerCase()) {
+                if (data.name.toLowerCase() === area || data.id === area) {
                     formData[index].value = row.value;
                 }
             });
@@ -295,6 +308,7 @@ class IndicatorFormController extends StateHandler {
             }
         });
     }
+
     editDataset (item = {}) {
         const datasetYear = item[SELECTOR];
         const datasetRegionset = item.regionset;
@@ -333,10 +347,10 @@ const wrapped = controllerMixin(IndicatorFormController, [
     'showClipboardPopup',
     'saveForm',
     'importFromClipboard',
-    'setClipboardValue',
     'editDataset',
     'showIndicatorPopup',
-    'deleteDataset'
+    'deleteDataset',
+    'selectIndicator'
 ]);
 
 export { wrapped as IndicatorFormHandler };

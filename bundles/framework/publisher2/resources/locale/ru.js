@@ -116,6 +116,11 @@ Oskari.registerLocalization(
                 "usereditmode": "Начать редактирование",
                 "usereditmodeoff": "Закончить редактирование"
             },
+            "statsgrid": {
+                "label": "Тематические карты",
+                "tooltip": "Показать тематические карты на карте."
+            },
+            /* for deprecated statsgrid2016 */
             "data": {
                 "label": "Тематические карты",
                 "tooltip": "Показать тематические карты на карте.",

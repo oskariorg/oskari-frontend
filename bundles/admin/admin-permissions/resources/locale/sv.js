@@ -4,32 +4,41 @@ Oskari.registerLocalization(
     "key": "admin-permissions",
     "value": {
         "title": "Rätter för kartlager",
-        "desc": "desc",
+        "desc": "",
         "tile": {
             "title": "Rätter för kartlager"
         },
         "flyout": {
             "title": "Rätter för kartlager",
-            "message": "Rätter för kartlager",
-            "instructionText": "Börja med att välja en roll"
+            "instruction": "Börja med att välja en roll",
+            "unsavedChangesConfirm": "Du kommer att förlora dina osparade ändringar, vill du fortsätta?",
+            "name": "Kartlager"
         },
-        "rights": {
-            "name": "Namn",
-            "PUBLISH": "rätt att publicera",
-            "VIEW_LAYER": "rätt att visa",
-            "DOWNLOAD": "rätt att ladda ner",
-            "VIEW_PUBLISHED": "rätt att visa en publicerat vy",
+        "permissions": {
+            "type": {
+                "PUBLISH": "rätt att publicera",
+                "VIEW_LAYER": "rätt att visa",
+                "DOWNLOAD": "rätt att ladda ner",
+                "VIEW_PUBLISHED": "rätt att visa en publicerat vy"
+            },
             "success": {
-                "title": "Rätter har uppdaterats",
-                "message": "Sparning av rätter lyckas."
+                "save": "Sparning av rätter lyckas."
             },
             "error": {
-                "title": "Rätter har inte uppdaterats",
-                "message": "Sparning av rätter lyckas inte."
-            },
-            "selectValue": "Markera värdet"
+                "fetch": "Sökningen av rätter misslyckades.",
+                "save": "Sparning av rätter lyckas inte."
+            }
         },
-        "save": "Lagra",
-        "selectRole": "Roll"
+        "roles": {
+            "title": "Roll",
+            "placeholder": "Markera värdet",
+            "type": {
+                "system": "Systemroller",
+                "other": "Övriga roller"
+            },
+            "error": {
+                "fetch": "Sökningen av roller misslyckades.",
+            }
+        }
     }
 });

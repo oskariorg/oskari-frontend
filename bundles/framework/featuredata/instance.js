@@ -8,7 +8,7 @@
  */
 
 import { FEATUREDATA_BUNDLE_ID } from './view/FeatureDataContainer';
-import { DRAW_REQUEST_ID, SelectToolPopupHandler } from './view/SelectToolPopupHandler.js';
+import { SelectToolPopupHandler } from './view/SelectToolPopupHandler.js';
 import './publisher/FeaturedataTool';
 
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleInstance',
@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
                     iconCls: 'tool-feature-selection',
                     tooltip: Oskari.getMsg(FEATUREDATA_BUNDLE_ID, 'selectionTools.tools.select.tooltip'),
                     sticky: true,
-                    callback: () => this.selectToolPopupHandler.showSelectionTools()
+                    callback: () => this.selectToolPopupHandler.showSelectionPopup()
                 };
                 this.getSandbox().request(this, addBtnRequestBuilder('featuredataSelectionTools', 'selectiontools', btn));
             }
@@ -128,23 +128,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
             this.getLayerService().addToolForLayer(layer, tool, suppressEvent);
         },
         eventHandlers: {
-            DrawingEvent: function (evt) {
-                if (!evt.getIsFinished() || !this.selectToolPopupHandler) {
-                    // only interested in finished drawings
-                    return;
-                }
-                if (DRAW_REQUEST_ID !== evt.getId()) {
-                    // event is from some other functionality
-                    return;
-                }
-                const geojson = evt.getGeoJson();
-                if (!geojson.features.length) {
-                    // no features drawn
-                    return;
-                }
-
-                this.selectToolPopupHandler.selectWithGeometry(geojson.features[0]);
-            },
             MapLayerEvent: function (event) {
                 if (event.getOperation() !== 'add') {
                     // only handle add layer

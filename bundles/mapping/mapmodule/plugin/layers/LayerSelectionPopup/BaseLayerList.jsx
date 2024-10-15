@@ -36,7 +36,7 @@ export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLay
                         { layer.getName() }
                         { showMetadata &&
                             <IconContainer>
-                                <MetadataIcon metadataId={layer.getMetadataIdentifier()} />
+                                <MetadataIcon metadataId={layer.getMetadataIdentifier()} layerId={layer.getId()} />
                             </IconContainer> }
                     </LayerRow>
                     {styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}
@@ -63,7 +63,7 @@ export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLay
                                 </Radio.Choice>
                                 { showMetadata &&
                                     <IconContainer>
-                                        <MetadataIcon metadataId={layer.getMetadataIdentifier()} />
+                                        <MetadataIcon metadataId={layer.getMetadataIdentifier()} layerId={layer.getId()} />
                                     </IconContainer> }
                             </LayerRow>
                             {styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}

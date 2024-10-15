@@ -17,28 +17,39 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     this._pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
     this._regionsAdded = [];
     this._lastRenderCache = {};
-
-    this.stateHandler.addStateListener(state => this.render(state));
+    this._lastRenderStateForSelectedRegionOptimizing = {};
+    this.stateHandler.addStateListener((state) => this.render(state));
 }, {
+    updateActiveRegion: function (activeRegion) {
+        const { highlightRegionId } = this._lastRenderCache;
+        // higlight feature
+        this._updateFeatureStyle(activeRegion, true);
+        if (highlightRegionId) {
+            // Remove previous highlight
+            this._updateFeatureStyle(highlightRegionId, false);
+        }
+        this._lastRenderCache.highlightRegionId = activeRegion;
+    },
+    isOnlyActiveRegionChange: function (state = {}) {
+        const sameRegionset = this._lastRenderStateForSelectedRegionOptimizing.regionset === state.regionset;
+        const sameIndicator = this._lastRenderStateForSelectedRegionOptimizing.activeIndicator === state.activeIndicator;
+        const sameActiveRegion = this._lastRenderStateForSelectedRegionOptimizing.activeRegion === state.activeRegion;
+        return sameRegionset && sameIndicator && !sameActiveRegion;
+    },
     render: async function (state) {
+        const changeActiveRegion = this.isOnlyActiveRegionChange(state);
+        this._lastRenderStateForSelectedRegionOptimizing = state;
+        if (changeActiveRegion) {
+            // full render is heavy operation and causes blinking on map
+            // minor update, only update highlighted region and skip full re-render
+            this.updateActiveRegion(state.activeRegion);
+            return;
+        }
         try {
             const { indicators, activeIndicator, activeRegion, regionset } = state;
             const currentIndicator = indicators.find(ind => ind.hash === activeIndicator);
             if (!currentIndicator) {
                 this.clearRegions();
-                return;
-            }
-            // assume that state update contains only active region change
-            // this is little dangerous but rendering whole layer is heavy operation
-            const { highlightRegionId: previous } = this._lastRenderCache;
-            if (activeRegion && activeRegion !== previous) {
-                // higlight feature
-                this._updateFeatureStyle(activeRegion, true);
-                if (previous) {
-                    // Remove previous highlight
-                    this._updateFeatureStyle(previous, false);
-                }
-                this._lastRenderCache.highlightRegionId = activeRegion;
                 return;
             }
             const { classification, classifiedData } = currentIndicator;
@@ -81,7 +92,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         const addFeaturesRequestParams = [];
         const handledRegions = [];
         const { groups } = classifiedData;
-        const { mapStyle, showValues } = classification;
+        const { mapStyle, showValues, transparency } = classification;
         groups.forEach(function (regiongroup, index) {
             const { color, sizePx, regionIds } = regiongroup;
             const optionalStyles = [];
@@ -139,6 +150,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 optionalStyles: optionalStyles,
                 layerId: LAYER_ID,
                 prio: REGION_PRIO + index,
+                opacity: typeof transparency !== 'undefined' ? transparency : 100,
                 animationDuration: 250
             };
             const borderRequestOptions = Object.assign({}, regionRequestOptions, {

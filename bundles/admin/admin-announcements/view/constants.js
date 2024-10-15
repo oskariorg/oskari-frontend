@@ -11,5 +11,5 @@ export const TYPE = {
 };
 
 export const OPTIONS = {
-    showAsPopup: true
+    showAsPopup: false
 };

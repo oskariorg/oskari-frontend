@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message, Confirm, Button, Tooltip } from 'oskari-ui';
 import { ThemeConsumer } from '../../util';
-import { getColorEffect, EFFECT } from '../../theme';
+import { EFFECT } from '../../../constants';
 import styled from 'styled-components';
 import { PlusOutlined, EditOutlined, QuestionCircleOutlined, DeleteOutlined, CheckOutlined, StopOutlined} from '@ant-design/icons';
 import { Forward } from '../icons/Forward'
@@ -33,7 +33,7 @@ const BorderlessButton = styled(Button)`
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
     &:hover {
-        color: ${props => props.$hover};
+        color: ${props => props.$hover} !important;
         background: none;
     }
     &:disabled {
@@ -41,13 +41,13 @@ const BorderlessButton = styled(Button)`
     }
 `;
 const BorderedButton = styled(Button)`
-    color:  ${props => props.$active || props.$color};
+    color:  ${props => props.$active || props.$color} !important;
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
     border-color: ${props => props.$active};
     &:hover {
-        color: ${props => props.$hover};
-        border-color: ${props => props.$hover};
+        color: ${props => props.$hover} !important;
+        border-color: ${props => props.$hover} !important;
     }
 `;
 
@@ -82,10 +82,10 @@ const getPredefinedIcon = (type) => {
         return <Backward/>;
     }
     if (type === 'delete') {
-        return <DeleteOutlined />
+        return <DeleteOutlined />;
     }
     return null;
-}
+};
 
 const getConfirmProps = (type) => {
     if (type === 'delete') {
@@ -124,7 +124,7 @@ const ThemeButton = ThemeConsumer(({
     if (!hover) {
         hover = COLORS.hover;
     } else if (Oskari.util.isDarkColor(hover)) {
-        hover = getColorEffect(hover, EFFECT.LIGHTEN);
+        hover = Oskari.util.getColorEffect(hover, EFFECT.LIGHTEN);
     }
     const ButtonNode = bordered ? BorderedButton : BorderlessButton;
     const activeColor = active ? hover : null;

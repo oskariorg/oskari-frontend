@@ -107,13 +107,13 @@ export const getGroupStats = (dataBySelection) => {
  * @param  {geostats} groupStats precalculated geostats | optional
  * @return {Object}               result with classified values
  */
-export const getClassifiedData = (indicator, groupStats) => {
+export const getClassifiedData = (indicator) => {
     const { classification: opts, data: { seriesValues } } = indicator;
-    if (seriesValues && seriesValues.length < 3) {
-        return { error: 'noEnough' };
-    }
     const dataByRegions = getDataByRegions(indicator);
     const values = seriesValues || dataByRegions.map(d => d.value).filter(val => typeof val !== 'undefined');
+    if (!values.length || (seriesValues && seriesValues.length < 3)) {
+        return { error: 'noData' };
+    }
     const isDivided = opts.type === 'div';
     const { format } = Oskari.getNumberFormatter(opts.fractionDigits);
 

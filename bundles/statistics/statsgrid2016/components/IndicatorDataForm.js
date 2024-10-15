@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 /**
  * Generic form for feeding values for regions. Triggers events on cancel and save.
  */
@@ -9,19 +10,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
     this.buttons = [];
 }, {
     __templates: {
-        main: _.template('<div class="user-indicator-main"></div>'),
-        insertTable: _.template('<table class="user-indicator-table">' +
+        main: template('<div class="user-indicator-main"></div>'),
+        insertTable: template('<table class="user-indicator-table">' +
                                         '<tbody></tbody>' +
                                 '</table>'),
-        header: _.template('<div class="user-indicator-specification">' +
+        header: template('<div class="user-indicator-specification">' +
                                 '<div>${regionsetLabel}: ${regionset}</div>' +
                                 '<div>${yearLabel}: ${year}</div>' +
                             '</div>'),
-        row: _.template('<tr data-id="${regionId}" data-name="${regionName.toLowerCase()}">' +
+        row: template('<tr data-id="${regionId}" data-name="${regionName.toLowerCase()}">' +
                             '<td class="region" style=" border: 1px solid black ;">${regionName}</td>' +
                             '<td class="uservalue" style="border: 1px solid black ;"><div contenteditable="true">${value}</div></td>' +
                         '</tr> '),
-        import: _.template('<div class="user-indicator-import"><textarea placeholder="${placeholder}"></textarea></div>')
+        import: template('<div class="user-indicator-import"><textarea placeholder="${placeholder}"></textarea></div>')
     },
     getElement: function () {
         return this.element;

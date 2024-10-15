@@ -18,8 +18,7 @@ class MetadataStateHandler extends StateHandler {
             query: '',
             advancedSearchExpanded: false,
             advancedSearchOptions: null,
-            advancedSearchValues: {
-            },
+            advancedSearchValues: {},
             loading: false,
             drawing: false,
             searchResultsVisible: false,
@@ -46,13 +45,23 @@ class MetadataStateHandler extends StateHandler {
     }
 
     doSearch () {
-        const { query, advancedSearchValues } = this.getState();
-        if (!(query?.length || this.hasAdvancedSearchValues(advancedSearchValues))) {
+        const { query = '', advancedSearchValues } = this.getState();
+        const search = query.trim();
+        const params = search ? { search } : {};
+        Object.keys(advancedSearchValues).forEach(key => {
+            let value = advancedSearchValues[key];
+            if (Array.isArray(value)) {
+                value = value.join(',');
+            }
+            // eliminate nulls and empty values
+            if (value) {
+                params[key] = value;
+            }
+        });
+
+        if (!Object.keys(params).length) {
             return;
         }
-
-        const formdata = {};
-        formdata.search = query;
 
         this.updateState({
             loading: true,
@@ -60,23 +69,7 @@ class MetadataStateHandler extends StateHandler {
             searchResultsFilter: null
         });
 
-        Object.keys(advancedSearchValues).forEach(key => {
-            if (advancedSearchValues[key] instanceof Array) {
-                formdata[key] = advancedSearchValues[key].join(',');
-            } else {
-                // eliminate nulls
-                if (advancedSearchValues[key]) {
-                    formdata[key] = advancedSearchValues[key];
-                }
-            }
-        });
-
-        this.searchService.doSearch(formdata, (results) => this.updateSearchResults(results));
-    }
-
-    hasAdvancedSearchValues (advancedSearchValues) {
-        return !!Object.keys(advancedSearchValues)
-            .filter(key => !!advancedSearchValues[key])?.length;
+        this.searchService.doSearch(params, (results) => this.updateSearchResults(results));
     }
 
     updateSearchResults (json) {
@@ -147,15 +140,10 @@ class MetadataStateHandler extends StateHandler {
      * Advanced search
      */
     toggleAdvancedSearch () {
-        const { advancedSearchExpanded, advancedSearchOptions } = this.getState();
-        // toggling open and haven't fetched options yet -> fetch.
+        const { advancedSearchExpanded } = this.getState();
         this.updateState({
             advancedSearchExpanded: !advancedSearchExpanded
         });
-
-        if (!advancedSearchExpanded && !advancedSearchOptions) {
-            this.fetchOptions();
-        }
     }
 
     /**
@@ -173,49 +161,37 @@ class MetadataStateHandler extends StateHandler {
         });
     }
 
-    async fetchOptions () {
-        await this.optionsService.getOptions((options) => {
-            const sortedOptions = { fields: [] };
-            const emptyOption = Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.emptyOption');
-            options?.fields?.forEach((field) => {
-                const newField = Object.assign({}, field);
-                let sortedValues = field.values.sort((a, b) => Oskari.util.naturalSort(a.val, b.val));
-                sortedValues.forEach((value) => { value.value = value.val; });
-                if (!newField.multi) {
-                    sortedValues = [{ val: emptyOption, value: '' }].concat(sortedValues);
-                }
-                newField.values = sortedValues;
-                sortedOptions.fields.push(newField);
-            });
-            this.updateState({ advancedSearchOptions: sortedOptions });
-        });
+    loadOptions () {
+        const { advancedSearchOptions } = this.getState();
+        if (!advancedSearchOptions) {
+            this.fetchOptions();
+        }
     }
 
-    updateAdvancedSearchValues (newValues) {
-        this.updateState({
-            advancedSearchValues: newValues
+    async fetchOptions () {
+        this.updateState({ advancedSearchOptions: { loading: true } });
+        const fields = [];
+        const emptyOption = Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.emptyOption');
+        await this.optionsService.getOptions((options) => {
+            options?.fields?.forEach((field) => {
+                const sortedValues = field.values.sort((a, b) => Oskari.util.naturalSort(a.val, b.val)).map(({ val }) => ({ label: val, value: val }));
+                if (!sortedValues.length) {
+                    // don't store field with no values
+                    return;
+                }
+                if (!field.multi) {
+                    sortedValues.unshift({ label: emptyOption, value: '' });
+                }
+                fields.push({ ...field, values: sortedValues });
+            });
         });
+        this.updateState({ advancedSearchOptions: { fields, loading: false } });
     }
 
     advancedSearchParamsChanged (key, value) {
-        const { advancedSearchValues } = this.getState();
-        advancedSearchValues[key] = value;
-        this.updateAdvancedSearchValues(advancedSearchValues);
-    }
-
-    advancedSearchParamsChangedMulti (key, value) {
-        if (!value || !value.target) {
-            return;
-        }
-        const { advancedSearchValues } = this.getState();
-        const checked = !!value.target.checked;
-
-        const newMultiValue = advancedSearchValues[key]?.filter(item => item !== value.target.value) || [];
-        if (checked) {
-            newMultiValue.push(value.target.value);
-        }
-        advancedSearchValues[key] = newMultiValue;
-        this.updateAdvancedSearchValues(advancedSearchValues);
+        this.updateState({
+            advancedSearchValues: { ...this.getState().advancedSearchValues, [key]: value }
+        });
     }
 
     advancedSearchCoverageStartDrawing (evt) {
@@ -251,7 +227,6 @@ const wrapped = controllerMixin(MetadataStateHandler, [
     'toggleAdvancedSearch',
     'toggleSearchResultsFilter',
     'advancedSearchParamsChanged',
-    'advancedSearchParamsChangedMulti',
     'advancedSearchCoverageStartDrawing',
     'advancedSearchCoverageCancelDrawing',
     'updateCoverageFeature',

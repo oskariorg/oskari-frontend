@@ -1,5 +1,5 @@
-
-import { EFFECT, DEFAULT_COLORS, DEFAULT_FONT } from './constants';
+import { DEFAULT_COLORS, DEFAULT_FONT } from './constants';
+import { EFFECT } from '../../constants';
 
 export const getHeaderTheme = (theme) => {
     const bgColor = theme.color?.header?.bg || theme.color?.primary || DEFAULT_COLORS.HEADER_BG;
@@ -8,13 +8,43 @@ export const getHeaderTheme = (theme) => {
     const funcs = {
         getBgColor: () => bgColor,
         getAccentColor: () => accentColor,
-        getBgBorderColor: () => getColorEffect(accentColor, -10),
-        getBgBorderBottomColor: () => getColorEffect(accentColor, 20),
+        getBgBorderColor: () => Oskari.util.getColorEffect(accentColor, -10),
+        getBgBorderBottomColor: () => Oskari.util.getColorEffect(accentColor, 20),
         getTextColor: () => theme.color?.header?.text || headerTextColor,
         getToolColor: () => theme.color?.header?.icon || funcs.getTextColor(),
         getToolHoverColor: () => accentColor
     };
     return funcs;
+};
+
+// https://ant.design/docs/react/customize-theme
+export const getAntdTheme = (theme) => {
+    // Note! The theme parameter is not used here,
+    //  but the Oskari theme is passed here so we _could_ make some adjustments based on that
+    return {
+        // algorithm: antdTheme.defaultAlgorithm,
+        components: {
+            Button: {
+                // colorPrimary: accentColor,
+                // controlItemBgHover: headerTextColor,
+                // colorFillContentHover: accentColor
+                // fixes an issue where close icon has white bg while hovering
+                colorBgContainer: 'inherit'
+            }
+        },
+        token: {
+            // Seed Token
+            // colorPrimary: '#00b96b',
+            // colorPrimary "antD blue" seems to work better than using accent from Oskari theme at the moment
+            colorPrimary: 'rgb(24, 144, 255)', // accentColor,
+            // use the font selected from Oskari theme/global, otherwise antd defaults to its own font spec
+            fontFamily: 'inherit',
+            // make buttons more like v4, the default is a bit more rounder
+            borderRadius: 2
+            // Setting colorBgContainer: 'inherit' here makes the table th column bg color black for some reason
+            // colorBgContainer: 'inherit'
+        }
+    };
 };
 
 export const getNavigationTheme = (theme) => {
@@ -27,7 +57,9 @@ export const getNavigationTheme = (theme) => {
 
     let buttonColor = primary;
     if (theme.navigation?.effect === '3D') {
-        buttonColor = `linear-gradient(180deg, ${getColorEffect(primary, EFFECT.DARKEN)} 0%, ${primary} 35%, ${getColorEffect(primary, EFFECT.LIGHTEN)} 100%)`;
+        const start = Oskari.util.getColorEffect(primary, EFFECT.DARKEN);
+        const stop = Oskari.util.getColorEffect(primary, EFFECT.LIGHTEN);
+        buttonColor = `linear-gradient(180deg, ${start} 0%, ${primary} 35%, ${stop} 100%)`;
     }
     const funcs = {
         getPrimary: () => primary,
@@ -53,40 +85,6 @@ export const getTextColor = (bgColor) => {
 };
 
 export const getFontClass = (theme) => {
-    let fontClassSuffix = theme.font || DEFAULT_FONT;
+    const fontClassSuffix = theme.font || DEFAULT_FONT;
     return 'oskari-theme-font-' + fontClassSuffix;
-}
-
-/* ------------------------------------------------------------------------------ */
-// Note! Copy-pasted from bundles/mapping/mapmodule/oskariStyle!
-// TODO: figure out if these should be shared and from map or src
-/**
- * @method getColorEffect
- * @param {String} color Color to apply the effect on
- * @param {String} effect Oskari style constant (auto, darken, lighten with specifiers minor, normal, major)
- * @return {String} Affected color or undefined if effect or color is missing
- */
- export const getColorEffect = (color, effect) => {
-    if (!effect || !color || effect === EFFECT.NONE) {
-        return;
-    }
-    const minor = 60;
-    const normal = 90;
-    const major = 120;
-    const getEffect = (delta, auto) => Oskari.util.alterBrightness(color, delta, auto);
-    switch (effect) {
-    case EFFECT.AUTO : return getEffect(normal, true);
-    case EFFECT.AUTO_MINOR : return getEffect(minor, true);
-    case EFFECT.AUTO_NORMAL : return getEffect(normal, true);
-    case EFFECT.AUTO_MAJOR : return getEffect(major, true);
-    case EFFECT.DARKEN : return getEffect(-normal);
-    case EFFECT.DARKEN_MINOR : return getEffect(-minor);
-    case EFFECT.DARKEN_NORMAL : return getEffect(-normal);
-    case EFFECT.DARKEN_MAJOR : return getEffect(-major);
-    case EFFECT.LIGHTEN : return getEffect(normal);
-    case EFFECT.LIGHTEN_MINOR : return getEffect(minor);
-    case EFFECT.LIGHTEN_NORMAL : return getEffect(normal);
-    case EFFECT.LIGHTEN_MAJOR : return getEffect(major);
-    default : return getEffect(effect, true);
-    }
 };

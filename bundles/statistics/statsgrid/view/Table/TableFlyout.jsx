@@ -10,6 +10,8 @@ import { IndicatorName } from '../IndicatorName';
 import { getRegionsets } from '../../helper/ConfigHelper';
 import { getDataByRegions } from '../../helper/StatisticsHelper';
 import { getRegions } from '../../helper/RegionsHelper';
+import { ThemeConsumer } from 'oskari-ui/util';
+import { getHeaderTheme } from 'oskari-ui/theme';
 
 const BUNDLE_KEY = 'StatsGrid';
 const COLUMN = 200;
@@ -26,6 +28,9 @@ const StyledTable = styled(Table)`
     }
     .ant-table-column-title {
         height: 100%;
+    }
+    .ant-table-selection-col, .ant-table-selection-column {
+        display: none;
     }
 `;
 const RegionHeader = styled('div')`
@@ -62,30 +67,19 @@ const HeaderTools = styled.div`
     height: 20px;
 `;
 
-const TableFlyout = ({ state, controller }) => {
-    const { indicators, activeIndicator, regionset } = state;
+const TableFlyout = ThemeConsumer(({ state, controller, theme }) => {
+    const { indicators, activeIndicator, regionset, activeRegion } = state;
     const regions = getRegions(regionset);
-    let initialSort = {
-        regionName: null
-    };
-    indicators?.forEach(indicator => {
-        initialSort[indicator.hash] = null;
-    });
-    const [sortOrder, setSortOrder] = useState(initialSort);
+    const headerTheme = getHeaderTheme(theme);
 
-    const changeSortOrder = (col) => {
-        let newOrder = { ...sortOrder };
-        if (newOrder[col] === 'descend' || newOrder[col] === null) {
-            newOrder[col] = 'ascend';
-        } else {
-            newOrder[col] = 'descend';
+    const [sortOrder, setSortOrder] = useState({ column: 'name', order: 'ascend' });
+
+    const changeSortOrder = (column) => {
+        let order = 'ascend';
+        if (column === sortOrder.column) {
+            order = sortOrder.order === 'ascend' ? 'descend' : 'ascend'
         }
-        for (const key of Object.keys(newOrder)) {
-            if (key !== col) {
-                newOrder[key] = null;
-            }
-        }
-        setSortOrder(newOrder);
+        setSortOrder({ column, order });
     };
     // every value is set by looping regions => same indexes
     const dataByHash = indicators.reduce((data, ind) => {
@@ -111,19 +105,34 @@ const TableFlyout = ({ state, controller }) => {
             }
         });
     });
+    const getCellStyle = (regionId, hash) => {
+        const style = { background: '#ffffff' };
+        if (regionId === activeRegion) {
+            style.background = headerTheme.getBgColor();
+            style.color = headerTheme.getTextColor();
+        } else if (activeIndicator === hash) {
+            style.background = '#fafafa';
+        }
+        return { style };
+    };
+    const getHeaderStyle = (hash) => {
+        const style = { background: '#fafafa' };
+        if (activeIndicator === hash) {
+            style.background = headerTheme.getBgColor();
+            style.color = headerTheme.getTextColor();
+        }
+        return { style };
+    };
+
     columnSettings.push({
         dataIndex: 'name',
         align: 'left',
         width: COLUMN,
         sorter: getSorterFor('name'),
-        sortOrder: sortOrder['name'],
+        sortOrder: sortOrder.column === 'name' ? sortOrder.order : null,
         showSorterTooltip: false,
-        onCell: (record, rowIndex) => ({
-            style: { background: '#ffffff' }
-        }),
-        onHeaderCell: (record, rowIndex) => ({
-            style: { background: '#fafafa' }
-        }),
+        onCell: (item) => getCellStyle(item.key),
+        onHeaderCell: () => getHeaderStyle(),
         title: () => {
             return (
                 <HeaderCell>
@@ -144,8 +153,9 @@ const TableFlyout = ({ state, controller }) => {
                     </RegionHeader>
                     <HeaderTools>
                         <Sorter
-                            sortOrder={sortOrder['name']}
-                            changeSortOrder={() => changeSortOrder('name')} />
+                            column={'name'}
+                            sortOrder={sortOrder}
+                            changeSortOrder={changeSortOrder} />
                     </HeaderTools>
                 </HeaderCell>
             );
@@ -159,21 +169,18 @@ const TableFlyout = ({ state, controller }) => {
             if (a === b) return 0;
             if (typeof a === 'undefined') return -1;
             if (typeof b === 'undefined') return 1;
-            return sortOrder[hash] === 'descend' ? a - b : b - a;
+            return sortOrder.order === 'descend' ? a - b : b - a;
         };
         columnSettings.push({
             dataIndex: [hash, 'formatted'],
             align: 'right',
             width: COLUMN,
             sorter,
-            sortOrder: 'descend',
+            // use descend always for order as we are using own sorter which sorts undefined last
+            sortOrder: sortOrder.column === hash ? 'descend' : null,
             showSorterTooltip: false,
-            onCell: (record, rowIndex) => ({
-                style: { background: activeIndicator === hash ? '#fafafa' : '#ffffff' }
-            }),
-            onHeaderCell: (record, rowIndex) => ({
-                style: { background: activeIndicator === hash ? '#f0f0f0' : '#fafafa' }
-            }),
+            onCell: item => getCellStyle(item.key, hash),
+            onHeaderCell: () => getHeaderStyle(hash),
             title: () => {
                 return (
                     <HeaderCell>
@@ -182,8 +189,9 @@ const TableFlyout = ({ state, controller }) => {
                         </IndicatorHeader>
                         <HeaderTools>
                             <Sorter
-                                sortOrder={sortOrder[hash]}
-                                changeSortOrder={() => changeSortOrder(hash)}/>
+                                column={hash}
+                                sortOrder={sortOrder}
+                                changeSortOrder={changeSortOrder}/>
                             <StyledRemoveButton
                                 type='delete'
                                 onClick={() => controller.removeIndicator(indicator)}/>
@@ -193,9 +201,14 @@ const TableFlyout = ({ state, controller }) => {
             }
         });
     });
-
-    return <StyledTable columns={columnSettings} dataSource={dataSource} pagination={false}/>
-};
+    const selectedRowKeys = activeRegion ? [activeRegion] : [];
+    return <StyledTable
+        pagination={false}
+        columns={columnSettings}
+        dataSource={dataSource}
+        rowSelection={{ selectedRowKeys }}
+        onRow={item => ({onClick: () => controller.setActiveRegion(item.key)})} />
+});
 
 export const showTableFlyout = (state, controller, onClose) => {
     const title = <Message bundleKey={BUNDLE_KEY} messageKey='tile.grid' />;

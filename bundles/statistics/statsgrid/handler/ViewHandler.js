@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { AsyncStateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { getContainerOptions, createSeriesControlPlugin, createTogglePlugin, stopTogglePlugin } from '../helper/ViewHelper';
 import { showTableFlyout } from '../view/Table/TableFlyout';
 import { showSearchFlyout } from '../view/search/SearchFlyout';
@@ -12,13 +12,14 @@ import { showMedataPopup } from '../components/description/MetadataPopup';
 export const FLYOUTS = ['search', 'grid', 'diagram']; // to toggle tile
 
 const CLASSIFICATION = 'classification';
+const SERIES = 'series';
 const classificationDefaults = {
     editEnabled: true,
     transparent: false
 };
-const embeddedTools = [...FLYOUTS, CLASSIFICATION];
+const embeddedTools = [...FLYOUTS, CLASSIFICATION, SERIES];
 
-class UIHandler extends StateHandler {
+class UIHandler extends AsyncStateHandler {
     constructor (instance, stateHandler, searchHandler) {
         super();
         this.instance = instance;
@@ -29,7 +30,6 @@ class UIHandler extends StateHandler {
 
         this.setState({
             layer: {
-                opacity: 100, // store layer opacity to trigger update
                 visible: true,
                 onMap: false
             },
@@ -87,6 +87,7 @@ class UIHandler extends StateHandler {
 
         // automaticly shown/closed views
         const hasClassificationButton = viewState.mapButtons.includes(CLASSIFICATION);
+        const hasSeriesButton = viewState.mapButtons.includes(SERIES);
         if (isActive) {
             if (classification) {
                 classification.update(state, viewState);
@@ -98,13 +99,14 @@ class UIHandler extends StateHandler {
             if (state.isSeriesActive) {
                 if (series) {
                     series.update(state);
-                } else {
-                    this.show('series');
+                } else if (!hasSeriesButton) {
+                    // series is always visible except when there is a button to show it
+                    this.show(SERIES);
                 }
             }
         } else {
             this.close(CLASSIFICATION);
-            this.close('series');
+            this.close(SERIES);
         }
         // create toggle plugin only when needed
         if (viewState.mapButtons.length > 0 && !this.togglePlugin) {
@@ -139,8 +141,16 @@ class UIHandler extends StateHandler {
                 control.update(state);
             }
         });
+        // on active indicator change single => serie  show
+        // update closes ui on series => single
         if (state.isSeriesActive && !this.controls.series) {
-            this.show('series');
+            const { layer, mapButtons } = this.getState();
+            const hasSeriesButton = mapButtons.includes(SERIES);
+            const isActive = layer.onMap && layer.visible && state.indicators.length > 0;
+            if (isActive && !hasSeriesButton) {
+                // series is always visible if active except when there is a button to show it
+                this.show(SERIES);
+            }
         }
     }
 
@@ -194,9 +204,13 @@ class UIHandler extends StateHandler {
     toggle (id) {
         if (this.controls[id]) {
             this.close(id);
-        } else {
-            this.show(id);
+            return;
         }
+        if (id === SERIES && !this.stateHandler.getState().isSeriesActive) {
+            Messaging.warn(this.loc('errors.cannotDisplayAsSeries'));
+            return;
+        }
+        this.show(id);
     }
 
     openSearchWithSelections (indicator) {

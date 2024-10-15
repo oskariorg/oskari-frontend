@@ -1,11 +1,12 @@
-import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { AsyncStateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { showMedataPopup } from '../components/description/MetadataPopup';
 import { getHashForIndicator } from '../helper/StatisticsHelper';
 import { populateIndicatorOptions, validateSelectionsForSearch } from './SearchIndicatorOptionsHelper';
 import { getIndicatorMetadata } from './IndicatorHelper';
 import { getDatasources, getUnsupportedDatasourceIds, getRegionsets } from '../helper/ConfigHelper';
 import { showSearchErrorPopup } from '../view/search/ErrorPopup';
 
-class SearchController extends StateHandler {
+class SearchController extends AsyncStateHandler {
     constructor (instance, stateHandler) {
         super();
         this.instance = instance;
@@ -51,12 +52,12 @@ class SearchController extends StateHandler {
         this.setSelectedIndicators(indicators);
     }
 
-    onCacheUpdate ({ datasourceId, indicatorId }) {
+    onCacheUpdate ({ datasourceId, indicator }) {
         const { selectedDatasource, selectedIndicators } = this.getState();
         if (datasourceId && selectedDatasource === datasourceId) {
             this.fetchindicatorOptions();
         }
-        if (indicatorId && selectedIndicators.includes(indicatorId)) {
+        if (indicator && selectedIndicators.includes(indicator.id)) {
             this.fetchIndicatorParams();
         }
     }

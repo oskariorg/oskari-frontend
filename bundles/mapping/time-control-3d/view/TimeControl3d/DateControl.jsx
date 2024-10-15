@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Row, Col, ColFixed, StyledButton, StyledDateSlider, CalendarIcon } from './styled';
+import { ThemeConsumer } from 'oskari-ui/util';
+import { getHeaderTheme } from 'oskari-ui/theme';
 import { Input } from './Input';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -12,9 +14,10 @@ dayjs.extend(customParseFormat);
  */
 const DAYS = 365;
 
-export const DateControl = props => {
-    const { isMobile, changeHandler, sliderDateValue, dateValue, currentTimeHandler } = props;
-
+export const DateControl = ThemeConsumer(({ theme, isMobile, changeHandler, sliderDateValue, dateValue, currentTimeHandler }) => {
+    const helper = getHeaderTheme(theme);
+    const color = helper.getAccentColor();
+    const hover = Oskari.util.getColorEffect(color, 30);
     const changeSliderDate = (val) => {
         const d = new Date(2019, 0, val);
         const timeToSet = dayjs(d).format('D/M');
@@ -50,15 +53,24 @@ export const DateControl = props => {
             </Col>
             {!isMobile &&
                 <ColFixed>
-                    <StyledDateSlider marks={marksForDate()} min={1} max={DAYS} step={1} value={sliderDateValue} onChange={changeSliderDate} tooltipVisible={false} />
+                    <StyledDateSlider
+                        color={color}
+                        hover={hover}
+                        marks={marksForDate()}
+                        min={1} max={DAYS} step={1}
+                        value={sliderDateValue}
+                        onChange={changeSliderDate}
+                        tooltip={{ open: false }}/>
                 </ColFixed>
             }
             <Col>
-                <StyledButton onClick={setCurrentTime}><Message messageKey={'present'} /></StyledButton>
+                <StyledButton hover={hover} color={color} onClick={setCurrentTime}>
+                    <Message messageKey={'present'} />
+                </StyledButton>
             </Col>
         </Row>
     );
-};
+});
 
 DateControl.propTypes = {
     isMobile: PropTypes.bool.isRequired,

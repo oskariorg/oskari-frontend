@@ -37,28 +37,21 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          *
          */
         _createContent: function (data) {
-            var me = this,
-                i,
-                model,
-                panel,
-                template;
-
+            const me = this;
             if (data === null || data === undefined) {
                 throw new TypeError('_createContent(): missing data.');
             }
+            const { identifications, ...template } = data;
 
-            template = _.extend({}, data);
-            delete template.identifications;
-
-            if (data.identifications.length === 0) {
+            if (identifications.length === 0) {
                 //  No identifications, show metadata not found message
                 me._showMetadataNotFoundMessage();
             } else {
                 // Create a panel for each identification
-                for (i = 0; i < data.identifications.length; i += 1) {
-                    model = _.extend({}, template);
-                    model.identification = data.identifications[i];
-                    panel = Oskari.clazz.create(
+                for (let i = 0; i < identifications.length; i += 1) {
+                    const identification = identifications[i];
+                    const model = { ...template, identification };
+                    const panel = Oskari.clazz.create(
                         'Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                         me.instance,
                         me.locale,
@@ -78,9 +71,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             var me = this;
 
             if (me.panels && me.panels.length) {
-                _.each(me.panels, function (panel) {
-                    panel.addTabsAsync(data);
-                });
+                me.panels.forEach(panel => panel.addTabsAsync(data));
             } else {
                 for (var key in data) {
                     if (data.hasOwnProperty(key)) {
@@ -93,11 +84,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
         /**
          * @private @method _processJSON
          *
-         * @param {string} uuid         UUID
          * @param {Object} metadataJSON Metadata object
          *
          */
-        _processJSON: function (uuid, metadataJson) {
+        _processJSON: function (metadataJson) {
             var me = this,
                 data,
                 dataTemplate,
@@ -146,7 +136,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 useLimitations: []
             };
 
-            data = _.extend(dataTemplate, metadataJson);
+            data = Oskari.util.deepClone(dataTemplate, metadataJson);
 
             data.lineageStatements.forEach(function (lineage, index) {
                 data.lineageStatements[index] = me._prettify(lineage);
@@ -158,7 +148,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             for (i = 0; i < data.identifications.length; i += 1) {
                 data.identifications[i] =
-                    _.extend(identificationTemplate, data.identifications[i]);
+                    Oskari.util.deepClone(identificationTemplate, data.identifications[i]);
             }
 
             data.identifications.forEach(function (identification) {
@@ -197,7 +187,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 }
             });
 
-            data.uuid = uuid;
             me._createContent(data);
         },
 
@@ -228,23 +217,24 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * This is the actual data loader function
          *
          * @param {string} uuid UUID
+         * @param {number} layerId layer id
          *
          */
-        _getMetadata: function (uuid) {
+        _getMetadata: function (uuid, layerId) {
             var me = this;
 
-            if (uuid === null || uuid === undefined) {
+            if ((uuid === null || uuid === undefined) && (layerId === null || layerId === undefined)) {
                 throw new TypeError(
-                    '_getMetadata(): missing uuid'
+                    '_getMetadata(): missing uuid and layerId'
                 );
             }
-
             me.instance.getLoader().getCSWData(
                 uuid,
+                layerId,
                 Oskari.getLang(),
                 // TODO add sensible error handling
                 function (data) {
-                    me._processJSON(uuid, data);
+                    me._processJSON(data);
                 },
                 function (jqXHR, exception) {
                     // Request failed, show generic message to user
@@ -263,19 +253,20 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * Backend provides HTML setups that will be embedded and
          * styled with bundled CSS.
          *
-         * @param {string} uuid UUID
+         * @param {string} uuid uuid
+         * @param {number} layerId layer id
          *
          */
-        showMetadata: function (uuid) {
-            if (uuid === null || uuid === undefined) {
+        showMetadata: function (uuid, layerId) {
+            if ((uuid === null || uuid === undefined) && (layerId === null || layerId === undefined)) {
                 // Not a major error, keep on rolling
                 this.instance.getSandbox().printError(
-                    'showMetadata(): Missing uuid.'
+                    'showMetadata(): Missing layerId and uuid.'
                 );
                 return;
             }
 
-            this._getMetadata(uuid);
+            this._getMetadata(uuid, layerId);
         },
 
         /**
@@ -285,18 +276,19 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * ( calls directly now )
          * Used to buffer excess calls. Main entry point.
          *
-         * @param {string} uuid UUID
+         * @param {number} layerId layer id
          *
          */
-        scheduleShowMetadata: function (uuid) {
-            if (uuid === null || uuid === undefined) {
+        scheduleShowMetadata: function (uuid, layerId) {
+            if ((uuid === null || uuid === undefined) && (layerId === null || layerId === undefined)) {
                 // Not a major error, keep on rolling
                 this.instance.getSandbox().printError(
-                    'scheduleShowMetadata(): Missing uuid.'
+                    'scheduleShowMetadata(): Missing uuid and layerId.'
                 );
                 return;
             }
-            this.showMetadata(uuid);
+
+            this.showMetadata(uuid, layerId);
         },
 
         /**

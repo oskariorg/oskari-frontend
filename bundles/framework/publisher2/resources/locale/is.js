@@ -99,6 +99,11 @@ Oskari.registerLocalization(
                 "usereditmode": "Byrja að breyta",
                 "usereditmodeoff": "Hætta að breyta"
             },
+            "statsgrid": {
+                "label": "Þemakort",
+                "tooltip": "Sýna þemakort á kortinu."
+            },
+            /* for deprecated statsgrid2016 */
             "data": {
                 "label": "Þemakort",
                 "tooltip": "Sýna þemakort á kortinu.",

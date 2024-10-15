@@ -659,7 +659,7 @@ Oskari.clazz.define(
                 newDropdown,
                 dropdownDef,
                 emptyOption,
-                renderCoverageButton = (_.filter(dataFields, { 'field': 'coverage' }).length > 0),
+                renderCoverageButton = dataFields.filter(item => item.field === 'coverage').length > 0,
                 checkboxChange = function () {
                     me._updateOptions(advancedContainer);
                 };
@@ -973,17 +973,11 @@ Oskari.clazz.define(
                 resultHeader.find('.filter-link').hide();
                 resultHeader.find('.showLink').show();
 
-                var allRows = table.find('tr[class*=filter-]');
-                _.each(allRows, function (item) {
-                    var classNameFound = false;
-                    for (var i = 0; i < filterValues.length; i++) {
-                        if (jQuery(item).hasClass('filter-' + filterValues[i])) {
-                            classNameFound = true;
-                        }
-                    }
-
+                table.find('tr[class*=filter-]').each(function () {
+                    const elem = jQuery(this);
+                    const classNameFound = filterValues.some(filter => elem.hasClass(`filter-${filter}`));
                     if (!classNameFound) {
-                        jQuery(item).hide();
+                        elem.hide();
                     }
                 });
             });
