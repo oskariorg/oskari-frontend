@@ -8,7 +8,7 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Lýsigögn",
             "tab": {
-                "abstract": "Grunnupplýsingar",
+                "basic": "Grunnupplýsingar",
                 "inspire": "Inspire lýsigögn",
                 "jhs": "ISO 19115 lýsigögn",
                 "quality": "Gæði gagna",
@@ -50,7 +50,7 @@ Oskari.registerLocalization(
                 "operatesOn": "Starfar á",
                 "otherConstraints": "Aðrar takmarkanir",
                 "reportConformance": "Samræmi",
-                "responsibleParty": "Ábyrgðaraðili",
+                "responsibleParties": "Ábyrgðaraðili",
                 "resourceIdentifiers": "Kennimerki auðlindar",
                 "languages": "Tungumál auðlindar",
                 "scopeCodes": "Tegund auðlindar",
@@ -432,6 +432,6 @@ Oskari.registerLocalization(
                     "description": "Orku-, vatns- og úrganskerfi og samskiptagrunnkerfi og þjónustur. Dæmi: rafmagn búið til með vatnsafli, orkugjafar úr jarðhita, sól og kjarnorku, hreinsun og dreifing á vatni, skólpsöfnun og förgun, dreifing á rafmagni og gasi, gagnaflutningar, fjarskipti, útvarp, fjarskiptanet."
                 }
             }
-        },
+        }
     }
 });

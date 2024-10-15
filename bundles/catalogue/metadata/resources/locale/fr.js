@@ -69,7 +69,7 @@ Oskari.registerLocalization(
                 "reportConformance": "Conformité",
                 "conformanceResult": "Résultat de conformité",
                 "quantitativeResult": "Résultat quantitatif",
-                "responsibleParty": "Partie responsable",
+                "responsibleParties": "Partie responsable",
                 "resourceIdentifiers": "Identificateur de la ressource",
                 "languages": "Langue de la ressource",
                 "scopeCodes": "Type de ressource",

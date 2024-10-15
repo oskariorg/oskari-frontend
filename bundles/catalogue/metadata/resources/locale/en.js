@@ -44,7 +44,7 @@ Oskari.registerLocalization({
                 "errorStatistic": "Error statistic",
                 "value": "Value"
             },
-            "heading": {
+            "label": {
                 "layerList": "Map layers",
                 "abstractTextData": "Abstract text (data)",
                 "abstractTextService": "Abstract text (service)",
@@ -95,7 +95,7 @@ Oskari.registerLocalization({
                 "topologicalConsistency": "Topological consistency"
             }
         },
-        "codeLists": {
+        "codes": {
             "gmd:MD_CharacterSetCode": {
                 "ucs2": {
                     "label": "UCS2",

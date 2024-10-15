@@ -8,7 +8,7 @@ Oskari.registerLocalization(
         "flyout": {
             "title": "Метаданные",
             "tab": {
-                "abstract": "Основная информация",
+                "basic": "Основная информация",
                 "inspire": "Метаданные Inspire",
                 "jhs": "Метаданные ISO 19115",
                 "quality": "Качество данных",
