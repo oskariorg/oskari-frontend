@@ -51,8 +51,14 @@ TimeSeriesParams.propTypes = {
     controller: PropTypes.object.isRequired
 };
 
-export const IndicatorParams = ({ state, allRegionsets, controller }) => {
-    const { searchTimeseries, regionsetFilter, indicatorParams, selectedRegionset } = state;
+export const IndicatorParams = ({
+    searchTimeseries,
+    regionsetFilter,
+    indicatorParams,
+    selectedRegionset,
+    allRegionsets,
+    controller
+}) => {
     const { selectors = [], regionsets = [], selections = {} } = indicatorParams;
     if (!selectors.length) {
         return (
@@ -108,7 +114,10 @@ export const IndicatorParams = ({ state, allRegionsets, controller }) => {
 };
 
 IndicatorParams.propTypes = {
-    state: PropTypes.object.isRequired,
+    searchTimeseries: PropTypes.bool.isRequired,
+    regionsetFilter: PropTypes.array.isRequired,
+    indicatorParams: PropTypes.object.isRequired,
+    selectedRegionset: PropTypes.number,
     allRegionsets: PropTypes.array.isRequired,
     controller: PropTypes.object.isRequired
 };
