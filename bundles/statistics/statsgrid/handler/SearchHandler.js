@@ -197,8 +197,8 @@ class SearchController extends AsyncStateHandler {
                         if (!existing) {
                             combinedSelectors.push(selector);
                         } else {
-                            const existingIds = existing.values.map(s => s.id);
-                            const newValues = selector.values.filter(v => !existingIds.includes(v.id));
+                            const values = existing.values.map(s => s.value);
+                            const newValues = selector.values.filter(v => !values.includes(v.value));
                             if (newValues.length) {
                                 existing.values = [...existing.values, ...newValues].sort((a, b) => b.value - a.value);
                             }
