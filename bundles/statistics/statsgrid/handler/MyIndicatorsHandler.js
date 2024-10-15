@@ -81,6 +81,7 @@ class IndicatorsHandler extends AsyncStateHandler {
     editIndicator (id) {
         this.formHandler.getController().showIndicatorPopup(this.userDsId, id);
     }
+
     openIndicator (indicator) {
         const viewHandler = this.instance.getViewHandler();
         viewHandler?.openSearchWithSelections({ ds: this.userDsId, ...indicator });

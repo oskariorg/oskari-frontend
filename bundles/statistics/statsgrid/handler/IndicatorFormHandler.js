@@ -61,7 +61,7 @@ class IndicatorFormController extends StateHandler {
                 indicator.name = name;
                 indicator.description = description;
                 indicator.source = source;
-                selectors.forEach(sel => regionsets.forEach(regionset => sel.allowedValues.forEach(val => datasets.push({[sel.id]: val.id, regionset}))));
+                selectors.forEach(sel => regionsets.forEach(regionset => sel.allowedValues.forEach(val => datasets.push({ [sel.id]: val.id, regionset }))));
             } catch (error) {
                 Messaging.error(Oskari.getMsg('StatsGrid', 'errors.indicatorMetadataError'));
             }
@@ -70,7 +70,7 @@ class IndicatorFormController extends StateHandler {
     }
 
     updateIndicator (key, value) {
-        this.updateState({ indicator: {...this.getState().indicator, [key]: value }});
+        this.updateState({ indicator: { ...this.getState().indicator, [key]: value } });
     }
 
     setSelection (selection) {
@@ -96,7 +96,7 @@ class IndicatorFormController extends StateHandler {
 
     updateRegionValue (key, value) {
         const dataByRegions = this.getState().dataByRegions
-            .map(region => region.key === key ? {...region, value } : region);
+            .map(region => region.key === key ? { ...region, value } : region);
         this.updateState({ dataByRegions });
     }
 
@@ -109,14 +109,14 @@ class IndicatorFormController extends StateHandler {
             let data = {};
             if (indicator.id) {
                 try {
-                    data = await getIndicatorData({...indicator, selections }, regionset);
+                    data = await getIndicatorData({ ...indicator, selections }, regionset);
                 } catch (e) {
                     // no data saved for selections
                 }
             }
             // use key to use as datasource for Table
             const dataByRegions = regions
-                .map(({name, id}) => ({key: id, name, value: data[id]}))
+                .map(({ name, id }) => ({ key: id, name, value: data[id] }))
                 .sort((a, b) => a.name.localeCompare(b.name));
             this.updateState({ dataByRegions, loading: false });
         } catch (error) {
@@ -133,12 +133,13 @@ class IndicatorFormController extends StateHandler {
             dataByRegions: []
         });
     }
+
     async saveIndicator () {
         this.updateState({ loading: true });
         const { indicator } = this.getState();
         try {
             const id = await saveIndicator(indicator);
-            const updated =  {...indicator, id};
+            const updated = { ...indicator, id };
             this.updateState({ indicator: updated, loading: false });
             this.notifyCacheUpdate(updated);
             this.log.info(`Saved indicator with id: ${id}`, updated);
@@ -148,6 +149,7 @@ class IndicatorFormController extends StateHandler {
             Messaging.error(this.loc('userIndicators.error.indicatorSave'));
         }
     }
+
     async saveData () {
         this.updateState({ loading: true });
         const { dataByRegions, regionset, selection } = this.getState();
@@ -159,7 +161,7 @@ class IndicatorFormController extends StateHandler {
             return;
         }
         const data = {};
-        dataByRegions.forEach(({key, value}) => {
+        dataByRegions.forEach(({ key, value }) => {
             if (typeof value === 'undefined') {
                 return;
             }
@@ -179,7 +181,7 @@ class IndicatorFormController extends StateHandler {
             this.log.info('Saved data form values', data, indicatorInfo);
             Messaging.success(this.loc('userIndicators.success.datasetSave'));
             // add indicator only when data is saved
-            const dataset = {...selections, regionset };
+            const dataset = { ...selections, regionset };
             this.selectIndicator(dataset);
 
             this.updateState({ datasets: [...this.getState().datasets, dataset] });
