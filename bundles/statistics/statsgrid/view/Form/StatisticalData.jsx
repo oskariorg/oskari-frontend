@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { TextInput, Message } from 'oskari-ui';
 import { Table } from 'oskari-ui/components/Table';
 import styled from 'styled-components';
@@ -11,7 +12,7 @@ const StyledTable = styled(Table)`
 export const StatisticalData = ({ state, controller }) => {
     const { regionset, dataByRegions } = state;
     if (!regionset || !dataByRegions.length) {
-        return <Message messageKey='errors.regionsetsIsEmpty' />
+        return <Message messageKey='errors.regionsetsIsEmpty' />;
     }
     const columnSettings = [
         {
@@ -39,5 +40,9 @@ export const StatisticalData = ({ state, controller }) => {
     return <StyledTable
         columns={columnSettings}
         dataSource={dataByRegions}
-        pagination={false} />
+        pagination={false} />;
+};
+StatisticalData.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
 };

@@ -1,9 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { TextInput, Select, Message } from 'oskari-ui';
 import styled from 'styled-components';
 import { PrimaryButton } from 'oskari-ui/components/buttons';
 import { getDatasources, getRegionsets } from '../../helper/ConfigHelper';
-
 
 const Content = styled('div')`
     display: flex;
@@ -24,7 +24,7 @@ export const StatisticalInfo = ({ state, controller }) => {
     const { regionsets = [] } = getDatasources().find(({ id }) => id === indicator.ds) || {};
     const options = getRegionsets()
         .filter(rs => regionsets.includes(rs.id))
-        .map(rs => ({value: rs.id, label: rs.name}));
+        .map(rs => ({ value: rs.id, label: rs.name }));
     return (
         <Content>
             <YearField
@@ -40,4 +40,8 @@ export const StatisticalInfo = ({ state, controller }) => {
             <PrimaryButton type='add' onClick={() => controller.addStatisticalData()} />
         </Content>
     );
+};
+StatisticalInfo.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
 };

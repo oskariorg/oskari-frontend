@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Table } from 'oskari-ui/components/Table';
 import { IconButton } from 'oskari-ui/components/buttons';
@@ -66,4 +67,8 @@ export const DatasetsTable = ({ state, controller }) => {
             ...ds
         }))}
         pagination={false}/>;
+};
+DatasetsTable.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
 };

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Message, TextAreaInput } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import { PrimaryButton, ButtonContainer, SecondaryButton } from 'oskari-ui/components/buttons';
@@ -41,9 +42,12 @@ const ClipboardPopup = ({ controller, onClose }) => {
         </Content>
     );
 };
+ClipboardPopup.propTypes = {
+    controller: PropTypes.object.isRequired,
+    onClose: PropTypes.func.isRequired
+};
 
 export const showClipboardPopup = (controller, onClose) => {
-
     const title = <Message messageKey='userIndicators.flyoutTitle' bundleKey={BUNDLE_KEY} />;
     return showPopup(
         title,

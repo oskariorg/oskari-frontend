@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { TextInput, TextAreaInput } from 'oskari-ui';
 import styled from 'styled-components';
 import { BUNDLE_KEY } from '../../constants';
@@ -37,4 +38,8 @@ export const IndicatorInfo = ({ state, controller }) => {
             />
         </Content>
     );
+};
+IndicatorInfo.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
 };

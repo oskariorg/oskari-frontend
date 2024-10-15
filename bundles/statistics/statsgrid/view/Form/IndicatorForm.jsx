@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Message, Button } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import { PrimaryButton, SecondaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
@@ -35,7 +36,13 @@ const Title = ({ indicator, showDataTable, regionset, selection }) => {
         );
     }
     const key = !indicator.id ? 'userIndicators.add' : 'userIndicators.edit';
-    return <Message messageKey={key} bundleKey={BUNDLE_KEY} />
+    return <Message messageKey={key} bundleKey={BUNDLE_KEY} />;
+};
+Title.propTypes = {
+    indicator: PropTypes.object.isRequired,
+    regionset: PropTypes.number.isRequired,
+    showDataTable: PropTypes.func.isRequired,
+    selection: PropTypes.any.isRequired
 };
 
 const IndicatorForm = ({ state, controller, onClose }) => {
@@ -59,6 +66,11 @@ const IndicatorForm = ({ state, controller, onClose }) => {
             </ButtonContainer>
         </Content>
     );
+};
+IndicatorForm.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
+    onClose: PropTypes.func.isRequired
 };
 
 export const showIndicatorForm = (state, controller, onClose) => {
