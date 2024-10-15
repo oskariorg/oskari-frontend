@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Select, Message } from 'oskari-ui';
 import styled from 'styled-components';
 
@@ -23,7 +24,7 @@ const StyledSelect = styled(Select)`
     width: 100%;
 `;
 
-const TimeSeriesParams = ({id, options, selectedValues, controller}) => (
+const TimeSeriesParams = ({ id, options, selectedValues, controller }) => (
     <Timeseries>
         <TimeseriesField>
             <b><Message messageKey='parameters.from' /></b>
@@ -43,6 +44,12 @@ const TimeSeriesParams = ({id, options, selectedValues, controller}) => (
         </TimeseriesField>
     </Timeseries>
 );
+TimeSeriesParams.propTypes = {
+    id: PropTypes.string.isRequired,
+    options: PropTypes.array.isRequired,
+    selectedValues: PropTypes.array.isRequired,
+    controller: PropTypes.object.isRequired
+};
 
 export const IndicatorParams = ({ state, allRegionsets, controller }) => {
     const { searchTimeseries, regionsetFilter, indicatorParams, selectedRegionset } = state;
@@ -65,7 +72,7 @@ export const IndicatorParams = ({ state, allRegionsets, controller }) => {
 
     return (
         <div>
-            {selectors.map(({values, time, id, label}) => {
+            {selectors.map(({ values, time, id, label }) => {
                 const value = selections[id];
                 if (time && searchTimeseries) {
                     return (
@@ -98,4 +105,10 @@ export const IndicatorParams = ({ state, allRegionsets, controller }) => {
             </Field>
         </div>
     );
+};
+
+IndicatorParams.propTypes = {
+    state: PropTypes.object.isRequired,
+    allRegionsets: PropTypes.array.isRequired,
+    controller: PropTypes.object.isRequired
 };

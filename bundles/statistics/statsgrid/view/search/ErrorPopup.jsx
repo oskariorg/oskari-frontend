@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { showPopup } from 'oskari-ui/components/window';
 import { Message } from 'oskari-ui';
@@ -13,28 +14,31 @@ const Content = styled.div`
     padding: 20px;
 `;
 
-const Popup = ({errors}) => {
+const Popup = ({ errors }) => {
     const errorLoc = Oskari.getMsg(BUNDLE_KEY, 'errors');
     return (
         <Content>
-            {errors.map((indicator,i) => {
+            {errors.map((indicator, i) => {
                 const { name, partialSeries, selections, error } = indicator;
                 const selection = partialSeries
                     ? getInvalidSerie(partialSeries)
                     : getSelection(selections);
                 const cause = errorLoc[error];
                 const errorMsg = cause ? `: ${cause}` : '';
-                return <div key={i}>{`${name} (${selection})${errorMsg}`}</div>
+                return <div key={i}>{`${name} (${selection})${errorMsg}`}</div>;
             })}
         </Content>
     );
+};
+Popup.propTypes = {
+    errors: PropTypes.array.isRequired
 };
 
 export const showSearchErrorPopup = (errors, isPartial) => {
     // no need to update
     const titleKey = isPartial ? 'errors.onlyPartialDataForIndicators' : 'errors.noDataForIndicators';
     showPopup(
-        <Message messageKey={titleKey} bundleKey={BUNDLE_KEY} messageArgs={{indicators: errors.length}}/>,
+        <Message messageKey={titleKey} bundleKey={BUNDLE_KEY} messageArgs={{ indicators: errors.length }}/>,
         (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Popup errors={errors}/>
         </LocaleProvider>), () => {}, POPUP_OPTIONS);

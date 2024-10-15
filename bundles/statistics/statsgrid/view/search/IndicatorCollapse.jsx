@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Message, Collapse, CollapsePanel } from 'oskari-ui';
 import { DeleteButton } from 'oskari-ui/components/buttons';
 import { IndicatorRow } from './IndicatorRow';
@@ -34,4 +35,11 @@ export const IndicatorCollapse = ({ indicators = [], removeIndicator, removeAll,
             </CollapsePanel>
         </StyledCollapse>
     );
+};
+
+IndicatorCollapse.propTypes = {
+    indicators: PropTypes.array,
+    removeIndicator: PropTypes.func.isRequired,
+    removeAll: PropTypes.func.isRequired,
+    showMetadata: PropTypes.func.isRequired
 };

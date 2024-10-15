@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Checkbox, Select, Message, Spin } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
 import { ButtonContainer, PrimaryButton, SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
@@ -40,14 +41,21 @@ const IndicatorField = styled('div')`
     width: 100%;
 `;
 
-const UserIndicator = ({isSingle, onClick}) => {
+const UserIndicator = ({ isSingle, onClick }) => {
     const type = isSingle ? 'edit' : 'add';
     const title = isSingle ? 'userIndicators.modify.edit' : 'userIndicators.buttonTitle';
-    return <UserIndicatorButton bordered type={type} title={<Message messageKey={title} />} onClick={onClick} />
+    return <UserIndicatorButton bordered type={type} title={<Message messageKey={title} />} onClick={onClick} />;
+};
+UserIndicator.propTypes = {
+    isSingle: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired
 };
 
 // For preventing checkbox clickable area from stretching to 100% of content width
 const ClickableArea = ({ children }) => <div>{children}</div>;
+ClickableArea.propTypes = {
+    children: PropTypes.any
+};
 
 const SearchFlyout = ({ state, controller }) => {
     const datasources = getDatasources();
@@ -142,6 +150,10 @@ const SearchFlyout = ({ state, controller }) => {
         return <Spin showTip={true}>{Component}</Spin>;
     }
     return Component;
+};
+SearchFlyout.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.func.isRequired
 };
 
 export const showSearchFlyout = (state, indicators = [], searchController, stateController, onClose) => {
