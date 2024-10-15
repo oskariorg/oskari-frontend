@@ -13,6 +13,7 @@ const Margin = styled.div`
 `;
 
 export const ActionsTabPane = ({ metadataURL, controller, layers, hideLink }) => {
+    const hasLayers = layers.length > 0;
     return (
         <Content>
             { !hideLink &&
@@ -20,7 +21,7 @@ export const ActionsTabPane = ({ metadataURL, controller, layers, hideLink }) =>
                     <Link url={metadataURL}><Message messageKey='flyout.actions.xml' /></Link>
                 </Margin>
             }
-            <Label labelKey='layerList'/>
+            { hasLayers && <Label labelKey='layerList'/> }
             <LayerList>
                 { layers.map(layer => (
                     <li key={layer.layerId}>
