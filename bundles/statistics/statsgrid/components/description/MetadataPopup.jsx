@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import { Message } from 'oskari-ui';
@@ -12,7 +11,7 @@ const POPUP_OPTIONS = {
 
 export const showMedataPopup = (indicators, onClose) => {
     const controls = showPopup(
-        <Message messageKey="metadataPopup.title" bundleKey={BUNDLE_KEY} messageArgs={{indicators: indicators.length}}/>,
+        <Message messageKey="metadataPopup.title" bundleKey={BUNDLE_KEY} messageArgs={{ indicators: indicators.length }}/>,
         (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <MetadataCollapse indicators={indicators}/>
         </LocaleProvider>), onClose, POPUP_OPTIONS);
@@ -20,7 +19,7 @@ export const showMedataPopup = (indicators, onClose) => {
         ...controls,
         update: (indicators) => {
             controls.update(
-                <Message messageKey="metadataPopup.title" bundleKey={BUNDLE_KEY} messageArgs={{indicators: indicators.length}}/>,
+                <Message messageKey="metadataPopup.title" bundleKey={BUNDLE_KEY} messageArgs={{ indicators: indicators.length }}/>,
                 (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
                     <MetadataCollapse indicators={indicators} />
                 </LocaleProvider>)
