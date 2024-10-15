@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, Select, Message, Spin } from 'oskari-ui';
+import { Checkbox, Select, Message, Spin, Button } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
 import { ButtonContainer, PrimaryButton, SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
@@ -39,6 +39,10 @@ const IndicatorField = styled('div')`
     display: flex;
     flex-direction: column;
     width: 100%;
+`;
+const MetadataButton = styled(Button)`
+    margin-right: auto;
+    padding: 0;
 `;
 
 const UserIndicator = ({ isSingle, onClick }) => {
@@ -122,11 +126,9 @@ const SearchFlyout = ({ state, controller }) => {
                 </Row>
             </Field>
             {state.selectedIndicators && state.selectedIndicators.length > 0 && (
-                <div>
-                    <a onClick={() => controller.openMetadataPopup()}>
-                        <Message messageKey='metadataPopup.open' messageArgs={{ indicators: state.selectedIndicators.length }} />
-                    </a>
-                </div>
+                <MetadataButton type='link' onClick={() => controller.openMetadataPopup()}>
+                    <Message messageKey='metadataPopup.open' messageArgs={{ indicators: state.selectedIndicators.length }} />
+                </MetadataButton>
             )}
             <b><Message messageKey='panels.newSearch.refineSearchLabel' /></b>
             <IndicatorParams
@@ -153,7 +155,7 @@ const SearchFlyout = ({ state, controller }) => {
 };
 SearchFlyout.propTypes = {
     state: PropTypes.object.isRequired,
-    controller: PropTypes.func.isRequired
+    controller: PropTypes.object.isRequired
 };
 
 export const showSearchFlyout = (state, indicators = [], searchController, stateController, onClose) => {

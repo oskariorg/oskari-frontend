@@ -244,7 +244,7 @@ class StatisticsController extends AsyncStateHandler {
             this.updateState({ loading: true });
             const indicatorToAdd = await this.getIndicatorToAdd(indicator, regionset);
             if (indicatorToAdd.data.uniqueCount === 0) {
-                return { error: 'noData'};
+                return { error: 'noData' };
             }
             this.instance.addDataProviderInfo(indicatorToAdd);
             this.updateState({

@@ -3,7 +3,6 @@ import { updateIndicatorListInCache, removeIndicatorFromCache } from './SearchIn
 import { getRegionsAsync } from '../helper/RegionsHelper';
 import { BUNDLE_KEY } from '../constants';
 
-const statsGridLocale = Oskari.getMsg.bind(null, 'StatsGrid');
 // cache storage object
 const indicatorMetadataStore = {};
 const indicatorDataStore = {};
@@ -123,7 +122,7 @@ const processMetadata = (meta) => {
             return { value, label };
         });
         const label = locParams[id] || id;
-        const selector = { id, values, time, label};
+        const selector = { id, values, time, label };
         if (time) {
             selectors.unshift(selector);
         } else {
@@ -133,7 +132,7 @@ const processMetadata = (meta) => {
     const name = Oskari.getLocalized(meta.name) || '';
     const source = Oskari.getLocalized(meta.source) || '';
     const description = Oskari.getLocalized(meta.description) || '';
-    return {...meta, name, source, description, selectors};
+    return { ...meta, name, source, description, selectors };
 };
 
 export const getDataForIndicator = async (indicator, regionset) => {
