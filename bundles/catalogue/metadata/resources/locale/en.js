@@ -95,7 +95,7 @@ Oskari.registerLocalization({
                 "topologicalConsistency": "Topological consistency"
             }
         },
-        "codeLists": {
+        "codes": {
             "gmd:MD_CharacterSetCode": {
                 "ucs2": {
                     "label": "UCS2",
