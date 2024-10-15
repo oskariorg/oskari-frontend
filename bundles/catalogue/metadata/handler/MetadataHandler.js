@@ -65,7 +65,7 @@ class MetadataHandler extends StateHandler {
             return response.json();
         }).then(json => {
             const { metadata, identifications } = mapResponseForRender(json);
-            const layers = this._getLayers(uuid || metadata.fileIdentifier);
+            const layers = this._getLayers(uuid, layerId, metadata.fileIdentifier);
             this.updateState({ loading: false, metadata, layers, identifications });
         }).catch(error => {
             this.updateState({ loading: false });
@@ -73,17 +73,23 @@ class MetadataHandler extends StateHandler {
         });
     }
 
-    _getLayers (uuid) {
-        if (Oskari.dom.isEmbedded()) {
+    _getLayers (uuid, layerId, metadataUuid) {
+        const service = this.instance.getLayerService();
+        if (Oskari.dom.isEmbedded() || !service) {
             return [];
         }
+        const requestedUuid = uuid || service.findMapLayer(layerId)?.getMetadataIdentifier();
         const selected = Oskari.getSandbox().findAllSelectedMapLayers().map(l => l.getId());
-        return this.instance.getLayerService()?.getLayersByMetadataId(uuid).map(l => ({
+        const layers = service.getLayersByMetadataId(requestedUuid);
+        if (metadataUuid !== requestedUuid) {
+            layers.push(...service.getLayersByMetadataId(metadataUuid));
+        }
+        return layers.map(l => ({
             layerId: l.getId(),
             isVisible: l.isVisible(),
             name: l.getName(),
             isSelected: selected.includes(l.getId())
-        })) || [];
+        }));
     }
 }
 
