@@ -95,10 +95,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/mapmodule/plugin/scalebar/publisher/ScalebarTool.js"
-        },
-        {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/tools/ToolbarTool.js"
         },
         {
@@ -135,7 +131,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
-            "src": "./../../../bundles/mapping/mapmodule/plugin/logo/publisher/LogoTool.js"
+            "src": "../../../../bundles/mapping/mapmodule/publisher/tools.js"
         },
         {
             "type": "text/javascript",

@@ -83,3 +83,5 @@ Oskari.clazz.defineES('Oskari.publisher.LogoTool',
         protocol: ['Oskari.mapframework.publisher.Tool']
     }
 );
+
+export { LogoTool };

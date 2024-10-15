@@ -1,7 +1,7 @@
 import { AbstractPublisherTool } from '../../../../../framework/publisher2/tools/AbstractPublisherTool';
 
 const SCALEBAR_TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin';
-class ScalebarTool extends AbstractPublisherTool {
+class ScaleBarTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 1;
@@ -51,8 +51,10 @@ class ScalebarTool extends AbstractPublisherTool {
 
 // Attach protocol to make this discoverable by Oskari publisher
 Oskari.clazz.defineES('Oskari.publisher.ScalebarTool',
-    ScalebarTool,
+    ScaleBarTool,
     {
         protocol: ['Oskari.mapframework.publisher.Tool']
     }
 );
+
+export { ScaleBarTool };
