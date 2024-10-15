@@ -8,7 +8,7 @@ class UIHandler extends StateHandler {
             roles: [],
             permissions: [],
             resources: [],
-            selectedRole: 0,
+            selectedRole: null,
             loading: false,
             changedIds: new Set(),
             pagination: {
@@ -29,7 +29,7 @@ class UIHandler extends StateHandler {
         this.updateState({
             selectedRole: roleId
         });
-        if (roleId !== 0) {
+        if (roleId) {
             this.fetchPermissions();
         } else {
             this.updateState({
@@ -50,7 +50,7 @@ class UIHandler extends StateHandler {
         this.updateState({
             resources: structuredClone(this.state.permissions?.layers) || [],
             changedIds: new Set(),
-            selectedRole: 0,
+            selectedRole: null,
             pagination: {
                 ...this.state.pagination,
                 filter: '',
@@ -137,15 +137,14 @@ class UIHandler extends StateHandler {
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
-            const result = await response.json();
-            this.updateState({
-                roles: [
-                    { id: 0, name: `-- ${Oskari.getMsg('admin-permissions', 'rights.selectValue')} --` },
-                    ...result.rolelist
-                ]
-            });
+            const { rolelist, systemRoles } = await response.json();
+            const systemRoleNames = Object.values(systemRoles);
+            const roles = rolelist
+                .map(({ name, id }) => ({ value: id, label: name, isSystem: systemRoleNames.includes(name) }))
+                .sort((a, b) => Oskari.util.naturalSort(a.label, b.label));
+            this.updateState({ roles });
         } catch (e) {
-            Messaging.error(Oskari.getMsg('admin-permissions', 'rights.error.title'));
+            Messaging.error(Oskari.getMsg('admin-permissions', 'roles.error.fetch'));
             this.updateState({
                 roles: []
             });
@@ -167,9 +166,18 @@ class UIHandler extends StateHandler {
                 throw new Error(response.statusText);
             }
             const result = await response.json();
+            const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+            const layers = result?.layers.map(json => {
+                const layer = mapLayerService.findMapLayer(json.id);
+                return {
+                    ...json,
+                    layerType: layer?.getLayerType() || json.layerType.replace('layer', ''),
+                    hasTimeseries: layer?.hasTimeseries() || false
+                };
+            });
             this.updateState({
-                permissions: result,
-                resources: structuredClone(result?.layers) || [],
+                permissions: { ...result, layers },
+                resources: layers || [],
                 changedIds: new Set(),
                 pagination: {
                     ...this.state.pagination,
@@ -179,7 +187,7 @@ class UIHandler extends StateHandler {
             });
             this.setLoading(false);
         } catch (e) {
-            Messaging.error(Oskari.getMsg('admin-permissions', 'rights.error.title'));
+            Messaging.error(Oskari.getMsg('admin-permissions', 'permissions.error.fetch'));
             this.updateState({
                 permissions: [],
                 resources: [],
@@ -220,10 +228,10 @@ class UIHandler extends StateHandler {
                     throw new Error(response.statusText);
                 }
             }
-            Messaging.success(Oskari.getMsg('admin-permissions', 'rights.success.message'));
+            Messaging.success(Oskari.getMsg('admin-permissions', 'permissions.success.save'));
             this.fetchPermissions();
         } catch (e) {
-            Messaging.error(Oskari.getMsg('admin-permissions', 'rights.error.message'));
+            Messaging.error(Oskari.getMsg('admin-permissions', 'permissions.error.save'));
             this.updateState({
                 changedIds: new Set()
             });

@@ -17,7 +17,7 @@ const Container = styled('div')`
 const StyledButton = styled(MapButton)`
     z-index: 1;
 `;
-export const MapModuleButton = ({ visible = true, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, position, toolbarDirection }) => {
+export const MapModuleButton = ({ visible = true, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, position, toolbarDirection, highlight }) => {
     if (!visible) {
         return null;
     }
@@ -55,6 +55,7 @@ export const MapModuleButton = ({ visible = true, title, icon, onClick, size = '
                         className={className}
                         disabled={disabled}
                         position={position}
+                        highlight={highlight}
                     />
                 ) : (
                     <>
@@ -68,6 +69,7 @@ export const MapModuleButton = ({ visible = true, title, icon, onClick, size = '
                             className={className}
                             disabled={disabled}
                             position={position}
+                            highlight={highlight}
                         />
                         {withToolbar && (
                             <Toolbar height='32px' open={toolbarOpen} direction={toolbarOpenDirection} toolbarWidth={toolbarMaxWidth} maxWidth={toolbarMaxWidth + 100}>

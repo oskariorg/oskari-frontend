@@ -66,9 +66,10 @@ Oskari.registerLocalization(
             "toggleCompressedView": "Condensed view",
             "selectionTools": {
                 "title": "Select Features",
-                "instructions": " ",
+                "instructions": "Note! You can select objects only from vector layers.",
                 "selectFromTop": "From topmost layer",
                 "selectAll": "From all layers",
+                "noVectorLayers": "Open at least one vector layer so that you can select objects.",
                 "link": {
                     "title": "Select more features"
                 },

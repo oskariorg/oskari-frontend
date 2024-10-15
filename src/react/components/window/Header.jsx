@@ -14,7 +14,6 @@ const Container = styled('div')`
     padding: 8px 10px;
     margin: 0px;
     cursor: ${props => props.isDraggable ? 'grab' : undefined};
-    width: 100%;
 `;
 const ToolsContainer = styled('div')`
     display: flex;

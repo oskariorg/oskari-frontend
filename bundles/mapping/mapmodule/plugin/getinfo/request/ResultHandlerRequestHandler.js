@@ -1,4 +1,3 @@
-
 /**
  * @class Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequestHandler
  * Handles Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequest to handle getinfo results.

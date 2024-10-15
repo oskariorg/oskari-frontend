@@ -5,7 +5,7 @@ import { SearchHandler } from './SearchHandler';
 import { SearchResultInfo } from './SearchResultInfo';
 import { SearchResultTable } from './SearchResultTable';
 import { Message } from 'oskari-ui';
-import { LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const Description = styled('div')`
@@ -44,7 +44,7 @@ Oskari.clazz.define(
         this.loc = Oskari.getMsg.bind(null, this.instance.getName());
     }, {
         __refresh: function () {
-            var el = this.getContainer();
+            const el = this.getContainer();
             const {
                 query = '',
                 loading = false,
@@ -56,20 +56,22 @@ Oskari.clazz.define(
 
             ReactDOM.render(
                 (<LocaleProvider value={{ bundleKey: 'Search' }}>
-                    <SearchContainer>
-                        <Message messageKey="searchDescription" LabelComponent={Description}/>
-                        <SearchInput
-                            placeholder={this.instance.getLocalization('searchAssistance')}
-                            query={query}
-                            suggestions={suggestions}
-                            onSearch={controller.triggerSearch}
-                            onChange={controller.updateQuery}
-                            loading={loading} />
-                        { searchPerformed && <SearchResultInfo count={result.totalCount} hasMore={result.hasMore} /> }
-                        <SearchResultTable
-                            result={result}
-                            onResultClick={(result) => this._resultClicked(result)} />
-                    </SearchContainer>
+                    <ThemeProvider>
+                        <SearchContainer>
+                            <Message messageKey="searchDescription" LabelComponent={Description}/>
+                            <SearchInput
+                                placeholder={this.instance.getLocalization('searchAssistance')}
+                                query={query}
+                                suggestions={suggestions}
+                                onSearch={controller.triggerSearch}
+                                onChange={controller.updateQuery}
+                                loading={loading} />
+                            { searchPerformed && <SearchResultInfo count={result.totalCount} hasMore={result.hasMore} /> }
+                            <SearchResultTable
+                                result={result}
+                                onResultClick={(result) => this._resultClicked(result)} />
+                        </SearchContainer>
+                    </ThemeProvider>
                 </LocaleProvider>)
                 , el[0]);
         },
@@ -78,30 +80,30 @@ Oskari.clazz.define(
          * Creates the UI for a fresh start
          */
         createUi: function (container) {
-            var ui = jQuery(container);
+            const ui = jQuery(container);
             ui.empty();
             // create ui
-            var searchContainer = this.getContainer();
+            const searchContainer = this.getContainer();
             // add it to container
             ui.append(searchContainer);
             this.__refresh();
         },
         getContainer: function () {
             if (!this._searchContainer) {
-                var searchContainer = document.createElement('div');
+                const searchContainer = document.createElement('div');
                 this._searchContainer = jQuery(searchContainer);
             }
             return this._searchContainer;
         },
         focus: function () {},
         _resultClicked: function (result) {
-            var me = this;
-            var popupId = 'searchResultPopup';
-            var inst = this.instance;
-            var sandbox = inst.sandbox;
+            const me = this;
+            const popupId = 'searchResultPopup';
+            const inst = this.instance;
+            const sandbox = inst.sandbox;
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
-            var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest');
-            var zoom = result.zoomLevel;
+            const moveReqBuilder = Oskari.requestBuilder('MapMoveRequest');
+            let zoom = result.zoomLevel;
 
             if (result.zoomScale) {
                 zoom = { scale: result.zoomScale };
@@ -111,11 +113,11 @@ Oskari.clazz.define(
                 moveReqBuilder(result.lon, result.lat, zoom)
             );
 
-            var loc = this.instance.getLocalization('resultBox');
-            var resultActions = [];
-            var resultAction;
-            var action;
-            for (var name in this.resultActions) {
+            const loc = this.instance.getLocalization('resultBox');
+            const resultActions = [];
+            let resultAction;
+            let action;
+            for (const name in this.resultActions) {
                 if (this.resultActions.hasOwnProperty(name)) {
                     action = this.resultActions[name];
                     resultAction = {};
@@ -127,35 +129,35 @@ Oskari.clazz.define(
                 }
             }
 
-            var closeAction = {};
+            const closeAction = {};
             closeAction.name = loc.close;
             closeAction.type = 'link';
             closeAction.group = 1;
             closeAction.action = function () {
-                var rN = 'InfoBox.HideInfoBoxRequest';
-                var rB = Oskari.requestBuilder(rN);
-                var request = rB(popupId);
+                const rN = 'InfoBox.HideInfoBoxRequest';
+                const rB = Oskari.requestBuilder(rN);
+                const request = rB(popupId);
                 sandbox.request(me.instance.getName(), request);
             };
             resultActions.push(closeAction);
 
             const alternatives = me._createAlternativeNamesHTMLBlock(result);
-            var contentItem = {
+            const contentItem = {
                 html: `<h3>${Oskari.util.sanitize(result.name)}</h3>
                         ${alternatives}
                         <p>${result.region}<br/>
                         ${result.type}</p>`,
                 actions: resultActions
             };
-            var content = [contentItem];
+            const content = [contentItem];
 
-            var options = {
+            const options = {
                 hidePrevious: true
             };
 
-            var rN = 'InfoBox.ShowInfoBoxRequest';
-            var rB = Oskari.requestBuilder(rN);
-            var request = rB(
+            const rN = 'InfoBox.ShowInfoBoxRequest';
+            const rB = Oskari.requestBuilder(rN);
+            const request = rB(
                 popupId,
                 loc.title,
                 content,

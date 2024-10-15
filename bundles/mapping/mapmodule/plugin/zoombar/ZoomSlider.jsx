@@ -13,11 +13,18 @@ const Container = styled('div')`
     align-items: center;
     margin: 0 10px 10px 10px;
 `;
+const StyledMinus = styled(MinusOutlined)`
+    shape-rendering: optimizespeed;
+`;
+const StyledPlus = styled(PlusOutlined)`
+    shape-rendering: optimizespeed;
+`;
 
 const StyledSlider = styled(Slider)`
     height: 150px;
     opacity: ${props => props.opacity};
-    padding-left: 2px;
+    margin: 6px 10px;
+    left: -1px;
     .ant-slider-mark-text {
         color: #ffffff;
     }
@@ -26,7 +33,7 @@ const StyledSlider = styled(Slider)`
         background: ${props => props.dotColor};
         border: none;
         width: 7px;
-        left: 2px;
+        left: 0;
         opacity: 50%;
     }
     .ant-slider-rail,
@@ -53,7 +60,7 @@ const StyledSlider = styled(Slider)`
         border-radius: ${props => props.rounding || '0%'};
         width: 14px;
         height: 14px;
-        left: 3px;
+        left: 0;
         &:hover {
             background: ${props => props.handleBackground};
             border: 4px solid ${props => props.handleBorder};
@@ -67,20 +74,19 @@ const StyledSlider = styled(Slider)`
             border: 4px solid ${props => props.handleBorder};
         }
     }
-`;
+    .ant-slider-handle::after, .ant-slider-handle:hover::after {
+        background: none;
+        box-shadow: none !important;
+    }
+    .ant-slider:hover .ant-slider-handle::after {
+        box-shadow: none!important;
+    }
+    `;
 
 const MobileContainer = styled('div')`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-`;
-
-const PlusIcon = styled(PlusOutlined)`
-    font-size: 12px;
-`;
-
-const MinusIcon = styled(MinusOutlined)`
-    font-size: 12px;
 `;
 
 const ThemedSlider = ThemeConsumer(({theme = {}, ...rest}) => {
@@ -135,38 +141,40 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
     return (
         <Container>
             <MapModuleButton
-                icon={<PlusIcon />}
+                icon={<StyledPlus />}
                 className='t_plus'
                 onClick={() => {
                     changeZoom(zoom < 100 ? zoom + 1 : 100);
                 }}
                 size='18px'
+                iconSize='12px'
                 noMargin
             />
-            {!isMobile && (
-                <ThemeProvider value={mapModule.getMapTheme()}>
-                    <ThemedSlider
-                        className='t_zoomslider'
-                        vertical={true}
-                        value={zoom}
-                        step={1}
-                        dots
-                        max={maxZoom}
-                        min={0}
-                        onChange={value => {
-                            changeZoom(value);
-                        }}
-                        {...rest}
-                    />
-                </ThemeProvider>
-            )}
+
+            <ThemeProvider value={mapModule.getMapTheme()}>
+                <ThemedSlider
+                    className='t_zoomslider'
+                    vertical={true}
+                    value={zoom}
+                    step={1}
+                    dots
+                    max={maxZoom}
+                    min={0}
+                    onChange={value => {
+                        changeZoom(value);
+                    }}
+                    {...rest}
+                />
+            </ThemeProvider>
+
             <MapModuleButton
-                icon={<MinusIcon />}
+                icon={<StyledMinus />}
                 className='t_minus'
                 onClick={() => {
                     changeZoom(zoom > 0 ? zoom - 1 : 0);
                 }}
                 size='18px'
+                iconSize='12px'
                 noMargin
             />
         </Container>

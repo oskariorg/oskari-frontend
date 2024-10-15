@@ -26,6 +26,17 @@ Oskari.registerLocalization({
                 'title': 'Statistics'
             }
         },
+        'publisher': {
+            "label": "Thematic maps",
+            "tooltip": "Show thematic maps on the map.",
+            "grid": "Show thematic data in table",
+            "allowClassification": "Allow classification",
+            "transparent": "Set classification background transparent",
+            "diagram": "Display charts",
+            "classification": "Allow hiding classification",
+            "series": "Allow hiding series player",
+            "statistics": 'Open data search'
+        },
         'panels': {
             'newSearch': {
                 'title': 'SEARCH DATA',

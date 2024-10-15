@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Message } from 'oskari-ui';
 import { Messaging } from 'oskari-ui/util';

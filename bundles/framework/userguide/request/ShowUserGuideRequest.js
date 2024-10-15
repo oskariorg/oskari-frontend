@@ -1,4 +1,3 @@
-
 /**
  * @class Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequest
  *

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { FlyoutContent } from './view/';
-import { LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 
 /**
  * @class Oskari.framework.bundle.announcements.Flyout
@@ -62,11 +62,13 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
             }
             const content = (
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
-                    <FlyoutContent
-                        { ...state }
-                        toolController = {this.announcementsHandler.getToolController()}
-                        controller={this.announcementsHandler.getController()}
-                    />
+                    <ThemeProvider>
+                        <FlyoutContent
+                            { ...state }
+                            toolController = {this.announcementsHandler.getToolController()}
+                            controller={this.announcementsHandler.getController()}
+                        />
+                    </ThemeProvider>
                 </LocaleProvider>
             );
             ReactDOM.render(content, this.container);

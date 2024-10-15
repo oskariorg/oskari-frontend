@@ -3,7 +3,7 @@ import { CaretDownOutlined, CaretUpOutlined, CaretLeftOutlined, CaretRightOutlin
 import styled from 'styled-components';
 import { ReturnIcon } from 'oskari-ui/components/icons';
 import { MapModuleButton } from '../../MapModuleButton';
-import { getColorEffect, EFFECT } from 'oskari-ui/theme';
+import { EFFECT } from '../../../../../src/constants';
 
 const StyledButtonContainer = styled('div')`
     position: relative;
@@ -97,7 +97,7 @@ const ArrowButton = ({ children, onClick, colors, top = 'initial', right = 'init
 export const PanButton3D = ({ colors, resetClicked, panClicked, isMobile = false, showArrows = false }) => {
     const { bgColor, icon, hover, primary } = colors;
     let backgroundV = bgColor;
-    let backgroundH = `linear-gradient(180deg, ${primary} 0%, ${primary} 35%, ${getColorEffect(primary, EFFECT.LIGHTEN_MINOR)} 100%)`;
+    let backgroundH = `linear-gradient(180deg, ${primary} 0%, ${primary} 35%, ${Oskari.util.getColorEffect(primary, EFFECT.LIGHTEN_MINOR)} 100%)`;
     if (isMobile || !showArrows) {
         return (
             <MapModuleButton

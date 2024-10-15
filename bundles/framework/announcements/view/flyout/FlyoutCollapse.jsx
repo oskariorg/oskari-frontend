@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, Collapse, CollapsePanel, Divider } from 'oskari-ui';
+import { Message, Collapse, Divider } from 'oskari-ui';
 import { AnnouncementsContent, CollapseTools } from '../';
 import { getDateRange } from '../../service/util';
 
@@ -13,23 +13,26 @@ export const FlyoutCollapse = ({
             <Message messageKey={'flyout.noAnnouncements'}/>
         );
     }
+    const items = announcements.map((announcement) => {
+        const { locale, id } = announcement;
+        const { title } = Oskari.getLocalized(locale);
+        const dateRange = getDateRange(announcement);
+
+        return {
+            key: announcement.id,
+            label: title,
+            extra: <CollapseTools toolController={toolController} announcementId={id}/>,
+            children: <>
+                <AnnouncementsContent announcement={announcement}/>
+                <Divider />
+                <b><Message messageKey={'valid'} /></b>
+                <p>{dateRange}</p>
+            </>
+        };
+    });
+
     return (
-        <Collapse accordion>
-            { announcements.map((announcement) => {
-                const { locale, id } = announcement;
-                const { title } = Oskari.getLocalized(locale);
-                const dateRange = getDateRange(announcement);
-                return (
-                    <CollapsePanel header={title} key={announcement.id}
-                        extra={<CollapseTools toolController={toolController} announcementId={id}/>}>
-                        <AnnouncementsContent announcement={announcement}/>
-                        <Divider />
-                        <b><Message messageKey={'valid'} /></b>
-                        <p>{dateRange}</p>
-                    </CollapsePanel>
-                );
-            })}
-        </Collapse>
+        <Collapse accordion items={items}/>
     );
 };
 

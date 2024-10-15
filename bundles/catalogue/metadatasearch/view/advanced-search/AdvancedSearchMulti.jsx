@@ -1,39 +1,41 @@
 import React from 'react';
 import { AdvancedSearchCheckboxGroupContainer, AdvancedSearchInputLabel, AdvancedSearchRowContainer } from './AdvancedSearchStyledComponents';
-import { METADATA_BUNDLE_LOCALIZATION_ID } from '../../instance';
 import { PropTypes } from 'prop-types';
-import { Checkbox } from 'oskari-ui';
+import { Checkbox, Message } from 'oskari-ui';
 
 export const AdvancedSearchMulti = (props) => {
-    const { title, options, onChange, selected, disabled } = props;
-    const hasOptions = options && options?.values?.length && options.values.length > 0;
-    if (!hasOptions) {
+    const { field, options, onChange, selected = [], disabled } = props;
+    if (!options.length) {
         return null;
     }
+    const onCheckbox = (value, checked) => {
+        const values = checked ? [...selected, value] : selected.filter(val => val !== value);
+        onChange(values);
+    };
     return <AdvancedSearchRowContainer>
-        <AdvancedSearchInputLabel>{title}</AdvancedSearchInputLabel>
+        <AdvancedSearchInputLabel>
+            <Message messageKey={`advancedSearch.${field}`} defaultMsg={field}/>
+        </AdvancedSearchInputLabel>
         {
             <AdvancedSearchCheckboxGroupContainer>
-                {options.values.map(value => <Checkbox disabled={disabled}
-                    key={value.val}
-                    value={value.val}
-                    onChange={onChange}
-                    checked={isChecked(selected, value.val)}>
-                    {Oskari.getMsg(METADATA_BUNDLE_LOCALIZATION_ID, 'advancedSearch.' + value.val)}
-                </Checkbox>)}
+                {options.map(({ value, label }) =>
+                    <Checkbox
+                        disabled={disabled}
+                        key={value}
+                        value={value}
+                        onChange={evt => onCheckbox(value, evt.target.checked)}
+                        checked={selected.includes(value)}>
+                        <Message messageKey={`advancedSearch.${value}`} defaultMsg={label || value}/>
+                    </Checkbox>)}
             </AdvancedSearchCheckboxGroupContainer>
         }
     </AdvancedSearchRowContainer>;
 };
 
-const isChecked = (selected, value) => {
-    return selected?.includes(value);
-};
-
 AdvancedSearchMulti.propTypes = {
-    title: PropTypes.string,
-    options: PropTypes.object,
-    onChange: PropTypes.func,
+    field: PropTypes.string.isRequired,
+    options: PropTypes.array.isRequired,
+    onChange: PropTypes.func.isRequired,
     selected: PropTypes.array,
     disabled: PropTypes.bool
 };

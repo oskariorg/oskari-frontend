@@ -126,7 +126,7 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
         },
         {
             align: 'left',
-            title: <Message messageKey='flyout.idTitle' />,
+            title: <Message messageKey='flyout.fields.title' />,
             dataIndex: 'title',
             defaultSortOrder: 'ascend',
             sortDirections: ['descend', 'ascend', 'descend'],
@@ -145,7 +145,7 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
         },
         {
             align: 'left',
-            title: <Message messageKey='flyout.layerDataProvider' />,
+            title: <Message messageKey='flyout.fields.dataProducer' />,
             dataIndex: 'dataProducer',
             defaultSortOrder: 'ascend',
             sortDirections: ['descend', 'ascend', 'descend'],
@@ -158,7 +158,7 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
         },
         {
             align: 'left',
-            title: 'Type',
+            title: <Message messageKey='flyout.fields.layerType' />,
             dataIndex: 'layerType',
             defaultSortOrder: 'ascend',
             sortDirections: ['descend', 'ascend', 'descend'],
@@ -170,7 +170,7 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
         },
         {
             align: 'left',
-            title: <Message messageKey='flyout.totalDisplaysTitle' />,
+            title: <Message messageKey='flyout.fields.total' />,
             dataIndex: 'total',
             sortDirections: ['descend', 'ascend', 'descend'],
             sorter: (a, b) => a.total - b.total,
@@ -178,7 +178,7 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
         },
         {
             align: 'left',
-            title: <Message messageKey='flyout.failurePercentage' />,
+            title: <Message messageKey='flyout.fields.failurePercentage' />,
             dataIndex: 'failurePercentage',
             sortDirections: ['descend', 'ascend', 'descend'],
             sorter: (a, b, sortOrder) => {

@@ -1,18 +1,47 @@
 # Release Notes
 
+## 2.13.2
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/50?closed=1
+
+- Fixed an issue when importing statistical data from clipboard with region ids: https://github.com/oskariorg/oskari-frontend/pull/2640
+- Fixed an issue with the older jQuery version of statistical data functionality where the publisher tools for statistical data were not properly shown on the publisher.
+- Fixed issues when showing layer metadata properly from metadata search results and layer admin.
+- Fixed some localization issues on metadata search functionality.
+- Fixed an issue where clicks on the map were not properly received by the map on the lower part of the map. For example GFI didn't work at the bottom of the map etc.
+- Fixed an issue where setting a custom cursor on map was not properly reseted for popups on the map: https://github.com/oskariorg/oskari-frontend/pull/2644
+- Fixed an issue with layer admin vector hover style form where editing the hover style could lead to a situation where it could no longer be edited.
+- Added handling for colors with alpha channel under the hood (no UI yet). This enables a polygon style with semi-transparent fill and fully opaque strokes.
+
+## 2.13.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/49?closed=1
+
+- Restored synchronous state updates to other parts of the frontend than thematic maps (an AsyncStateHandler is now an option for developers though). This fixes cursor jumping to the end of an input field while user is editing the input text. See https://github.com/oskariorg/oskari-frontend/pull/2626 for more details.
+- Added max-width for tooltips so they are more usable on large screens.
+- Fixed an issue where feature data table would not work properly when vector layers are present when starting the application (for example on embedded maps).
+- Fixed some icons on time series player that were not using theme variables properly.
+- Added default duration for announcements (one day).
+- Fixed an issue where thematic maps search UI breaks when indicator listing has duplicates of the same indicator.
+- Fixed an issue where thematic maps opacity was not properly restored on embedded maps/saved views.
+- Added highlighting for selected region on thematic maps table. Also highlights the region on map when user selects a region on the table.
+- Fine-tuned the session expired modal.
+
 ## 2.13.0
 
 For a full list of changes see:
 https://github.com/oskariorg/oskari-frontend/milestone/45?closed=1
 
-### Improvements for Mobile / small screen on geoportal
+### Improvements for mobile devices / small screens
 
 - Adding a marker now only shows one popup at a time making it more usable on small screens/mobile devices.
 - Marker and measurement tools now automatically hide the main navigation on geoportal when used on small screens to show more of the map when these tools are activated.
 - The XY-tool now detects if the user has a mouse-controller and hides the "show coordinates at mouse location" toggle if mouse is not detected.
-- The main navigation now shows a scroll indicator to signal that there's more content on the navigation than fits the end-users screen. This helps users find functionalities that don't fit on their screen and are not familiar with the UI to know where to search them.
+- The main navigation on geoportal now shows a scroll indicator to signal that there's more content on the navigation than fits the end-users screen. This helps users find functionalities that don't fit on their screen and are not familiar with the UI to know where to search them.
 - Banner-announcements are now more usable on small screens and work better with dark themes (https://github.com/oskariorg/oskari-frontend/pull/2481).
-- The announcements tile in main navigation is now hidden on small screens when there are no announcements to be listed.
+- The announcements tile in geoportal main navigation is now hidden on small screens when there are no announcements to be listed.
 - The UI for browsing sparse timeseries data like historical ortophotos has been improved for small screens: https://github.com/oskariorg/oskari-frontend/pull/2565
 - Pinch zooming the page (outside the map/in the main navigation or flyout/popup content) on mobile devices can result the user losing access to part of the UI (usually the main navigation) as its rendered outside the device physical screen after pinch zooming. We now try to detect this condition and offer a button for reseting the page zoom when this happens. This is experimental and unfortunately doesn't seem to work on all devices (notably not working on iOS based devices). See https://github.com/oskariorg/oskari-frontend/pull/2534 for more details.
 
@@ -33,6 +62,8 @@ https://github.com/oskariorg/oskari-frontend/milestone/45?closed=1
 - Coordinates info can now be included on the infobox UI (https://github.com/oskariorg/oskari-frontend/pull/2566). Requires activating it on the database for any appsetups that wish to show the coordinates.
 - Reversed map layers legends listing order for consistency/matching the layer order on selected layers.
 - Fixed an issue with infobox header not growing with the content (https://github.com/oskariorg/oskari-frontend/pull/2577)
+- Text selection now uses theme colors
+- Timeseries UI now supports theme colors
 
 ### Admin functionalities
 

@@ -26,6 +26,17 @@ Oskari.registerLocalization({
                 "title": "Statistics"
             }
         },
+        'publisher': {
+            "label": "Þemakort",
+            "tooltip": "Sýna þemakort á kortinu.",
+            "grid": "Sýna þemagögn í töflunni.",
+            "allowClassification": "Leyfa flokkun",
+            "transparent": "Set classification background transparent",
+            "diagram": "Display charts",
+            "classification": "Allow hiding classification",
+            "series": "Allow hiding series player",
+            "statistics": "Leitargögn"
+        },
         "panels": {
             "newSearch": {
                 "title": "SEARCH DATA",

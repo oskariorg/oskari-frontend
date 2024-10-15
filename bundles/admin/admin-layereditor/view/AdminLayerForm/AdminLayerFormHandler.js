@@ -1178,8 +1178,15 @@ class UIHandler extends StateHandler {
     }
 
     showLayerMetadata (layerId) {
+        // this works even when the layer hasn't been saved yet
+        let payload = { uuid: layerId };
+        if (typeof layerId === 'number') {
+            // this works only when layer has been saved
+            // (and supports the attributes override for metadata service url)
+            payload = { layerId };
+        }
         Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
-            { layerId: layerId }
+            payload
         ]);
     }
 

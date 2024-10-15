@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
 
-
 const StyledInfoIcon = styled(QuestionCircleOutlined)`
     cursor: pointer;
     color: #0290ff;
@@ -19,11 +18,10 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
 `;
 
 /**
- * 
  * @param {String} title Icon tooltip
  * @param {Number} size Font size in pixels
  * @param {Object} style Additional styles
- * @returns 
+ * @returns
  */
 export const Info = ThemeConsumer(({ theme = {}, children, title, size = 16, style, space = true, placement = 'top' }) => {
     const helper = getNavigationTheme(theme);
@@ -47,5 +45,5 @@ Info.propTypes = {
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     size: PropTypes.number,
     style: PropTypes.object,
-    space: PropTypes.bool,
+    space: PropTypes.bool
 };

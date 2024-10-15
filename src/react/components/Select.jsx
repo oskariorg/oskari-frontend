@@ -1,6 +1,5 @@
 import { Select as AntSelect } from 'antd';
 import styled from 'styled-components';
-import 'antd/es/select/style/index.js';
 
 // Wrap to styled so components can be referred in component styling.
 const Select = styled(AntSelect)`

@@ -41,6 +41,7 @@ class IndicatorFormController extends StateHandler {
             loading: false
         };
     }
+
     reset () {
         this.updateState(this.getInitState());
     }
@@ -201,6 +202,10 @@ class IndicatorFormController extends StateHandler {
         this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, dataset.regionset);
     }
 
+    selectSavedIndicator (indicator, regionset) {
+        this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, regionset);
+    }
+
     importFromClipboard (data) {
         const regionValues = {};
 
@@ -224,12 +229,13 @@ class IndicatorFormController extends StateHandler {
             const value = regionValues[key] || regionValues[name.toLowerCase()];
             // String or undefined
             if (value) {
-                return {...region, value};
+                return { ...region, value };
             }
             return region;
         });
         this.updateState({ dataByRegions });
     }
+
     editDataset (item = {}) {
         const selection = item[SELECTOR];
         const regionset = item.regionset;

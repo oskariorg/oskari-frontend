@@ -1,4 +1,3 @@
-
 /**
  * @class Oskari.mapframework.bundle.layerlist.request.AddLayerListFilterRequestHandler
  * Handles Oskari.mapframework.bundle.layerlist.request.AddLayerListFilterRequest to show filter.

@@ -38,6 +38,9 @@ Oskari.registerLocalization(
                     "close": "Fermer"
                 }
             },
+            "BackgroundLayerSelectionPlugin": {
+                "emptyOption": "Aucune sélection"
+            },
             "LayerSelectionPlugin": {
                 "title": "Couches cartographiques",
                 "chooseDefaultBaseLayer": "Sélectionner la couche carte d’arrière-plan.",

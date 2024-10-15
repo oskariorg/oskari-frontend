@@ -1,4 +1,3 @@
-
 import '../../../../src/global';
 import { VectorFeatureSelectionService } from './VectorFeatureSelectionService';
 

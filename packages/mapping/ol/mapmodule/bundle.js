@@ -35,7 +35,7 @@ Oskari.clazz.define(
                 /**
                  * mapmodule implementation related plugins
                  */
-                 {
+                {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.ol.js'
                 },
@@ -69,12 +69,6 @@ Oskari.clazz.define(
                 }, {
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/vectorlayer.scss'
-                }, {
-                    'type': 'text/css',
-                    'src': '../../../../bundles/mapping/mapmodule/resources/scss/publishertoolbar.scss'
-                }, {
-                    'type': 'text/css',
-                    'src': '../../../../bundles/mapping/mapmodule/resources/scss/mylocation.scss'
                 }, {
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/mapmodule.ol.scss'

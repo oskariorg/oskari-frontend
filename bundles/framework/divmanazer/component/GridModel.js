@@ -65,12 +65,11 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
          * @param {String} firstField name of the first field
          */
         setFirstField: function (firstField) {
-            if (_.indexOf(this.fields, firstField) === 0 || _.indexOf(this.fields, firstField) === -1) {
+            if (this.fields.indexOf(firstField) < 1) {
                 // nothing to do
-            } else {
-                _.pull(this.fields, firstField);
-                this.fields.unshift(firstField);
+                return;
             }
+            this.fields = [firstField, ...this.fields.filter(field => field !== firstField)];
         },
         /**
          * @method addData
@@ -91,9 +90,8 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
             }
             // if key is not in fields, add it there
             if (addMissingFields) {
-                _.forEach(pData, function (n, key) {
-                    var index = _.indexOf(me.fields, key);
-                    if (index === -1) {
+                Object.keys(pData).forEach(function (key) {
+                    if (!me.fields.includes(key)) {
                         me._addField(key);
                     }
                 });

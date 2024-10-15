@@ -1,4 +1,3 @@
-
 // protocols that can be removed from url labels
 const WELL_KNOWN_PROTO = ['http://', 'https://'];
 // for reasonable breakpoint
