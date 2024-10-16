@@ -8,7 +8,6 @@ import { PrimaryButton, ButtonContainer, SecondaryButton } from 'oskari-ui/compo
 import styled from 'styled-components';
 
 const StyledTable = styled(Table)`
-    max-height: 750px;
     max-width: 850px;
     margin-bottom: 20px;
 `;
@@ -142,9 +141,8 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
                     current: pagination.page,
                     onChange: (page, pageSize) => controller.setPagination({ page, pageSize })
                 }}
-                scroll={{ y: 500 }}
-                loading={loading}
-            />
+                scroll={{ x: 800 }}
+                loading={loading}/>
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={() => controller.cancel()}/>
                 <PrimaryButton type='save' onClick={controller.savePermissions}/>
