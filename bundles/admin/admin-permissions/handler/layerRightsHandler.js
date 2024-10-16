@@ -28,11 +28,10 @@ class UIHandler extends StateHandler {
     }
 
     setSelectedRole (selectedRole) {
-        this.updateState({ selectedRole });
-        if (selectedRole) {
+        // unsaved changes are role related, clear on select
+        this.updateState({ selectedRole, unSavedChanges: {} });
+        if (!this.getState().resources.length) {
             this.fetchPermissions();
-        } else {
-            this.resetTable();
         }
     }
 
@@ -40,20 +39,25 @@ class UIHandler extends StateHandler {
         this.updateState({ loading });
     }
 
-    resetTable () {
-        this.updateState({
+    reset (full) {
+        const { pagination } = this.getState();
+        const newState = {
             unSavedChanges: {},
-            selectedRole: null,
             filtered: null,
             pagination: {
-                ...this.state.pagination,
+                ...pagination,
                 page: 1
             }
-        });
+        };
+        if (full) {
+            newState.selectedRole = null;
+            newState.resources = [];
+        }
+        this.updateState(newState);
     }
 
     cancel () {
-        this.instance.getSandbox().closeFlyout();
+        this.instance.closeFlyout();
     }
 
     setCheckAllForPermission (idList, type, enabled) {
@@ -84,20 +88,14 @@ class UIHandler extends StateHandler {
     }
 
     search (searchText) {
-        let filtered = null;
-        if (searchText) {
-            const lower = searchText.toLowerCase();
-            filtered = this.getState().resources
-                .filter(r => r.name.toLowerCase().includes(lower));
+        this.reset();
+        if (!searchText) {
+            return;
         }
-        this.updateState({
-            filtered,
-            unSavedChanges: {},
-            pagination: {
-                ...this.state.pagination,
-                page: 1
-            }
-        });
+        const lower = searchText.toLowerCase();
+        const filtered = this.getState().resources
+            .filter(r => r.name.toLowerCase().includes(lower));
+        this.updateState({ filtered });
     }
 
     async fetchRoles () {
@@ -158,7 +156,6 @@ class UIHandler extends StateHandler {
     async fetchPermissions () {
         try {
             this.setLoading(true);
-            // TODO: reset => pagination, unsaved
             const response = await fetch(Oskari.urls.getRoute('LayerPermission', {
                 lang: Oskari.getLang()
             }), {
@@ -173,20 +170,14 @@ class UIHandler extends StateHandler {
             const { names = {}, layers = [] } = await response.json();
             this.updateState({
                 permissions: this._mapPerimssions(names),
-                resources: layers.map(l => this._mapLayerToResource(l)),
-                unSavedChanges: {},
-                pagination: {
-                    ...this.state.pagination,
-                    page: 1
-                }
+                resources: layers.map(l => this._mapLayerToResource(l))
             });
             this.setLoading(false);
         } catch (e) {
             Messaging.error(this.instance.loc('permissions.error.fetch'));
             this.updateState({
                 permissions: [],
-                resources: [],
-                changedIds: new Set()
+                resources: []
             });
             this.setLoading(false);
         }
@@ -219,6 +210,7 @@ class UIHandler extends StateHandler {
                 }
             }
             Messaging.success(this.instance.loc('permissions.success.save'));
+            this.reset();
             this.fetchPermissions();
         } catch (e) {
             Messaging.error(this.instance.loc('permissions.error.save'));
@@ -255,7 +247,6 @@ const wrapped = controllerMixin(UIHandler, [
     'setPagination',
     'search',
     'clearSearch',
-    'resetTable',
     'cancel'
 ]);
 

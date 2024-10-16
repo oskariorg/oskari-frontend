@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          */
         resetFlyout: function () {
             if (this.handler) {
-                this.handler.resetTable();
+                this.handler.reset(true);
             }
         },
         /**
