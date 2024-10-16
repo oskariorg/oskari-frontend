@@ -67,10 +67,11 @@ class UIHandler extends StateHandler {
     getUpdatedPermissions (id, type, enabled) {
         const { resources, selectedRole, unSavedChanges } = this.getState();
         const current = unSavedChanges[id] || resources.find(p => p.id === id)?.permissions?.[selectedRole] || [];
-        if (!current) {
-            return;
+        if (enabled) {
+            // also used for check all -> don't add duplicates
+            return current.includes(type) ? current : [...current, type];
         }
-        return enabled ? [...current, type] : current.filter(p => p !== type);
+        return current.filter(p => p !== type);
     }
 
     togglePermission (id, type, enabled) {
