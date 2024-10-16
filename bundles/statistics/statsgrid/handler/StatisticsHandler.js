@@ -221,8 +221,11 @@ class StatisticsController extends AsyncStateHandler {
             // remove indicator first to get updated indicator and data
             this.removeIndicator(indicator);
         }
-        await this.addIndicator(indicator, regionset);
-        this.setActiveIndicator(indicator.hash);
+        const response = await this.addIndicator(indicator, regionset);
+        if (response.success) {
+            this.setActiveIndicator(indicator.hash);
+        }
+        return response;
     }
 
     async addIndicator (indicator, regionset) {
@@ -232,27 +235,27 @@ class StatisticsController extends AsyncStateHandler {
         }
         if (this.isIndicatorSelected(indicator, true)) {
             // already selected
-            return true;
+            if (regionset !== this.getState().regionset) {
+                await this.setActiveRegionset(regionset);
+            }
+            return { success: true };
         }
         try {
             this.updateState({ loading: true });
-            // TODO: SearchHandler should select first value
-            if (indicator.series) {
-                const { id, values } = indicator.series;
-                indicator.selections[id] = values[0];
-            }
             const indicatorToAdd = await this.getIndicatorToAdd(indicator, regionset);
+            if (indicatorToAdd.data.uniqueCount === 0) {
+                return { error: 'noData' };
+            }
             this.instance.addDataProviderInfo(indicatorToAdd);
             this.updateState({
                 loading: false,
                 indicators: [...this.getState().indicators, indicatorToAdd]
             });
         } catch (error) {
-            this.updateState({ loading: false });
-            this.log.warn(error.message);
-            return false;
+            return { error: error.message };
         }
-        return true;
+        this.updateState({ loading: false });
+        return { success: true };
     }
 
     // gather all needed stuff for rendering components before adding indicator to state

@@ -83,13 +83,6 @@ Oskari.registerLocalization(
             "orderByDescending": "Trier en ordre décroissant",
             "removeSource": "Supprimer les données"
         },
-        "legend": {
-            "title": "Classification",
-            "noActive": "Aucune donnée sélectionnée. Veuillez sélectionner les données pour voir la classification de la carte.",
-            "noEnough": "Les données sont trop petites pour être classifiées. Veuillez essayer des données différentes ou modifier les limites.",
-            "noData": "Les données ne sont pas accessibles pour le moment précis sélectionné.",
-            "cannotCreateLegend": "Impossible de créer la légende à l'aide des  valeurs choisies. Veuillez essayer des valeurs différentes."
-        },
         "series": {
             "speed": {
                 "label": "Vitesse d'animation",
@@ -177,7 +170,11 @@ Oskari.registerLocalization(
             "regionsDataError": "Une erreur est survenue lors de la recherche des valeurs de superficie.",
             "regionsDataIsEmpty": "Impossible d'aller chercher les valeurs de superficie pour les données choisies.",
             "datasourceIsEmpty": "Le champ Source de données est vide.",
-            "cannotDisplayAsSeries": "Impossible d'analyser l'indicateur en tant que série."
+            "cannotDisplayAsSeries": "Impossible d'analyser l'indicateur en tant que série.",
+            "noActiveLegend": "Aucune donnée sélectionnée. Veuillez sélectionner les données pour voir la classification de la carte.",
+            "noEnough": "Les données sont trop petites pour être classifiées. Veuillez essayer des données différentes ou modifier les limites.",
+            "noData": "Les données ne sont pas accessibles pour le moment précis sélectionné.",
+            "cannotCreateLegend": "Impossible de créer la légende à l'aide des  valeurs choisies. Veuillez essayer des valeurs différentes."
         },
         "datacharts": {
             "flyout": "Données recherchées",

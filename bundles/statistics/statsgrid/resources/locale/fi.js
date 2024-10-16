@@ -85,13 +85,6 @@ Oskari.registerLocalization({
             'removeSource': 'Poista aineisto',
             'noIndicators': 'Aloita teemakartan käyttö lisäämällä kartalle indikaattori.'
         },
-        'legend': {
-            'title': 'Luokittelu',
-            'noActive': 'Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun.',
-            'noEnough': 'Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.',
-            'noData': 'Aineistoa ei ole saatavilla valitsemaltasi ajankohdalta',
-            'cannotCreateLegend': 'Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla.'
-        },
         'series': {
             'speed': {
                 'label': 'Animaationopeus',
@@ -183,7 +176,11 @@ Oskari.registerLocalization({
             'datasourceIsEmpty': 'Tietolähde on tyhjä.',
             'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana',
             'noDataForIndicators': 'Palvelusta ei saatu tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}',
-            'onlyPartialDataForIndicators': 'Palvelusta ei saatu kaikkia tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}'
+            'onlyPartialDataForIndicators': 'Palvelusta ei saatu kaikkia tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}',
+            'noActiveLegend': 'Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun.',
+            'noEnough': 'Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.',
+            'noData': 'Aineistoa ei ole saatavilla valitsemaltasi ajankohdalta',
+            'cannotCreateLegend': 'Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla.'
         },
         'missing': {
             'regionsetName': 'Tuntematon',

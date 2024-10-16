@@ -69,6 +69,19 @@ class IndicatorFormController extends StateHandler {
         return datasets;
     }
 
+    // TODO: is this needed?
+    async getIndicatorDatasets (indicator) {
+        try {
+            const { selectors, regionsets, name, source, description } = await getIndicatorMetadata(indicator.ds, indicator.id);
+            const datasets = [];
+            // create dataset for every value and regionset compination like {year: 2024, regionset: 2036}
+            selectors.forEach(s => s.values.forEach(valObj => regionsets.forEach(regionset => datasets.push({ [s.id]: valObj.value, regionset }))));
+            this.updateState({ datasets, indicator: { ...indicator, name, source, description } });
+        } catch (error) {
+            Messaging.error(Oskari.getMsg('StatsGrid', 'errors.indicatorMetadataError'));
+        }
+    }
+
     updateIndicator (key, value) {
         this.updateState({ indicator: { ...this.getState().indicator, [key]: value } });
     }

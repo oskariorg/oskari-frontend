@@ -85,13 +85,6 @@ Oskari.registerLocalization({
             'removeSource': 'Radera datamängd',
             'noIndicators': 'Börja användningen av tematiska kartor med att lägga till en indikator på kartan.'
         },
-        'legend': {
-            'title': 'Klassificering',
-            'noActive': 'Inga valda datamängder, välj datamängd för att se kartans klassificering.',
-            'noEnough': 'Datamängden är för liten för att klassificeras, försök en annan datamängd eller avgränsning.',
-            'noData': 'Ingen data vid den valda tidspunkten.',
-            'cannotCreateLegend': 'Teckenförklaringen kan inte skapas utgående från de valda värden, vänligen försök andra värden.'
-        },
         'series': {
             'speed': {
                 'label': 'Animeringshastighet',
@@ -183,7 +176,11 @@ Oskari.registerLocalization({
             'datasourceIsEmpty': 'Datakällan är tom.',
             'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.',
             'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}',
-            'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}'
+            'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}',
+            'noActiveLegend': 'Inga valda datamängder, välj datamängd för att se kartans klassificering.',
+            'noEnough': 'Datamängden är för liten för att klassificeras, försök en annan datamängd eller avgränsning.',
+            'noData': 'Ingen data vid den valda tidspunkten.',
+            'cannotCreateLegend': 'Teckenförklaringen kan inte skapas utgående från de valda värden, vänligen försök andra värden.'
         },
         'missing': {
             'regionsetName': 'Okänd',

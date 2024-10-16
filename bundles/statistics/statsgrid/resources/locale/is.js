@@ -84,13 +84,6 @@ Oskari.registerLocalization({
             "orderByDescending": "Sort descending",
             "removeSource": "Remove data"
         },
-        "legend": {
-            "title": "Classification",
-            "noActive": "Data was not selected, select data to see map classification.",
-            "noEnough": "The data is too small to be classified, try different data or change limitings.",
-            "noData": "Data is not available for the selected point in time.",
-            "cannotCreateLegend": "Legend cannot be created by chosen values, try different values."
-        },
         "series": {
             "speed": {
                 "label": "Animation speed",
@@ -178,7 +171,11 @@ Oskari.registerLocalization({
             "regionsDataIsEmpty": "Area values could not be fetched for chosen data.",
             "datasourceIsEmpty": "Datasource is empty.",
             "cannotDisplayAsSeries": "Indicator cannot be inspected as a series.",
-            "noDataForIndicators": "Service did not return data for {indicators, plural, one {the indicator} other {indicators}}"
+            "noDataForIndicators": "Service did not return data for {indicators, plural, one {the indicator} other {indicators}}",
+            "noActiveLegend": "Data was not selected, select data to see map classification.",
+            "noEnough": "The data is too small to be classified, try different data or change limitings.",
+            "noData": "Data is not available for the selected point in time.",
+            "cannotCreateLegend": "Legend cannot be created by chosen values, try different values."
         },
         "missing": {
             "regionsetName": "Unknown"

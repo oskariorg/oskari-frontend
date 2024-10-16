@@ -103,7 +103,7 @@ export const populateIndicatorOptions = async (datasourceId, successCallback, er
         successCallback({ ...response, complete: true });
     } catch (error) {
         if (typeof errorCallback === 'function') {
-            errorCallback('errors.indicatorListError');
+            errorCallback('indicatorListError');
         } else {
             throw new Error(error);
         }
@@ -111,6 +111,31 @@ export const populateIndicatorOptions = async (datasourceId, successCallback, er
 };
 /*
 ------------------ /MAIN FUNCTIONALITY ------------------------
+*/
+
+/*
+------------------ HELPERS ------------------------
+*/
+export const validateSelectionsForSearch = (state) => {
+    const { indicatorParams: { selections, selectors }, selectedRegionset, selectedIndicators } = state;
+    if (!selectedIndicators.length || !selectedRegionset || !selections) {
+        return false;
+    }
+    const keys = Object.keys(selections);
+    if (keys.length !== Object.keys(selectors).length) {
+        return false;
+    }
+    return keys.every(key => {
+        const selection = selections[key];
+        if (Array.isArray(selection)) {
+            return selection.length > 0;
+        }
+        return selection === 0 || selection;
+    });
+};
+
+/*
+------------------ /HELPERS ------------------------
 */
 
 /*
@@ -174,6 +199,6 @@ const getIndicatorListFromServer = async (datasourceId) => {
             indicators: filterDuplicates(indicators)
         };
     } catch (error) {
-        throw new Error('errors.indicatorListIsEmpty');
+        throw new Error(error);
     }
 };
