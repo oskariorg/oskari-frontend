@@ -4,6 +4,7 @@ import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
 import { LayerIcon } from 'oskari-ui/components/icons';
+import { PrimaryButton, ButtonContainer, SecondaryButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 
 const StyledTable = styled(Table)`
@@ -19,7 +20,7 @@ const HeaderCell = styled('div')`
     flex-direction: column;
 `;
 const CheckAllCheckbox = styled(Checkbox)`
-    margin-top: 10px;
+    margin-top: 8px;
 `;
 const LayerName = styled('div')`
     display: flex;
@@ -30,7 +31,9 @@ const StyledLayerIcon = styled(LayerIcon)`
     margin-right: 5px;
 `;
 const Modified = styled.span`
-    margin-left: 6px;
+    margin-left: 5px;
+    font-size: 22px;
+    vertical-align: middle;
 `;
 
 const ICON = {
@@ -127,19 +130,25 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
         });
     }
     return (
-        <StyledTable
-            columns={columnSettings}
-            dataSource={dataSource}
-            pagination={{
-                pageSize: pagination.pageSize,
-                hideOnSinglePage: true,
-                simple: true,
-                showSizeChanger: false,
-                current: pagination.page,
-                onChange: (page, pageSize) => controller.setPagination({ page, pageSize })
-            }}
-            scroll={{ y: 500 }}
-            loading={loading}
-        />
+        <div>
+            <StyledTable
+                columns={columnSettings}
+                dataSource={dataSource}
+                pagination={{
+                    pageSize: pagination.pageSize,
+                    hideOnSinglePage: true,
+                    simple: true,
+                    showSizeChanger: false,
+                    current: pagination.page,
+                    onChange: (page, pageSize) => controller.setPagination({ page, pageSize })
+                }}
+                scroll={{ y: 500 }}
+                loading={loading}
+            />
+            <ButtonContainer>
+                <SecondaryButton type='cancel' onClick={() => controller.cancel()}/>
+                <PrimaryButton type='save' onClick={controller.savePermissions}/>
+            </ButtonContainer>
+        </div>
     );
 });
