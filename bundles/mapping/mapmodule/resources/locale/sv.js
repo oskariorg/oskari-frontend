@@ -153,6 +153,9 @@ Oskari.registerLocalization(
         "layerCoverageTool": {
             "name": "Visa kartlagrets utsträckning",
             "removeCoverageFromMap": "Göm kartlagrets utsträckning"
+        },
+        "publisherTools": {
+            "ScaleBarPlugin": "Skalstock",
         }
     }
 });

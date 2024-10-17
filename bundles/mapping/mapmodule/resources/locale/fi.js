@@ -157,6 +157,9 @@ Oskari.registerLocalization(
         "layerCoverageTool": {
             "name": "Näytä kattavuusalue",
             "removeCoverageFromMap": "Piilota kattavuusalue"
+        },
+        "publisherTools": {
+            "ScaleBarPlugin": "Mittakaavajana",
         }
     }
 });

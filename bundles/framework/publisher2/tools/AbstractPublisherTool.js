@@ -37,6 +37,12 @@ export class AbstractPublisherTool {
             config: this.state.pluginConfig || {}
         };
     }
+
+    // override when the tool has a component / handler
+    getComponent () {
+        return {};
+    };
+
     // deprecated - new (React based) tools should use getTool().title instead
     getTitle () {
         const toolTitle = this.getTool().title;
@@ -45,9 +51,11 @@ export class AbstractPublisherTool {
         }
         return this.__loc[toolTitle];
     }
+
     getGroup () {
         return this.group;
     }
+
     getIndex () {
         return this.index;
     }
@@ -57,11 +65,13 @@ export class AbstractPublisherTool {
         // assume it's in mapfull bundles plugins array as most of the default tools are stored there
         return data?.configuration?.mapfull?.conf?.plugins?.find(plugin => toolId === plugin.id);
     }
+
     storePluginConf (conf) {
         this.state.pluginConfig = conf || {};
     }
+
     setEnabled (enabled) {
-        var tool = this.getTool();
+        const tool = this.getTool();
 
         // state actually hasn't changed -> do nothing
         if (this.isEnabled() === enabled) {
@@ -81,7 +91,7 @@ export class AbstractPublisherTool {
         // Stop checks if we are already disabled so toggle the value after
         this.state.enabled = enabled;
         // notify publisher tool layout panel in case tool placement dragging needs to be toggled
-        var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
+        const event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
         this.getSandbox().notifyAll(event);
         return true;
     }
@@ -89,15 +99,17 @@ export class AbstractPublisherTool {
     isEnabled () {
         return !!this.state.enabled;
     }
+
     getValues () {
         // override
         return null;
     }
+
     stop () {
         if (!this.isEnabled()) {
             return;
         }
-        var tool = this.getTool();
+        const tool = this.getTool();
         if (tool.hasNoPlugin !== true) {
             const plugin = this.getPlugin();
             if (!plugin) {
@@ -110,6 +122,7 @@ export class AbstractPublisherTool {
             this.__plugin = null;
         }
     }
+
     /**
     * Is displayed. We can use this to tell when tool is displayed.
     * For example if stats layers are added to map when opening publisher we can tell at then this tool need to be shown (ShowStatsTableTool).
@@ -123,6 +136,7 @@ export class AbstractPublisherTool {
     isDisplayed () {
         return true;
     }
+
     /**
     * Is this tool available.
     * @method isDisabled
@@ -133,6 +147,7 @@ export class AbstractPublisherTool {
     isDisabled (data) {
         return false;
     }
+
     validate () {
         // always valid by default
         // could return false if there's something wrong that should require stopping the user from saving
@@ -142,15 +157,19 @@ export class AbstractPublisherTool {
     getPlugin () {
         return this.__plugin;
     }
+
     getSandbox () {
         return this.__sandbox;
     }
+
     getMapmodule () {
         return this.__mapmodule;
     }
+
     getAllowedLocations () {
         return this.allowedLocations;
     }
+
     // old tools return jQuery object that renders the extra options for this tool
     getExtraOptions () {
         return null;
