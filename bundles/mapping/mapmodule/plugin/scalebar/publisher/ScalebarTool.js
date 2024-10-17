@@ -12,7 +12,7 @@ class ScaleBarTool extends AbstractPublisherTool {
     getTool () {
         return {
             id: SCALEBAR_TOOL_ID,
-            title: Oskari.getMsg('Publisher2', 'BasicView.maptools.ScaleBarPlugin'),
+            title: Oskari.getMsg('MapModule', 'publisherTools.ScaleBarPlugin'),
             config: this.state?.pluginConfig || {}
         };
     }
