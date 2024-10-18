@@ -156,6 +156,18 @@ Oskari.registerLocalization(
         },
         "publisherTools": {
             "ScaleBarPlugin": "Skalstock",
+            "MyLocationPlugin": {
+                "toolLabel": "Centrera kartan på användarens position",
+                "modes": {
+                    "single": "Enskild",
+                    "continuous": "Fortsatt"
+                },
+                "titles": {
+                    "mode": "Funktion",
+                    "mobileOnly": "Tillåt funktionen endast för mobilapparater",
+                    "centerMapAutomatically": "Centrera kartan till användarens plats vid start"
+                }
+        }
         }
     }
 });

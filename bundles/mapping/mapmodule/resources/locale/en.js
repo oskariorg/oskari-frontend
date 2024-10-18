@@ -161,6 +161,18 @@ Oskari.registerLocalization(
         },
         "publisherTools": {
             "ScaleBarPlugin": "Scale bar",
+            "MyLocationPlugin": {
+                "toolLabel": "Center to location",
+                "modes": {
+                    "single": "Single",
+                    "continuous": "Continuous"
+                },
+                "titles": {
+                    "mode": "Mode",
+                    "mobileOnly": "Enable functionality only for mobile devices",
+                    "centerMapAutomatically": "Center map on user location at startup"
+                }
+            }
         }
     }
 });

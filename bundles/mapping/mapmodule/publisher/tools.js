@@ -3,5 +3,6 @@
  */
 import { LogoTool } from '../plugin/logo/publisher/LogoTool';
 import { ScaleBarTool } from '../plugin/scalebar/publisher/ScalebarTool';
+import { MyLocationTool } from '../plugin/mylocation/publisher/MyLocationTool';
 
-export { LogoTool, ScaleBarTool };
+export { LogoTool, ScaleBarTool, MyLocationTool };
