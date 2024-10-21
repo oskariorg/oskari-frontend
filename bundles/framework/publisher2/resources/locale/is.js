@@ -51,7 +51,6 @@ Oskari.registerLocalization(
                 "label": "Tól",
                 "tooltip": "Velja tiltæk kortatól. Athugaðu staðsetningu við forskoðun korts.",
                 "IndexMapPlugin": "Index kort",
-                "PanButtons": "Hliðrunartól",
                 "Portti2Zoombar": "Þysjunarstika",
                 "ControlsPlugin": "Hliðra með mús",
                 "SearchPlugin": "Leit eftir stað",

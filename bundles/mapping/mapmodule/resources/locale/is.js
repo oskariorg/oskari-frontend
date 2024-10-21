@@ -136,8 +136,10 @@ Oskari.registerLocalization(
             "ScaleBarPlugin": "Mælikvarðastika",
             "MyLocationPlugin": {
                 "toolLabel": "Miðja"
+            },
+            "PanButtons": {
+                "toolLabel": "Hliðrunartól"
             }
         }
-
     }
 });

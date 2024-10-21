@@ -67,7 +67,6 @@ Oskari.registerLocalization(
                 "AnnouncementsPlugin": "Announcements",
                 "TimeseriesControlPlugin": "Time series player",
                 "IndexMapPlugin": "Index map",
-                "PanButtons": "Move to the original map view",
                 "Portti2Zoombar": "Zoom bar",
                 "ControlsPlugin": "Pan by mouse",
                 "SearchPlugin": "Place search",
@@ -122,9 +121,6 @@ Oskari.registerLocalization(
                         "centerMapAutomatically": "Center map on user location at startup"
                     }
                 },
-                "panButtonsOptions": {
-                    "showArrows": "Pan tool"
-                }
             },
             "toollayout": {
                 "label": "Tool Placement",

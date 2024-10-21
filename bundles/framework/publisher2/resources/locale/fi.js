@@ -67,7 +67,6 @@ Oskari.registerLocalization(
                 "AnnouncementsPlugin": "Ilmoitukset",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "IndexMapPlugin": "Indeksikartta",
-                "PanButtons": "Palaa alkutilaan",
                 "Portti2Zoombar": "Mittakaavasäädin",
                 "ControlsPlugin": "Kartan liikuttaminen hiirellä raahaamalla",
                 "SearchPlugin": "Osoite- ja paikannimihaku",
@@ -122,9 +121,6 @@ Oskari.registerLocalization(
                         "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
                     }
                 },
-                "panButtonsOptions": {
-                    "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
-                }
             },
             "toollayout": {
                 "label": "Työkalujen asettelu kartalla",

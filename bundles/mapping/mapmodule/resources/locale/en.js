@@ -172,6 +172,12 @@ Oskari.registerLocalization(
                     "mobileOnly": "Enable functionality only for mobile devices",
                     "centerMapAutomatically": "Center map on user location at startup"
                 }
+            },
+            "PanButtons": {
+                "toolLabel": "Move to the original map view",
+                "titles": {
+                    "showArrows": "Pan tool"
+                }
             }
         }
     }
