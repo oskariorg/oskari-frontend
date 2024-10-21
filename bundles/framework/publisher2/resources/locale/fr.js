@@ -62,12 +62,10 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Outils",
                 "tooltip": "Sélectionner les outils de carte accessibles. Consulter une mise en place dans la prévisualisation de carte.",
-                "ScaleBarPlugin": "Barre d'échelle",
                 "TimeseriesControlPlugin": "Lecteur chronologique",
                 "IndexMapPlugin": "Carte-index",
                 "PanButtons": "Outil pour panoramiser",
                 "Portti2Zoombar": "Barre de zoom",
-                "MyLocationPlugin": "Centre par rapport au lieu",
                 "ControlsPlugin": "Panoramiser avec la souris",
                 "SearchPlugin": "Recherche de lieu",
                 "FeaturedataPlugin": "Données de fonctionnalité",
