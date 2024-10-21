@@ -8,7 +8,7 @@ class UIHandler extends StateHandler {
         this.setState({
             mode: 'single',
             centerMapAutomatically: false,
-            mobileOnly: true
+            mobileOnly: false
         });
     };
 
@@ -22,16 +22,6 @@ class UIHandler extends StateHandler {
         const newState = this.getState();
         newState[key] = value;
         this.updateState(newState);
-    }
-
-    syncState () {
-        // required to sync state to plugin on startup and restore the state of the embedded map
-    }
-
-    clearState () {
-        // plugin is created again on startup, so it's state doesn't need to be cleared
-        this.setState({
-        });
     }
 }
 
