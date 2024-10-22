@@ -142,6 +142,9 @@ Oskari.registerLocalization(
             "ScaleBarPlugin": "Barre d'échelle",
             "MyLocationPlugin": {
                 "toolLabel": "Centre par rapport au lieu"
+            },
+            "PanButtons": {
+                "toolLabel": "Outil pour panoramiser"
             }
         }
     }

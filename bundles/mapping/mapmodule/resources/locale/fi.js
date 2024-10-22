@@ -171,6 +171,12 @@ Oskari.registerLocalization(
                     "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
                     "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
                 }
+            },
+            "PanButtons": {
+                "toolLabel": "Palaa alkutilaan",
+                "titles": {
+                    "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
+                }
             }
         }
     }

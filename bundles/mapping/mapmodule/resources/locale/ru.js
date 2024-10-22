@@ -137,6 +137,9 @@ Oskari.registerLocalization(
             "ScaleBarPlugin": "Масштабная линейка",
             "MyLocationPlugin": {
                 "toolLabel": "Центровать к месту"
+            },
+            "PanButtons": {
+                "toolLabel": "Инструмент панорамирования"
             }
         }
     }

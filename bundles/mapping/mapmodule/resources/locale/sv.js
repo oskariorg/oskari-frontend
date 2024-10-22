@@ -167,7 +167,13 @@ Oskari.registerLocalization(
                     "mobileOnly": "Tillåt funktionen endast för mobilapparater",
                     "centerMapAutomatically": "Centrera kartan till användarens plats vid start"
                 }
-        }
+            },
+            "PanButtons": {
+                "toolLabel": "Gå tillbaka till standardvyn för kartvyn",
+                "titles": {
+                    "showArrows": "Panoreringsverktyg"
+                }
+            }
         }
     }
 });
