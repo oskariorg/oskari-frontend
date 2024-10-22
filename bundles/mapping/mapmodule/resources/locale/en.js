@@ -178,7 +178,8 @@ Oskari.registerLocalization(
                 "titles": {
                     "showArrows": "Pan tool"
                 }
-            }
+            },
+            "IndexMapPlugin": "Index map",
         }
     }
 });

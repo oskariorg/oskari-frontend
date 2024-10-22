@@ -177,7 +177,8 @@ Oskari.registerLocalization(
                 "titles": {
                     "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
                 }
-            }
+            },
+            "IndexMapPlugin": "Indeksikartta",
         }
     }
 });
