@@ -145,6 +145,9 @@ Oskari.registerLocalization(
             },
             "PanButtons": {
                 "toolLabel": "Outil pour panoramiser"
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Carte-index"
             }
         }
     }

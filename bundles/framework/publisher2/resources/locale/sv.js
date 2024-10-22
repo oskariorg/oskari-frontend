@@ -66,7 +66,6 @@ Oskari.registerLocalization(
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
                 "AnnouncementsPlugin": "Aviseringar",
                 "TimeseriesControlPlugin": "Tidseriespelare",
-                "IndexMapPlugin": "Indexkarta",
                 "Portti2Zoombar": "Skalans glidreglage",
                 "ControlsPlugin": "Flytta kartvyn med musen",
                 "SearchPlugin": "Adress- och ortnamnssökning",
