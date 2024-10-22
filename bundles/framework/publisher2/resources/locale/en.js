@@ -69,7 +69,6 @@ Oskari.registerLocalization(
                 "IndexMapPlugin": "Index map",
                 "PanButtons": "Move to the original map view",
                 "Portti2Zoombar": "Zoom bar",
-                "MyLocationPlugin": "Center to location",
                 "ControlsPlugin": "Pan by mouse",
                 "SearchPlugin": "Place search",
                 "FeaturedataPlugin": "Feature data",

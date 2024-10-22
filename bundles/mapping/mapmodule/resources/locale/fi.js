@@ -160,6 +160,18 @@ Oskari.registerLocalization(
         },
         "publisherTools": {
             "ScaleBarPlugin": "Mittakaavajana",
+            "MyLocationPlugin": {
+                "toolLabel": "Käyttäjän sijaintiin keskittäminen",
+                "modes": {
+                    "single": "Yksittäinen",
+                    "continuous": "Jatkuva"
+                },
+                "titles": {
+                    "mode": "Toiminto",
+                    "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
+                    "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
+                }
+            }
         }
     }
 });

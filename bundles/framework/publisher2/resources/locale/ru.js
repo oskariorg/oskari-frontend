@@ -63,12 +63,10 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Инструменты",
                 "tooltip": "Выберите доступные инструменты карты. Проверка размещения в окне предварительного просмотра карты.",
-                "ScaleBarPlugin": "Масштабная линейка",
                 "TimeseriesControlPlugin": "Временные ряды",
                 "IndexMapPlugin": "Номенклатура карты",
                 "PanButtons": "Инструмент панорамирования",
                 "Portti2Zoombar": "Панель увеличения",
-                "MyLocationPlugin": "Центровать к месту",
                 "ControlsPlugin": "Панорамирование мышью",
                 "SearchPlugin": "Поиск места",
                 "FeaturedataPlugin": "Данные объекта",
