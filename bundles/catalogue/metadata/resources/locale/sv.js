@@ -45,7 +45,7 @@ Oskari.registerLocalization({
                 "value": ""
             },
             "label": {
-                "layerList": "Karttatasot",
+                "layerList": "Kartlager",
                 "abstractTextData": "Sammanfattning text (data)",
                 "abstractTextService": "Sammanfattning text (tjänst)",
                 "accessConstraints": "Åtkomstrestriktioner",
