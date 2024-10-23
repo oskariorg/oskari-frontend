@@ -86,7 +86,6 @@ Oskari.registerLocalization(
                 "noAttributeData": "No attributes to show, please open feature data to see hidden attributes."
             },
             "PublisherToolbarPlugin": {
-                "test": "test",
                 "history": {
                     "reset": "Move to the original map view",
                     "back": "Move to previous view",

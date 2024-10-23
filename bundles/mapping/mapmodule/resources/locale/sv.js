@@ -81,7 +81,6 @@ Oskari.registerLocalization(
                 "noAttributeData": "Inga attributer att visa, vänligen öppna objektuppgifterna för att se de dolda attributerna."
             },
             "PublisherToolbarPlugin": {
-                "test": "test",
                 "history": {
                     "reset": "Gå tillbaka till standardvyn för kartvyn",
                     "back": "Tillbaka till föregående vy",
