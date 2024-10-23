@@ -13,7 +13,6 @@ const ColorSet = styled.div`
     height: 20px;
     display: flex;
     flex-flow: row nowrap;
-    margin-top: 5px;
 `;
 
 const Color = styled.div`
