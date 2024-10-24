@@ -88,7 +88,7 @@ class UIHandler extends StateHandler {
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
-            const { users, total_count } = await response.json();
+            const { users = [], total_count } = await response.json();
             this.updateState({
                 users,
                 userPagination: {
@@ -143,11 +143,6 @@ class UIHandler extends StateHandler {
         this.updateState({ usersByRole: { users, roleId } });
     }
 
-    async getUserCountByRole (roleId) {
-        const users = await this.fetchUsersByRole(roleId);
-        return users.length;
-    }
-
     async fetchUsersByRole (roleId) {
         try {
             const response = await fetch(Oskari.urls.buildUrl(this.restUrl, {
@@ -170,13 +165,30 @@ class UIHandler extends StateHandler {
     }
 
     setAddingUser () {
-        this.updateState({
-            userFormState: this.initUserForm()
-        });
+        this.setEditingUser(this.initUser());
     }
 
-    setEditingUser (id) {
-        const user = this.state.users.find(u => u.id === id) || {};
+    editUserById (id) {
+        const user = this.getState().users.find(u => u.id === id);
+        this.setEditingUser(user);
+    }
+
+    editUserFromRoles (id, userName) {
+        this.setActiveTab('admin-users-tab');
+        // fetchUsersByRole doesn't return roles so usersByRole.users doesn't have roles
+        // search user by name if not found in paginated results
+        const user = this.getState().users.find(u => u.id === id);
+        if (user) {
+            this.setEditingUser(user);
+        } else {
+            this.search(userName);
+        }
+    }
+
+    setEditingUser (user) {
+        if (!user) {
+            Messaging.error(Oskari.getMsg('AdminUsers', 'users.noMatch'));
+        }
         this.updateState({
             userFormState: {
                 ...user,
@@ -220,7 +232,7 @@ class UIHandler extends StateHandler {
         }
     }
 
-    initUserForm () {
+    initUser () {
         return {
             firstName: '',
             lastName: '',
@@ -445,7 +457,8 @@ class UIHandler extends StateHandler {
 const wrapped = controllerMixin(UIHandler, [
     'setActiveTab',
     'setAddingUser',
-    'setEditingUser',
+    'editUserById',
+    'editUserFromRoles',
     'updateUserFormState',
     'closeUserForm',
     'saveUser',
@@ -458,8 +471,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setEditingRole',
     'updateRole',
     'updateEditingRole',
-    'showUsersByRole',
-    'getUserCountByRole'
+    'showUsersByRole'
 ]);
 
 export { wrapped as AdminUsersHandler };

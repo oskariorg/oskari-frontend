@@ -27,7 +27,6 @@ export const RoleSelect = ({ state, value, error, multiple, onlyAdmin, onChange 
         className='t_roles'
         mode={multiple ? 'multiple' : null}
         status={error ? 'error' : null}
-        allowClear = {!!multiple}
         onChange={(value) => onChange(value)}
         placeholder={<Message messageKey='usersByRole.selectRole' />}
         value={value}

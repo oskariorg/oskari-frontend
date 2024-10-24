@@ -56,19 +56,19 @@ export const UsersTab = ({ state, controller, isExternal }) => {
             {userPagination.search && (
                 <SearchText><Message messageKey='users.searchResults' /> ("{userPagination.search}"):</SearchText>
             )}
-            {(users && users.length > 0) && users.map(item => {
+            {users.length > 0 && users.map(item => {
                 const { id, user, firstName, lastName } = item;
                 const details = firstName || lastName ? ` (${firstName} ${lastName})` : '';
                 return (
                     <Block key={id}>
                         <span>{user}{details}</span>
                         <ButtonContainer>
-                            <Button type='edit' onClick={() => controller.setEditingUser(id)} />
+                            <Button type='edit' onClick={() => controller.editUserById(id)} />
                             <Button type='delete' onConfirm={() => controller.deleteUser(id)} />
                         </ButtonContainer>
                     </Block>
-                )})
-            }
+                );
+            })}
             {(!users || users.length === 0) && <Message messageKey='users.noMatch'/>}
             {userPagination.totalCount > userPagination.limit && (
                 <Footer>

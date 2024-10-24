@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import styled from 'styled-components';
-import { Block, Content } from './styled';
+import { Block, Content, Button } from './styled';
 import { RoleSelect } from './RoleSelect';
 
 const Margin = styled.div`
@@ -26,6 +26,7 @@ export const UsersByRoleTab = ({ state, controller }) => {
                 return (
                     <Block key={id}>
                         <span>{user}{details}</span>
+                        <Button type='edit' onClick={() => controller.editUserFromRoles(id, user)} />
                     </Block>
                 );
             })}
