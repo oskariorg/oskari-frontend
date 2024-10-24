@@ -30,6 +30,11 @@ export const getAntdTheme = (theme) => {
                 // colorFillContentHover: accentColor
                 // fixes an issue where close icon has white bg while hovering
                 colorBgContainer: 'inherit'
+            },
+            Slider: {
+                handleColor: DEFAULT_COLORS.SLIDER_BG,
+                trackBg: DEFAULT_COLORS.SLIDER_BG,
+                trackHoverBg: DEFAULT_COLORS.SLIDER_HOVER,
             }
         },
         token: {
