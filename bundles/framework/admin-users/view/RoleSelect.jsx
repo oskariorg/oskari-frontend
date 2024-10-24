@@ -30,6 +30,7 @@ export const RoleSelect = ({ state, value, error, multiple, onlyAdmin, onChange 
         onChange={(value) => onChange(value)}
         placeholder={<Message messageKey='usersByRole.selectRole' />}
         value={value}
+        style={multiple ? { width: 210 } : null}
         options={options}/>;
 };
 

@@ -54,7 +54,7 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                 )}
             </SearchContainer>
             {userPagination.search && (
-                <SearchText><Message messageKey='users.searchResults' /> ("{userPagination.search}"):</SearchText>
+                <SearchText><Message messageKey='users.searchResults' />{` ("${userPagination.search}"):`}</SearchText>
             )}
             {users.length > 0 && users.map(item => {
                 const { id, user, firstName, lastName } = item;

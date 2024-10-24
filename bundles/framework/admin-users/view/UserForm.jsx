@@ -27,7 +27,6 @@ export const UserForm = ({ state, controller, isExternal }) => {
                 <StyledLabel><Message messageKey='users.addRole' /></StyledLabel>
                 <RoleSelect
                     multiple
-                    style={{ width: 210 }}
                     state={state}
                     value={roles}
                     error={errors.includes('roles')}
