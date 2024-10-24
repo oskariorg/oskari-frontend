@@ -1,29 +1,35 @@
 import React from 'react';
 import { Slider as AntSlider } from 'antd';
 import styled from 'styled-components';
-import { getNavigationTheme } from 'oskari-ui/theme';
+import { getNavigationTheme, DEFAULT_COLORS } from 'oskari-ui/theme';
 
 const normal = 4;
 const thick = 8;
 const handler = 12;
+const hover = DEFAULT_COLORS.SLIDER_HOVER;
 
-// TODO colors should come from theme-variables
 const StyledAntSlider = styled(AntSlider)`
-    &.ant-slider-vertical {
-        .ant-slider-handle {
-            margin-bottom: 0;
-        }
-        .ant-slider-mark {
-            top: 2px;
-        }
+    .ant-slider-mark-text {
+        white-space: nowrap;
+        font-size: 11px;
     }
+    .ant-slider-dot {
+        ${props => props.hideDots ? 'display: none;' : ''}
+    }
+    &:hover .ant-slider-handle::after {
+        box-shadow: 0 0 0 2px ${hover};
+    }
+    ${props => props.noMargin ? 'margin: 0;' : ''}
+
 `;
+
 const ThemedAntSlider = styled(StyledAntSlider)`
     .ant-slider-mark {
         top: -21px;
     }
     .ant-slider-mark-text {
         color: ${props => props.theme.getTextColor()};
+        font-size: 11px;
     }
     .ant-slider-handle::after {
         display: none;
@@ -44,11 +50,11 @@ const getThemedStyle = (theme, vertical, useThick) => {
     return {
         track: {
             [height]: `${size}px`,
-            background: theme.getButtonHoverColor()
+            backgroundColor: theme.getButtonHoverColor()
         },
         rail: {
             [height]: `${size}px`,
-            background: theme.getTextColor()
+            backgroundColor: theme.getTextColor()
         },
         handle: {
             backgroundColor: theme.getButtonHoverColor(),
@@ -64,8 +70,8 @@ const getThemedStyle = (theme, vertical, useThick) => {
 export const Slider = ({ theme, useThick, vertical, ...props }) => {
     if (theme) {
         const helper = getNavigationTheme(theme);
-        const styles = getThemedStyle(helper, vertical, useThick);
-        return <ThemedAntSlider styles={styles} theme={helper} useThick={useThick} {...props} />
+        const style = getThemedStyle(helper, vertical, useThick);
+        return <ThemedAntSlider styles={style} theme={helper} useThick={useThick} {...props} />
     }
-    return <StyledAntSlider {...props} />
+    return <StyledAntSlider styles={style} vertical= {vertical} {...props} />
 };
