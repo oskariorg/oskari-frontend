@@ -66,7 +66,6 @@ Oskari.registerLocalization(
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
                 "AnnouncementsPlugin": "Ilmoitukset",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
-                "IndexMapPlugin": "Indeksikartta",
                 "Portti2Zoombar": "Mittakaavasäädin",
                 "ControlsPlugin": "Kartan liikuttaminen hiirellä raahaamalla",
                 "SearchPlugin": "Osoite- ja paikannimihaku",

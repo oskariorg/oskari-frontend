@@ -66,7 +66,6 @@ Oskari.registerLocalization(
                 "tooltip": "Select available map tools. Check a placement in the map preview.",
                 "AnnouncementsPlugin": "Announcements",
                 "TimeseriesControlPlugin": "Time series player",
-                "IndexMapPlugin": "Index map",
                 "Portti2Zoombar": "Zoom bar",
                 "ControlsPlugin": "Pan by mouse",
                 "SearchPlugin": "Place search",
