@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { PrimaryButton } from 'oskari-ui/components/buttons';
 import { RoleBlock } from './RoleBlock';
@@ -47,4 +48,8 @@ export const RolesTab = ({ state, controller }) => {
             { systemRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} isSystemRole/>) }
         </Content>
     );
+};
+RolesTab.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
 };

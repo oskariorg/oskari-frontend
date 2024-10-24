@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Select, Message } from 'oskari-ui';
 import styled from 'styled-components';
 import { Block, Content } from './styled';
@@ -47,4 +48,8 @@ export const UsersByRoleTab = ({ state, controller }) => {
             {showNoUsers && <Message messageKey='usersByRole.noUsers' />}
         </Content>
     );
+};
+UsersByRoleTab.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
 };

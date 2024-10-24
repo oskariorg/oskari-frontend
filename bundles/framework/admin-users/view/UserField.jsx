@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { getMandatoryIcon } from 'oskari-ui/util/validators';
 import { LabelledField, StyledLabel, StyledInput } from './styled';
@@ -25,4 +26,13 @@ export const UserField = ({ field, value, controller, error, readonly = false, t
             />
         </LabelledField>
     );
+};
+UserField.propTypes = {
+    field: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    controller: PropTypes.object.isRequired,
+    type: PropTypes.string,
+    error: PropTypes.bool,
+    readonly: PropTypes.bool,
+    mandatory: PropTypes.bool
 };

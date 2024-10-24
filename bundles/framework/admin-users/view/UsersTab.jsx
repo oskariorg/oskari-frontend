@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { SearchInput, Pagination, Message } from 'oskari-ui';
 import styled from 'styled-components';
 import { UserForm } from './UserForm';
@@ -84,4 +85,9 @@ export const UsersTab = ({ state, controller, isExternal }) => {
             )}
         </Content>
     );
+};
+UsersTab.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
+    isExternal: PropTypes.bool
 };

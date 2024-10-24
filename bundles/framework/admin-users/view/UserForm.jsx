@@ -1,5 +1,6 @@
 import React from 'react';
-import { Message, Label, Select } from 'oskari-ui';
+import PropTypes from 'prop-types';
+import { Message, Select } from 'oskari-ui';
 import { PrimaryButton, SecondaryButton, DeleteButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { UserField } from './UserField';
@@ -72,4 +73,10 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
             </ButtonContainer>
         </Content>
     );
+};
+UserForm.propTypes = {
+    userFormState: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
+    roles: PropTypes.array.isRequired,
+    isExternal: PropTypes.bool
 };
