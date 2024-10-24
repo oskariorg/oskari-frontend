@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message } from 'oskari-ui';
-import { Row, Col, ColFixed, StyledButton, StyledDateSlider, CalendarIcon } from './styled';
+import { Message, Slider } from 'oskari-ui';
+import { Row, Col, StyledButton, DateSliderContainer, CalendarIcon, ColFixed } from './styled';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getHeaderTheme } from 'oskari-ui/theme';
 import { Input } from './Input';
@@ -53,14 +53,16 @@ export const DateControl = ThemeConsumer(({ theme, isMobile, changeHandler, slid
             </Col>
             {!isMobile &&
                 <ColFixed>
-                    <StyledDateSlider
-                        color={color}
-                        hover={hover}
-                        marks={marksForDate()}
-                        min={1} max={DAYS} step={1}
-                        value={sliderDateValue}
-                        onChange={changeSliderDate}
-                        tooltip={{ open: false }}/>
+                    <DateSliderContainer>
+                        <Slider
+                            noMargin
+                            theme={theme}
+                            marks={marksForDate()}
+                            min={1} max={DAYS} step={1}
+                            value={sliderDateValue}
+                            onChange={changeSliderDate}
+                            tooltip={{ open: false }}/>
+                    </DateSliderContainer>
                 </ColFixed>
             }
             <Col>

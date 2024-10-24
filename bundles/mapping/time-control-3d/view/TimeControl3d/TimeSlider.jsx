@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { InputGroup } from 'oskari-ui';
-import { StyledTimeSlider, TimeBorder, StyledPlayButton } from './styled';
+import { InputGroup, Slider } from 'oskari-ui';
+import { TimeBorder, StyledPlayButton } from './styled';
 import { PlayButton } from './PlayButton';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getHeaderTheme } from 'oskari-ui/theme';
@@ -34,9 +34,9 @@ export const TimeSlider = ThemeConsumer(({ theme, isMobile, changeHandler, slide
                 <PlayButton initial={playing} />
             </StyledPlayButton>
             <TimeBorder isMobile={isMobile}>
-                <StyledTimeSlider
-                    color={color}
-                    hover={hover}
+                <Slider
+                    noMargin
+                    theme={theme}
                     useThick={isMobile}
                     marks={marksForTime}
                     min={0} max={MINUTES}

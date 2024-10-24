@@ -4,6 +4,7 @@ import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { TimeControl } from './TimeControl3d/TimeControl';
 import { DateControl } from './TimeControl3d/DateControl';
+import { Divider } from './TimeControl3d/styled';
 import { validateDate, validateTime } from '../../mapmodule/util/time';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -130,6 +131,7 @@ export const TimeControl3d = ({ controller, date, time, isMobile }) => {
                 dateValue={dateValue}
                 currentTimeHandler={changeTimeAndDate}
             />
+            <Divider />
             <TimeControl
                 isMobile={isMobile}
                 changeHandler={changeTime}
