@@ -1,28 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, Select } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import { PrimaryButton, SecondaryButton, DeleteButton, ButtonContainer } from 'oskari-ui/components/buttons';
-import styled from 'styled-components';
 import { UserField } from './UserField';
+import { RoleSelect } from './RoleSelect';
 import { Content, LabelledField, StyledLabel } from './styled';
-
-const StyledSelect = styled(Select)`
-    width: 210px;
-`;
 
 const FIELDS = ['user', 'firstName', 'lastName', 'email'];
 const PASS_FIELDS = ['password', 'rePassword'];
 
-const getRoleOptions = (roles, systemRole) => {
-    const filtered = roles.filter(role => role.systemRole === systemRole);
-    return filtered.map(role => ({
-        label: role.name,
-        value: role.id
-    }));
-};
-
-export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
-    const { errors = [], passwordErrors = {}, id, password } = userFormState;
+export const UserForm = ({ state, controller, isExternal }) => {
+    const { userFormState } = state;
+    const { errors = [], passwordErrors = {}, id, password, roles } = userFormState;
     const passwordRequired = !id || password.length > 0;
     return (
         <Content>
@@ -36,24 +25,13 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
             )}
             <LabelledField>
                 <StyledLabel><Message messageKey='users.addRole' /></StyledLabel>
-                <StyledSelect
-                    className='t_roles'
-                    mode='multiple'
-                    allowClear
-                    onChange={(value) => controller.updateUserFormState('roles', value)}
-                    defaultValue={userFormState.roles}
-                    status={errors.includes('roles') ? 'error' : null}
-                    options={[
-                        {
-                            label: <Message messageKey='roles.types.system' />,
-                            options: getRoleOptions(roles, true)
-                        },
-                        {
-                            label: <Message messageKey='roles.types.other' />,
-                            options: getRoleOptions(roles, false)
-                        }
-                    ]}
-                />
+                <RoleSelect
+                    multiple
+                    style={{ width: 210 }}
+                    state={state}
+                    value={roles}
+                    error={errors.includes('roles')}
+                    onChange={value => controller.updateUserFormState('roles', value)}/>
             </LabelledField>
             <ButtonContainer>
                 <SecondaryButton
@@ -75,8 +53,7 @@ export const UserForm = ({ userFormState, roles, controller, isExternal }) => {
     );
 };
 UserForm.propTypes = {
-    userFormState: PropTypes.object.isRequired,
+    state: PropTypes.object.isRequired,
     controller: PropTypes.object.isRequired,
-    roles: PropTypes.array.isRequired,
     isExternal: PropTypes.bool
 };

@@ -25,19 +25,18 @@ const SearchText = styled('span')`
 
 export const UsersTab = ({ state, controller, isExternal }) => {
     const [filter, setFilter] = useState('');
-    const { userFormState, userPagination, users, roles } = state;
-    if (userFormState) {
+    if (state.userFormState) {
         return (
             <Content>
                 <UserForm
-                    userFormState={userFormState}
-                    roles={roles}
+                    state={state}
                     controller={controller}
                     isExternal={isExternal}
                 />
             </Content>
         );
     }
+    const { userPagination, users } = state;
     return (
         <Content>
             <SearchContainer>
