@@ -25,7 +25,7 @@ export const RolesTab = ({ state, controller }) => {
         controller.addRole(roleName);
         setStatus('');
         setRoleName('');
-    }
+    };
     const { roles, systemRoles, editingRole } = state;
     return (
         <Content>
