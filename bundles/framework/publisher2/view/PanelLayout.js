@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { PanelToolStyles } from './PanelToolStyles';
+import { ThemeProvider } from 'oskari-ui/util';
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PanelToolLayout
  *
@@ -130,11 +131,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             contentPanel.append(styleEditor);
 
             ReactDOM.render(
-                <PanelToolStyles
-                    mapTheme={this.mapModule.getMapTheme()}
-                    changeTheme={(theme) => this.updateTheme(theme)}
-                    fonts={this.fonts}
-                />,
+                <ThemeProvider>
+                    <PanelToolStyles
+                        mapTheme={this.mapModule.getMapTheme()}
+                        changeTheme={(theme) => this.updateTheme(theme)}
+                        fonts={this.fonts}/>
+                </ThemeProvider>,
                 styleEditor[0]
             );
 

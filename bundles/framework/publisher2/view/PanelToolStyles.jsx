@@ -21,18 +21,12 @@ const StyledColorPicker = styled('div')`
     width: 165px;
 `;
 
-const StyledSlider = styled(Slider)`
+const SliderContainer = styled('div')`
     width: 285px;
-    margin: 0 15px 0 5px;
-    .ant-slider-track {
-        background-color: #0091ff;
-    }
-    &:hover .ant-slider-track {
-        background-color: #003fc3 !important;
-    }
+    margin-left: 5px;
 `;
 
-const SliderContainer = styled('div')`
+const ButtonRounding = styled('div')`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -46,6 +40,7 @@ const StyledNumberInput = styled(NumberInput)`
 const NumberInputContainer = styled('div')`
     display: flex;
     flex-direction: row;
+    margin-left: 15px;
 `;
 
 const NumberSuffix = styled('span')`
@@ -186,11 +181,12 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
             </Field>
             <Field>
                 <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.buttonRounding' />
-                <SliderContainer>
-                    <StyledSlider
-                        value={buttonRounding}
-                        onChange={val => setButtonRounding(val)}
-                    />
+                <ButtonRounding>
+                    <SliderContainer>
+                        <Slider noMargin
+                            value={buttonRounding}
+                            onChange={val => setButtonRounding(val)}/>
+                    </SliderContainer>
                     <NumberInputContainer>
                         <StyledNumberInput
                             min={0}
@@ -202,7 +198,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                             %
                         </NumberSuffix>
                     </NumberInputContainer>
-                </SliderContainer>
+                </ButtonRounding>
             </Field>
             <Field>
                 <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.effect' />

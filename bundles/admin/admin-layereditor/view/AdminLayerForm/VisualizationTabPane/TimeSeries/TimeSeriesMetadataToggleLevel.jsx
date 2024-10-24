@@ -9,10 +9,6 @@ const SliderContainer = styled('div')`
     padding-right: 15px;
     padding-top: 10px;
     padding-bottom: 10px;
-
-    .ant-slider-mark-text {
-        font-size: 11px;
-    }
 `;
 
 export const TimeSeriesMetadataToggleLevel = ({ layer, disabled, scales, controller }) => {
