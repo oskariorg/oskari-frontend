@@ -65,12 +65,9 @@ Oskari.registerLocalization(
                 "label": "Kartalla näytettävät työkalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
                 "AnnouncementsPlugin": "Ilmoitukset",
-                "ScaleBarPlugin": "Mittakaavajana",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "IndexMapPlugin": "Indeksikartta",
-                "PanButtons": "Palaa alkutilaan",
                 "Portti2Zoombar": "Mittakaavasäädin",
-                "MyLocationPlugin": "Käyttäjän sijaintiin keskittäminen",
                 "ControlsPlugin": "Kartan liikuttaminen hiirellä raahaamalla",
                 "SearchPlugin": "Osoite- ja paikannimihaku",
                 "FeaturedataPlugin": "Kohdetietotaulukko",
@@ -124,9 +121,6 @@ Oskari.registerLocalization(
                         "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
                     }
                 },
-                "panButtonsOptions": {
-                    "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
-                }
             },
             "toollayout": {
                 "label": "Työkalujen asettelu kartalla",
@@ -136,6 +130,11 @@ Oskari.registerLocalization(
                 "usereditmode": "Muokkaa asettelua",
                 "usereditmodeoff": "Lopeta muokkaus"
             },
+            "statsgrid": {
+                "label": "Teemakartat",
+                "tooltip": "Näytä tilastotiedot taulukossa kartan yhteydessä."
+            },
+            /* for deprecated statsgrid2016 */
             "data": {
                 "label": "Teemakartat",
                 "tooltip": "Näytä tilastotiedot taulukossa kartan yhteydessä.",

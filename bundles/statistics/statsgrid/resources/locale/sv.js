@@ -26,6 +26,17 @@ Oskari.registerLocalization({
                 'title': 'Statistik'
             }
         },
+        'publisher': {
+            "label": "Statistik",
+            "tooltip": "Visa kartstatistik",
+            "grid": "Visa statistik",
+            "allowClassification": "Tillåt klassificering",
+            "transparent": "Sätt klassificeringsbakgrund genomskinlig",
+            "diagram": "Visa diagram",
+            "classification": "Tillåt att gömma klassificering",
+            "series": "Tillåt att gömma seriespelare",
+            "statistics": "Öppna materialsökning"
+        },
         'panels': {
             'newSearch': {
                 'title': 'SÖK DATA',

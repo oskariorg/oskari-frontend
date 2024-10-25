@@ -34,6 +34,9 @@ export const PublisherToolsList = ({ state, controller }) => {
 };
 
 const ToolCheckbox = ({ tool, controller }) => {
+    if (tool.hideCheckbox) {
+        return null;
+    }
     const toolClass = tool.publisherTool;
     if (toolClass.isDisabled()) {
         return (<Tooltip title={toolClass.getTool().disabledReason}>
