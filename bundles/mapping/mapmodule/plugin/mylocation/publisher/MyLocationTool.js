@@ -7,18 +7,13 @@ class MyLocationTool extends AbstractPublisherTool {
         super(...args);
         this.index = 1;
         this.group = 'additional';
-        this.config = null;
         this.handler = new MyLocationToolHandler(this);
     };
 
     init (data) {
-        const plugin = this.findPluginFromInitData(data);
-        // restore state to handler -> passing init data to it
-        this.setEnabled(!!plugin);
-
-        if (plugin?.config) {
-            this.handler.init(plugin.config);
-        }
+        super.init(data);
+        const config = this.state?.pluginConfig || {};
+        this.handler.init(config);
     }
 
     getComponent () {
@@ -38,7 +33,7 @@ class MyLocationTool extends AbstractPublisherTool {
         return {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
             title: Oskari.getMsg('MapModule', 'publisherTools.MyLocationPlugin.toolLabel'),
-            config: this.handler?.getState() || {}
+            config: this.state?.pluginConfig || {}
         };
     }
 
@@ -46,8 +41,8 @@ class MyLocationTool extends AbstractPublisherTool {
         if (!this.isEnabled()) {
             return null;
         }
-        const pluginConfig = this.getPlugin().config || {};
-        // add selected extraoptions to conf
+        const pluginConfig = this.getPlugin().getConfig() || {};
+        // update extras
         const state = this.handler.getState();
         for (const key in state) {
             if (state.hasOwnProperty(key)) {

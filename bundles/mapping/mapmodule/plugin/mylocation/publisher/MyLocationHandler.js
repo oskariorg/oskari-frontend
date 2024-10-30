@@ -4,11 +4,13 @@ class UIHandler extends StateHandler {
     constructor (tool) {
         super();
         this.tool = tool;
-        this.sandbox = tool.getSandbox();
-        this.setState({
+        const defaults = {
             mode: 'single',
             centerMapAutomatically: false,
             mobileOnly: false
+        };
+        this.setState({
+            ...defaults
         });
     };
 
