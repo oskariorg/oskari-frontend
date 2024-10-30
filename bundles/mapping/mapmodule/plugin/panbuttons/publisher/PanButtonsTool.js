@@ -6,18 +6,13 @@ class PanButtonsTool extends AbstractPublisherTool {
         super(...args);
         this.index = 1;
         this.group = 'additional';
-        this.config = null;
         this.handler = new PanButtonsHandler(this);
     };
 
     init (data) {
-        const plugin = this.findPluginFromInitData(data);
-        // restore state to handler -> passing init data to it
-        this.setEnabled(!!plugin);
-
-        if (plugin?.config) {
-            this.handler.init(plugin.config);
-        }
+        super.init(data);
+        const config = this.state?.pluginConfig || {};
+        this.handler.init(config);
     }
 
     getComponent () {
@@ -37,7 +32,7 @@ class PanButtonsTool extends AbstractPublisherTool {
         return {
             id: 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             title: Oskari.getMsg('MapModule', 'publisherTools.PanButtons.toolLabel'),
-            config: this.handler?.getState() || {}
+            config: this.state?.pluginConfig || {}
         };
     }
 
@@ -46,7 +41,7 @@ class PanButtonsTool extends AbstractPublisherTool {
             return null;
         }
 
-        const pluginConfig = this.getPlugin().config || {};
+        const pluginConfig = this.getPlugin().getConfig() || {};
         // add selected extraoptions to conf
         const state = this.handler.getState();
         for (const key in state) {
