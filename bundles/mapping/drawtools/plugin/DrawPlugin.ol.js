@@ -364,13 +364,21 @@ Oskari.clazz.define(
                 // try to finish unfinished (currently drawn) feature
                 this.forceFinishDrawing();
             }
-            if (id && !supressEvent) {
-                this.sendDrawingEvent(true);
+            // only clear state if the stopped id is the current id
+            // otherwise sending startDraw with id 2 and stop with id 1 will
+            // remove the draw control from the draw id 2 when the requested one was 1
+            const clearingAllOrCurrentDrawing = typeof id === 'undefined' || id === this.getRequestId();
+            if (clearingAllOrCurrentDrawing) {
+                if (id && !supressEvent) {
+                    this.sendDrawingEvent(true);
+                }
+                // remove draw and modify controls
+                this._cleanupInternalState();
+                // enable gfi
+                this._gfiTimeout = setTimeout(() => this.getMapModule().setDrawingMode(false), 500);
+            } else {
+                Oskari.log('DrawPlugin').info(`Called stop with id '${id}' and draw is currently active with id '${this.getRequestId()}'.`);
             }
-            // remove draw and modify controls
-            this._cleanupInternalState();
-            // enable gfi
-            this._gfiTimeout = setTimeout(() => this.getMapModule().setDrawingMode(false), 500);
         },
         /**
          * @method forceFinishDrawing
