@@ -6,7 +6,6 @@ class ScaleBarTool extends AbstractPublisherTool {
         super(...args);
         this.index = 1;
         this.group = 'additional';
-        this.config = null;
     }
 
     getTool () {
@@ -15,18 +14,6 @@ class ScaleBarTool extends AbstractPublisherTool {
             title: Oskari.getMsg('MapModule', 'publisherTools.ScaleBarPlugin'),
             config: this.state?.pluginConfig || {}
         };
-    }
-
-    init (data) {
-        const plugin = this.findPluginFromInitData(data);
-        this.setEnabled(!!plugin);
-
-        if (plugin?.config) {
-            this.storePluginConf(plugin.config);
-            // when we enter publisher:
-            // restore saved location for plugin that is not stopped nor started
-            this.getPlugin().setLocation(plugin.config?.location?.classes);
-        }
     }
 
     getValues () {
@@ -42,10 +29,6 @@ class ScaleBarTool extends AbstractPublisherTool {
                 }
             }
         };
-    }
-
-    stop () {
-        super.stop();
     }
 };
 
