@@ -148,7 +148,10 @@ Oskari.registerLocalization(
             },
             "IndexMapPlugin": {
                 "toolLabel": "Carte-index"
-            }
+            },
+            "Zoombar": {
+                "toolLabel": "Barre de zoom"
+            },
         }
     }
 });
