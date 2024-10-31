@@ -177,6 +177,9 @@ Oskari.registerLocalization(
                 "titles": {
                     "showArrows": "Pan tool"
                 }
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Index map",
             }
         }
     }

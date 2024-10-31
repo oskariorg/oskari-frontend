@@ -139,6 +139,9 @@ Oskari.registerLocalization(
             },
             "PanButtons": {
                 "toolLabel": "Hliðrunartól"
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Index kort"
             }
         }
     }

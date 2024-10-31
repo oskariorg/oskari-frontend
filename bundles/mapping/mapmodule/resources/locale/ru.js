@@ -140,7 +140,8 @@ Oskari.registerLocalization(
             },
             "PanButtons": {
                 "toolLabel": "Инструмент панорамирования"
-            }
+            },
+            "IndexMapPlugin": "Номенклатура карты",
         }
     }
 });

@@ -172,6 +172,9 @@ Oskari.registerLocalization(
                 "titles": {
                     "showArrows": "Panoreringsverktyg"
                 }
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Indexkarta"
             }
         }
     }
