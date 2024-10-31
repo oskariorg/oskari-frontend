@@ -50,7 +50,6 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Tól",
                 "tooltip": "Velja tiltæk kortatól. Athugaðu staðsetningu við forskoðun korts.",
-                "Portti2Zoombar": "Þysjunarstika",
                 "ControlsPlugin": "Hliðra með mús",
                 "SearchPlugin": "Leit eftir stað",
                 "FeaturedataPlugin": "Fitjugögn",

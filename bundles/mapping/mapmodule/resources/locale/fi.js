@@ -180,6 +180,9 @@ Oskari.registerLocalization(
             },
             "IndexMapPlugin": {
                 "toolLabel": "Indeksikartta"
+            },
+            "Zoombar": {
+                "toolLabel": "Mittakaavasäädin"
             }
         }
     }

@@ -6,5 +6,6 @@ import { ScaleBarTool } from '../plugin/scalebar/publisher/ScalebarTool';
 import { MyLocationTool } from '../plugin/mylocation/publisher/MyLocationTool';
 import { PanButtonsTool } from '../plugin/panbuttons/publisher/PanButtonsTool';
 import { IndexMapTool } from '../plugin/indexmap/publisher/IndexMapTool';
+import { ZoombarTool } from '../plugin/zoombar/publisher/ZoombarTool';
 
-export { LogoTool, ScaleBarTool, MyLocationTool, PanButtonsTool, IndexMapTool };
+export { LogoTool, ScaleBarTool, MyLocationTool, PanButtonsTool, IndexMapTool, ZoombarTool };

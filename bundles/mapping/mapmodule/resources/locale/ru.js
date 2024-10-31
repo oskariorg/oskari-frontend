@@ -141,7 +141,12 @@ Oskari.registerLocalization(
             "PanButtons": {
                 "toolLabel": "Инструмент панорамирования"
             },
-            "IndexMapPlugin": "Номенклатура карты",
+            "IndexMapPlugin": {
+                "toolLabel": "Номенклатура карты"
+            },
+            "Zoombar": {
+                "toolLabel": "Панель увеличения"
+            },
         }
     }
 });

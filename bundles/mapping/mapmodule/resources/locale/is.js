@@ -142,7 +142,10 @@ Oskari.registerLocalization(
             },
             "IndexMapPlugin": {
                 "toolLabel": "Index kort"
-            }
+            },
+            "Zoombar": {
+                "toolLabel": "Þysjunarstika"
+            },
         }
     }
 });

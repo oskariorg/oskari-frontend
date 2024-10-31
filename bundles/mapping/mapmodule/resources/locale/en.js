@@ -180,7 +180,10 @@ Oskari.registerLocalization(
             },
             "IndexMapPlugin": {
                 "toolLabel": "Index map",
-            }
+            },
+            "Zoombar": {
+                "toolLabel": "Zoom bar"
+            },
         }
     }
 });

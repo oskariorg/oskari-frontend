@@ -175,7 +175,10 @@ Oskari.registerLocalization(
             },
             "IndexMapPlugin": {
                 "toolLabel": "Indexkarta"
-            }
+            },
+            "Zoombar": {
+                "toolLabel": "Skalans glidreglage"
+            },
         }
     }
 });
