@@ -1,4 +1,4 @@
-import { AbstractPublisherTool } from '../../../../../framework/publisher2/tools/AbstractPublisherTool';
+import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/AbstractPublisherTool';
 
 const SCALEBAR_TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin';
 class ScaleBarTool extends AbstractPublisherTool {

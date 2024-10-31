@@ -1,13 +1,12 @@
-import { AbstractPublisherTool } from '../../../../../framework/publisher2/tools/AbstractPublisherTool';
-import { MyLocationComponent } from './MyLocationComponent';
-import { MyLocationToolHandler } from './MyLocationHandler';
-
-class MyLocationTool extends AbstractPublisherTool {
+import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/AbstractPublisherTool';
+import { PanButtonsComponent } from './PanButtonsComponent';
+import { PanButtonsHandler } from './PanButtonsHandler';
+class PanButtonsTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 1;
         this.group = 'additional';
-        this.handler = new MyLocationToolHandler(this);
+        this.handler = new PanButtonsHandler(this);
     };
 
     init (data) {
@@ -18,7 +17,7 @@ class MyLocationTool extends AbstractPublisherTool {
 
     getComponent () {
         return {
-            component: MyLocationComponent,
+            component: PanButtonsComponent,
             handler: this.handler
         };
     }
@@ -31,8 +30,8 @@ class MyLocationTool extends AbstractPublisherTool {
     */
     getTool () {
         return {
-            id: 'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-            title: Oskari.getMsg('MapModule', 'publisherTools.MyLocationPlugin.toolLabel'),
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
+            title: Oskari.getMsg('MapModule', 'publisherTools.PanButtons.toolLabel'),
             config: this.state?.pluginConfig || {}
         };
     }
@@ -41,14 +40,16 @@ class MyLocationTool extends AbstractPublisherTool {
         if (!this.isEnabled()) {
             return null;
         }
+
         const pluginConfig = this.getPlugin().getConfig() || {};
-        // update extras
+        // add selected extraoptions to conf
         const state = this.handler.getState();
         for (const key in state) {
             if (state.hasOwnProperty(key)) {
                 pluginConfig[key] = state[key];
             }
         }
+
         return {
             configuration: {
                 mapfull: {
@@ -62,11 +63,11 @@ class MyLocationTool extends AbstractPublisherTool {
 }
 
 // Attach protocol to make this discoverable by Oskari publisher
-Oskari.clazz.defineES('Oskari.publisher.MyLocationTool',
-    MyLocationTool,
+Oskari.clazz.defineES('Oskari.publisher.PanButtonsTool',
+    PanButtonsTool,
     {
         protocol: ['Oskari.mapframework.publisher.Tool']
     }
 );
 
-export { MyLocationTool };
+export { PanButtonsTool };
