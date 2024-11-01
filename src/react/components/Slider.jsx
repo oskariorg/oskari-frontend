@@ -1,6 +1,7 @@
 import React from 'react';
 import { Slider as AntSlider } from 'antd';
 import styled from 'styled-components';
+import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme, DEFAULT_COLORS } from 'oskari-ui/theme';
 
 const normal = 4;
@@ -43,26 +44,31 @@ const ThemedAntSlider = styled(AntSlider)`
         top: 0px;
         height: ${props => props.useThick ? thick : normal}px;
     }
+    &:hover .ant-slider-track,
+    &:hover .ant-slider-handle {
+        background-color: ${props => props.theme.getAccentHover()} !important;
+    }
 `;
 
 const getThemedStyle = (theme, vertical, useThick) => {
-    const width = vertical ? 'height' : 'width';
-    const height = vertical ?  'width' : 'height';
+    const handleSize = vertical ? 'height' : 'width';
+    const thickness = vertical ?  'width' : 'height';
+    const alignment = vertical ? 'left' : 'top';
     const size = useThick ? thick : normal;
     return {
         track: {
-            [height]: `${size}px`,
-            backgroundColor: theme.getButtonHoverColor()
+            [thickness]: `${size}px`,
+            backgroundColor: theme.getAccent()
         },
         rail: {
-            [height]: `${size}px`,
+            [thickness]: `${size}px`,
             backgroundColor: theme.getTextColor()
         },
         handle: {
-            backgroundColor: theme.getButtonHoverColor(),
-            [width]: '8px',
-            [height]: `${size + handler}px`,
-            top: '-2px',
+            backgroundColor: theme.getAccent(),
+            [handleSize]: '8px',
+            [thickness]: `${size + handler}px`,
+            [alignment]: '-2px',
             borderRadius: '6px',
             border: 'solid 1px #3c3c3c'
         }
@@ -70,10 +76,11 @@ const getThemedStyle = (theme, vertical, useThick) => {
 };
 
 export const Slider = ({ theme, useThick, vertical, ...rest }) => {
-    if (!theme) {
-        return <StyledAntSlider vertical= {vertical} {...rest} />
-    }
+    return <StyledAntSlider vertical= {vertical} {...rest} />
+};
+
+export const ThemedSlider = ThemeConsumer(({ theme, useThick, vertical, ...rest }) => {
     const helper = getNavigationTheme(theme);
     const style = getThemedStyle(helper, vertical, useThick);
     return <ThemedAntSlider styles={style} theme={helper} useThick={useThick} vertical={vertical} {...rest} />
-};
+});
