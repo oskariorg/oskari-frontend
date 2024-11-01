@@ -45,15 +45,11 @@ export const AllLayersSwitch = ({ checked, onToggle, layerCount = 0 }) => {
                 showConfirm(false);
                 event.stopPropagation();
             }}
-            okText={<Message messageKey='yes'/>}
             // TODO: try to link tooltip to the flyout so it's removed if the flyout is closed.
             // These didn't solve the problem but might be helpful
             // div.oskari-flyout.layerlist
             //getPopupContainer={(triggerNode) => document.querySelector('div.oskari-flyout.layerlist')}
             //destroyTooltipOnHide={true}
-            cancelText={<Message messageKey='cancel'/>}
-            placement='top'
-            popupStyle={{zIndex: '999999'}}
         >
             <StyledSwitch
                 size="small"
@@ -69,5 +65,3 @@ AllLayersSwitch.propTypes = {
     layerCount: PropTypes.number,
     onToggle: PropTypes.func.isRequired
 };
-
-                        
