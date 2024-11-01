@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Popconfirm } from 'antd';
+import { Message } from 'oskari-ui';
 
 // NOTE! z-index is overridden in resources/css/portal.css
 // Without the override the confirm is shown behind flyouts (for example in admin)
@@ -28,9 +29,18 @@ Check the render method of `styled__IconButton`.
 There seems to be a problem with tooltips with styled-components as direct children:
 https://stackoverflow.com/questions/61450739/understanding-warning-function-components-cannot-be-given-refs
 */
-export const Confirm = ({ children, cancelButtonProps = {}, okButtonProps = {}, ...other }) => (
+export const Confirm = ({
+    children,
+    cancelButtonProps = {},
+    okButtonProps = {},
+    okText = <Message bundleKey='oskariui' messageKey='buttons.yes'/>,
+    cancelText = <Message bundleKey='oskariui' messageKey='buttons.cancel'/>,
+     ...other
+}) => (
     <Popconfirm
         overlayClassName='t_confirm'
+        okText={okText}
+        cancelText={cancelText}
         okButtonProps={{
             className: 't_button t_ok',
             ...okButtonProps }}
