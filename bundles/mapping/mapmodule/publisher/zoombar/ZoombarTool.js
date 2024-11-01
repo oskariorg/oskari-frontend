@@ -1,25 +1,33 @@
-import { AbstractPublisherTool } from '../../../../../framework/publisher2/tools/AbstractPublisherTool';
+import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/AbstractPublisherTool';
 
-class IndexMapTool extends AbstractPublisherTool {
+class ZoombarTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 1;
         this.group = 'additional';
-    }
+    };
 
+    /**
+    * Get tool object.
+    * @method getTool
+    *
+    * @returns {Object} tool description
+    */
     getTool () {
         return {
-            id: 'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
-            title: Oskari.getMsg('MapModule', 'publisherTools.IndexMapPlugin.toolLabel'),
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
+            title: Oskari.getMsg('MapModule', 'publisherTools.Zoombar.toolLabel'),
             config: this.state.pluginConfig || {}
         };
-    }
+    };
 
-    isDisplayed () {
-        // not shown on 3d maps
-        return !Oskari.getSandbox().getMap().getSupports3D();
-    }
-
+    /**
+    * Get values.
+    * @method getValues
+    * @public
+    *
+    * @returns {Object} tool value object
+    */
     getValues () {
         if (!this.isEnabled()) {
             return null;
@@ -33,15 +41,15 @@ class IndexMapTool extends AbstractPublisherTool {
                 }
             }
         };
-    }
+    };
 }
 
 // Attach protocol to make this discoverable by Oskari publisher
-Oskari.clazz.defineES('Oskari.publisher.IndexMapTool',
-    IndexMapTool,
+Oskari.clazz.defineES('Oskari.publisher.ZoombarTool',
+    ZoombarTool,
     {
         protocol: ['Oskari.mapframework.publisher.Tool']
     }
 );
 
-export { IndexMapTool };
+export { ZoombarTool };

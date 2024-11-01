@@ -1,4 +1,4 @@
-import { AbstractPublisherTool } from '../../../../../framework/publisher2/tools/AbstractPublisherTool';
+import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/AbstractPublisherTool';
 
 class LogoTool extends AbstractPublisherTool {
     constructor (...args) {
