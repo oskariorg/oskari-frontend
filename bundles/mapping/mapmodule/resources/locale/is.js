@@ -146,6 +146,9 @@ Oskari.registerLocalization(
             "Zoombar": {
                 "toolLabel": "Þysjunarstika"
             },
+            "CrosshairTool": {
+                "toolLabel": "Sýna aðalatriði korts"
+            }
         }
     }
 });

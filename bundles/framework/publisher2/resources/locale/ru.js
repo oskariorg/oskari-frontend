@@ -75,7 +75,6 @@ Oskari.registerLocalization(
                 "FeedbackServiceTool": "Обратная связь (Open311) ",
                 "MapLegend": "Показать условные знаки",
                 "MapRotator": "Включить поворот карты",
-                "CrosshairTool": "Показать фокус карты",
                 "toolbarToolNames": {
                     "history": "Перейти к предыдущему или следующему виду",
                     "history_back": "Перейти к предыдущему виду",

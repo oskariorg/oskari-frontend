@@ -179,6 +179,9 @@ Oskari.registerLocalization(
             "Zoombar": {
                 "toolLabel": "Skalans glidreglage"
             },
+            "CrosshairTool": {
+                "toolLabel": "Visa kartans mittpunkt"
+            }
         }
     }
 });

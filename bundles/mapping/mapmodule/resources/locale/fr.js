@@ -152,6 +152,9 @@ Oskari.registerLocalization(
             "Zoombar": {
                 "toolLabel": "Barre de zoom"
             },
+            "CrosshairTool": {
+                "toolLabel": "Afficher le point d'intérêt de la carte"
+            }
         }
     }
 });

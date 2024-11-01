@@ -76,7 +76,6 @@ Oskari.registerLocalization(
                 "CoordinateToolPlugin": "Koordinatverktyg",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
-                "CrosshairTool": "Visa kartans mittpunkt",
                 "CameraControls3d": "Kameraverktyg",
                 "TimeControl3d": "Tidskontroll",
                 "toolbarToolNames": {

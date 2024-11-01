@@ -74,7 +74,6 @@ Oskari.registerLocalization(
                 "FeedbackServiceTool": "Service de rétroaction (Open311)",
                 "MapLegend": "Afficher la légende de la carte",
                 "MapRotator": "Activer la rotation de la carte",
-                "CrosshairTool": "Afficher le point d'intérêt de la carte",
                 "toolbarToolNames": {
                     "history": "Passer à la vue précédente ou suivante",
                     "history_back": "Passer à la vue précédente",

@@ -76,7 +76,6 @@ Oskari.registerLocalization(
                 "CoordinateToolPlugin": "Coordinate tool",
                 "MapLegend": "Show map legend",
                 "MapRotator": "Enable map rotation",
-                "CrosshairTool": "Show map focal point",
                 "CameraControls3d": "Camera tools",
                 "TimeControl3d": "Time control",
                 "toolbarToolNames": {
