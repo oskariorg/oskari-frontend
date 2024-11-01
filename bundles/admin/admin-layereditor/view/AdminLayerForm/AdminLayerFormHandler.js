@@ -1087,10 +1087,14 @@ class UIHandler extends StateHandler {
                 this.loadingCount--;
                 const currentLayer = this.getState().layer;
                 this.layerHelper.initPermissionsForLayer(currentLayer, data.roles);
+                const system = Object.values(data.systemRoles || {});
+                const sorted = data.roles
+                    .map(role => ({ ...role, isSystem: system.includes(role.name) }))
+                    .sort(r => r.isSystem ? -1 : 1);
                 this.updateState({
                     layer: currentLayer,
                     loading: this.isLoading(),
-                    metadata: data
+                    metadata: { ...data, roles: sorted }
                 });
                 // invalidate cache if it was populated
                 Object.keys(__VALIDATOR_CACHE).forEach(key => delete __VALIDATOR_CACHE[key]);
@@ -1133,6 +1137,12 @@ class UIHandler extends StateHandler {
         const layer = this.getState().layer;
         handlePermissionForSingleRole(layer.role_permissions, permission, role);
 
+        this.updateState({ layer });
+    }
+
+    setPermissions (permissions = {}) {
+        const { layer } = this.getState();
+        layer.role_permissions = permissions;
         this.updateState({ layer });
     }
 
@@ -1281,6 +1291,7 @@ const wrapped = controllerMixin(UIHandler, [
     'showLayerMetadata',
     'clearLayerCoverage',
     'showLayerCoverage',
-    'toggleDeclutter'
+    'toggleDeclutter',
+    'setPermissions'
 ]);
 export { wrapped as AdminLayerFormHandler };

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { PermissionRow, TEXT_COLUMN_SIZE, PERMISSION_TYPE_COLUMN_SIZE } from './PermissionRow';
+import { DefaultPermissions } from './DefaultPermissions';
 import { List, ListItem, Checkbox, Message, Tooltip } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
@@ -42,17 +43,17 @@ const ListDivContent = styled('div')`
 const getPermissionTableHeader = (permission) => {
     const translation = <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} bundleKey='admin-layereditor' />;
     switch (permission.id) {
-        case 'VIEW_LAYER':
-            return <Tooltip title={translation}><StyledIcon><UnorderedListOutlined /></StyledIcon></Tooltip>
-        case 'VIEW_PUBLISHED':
-            return <Tooltip title={translation}><StyledIcon><EyeOutlined /></StyledIcon></Tooltip>
-        case 'PUBLISH':
-            return <Tooltip title={translation}><StyledIcon><ImportOutlined /></StyledIcon></Tooltip>
-        case 'DOWNLOAD':
-            return <Tooltip title={translation}><StyledIcon><ExportOutlined /></StyledIcon></Tooltip>
-        default:
-            // permissions might have server side localization as "name" that defaults to id if not given
-            return translation;
+    case 'VIEW_LAYER':
+        return <Tooltip title={translation}><StyledIcon><UnorderedListOutlined /></StyledIcon></Tooltip>;
+    case 'VIEW_PUBLISHED':
+        return <Tooltip title={translation}><StyledIcon><EyeOutlined /></StyledIcon></Tooltip>;
+    case 'PUBLISH':
+        return <Tooltip title={translation}><StyledIcon><ImportOutlined /></StyledIcon></Tooltip>;
+    case 'DOWNLOAD':
+        return <Tooltip title={translation}><StyledIcon><ExportOutlined /></StyledIcon></Tooltip>;
+    default:
+        // permissions might have server side localization as "name" that defaults to id if not given
+        return translation;
     }
 };
 
@@ -85,6 +86,8 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
     }
     const { roles, permissionTypes } = rolesAndPermissionTypes;
 
+    // TODO: mutates permissionTypes. dataRows uses it but header uses localized => both uses localizedText
+    // => use mutated or variable but don't mix
     const localizedPermissionTypes = permissionTypes.map(permission => {
         permission.localizedText = getPermissionTableHeader(permission);
         return permission;
@@ -93,16 +96,14 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
     const dataRows = roles.map(role => {
         return {
             isHeaderRow: false,
-            text: role.name,
             permissions: permissions[role.name] || [],
-            permissionTypes: permissionTypes,
-            role: role
+            permissionTypes,
+            role
         };
     });
 
     const headerRow = {
         isHeaderRow: true,
-        text: <Message messageKey='rights.role'/>,
         permissions: getHeaderPermissions(dataRows, roles),
         permissionTypes: localizedPermissionTypes
     };
@@ -114,24 +115,21 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
             if (modelRow.isHeaderRow) {
                 // header row with special functionality (select all/none)
                 return <Checkbox key={permission.id + '_headerRow'}
-                    permissionDescription={permission.localizedText}
-                    permission={permission.id}
-                    role={'N/A'}
+                    description={permission.localizedText}
                     checked={modelRow.permissions.includes(permission.id)}
-                    onChange = {(event) => controller.setPermissionForAll(event.target.permission, event.target.checked) }/>;
+                    onChange = {(event) => controller.setPermissionForAll(permission.id, event.target.checked) }/>;
             }
             // the actual role-based rows
             const role = modelRow.role.name;
             const tooltip = <span>{role}: <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} /></span>;
-            return (<Tooltip key={permission.id + '_' + role}
-                title={tooltip}>
-                <Checkbox
-                    permissionDescription={permission.localizedText}
-                    permission={permission.id}
-                    role={role}
-                    checked={modelRow.permissions.includes(permission.id)}
-                    onChange = {(event) => controller.togglePermission(event.target.role, event.target.permission)}/>
-            </Tooltip>);
+            return (
+                <Tooltip key={permission.id + '_' + role} title={tooltip}>
+                    <Checkbox
+                        description={permission.localizedText}
+                        checked={modelRow.permissions.includes(permission.id)}
+                        onChange = {() => controller.togglePermission(role, permission.id)}/>
+                </Tooltip>
+            );
         });
 
         const rowKey = modelRow.isHeaderRow ? 'header' : modelRow.role.name;
@@ -140,13 +138,17 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
         const rowWidth = TEXT_COLUMN_SIZE.width + (PERMISSION_TYPE_COLUMN_SIZE.width * headerRow.permissionTypes.length);
         return (
             <StyledListItem style={{ width: rowWidth + 'px' }}>
-                <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} text={modelRow.text} checkboxes={checkboxes}/>
+                <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} role={modelRow.role} checkboxes={checkboxes}/>
             </StyledListItem>
         );
     };
 
     return (
         <ListDiv>
+            <DefaultPermissions
+                metadata={rolesAndPermissionTypes}
+                permissions={permissions}
+                controller={controller}/>
             <ListDivHeader>
                 <List bordered={false} dataSource={headerDataModel} renderItem={renderRow}/>
             </ListDivHeader>
