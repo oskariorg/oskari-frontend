@@ -184,6 +184,9 @@ Oskari.registerLocalization(
             "Zoombar": {
                 "toolLabel": "Zoom bar"
             },
+            "CrosshairTool": {
+                "toolLabel": "Show map focal point"
+            }
         }
     }
 });

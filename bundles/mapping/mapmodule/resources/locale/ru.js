@@ -147,6 +147,9 @@ Oskari.registerLocalization(
             "Zoombar": {
                 "toolLabel": "Панель увеличения"
             },
+            "CrosshairTool": {
+                "toolLabel": "Показать фокус карты"
+            }
         }
     }
 });

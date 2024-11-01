@@ -183,6 +183,9 @@ Oskari.registerLocalization(
             },
             "Zoombar": {
                 "toolLabel": "Mittakaavasäädin"
+            },
+            "CrosshairTool": {
+                "toolLabel": "Näytä kartan keskipiste"
             }
         }
     }
