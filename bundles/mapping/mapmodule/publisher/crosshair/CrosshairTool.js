@@ -68,3 +68,5 @@ Oskari.clazz.defineES('Oskari.publisher.CrosshairTool',
         protocol: ['Oskari.mapframework.publisher.Tool']
     }
 );
+
+export { CrosshairTool };

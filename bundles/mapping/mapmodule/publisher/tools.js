@@ -7,5 +7,5 @@ import { MyLocationTool } from './mylocation/MyLocationTool';
 import { PanButtonsTool } from './panbuttons/PanButtonsTool';
 import { IndexMapTool } from './indexmap/IndexMapTool';
 import { ZoombarTool } from './zoombar/ZoombarTool';
-import { CrossHairTool } from './crosshair/CrosshairTool';
-export { LogoTool, ScaleBarTool, MyLocationTool, PanButtonsTool, IndexMapTool, ZoombarTool, CrossHairTool };
+import { CrosshairTool } from './crosshair/CrosshairTool';
+export { LogoTool, ScaleBarTool, MyLocationTool, PanButtonsTool, IndexMapTool, ZoombarTool, CrosshairTool };
