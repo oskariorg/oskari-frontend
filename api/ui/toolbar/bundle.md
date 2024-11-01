@@ -59,11 +59,12 @@ A toolbar can also contain color configs:
     "background": "#00ff00"
   }
 }
+```
 
 Hover color is used when hovering icon and Toolbar.ToolbarRequest add operation data not contains color configuration.
 
 Background color is now only used to calculate light/dark icon classes.
-Configuration is used when Toolbar.ToolbarREquest add operation data not contains color configuration. 
+Configuration is used when Toolbar.ToolbarREquest add operation data not contains color configuration.
 
 ## Bundle state
 

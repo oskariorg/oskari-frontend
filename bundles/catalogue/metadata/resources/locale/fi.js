@@ -322,8 +322,8 @@ Oskari.registerLocalization({
                     "description": "Informaatio koskaa kohdetyyppiä."
                 },
                 "propertyType": {
-                    "label": "Property type",
-                    "description": "Information applies to a property type"
+                    "label": "Ominaisuustyyppi",
+                    "description": "Informaatio koskee kohdetyypin ominaispiirrettä."
                 },
                 "fieldSession": {
                     "label": "Maastotyöskentely",

@@ -65,12 +65,7 @@ Oskari.registerLocalization(
                 "label": "Verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
                 "AnnouncementsPlugin": "Aviseringar",
-                "ScaleBarPlugin": "Skalstock",
                 "TimeseriesControlPlugin": "Tidseriespelare",
-                "IndexMapPlugin": "Indexkarta",
-                "PanButtons": "Gå tillbaka till standardvyn för kartvyn",
-                "Portti2Zoombar": "Skalans glidreglage",
-                "MyLocationPlugin": "Centrera kartan på användarens position",
                 "ControlsPlugin": "Flytta kartvyn med musen",
                 "SearchPlugin": "Adress- och ortnamnssökning",
                 "FeaturedataPlugin": "Objektuppgifter",
@@ -81,7 +76,6 @@ Oskari.registerLocalization(
                 "CoordinateToolPlugin": "Koordinatverktyg",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
-                "CrosshairTool": "Visa kartans mittpunkt",
                 "CameraControls3d": "Kameraverktyg",
                 "TimeControl3d": "Tidskontroll",
                 "toolbarToolNames": {
@@ -124,9 +118,6 @@ Oskari.registerLocalization(
                         "centerMapAutomatically": "Centrera kartan till användarens plats vid start"
                     }
                 },
-                "panButtonsOptions": {
-                    "showArrows": "Panoreringsverktyg"
-                }
             },
             "toollayout": {
                 "label": "Verktygsplacering",

@@ -70,16 +70,16 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadata.MetadataBundleInstance',
         /**
          * Adds the metadata tool for layer
          * @method  @private _addTool
-         * @param  {String| Number} layerId layer to process
+         * @param  {Object} layer Oskari layer of any type to process
          * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
          */
         _addTool: function (layer, suppressEvent) {
-            const service = this.getLayerService();
-            if (!layer || !layer.getMetadataIdentifier()) {
+            const uuid = layer?.getMetadataIdentifier();
+            if (!uuid) {
                 return;
             }
+            const service = this.getLayerService();
             const layerId = layer.getId();
-            const uuid = layer.getMetadataIdentifier();
             // add feature data tool for layer
             const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             tool.setName('metadata');
@@ -117,8 +117,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadata.MetadataBundleInstance',
                     // only handle add layer
                     return;
                 }
-                if (event.getLayerId()) {
-                    this._addTool(event.getLayerId());
+                const layerId = event.getLayerId();
+                if (layerId) {
+                    const layer = this.getLayerService()?.findMapLayer(layerId);
+                    this._addTool(layer);
                 } else {
                     // ajax call for all layers
                     this._setupLayerTools();

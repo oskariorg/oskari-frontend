@@ -33,8 +33,8 @@ const BorderlessButton = styled(Button)`
     padding: 0px;
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
-    &:hover {
-        color: ${props => props.$hover} !important;
+    &&&:hover {
+        color: ${props => props.$hover};
         background: none;
     }
     &:disabled {

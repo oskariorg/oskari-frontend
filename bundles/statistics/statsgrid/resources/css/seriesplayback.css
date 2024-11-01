@@ -35,11 +35,10 @@
 .stats-series-speed label {
   display: block;
 }
-.stats-series-speed select {
+.statsgrid-series-control-plugin .stats-series-speed select {
     width: 100px;
     height: 24px;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0 5px;
 }
 
 .statsgrid-series-control-plugin .line-svg g.drag-handle circle{

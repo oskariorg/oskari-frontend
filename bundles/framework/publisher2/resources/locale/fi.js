@@ -65,12 +65,7 @@ Oskari.registerLocalization(
                 "label": "Kartalla näytettävät työkalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
                 "AnnouncementsPlugin": "Ilmoitukset",
-                "ScaleBarPlugin": "Mittakaavajana",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
-                "IndexMapPlugin": "Indeksikartta",
-                "PanButtons": "Palaa alkutilaan",
-                "Portti2Zoombar": "Mittakaavasäädin",
-                "MyLocationPlugin": "Käyttäjän sijaintiin keskittäminen",
                 "ControlsPlugin": "Kartan liikuttaminen hiirellä raahaamalla",
                 "SearchPlugin": "Osoite- ja paikannimihaku",
                 "FeaturedataPlugin": "Kohdetietotaulukko",
@@ -81,7 +76,6 @@ Oskari.registerLocalization(
                 "CoordinateToolPlugin": "Koordinaattityökalu",
                 "MapLegend": "Näytä karttaselitteet",
                 "MapRotator": "Salli kartan pyörittäminen",
-                "CrosshairTool": "Näytä kartan keskipiste",
                 "CameraControls3d": "Kameratyökalut",
                 "TimeControl3d": "Ajanhetken säädin",
                 "toolbarToolNames": {
@@ -124,9 +118,6 @@ Oskari.registerLocalization(
                         "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
                     }
                 },
-                "panButtonsOptions": {
-                    "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
-                }
             },
             "toollayout": {
                 "label": "Työkalujen asettelu kartalla",

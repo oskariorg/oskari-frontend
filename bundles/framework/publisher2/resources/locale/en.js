@@ -65,12 +65,7 @@ Oskari.registerLocalization(
                 "label": "Tools",
                 "tooltip": "Select available map tools. Check a placement in the map preview.",
                 "AnnouncementsPlugin": "Announcements",
-                "ScaleBarPlugin": "Scale bar",
                 "TimeseriesControlPlugin": "Time series player",
-                "IndexMapPlugin": "Index map",
-                "PanButtons": "Move to the original map view",
-                "Portti2Zoombar": "Zoom bar",
-                "MyLocationPlugin": "Center to location",
                 "ControlsPlugin": "Pan by mouse",
                 "SearchPlugin": "Place search",
                 "FeaturedataPlugin": "Feature data",
@@ -81,7 +76,6 @@ Oskari.registerLocalization(
                 "CoordinateToolPlugin": "Coordinate tool",
                 "MapLegend": "Show map legend",
                 "MapRotator": "Enable map rotation",
-                "CrosshairTool": "Show map focal point",
                 "CameraControls3d": "Camera tools",
                 "TimeControl3d": "Time control",
                 "toolbarToolNames": {
@@ -124,9 +118,6 @@ Oskari.registerLocalization(
                         "centerMapAutomatically": "Center map on user location at startup"
                     }
                 },
-                "panButtonsOptions": {
-                    "showArrows": "Pan tool"
-                }
             },
             "toollayout": {
                 "label": "Tool Placement",

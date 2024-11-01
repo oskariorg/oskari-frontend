@@ -40,7 +40,6 @@ Oskari.registerLocalization(
             },
             "content": {
                 "label": "Synlig information",
-                "tooltip": "",
                 "pngNote": "Tilläggsinformationen ingår ej i PNG-utskriftet.",
                 "mapTitle": {
                     "placeholder": "Rubrik"

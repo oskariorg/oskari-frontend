@@ -4,9 +4,9 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 
 class UIService extends StateHandler {
-    constructor (requestFn, initialDate) {
+    constructor (sandbox, initialDate) {
         super();
-        this.requestFunction = requestFn;
+        this.sandbox = sandbox;
         const time = dayjs(initialDate);
         this.state = {
             time: time.format('H:mm'),
@@ -28,7 +28,7 @@ class UIService extends StateHandler {
     }
 
     requestNewDateAndTime (date, time) {
-        this.requestFunction(date, time);
+        this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
     }
 }
 

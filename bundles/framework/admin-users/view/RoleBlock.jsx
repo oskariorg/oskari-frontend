@@ -1,14 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { TextInput, Message } from 'oskari-ui';
 import { UserOutlined } from '@ant-design/icons';
 import { Block, Button, ButtonContainer } from './styled';
 
+const ADMIN = 'admin';
+
 export const RoleBlock = ({ role, controller, isSystemRole, editingRole }) => {
-    const { id, name } = role;
+    const { id, name, type } = role;
     if (isSystemRole) {
         return (
             <Block>
                 <span>{name}</span>
+                { type === ADMIN &&
+                    <Button
+                        icon={<UserOutlined />}
+                        title={<Message messageKey='roles.showUsers'/>}
+                        onClick={() => controller.showUsersByRole(id)} />
+                }
             </Block>
         );
     }
@@ -40,4 +49,10 @@ export const RoleBlock = ({ role, controller, isSystemRole, editingRole }) => {
             </ButtonContainer>
         </Block>
     );
+};
+RoleBlock.propTypes = {
+    role: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
+    editingRole: PropTypes.object,
+    isSystemRole: PropTypes.bool
 };

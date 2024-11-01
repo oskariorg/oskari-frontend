@@ -1,19 +1,27 @@
-import { AbstractPublisherTool } from './AbstractPublisherTool';
+import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/AbstractPublisherTool';
 
 class CrosshairTool extends AbstractPublisherTool {
+    constructor (...args) {
+        super(...args);
+        this.index = 1;
+        this.group = 'additional';
+    }
+
     getTool () {
         return {
             id: 'Oskari.mapframework.publisher.tool.CrosshairTool',
-            title: 'CrosshairTool',
+            title: Oskari.getMsg('MapModule', 'publisherTools.CrosshairTool.toolLabel'),
             config: this.state.pluginConfig || {},
             hasNoPlugin: true
         };
     }
+
     init (data) {
         if (Oskari.util.keyExists(data, 'configuration.mapfull.conf.mapOptions.crosshair')) {
             this.setEnabled(!!data?.configuration?.mapfull?.conf?.mapOptions?.crosshair);
         }
     }
+
     // override since we want to use the instance we currently have, not create a new one
     setEnabled (enabled) {
         const changed = super.setEnabled(enabled);
@@ -25,6 +33,7 @@ class CrosshairTool extends AbstractPublisherTool {
             mapModule.toggleCrosshair(enabled);
         }
     }
+
     getValues () {
         if (!this.isEnabled()) {
             return null;
@@ -41,6 +50,7 @@ class CrosshairTool extends AbstractPublisherTool {
             }
         };
     }
+
     stop () {
         super.stop();
         // remove crosshair from map
@@ -55,6 +65,8 @@ class CrosshairTool extends AbstractPublisherTool {
 Oskari.clazz.defineES('Oskari.publisher.CrosshairTool',
     CrosshairTool,
     {
-        'protocol': ['Oskari.mapframework.publisher.Tool']
+        protocol: ['Oskari.mapframework.publisher.Tool']
     }
 );
+
+export { CrosshairTool };

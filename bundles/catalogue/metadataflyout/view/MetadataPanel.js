@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <h2>' + this.locale.heading.onlineResource + '</h2>' +
                     '        <ul>' +
                     '        <% _.forEach(onlineResources, function (onlineResource) { %>' +
-                    '            <% if (onlineResource.url.length) { %>' +
+                    '            <% if (onlineResource.url) { %>' +
                     '                <li><a href="<%= onlineResource.url %>"><%= onlineResource.name && onlineResource.name.length ? onlineResource.name : onlineResource.url %></a></li>' +
                     '            <% } %>' +
                     '        <% }); %>' +
@@ -274,7 +274,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <h2>' + this.locale.heading.onlineResource + '</h2>' +
                     '        <ul>' +
                     '        <% _.forEach(onlineResources, function (onlineResource) { %>' +
-                    '            <% if (onlineResource.url.length) { %>' +
+                    '            <% if (onlineResource.url) { %>' +
                     '                <li><a href="<%= onlineResource.url %>"><%= onlineResource.name && onlineResource.name.length ? onlineResource.name : onlineResource.url %></a></li>' +
                     '            <% } %>' +
                     '        <% }); %>' +

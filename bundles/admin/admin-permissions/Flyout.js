@@ -18,9 +18,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
      *        instance reference to component that created the tile
      */
     function (instance) {
-        var me = this;
-        me.instance = instance;
-        me.handler = null;
+        this.instance = instance;
+        this.handler = null;
     }, {
         /**
          * @method getName
@@ -42,9 +41,9 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          * Interface method implementation
          */
         setEl: function (el, flyout, width, height) {
-            this.container = el[0];
-            if (!jQuery(this.container).hasClass('admin-permissions')) {
-                jQuery(this.container).addClass('admin-permissions');
+            this.container = jQuery(el[0]);
+            if (!this.container.hasClass('admin-permissions')) {
+                this.container.addClass('admin-permissions');
             }
             if (!flyout.hasClass('admin-permissions')) {
                 flyout.addClass('admin-permissions');
@@ -57,7 +56,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          * Plugin start
          */
         startPlugin: function () {
-            this.handler = new LayerRightsHandler(() => this.renderContent());
+            this.handler = new LayerRightsHandler(this.instance, () => this.renderContent());
         },
 
         /**
@@ -74,16 +73,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          * @return {String} localized text for the title of the flyout
          */
         getTitle: function () {
-            return Oskari.getMsg('admin-permissions', 'title');
-        },
-
-        /**
-         * @method getDescription
-         * @return {String} localized text for the description of the
-         * flyout
-         */
-        getDescription: function () {
-            return Oskari.getMsg('admin-permissions', 'desc');
+            return this.instance.loc('flyout.title');
         },
 
         /**
@@ -91,7 +81,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          */
         resetFlyout: function () {
             if (this.handler) {
-                this.handler.resetTable();
+                this.handler.reset(true);
             }
         },
         /**
@@ -99,12 +89,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          * Renders flyout content
          */
         renderContent: function () {
-            const flyout = jQuery(this.container);
-
-            flyout.empty();
-
-            const layerRightsContainer = jQuery('<div />');
-            flyout.append(layerRightsContainer);
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'admin-permissions' }}>
                     <ThemeProvider>
@@ -114,7 +98,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
                         />
                     </ThemeProvider>
                 </LocaleProvider>,
-                layerRightsContainer[0]
+                this.container[0]
             );
         }
     }, {
@@ -122,5 +106,5 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.userinterface.Flyout']
+        protocol: ['Oskari.userinterface.Flyout']
     });
