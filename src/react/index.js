@@ -3,7 +3,7 @@ import 'antd/dist/reset.css';
 
 export { Alert } from './components/Alert';
 export { Badge } from './components/Badge';
-export { Button } from './components/Button';
+export { Button, ThemedButton } from './components/Button';
 export { Checkbox } from './components/Checkbox';
 export { Collapse, Panel as CollapsePanel } from './components/Collapse';
 export { Confirm } from './components/Confirm';
@@ -18,7 +18,7 @@ export { Popover } from './components/Popover';
 export { Radio } from './components/Radio';
 export { SearchInput } from './components/SearchInput';
 export { Select, Option } from './components/Select';
-export { Slider } from './components/Slider';
+export { Slider, ThemedSlider } from './components/Slider';
 export { Space } from './components/Space';
 export { Spin } from './components/Spin';
 export { Steps } from './components/Steps';
