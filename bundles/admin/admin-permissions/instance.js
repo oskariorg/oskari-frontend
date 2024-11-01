@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
-        this.service = null;
+        this.loc = Oskari.getMsg.bind(null, this.getName());
     }, {
 
         /**
@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          * @method getName
          * @return {String} the name for the component
          */
-        'getName': function () {
+        getName: function () {
             return this.__name;
         },
 
@@ -58,40 +58,30 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        'start': function () {
-            var me = this,
-                conf = me.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
-
-            if (me.started) {
+        start: function () {
+            if (this.started) {
                 return;
             }
+            this.started = true;
+            const conf = this.conf || {};
+            const sandboxName = conf.sandbox || 'sandbox';
+            this.sandbox = Oskari.getSandbox(sandboxName);
 
-            me.started = true;
-
-            me.sandbox = sandbox;
-
-            sandbox.register(me);
-            for (var p in me.eventHandlers) {
-                sandbox.registerForEventByName(me, p);
-            }
-
+            this.sandbox.register(this);
+            Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.registerForEventByName(this, p));
             // Let's extend UI
-            var reqName = 'userinterface.AddExtensionRequest',
-                reqBuilder = Oskari.requestBuilder(reqName),
-                request = reqBuilder(this);
-            sandbox.request(this, request);
+            const reqBuilder = Oskari.requestBuilder('userinterface.AddExtensionRequest');
+            this.sandbox.request(this, reqBuilder(this));
 
             // draw ui
-            me.createUi();
+            this.createUi();
         },
 
         /**
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        'init': function () {
+        init: function () {
             return null;
         },
 
@@ -100,7 +90,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          * implements BundleInstance protocol update method - does
          * nothing atm
          */
-        'update': function () {
+        update: function () {
 
         },
 
@@ -108,20 +98,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        'stop': function () {
-            var me = this,
-                sandbox = me.sandbox(),
-                reqName = 'userinterface.RemoveExtensionRequest',
-                reqBuilder = Oskari.requestBuilder(reqName);
+        stop: function () {
+            const reqBuilder = Oskari.requestBuilder('userinterface.RemoveExtensionRequest');
+            this.sandbox.request(this, reqBuilder(this));
+            Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.unregisterFromEventByName(this, p));
 
-            for (var p in me.eventHandlers) {
-                sandbox.unregisterFromEventByName(me, p);
-            }
-
-            sandbox.request(me, reqBuilder(me));
-
-            me.sandbox.unregister(me);
-            me.started = false;
+            this.sandbox.unregister(this);
+            this.started = false;
         },
 
         /**
@@ -165,16 +148,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return Oskari.getMsg('admin-permissions', 'title');
-        },
-
-        /**
-         * @method getDescription
-         * @return {String} localized text for the description of the
-         * component
-         */
-        getDescription: function () {
-            return Oskari.getMsg('admin-permissions', 'desc');
+            return this.loc('title');
         },
 
         /**
@@ -182,8 +156,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          * (re)creates the UI for "selected layers" functionality
          */
         createUi: function () {
-            var me = this;
-            me.plugins['Oskari.userinterface.Flyout'].renderContent();
+            this.plugins['Oskari.userinterface.Flyout'].renderContent();
+        },
+        closeFlyout: function () {
+            this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
         },
         /**
          * @method onEvent
@@ -225,7 +201,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          * @property {String[]} protocol
          * @static
          */
-        'protocol': [
+        protocol: [
             'Oskari.bundle.BundleInstance',
             'Oskari.mapframework.module.Module',
             'Oskari.userinterface.Extension'
