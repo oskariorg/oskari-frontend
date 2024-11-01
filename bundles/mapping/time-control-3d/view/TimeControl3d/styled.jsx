@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, Select } from 'oskari-ui';
+import { ThemedButton, Select } from 'oskari-ui';
 import { CalendarOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 export const CalendarIcon = styled(CalendarOutlined)`
@@ -38,27 +38,14 @@ export const StyledInput = styled.input`
     text-align: center;
 `;
 
-const ThemedButton = styled(Button)`
-    background: ${props => props.color};
-    border: none;
-    font-size: 16px;
-    fill: currentColor;
-
-    &:focus,
-    &:active,
-    &&&:hover {
-        background: ${props => props.hover};
-        color: inherit;
-        border: none;
-    }
-`;
-
 export const StyledButton = styled(ThemedButton)`
+    font-size: 16px;
     width: 100%;
     height: 40px;
 `;
 
 export const StyledPlayButton = styled(ThemedButton)`
+    font-size: 16px;
     padding: 0;
     height: 42px;
     width: 40px;
