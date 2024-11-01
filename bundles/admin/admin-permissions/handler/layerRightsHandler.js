@@ -138,7 +138,7 @@ class UIHandler extends StateHandler {
         };
     }
 
-    _mapPerimssions (permissions) {
+    _mapPermissions (permissions) {
         // move the recognized permissionTypes to the front with additional styles in random order
         const orderedTypes = DEFAULT_PERMISSIONS.filter(type => permissions[type]);
         const additionalTypes = Object.keys(permissions).filter(type => !orderedTypes.includes(type));
@@ -169,7 +169,7 @@ class UIHandler extends StateHandler {
             }
             const { names = {}, layers = [] } = await response.json();
             this.updateState({
-                permissions: this._mapPerimssions(names),
+                permissions: this._mapPermissions(names),
                 resources: layers.map(l => this._mapLayerToResource(l))
             });
             this.setLoading(false);
