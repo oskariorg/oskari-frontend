@@ -157,6 +157,33 @@ Oskari.registerLocalization(
         "layerCoverageTool": {
             "name": "Näytä kattavuusalue",
             "removeCoverageFromMap": "Piilota kattavuusalue"
+        },
+        "publisherTools": {
+            "ScaleBarPlugin": "Mittakaavajana",
+            "MyLocationPlugin": {
+                "toolLabel": "Käyttäjän sijaintiin keskittäminen",
+                "modes": {
+                    "single": "Yksittäinen",
+                    "continuous": "Jatkuva"
+                },
+                "titles": {
+                    "mode": "Toiminto",
+                    "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
+                    "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
+                }
+            },
+            "PanButtons": {
+                "toolLabel": "Palaa alkutilaan",
+                "titles": {
+                    "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
+                }
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Indeksikartta"
+            },
+            "Zoombar": {
+                "toolLabel": "Mittakaavasäädin"
+            }
         }
     }
 });

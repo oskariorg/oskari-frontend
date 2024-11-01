@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { SearchInput, Pagination, Message } from 'oskari-ui';
 import styled from 'styled-components';
 import { UserForm } from './UserForm';
@@ -24,19 +25,18 @@ const SearchText = styled('span')`
 
 export const UsersTab = ({ state, controller, isExternal }) => {
     const [filter, setFilter] = useState('');
-    const { userFormState, userPagination, users, roles } = state;
-    if (userFormState) {
+    if (state.userFormState) {
         return (
             <Content>
                 <UserForm
-                    userFormState={userFormState}
-                    roles={roles}
+                    state={state}
                     controller={controller}
                     isExternal={isExternal}
                 />
             </Content>
         );
     }
+    const { userPagination, users } = state;
     return (
         <Content>
             <SearchContainer>
@@ -54,21 +54,21 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                 )}
             </SearchContainer>
             {userPagination.search && (
-                <SearchText><Message messageKey='users.searchResults' /> ("{userPagination.search}"):</SearchText>
+                <SearchText><Message messageKey='users.searchResults' />{` ("${userPagination.search}"):`}</SearchText>
             )}
-            {(users && users.length > 0) && users.map(item => {
+            {users.length > 0 && users.map(item => {
                 const { id, user, firstName, lastName } = item;
                 const details = firstName || lastName ? ` (${firstName} ${lastName})` : '';
                 return (
                     <Block key={id}>
                         <span>{user}{details}</span>
                         <ButtonContainer>
-                            <Button type='edit' onClick={() => controller.setEditingUser(id)} />
+                            <Button type='edit' onClick={() => controller.editUserById(id)} />
                             <Button type='delete' onConfirm={() => controller.deleteUser(id)} />
                         </ButtonContainer>
                     </Block>
-                )})
-            }
+                );
+            })}
             {(!users || users.length === 0) && <Message messageKey='users.noMatch'/>}
             {userPagination.totalCount > userPagination.limit && (
                 <Footer>
@@ -84,4 +84,9 @@ export const UsersTab = ({ state, controller, isExternal }) => {
             )}
         </Content>
     );
+};
+UsersTab.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
+    isExternal: PropTypes.bool
 };

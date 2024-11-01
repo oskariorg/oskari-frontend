@@ -86,7 +86,6 @@ Oskari.registerLocalization(
                 "noAttributeData": "No attributes to show, please open feature data to see hidden attributes."
             },
             "PublisherToolbarPlugin": {
-                "test": "test",
                 "history": {
                     "reset": "Move to the original map view",
                     "back": "Move to previous view",
@@ -158,6 +157,33 @@ Oskari.registerLocalization(
         "layerCoverageTool": {
             "name": "Show coverage area",
             "removeCoverageFromMap": "Hide coverage area"
+        },
+        "publisherTools": {
+            "ScaleBarPlugin": "Scale bar",
+            "MyLocationPlugin": {
+                "toolLabel": "Center to location",
+                "modes": {
+                    "single": "Single",
+                    "continuous": "Continuous"
+                },
+                "titles": {
+                    "mode": "Mode",
+                    "mobileOnly": "Enable functionality only for mobile devices",
+                    "centerMapAutomatically": "Center map on user location at startup"
+                }
+            },
+            "PanButtons": {
+                "toolLabel": "Move to the original map view",
+                "titles": {
+                    "showArrows": "Pan tool"
+                }
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Index map",
+            },
+            "Zoombar": {
+                "toolLabel": "Zoom bar"
+            },
         }
     }
 });

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { Tooltip, Message } from 'oskari-ui';
-import { Icon } from 'oskari-ui';
+import { Icon, Tooltip, Message } from 'oskari-ui';
 
 const defaultColor = '#979797';
 

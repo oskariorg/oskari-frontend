@@ -81,7 +81,6 @@ Oskari.registerLocalization(
                 "noAttributeData": "Inga attributer att visa, vänligen öppna objektuppgifterna för att se de dolda attributerna."
             },
             "PublisherToolbarPlugin": {
-                "test": "test",
                 "history": {
                     "reset": "Gå tillbaka till standardvyn för kartvyn",
                     "back": "Tillbaka till föregående vy",
@@ -153,6 +152,33 @@ Oskari.registerLocalization(
         "layerCoverageTool": {
             "name": "Visa kartlagrets utsträckning",
             "removeCoverageFromMap": "Göm kartlagrets utsträckning"
+        },
+        "publisherTools": {
+            "ScaleBarPlugin": "Skalstock",
+            "MyLocationPlugin": {
+                "toolLabel": "Centrera kartan på användarens position",
+                "modes": {
+                    "single": "Enskild",
+                    "continuous": "Fortsatt"
+                },
+                "titles": {
+                    "mode": "Funktion",
+                    "mobileOnly": "Tillåt funktionen endast för mobilapparater",
+                    "centerMapAutomatically": "Centrera kartan till användarens plats vid start"
+                }
+            },
+            "PanButtons": {
+                "toolLabel": "Gå tillbaka till standardvyn för kartvyn",
+                "titles": {
+                    "showArrows": "Panoreringsverktyg"
+                }
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Indexkarta"
+            },
+            "Zoombar": {
+                "toolLabel": "Skalans glidreglage"
+            },
         }
     }
 });

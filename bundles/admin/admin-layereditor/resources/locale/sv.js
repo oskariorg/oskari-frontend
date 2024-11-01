@@ -163,7 +163,7 @@ Oskari.registerLocalization(
                         "typeFormats": "Värde typ",
                         "textFormats": "Textformatering",
                         "link": "Länk",
-                        "image": "Image",
+                        "image": "Bild",
                         "number": "Nummer",
                         "phone": "Telefonnummer"
                     },

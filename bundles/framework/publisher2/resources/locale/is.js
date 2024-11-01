@@ -50,11 +50,6 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Tól",
                 "tooltip": "Velja tiltæk kortatól. Athugaðu staðsetningu við forskoðun korts.",
-                "ScaleBarPlugin": "Mælikvarðastika",
-                "IndexMapPlugin": "Index kort",
-                "PanButtons": "Hliðrunartól",
-                "Portti2Zoombar": "Þysjunarstika",
-                "MyLocationPlugin": "Miðja",
                 "ControlsPlugin": "Hliðra með mús",
                 "SearchPlugin": "Leit eftir stað",
                 "FeaturedataPlugin": "Fitjugögn",
@@ -99,6 +94,11 @@ Oskari.registerLocalization(
                 "usereditmode": "Byrja að breyta",
                 "usereditmodeoff": "Hætta að breyta"
             },
+            "statsgrid": {
+                "label": "Þemakort",
+                "tooltip": "Sýna þemakort á kortinu."
+            },
+            /* for deprecated statsgrid2016 */
             "data": {
                 "label": "Þemakort",
                 "tooltip": "Sýna þemakort á kortinu.",
