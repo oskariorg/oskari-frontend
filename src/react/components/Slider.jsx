@@ -40,9 +40,9 @@ const ThemedAntSlider = styled(AntSlider)`
     .ant-slider-dot {
         background: #3c3c3c;
         border: none;
-        width: 2px;
         top: 0px;
-        height: ${props => props.useThick ? thick : normal}px;
+        ${props => props.vertical ? 'height': 'width'}: 2px;
+        ${props => props.vertical ? 'width': 'height'}: ${props => props.useThick ? thick : normal}px;
     }
     &:hover .ant-slider-track,
     &:hover .ant-slider-handle {
