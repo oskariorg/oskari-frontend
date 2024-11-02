@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { sliderTypes, timeUnits } from './util/constants';
 import { getDifferenceCalculator, calculateSvgX } from './util/calculation';
@@ -85,49 +85,28 @@ export const TimeSeriesSlider = ThemeConsumer(({
     const widthUnit = lineWidth / calculator(max, min);
 
     const [state, setState] = useState({
-        sliderPoints: [],
-        handleX: range ? calcHandlePosition(value[0], min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR) : calcHandlePosition(value, min, widthUnit, 8, timeUnits.YEAR),
-        secondHandleX: range ? calcHandlePosition(value[1], min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR) : 0,
         dragElement: null,
         dragOffsetX: null
     });
+    const xValue = range ? value[0] : value;
+    const handleX = calcHandlePosition(xValue, min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR);
+    const secondHandleX = range ? calcHandlePosition(value[1], min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR) : 0;
 
-    useEffect(() => {
-        if (range) {
-            setState({
-                ...state,
-                handleX: calcHandlePosition(value[0], min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR),
-                secondHandleX: calcHandlePosition(value[1], min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR)
-            });
-        } else {
-            setState({
-                ...state,
-                handleX: calcHandlePosition(value, min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR)
-            });
-        }
-    }, [value, value[0], value[1]]);
-
-    useEffect(() => {
-        let points = dataPoints.map((data) => ({
-            data,
-            x: calcDataPointX(data, widthUnit, min, (POINT_RADIUS * 2), calculator)
-        }));
-        setState({
-            ...state,
-            sliderPoints: points
-        });
-    }, [dataPoints]);
+    const sliderPoints = dataPoints.map((data) => ({
+        data,
+        x: calcDataPointX(data, widthUnit, min, (POINT_RADIUS * 2), calculator)
+    }));
 
     const onHandlePositionChange = (e, target) => {
         const svgX = calculateSvgX(e.clientX, target);
-        const snap = findSnapPoint(svgX, state.sliderPoints);
+        const snap = findSnapPoint(svgX, sliderPoints);
         target.setAttributeNS(null, 'x', snap.x - state.dragOffsetX);
         handleChange(snap.data, target.id);
     };
 
     const onRailClick = (e) => {
         const svgX = calculateSvgX(e.clientX, e.target);
-        const snap = findSnapPoint(svgX, state.sliderPoints);
+        const snap = findSnapPoint(svgX, sliderPoints);
         handleChange(snap.data);
     };
 
@@ -222,7 +201,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
                     <g onClick={(e) => onRailClick(e)}>
                         <Rail className='slider-rail' width={lineWidth} height={3} $theme={navigationTheme} />
                         {range && (
-                            <ActiveRail x1={state.handleX} x2={state.secondHandleX} y1={1.5} y2={1.5} stroke={navigationTheme.getButtonHoverColor()} strokeWidth={3} />
+                            <ActiveRail x1={handleX} x2={secondHandleX} y1={1.5} y2={1.5} stroke={navigationTheme.getButtonHoverColor()} strokeWidth={3} />
                         )}
                         {markers.map((mark, index) => {
                             return (
@@ -240,7 +219,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
                             )
                         })}
                     </g>
-                    {state.sliderPoints.map((point, index) => (
+                    {sliderPoints.map((point, index) => (
                         <g
                             key={index}
                             className='slider-data-point'
@@ -276,7 +255,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
                         strokeWidth={1}
                         width={HANDLE_WIDTH}
                         height={HANDLE_WIDTH * 2}
-                        x={state.handleX}
+                        x={handleX}
                         y={-7}
                         onMouseDown={(e) => startDrag(e)}
                         $theme={navigationTheme}
@@ -290,7 +269,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
                             strokeWidth={1}
                             width={HANDLE_WIDTH}
                             height={HANDLE_WIDTH * 2}
-                            x={state.secondHandleX}
+                            x={secondHandleX}
                             y={-7}
                             onMouseDown={(e) => startDrag(e)}
                             $theme={navigationTheme}
