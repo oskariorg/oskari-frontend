@@ -6,8 +6,8 @@ import { ThemeConsumer } from 'oskari-ui/util';
 import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
 import { LayerIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { hasDefaultPermissionsByRoleId, viewPublished, onlyAdmin } from '../../rolesHelper';
-import { ROLE_TYPES } from '../../constants';
+import { hasDefaultPermissionsByRoleId, viewPublished, onlyAdmin } from '../../util/rolesHelper';
+import { ROLE_TYPES } from '../../util/constants';
 
 const StyledTable = styled(Table)`
     width: 1200px;

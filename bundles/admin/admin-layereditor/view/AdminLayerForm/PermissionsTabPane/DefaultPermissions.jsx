@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Message, Confirm, Tooltip } from 'oskari-ui';
-import { ROLE_TYPES, SYSTEM_PERMISSIONS, PUBLISHED } from '../../../../constants';
-import { getDefaultPermisions, hasDefaultPermissions, onlyAdmin } from '../../../../rolesHelper';
+import { ROLE_TYPES, SYSTEM_PERMISSIONS, PUBLISHED } from '../../../../util/constants';
+import { getDefaultPermisions, hasDefaultPermissions, onlyAdmin } from '../../../../util/rolesHelper';
 
 const Content = styled.div`
     margin-bottom: 20px;

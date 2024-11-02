@@ -1,5 +1,5 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { validateSystemRoles } from '../../rolesHelper';
+import { validateSystemRoles } from '../../util/rolesHelper';
 import { getZoomLevelHelper } from '../../../mapping/mapmodule/util/scale';
 
 const DEFAULT_PERMISSIONS = ['VIEW_LAYER', 'VIEW_PUBLISHED', 'PUBLISH', 'DOWNLOAD'];
