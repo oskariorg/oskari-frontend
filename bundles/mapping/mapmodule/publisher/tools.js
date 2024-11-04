@@ -10,5 +10,17 @@ import { ZoombarTool } from './zoombar/ZoombarTool';
 import { CrosshairTool } from './crosshair/CrosshairTool';
 import { MapLayerListTool } from './layers/MapLayerListTool';
 import { SearchTool } from './search/SearchTool';
+import { ControlsTool } from './controls/ControlsTool';
 
-export { LogoTool, ScaleBarTool, MyLocationTool, PanButtonsTool, IndexMapTool, ZoombarTool, CrosshairTool, MapLayerListTool, SearchTool };
+export {
+    LogoTool,
+    ScaleBarTool,
+    MyLocationTool,
+    PanButtonsTool,
+    IndexMapTool,
+    ZoombarTool,
+    CrosshairTool,
+    MapLayerListTool,
+    SearchTool,
+    ControlsTool
+};

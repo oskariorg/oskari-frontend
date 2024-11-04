@@ -1,21 +1,24 @@
-import { AbstractPublisherTool } from './AbstractPublisherTool';
-
+import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/AbstractPublisherTool';
 class ControlsTool extends AbstractPublisherTool {
-    getIndex () {
-        return 5;
+    constructor (...args) {
+        super(...args);
+        this.index = 1;
+        this.group = 'additional';
     }
+
     getTool () {
         return {
             id: 'Oskari.mapframework.mapmodule.ControlsPlugin',
-            title: 'ControlsPlugin',
+            title: Oskari.getMsg('MapModule', 'publisherTools.ControlsPlugin.toolLabel'),
             config: this.state.pluginConfig || {},
             hasNoPlugin: true
         };
     }
+
     init (data) {
         const plugin = this.findPluginFromInitData(data);
         if (plugin) {
-            var hasConfig = typeof plugin.config === 'object';
+            const hasConfig = typeof plugin?.config === 'object';
             if (hasConfig) {
                 this.storePluginConf(plugin.config);
             }
@@ -23,18 +26,18 @@ class ControlsTool extends AbstractPublisherTool {
             this.setEnabled(!hasConfig || (hasConfig && plugin.config.keyboardControls !== false));
         }
     }
+
     // override since we want to use the instance we currently have, not create a new one
     setEnabled (enabled) {
-        const changed = super.setEnabled(enabled);
-        if (!changed) {
-            return;
-        }
+        super.setEnabled(enabled);
         this.allowPanning(!!enabled);
     }
+
     getPlugin () {
         // always use the instance on map, not a new copy
         return this.getMapmodule().getPluginInstances('ControlsPlugin');
     }
+
     allowPanning (enabled) {
         if (!enabled) {
             this.getSandbox().postRequestByName('DisableMapKeyboardMovementRequest', []);
@@ -44,6 +47,7 @@ class ControlsTool extends AbstractPublisherTool {
             this.getSandbox().postRequestByName('EnableMapMouseMovementRequest', []);
         }
     }
+
     getValues () {
         return {
             configuration: {
@@ -55,6 +59,7 @@ class ControlsTool extends AbstractPublisherTool {
             }
         };
     }
+
     getConfig () {
         // NOTE! returning null when isEnabled() is ON PURPOSE!
         // Usually this is reversed
@@ -67,6 +72,7 @@ class ControlsTool extends AbstractPublisherTool {
             mouseControls: false
         };
     }
+
     stop () {
         super.stop();
         // resume panning on map
@@ -78,6 +84,8 @@ class ControlsTool extends AbstractPublisherTool {
 Oskari.clazz.defineES('Oskari.publisher.ControlsTool',
     ControlsTool,
     {
-        'protocol': ['Oskari.mapframework.publisher.Tool']
+        protocol: ['Oskari.mapframework.publisher.Tool']
     }
 );
+
+export { ControlsTool };
