@@ -186,6 +186,14 @@ Oskari.registerLocalization(
             },
             "CrosshairTool": {
                 "toolLabel": "Näytä kartan keskipiste"
+            },
+            "LayerSelection": {
+                "toolLabel": "Karttatasovalikko",
+                "noMultipleStyles": "Vain yksi esitystyyli saatavilla valituilla karttatasoilla.",
+                "allowStyleChange": "Salli esitystyylin valinta",
+                "noMetadata": "Metatietolinkkejä ei saatavilla valituilla karttatasoilla",
+                "showMetadata": "Näytä metatietolinkit",
+                "selectAsBaselayer": "Valitse taustakartaksi",
             }
         }
     }
