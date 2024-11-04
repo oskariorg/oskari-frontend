@@ -1,6 +1,6 @@
-import { AbstractPublisherTool } from './AbstractPublisherTool';
-import { MapLayerListToolComponent } from '../view/MapLayers/MapLayerListToolComponent';
-import { MapLayerListHandler } from '../handler/MapLayerListHandler';
+import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/AbstractPublisherTool';
+import { MapLayerListToolComponent } from './MapLayerListToolComponent';
+import { MapLayerListHandler } from './MapLayerListHandler';
 
 export const LAYERLIST_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
 
@@ -8,27 +8,31 @@ class MapLayerListTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 5;
-        this.group = 'layers';
+        this.group = 'additional';
         this.handler = new MapLayerListHandler(this);
     }
+
     getTool () {
         return {
             id: LAYERLIST_ID,
-            title: Oskari.getMsg('Publisher2', 'BasicView.layerselection.label'),
+            title: Oskari.getMsg('MapModule', 'publisherTools.LayerSelection.toolLabel'),
             config: this.state.pluginConfig || {}
         };
     }
+
     getComponent () {
         return {
             component: MapLayerListToolComponent,
             handler: this.handler
         };
     }
+
     init (data) {
         super.init(data);
         // restore state to handler -> passing init data to it
         this.handler.init(this.getTool().config);
     }
+
     getValues () {
         if (!this.isEnabled()) {
             return null;
@@ -49,6 +53,7 @@ class MapLayerListTool extends AbstractPublisherTool {
         }
         return value;
     }
+
     stop () {
         super.stop();
         this.handler.clearState();
@@ -59,6 +64,8 @@ class MapLayerListTool extends AbstractPublisherTool {
 Oskari.clazz.defineES('Oskari.publisher.MapLayerListTool',
     MapLayerListTool,
     {
-        'protocol': ['Oskari.mapframework.publisher.LayerTool']
+        protocol: ['Oskari.mapframework.publisher.LayerTool']
     }
 );
+
+export { MapLayerListTool };
