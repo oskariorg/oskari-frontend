@@ -67,7 +67,6 @@ Oskari.registerLocalization(
                 "AnnouncementsPlugin": "Announcements",
                 "TimeseriesControlPlugin": "Time series player",
                 "ControlsPlugin": "Pan by mouse",
-                "SearchPlugin": "Place search",
                 "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Feature query tool",
                 "PublisherToolbarPlugin": "Map tools",

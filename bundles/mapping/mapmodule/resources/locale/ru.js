@@ -149,7 +149,10 @@ Oskari.registerLocalization(
             },
             "CrosshairTool": {
                 "toolLabel": "Показать фокус карты"
-            }
+            },
+            "SearchPlugin": {
+                "toolLabel": "Поиск места"
+            },
         }
     }
 });

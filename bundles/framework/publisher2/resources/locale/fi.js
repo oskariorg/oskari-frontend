@@ -67,7 +67,6 @@ Oskari.registerLocalization(
                 "AnnouncementsPlugin": "Ilmoitukset",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "ControlsPlugin": "Kartan liikuttaminen hiirellä raahaamalla",
-                "SearchPlugin": "Osoite- ja paikannimihaku",
                 "FeaturedataPlugin": "Kohdetietotaulukko",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
                 "PublisherToolbarPlugin": "Karttatyökalut",

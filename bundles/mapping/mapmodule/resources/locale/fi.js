@@ -194,7 +194,10 @@ Oskari.registerLocalization(
                 "noMetadata": "Metatietolinkkejä ei saatavilla valituilla karttatasoilla",
                 "showMetadata": "Näytä metatietolinkit",
                 "selectAsBaselayer": "Valitse taustakartaksi",
-            }
+            },
+            "SearchPlugin": {
+                "toolLabel": "Osoite- ja paikannimihaku"
+            },
         }
     }
 });

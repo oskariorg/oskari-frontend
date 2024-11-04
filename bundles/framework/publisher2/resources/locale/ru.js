@@ -65,7 +65,6 @@ Oskari.registerLocalization(
                 "tooltip": "Выберите доступные инструменты карты. Проверка размещения в окне предварительного просмотра карты.",
                 "TimeseriesControlPlugin": "Временные ряды",
                 "ControlsPlugin": "Панорамирование мышью",
-                "SearchPlugin": "Поиск места",
                 "FeaturedataPlugin": "Данные объекта",
                 "GetInfoPlugin": "Инструмент запроса объектов",
                 "PublisherToolbarPlugin": "Инструмент карты",

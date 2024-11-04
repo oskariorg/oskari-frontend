@@ -148,7 +148,10 @@ Oskari.registerLocalization(
             },
             "CrosshairTool": {
                 "toolLabel": "Sýna aðalatriði korts"
-            }
+            },
+            "SearchPlugin": {
+                "toolLabel": "Leit eftir stað"
+            },
         }
     }
 });

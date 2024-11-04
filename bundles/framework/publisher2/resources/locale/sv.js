@@ -67,7 +67,6 @@ Oskari.registerLocalization(
                 "AnnouncementsPlugin": "Aviseringar",
                 "TimeseriesControlPlugin": "Tidseriespelare",
                 "ControlsPlugin": "Flytta kartvyn med musen",
-                "SearchPlugin": "Adress- och ortnamnssökning",
                 "FeaturedataPlugin": "Objektuppgifter",
                 "GetInfoPlugin": "Frågverktyg för visande av objektuppgifter",
                 "PublisherToolbarPlugin": "Kartverktyg",
