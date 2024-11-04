@@ -193,6 +193,9 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "toolLabel": "Adress- och ortnamnssökning"
             },
+            "ControlsPlugin": {
+                "toolLabel": "Flytta kartvyn med musen"
+            }
         }
     }
 });

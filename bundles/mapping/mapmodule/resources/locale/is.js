@@ -152,6 +152,9 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "toolLabel": "Leit eftir stað"
             },
+            "ControlsPlugin": {
+                "toolLabel": "Hliðra með mús"
+            }
         }
     }
 });

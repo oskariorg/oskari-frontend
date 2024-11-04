@@ -198,6 +198,9 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "toolLabel": "Osoite- ja paikannimihaku"
             },
+            "ControlsPlugin": {
+                "toolLabel": "Kartan liikuttaminen hiirellä raahaamalla",
+            }
         }
     }
 });

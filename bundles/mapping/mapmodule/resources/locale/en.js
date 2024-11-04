@@ -198,6 +198,9 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "toolLabel": "Place search"
             },
+            "ControlsPlugin": {
+                "toolLabel": "Pan by mouse"
+            }
         }
     }
 });

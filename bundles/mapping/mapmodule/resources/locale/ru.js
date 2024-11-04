@@ -153,6 +153,9 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "toolLabel": "Поиск места"
             },
+            "ControlsPlugin": {
+                "toolLabel": "Панорамирование мышью"
+            }
         }
     }
 });
