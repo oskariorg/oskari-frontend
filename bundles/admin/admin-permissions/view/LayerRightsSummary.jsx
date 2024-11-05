@@ -6,7 +6,7 @@ import { ThemeConsumer } from 'oskari-ui/util';
 import { UnorderedListOutlined, EyeOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
 import { LayerIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { hasDefaultPermissionsByRoleId, viewPublished, onlyAdmin } from '../../util/rolesHelper';
+import { hasDefaultPermissions, viewPublished, onlyAdmin } from '../../util/rolesHelper';
 import { ROLE_TYPES } from '../../util/constants';
 
 const StyledTable = styled(Table)`
@@ -53,7 +53,7 @@ const mapSummaryData = (resource, roles) => {
         }, {});
 
     let filterValue = FILTER.SYSTEM;
-    const others = roles.filter(r => r.type === 'other')
+    const others = roles.filter(r => !r.isSystem)
         .reduce((others, role) => {
             const count = permissions[role.id]?.length || 0;
             if (count > 0) {
@@ -65,11 +65,9 @@ const mapSummaryData = (resource, roles) => {
             return others;
         }, { roles: 0, permissions: 0, names: [] });
 
-    const adminId = roles.find(r => r.type === ROLE_TYPES.ADMIN).id.toString();
-    const guestId = roles.find(r => r.type === ROLE_TYPES.GUEST).id.toString();
-    if (onlyAdmin(permissions, adminId, guestId)) {
+    if (onlyAdmin(roles, permissions)) {
         filterValue = FILTER.ADMIN;
-    } else if (hasDefaultPermissionsByRoleId(roles, permissions)) {
+    } else if (hasDefaultPermissions(roles, permissions)) {
         filterValue = FILTER.DEFAULT;
     }
     return {

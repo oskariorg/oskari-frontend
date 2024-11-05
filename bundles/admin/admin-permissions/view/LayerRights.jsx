@@ -40,8 +40,7 @@ Table.propTypes = {
     state: PropTypes.object.isRequired
 };
 
-const getRoleOptions = roles => {
-    const mapped = roles.map(r => ({ label: r.name, value: r.id, isSystem: r.type !== 'other' }));
+const getOptions = roles => {
     return [{
         title: 'summary',
         label: <Message messageKey='flyout.select.summary' />,
@@ -49,11 +48,11 @@ const getRoleOptions = roles => {
     }, {
         title: 'system',
         label: <Message messageKey='roles.type.system' />,
-        options: mapped.filter(r => r.isSystem)
+        options: roles.filter(r => r.isSystem).map(r => ({ value: r.id, label: r.name }))
     }, {
         title: 'other',
         label: <Message messageKey='roles.type.other' />,
-        options: mapped.filter(r => !r.isSystem)
+        options: roles.filter(r => !r.isSystem).map(r => ({ value: r.id, label: r.name }))
     }];
 };
 
@@ -94,7 +93,7 @@ export const LayerRights = ({ controller, state }) => {
                     <StyledSelect
                         placeholder={<Message messageKey='flyout.select.placeholder'/>}
                         value={state.selectedRole}
-                        options={getRoleOptions(state.roles)}
+                        options={getOptions(state.roles)}
                         onChange={value => onRoleChange(value)}/>
                 </Confirm>
                 { showSearch && <LayerRightsSearch controller={controller} state={state} /> }

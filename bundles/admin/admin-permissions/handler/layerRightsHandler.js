@@ -1,5 +1,5 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { validateSystemRoles } from '../../util/rolesHelper';
+import { getRolesFromResponse } from '../../util/rolesHelper';
 import { getZoomLevelHelper } from '../../../mapping/mapmodule/util/scale';
 
 const DEFAULT_PERMISSIONS = ['VIEW_LAYER', 'VIEW_PUBLISHED', 'PUBLISH', 'DOWNLOAD'];
@@ -128,12 +128,8 @@ class UIHandler extends StateHandler {
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
-            const { rolelist, systemRoles } = await response.json();
-            validateSystemRoles(systemRoles);
-            const getType = value => Object.keys(systemRoles).find(key => systemRoles[key] === value) || 'other';
-            const roles = rolelist
-                .map(role => ({ ...role, type: getType(role.name) }))
-                .sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+            const jsonResponse = await response.json();
+            const roles = getRolesFromResponse(jsonResponse);
             this.updateState({ roles });
         } catch (e) {
             Messaging.error(this.instance.loc('roles.error.fetch'));
