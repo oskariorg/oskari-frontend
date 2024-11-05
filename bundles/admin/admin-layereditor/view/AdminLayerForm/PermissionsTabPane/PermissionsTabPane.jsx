@@ -146,7 +146,7 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
     return (
         <ListDiv>
             <DefaultPermissions
-                metadata={rolesAndPermissionTypes}
+                roles={roles}
                 permissions={permissions}
                 controller={controller}/>
             <ListDivHeader>

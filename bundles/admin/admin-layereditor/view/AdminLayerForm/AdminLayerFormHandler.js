@@ -5,6 +5,7 @@ import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
 import { getWarningsForStyles } from './VisualizationTabPane/RasterStyle/helper';
 import { TIME_SERIES_UI } from './VisualizationTabPane/TimeSeries';
+import { getRolesFromResponse } from '../../../util/rolesHelper';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
@@ -1087,14 +1088,11 @@ class UIHandler extends StateHandler {
                 this.loadingCount--;
                 const currentLayer = this.getState().layer;
                 this.layerHelper.initPermissionsForLayer(currentLayer, data.roles);
-                const system = Object.values(data.systemRoles || {});
-                const sorted = data.roles
-                    .map(role => ({ ...role, isSystem: system.includes(role.name) }))
-                    .sort(r => r.isSystem ? -1 : 1);
+                const roles = getRolesFromResponse(data);
                 this.updateState({
                     layer: currentLayer,
                     loading: this.isLoading(),
-                    metadata: { ...data, roles: sorted }
+                    metadata: { ...data, roles }
                 });
                 // invalidate cache if it was populated
                 Object.keys(__VALIDATOR_CACHE).forEach(key => delete __VALIDATOR_CACHE[key]);
