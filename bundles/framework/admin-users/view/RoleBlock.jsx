@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { TextInput, Message } from 'oskari-ui';
 import { UserOutlined } from '@ant-design/icons';
 import { Block, Button, ButtonContainer } from './styled';
-
-const ADMIN = 'admin';
+import { ROLE_TYPES } from '../../../admin/util/constants';
 
 export const RoleBlock = ({ role, controller, isSystemRole, editingRole }) => {
     const { id, name, type } = role;
@@ -12,7 +11,7 @@ export const RoleBlock = ({ role, controller, isSystemRole, editingRole }) => {
         return (
             <Block>
                 <span>{name}</span>
-                { type === ADMIN &&
+                { type === ROLE_TYPES.ADMIN &&
                     <Button
                         icon={<UserOutlined />}
                         title={<Message messageKey='roles.showUsers'/>}
