@@ -1,9 +1,9 @@
-import { ROLE_TYPES, PUBLISHED, DEFAULT_PERMISSIONS } from './constants';
+import { ROLE_TYPES, PUBLISHED, DEFAULT_PERMISSIONS, ADDITIONAL_ROLE_TYPE } from './constants';
 
+/* --- ROLES--- */
 export const validateSystemRoles = (systemRoles, roles) => {
     const systemTypes = Object.keys(systemRoles);
-    const types = Object.values(ROLE_TYPES);
-    if (types.some(type => !systemTypes.includes(type))) {
+    if (Object.values(ROLE_TYPES).some(type => !systemTypes.includes(type))) {
         throw new Error('System roles is misconfigured');
     }
     const systemNames = Object.values(systemRoles);
@@ -11,42 +11,61 @@ export const validateSystemRoles = (systemRoles, roles) => {
         throw new Error('Role list does not include all system roles');
     }
 };
-export const getRolesFromResponse = (response) => {
-    const { systemRoles, roles } = response;
-    validateSystemRoles(systemRoles, roles);
-    const getType = name => Object.keys(systemRoles).find(key => systemRoles[key] === name) || ROLE_TYPES.ADDITIONAL;
-    return roles.map(role => ({ ...role, type: getType(role.name) }))
-        .sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+export const getRolesFromResponse = ({ systemRoles = {}, roles, rolelist }) => {
+    const list = rolelist || roles || [];
+    validateSystemRoles(systemRoles, list);
+    const getType = name => Object.keys(systemRoles).find(key => systemRoles[key] === name) || ADDITIONAL_ROLE_TYPE;
+
+    return list.map(role => {
+        const type = getType(role.name);
+        return { ...role, type, isSystem: type !== ADDITIONAL_ROLE_TYPE };
+    })
+        .sort((a, b) => Oskari.util.naturalSort(a.name, b.name))
+        .sort((a, b) => {
+            if (a.isSystem === b.isSystem) return 0;
+            return a.isSystem ? -1 : 1;
+        });
 };
 
+export const getRolesByTypeFromResponse = (response) => {
+    const roles = getRolesFromResponse(response);
+    const additional = roles.filter(role => role.type === ADDITIONAL_ROLE_TYPE);
+    const system = roles.filter(role => role.type !== ADDITIONAL_ROLE_TYPE);
+    return { additional, system };
+};
+
+/* --- PERMISSIONS --- */
 // TODO: admin-layereditor uses role 'name' and admin-permissions role 'id' as key in permissions object
-export const onlyAdmin = (permissions, admin, guest) => {
-    const hasAdmin = permissions[admin]?.length > 0 || false;
-    const hasOthers = Object.keys(permissions).some(role => {
-        if (role === admin) {
+
+export const onlyAdmin = (roles, permissions, key = 'id') => {
+    const adminKey = roles.find(r => r.type === ROLE_TYPES.ADMIN)[key].toString();
+    const guestKey = roles.find(r => r.type === ROLE_TYPES.GUEST)[key].toString();
+    const hasAdmin = permissions[adminKey]?.length > 0 || false;
+    const hasOthers = Object.keys(permissions).some(key => {
+        if (key === adminKey) {
             return false;
         }
-        const defined = permissions[role];
-        if (role === guest && defined.length === 1 && defined[0] === PUBLISHED) {
+        const defined = permissions[key];
+        if (key === guestKey && defined.length === 1 && defined[0] === PUBLISHED) {
             // exclude guest view published
             return false;
         }
-        return permissions[role]?.length > 0;
+        return permissions[key]?.length > 0;
     });
     return hasAdmin && !hasOthers;
 };
 
-export const getDefaultPermisions = (systemRoles) => {
-    const permissions = {};
-    Object.keys(systemRoles).forEach(type => {
-        const roleName = systemRoles[type];
-        permissions[roleName] = [...DEFAULT_PERMISSIONS[type]];
-    });
-    return permissions;
+export const getDefaultPermisions = (roles, key = 'id') => {
+    return roles
+        .filter(role => role.isSystem)
+        .reduce((permissions, role) => {
+            const permKey = role[key];
+            permissions[permKey] = [...DEFAULT_PERMISSIONS[role.type]];
+            return permissions;
+        }, {});
 };
-// TODO: admin-layereditor uses role 'name' and admin-permissions role 'id' as key in permissions object
-export const hasDefaultPermissions = (systemRoles, permissions) => {
-    const defaults = getDefaultPermisions(systemRoles);
+export const hasDefaultPermissions = (roles, permissions, key = 'id') => {
+    const defaults = getDefaultPermisions(roles, key);
     return Object.keys(defaults).every(role => {
         const roles = defaults[role];
         const defined = permissions[role] || [];
@@ -56,19 +75,8 @@ export const hasDefaultPermissions = (systemRoles, permissions) => {
         return roles.every(role => defined.includes(role));
     });
 };
-export const hasDefaultPermissionsByRoleId = (roles, permissions) => {
-    return Object.keys(DEFAULT_PERMISSIONS).every(type => {
-        const roleId = roles.find(r => r.type === type).id;
-        const defaults = DEFAULT_PERMISSIONS[type];
-        const defined = permissions[roleId] || [];
-        if (defaults.length !== defined.length) {
-            return false;
-        }
-        return defaults.every(p => defined.includes(p));
-    });
-};
 
-export const viewPublished = (roles, permissions) => {
-    const guest = roles.find(r => r.type === ROLE_TYPES.GUEST).id;
+export const viewPublished = (roles, permissions, key = 'id') => {
+    const guest = roles.find(r => r.type === ROLE_TYPES.GUEST)?.[key];
     return permissions[guest]?.includes(PUBLISHED) || false;
 };
