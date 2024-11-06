@@ -11,14 +11,18 @@ export const validateSystemRoles = (systemRoles, roles) => {
         throw new Error('Role list does not include all system roles');
     }
 };
-export const getRolesFromResponse = ({ systemRoles = {}, roles, rolelist }) => {
+
+// admin-layereditor uses role 'name' and admin-permissions role 'id' as key in permissions object
+// store getter to roles for easier permissions handling
+export const getRolesFromResponse = ({ systemRoles = {}, roles, rolelist }, permissionsKey = 'id') => {
     const list = rolelist || roles || [];
     validateSystemRoles(systemRoles, list);
-    const getType = name => Object.keys(systemRoles).find(key => systemRoles[key] === name) || ADDITIONAL_ROLE_TYPE;
 
     return list.map(role => {
-        const type = getType(role.name);
-        return { ...role, type, isSystem: type !== ADDITIONAL_ROLE_TYPE };
+        const type = Object.keys(systemRoles).find(key => systemRoles[key] === role.name) || ADDITIONAL_ROLE_TYPE;
+        // convert to string (used for object keys comparison and get permissons for role)
+        const getPermissionsKey = () => role[permissionsKey].toString();
+        return { ...role, type, isSystem: type !== ADDITIONAL_ROLE_TYPE, getPermissionsKey };
     })
         .sort((a, b) => Oskari.util.naturalSort(a.name, b.name))
         .sort((a, b) => {
@@ -34,12 +38,10 @@ export const getRolesByTypeFromResponse = (response) => {
     return { additional, system };
 };
 
-/* --- PERMISSIONS --- */
-// TODO: admin-layereditor uses role 'name' and admin-permissions role 'id' as key in permissions object
-
-export const onlyAdmin = (roles, permissions, key = 'id') => {
-    const adminKey = roles.find(r => r.type === ROLE_TYPES.ADMIN)[key].toString();
-    const guestKey = roles.find(r => r.type === ROLE_TYPES.GUEST)[key].toString();
+/* --- PERMISSIONS used with getRolesFromResponse mapped and validated roles --- */
+export const onlyAdmin = (roles, permissions) => {
+    const adminKey = roles.find(r => r.type === ROLE_TYPES.ADMIN).getPermissionsKey();
+    const guestKey = roles.find(r => r.type === ROLE_TYPES.GUEST).getPermissionsKey();
     const hasAdmin = permissions[adminKey]?.length > 0 || false;
     const hasOthers = Object.keys(permissions).some(key => {
         if (key === adminKey) {
@@ -55,17 +57,17 @@ export const onlyAdmin = (roles, permissions, key = 'id') => {
     return hasAdmin && !hasOthers;
 };
 
-export const getDefaultPermisions = (roles, key = 'id') => {
+export const getDefaultPermisions = (roles) => {
     return roles
         .filter(role => role.isSystem)
         .reduce((permissions, role) => {
-            const permKey = role[key];
-            permissions[permKey] = [...DEFAULT_PERMISSIONS[role.type]];
+            const key = role.getPermissionsKey();
+            permissions[key] = [...DEFAULT_PERMISSIONS[role.type]];
             return permissions;
         }, {});
 };
-export const hasDefaultPermissions = (roles, permissions, key = 'id') => {
-    const defaults = getDefaultPermisions(roles, key);
+export const hasDefaultPermissions = (roles, permissions) => {
+    const defaults = getDefaultPermisions(roles);
     return Object.keys(defaults).every(role => {
         const roles = defaults[role];
         const defined = permissions[role] || [];
@@ -76,7 +78,7 @@ export const hasDefaultPermissions = (roles, permissions, key = 'id') => {
     });
 };
 
-export const viewPublished = (roles, permissions, key = 'id') => {
-    const guest = roles.find(r => r.type === ROLE_TYPES.GUEST)?.[key];
-    return permissions[guest]?.includes(PUBLISHED) || false;
+export const viewPublished = (roles, permissions) => {
+    const key = roles.find(r => r.type === ROLE_TYPES.GUEST).getPermissionsKey();
+    return permissions[key]?.includes(PUBLISHED) || false;
 };
