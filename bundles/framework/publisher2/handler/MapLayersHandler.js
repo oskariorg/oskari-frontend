@@ -1,7 +1,6 @@
 import { controllerMixin } from 'oskari-ui/util';
 import { ToolPanelHandler } from './ToolPanelHandler';
-import { LAYERLIST_ID } from '../tools/MapLayerListTool';
-
+import { LAYERLIST_ID } from '../../../mapping/mapmodule/publisher/layers/MapLayerListTool';
 class UIHandler extends ToolPanelHandler {
     constructor (tools, sandbox, consumer) {
         // ToolPanelHandler adds tools to state so we can reference it here

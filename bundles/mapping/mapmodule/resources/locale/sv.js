@@ -181,7 +181,16 @@ Oskari.registerLocalization(
             },
             "CrosshairTool": {
                 "toolLabel": "Visa kartans mittpunkt"
+            },
+            "LayerSelection": {
+                "toolLabel": "Kartlagermeny",
+                "selectAsBaselayer": "Välj bakgrundskartlager",
+                "allowStyleChange": "Tillåt val av visningsstil",
+                "showMetadata": "Visa länkar för metadata",
+                "noMultipleStyles": "Endast en visningsstil är tillgänglig för valda kartlager.",
+                "noMetadata": "Metadatalänkar är inte tillgängliga på valda kartlager"
             }
+
         }
     }
 });

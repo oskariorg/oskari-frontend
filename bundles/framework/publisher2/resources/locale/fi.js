@@ -100,12 +100,7 @@ Oskari.registerLocalization(
                     "label": "Omat karttatasot"
                 },
                 "layerselection": {
-                    "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
                     "selectAsBaselayer": "Valitse taustakartaksi",
-                    "allowStyleChange": "Salli esitystyylin valinta",
-                    "showMetadata": "Näytä metatietolinkit",
-                    "noMultipleStyles": "Vain yksi esitystyyli saatavilla valituilla karttatasoilla.",
-                    "noMetadata": "Metatietolinkkejä ei saatavilla valituilla karttatasoilla"
                 },
                 "mylocation": {
                     "modes": {

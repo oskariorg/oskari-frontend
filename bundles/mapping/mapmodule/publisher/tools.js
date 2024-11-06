@@ -8,4 +8,5 @@ import { PanButtonsTool } from './panbuttons/PanButtonsTool';
 import { IndexMapTool } from './indexmap/IndexMapTool';
 import { ZoombarTool } from './zoombar/ZoombarTool';
 import { CrosshairTool } from './crosshair/CrosshairTool';
-export { LogoTool, ScaleBarTool, MyLocationTool, PanButtonsTool, IndexMapTool, ZoombarTool, CrosshairTool };
+import { MapLayerListTool } from './layers/MapLayerListTool';
+export { LogoTool, ScaleBarTool, MyLocationTool, PanButtonsTool, IndexMapTool, ZoombarTool, CrosshairTool, MapLayerListTool };

@@ -18,6 +18,7 @@ class UIHandler extends StateHandler {
             isDisabledStyleChange: !layersHaveMultipleStyles(layers)
         });
     };
+
     init (pluginConfig) {
         this.updateState({
             ...pluginConfig
