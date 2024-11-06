@@ -180,16 +180,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
             if (!this.getMapModule().getSupports3D()) {
                 return;
             }
-            const options = layer.getOptions() || {};
-            const { ionAssetId, ionAssetServer, ionAccessToken } = options;
-
-            const url = ionAssetId
-                ? Cesium.IonResource.fromAssetId(ionAssetId, { server: ionAssetServer, accessToken: ionAccessToken })
-                : layer.getLayerUrl();
-
-            this.__addTileset(layer, url, options);
+            // moved to own func because of async/await requirement
+            this.__addTileset(layer);
         },
-        __addTileset: async function (layer, url, options = {}) {
+        __addTileset: async function (layer) {
+            const options = layer.getOptions() || {};
+            const url = await this.__getURL(layer, options);
             // Common settings for the dynamicScreenSpaceError optimization
             // copied from Cesium.Cesium3DTileset api doc:
             // https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html
@@ -207,6 +203,21 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
 
             // store reference to layers
             this.setOLMapLayers(layer.getId(), tileset);
+        },
+        __getURL: async function (layer, options) {
+            const { ionAssetId, ionAssetServer, ionAccessToken } = options;
+            if (!ionAssetId) {
+                return layer.getLayerUrl();
+            }
+            const ionResourceOpts = {};
+            if (ionAssetServer) {
+                // check truthy, we might have empty string defined and Cesium only checks for null/undefined for defaulting.
+                ionResourceOpts.server = ionAssetServer;
+            }
+            if (ionAccessToken) {
+                ionResourceOpts.accessToken = ionAccessToken;
+            }
+            return Cesium.IonResource.fromAssetId(ionAssetId, ionResourceOpts);
         },
         /**
          * Called when layer details are updated (for example by the admin functionality)
