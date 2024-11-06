@@ -89,6 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
             ReactDOM.render(
                 <MapModuleButton
                     className='t_layerswipe'
+                    highlight='stroke'
                     icon={<SwipeIcon />}
                     visible={this.hasUI()}
                     title={title}

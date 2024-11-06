@@ -9,6 +9,7 @@ const StyledCheckbox = styled(AntCheckbox)`
     }
 
     .ant-checkbox {
+        margin-top: auto;
         margin-bottom: auto;
     }
 `;

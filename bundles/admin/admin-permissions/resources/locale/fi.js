@@ -10,27 +10,35 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Karttatasojen oikeuksien hallinta",
-            "message": "Karttatasojen oikeuksien hallinta",
-            "instructionText": "Aloita valitsemalla rooli"
-        },
-        "rights": {
+            "instruction": "Aloita valitsemalla rooli",
+            "unsavedChangesConfirm": "Tallentamattomat muutoksesi häviävät, haluatko jatkaa?",
             "name": "Karttataso",
-            "PUBLISH": "Julkaisuoikeus",
-            "VIEW_LAYER": "Katseluoikeus",
-            "DOWNLOAD": "Latausoikeus",
-            "VIEW_PUBLISHED": "Katseluoikeus upotetussa kartassa",
+        },
+        "permissions": {
+            "type": {
+                "PUBLISH": "Julkaisuoikeus",
+                "VIEW_LAYER": "Katseluoikeus",
+                "DOWNLOAD": "Latausoikeus",
+                "VIEW_PUBLISHED": "Katseluoikeus upotetussa kartassa"
+            },
             "success": {
-                "title": "Oikeudet on päivitetty",
-                "message": "Karttatasojen oikeudet on päivitetty."
+                "save": "Karttatasojen oikeudet on päivitetty."
             },
             "error": {
-                "title": "Virhe",
-                "message": "Karttatasojen oikeuksia ei voitu päivittää."
-            },
-            "selectValue": "Valitse tunniste"
+                "fetch": "Karttatasojen oikeuksia ei voitu hakea.",
+                "save": "Karttatasojen oikeuksia ei voitu päivittää."
+            }
         },
-        "unsavedChangesConfirm": "Tallentamattomat muutoksesi häviävät, haluatko jatkaa?",
-        "save": "Tallenna",
-        "selectRole": "Rooli"
+        "roles": {
+            "title": "Rooli",
+            "placeholder": "Valitse rooli",
+            "type": {
+                "system": "Järjestelmäroolit",
+                "other": "Lisäroolit"
+            },
+            "error": {
+                "fetch": "Roolien haku epäonnistui.",
+            }
+        }
     }
 });

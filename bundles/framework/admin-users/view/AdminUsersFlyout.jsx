@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Tabs, Message } from 'oskari-ui';
 import { RolesTab } from './RolesTab';
 import { UsersTab } from './UsersTab';
@@ -36,4 +37,9 @@ export const AdminUsersFlyout = ({ state, controller, isExternal = false }) => {
             />
         </div>
     );
+};
+AdminUsersFlyout.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
+    isExternal: PropTypes.bool
 };

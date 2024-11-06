@@ -543,3 +543,8 @@ This seems to only happen on the Firefox browser
 .ant-message, .ant-notification {
   z-index: 30010 !important;
 }
+
+/*fix the misalignment of checkbox input with it's label*/
+.ant-checkbox-wrapper {
+  margin: auto 0;
+}

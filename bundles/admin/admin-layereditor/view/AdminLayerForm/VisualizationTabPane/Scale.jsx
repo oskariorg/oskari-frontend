@@ -23,14 +23,13 @@ const ScaleSlider = styled(Slider)`
     .ant-slider-track {
         background-color: #0091ff;
     }
-    .ant-slider-handle {
-        border: #0091ff solid 2px;
+    .ant-slider-mark-text {
+        padding-bottom: 3px;
+        white-space: nowrap;
+        font-size: 11px;
     }
     &:hover .ant-slider-track {
         background-color: #003fc3 !important;
-    }
-    &:hover .ant-slider-handle {
-        border: #003fc3 solid 2px !important;
     }
 `;
 
@@ -38,11 +37,6 @@ const SliderContainer = styled('div')`
     height: 200px;
     padding-top: 15px;
     padding-bottom: 15px;
-
-    .ant-slider-mark-text {
-        padding-bottom: 3px;
-        font-size: 11px;
-    }
 `;
 
 const ScaleInput = styled(Numeric)`
@@ -52,11 +46,11 @@ const ScaleInput = styled(Numeric)`
 
 const PlusIcon = styled(PlusCircleOutlined)`
     text-align: left;
-    margin-left: 8px;
+    margin-left: 10px;
 `;
 const MinusIcon = styled(MinusCircleOutlined)`
     text-align: left;
-    margin-left: 8px;
+    margin-left: 10px;
 `;
 
 const Scale = ({ layer, scales = [], controller, getMessage }) => {

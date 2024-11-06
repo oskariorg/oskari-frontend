@@ -1,127 +1,84 @@
 import React, { useState } from 'react';
-import { Select, Option, Message, Confirm, TextInput } from 'oskari-ui';
-import { PrimaryButton, ButtonContainer, SecondaryButton } from 'oskari-ui/components/buttons';
+import PropTypes from 'prop-types';
+import { Select, Message, Confirm } from 'oskari-ui';
 import { LayerRightsTable } from './LayerRightsTable';
+import { LayerRightsSearch } from './LayerRightsSearch';
 import styled from 'styled-components';
 
-const SelectContainer = styled('div')`
+const Container = styled.div`
     display: flex;
-    width: 250px;
     align-items: center;
     margin-bottom: 15px;
 `;
 const StyledSelect = styled(Select)`
-    width: 100%;
+    width: 250px;
     margin-left: 10px;
 `;
-const ConfirmWrapper = styled(Confirm)`
-    width: 100%;
+const Instruction = styled.span`
+    font-style: italic;
 `;
-const SearchContainer = styled('div')`
-    display: flex;
-    flex-direction: row;
-    width: 300px;
-    margin-bottom: 10px;
-`;
+
+const getRoleOptions = roles => {
+    return [{
+        title: 'system',
+        label: <Message messageKey='roles.type.system' />,
+        options: roles.filter(r => r.isSystem)
+    }, {
+        title: 'other',
+        label: <Message messageKey='roles.type.other' />,
+        options: roles.filter(r => !r.isSystem)
+    }];
+};
 
 export const LayerRights = ({ controller, state }) => {
     const [roleConfirmOpen, setRoleConfirmOpen] = useState(false);
-    const [searchConfirmOpen, setSearchConfirmOpen] = useState(false);
     const [pendingRole, setPendingRole] = useState(null);
-    const [searchValue, setSearchValue] = useState(state.pagination.filter);
+    const hasChanges = Object.keys(state.unSavedChanges).length > 0;
+    const roleSelected = !!state.selectedRole;
+
+    const onRoleChange = role => {
+        if (hasChanges) {
+            setPendingRole(role);
+            setRoleConfirmOpen(true);
+        } else {
+            controller.setSelectedRole(role);
+        }
+    };
+    const onRoleConfirm = confirm => {
+        if (confirm) {
+            controller.setSelectedRole(pendingRole);
+        }
+        setPendingRole(null);
+        setRoleConfirmOpen(false);
+    };
     return (
         <div>
-            { !state.selectedRole && <b><Message messageKey={`flyout.instructionText`} bundleKey='admin-permissions' /></b> }
-            <SelectContainer>
-                <Message messageKey='selectRole' />
-                <ConfirmWrapper
-                    title={<Message messageKey='unsavedChangesConfirm'/>}
+            <Container>
+                <Message messageKey='roles.title' />
+                <Confirm
+                    title={<Message messageKey='flyout.unsavedChangesConfirm'/>}
                     open={roleConfirmOpen}
-                    onConfirm={() => {
-                        setRoleConfirmOpen(false);
-                        controller.setSelectedRole(pendingRole);
-                        setPendingRole(null);
-                    }}
-                    onCancel={() => {
-                        setRoleConfirmOpen(false);
-                        setPendingRole(null);
-                    }}
+                    onConfirm={() => onRoleConfirm(true) }
+                    onCancel={() => onRoleConfirm(false) }
                     okText={<Message bundleKey='oskariui' messageKey='buttons.yes'/>}
                     cancelText={<Message bundleKey='oskariui' messageKey='buttons.cancel'/>}
                     placement='top'
-                    popupStyle={{zIndex: '999999'}}
-                >
+                    popupStyle={{ zIndex: '999999' }}>
                     <StyledSelect
+                        placeholder={<Message messageKey='roles.placeholder'/>}
                         value={state.selectedRole}
-                        onChange={(value) => {
-                            if (state.changedIds.size !== 0) {
-                                setPendingRole(value);
-                                setRoleConfirmOpen(true);
-                            } else {
-                                controller.setSelectedRole(value);
-                            }
-                        }}
-                    >
-                        {state.roles.map(role => (
-                            <Option key={role.id} value={role.id}>
-                                {role.name}
-                            </Option>
-                        ))}
-                    </StyledSelect>
-                </ConfirmWrapper>
-            </SelectContainer>
-            { !!state.selectedRole &&
-                <React.Fragment>
-                    <SearchContainer>
-                        <TextInput
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                        <Confirm
-                            title={<Message messageKey='unsavedChangesConfirm'/>}
-                            open={searchConfirmOpen}
-                            onConfirm={() => {
-                                setSearchConfirmOpen(false);
-                                controller.search(searchValue);
-                            }}
-                            onCancel={() => {
-                                setSearchConfirmOpen(false);
-                            }}
-                            okText={<Message bundleKey='oskariui' messageKey='buttons.yes'/>}
-                            cancelText={<Message bundleKey='oskariui' messageKey='buttons.cancel'/>}
-                            placement='top'
-                            popupStyle={{zIndex: '999999'}}
-                        >
-                            <PrimaryButton
-                                type='search'
-                                onClick={() => state.changedIds.size !== 0 ? setSearchConfirmOpen(true) : controller.search(searchValue)}
-                                disabled={!state.permissions?.layers || state.permissions?.layers?.length < 1}
-                            />
-
-                        </Confirm>
-                        {state.pagination.filter && state.pagination.filter !== '' && (
-                            <SecondaryButton
-                                type='clear'
-                                onClick={controller.clearSearch}
-                            />
-                        )}
-                    </SearchContainer>
-                    <LayerRightsTable
-                        controller={controller}
-                        state={state}
-                    />
-                    <ButtonContainer>
-                        <SecondaryButton
-                            type='cancel'
-                            onClick={() => controller.cancel()}
-                        />
-                        <PrimaryButton
-                            type='save'
-                            onClick={controller.savePermissions}
-                        />
-                    </ButtonContainer>
-                </React.Fragment>
-            }
+                        options={getRoleOptions(state.roles)}
+                        onChange={value => onRoleChange(value)}/>
+                </Confirm>
+                { roleSelected && <LayerRightsSearch controller={controller} state={state} /> }
+            </Container>
+            { roleSelected && <LayerRightsTable controller={controller} state={state} /> }
+            { !roleSelected && <Instruction><Message messageKey={`flyout.instruction`} /></Instruction> }
         </div>
     );
+};
+
+LayerRights.propTypes = {
+    controller: PropTypes.object.isRequired,
+    state: PropTypes.object.isRequired
 };

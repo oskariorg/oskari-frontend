@@ -21,6 +21,7 @@ import './publisher/ClassificationToggleTool.js';
 import './publisher/OpacityTool.js';
 import './publisher/DiagramTool.js';
 import './publisher/SeriesToggleTool.js';
+import './publisher/StatisticsTool.js';
 
 /**
  * @class Oskari.statistics.statsgrid.StatsGridBundleInstance

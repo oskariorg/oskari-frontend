@@ -2,20 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MenuOutlined } from '@ant-design/icons';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
-import styled from 'styled-components';
-
-// Icon is too small with defaults (18x18px)
-const StyledButton = styled(MapModuleButton)`
-> span {
-    font-size: 22px;
-    max-height: 22px;
-    max-width: 22px;
-    > svg {
-        max-height: 22px;
-        max-width: 22px;
-    }
-}
-`;
 
 /**
  * @class Oskari.userinterface.plugin.ToggleNavigationPlugin
@@ -86,11 +72,12 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
             ReactDOM.unmountComponentAtNode(el[0]);
 
             ReactDOM.render(
-                <StyledButton
+                <MapModuleButton
                     className='t_navigationtoggle'
                     visible={this.isVisible()}
                     icon={<MenuOutlined />}
                     iconActive={isToggled}
+                    iconSize='20px'
                     onClick={(e) => {
                         Oskari.dom.showNavigation(!isToggled);
                         this.redrawUI();

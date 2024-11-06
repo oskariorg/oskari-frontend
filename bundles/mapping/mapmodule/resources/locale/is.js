@@ -131,6 +131,24 @@ Oskari.registerLocalization(
                 "title": "Þysja inn og út í kortasýn",
                 "message": "Það má þysja kortasýninni inn og út á nokkra vegu.<br/><br/>Velja mælikvarða í aðdráttarstikunni. Einnig er hægt að smella á (+) og (-) hnappana efst á aðdráttastikunni.<br/><br/>Nota á (+) og (-) hnappana á lyklaborðinu þínu.<br/><br/>Tvísmella á kortasýnina eða nota \"stækkunargler\" til að þysja inn í kortasýn."
             }
+        },
+        "publisherTools": {
+            "ScaleBarPlugin": "Mælikvarðastika",
+            "MyLocationPlugin": {
+                "toolLabel": "Miðja"
+            },
+            "PanButtons": {
+                "toolLabel": "Hliðrunartól"
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Index kort"
+            },
+            "Zoombar": {
+                "toolLabel": "Þysjunarstika"
+            },
+            "CrosshairTool": {
+                "toolLabel": "Sýna aðalatriði korts"
+            }
         }
     }
 });

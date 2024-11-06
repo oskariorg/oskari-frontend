@@ -114,7 +114,7 @@ __featureClicked: function(features, olLayer) {
     var clickEvent = sandbox.getEventBuilder('FeatureEvent')().setOpClick();
     var formatter = this._supportedFormats['GeoJSON'];
     var me = this;
-    _.forEach(features, function (feature) {
+    features.forEach(feature => {
         var geojson = formatter.write([feature]);
         clickEvent.addFeature(feature.id, geojson, me._getLayerId(olLayer.name));
     });

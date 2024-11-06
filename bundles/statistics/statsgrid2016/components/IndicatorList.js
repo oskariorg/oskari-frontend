@@ -1,3 +1,4 @@
+import { template } from 'lodash';
 import { prepareData, showMedataPopup } from './description/MetadataPopup';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (service) {
@@ -14,7 +15,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
     };
 }, {
     __templates: {
-        indicator: _.template(
+        indicator: template(
             `<li>
                 <div>
                     <span title="\${full}">\${name}</span>
@@ -22,7 +23,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
                     <div class="indicator-list-remove icon-close" data-ind-hash="\${indHash}"></div>
                 </div>
             </li>`),
-        empty: _.template('<li>${emptyMsg}</li>')
+        empty: template('<li>${emptyMsg}</li>')
     },
     /**
      * @method getElement

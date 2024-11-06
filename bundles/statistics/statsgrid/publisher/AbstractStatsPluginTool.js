@@ -1,9 +1,14 @@
 import { AbstractPublisherTool } from '../../../framework/publisher2/tools/AbstractPublisherTool';
 
-import { LAYER_ID } from '../constants';
+import { LAYER_ID, BUNDLE_KEY } from '../constants';
 const defaultPlugin = 'Oskari.statistics.statsgrid.TogglePlugin';
 
 export class AbstractStatsPluginTool extends AbstractPublisherTool {
+    constructor (...args) {
+        super(...args);
+        this.group = 'statsgrid';
+    }
+
     getTool () {
         const id = this._getToolId();
         return {
@@ -17,9 +22,7 @@ export class AbstractStatsPluginTool extends AbstractPublisherTool {
     }
 
     getTitle () {
-        // TODO: move localizations:
-        // Oskari.getMsg('StatsGrid', 'tool.label' + title)
-        return Oskari.getMsg('Publisher2', 'BasicView.data.' + this.title);
+        return Oskari.getMsg(BUNDLE_KEY, 'publisher.' + this.id);
     }
 
     getComponent () {

@@ -40,7 +40,6 @@ Oskari.registerLocalization(
             },
             "content": {
                 "label": "Näytettävät tiedot",
-                "tooltip": "Valitse tulosteessa näytettävät tiedot.",
                 "pngNote": "PNG-tulosteelle ei lisätä alla olevia tietoja.",
                 "mapTitle": {
                     "placeholder": "Otsikko"
