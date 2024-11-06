@@ -37,6 +37,9 @@ module.exports = (env, argv) => {
         .forEach(possibleSrcPath => {
             plugins.push(new CopywebpackPlugin([
                 { from: path.join(__dirname, possibleSrcPath, '../Source/Assets'), to: cesiumTarget + '/Assets' },
+                // This is not available under Build folder:
+                // - oskari-frontend/node_modules/@cesium/engine/Source/ThirdParty/draco_decoder.wasm
+                { from: path.join(__dirname, possibleSrcPath, '../Source/ThirdParty'), to: cesiumTarget + '/ThirdParty' },
                 { from: path.join(__dirname, possibleSrcPath, 'Workers'), to: cesiumTarget + '/Workers' },
                 // { from: path.join(__dirname, possibleSrcPath, 'Widgets'), to: cesiumTarget + '/Widgets' },
                 // copy Cesium's minified third-party scripts
