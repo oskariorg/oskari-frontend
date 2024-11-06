@@ -1088,7 +1088,7 @@ class UIHandler extends StateHandler {
                 this.loadingCount--;
                 const currentLayer = this.getState().layer;
                 this.layerHelper.initPermissionsForLayer(currentLayer, data.roles);
-                const roles = getRolesFromResponse(data);
+                const roles = getRolesFromResponse(data, 'name');
                 this.updateState({
                     layer: currentLayer,
                     loading: this.isLoading(),

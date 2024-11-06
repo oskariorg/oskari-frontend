@@ -59,7 +59,7 @@ export const DefaultPermissions = ({ roles, permissions, controller }) => {
             updated[name] = [];
         });
         if (addToRoleType === 'default') {
-            const defaults = getDefaultPermisions(roles, 'name');
+            const defaults = getDefaultPermisions(roles);
             updated = { ...updated, ...defaults };
         } else if (addToRoleType) {
             const { name } = roles.find(r => r.type === addToRoleType);
@@ -75,17 +75,17 @@ export const DefaultPermissions = ({ roles, permissions, controller }) => {
         <Content>
             <ConfirmButton
                 label='default'
-                type={hasDefaultPermissions(roles, permissions, 'name') ? 'primary' : 'default'}
+                type={hasDefaultPermissions(roles, permissions) ? 'primary' : 'default'}
                 confirm={count.system > 0 && <Message messageKey='permissions.confirm.override'/>}
                 callback={() => updatePermissions('system', 'default')}/>
             <ConfirmButton
                 label='onlyAdmin'
-                type={onlyAdmin(roles, permissions, 'name') ? 'primary' : 'default'}
+                type={onlyAdmin(roles, permissions) ? 'primary' : 'default'}
                 confirm={count.system > 0 && <Message messageKey='permissions.confirm.override'/>}
                 callback={() => updatePermissions('system', ROLE_TYPES.ADMIN)}/>
             <ConfirmButton
                 label='published'
-                type={viewPublished(roles, permissions, 'name') ? 'primary' : 'default'}
+                type={viewPublished(roles, permissions) ? 'primary' : 'default'}
                 callback={() => togglePublished()}/>
             <ConfirmButton
                 danger
