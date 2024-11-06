@@ -19,7 +19,7 @@ const getOptions = (roles, onlyAdmin) => {
     }];
 };
 
-export const RoleSelect = ({ state, value, error, multiple, onlyAdmin, onChange }) => {
+export const RoleSelect = ({ roles, value, error, multiple, onlyAdmin, onChange }) => {
     return <Select
         className='t_roles'
         mode={multiple ? 'multiple' : null}
@@ -28,11 +28,11 @@ export const RoleSelect = ({ state, value, error, multiple, onlyAdmin, onChange 
         placeholder={<Message messageKey='usersByRole.selectRole' />}
         value={value}
         style={multiple ? { width: 210 } : null}
-        options={getOptions(state.roles, onlyAdmin)}/>;
+        options={getOptions(roles, onlyAdmin)}/>;
 };
 
 RoleSelect.propTypes = {
-    state: PropTypes.object.isRequired,
+    roles: PropTypes.object.isRequired,
     value: PropTypes.any,
     onChange: PropTypes.func.isRequired,
     multiple: PropTypes.bool,

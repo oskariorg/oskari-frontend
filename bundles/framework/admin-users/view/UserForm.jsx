@@ -11,7 +11,7 @@ const PASS_FIELDS = ['password', 'rePassword'];
 
 export const UserForm = ({ state, controller, isExternal }) => {
     const { userFormState } = state;
-    const { errors = [], passwordErrors = {}, id, password, roles } = userFormState;
+    const { errors = [], passwordErrors = {}, id, password, roles } = state.userFormState;
     const passwordRequired = !id || password.length > 0;
     return (
         <Content>
@@ -27,7 +27,7 @@ export const UserForm = ({ state, controller, isExternal }) => {
                 <StyledLabel><Message messageKey='users.addRole' /></StyledLabel>
                 <RoleSelect
                     multiple
-                    state={state}
+                    roles={state.roles}
                     value={roles}
                     error={errors.includes('roles')}
                     onChange={value => controller.updateUserFormState('roles', value)}/>

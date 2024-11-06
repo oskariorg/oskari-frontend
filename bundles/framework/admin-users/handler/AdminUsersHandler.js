@@ -1,5 +1,5 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { getRolesFromResponse } from '../../../admin/util/rolesHelper';
+import { getRolesByTypeFromResponse } from '../../../admin/util/rolesHelper';
 
 class UIHandler extends StateHandler {
     constructor (conf = {}, consumer) {
@@ -16,7 +16,7 @@ class UIHandler extends StateHandler {
             activeTab: 'admin-users-tab',
             userFormState: null,
             users: [],
-            roles: [],
+            roles: {}, // {system, additional}
             editingRole: null,
             usersByRole: {},
             userPagination: {
@@ -116,10 +116,10 @@ class UIHandler extends StateHandler {
                 throw new Error(response.statusText);
             }
             const jsonResponse = await response.json();
-            const roles = getRolesFromResponse(jsonResponse);
+            const roles = getRolesByTypeFromResponse(jsonResponse);
             this.updateState({ roles });
         } catch (e) {
-            this.updateState({ roles: [] });
+            this.updateState({ roles: {} });
             Messaging.error(Oskari.getMsg('AdminUsers', 'roles.errors.fetch'));
         }
     }
