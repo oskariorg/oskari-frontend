@@ -186,18 +186,21 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
             const url = ionAssetId
                 ? Cesium.IonResource.fromAssetId(ionAssetId, { server: ionAssetServer, accessToken: ionAccessToken })
                 : layer.getLayerUrl();
+
+            this.__addTileset(layer, url, options);
+        },
+        __addTileset: async function (layer, url, options = {}) {
             // Common settings for the dynamicScreenSpaceError optimization
             // copied from Cesium.Cesium3DTileset api doc:
             // https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html
-            var tileset = new Cesium.Cesium3DTileset({
-                url,
+            // https://cesium.com/learn/cesiumjs/ref-doc/Cesium3DTileset.html
+            const tileset = await Cesium.Cesium3DTileset.fromUrl(url, {
                 dynamicScreenSpaceError: true,
                 dynamicScreenSpaceErrorDensity: 0.00278,
                 dynamicScreenSpaceErrorFactor: 4.0,
                 dynamicScreenSpaceErrorHeightFalloff: 0.25,
                 ...options
             });
-
             this._disablePointCloudShadows(tileset);
             this._applyOskariStyle(tileset, layer);
             this.getMapModule().addLayer(tileset);
