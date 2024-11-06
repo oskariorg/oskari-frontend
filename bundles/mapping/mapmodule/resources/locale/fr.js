@@ -154,6 +154,12 @@ Oskari.registerLocalization(
             },
             "CrosshairTool": {
                 "toolLabel": "Afficher le point d'intérêt de la carte"
+            },
+            "SearchPlugin": {
+                "toolLabel": "Recherche de lieu"
+            },
+            "ControlsPlugin": {
+                "toolLabel": "Panoramiser avec la souris"
             }
         }
     }

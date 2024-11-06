@@ -194,6 +194,12 @@ Oskari.registerLocalization(
                 "showMetadata": "Show metadata links",
                 "noMultipleStyles": "Only single presentation style available on the selected map layers.",
                 "noMetadata": "No metadata links availabe on the selected map layers"
+            },
+            "SearchPlugin": {
+                "toolLabel": "Place search"
+            },
+            "ControlsPlugin": {
+                "toolLabel": "Pan by mouse"
             }
         }
     }

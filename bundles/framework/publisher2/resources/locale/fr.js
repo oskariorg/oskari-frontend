@@ -63,8 +63,6 @@ Oskari.registerLocalization(
                 "label": "Outils",
                 "tooltip": "Sélectionner les outils de carte accessibles. Consulter une mise en place dans la prévisualisation de carte.",
                 "TimeseriesControlPlugin": "Lecteur chronologique",
-                "ControlsPlugin": "Panoramiser avec la souris",
-                "SearchPlugin": "Recherche de lieu",
                 "FeaturedataPlugin": "Données de fonctionnalité",
                 "GetInfoPlugin": "Outil d'interrogation de fonctionnalité",
                 "PublisherToolbarPlugin": "Outils cartographiques",
