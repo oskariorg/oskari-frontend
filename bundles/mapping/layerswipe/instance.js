@@ -28,13 +28,7 @@ Oskari.clazz.define(
                     iconCls: 'tool-layer-swipe',
                     tooltip: this.loc('toolLayerSwipe'),
                     sticky: true,
-                    callback: () => {
-                        if (this.getState().active) {
-                            this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
-                        } else {
-                            this.setActive(true);
-                        }
-                    }
+                    callback: () => this.setActive(!this.getState().active)
                 };
                 sandbox.request(this, addToolButtonBuilder('LayerSwipe', 'basictools', buttonConf));
             }
@@ -58,6 +52,10 @@ Oskari.clazz.define(
             return this.handler?.getState() || {};
         },
         setActive: function (active) {
+            if (!this.plugin && !active) {
+                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
+                return;
+            }
             this.handler?.setActive(active);
         },
         getStateParameters: function () {
