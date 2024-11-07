@@ -93,6 +93,7 @@ class UIHandler extends StateHandler {
         if (this.getState().active === active) {
             return;
         }
+        let { layerId } = this.getState();
         const mapModule = this.instance.getMapModule();
         const root = mapModule.getMapDOMEl();
         if (active) {
@@ -106,10 +107,11 @@ class UIHandler extends StateHandler {
             unmountComponentAtNode(this.element);
             root.removeChild(this.element);
             this.element = null;
+            layerId = null;
         }
         mapModule.getMap().render();
         this.instance.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService')?.setHoverEnabled(!active);
-        this.updateState({ active });
+        this.updateState({ active, layerId });
     }
 
     toggleTool () {
