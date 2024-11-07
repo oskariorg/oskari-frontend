@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { SwipeIcon } from '../resources/icons/Swipe';
 import { MapModuleButton } from '../../mapmodule/MapModuleButton';
-import { refresh } from 'less';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
@@ -33,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
             return true;
         },
         _stopPluginImpl: function () {
-            this.getInstance()?.handler.setActive(false);
+            this.getInstance()?.setActive(false);
             this.teardownUI();
         },
         setHandler: function (handler) {
