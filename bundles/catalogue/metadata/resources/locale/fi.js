@@ -19,7 +19,7 @@ Oskari.registerLocalization({
                 "hide": "Piilota karttataso",
                 "removeBBOX": "Piilota kattavuusalue",
                 "showBBOX": "Näytä kattavuusalue"
-            },            
+            },
             "error": {
                 "notFound": "Metatietoja ei löytynyt."
             },

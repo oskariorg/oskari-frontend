@@ -28,21 +28,21 @@ Oskari.registerLocalization({
                     "true": "Datamängden uppfyller specifikationen.",
                     "false": "Datamängden uppfyller inte specifikationen."
                 },
-                "nameOfMeasure": "",
-                "citationTitle": "",
-                "measureIdentificationCode": "",
-                "measureIdentificationAuthorization": "",
-                "measureDescription": "",
-                "evaluationMethodType": "",
-                "evaluationMethodDescription": "",
-                "evaluationProcedure": "",
-                "dateTime": "",
-                "specification": "",
-                "explanation": "",
-                "valueType": "",
-                "valueUnit": "",
-                "errorStatistic": "",
-                "value": ""
+                "nameOfMeasure": "Kvalitetmåttets namn",
+                "citationTitle": "Titel",
+                "measureIdentificationCode": "Kvalitetmåttets identifikationskod",
+                "measureIdentificationAuthorization": "Identifieringskod för kvalitetsmått",
+                "measureDescription": "Beskrivning av kvalitetsmått",
+                "evaluationMethodType": "Typ av evalueringsmetod",
+                "evaluationMethodDescription": "Beskrivning av evalueringsmetod",
+                "evaluationProcedure": "Evalueringsprocedur",
+                "dateTime": "Datum och tid",
+                "specification": "Spesifikationens titel",
+                "explanation": "Förklaring",
+                "valueType": "Typ av datakvalitetsresultat",
+                "valueUnit": "Enhet av datakvalitetsresultat",
+                "errorStatistic": "Statistisk metod",
+                "value": "Värde"
             },
             "label": {
                 "layerList": "Kartlager",
@@ -61,18 +61,18 @@ Oskari.registerLocalization({
                 "metadataLanguage": "Metadata språk",
                 "metadataResponsibleParties": "Organisationsnamn",
                 "metadataStandardName": "Metadata standard namn",
-                "metadataStandardVersion": "Metadata standard version",
+                "metadataStandardVersion": "Version av metastandard",
                 "onlineResources": "Online resurser",
                 "operatesOn": "Drivs med",
                 "otherConstraints": "Övriga restriktioner",
                 "reportConformance": "Specifikationsuppfyllelse",
-                "conformanceResult": "",
-                "quantitativeResult": "",
+                "conformanceResult": "Kravöverensstämmelse",
+                "quantitativeResult": "Mätt kvalitetsresultat",
                 "responsibleParties": "Ansvarig part",
                 "resourceIdentifiers": "Resurs identifierare",
                 "languages": "Resurs språk",
                 "scopeCodes": "Resurs typ",
-                "serviceType": "Service type",
+                "serviceType": "Typ av geodatatjänst",
                 "spatialRepresentationTypes": "Rumslig presentationstyp",
                 "spatialResolutions": "Rumslig upplösning",
                 "temporalExtents": "Temporära utsträckningar",
@@ -451,6 +451,5 @@ Oskari.registerLocalization({
                 }
             }
         }
-            
     }
 });
