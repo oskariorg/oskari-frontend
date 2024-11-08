@@ -94,22 +94,16 @@ export const LayerRightsSummary = ThemeConsumer(({ theme, controller, state }) =
         title: <Message messageKey='flyout.name' />,
         dataIndex: 'name',
         sorter: getSorterFor('name'),
+        filters: getFilterOptions(),
+        filteredValue: filter,
+        filterMultiple: false,
+        onFilter: (value, item) => value === FILTER.UNPUBLISHED ? !item.published : item.filterValue === value,
         render: (title, item) => (
             <LayerName>
                 <StyledLayerIcon type={item.type} hasTimeseries={item.hasTimeseries}/>
                 <Button type='link' onClick={() => controller.editLayer(item.id)}>{title}</Button>
             </LayerName>
         )
-    }, {
-        align: 'left',
-        width: '4em',
-        title: <Message messageKey='flyout.summary.published' />,
-        dataIndex: 'filterValue',
-        filters: getFilterOptions(),
-        filteredValue: filter,
-        filterMultiple: false,
-        onFilter: (value, item) => value === FILTER.UNPUBLISHED ? !item.published : item.filterValue === value,
-        render: (val, item) => item.published ? <Tooltip title={<Message messageKey='flyout.summary.publishedTooltip'/>}><EyeOutlined /></Tooltip> : null
     }];
     Object.values(ROLE_TYPES).forEach(type => columnSettings.push({
         align: 'left',
@@ -154,7 +148,7 @@ export const LayerRightsSummary = ThemeConsumer(({ theme, controller, state }) =
                     current: pagination.page,
                     onChange: (page, pageSize) => controller.setPagination({ page, pageSize })
                 }}
-                onChange={(pagination, filter) => setFilter(filter.filterValue)}
+                onChange={(pagination, filter) => setFilter(filter.name)}
                 scroll={{ x: 800 }}
                 loading={loading}/>
         </div>
