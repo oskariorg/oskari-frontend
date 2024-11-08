@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
@@ -9,6 +9,12 @@ export const MARGIN = {
     desktop: 2,
     mobile: 5
 };
+const Mask = styled.div`
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+`;
 
 const DragWrapper = styled.div`
     position: absolute;
@@ -25,7 +31,7 @@ const Splitter = styled.div`
     margin-left: ${props => props.isMobile ? MARGIN.mobile : MARGIN.desktop}px;
 `;
 
-const createDraggable = (elementRef, position, limits, setPosition) => {
+const createDraggable = (elementRef, position, limits, setPosition, setDragging) => {
     const element = elementRef.current;
     // previousTouch is assigned in onTouchMove to track change and onMouseUp for reset
     let previousTouch;
@@ -45,6 +51,7 @@ const createDraggable = (elementRef, position, limits, setPosition) => {
     };
     const onMouseMove = (event) => {
         // prevents text selection from other elements while dragging
+        setDragging(true);
         event.preventDefault();
         event.stopPropagation();
         if (!element) {
@@ -73,6 +80,7 @@ const createDraggable = (elementRef, position, limits, setPosition) => {
         document.removeEventListener('touchend', onMouseUp);
         document.removeEventListener('touchcancel', onMouseUp);
         previousTouch = null;
+        setDragging(false);
     };
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
@@ -82,6 +90,7 @@ const createDraggable = (elementRef, position, limits, setPosition) => {
 };
 
 export const LayerSwipe = ThemeConsumer(({ theme, position, mapWidth, isMobile, controller }) => {
+    const [dragging, setDragging] = useState(false);
     const elementRef = useRef();
     const helper = getHeaderTheme(theme);
 
@@ -90,8 +99,8 @@ export const LayerSwipe = ThemeConsumer(({ theme, position, mapWidth, isMobile, 
     const limits = { min: -margin, max: mapWidth - SPLITTER_WIDTH };
     const style = { transform: `translate(${position - margin}px` };
 
-    const onEvent = useCallback(() => createDraggable(elementRef, position, limits, controller.setPosition), [position, limits]);
-    return (
+    const onEvent = useCallback(() => createDraggable(elementRef, position, limits, controller.setPosition, setDragging), [position, limits]);
+    const swipe = (
         <DragWrapper
             ref={elementRef}
             style={style}
@@ -101,6 +110,14 @@ export const LayerSwipe = ThemeConsumer(({ theme, position, mapWidth, isMobile, 
             <Splitter $color={helper.getAccentColor()} isMobile={isMobile}/>
         </DragWrapper>
     );
+    if (dragging) {
+        return (
+            <Mask onMouseMove={event => event.preventDefault()}>
+                {swipe}
+            </Mask>
+        );
+    }
+    return swipe;
 });
 
 LayerSwipe.propTypes = {
