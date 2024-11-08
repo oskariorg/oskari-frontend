@@ -10,6 +10,11 @@ const StyledTable = styled(Table)`
     width: 1600px;
     margin-bottom: 20px;
 `;
+const LayerName = styled('div')`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
 
 const TYPES = ['wms', 'wmts', 'wfs', 'arcgis', 'vectortile', 'bingmaps', 'tiles3d'];
 const VERSIONS = ['1.0.0', '1.1.0', '1.3.0', '2.0.0', '3.0.0'];
@@ -47,9 +52,11 @@ export const LayerDetails = ({ controller, state }) => {
         filterMultiple: false,
         onFilter: missingFilter,
         render: (title, item) => (
-            <Tooltip title={item.id}>
-                <IconButton type='add' onClick={() => controller.addLayer(item.id)} title={null}/>
-                <Button type='link' onClick={() => controller.editLayer(item.id)}>{title}</Button>
+            <Tooltip title={`ID: ${item.id}`}>
+                <LayerName>
+                    <IconButton type='add' onClick={() => controller.addLayer(item.id)} title={null}/>
+                    <Button type='link' onClick={() => controller.editLayer(item.id)}>{title}</Button>
+                </LayerName>
             </Tooltip>
         )
     }, {
@@ -67,8 +74,8 @@ export const LayerDetails = ({ controller, state }) => {
         filteredValue: filter.version,
         onFilter: (value, item) => item.version === value
     }];
-
-    const locales = Oskari.getSupportedLanguages().map(lang => ({
+    // TODO: for now has only default lang locale. Fetch data from backend and remove slice
+    const locales = Oskari.getSupportedLanguages().slice(0, 1).map(lang => ({
         title: <Message messageKey={`flyout.layer.${lang}`} />,
         maxWidth: '15em',
         dataIndex: lang,
