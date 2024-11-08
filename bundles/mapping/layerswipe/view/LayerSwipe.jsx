@@ -33,6 +33,7 @@ const createDraggable = (elementRef, position, limits, setPosition) => {
     const onTouchMove = (event) => {
         // prevents text selection from other elements while dragging
         event.preventDefault();
+        event.stopPropagation();
         if (!element) {
             return;
         }
@@ -45,6 +46,7 @@ const createDraggable = (elementRef, position, limits, setPosition) => {
     const onMouseMove = (event) => {
         // prevents text selection from other elements while dragging
         event.preventDefault();
+        event.stopPropagation();
         if (!element) {
             return;
         }
@@ -86,13 +88,14 @@ export const LayerSwipe = ThemeConsumer(({ theme, position, mapWidth, isMobile, 
     const margin = isMobile ? MARGIN.mobile : MARGIN.desktop;
     const width = SPLITTER_WIDTH + 2 * margin;
     const limits = { min: -margin, max: mapWidth - SPLITTER_WIDTH };
-    const style = { transform: `translate(${position - margin}px`, width };
+    const style = { transform: `translate(${position - margin}px` };
 
     const onEvent = useCallback(() => createDraggable(elementRef, position, limits, controller.setPosition), [position, limits]);
     return (
         <DragWrapper
             ref={elementRef}
             style={style}
+            $width={width}
             onMouseDown={() => onEvent()}
             onTouchStart={() => onEvent()} >
             <Splitter $color={helper.getAccentColor()} isMobile={isMobile}/>

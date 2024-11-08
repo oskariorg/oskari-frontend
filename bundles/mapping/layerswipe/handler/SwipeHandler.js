@@ -131,7 +131,7 @@ class UIHandler extends StateHandler {
         }
         ReactDOM.render(
             <ThemeProvider>
-                <LayerSwipe { ...this.getState() } controller={this.getController()} isMobile={Oskari.util.mouseExists()}/>
+                <LayerSwipe { ...this.getState() } controller={this.getController()} isMobile={!Oskari.util.mouseExists()}/>
             </ThemeProvider>, this.element);
     }
 
