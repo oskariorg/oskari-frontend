@@ -30,7 +30,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
             return true;
         },
         _stopPluginImpl: function () {
-            this.getHandler()?.setActive(false);
+            // to sync toolbar button state on publisher close
+            this.getSandbox().findRegisteredModuleInstance('LayerSwipe')?.setToolActive(false);
             this.teardownUI();
         },
         setHandler: function (handler) {
