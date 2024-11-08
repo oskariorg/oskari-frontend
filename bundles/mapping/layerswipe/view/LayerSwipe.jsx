@@ -72,7 +72,7 @@ const createDraggable = (elementRef, position, limits, setPosition, setDragging)
             setPosition(max);
         }
     };
-    // window.visualViewport.
+
     const onMouseUp = () => {
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
@@ -89,14 +89,14 @@ const createDraggable = (elementRef, position, limits, setPosition, setDragging)
     document.addEventListener('touchcancel', onMouseUp);
 };
 
-export const LayerSwipe = ThemeConsumer(({ theme, position, mapWidth, isMobile, controller }) => {
+export const LayerSwipe = ThemeConsumer(({ theme, position, mapSize, isMobile, controller }) => {
     const [dragging, setDragging] = useState(false);
     const elementRef = useRef();
     const helper = getHeaderTheme(theme);
 
     const margin = isMobile ? MARGIN.mobile : MARGIN.desktop;
     const width = SPLITTER_WIDTH + 2 * margin;
-    const limits = { min: -margin, max: mapWidth - SPLITTER_WIDTH };
+    const limits = { min: -margin, max: mapSize.width - SPLITTER_WIDTH };
     const style = { transform: `translate(${position - margin}px` };
 
     const onEvent = useCallback(() => createDraggable(elementRef, position, limits, controller.setPosition, setDragging), [position, limits]);
