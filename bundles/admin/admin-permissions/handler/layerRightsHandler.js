@@ -15,7 +15,7 @@ class UIHandler extends StateHandler {
             layerDetails: [],
             dataProviders: [],
             filtered: null,
-            selectedRole: null,
+            selected: null,
             loading: false,
             unSavedChanges: {}, // {[id]: [permissions] }
             pagination: {
@@ -32,26 +32,26 @@ class UIHandler extends StateHandler {
     }
 
     async onLayerUpdate () {
-        const { selectedRole } = this.getState();
-        if (!selectedRole) {
+        const { selected } = this.getState();
+        if (!selected) {
             // without selection no need to update
             // selection => fluout is visible and resources are loaded
             // resources and selection is cleared on flyout close
             return;
         }
         await this.fetchPermissions();
-        if (selectedRole === 'layer') {
+        if (selected === 'layer') {
             this.initLayerDetails();
         }
     }
 
-    async setSelectedRole (selectedRole) {
+    async setSelected (selected) {
         // unsaved changes are role related, clear on select
-        this.updateState({ selectedRole, unSavedChanges: {} });
+        this.updateState({ selected, unSavedChanges: {} });
         if (!this.getState().resources.length) {
             await this.fetchPermissions();
         }
-        if (selectedRole === 'layer') {
+        if (selected === 'layer') {
             this.initLayerDetails();
         }
     }
@@ -79,7 +79,7 @@ class UIHandler extends StateHandler {
             }
         };
         if (full) {
-            newState.selectedRole = null;
+            newState.selected = null;
             newState.resources = [];
         }
         this.updateState(newState);
@@ -98,8 +98,8 @@ class UIHandler extends StateHandler {
     }
 
     getUpdatedPermissions (id, type, enabled) {
-        const { resources, selectedRole, unSavedChanges } = this.getState();
-        const current = unSavedChanges[id] || resources.find(p => p.id === id)?.permissions?.[selectedRole] || [];
+        const { resources, selected, unSavedChanges } = this.getState();
+        const current = unSavedChanges[id] || resources.find(p => p.id === id)?.permissions?.[selected] || [];
         if (enabled) {
             // also used for check all -> don't add duplicates
             return current.includes(type) ? current : [...current, type];
@@ -253,7 +253,7 @@ class UIHandler extends StateHandler {
     async savePermissions () {
         try {
             this.setLoading(true);
-            const { unSavedChanges, selectedRole: roleId } = this.getState();
+            const { unSavedChanges, selected: roleId } = this.getState();
 
             const changedPermissions = Object.keys(unSavedChanges)
                 .map(id => ({ id, roleId, permissions: unSavedChanges[id] }));
@@ -307,7 +307,7 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'setSelectedRole',
+    'setSelected',
     'togglePermission',
     'savePermissions',
     'setCheckAllForPermission',

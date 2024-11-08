@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "select": {
                 "label": "Valitse",
                 "placeholder": "yhteenveto tai rooli",
-                "group": "Yhteenvedot",
+                "summary": "Yhteenvedot",
                 "permissions": "Roolien oikeudet",
                 "layer": "Karttatasojen tiedot"
             },
@@ -37,7 +37,7 @@ Oskari.registerLocalization(
                     'unpublished': "Ei julkaistu vierailijalle"
                 }
             },
-            "layerDetails": {
+            "layer": {
                 "name": "Nimi",
                 "type": "Tyyppi",
                 "version": "Versio",

@@ -23,14 +23,14 @@ const Instruction = styled.span`
 `;
 
 const Table = ({ controller, state }) => {
-    const { selectedRole } = state;
-    if (!selectedRole) {
+    const { selected } = state;
+    if (!selected) {
         return <Instruction><Message messageKey={`flyout.instruction`} /></Instruction>;
     }
-    if (selectedRole === 'permissions') {
+    if (selected === 'permissions') {
         return <LayerRightsSummary controller={controller} state={state} />;
     }
-    if (selectedRole === 'layer') {
+    if (selected === 'layer') {
         return <LayerDetails controller={controller} state={state} />;
     }
     return <LayerRightsTable controller={controller} state={state} />;
@@ -60,19 +60,19 @@ export const LayerRights = ({ controller, state }) => {
     const [roleConfirmOpen, setRoleConfirmOpen] = useState(false);
     const [pendingRole, setPendingRole] = useState(null);
     const hasChanges = Object.keys(state.unSavedChanges).length > 0;
-    const showSearch = state.selectedRole && state.selectedRole !== 'layer';
+    const showSearch = state.selected && state.selected !== 'layer';
 
     const onRoleChange = role => {
         if (hasChanges) {
             setPendingRole(role);
             setRoleConfirmOpen(true);
         } else {
-            controller.setSelectedRole(role);
+            controller.setSelected(role);
         }
     };
     const onRoleConfirm = confirm => {
         if (confirm) {
-            controller.setSelectedRole(pendingRole);
+            controller.setSelected(pendingRole);
         }
         setPendingRole(null);
         setRoleConfirmOpen(false);
@@ -92,7 +92,7 @@ export const LayerRights = ({ controller, state }) => {
                     popupStyle={{ zIndex: '999999' }}>
                     <StyledSelect
                         placeholder={<Message messageKey='flyout.select.placeholder'/>}
-                        value={state.selectedRole}
+                        value={state.selected}
                         options={getOptions(state.roles)}
                         onChange={value => onRoleChange(value)}/>
                 </Confirm>
