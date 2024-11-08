@@ -31,6 +31,20 @@ class UIHandler extends StateHandler {
         return 'LayerRightsHandler';
     }
 
+    async onLayerUpdate () {
+        const { selectedRole } = this.getState();
+        if (!selectedRole) {
+            // without selection no need to update
+            // selection => fluout is visible and resources are loaded
+            // resources and selection is cleared on flyout close
+            return;
+        }
+        await this.fetchPermissions();
+        if (selectedRole === 'layer') {
+            this.initLayerDetails();
+        }
+    }
+
     async setSelectedRole (selectedRole) {
         // unsaved changes are role related, clear on select
         this.updateState({ selectedRole, unSavedChanges: {} });
@@ -155,7 +169,6 @@ class UIHandler extends StateHandler {
         const sb = this.instance.getSandbox();
         // TODO: Should fetch details from backend to get url, locale, opacity...
         // override or from capa for metadata and legend
-        // TODO: listen layer update event => details selected => fetch
         const { resources } = this.getState();
         const scales = sb.findRegisteredModuleInstance('MainMapModule')?.getScaleArray();
         const zoomLevelHelper = getZoomLevelHelper(scales);
