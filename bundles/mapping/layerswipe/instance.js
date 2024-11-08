@@ -42,9 +42,13 @@ Oskari.clazz.define(
             }
         },
         setToolActive: function (active) {
-            if (!this.plugin && !active) {
-                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
-                return;
+            if (!this.plugin) {
+                if (!active) {
+                    this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
+                    return;
+                } else if (Oskari.util.isMobile()) {
+                    Oskari.dom.showNavigation(false);
+                }
             }
             this.handler?.setActive(active);
         },
