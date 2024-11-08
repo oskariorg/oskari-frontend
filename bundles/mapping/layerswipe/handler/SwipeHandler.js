@@ -16,11 +16,13 @@ class UIHandler extends StateHandler {
         super();
         this.instance = instance;
         const mapSize = this.getMapSize();
+        const { noUI = false } = instance.conf || {};
         this.setState({
             active: false,
             layerId: null,
             position: (mapSize.width - SPLITTER_WIDTH) / 2,
-            mapSize
+            mapSize,
+            noUI
         });
         this.alertPopupControls = null;
         this.element = null;
@@ -119,6 +121,10 @@ class UIHandler extends StateHandler {
         this.setActive(!active);
     }
 
+    setHideUI (noUI) {
+        this.updateState({ noUI });
+    }
+
     render () {
         if (!this.element) {
             return;
@@ -197,7 +203,8 @@ class UIHandler extends StateHandler {
 const wrapped = controllerMixin(UIHandler, [
     'setActive',
     'setPosition',
-    'toggleTool'
+    'toggleTool',
+    'setHideUI'
 ]);
 
 export { wrapped as SwipeHandler };
