@@ -32,15 +32,17 @@ class UIHandler extends StateHandler {
         if (toolComponent.handler) {
             toolComponent.handler.addStateListener(() => this.notify());
         }
+        const { id, title, hideCheckbox } = tool.getTool();
         this.updateState({
             tools: [
                 ...this.state.tools,
                 {
+                    id,
+                    title,
+                    hideCheckbox,
                     component: toolComponent.component,
                     handler: toolComponent.handler,
-                    publisherTool: tool,
-                    id: tool.getTool().id,
-                    title: tool.getTool().title
+                    publisherTool: tool
                 }
             ]
         });

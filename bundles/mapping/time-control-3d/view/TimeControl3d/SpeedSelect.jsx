@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Option, Message } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import { StyledSelect } from './styled';
 
 export const SpeedSelect = ({ speedHandler, speed }) => {
@@ -23,11 +23,11 @@ export const SpeedSelect = ({ speedHandler, speed }) => {
         }
     ];
     return (
-        <StyledSelect defaultValue={speed} size='large' onChange={handleSpeedChange}>
-            {speedValues.map(speed => (
-                <Option key={speed.value} value={speed.value}>{speed.label}</Option>
-            ))}
-        </StyledSelect>
+        <StyledSelect
+            defaultValue={speed}
+            size='large'
+            onChange={handleSpeedChange}
+            options={speedValues}/>
     );
 };
 SpeedSelect.propTypes = {

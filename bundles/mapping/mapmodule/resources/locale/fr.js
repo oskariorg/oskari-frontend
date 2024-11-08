@@ -137,6 +137,30 @@ Oskari.registerLocalization(
                 "title": "Zoom avant et zoom arrière",
                 "message": "Vous pouvez faire un zoom avant et arrière sur la carte à l'aide de la barre de défilement de l'échelle ou des boutons plus et moins à côté de la barre de défilement. Vous pouvez également faire un zoom au moyen des touches plus et moins de votre clavier ou à l'aide de la roue de défilement de votre souris. Vous pouvez également faire un zoom avant en faisant un double clic sur la carte."
             }
+        },
+        "publisherTools": {
+            "ScaleBarPlugin": "Barre d'échelle",
+            "MyLocationPlugin": {
+                "toolLabel": "Centre par rapport au lieu"
+            },
+            "PanButtons": {
+                "toolLabel": "Outil pour panoramiser"
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Carte-index"
+            },
+            "Zoombar": {
+                "toolLabel": "Barre de zoom"
+            },
+            "CrosshairTool": {
+                "toolLabel": "Afficher le point d'intérêt de la carte"
+            },
+            "SearchPlugin": {
+                "toolLabel": "Recherche de lieu"
+            },
+            "ControlsPlugin": {
+                "toolLabel": "Panoramiser avec la souris"
+            }
         }
     }
 });

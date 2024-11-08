@@ -65,14 +65,7 @@ Oskari.registerLocalization(
                 "label": "Verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
                 "AnnouncementsPlugin": "Aviseringar",
-                "ScaleBarPlugin": "Skalstock",
                 "TimeseriesControlPlugin": "Tidseriespelare",
-                "IndexMapPlugin": "Indexkarta",
-                "PanButtons": "Gå tillbaka till standardvyn för kartvyn",
-                "Portti2Zoombar": "Skalans glidreglage",
-                "MyLocationPlugin": "Centrera kartan på användarens position",
-                "ControlsPlugin": "Flytta kartvyn med musen",
-                "SearchPlugin": "Adress- och ortnamnssökning",
                 "FeaturedataPlugin": "Objektuppgifter",
                 "GetInfoPlugin": "Frågverktyg för visande av objektuppgifter",
                 "PublisherToolbarPlugin": "Kartverktyg",
@@ -81,7 +74,6 @@ Oskari.registerLocalization(
                 "CoordinateToolPlugin": "Koordinatverktyg",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
-                "CrosshairTool": "Visa kartans mittpunkt",
                 "CameraControls3d": "Kameraverktyg",
                 "TimeControl3d": "Tidskontroll",
                 "toolbarToolNames": {
@@ -106,12 +98,7 @@ Oskari.registerLocalization(
                     "label": "Mina kartlager"
                 },
                 "layerselection": {
-                    "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                     "selectAsBaselayer": "Välj bakgrundskartlager",
-                    "allowStyleChange": "Tillåt val av visningsstil",
-                    "showMetadata": "Visa länkar för metadata",
-                    "noMultipleStyles": "Endast en visningsstil är tillgänglig för valda kartlager.",
-                    "noMetadata": "Metadatalänkar är inte tillgängliga på valda kartlager"
                 },
                 "mylocation": {
                     "modes": {
@@ -124,9 +111,6 @@ Oskari.registerLocalization(
                         "centerMapAutomatically": "Centrera kartan till användarens plats vid start"
                     }
                 },
-                "panButtonsOptions": {
-                    "showArrows": "Panoreringsverktyg"
-                }
             },
             "toollayout": {
                 "label": "Verktygsplacering",
@@ -136,6 +120,11 @@ Oskari.registerLocalization(
                 "usereditmode": "Starta redigering",
                 "usereditmodeoff": "Sluta redigering"
             },
+            "statsgrid": {
+                "label": "Statistik",
+                "tooltip": "Visa kartstatistik"
+            },
+            /* for deprecated statsgrid2016 */
             "data": {
                 "label": "Statistik",
                 "tooltip": "Visa kartstatistik",

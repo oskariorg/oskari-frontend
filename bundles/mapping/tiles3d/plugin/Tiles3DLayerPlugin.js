@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
          */
         _initImpl: function () {
             // register domain builder
-            var mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+            const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
                 const registerType = this.layertype + 'layer';
                 const clazz = 'Oskari.mapframework.mapmodule.Tiles3DLayer';
@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
                 if (tableContent.length === 0) {
                     return;
                 }
-                let content = [{ html: `<table>${tableContent}</table>` }];
+                const content = [{ html: `<table>${tableContent}</table>` }];
                 const location = me.getMapModule().getMouseLocation(movement.position);
                 // Request info box
                 const infoRequestBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest');
@@ -180,30 +180,44 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
             if (!this.getMapModule().getSupports3D()) {
                 return;
             }
+            // moved to own func because of async/await requirement
+            this.__addTileset(layer);
+        },
+        __addTileset: async function (layer) {
             const options = layer.getOptions() || {};
-            const { ionAssetId, ionAssetServer, ionAccessToken } = options;
-
-            const url = ionAssetId
-                ? Cesium.IonResource.fromAssetId(ionAssetId, { server: ionAssetServer, accessToken: ionAccessToken })
-                : layer.getLayerUrl();
+            const url = await this.__getURL(layer, options);
             // Common settings for the dynamicScreenSpaceError optimization
             // copied from Cesium.Cesium3DTileset api doc:
             // https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html
-            var tileset = new Cesium.Cesium3DTileset({
-                url,
+            // https://cesium.com/learn/cesiumjs/ref-doc/Cesium3DTileset.html
+            const tileset = await Cesium.Cesium3DTileset.fromUrl(url, {
                 dynamicScreenSpaceError: true,
                 dynamicScreenSpaceErrorDensity: 0.00278,
                 dynamicScreenSpaceErrorFactor: 4.0,
                 dynamicScreenSpaceErrorHeightFalloff: 0.25,
                 ...options
             });
-
             this._disablePointCloudShadows(tileset);
             this._applyOskariStyle(tileset, layer);
             this.getMapModule().addLayer(tileset);
 
             // store reference to layers
             this.setOLMapLayers(layer.getId(), tileset);
+        },
+        __getURL: async function (layer, options) {
+            const { ionAssetId, ionAssetServer, ionAccessToken } = options;
+            if (!ionAssetId) {
+                return layer.getLayerUrl();
+            }
+            const ionResourceOpts = {};
+            if (ionAssetServer) {
+                // check truthy, we might have empty string defined and Cesium only checks for null/undefined for defaulting.
+                ionResourceOpts.server = ionAssetServer;
+            }
+            if (ionAccessToken) {
+                ionResourceOpts.accessToken = ionAccessToken;
+            }
+            return Cesium.IonResource.fromAssetId(ionAssetId, ionResourceOpts);
         },
         /**
          * Called when layer details are updated (for example by the admin functionality)
@@ -213,11 +227,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
             // no-op - 3DTiles scale limits or runtime changes to config not supported at this time
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
+        extend: ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]

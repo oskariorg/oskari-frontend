@@ -3,8 +3,8 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "findbycoordinates",
     "value": {
-        "title": "FindByCoordinates",
-        "desc": "FindByCoordinates",
+        "title": "Sök närmaste adress",
+        "desc": "",
         "tool": {
             "tooltip": "Sök närmaste adress genom att klicka kartan."
         },

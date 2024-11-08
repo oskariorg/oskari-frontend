@@ -63,14 +63,7 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Инструменты",
                 "tooltip": "Выберите доступные инструменты карты. Проверка размещения в окне предварительного просмотра карты.",
-                "ScaleBarPlugin": "Масштабная линейка",
                 "TimeseriesControlPlugin": "Временные ряды",
-                "IndexMapPlugin": "Номенклатура карты",
-                "PanButtons": "Инструмент панорамирования",
-                "Portti2Zoombar": "Панель увеличения",
-                "MyLocationPlugin": "Центровать к месту",
-                "ControlsPlugin": "Панорамирование мышью",
-                "SearchPlugin": "Поиск места",
                 "FeaturedataPlugin": "Данные объекта",
                 "GetInfoPlugin": "Инструмент запроса объектов",
                 "PublisherToolbarPlugin": "Инструмент карты",
@@ -80,7 +73,6 @@ Oskari.registerLocalization(
                 "FeedbackServiceTool": "Обратная связь (Open311) ",
                 "MapLegend": "Показать условные знаки",
                 "MapRotator": "Включить поворот карты",
-                "CrosshairTool": "Показать фокус карты",
                 "toolbarToolNames": {
                     "history": "Перейти к предыдущему или следующему виду",
                     "history_back": "Перейти к предыдущему виду",
@@ -116,6 +108,11 @@ Oskari.registerLocalization(
                 "usereditmode": "Начать редактирование",
                 "usereditmodeoff": "Закончить редактирование"
             },
+            "statsgrid": {
+                "label": "Тематические карты",
+                "tooltip": "Показать тематические карты на карте."
+            },
+            /* for deprecated statsgrid2016 */
             "data": {
                 "label": "Тематические карты",
                 "tooltip": "Показать тематические карты на карте.",

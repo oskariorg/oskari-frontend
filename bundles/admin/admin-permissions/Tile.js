@@ -12,10 +12,9 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Tile',
        *        reference to component that created the tile
        */
     function (instance) {
-        var me = this;
-        me.instance = instance;
-        me.container = null;
-        me.template = null;
+        this.instance = instance;
+        this.container = null;
+        this.template = null;
     }, {
         /**
          * @method getName
@@ -46,9 +45,9 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Tile',
             this._addTileStyleClasses();
         },
         _addTileStyleClasses: function () {
-            var isContainer = !!((this.container && this.instance.mediator));
-            var isBundleId = !!((isContainer && this.instance.mediator.bundleId));
-            var isInstanceId = !!((isContainer && this.instance.mediator.instanceId));
+            const isContainer = !!((this.container && this.instance.mediator));
+            const isBundleId = !!((isContainer && this.instance.mediator.bundleId));
+            const isInstanceId = !!((isContainer && this.instance.mediator.instanceId));
 
             if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
                 this.container.addClass(this.instance.mediator.instanceId);
@@ -69,19 +68,12 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Tile',
          * @return {String} localized text for the title of the tile
          */
         getTitle: function () {
-            return Oskari.getMsg('admin-permissions', 'title');
-        },
-        /**
-         * @method getDescription
-         * @return {String} localized text for the description of the tile
-         */
-        getDescription: function () {
-            return Oskari.getMsg('admin-permissions', 'desc');
+            return this.instance.loc('tile.title');
         }
     }, {
         /**
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.userinterface.Tile']
+        protocol: ['Oskari.userinterface.Tile']
     });

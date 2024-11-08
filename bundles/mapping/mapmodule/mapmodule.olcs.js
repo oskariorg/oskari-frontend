@@ -62,12 +62,12 @@ class MapModuleOlCesium extends MapModuleOl {
      * @return {ol/Map}
      */
     createMap () {
-        var me = this;
+        const me = this;
         olProjProj4.register(window.proj4);
         // this is done BEFORE enhancement writes the values to map domain
         // object... so we will move the map to correct location
         // by making a MapMoveRequest in application startup
-        var controls = olControlDefaults({
+        const controls = olControlDefaults({
             zoom: false,
             attribution: true,
             attributionOptions: {
@@ -76,17 +76,17 @@ class MapModuleOlCesium extends MapModuleOl {
             rotate: false
         });
 
-        var map = new OLMap({
+        const map = new OLMap({
             keyboardEventTarget: document,
             target: this.getMapDOMEl(),
-            controls: controls,
+            controls,
             interactions: me._olInteractionDefaults,
             moveTolerance: 2
         });
 
-        var projection = olProj.get(me.getProjection());
+        const projection = olProj.get(me.getProjection());
         map.setView(new OLView({
-            projection: projection,
+            projection,
             // actual startup location is set with MapMoveRequest later on
             // still these need to be set to prevent errors
             center: [0, 0],
@@ -96,7 +96,7 @@ class MapModuleOlCesium extends MapModuleOl {
         const creditContainer = document.createElement('div');
         creditContainer.className = 'cesium-credit-container';
         this._map3D = new OLCesium({
-            map: map,
+            map,
             time: () => this.getJulianTime(),
             sceneOptions: {
                 showCredit: true,
@@ -109,7 +109,7 @@ class MapModuleOlCesium extends MapModuleOl {
         });
         this._map3D.container_.appendChild(creditContainer);
 
-        var scene = this._map3D.getCesiumScene();
+        const scene = this._map3D.getCesiumScene();
         // Vector features sink in the ground. This allows sunken features to be visible through the ground.
         // Setting olcs property 'altitudeMode': 'clampToGround' to vector layer had some effect but wasn't good enough.
         // DepthTestAgainstTerrain should be enabled when 3D-tiles (buildings) are visible.
@@ -131,7 +131,7 @@ class MapModuleOlCesium extends MapModuleOl {
         this._setupMapEvents(map);
         this._fixDuplicateOverlays(true);
 
-        var updateReadyStatus = function () {
+        const updateReadyStatus = function () {
             scene.postRender.removeEventListener(updateReadyStatus);
             me._mapReady = true;
             me._notifyMapReadySubscribers();

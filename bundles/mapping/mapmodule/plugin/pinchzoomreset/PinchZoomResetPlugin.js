@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
      *
      */
     function () {
-        var me = this;
+        const me = this;
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetPlugin';
         me._defaultLocation = 'top center';
@@ -29,9 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
         me._templates = {
             plugin: jQuery('<div class="mapplugin pinchzoomresetcontainer"></div>')
         };
-
-        window.visualViewport.addEventListener('resize', () => this.reposition());
-        window.visualViewport.addEventListener('scroll', () => this.reposition());
+        // store to keep reference to function to allow removing
+        this.handler = () => this.reposition();
     },
     {
         /**
@@ -51,6 +50,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
          * @return {Boolean} true if page is zoomed in
          */
         reposition: function () {
+            const jQueryElement = this.getElement();
+            if (!jQueryElement) {
+                return;
+            }
             if (!this.isZoomedIn()) {
                 this.setVisible(false);
                 this.refresh();
@@ -61,7 +64,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
                 this.setVisible(true);
                 this.refresh();
             }
-            const jQueryElement = this.getElement();
             jQueryElement.css('position', 'fixed');
             jQueryElement.css('top', window.visualViewport.offsetTop + 'px');
             jQueryElement.css('left', window.visualViewport.width / 2 + window.visualViewport.offsetLeft + 'px');
@@ -82,9 +84,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
         _startPluginImpl: function () {
             this.setElement(this._createControlElement());
             this.addToPluginContainer(this.getElement());
+            this._setEventListeners(true);
             this.refresh();
             if (this.isVisible()) {
                 this.reposition();
+            }
+        },
+        _setEventListeners: function (enabled) {
+            if (enabled) {
+                window.visualViewport.addEventListener('resize', this.handler);
+                window.visualViewport.addEventListener('scroll', this.handler);
+            } else {
+                window.visualViewport.removeEventListener('resize', this.handler);
+                window.visualViewport.removeEventListener('scroll', this.handler);
             }
         },
         /**
@@ -119,6 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
          */
         _stopPluginImpl: function (sandbox) {
             this.removeFromPluginContainer(this.getElement());
+            this._setEventListeners(false);
         },
         isVisible: function () {
             return Oskari.util.isMobile() && this._isVisible;

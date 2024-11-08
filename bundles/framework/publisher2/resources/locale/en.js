@@ -65,14 +65,7 @@ Oskari.registerLocalization(
                 "label": "Tools",
                 "tooltip": "Select available map tools. Check a placement in the map preview.",
                 "AnnouncementsPlugin": "Announcements",
-                "ScaleBarPlugin": "Scale bar",
                 "TimeseriesControlPlugin": "Time series player",
-                "IndexMapPlugin": "Index map",
-                "PanButtons": "Move to the original map view",
-                "Portti2Zoombar": "Zoom bar",
-                "MyLocationPlugin": "Center to location",
-                "ControlsPlugin": "Pan by mouse",
-                "SearchPlugin": "Place search",
                 "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Feature query tool",
                 "PublisherToolbarPlugin": "Map tools",
@@ -81,7 +74,6 @@ Oskari.registerLocalization(
                 "CoordinateToolPlugin": "Coordinate tool",
                 "MapLegend": "Show map legend",
                 "MapRotator": "Enable map rotation",
-                "CrosshairTool": "Show map focal point",
                 "CameraControls3d": "Camera tools",
                 "TimeControl3d": "Time control",
                 "toolbarToolNames": {
@@ -106,12 +98,7 @@ Oskari.registerLocalization(
                     "label": "My map layers"
                 },
                 "layerselection": {
-                    "info": "Select the background map layer. You can select the default background map layer in the map preview.",
                     "selectAsBaselayer": "Select as baselayer",
-                    "allowStyleChange": "Allow presentation style change",
-                    "showMetadata": "Show metadata links",
-                    "noMultipleStyles": "Only single presentation style available on the selected map layers.",
-                    "noMetadata": "No metadata links availabe on the selected map layers"
                 },
                 "mylocation": {
                     "modes": {
@@ -124,9 +111,6 @@ Oskari.registerLocalization(
                         "centerMapAutomatically": "Center map on user location at startup"
                     }
                 },
-                "panButtonsOptions": {
-                    "showArrows": "Pan tool"
-                }
             },
             "toollayout": {
                 "label": "Tool Placement",
@@ -136,6 +120,11 @@ Oskari.registerLocalization(
                 "usereditmode": "Start editing",
                 "usereditmodeoff": "Finish editing"
             },
+            "statsgrid": {
+                "label": "Thematic maps",
+                "tooltip": "Show thematic maps on the map."
+            },
+            /* for deprecated statsgrid2016 */
             "data": {
                 "label": "Thematic maps",
                 "tooltip": "Show thematic maps on the map.",
