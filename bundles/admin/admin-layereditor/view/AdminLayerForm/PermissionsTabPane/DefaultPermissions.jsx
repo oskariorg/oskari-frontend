@@ -88,9 +88,8 @@ export const DefaultPermissions = ({ roles, permissions, controller }) => {
                 type={viewPublished(roles, permissions) ? 'primary' : 'default'}
                 callback={() => togglePublished()}/>
             <ConfirmButton
-                danger
+                danger={count.other > 0}
                 label='removeOther'
-                type="dashed"
                 confirm={count.other > 0 && <Message messageKey='permissions.confirm.remove' messageArgs={{ count: count.other }}/>}
                 callback={() => updatePermissions()}/>
         </Content>

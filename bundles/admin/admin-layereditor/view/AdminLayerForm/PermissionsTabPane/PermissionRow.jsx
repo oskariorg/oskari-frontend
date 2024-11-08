@@ -71,7 +71,7 @@ export const PermissionRow = ({ isHeaderRow, checkboxes, role }) => {
             {content}
         </StyledPermissionDiv>);
     });
-    const label = isHeaderRow ? <Message messageKey='rights.role'/> : role.name;
+    const label = isHeaderRow ? <Message messageKey='permissions.role'/> : role.name;
     return (
         <RowContainer>
             <TextColumn isHeaderRow={isHeaderRow || role.isSystem}>
