@@ -28,17 +28,23 @@ Oskari.clazz.define(
                     iconCls: 'tool-layer-swipe',
                     tooltip: this.loc('toolLayerSwipe'),
                     sticky: true,
-                    callback: () => this.setActive(!this.getState().active)
+                    callback: () => {
+                        if (this.getState().active) {
+                            this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
+                        } else {
+                            this.handler?.setActive(true);
+                        }
+                    }
                 };
                 sandbox.request(this, addToolButtonBuilder('LayerSwipe', 'basictools', buttonConf));
             }
-            if (this.state.active) {
+            if (this.state?.active) {
                 if (!this.plugin) {
                     // AddToolButtonRequest prefixes group and have to use prefixed group on select tool
                     // It's little confusing that tool can't be selected using group which was used on add
                     this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', ['LayerSwipe', 'default-basictools']);
                 }
-                Oskari.on('app.start', () => this.setActive(true));
+                Oskari.on('app.start', () => this.handler.setActive(true));
             }
         },
 
@@ -48,15 +54,11 @@ Oskari.clazz.define(
         getMapModule: function () {
             return this.mapModule;
         },
+        getHandler: function () {
+            return this.handler;
+        },
         getState: function () {
             return this.handler?.getState() || {};
-        },
-        setActive: function (active) {
-            if (!this.plugin && !active) {
-                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
-                return;
-            }
-            this.handler?.setActive(active);
         },
         getStateParameters: function () {
             const { active } = this.getState();
