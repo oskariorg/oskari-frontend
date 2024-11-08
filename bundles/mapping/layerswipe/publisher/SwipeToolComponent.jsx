@@ -13,8 +13,8 @@ export const SwipeToolComponent = ({ state, controller }) => {
         <ExtraOptions>
             <Checkbox
                 className='t_swipe_auto_start'
-                checked={state.autoStart}
-                onChange={(e) => controller.setAutoStart(e.target.checked)}>
+                checked={state.active}
+                onChange={(e) => controller.setActive(e.target.checked)}>
                 <Message bundleKey="LayerSwipe" messageKey='tool.autoStart' />
             </Checkbox>
             <Checkbox
