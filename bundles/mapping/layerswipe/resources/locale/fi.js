@@ -4,12 +4,14 @@ Oskari.registerLocalization({
     value: {
         toolLayerSwipe: 'Vertaa ylintä karttatasoa alempiin karttatasoihin',
         alert: {
-            ok: 'OK',
-            move: 'Siirry',
-            swipeNoRasterTitle: 'Yhtään karttatasoa ei ole valittuna käytettäväksi vertailutyökalun kanssa',
-            swipeNoRasterMessage: 'Aseta karttatasovalikosta taso näkyväksi',
-            swipeLayerNotVisibleTitle: 'Karttatasojen vertailu ei toimi tässä näkymässä',
-            swipeLayerNotVisibleMessage: 'Ylin karttataso ei näy tässä näkymässä. Siirry sijaintiin, jossa se näkyy.'
+            noRaster: {
+                title: 'Yhtään karttatasoa ei ole valittuna käytettäväksi vertailutyökalun kanssa',
+                message: 'Aseta karttatasovalikosta taso näkyväksi'
+            },
+            notVisible: {
+                title: 'Karttatasojen vertailu ei toimi tässä näkymässä',
+                message: 'Ylin karttataso ei näy tässä näkymässä. Siirry sijaintiin, jossa se näkyy.'
+            }
         },
         tool: {
             "label": "Tasojen vertailutyökalu",

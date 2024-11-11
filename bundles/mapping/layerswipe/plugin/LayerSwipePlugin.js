@@ -15,66 +15,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
      * @method create called automatically on construction
      * @static
      */
-    function (config) {
-        const me = this;
-        me._config = config || {};
-        me._clazz =
+    function () {
+        this._clazz =
             'Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlugin';
-        me._defaultLocation = 'top left';
-        me._index = 70;
-        me._name = 'LayerSwipePlugin';
-
-        me.initialSetup = true;
-        me.templates = {};
+        this._defaultLocation = 'top left';
+        this._index = 70;
+        this._name = 'LayerSwipePlugin';
+        this.handler = null;
+        this.template = jQuery('<div class="mapplugin layerswipe"></div>');
     }, {
-        /**
-         * @private @method _initImpl
-         * Interface method for the module protocol. Initializes the request
-         * handlers/templates.
-         */
-        _initImpl: function () {
-            this._title = Oskari.getMsg('LayerSwipe', 'toolLayerSwipe');
-            this.templates.main = jQuery('<div class="mapplugin layerswipe"></div>');
-        },
         _startPluginImpl: function () {
             this.addToPluginContainer(this._createControlElement());
             this.refresh();
             return true;
         },
-        toggleToolState: function (active) {
-            this.getInstance()?.setActive(active);
-            this.refresh();
+        _stopPluginImpl: function () {
+            // to sync toolbar button state on publisher close
+            this.getSandbox().findRegisteredModuleInstance('LayerSwipe')?.setToolActive(false);
+            this.teardownUI();
         },
-        isActive: function () {
-            return !!this.getInstance()?.isActive();
-        },
-        resetUI: function () {
-        },
-        getInstance: function () {
-            // We need instance as it manages the `active` state.
-            if (!this._instance) {
-                if (!this.sandbox) {
-                    // wacky stuff we do since sandbox might be provided
-                    // by mapmodule or not depending if the plugin has been started etc
-                    this.sandbox = this.getSandbox();
-                }
-                if (!this.sandbox) {
-                    // just get a ref to sandbox since we really need it here to get the instance (see TODO above)
-                    this.sandbox = Oskari.getSandbox();
-                }
-                this._instance = this.sandbox.findRegisteredModuleInstance('LayerSwipe');
+        setHandler: function (handler) {
+            if (this.handler || !handler) {
+                // already set or no handler
+                return;
             }
-            return this._instance;
+            handler.addStateListener(() => this.refresh());
+            this.handler = handler;
         },
-        hasUI: function () {
-            return !this.getConfig()?.noUI;
-        },
-        setHideUI: function (value) {
-            const old = this.getConfig();
-            this.setConfig({
-                ...old,
-                noUI: value
-            });
+        getHandler: function () {
+            if (!this.handler) {
+                const handler = this.getSandbox().findRegisteredModuleInstance('LayerSwipe')?.getHandler();
+                this.setHandler(handler);
+            }
+            return this.handler;
         },
         /**
          * @private @method  _createControlElement
@@ -84,44 +57,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
          * If the placeholder doesn't exist the plugin is written to the mapmodules div element.
          */
         _createControlElement: function () {
-            const el = this.templates.main.clone();
-            return el;
-        },
-
-        teardownUI: function () {
-            // remove old element
-            this.toggleToolState(false);
-            this.removeFromPluginContainer(this.getElement());
+            return this.template.clone();
         },
 
         refresh: function () {
             const el = this.getElement();
-            if (!el) {
+            const handler = this.getHandler();
+            if (!el || !handler) {
                 return;
             }
-
+            const { active, noUI } = handler.getState();
+            const controller = handler.getController();
             ReactDOM.render(
                 <MapModuleButton
                     className='t_layerswipe'
                     highlight='stroke'
                     icon={<SwipeIcon />}
-                    visible={this.hasUI()}
-                    title={this._title}
-                    onClick={(e) => this.toggleToolState(!this.isActive())}
-                    iconActive={this.isActive()}
+                    visible={!noUI}
+                    title={Oskari.getMsg('LayerSwipe', 'toolLayerSwipe')}
+                    onClick={() => controller.toggleTool()}
+                    iconActive={active}
                     position={this.getLocation()}
                     iconSize='20px'
                 />,
                 el[0]
             );
-        },
-
-        /**
-         * @method _stopPluginImpl BasicMapModulePlugin method override
-         * @param {Oskari.Sandbox} sandbox
-         */
-        _stopPluginImpl: function (sandbox) {
-            this.teardownUI();
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

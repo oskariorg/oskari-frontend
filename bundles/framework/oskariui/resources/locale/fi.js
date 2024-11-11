@@ -22,7 +22,8 @@ Oskari.registerLocalization({
             clear: 'Tyhjennä',
             accept: 'Hyväksy',
             reject: 'Hylkää',
-            info: 'Näytä lisätietoa'
+            info: 'Näytä lisätietoa',
+            move: 'Siirry'
         },
         messages: {
             confirm: 'Haluatko varmasti jatkaa?',

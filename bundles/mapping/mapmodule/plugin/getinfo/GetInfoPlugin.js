@@ -339,9 +339,8 @@ Oskari.clazz.define(
             let layerIds = me._buildLayerIdList(requestedLayers);
             const mapVO = me.getSandbox().getMap();
             const px = me.getMapModule().getPixelFromCoordinate(lonlat);
-
-            if (this._swipeStatus.cropX && this._swipeStatus.layerId) {
-                layerIds = layerIds.filter(l => l !== this._swipeStatus.layerId || px.x < this._swipeStatus.cropX);
+            if (this._swipeStatus.layerId && px.x > this._swipeStatus.cropX) {
+                layerIds = layerIds.filter(l => l !== this._swipeStatus.layerId);
             }
 
             if (layerIds.length === 0) {

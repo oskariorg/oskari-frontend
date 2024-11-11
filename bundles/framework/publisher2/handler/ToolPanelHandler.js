@@ -61,7 +61,7 @@ class UIHandler extends StateHandler {
                 tool.publisherTool.stop();
             } catch (e) {
                 Oskari.log('Publisher.ToolPanelHandler')
-                    .error('Error stopping publisher tool:', tool.getTool().id);
+                    .error('Error stopping publisher tool:', tool.id);
             }
         });
     }
