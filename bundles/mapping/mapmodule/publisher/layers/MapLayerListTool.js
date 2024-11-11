@@ -8,7 +8,7 @@ class MapLayerListTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 5;
-        this.group = 'additional';
+        this.group = 'layers';
         this.handler = new MapLayerListHandler(this);
     }
 
