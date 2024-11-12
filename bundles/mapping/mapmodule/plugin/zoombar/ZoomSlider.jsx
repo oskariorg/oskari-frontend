@@ -5,6 +5,7 @@ import { Slider } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { ThemeConsumer, ThemeProvider } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
+import { TextIcon } from 'oskari-ui/components/icons';
 
 const width = '8px';
 
@@ -14,12 +15,6 @@ const Container = styled('div')`
     justify-content: center;
     align-items: center;
     margin: 0 10px 10px 10px;
-`;
-const StyledMinus = styled(MinusOutlined)`
-    shape-rendering: optimizespeed;
-`;
-const StyledPlus = styled(PlusOutlined)`
-    shape-rendering: optimizespeed;
 `;
 
 const StyledSlider = styled(Slider)`
@@ -94,7 +89,6 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
                     onClick={() => {
                         changeZoom(zoom < 100 ? zoom + 1 : 100);
                     }}
-                    size='32px'
                     className='t_plus'
                 />
                 <MapModuleButton
@@ -102,7 +96,6 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
                     onClick={() => {
                         changeZoom(zoom > 0 ? zoom - 1 : 0);
                     }}
-                    size='32px'
                     className='t_minus'
                 />
             </MobileContainer>
@@ -110,16 +103,19 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
     }
 
     const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+    // Use text icon for desktop as we are using small buttons and icons.
+    // Antd 5+ Minus/PlusOutlined icon rendering doesn't look nice with small buttons
+    // Note! minus icon text is minus sign (U+2212, not hyphen)
     return (
         <Container>
             <MapModuleButton
-                icon={<StyledPlus />}
+                icon={<TextIcon text='+'/>}
                 className='t_plus'
                 onClick={() => {
                     changeZoom(zoom < 100 ? zoom + 1 : 100);
                 }}
+                iconSize='14px'
                 size='18px'
-                iconSize='12px'
                 noMargin
             />
 
@@ -140,13 +136,13 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
             </ThemeProvider>
 
             <MapModuleButton
-                icon={<StyledMinus />}
+                icon={<TextIcon text='−'/>}
                 className='t_minus'
                 onClick={() => {
                     changeZoom(zoom > 0 ? zoom - 1 : 0);
                 }}
+                iconSize='14px'
                 size='18px'
-                iconSize='12px'
                 noMargin
             />
         </Container>

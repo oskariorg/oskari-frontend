@@ -2,13 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
 import { CoordinatePluginHandler } from './CoordinatePluginHandler';
-import styled from 'styled-components';
+import { TextIcon } from 'oskari-ui/components/icons';
 
-const StyledDiv = styled('div')`
-    font-weight: bold;
-    font-family: Open Sans,Arial,sans-serif;
-`;
-const CoordinateIcon = () => (<StyledDiv>XY</StyledDiv>);
 /**
  * @class Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin
  * Provides a coordinate display for map
@@ -89,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     className='t_coordinatetool'
                     visible={this.hasUI()}
                     title={this._locale('display.tooltip.tool')}
-                    icon={<CoordinateIcon />}
+                    icon={<TextIcon text='XY' />}
                     onClick={() => this.handler.getController().showPopup()}
                     iconActive={!!this.popupOpen}
                     position={this.getLocation()}
