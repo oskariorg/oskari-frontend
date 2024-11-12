@@ -30,6 +30,11 @@ export const getAntdTheme = (theme) => {
                 // colorFillContentHover: accentColor
                 // fixes an issue where close icon has white bg while hovering
                 colorBgContainer: 'inherit'
+            },
+            Slider: {
+                handleColor: DEFAULT_COLORS.SLIDER_BG,
+                trackBg: DEFAULT_COLORS.SLIDER_BG,
+                trackHoverBg: DEFAULT_COLORS.SLIDER_HOVER,
             }
         },
         token: {
@@ -49,6 +54,7 @@ export const getAntdTheme = (theme) => {
 
 export const getNavigationTheme = (theme) => {
     const primary = theme.navigation?.color?.primary || DEFAULT_COLORS.DARK_BUTTON_BG;
+    const accent = theme.navigation?.color?.accent || theme.color.accent || DEFAULT_COLORS.ACCENT;
     const textColor = getTextColor(primary);
     let borderRadius = 0;
     if (theme?.navigation?.roundness) {
@@ -63,9 +69,11 @@ export const getNavigationTheme = (theme) => {
     }
     const funcs = {
         getPrimary: () => primary,
+        getAccent: () => accent,
+        getAccentHover: () => Oskari.util.getColorEffect(accent, 30),
         getTextColor: () => theme.navigation?.color?.text || textColor,
         getButtonColor: () => buttonColor,
-        getButtonHoverColor: () => theme.navigation?.color?.accent || theme.color.accent || DEFAULT_COLORS.ACCENT,
+        getButtonHoverColor: () => accent,
         // like 50%
         getButtonRoundness: () => `${borderRadius}%`,
         // like 0.5 for calc() usage

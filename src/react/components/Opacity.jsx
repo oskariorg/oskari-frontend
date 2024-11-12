@@ -8,12 +8,6 @@ const StyledSlider = styled('div')`
     width: 100%;
     padding: 0 10px 0 5px;
     float: left;
-    .ant-slider-track {
-        background-color: #0091ff;
-    }
-    &:hover .ant-slider-track {
-        background-color: #003fc3 !important;
-    }
     ${props => props.bordered && (
         `
             border-radius: 4px 0 0 4px;

@@ -7,6 +7,7 @@ import { Message } from 'oskari-ui';
 import styled from 'styled-components';
 import { TimeControl } from './TimeControl3d/TimeControl';
 import { DateControl } from './TimeControl3d/DateControl';
+import { Divider } from './TimeControl3d/styled';
 import { validateDate, validateTime } from '../../mapmodule/util/time';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -148,6 +149,7 @@ export const TimeControl3d = ThemeConsumer(({ theme, controller, date, time, isM
                 dateValue={dateValue}
                 currentTimeHandler={changeTimeAndDate}
             />
+            <Divider />
             <TimeControl
                 isMobile={isMobile}
                 changeHandler={changeTime}

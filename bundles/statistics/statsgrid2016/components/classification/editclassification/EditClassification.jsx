@@ -7,13 +7,9 @@ import { Color } from './Color';
 import { Checkbox, Message, Slider } from 'oskari-ui';
 import { EditTwoTone } from '@ant-design/icons';
 
-// remove mark dots (.ant-slider-dot)
 const Container = styled.div`
     background-color: #fafafa;
     padding: 6px 12px;
-    .ant-slider-dot {
-        display: none;
-    }
 `;
 
 const MethodContainer = styled.div`
@@ -98,7 +94,7 @@ export const EditClassification = ({
             <Color values = {values} disabled = {disabled} colorsets = {options.colorsets} controller = {controller}/>
 
             <Message messageKey='classify.labels.transparency'/>
-            <Slider
+            <Slider hideDots
                 value = {values.transparency}
                 disabled = {disabled}
                 onChange = {value => handleChange('transparency', value)}
