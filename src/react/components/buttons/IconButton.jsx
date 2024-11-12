@@ -29,6 +29,7 @@ const BorderlessButton = styled(Button)`
     color:  ${props => props.$active || props.$color};
     border: none;
     background: none;
+    box-shadow: none;
     padding: 0px;
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     font-size: ${props => props.$iconSize}px;
@@ -87,19 +88,19 @@ const getPredefinedIcon = (type) => {
     return null;
 };
 
-const getConfirmProps = (type) => {
+const getConfirmProps = (type, title) => {
     if (type === 'delete') {
         return {
             okText: <Message messageKey='buttons.delete' bundleKey='oskariui'/>,
             cancelText: <Message messageKey='buttons.cancel' bundleKey='oskariui'/>,
-            title: <Message messageKey='messages.confirmDelete' bundleKey='oskariui'/>,
+            title: title || <Message messageKey='messages.confirmDelete' bundleKey='oskariui'/>,
             okType: 'danger'
         };
     }
     return {
         okText: <Message messageKey='buttons.yes' bundleKey='oskariui'/>,
         cancelText: <Message messageKey='buttons.no' bundleKey='oskariui'/>,
-        title: <Message messageKey='messages.confirm' bundleKey='oskariui'/>
+        title: title || <Message messageKey='messages.confirm' bundleKey='oskariui'/>
     };
 };
 
@@ -140,6 +141,7 @@ export const IconButton = ({
     title = type ? <Message messageKey={`buttons.${type}`} bundleKey='oskariui'/> : '',
     disabled = false,
     onConfirm,
+    confirm = {},
     ...rest
 }) => {
     if (onConfirm) {
@@ -151,7 +153,7 @@ export const IconButton = ({
                 cancelButtonProps={{className: 't_button t_cancel'}}
                 disabled={disabled}
                 placement={title ? 'bottom' : 'top'}
-                { ...getConfirmProps(type) }>
+                { ...getConfirmProps(type, confirm.title) }>
                     <Tooltip title={title}>
                         <DisabledWrapper $disabled={disabled}>
                             <ThemeButton type={type} disabled={disabled} { ...rest }/>
@@ -178,6 +180,7 @@ IconButton.propTypes = {
     icon: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
     onClick: PropTypes.func,
     onConfirm: PropTypes.func,
+    confirm: PropTypes.object,
     disabled: PropTypes.bool,
     color: PropTypes.string,
     iconSize: PropTypes.number,
