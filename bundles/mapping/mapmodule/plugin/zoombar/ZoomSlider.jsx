@@ -1,10 +1,12 @@
 import React from 'react';
 import { MapModuleButton } from '../../MapModuleButton';
 import styled from 'styled-components';
-import { Slider } from 'oskari-ui';
+import { Slider } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { ThemeConsumer, ThemeProvider } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
+
+const width = '8px';
 
 const Container = styled('div')`
     display: flex;
@@ -23,65 +25,26 @@ const StyledPlus = styled(PlusOutlined)`
 const StyledSlider = styled(Slider)`
     height: 150px;
     opacity: ${props => props.opacity};
-    margin: 6px 10px;
+    margin: 6px 0;
     left: -1px;
+
+    .ant-slider-handle::after {
+        display: none;
+    }
+
     .ant-slider-mark-text {
         color: #ffffff;
     }
+
     .ant-slider-dot {
         height: 1px;
         background: ${props => props.dotColor};
         border: none;
-        width: 7px;
+        width: ${width};
         left: 0;
         opacity: 50%;
     }
-    .ant-slider-rail,
-    .ant-slider-track,
-    .ant-slider-step {
-        width: 7px;
-        background: ${props => props.railBackground};
-        border-radius: 5px;
-        box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 60%);
-        &:hover {
-            background: ${props => props.railBackground};
-        }
-        &:focus {
-            background: ${props => props.railBackground};
-        }
-        &:active {
-            background: ${props => props.railBackground};
-        }
-    }
-    .ant-slider-handle {
-        background: ${props => props.handleBackground};
-        border: 4px solid ${props => props.handleBorder};
-        box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 60%);
-        border-radius: ${props => props.rounding || '0%'};
-        width: 14px;
-        height: 14px;
-        left: 0;
-        &:hover {
-            background: ${props => props.handleBackground};
-            border: 4px solid ${props => props.handleBorder};
-        }
-        &:focus {
-            background: ${props => props.handleBackground};
-            border: 4px solid ${props => props.handleBorder};
-        }
-        &:active {
-            background: ${props => props.handleBackground};
-            border: 4px solid ${props => props.handleBorder};
-        }
-    }
-    .ant-slider-handle::after, .ant-slider-handle:hover::after {
-        background: none;
-        box-shadow: none !important;
-    }
-    .ant-slider:hover .ant-slider-handle::after {
-        box-shadow: none!important;
-    }
-    `;
+`;
 
 const MobileContainer = styled('div')`
     display: flex;
@@ -89,20 +52,29 @@ const MobileContainer = styled('div')`
     align-items: flex-end;
 `;
 
-const ThemedSlider = ThemeConsumer(({theme = {}, ...rest}) => {
+const ThemedSlider = ThemeConsumer(({ theme = {}, ...rest }) => {
     const helper = getNavigationTheme(theme);
-    const bgColor = helper.getButtonColor();
-    const icon = helper.getTextColor();
-    const rounding = helper.getButtonRoundness();
-    const opacity = helper.getButtonOpacity();
+
+    const backgroundColor = helper.getButtonColor();
+    const boxShadow = '0px 1px 2px 1px rgb(0 0 0 / 60%)';
+    const slider = { width, backgroundColor, boxShadow, borderRadius: '5px' };
+    const styles = {
+        track: slider,
+        rail: slider,
+        handle: {
+            width: '14px',
+            height: '14px',
+            backgroundColor,
+            boxShadow,
+            border: `4px solid ${helper.getTextColor()}`,
+            borderRadius: helper.getButtonRoundness() || '0%'
+        }
+    };
     return (
         <StyledSlider
-            railBackground={bgColor}
-            handleBackground={bgColor}
-            dotColor={icon}
-            rounding={rounding}
-            handleBorder={icon}
-            opacity={opacity}
+            styles={styles}
+            dotColor={helper.getTextColor()}
+            opacity={helper.getButtonOpacity()}
             {...rest}
         />
     );
