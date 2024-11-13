@@ -7,7 +7,7 @@ import { getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 export const SPLITTER_WIDTH = 5;
 export const MARGIN = {
     desktop: 2,
-    mobile: 5
+    mobile: 10
 };
 const Mask = styled.div`
     position: absolute;
