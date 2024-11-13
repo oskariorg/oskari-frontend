@@ -96,7 +96,7 @@ export const LayerSwipe = ThemeConsumer(({ theme, position, mapSize, isMobile, c
 
     const margin = isMobile ? MARGIN.mobile : MARGIN.desktop;
     const width = SPLITTER_WIDTH + 2 * margin;
-    const limits = { min: -margin, max: mapSize.width - SPLITTER_WIDTH };
+    const limits = { min: 0, max: mapSize.width - SPLITTER_WIDTH };
     const style = { transform: `translate(${position - margin}px` };
 
     const onEvent = useCallback(() => createDraggable(elementRef, position, limits, controller.setPosition, setDragging), [position, limits]);
