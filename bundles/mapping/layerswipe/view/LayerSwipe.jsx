@@ -7,7 +7,7 @@ import { getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 export const SPLITTER_WIDTH = 5;
 export const MARGIN = {
     desktop: 2,
-    mobile: 5
+    mobile: 10
 };
 const Mask = styled.div`
     position: absolute;
@@ -96,7 +96,7 @@ export const LayerSwipe = ThemeConsumer(({ theme, position, mapSize, isMobile, c
 
     const margin = isMobile ? MARGIN.mobile : MARGIN.desktop;
     const width = SPLITTER_WIDTH + 2 * margin;
-    const limits = { min: -margin, max: mapSize.width - SPLITTER_WIDTH };
+    const limits = { min: 0, max: mapSize.width - SPLITTER_WIDTH };
     const style = { transform: `translate(${position - margin}px` };
 
     const onEvent = useCallback(() => createDraggable(elementRef, position, limits, controller.setPosition, setDragging), [position, limits]);
