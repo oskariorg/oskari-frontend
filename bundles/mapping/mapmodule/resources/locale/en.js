@@ -200,6 +200,9 @@ Oskari.registerLocalization(
             },
             "ControlsPlugin": {
                 "toolLabel": "Pan by mouse"
+            },
+            "PublisherToolbarPlugin": {
+                "toolLabel": "Map tools"
             }
         }
     }

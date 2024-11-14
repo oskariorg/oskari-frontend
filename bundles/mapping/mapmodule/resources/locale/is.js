@@ -154,6 +154,9 @@ Oskari.registerLocalization(
             },
             "ControlsPlugin": {
                 "toolLabel": "Hliðra með mús"
+            },
+            "PublisherToolbarPlugin": {
+                "toolLabel": "Kortatól"
             }
         }
     }

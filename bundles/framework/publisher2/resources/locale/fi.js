@@ -68,7 +68,6 @@ Oskari.registerLocalization(
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "FeaturedataPlugin": "Kohdetietotaulukko",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
-                "PublisherToolbarPlugin": "Karttatyökalut",
                 "selectDrawLayer": "Valitse tallennustaso",
                 "LayerSelectionPlugin": "Karttatasovalikko",
                 "CoordinateToolPlugin": "Koordinaattityökalu",

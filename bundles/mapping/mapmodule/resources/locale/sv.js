@@ -195,6 +195,9 @@ Oskari.registerLocalization(
             },
             "ControlsPlugin": {
                 "toolLabel": "Flytta kartvyn med musen"
+            },
+            "PublisherToolbarPlugin": {
+                "toolLabel": "Kartverktyg"
             }
         }
     }

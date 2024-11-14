@@ -200,7 +200,11 @@ Oskari.registerLocalization(
             },
             "ControlsPlugin": {
                 "toolLabel": "Kartan liikuttaminen hiirellä raahaamalla",
+            },
+            "PublisherToolbarPlugin": {
+                "toolLabel": "Karttatyökalut"
             }
+
         }
     }
 });

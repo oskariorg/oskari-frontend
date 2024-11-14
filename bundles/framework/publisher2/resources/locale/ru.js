@@ -66,7 +66,6 @@ Oskari.registerLocalization(
                 "TimeseriesControlPlugin": "Временные ряды",
                 "FeaturedataPlugin": "Данные объекта",
                 "GetInfoPlugin": "Инструмент запроса объектов",
-                "PublisherToolbarPlugin": "Инструмент карты",
                 "selectDrawLayer": "Выбрать слой карты",
                 "LayerSelectionPlugin": "Меню слоев карты",
                 "CoordinateToolPlugin": "Инструмент координат",
