@@ -126,27 +126,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
          * @param {function} doneCallback callback that will be called after new time has been loaded
          */
         requestNewTime: function (newTime, nextTime, doneCallback) {
-            var me = this;
+            const me = this;
             this._currentTime = newTime;
-            var requestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');
-            if (requestBuilder) {
-                this._isLoading = true;
-                this._doneCallback = doneCallback;
-                if (nextTime) {
-                    this._isBuffering = true;
-                    this._bufferImages(this._mapModule.getLayerTileUrls(this._layer.getId()), nextTime, function (success) {
-                        me._isBuffering = false;
-                        me._resolveWait();
-                    });
-                }
-                const layerParams = this._layer.getParams();
-                layerParams.time = newTime;
-                var request = requestBuilder(this._layer.getId(), true, { 'TIME': newTime });
-                this._sandbox.request(this, request);
-                if (!nextTime && this._doneCallback) {
-                    this._doneCallback();
-                    this._doneCallback = null;
-                }
+            const requestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');
+            if (!requestBuilder) {
+                Oskari.log('WMSAnimator').warn('MapLayerUpdateRequest not available');
+                return;
+            }
+            this._isLoading = true;
+            this._doneCallback = doneCallback;
+            if (nextTime) {
+                this._isBuffering = true;
+                this._bufferImages(this._mapModule.getLayerTileUrls(this._layer.getId()), nextTime, function (success) {
+                    me._isBuffering = false;
+                    me._resolveWait();
+                });
+            }
+            const layerParams = this._layer.getParams();
+            layerParams.time = newTime;
+            const request = requestBuilder(this._layer.getId(), true, { TIME: newTime });
+            this._sandbox.request(this, request);
+            if (!nextTime && this._doneCallback) {
+                this._doneCallback();
+                this._doneCallback = null;
             }
         },
         /**
@@ -159,18 +161,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
          */
         _bufferImages: function (urls, nextTime, callback) {
             /* eslint-disable n/no-callback-literal */
-            var imgCount = urls.length;
+            let imgCount = urls.length;
             if (imgCount === 0) {
                 callback(true);
                 return;
             }
-            var aborted = false;
-            var timeout = setTimeout(function () {
+            let aborted = false;
+            const timeout = setTimeout(function () {
                 aborted = true;
                 callback(false);
             }, 5000);
             urls.forEach(function (url) {
-                var image = document.createElement('img');
+                if (!url) {
+                    Oskari.log('WMSAnimator').warn('Image preloading didnt receive an URL to preload');
+                    return;
+                }
+                const image = document.createElement('img');
                 image.onload = function () {
                     if (aborted) {
                         return;
