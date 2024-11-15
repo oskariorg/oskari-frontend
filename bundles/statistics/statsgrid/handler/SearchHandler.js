@@ -146,20 +146,18 @@ class SearchController extends AsyncStateHandler {
             return;
         }
         const disabledDatasources = getUnsupportedDatasourceIds(value);
-        if (disabledDatasources.length) {
-            if (disabledDatasources.includes(this.getState().selectedDatasource)) {
-                this.clearSearch();
-                return;
-            }
-            this.updateState({
-                // reset any selected indicators because if they are disabled, user can't unselect them
-                selectedIndicators: [],
-                indicatorParams: {},
-                selectedRegionset: null,
-                disabledDatasources,
-                indicatorOptions: this.validateIndicatorList(this.getState().indicatorOptions)
-            });
+        if (disabledDatasources.includes(this.getState().selectedDatasource)) {
+            this.clearSearch();
+            return;
         }
+        this.updateState({
+            // reset any selected indicators because if they are disabled, user can't unselect them
+            selectedIndicators: [],
+            indicatorParams: {},
+            selectedRegionset: null,
+            disabledDatasources,
+            indicatorOptions: this.validateIndicatorList(this.getState().indicatorOptions)
+        });
     }
 
     setSelectedDatasource (value) {
