@@ -16,6 +16,8 @@ See notes:
 
 On Oskari 2.14 cesium was switched to @cesium/engine as we aren't using the widgets part. However it seems it's more difficult to track the changes on the engine as changelog describes the "full release" of everything cesium (or more difficult to track which version of engine is used on which Cesium release).
 
+The engine version can be found here: https://github.com/CesiumGS/cesium/blob/1.123.1/packages/engine/package.json#L3 (when cesium version is 1.123.1).
+
 ## ol-cesium
 
 Maintained under openlayers and acts as glue between cesium and OpenLayers. We can use most of OpenLayers API while showing data on Cesium.
