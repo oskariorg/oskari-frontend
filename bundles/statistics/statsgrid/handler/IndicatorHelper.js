@@ -1,7 +1,7 @@
 import { getHash, getDataProviderKey, populateData, populateSeriesData } from '../helper/StatisticsHelper';
 import { updateIndicatorListInCache, removeIndicatorFromCache } from './SearchIndicatorOptionsHelper';
 import { getRegionsAsync } from '../helper/RegionsHelper';
-import { BUNDLE_KEY } from '../constants';
+import { BUNDLE_KEY, RUNTIME } from '../constants';
 
 // cache storage object
 const indicatorMetadataStore = {};
@@ -12,6 +12,7 @@ const getDataCacheKey = (indicator, regionsetId) => {
     const hash = getHash(indicator.ds, indicator.id, indicator.selections);
     return 'hash_' + hash + '_rs_' + regionsetId;
 };
+const isRuntime = (indicator = {}) => typeof indicator.id === 'string' && indicator.id.startsWith(RUNTIME);
 
 // for guest user's own indicators
 const updateIndicatorMetadataInCache = (indicator, regionsetId) => {
@@ -137,7 +138,6 @@ const processMetadata = (meta) => {
 
 export const getDataForIndicator = async (indicator, regionset) => {
     const regions = await getRegionsAsync(regionset);
-    // TODO: regionsetsIsEmpty
     let data = {};
     const fractionDigits = indicator?.classification?.fractionDigits;
     if (indicator.series) {
@@ -173,6 +173,10 @@ export const getIndicatorData = async (indicator, regionsetId) => {
         // found a cached response
         return cachedResponse;
     }
+    if (isRuntime(indicator)) {
+        // backend doesn't have data for runtime indicators
+        return {};
+    }
     try {
         const response = await fetch(Oskari.urls.getRoute('GetIndicatorData', {
             datasource: indicator.ds,
@@ -205,7 +209,7 @@ export const saveIndicator = async (indicator) => {
         throw new Error('Indicator missing');
     }
     if (!Oskari.user().isLoggedIn()) {
-        const id = indicator.id || 'RuntimeIndicator' + Oskari.seq.nextVal('RuntimeIndicator');
+        const id = indicator.id || RUNTIME + Oskari.seq.nextVal(RUNTIME);
         const saved = { ...indicator, id };
         updateIndicatorListInCache(saved);
         updateIndicatorMetadataInCache(saved);
