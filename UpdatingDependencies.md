@@ -14,11 +14,11 @@ See notes:
 - https://github.com/CesiumGS/cesium/releases
 - https://github.com/CesiumGS/cesium/blob/main/CHANGES.md
 
-On Oskari 2.14 cesium was switched to @cesium/engine as we aren't using the widgets part. However it seems it's more difficult to track the changes on the engine as changelog describes the "full release" of everything cesium.
+On Oskari 2.14 cesium was switched to @cesium/engine as we aren't using the widgets part. However it seems it's more difficult to track the changes on the engine as changelog describes the "full release" of everything cesium (or more difficult to track which version of engine is used on which Cesium release).
 
 ## ol-cesium
 
-Maintained under openlayers and acts as a glue between cesium and OpenLayers. We can use most of OpenLayers API while showing data on Cesium.
+Maintained under openlayers and acts as glue between cesium and OpenLayers. We can use most of OpenLayers API while showing data on Cesium.
 
 Currently, doesn't have support for OpenLayers 10.x/prevents from updating to most recent version of OpenLayers.
 
