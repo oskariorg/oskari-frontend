@@ -65,7 +65,6 @@ Oskari.registerLocalization(
                 "TimeseriesControlPlugin": "Lecteur chronologique",
                 "FeaturedataPlugin": "Données de fonctionnalité",
                 "GetInfoPlugin": "Outil d'interrogation de fonctionnalité",
-                "PublisherToolbarPlugin": "Outils cartographiques",
                 "selectDrawLayer": "Sélectionner la couche cartographique",
                 "LayerSelectionPlugin": "Menu des couches cartographiques",
                 "CoordinateToolPlugin": "Coordonner l'outil",

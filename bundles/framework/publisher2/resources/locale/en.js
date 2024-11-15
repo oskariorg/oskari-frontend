@@ -68,7 +68,6 @@ Oskari.registerLocalization(
                 "TimeseriesControlPlugin": "Time series player",
                 "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Feature query tool",
-                "PublisherToolbarPlugin": "Map tools",
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
                 "CoordinateToolPlugin": "Coordinate tool",

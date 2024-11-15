@@ -11,6 +11,7 @@ import { CrosshairTool } from './crosshair/CrosshairTool';
 import { MapLayerListTool } from './layers/MapLayerListTool';
 import { SearchTool } from './search/SearchTool';
 import { ControlsTool } from './controls/ControlsTool';
+import { ToolbarTool } from './toolbar/ToolbarTool';
 
 export {
     LogoTool,
@@ -22,5 +23,6 @@ export {
     CrosshairTool,
     MapLayerListTool,
     SearchTool,
-    ControlsTool
+    ControlsTool,
+    ToolbarTool
 };

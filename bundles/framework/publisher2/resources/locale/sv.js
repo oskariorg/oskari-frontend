@@ -68,7 +68,6 @@ Oskari.registerLocalization(
                 "TimeseriesControlPlugin": "Tidseriespelare",
                 "FeaturedataPlugin": "Objektuppgifter",
                 "GetInfoPlugin": "Frågverktyg för visande av objektuppgifter",
-                "PublisherToolbarPlugin": "Kartverktyg",
                 "selectDrawLayer": "Välj lager för nya funktioner",
                 "LayerSelectionPlugin": "Kartlagermeny",
                 "CoordinateToolPlugin": "Koordinatverktyg",

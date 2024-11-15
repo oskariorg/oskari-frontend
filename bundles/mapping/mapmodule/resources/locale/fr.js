@@ -160,6 +160,9 @@ Oskari.registerLocalization(
             },
             "ControlsPlugin": {
                 "toolLabel": "Panoramiser avec la souris"
+            },
+            "PublisherToolbarPlugin": {
+                "toolLabel": "Outils cartographiques"
             }
         }
     }

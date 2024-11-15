@@ -52,7 +52,6 @@ Oskari.registerLocalization(
                 "tooltip": "Velja tiltæk kortatól. Athugaðu staðsetningu við forskoðun korts.",
                 "FeaturedataPlugin": "Fitjugögn",
                 "GetInfoPlugin": "Fyrirspurnatól fyrir fitjur",
-                "PublisherToolbarPlugin": "Kortatól",
                 "selectDrawLayer": "Velja kortalag",
                 "LayerSelectionPlugin": "Valmynd fyrir kortalög",
                 "CoordinateToolPlugin": "Hnitatól",

@@ -155,6 +155,9 @@ Oskari.registerLocalization(
             },
             "ControlsPlugin": {
                 "toolLabel": "Панорамирование мышью"
+            },
+            "PublisherToolbarPlugin": {
+                "toolLabel": "Инструмент карты"
             }
         }
     }
