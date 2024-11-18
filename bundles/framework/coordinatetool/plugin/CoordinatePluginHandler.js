@@ -96,8 +96,14 @@ class UIHandler extends StateHandler {
         });
     }
 
+    getProjectionShowFormat (selectedProj = this.state.selectedProjection) {
+        const projConfig = this.config?.projectionShowFormat?.[selectedProj] || {};
+        const globalFormat = this.config?.projectionShowFormat?.format;
+        return projConfig.format || globalFormat;
+    }
+
     async useUserDefinedCoordinates () {
-        let data = {
+        const data = {
             lonlat: {
                 lon: this.formatNumber(this.state.lonField, '.'),
                 lat: this.formatNumber(this.state.latField, '.')
@@ -105,12 +111,7 @@ class UIHandler extends StateHandler {
         };
 
         // Check if format should be degrees and add '°' symbol if needed
-        let isDegrees = false;
-        if (this.config.projectionShowFormat[this.state.selectedProjection]) {
-            isDegrees = this.config.projectionShowFormat[this.state.selectedProjection].format === 'degrees';
-        } else {
-            isDegrees = this.config.projectionShowFormat.format === 'degrees';
-        }
+        const isDegrees = this.getProjectionShowFormat() === 'degrees';
         if (isDegrees) {
             if (data.lonlat.lon.indexOf('°') < 0) data.lonlat.lon = data.lonlat.lon + '°';
             if (data.lonlat.lat.indexOf('°') < 0) data.lonlat.lat = data.lonlat.lat + '°';
@@ -122,13 +123,11 @@ class UIHandler extends StateHandler {
 
     coordinatesToMetric (data) {
         const converted = Oskari.util.coordinateDegreesToMetric([data.lonlat?.lon, data.lonlat?.lat], 10);
-        const lon = converted[0];
-        const lat = converted[1];
 
         return {
-            'lonlat': {
-                'lon': lon,
-                'lat': lat
+            lonlat: {
+                lon: converted[0],
+                lat: converted[1]
             }
         };
     }
@@ -210,7 +209,7 @@ class UIHandler extends StateHandler {
         let lon = parseFloat(data?.lonlat?.lon);
 
         // Need to show degrees ?
-        if (this.allowDegrees() && !isNaN(lat) && !isNaN(lon)) {
+        if (this.isCurrentUnitDegrees() && !isNaN(lat) && !isNaN(lon)) {
             const degreePoint = Oskari.util.coordinateMetricToDegrees([lon, lat], this.getProjectionDecimals());
             lon = degreePoint[0];
             lat = degreePoint[1];
@@ -284,7 +283,7 @@ class UIHandler extends StateHandler {
         let lon = displayData?.lonlat?.lon || data?.lonlat?.lon;
         try {
             let msg = null;
-            if (Oskari.util.coordinateIsDegrees([lon, lat]) && this.allowDegrees()) {
+            if (Oskari.util.coordinateIsDegrees([lon, lat]) && this.isCurrentUnitDegrees()) {
                 msg = {
                     lat: lat,
                     lon: lon
@@ -348,9 +347,9 @@ class UIHandler extends StateHandler {
     getMapXY () {
         const map = this.sandbox.getMap();
         const data = {
-            'lonlat': {
-                'lat': parseFloat(map.getY()),
-                'lon': parseFloat(map.getX())
+            lonlat: {
+                lat: parseFloat(map.getY()),
+                lon: parseFloat(map.getX())
             }
         };
         return data;
@@ -365,30 +364,11 @@ class UIHandler extends StateHandler {
         return coordinate;
     }
 
-    showDegrees () {
+    isCurrentUnitDegrees () {
         const projection = this.state.selectedProjection || this.originalProjection;
-        let showDegrees = (this.mapModule.getProjectionUnits() === 'degrees');
-        const projFormats = this.config.projectionShowFormat || {};
-        const formatDef = projFormats[projection];
-
-        if (formatDef) {
-            showDegrees = (formatDef.format === 'degrees');
-        }
-        return showDegrees;
-    }
-
-    allowDegrees (checkedProjection) {
-        const selectedProjection = this.state.selectedProjection ? this.state.selectedProjection : this.originalProjection;
-        const projection = checkedProjection || selectedProjection;
-
-        const isProjectionShowConfig = !!((this.config.projectionShowFormat && this.config.projectionShowFormat[projection] && this.config.projectionShowFormat[projection].format));
-        let isDegrees = !!(((isProjectionShowConfig && this.config.projectionShowFormat[projection].format === 'degrees') || this.mapModule.getProjectionUnits() === 'degrees'));
-
-        const isAllProjectionConfig = !!((this.config.projectionShowFormat && typeof this.config.projectionShowFormat.format === 'string'));
-        if (!isProjectionShowConfig && isAllProjectionConfig) {
-            isDegrees = (this.config.projectionShowFormat.format === 'degrees');
-        }
-        return isDegrees;
+        const formatDef = this.getProjectionShowFormat(projection);
+        const defaultedToMapmodule = formatDef || this.mapModule.getProjectionUnits();
+        return defaultedToMapmodule === 'degrees';
     }
 
     formatDegrees (lon, lat, type) {
@@ -544,7 +524,7 @@ class UIHandler extends StateHandler {
         // update emergency if configured
         if (this.config.showEmergencyCallMessage) {
             // already in degrees, don't fetch again
-            if (this.allowDegrees() && this.originalProjection === 'EPSG:4326') {
+            if (this.isCurrentUnitDegrees() && this.originalProjection === 'EPSG:4326') {
                 this.updateState({
                     emergencyInfo: this.formatEmergencyCallMessage({
                         'lonlat': {
@@ -646,7 +626,7 @@ class UIHandler extends StateHandler {
 
 const wrapped = controllerMixin(UIHandler, [
     'toggleMouseCoordinates',
-    'showDegrees',
+    'isCurrentUnitDegrees',
     'showPopup',
     'markersSupported',
     'setMarker',
@@ -655,7 +635,6 @@ const wrapped = controllerMixin(UIHandler, [
     'setLatInputValue',
     'setLoading',
     'setSelectedProjection',
-    'allowDegrees',
     'formatDegrees',
     'toggleReverseGeoCode',
     'useUserDefinedCoordinates',

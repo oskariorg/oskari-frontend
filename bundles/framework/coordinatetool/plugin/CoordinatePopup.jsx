@@ -79,14 +79,14 @@ const formatLeadingZero = (number) => {
 const PopupContent = ({ state, controller, preciseTransform, supportedProjections, crsText, decimalSeparator, showReverseGeoCodeCheckbox }) => {
     let latLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lat'} />;
     let lonLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lon'} />;
-    if (!controller.showDegrees()) {
+    if (!controller.isCurrentUnitDegrees()) {
         latLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.n'} />;
         lonLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.e'} />;
     }
 
     let degmin;
     let dec;
-    if (controller.allowDegrees() && state?.lonField && state?.latField) {
+    if (controller.isCurrentUnitDegrees() && state?.lonField && state?.latField) {
         dec = Oskari.util.coordinateDegreesToMetric([state.lonField, state.latField], 20);
         degmin = controller.formatDegrees(dec[0], dec[1], 'min');
         degmin.minutesX = formatLeadingZero(degmin.minutesX);
