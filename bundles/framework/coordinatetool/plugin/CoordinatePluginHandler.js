@@ -302,8 +302,8 @@ class UIHandler extends StateHandler {
         this.centerMap();
         const data = this.state.xy || this.getMapXY();
         const displayData = { lonlat: { lon: this.state.lonField, lat: this.state.latField } } || this.getMapXY();
-        let lat = displayData?.lonlat?.lat || data?.lonlat?.lat;
-        let lon = displayData?.lonlat?.lon || data?.lonlat?.lon;
+        const lat = displayData?.lonlat?.lat || data?.lonlat?.lat;
+        const lon = displayData?.lonlat?.lon || data?.lonlat?.lon;
         try {
             let msg = null;
             if (Oskari.util.coordinateIsDegrees([lon, lat]) && this.isCurrentUnitDegrees()) {
@@ -328,9 +328,9 @@ class UIHandler extends StateHandler {
         let lat = parseFloat(data.lonlat.lat);
         let lon = parseFloat(data.lonlat.lon);
         const inputLonLatData = {
-            'lonlat': {
-                'lat': lat,
-                'lon': lon
+            lonlat: {
+                lat,
+                lon
             }
         };
 
@@ -358,7 +358,7 @@ class UIHandler extends StateHandler {
             const marker = {
                 x: data.lonlat.lon,
                 y: data.lonlat.lat,
-                msg: msg,
+                msg,
                 size: 5,
                 color: 'ee9900',
                 shape: 2
@@ -439,7 +439,7 @@ class UIHandler extends StateHandler {
             data = this.getMapXY();
         }
 
-        let reverseGeoCode = [];
+        const reverseGeoCode = [];
 
         service.getReverseGeocode(
             // Success callback
@@ -455,12 +455,12 @@ class UIHandler extends StateHandler {
                             title = r.type;
                         }
                         reverseGeoCode.push({
-                            title: title,
+                            title,
                             name: r.name
                         });
                     }
                     this.updateState({
-                        reverseGeoCode: reverseGeoCode
+                        reverseGeoCode
                     });
                 } else {
                     this.updateState({
@@ -504,9 +504,9 @@ class UIHandler extends StateHandler {
                 const response = await getTransformedCoordinates(this.originalProjection, data, sourceProjection, 'EPSG:4326');
                 if (response?.lat && response?.lon) {
                     const newData = {
-                        'lonlat': {
-                            'lon': response.lon,
-                            'lat': response.lat
+                        lonlat: {
+                            lon: response.lon,
+                            lat: response.lat
                         }
                     };
                     return this.formatEmergencyCallMessage(newData);
@@ -530,9 +530,9 @@ class UIHandler extends StateHandler {
             if (this.isCurrentUnitDegrees() && this.originalProjection === 'EPSG:4326') {
                 this.updateState({
                     emergencyInfo: this.formatEmergencyCallMessage({
-                        'lonlat': {
-                            'lon': xy.lonlat.lon,
-                            'lat': xy.lonlat.lat
+                        lonlat: {
+                            lon: xy.lonlat.lon,
+                            lat: xy.lonlat.lat
                         }
                     })
                 });
@@ -573,9 +573,9 @@ class UIHandler extends StateHandler {
             MouseHoverEvent: function (event) {
                 if (this.state.showMouseCoordinates && !this.state.loading) {
                     const data = {
-                        'lonlat': {
-                            'lat': parseFloat(event.getLat()),
-                            'lon': parseFloat(event.getLon())
+                        lonlat: {
+                            lat: parseFloat(event.getLat()),
+                            lon: parseFloat(event.getLon())
                         }
                     };
                     if (event.isPaused()) {
@@ -603,9 +603,9 @@ class UIHandler extends StateHandler {
                 if (!this.popupControls) return;
                 const lonlat = event.getLonLat();
                 const data = {
-                    'lonlat': {
-                        'lat': parseFloat(lonlat.lat),
-                        'lon': parseFloat(lonlat.lon)
+                    lonlat: {
+                        lat: parseFloat(lonlat.lat),
+                        lon: parseFloat(lonlat.lon)
                     }
                 };
                 if (!this.showMouseCoordinates) {
@@ -618,7 +618,7 @@ class UIHandler extends StateHandler {
     }
 
     onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
+        const handler = this.eventHandlers[e.getName()];
         if (!handler) {
             return;
         }
