@@ -263,14 +263,12 @@ class UIHandler extends StateHandler {
         if (this.popupControls) {
             this.popupCleanup();
         } else {
-            const crsText = this.loc('display.crs')[this.state.selectedProjection] || this.loc('display.crs.default', { crs: this.state.selectedProjection });
             this.popupControls = showCoordinatePopup(
                 this.getState(),
                 this.getController(),
                 this.popupLocation(),
                 this.config?.supportedProjections,
                 this.preciseTransform,
-                crsText,
                 this.decimalSeparator,
                 this.reverseGeocodingIds?.length > 2,
                 () => this.popupCleanup()

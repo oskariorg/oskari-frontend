@@ -21,9 +21,12 @@ const isMarkersSupported = () => {
     return !!builder;
 };
 
-const ProjectionChanger = ({ preciseTransform, projection, onChange, supportedProjections = [], children }) => {
+const ProjectionChanger = ({ preciseTransform, projection, onChange, supportedProjections = [] }) => {
     if (!preciseTransform || typeof onChange !== 'function') {
-        return children;
+        return (
+            <Message bundleKey={BUNDLE_KEY} messageKey={`display.crs.${projection}`} fallback={
+                <Message bundleKey={BUNDLE_KEY} messageKey='display.crs.default' messageArgs={{ crs: projection }} />
+            }/>);
     }
     return (
         <SelectField>
@@ -176,7 +179,7 @@ ReverseGeocodeResults.propTypes = {
     results: PropTypes.array
 };
 
-const PopupContent = ({ state = {}, controller, preciseTransform, supportedProjections, crsText, decimalSeparator, showReverseGeoCodeCheckbox }) => {
+const PopupContent = ({ state = {}, controller, preciseTransform, supportedProjections, decimalSeparator, showReverseGeoCodeCheckbox }) => {
     const isDegrees = controller.isCurrentUnitDegrees();
 
     return (
@@ -187,7 +190,7 @@ const PopupContent = ({ state = {}, controller, preciseTransform, supportedProje
                     preciseTransform={preciseTransform}
                     projection={state.selectedProjection}
                     onChange={value => controller.setSelectedProjection(value)}
-                    supportedProjections={supportedProjections}>{crsText}</ProjectionChanger>
+                    supportedProjections={supportedProjections} />
                 <CoordinateFields>
                     <CoordinateField>
                         <LatLabel isDegrees={isDegrees}/>
@@ -269,12 +272,11 @@ PopupContent.propTypes = {
     controller: PropTypes.object.isRequired,
     preciseTransform: PropTypes.bool,
     supportedProjections: PropTypes.array.isRequired,
-    crsText: PropTypes.string,
     decimalSeparator: PropTypes.string,
     showReverseGeoCodeCheckbox: PropTypes.bool
 };
 
-export const showCoordinatePopup = (state, controller, location, supportedProjections = [], preciseTransform, crsText, decimalSeparator, showReverseGeoCodeCheckbox, onClose) => {
+export const showCoordinatePopup = (state, controller, location, supportedProjections = [], preciseTransform, decimalSeparator, showReverseGeoCodeCheckbox, onClose) => {
     const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
     const options = {
         ...OPTIONS,
@@ -288,7 +290,6 @@ export const showCoordinatePopup = (state, controller, location, supportedProjec
             controller={controller}
             preciseTransform={preciseTransform}
             supportedProjections={supportedProjections}
-            crsText={crsText}
             decimalSeparator={decimalSeparator}
             showReverseGeoCodeCheckbox={showReverseGeoCodeCheckbox}
         />,
@@ -304,7 +305,6 @@ export const showCoordinatePopup = (state, controller, location, supportedProjec
                     controller={controller}
                     preciseTransform={preciseTransform}
                     supportedProjections={supportedProjections}
-                    crsText={crsText}
                     decimalSeparator={decimalSeparator}
                     showReverseGeoCodeCheckbox={showReverseGeoCodeCheckbox}
                 />
