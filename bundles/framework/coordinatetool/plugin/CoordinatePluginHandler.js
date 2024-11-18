@@ -282,7 +282,7 @@ class UIHandler extends StateHandler {
 
     centerMap (coordinates) {
         try {
-            let data = coordinates || this.state.xy;
+            const data = coordinates || this.state.xy;
             this.centerMapToSelectedCoordinates(data);
         } catch (e) {
             Messaging.error(this.loc('display.checkValuesDialog.message'));
@@ -308,8 +308,8 @@ class UIHandler extends StateHandler {
             let msg = null;
             if (Oskari.util.coordinateIsDegrees([lon, lat]) && this.isCurrentUnitDegrees()) {
                 msg = {
-                    lat: lat,
-                    lon: lon
+                    lat,
+                    lon
                 };
             } else {
                 msg = {
@@ -392,15 +392,6 @@ class UIHandler extends StateHandler {
         const formatDef = this.getProjectionShowFormat(projection);
         const defaultedToMapmodule = formatDef || this.mapModule.getProjectionUnits();
         return defaultedToMapmodule === 'degrees';
-    }
-
-    formatDegrees (lon, lat, type) {
-        return formatDegrees(lon, lat, type);
-    }
-
-    markersSupported () {
-        const builder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
-        return !!builder;
     }
 
     async getTransformedCoordinatesFromServer (data, fromProjection, toProjection) {
@@ -631,14 +622,12 @@ const wrapped = controllerMixin(UIHandler, [
     'toggleMouseCoordinates',
     'isCurrentUnitDegrees',
     'showPopup',
-    'markersSupported',
     'setMarker',
     'centerMap',
     'setLonInputValue',
     'setLatInputValue',
     'setLoading',
     'setSelectedProjection',
-    'formatDegrees',
     'toggleReverseGeoCode',
     'useUserDefinedCoordinates',
     'isMapCentered',
