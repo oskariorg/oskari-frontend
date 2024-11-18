@@ -96,10 +96,33 @@ class UIHandler extends StateHandler {
         });
     }
 
+    // prefer proj specific and default to global format
     getProjectionShowFormat (selectedProj = this.state.selectedProjection) {
-        const projConfig = this.config?.projectionShowFormat?.[selectedProj] || {};
+        const projection = selectedProj || this.originalProjection;
+        const projConfig = this.config?.projectionShowFormat?.[projection] || {};
         const globalFormat = this.config?.projectionShowFormat?.format;
         return projConfig.format || globalFormat;
+    }
+
+    // prefer proj specific, global format, deprecated conf and default to mapmodule logic
+    getProjectionDecimals (selectedProj = this.state.selectedProjection) {
+        const projection = selectedProj || this.originalProjection;
+        const conf = this.config;
+        const projConfig = conf?.projectionShowFormat?.[projection] || {};
+        const globalFormat = conf?.projectionShowFormat?.decimals;
+        const decimalCount = projConfig.decimals || globalFormat;
+        if (typeof decimalCount === 'number' && decimalCount >= 0) {
+            return decimalCount;
+        }
+        const deprecatedConf = conf?.roundToDecimals;
+        if (deprecatedConf) {
+            Oskari.log('coordinatetool').warn('Deprecated coordinatetool.conf.roundToDecimals - please use coordinatetool.conf.projectionShowFormat.decimals or ' +
+                'coordinatetool.conf.projectionShowFormat["projection"].decimals instead.');
+            if (typeof deprecatedConf === 'number' && deprecatedConf >= 0) {
+                return conf.roundToDecimals;
+            }
+        }
+        return this.mapModule.getProjectionDecimals(projection);
     }
 
     async useUserDefinedCoordinates () {
@@ -375,26 +398,6 @@ class UIHandler extends StateHandler {
         return formatDegrees(lon, lat, type);
     }
 
-    getProjectionDecimals (checkedProjection) {
-        const conf = this.config;
-        const selectedProjection = this.state.selectedProjection ? this.state.selectedProjection : this.originalProjection;
-        const projection = checkedProjection || selectedProjection;
-        const isProjectionShowConfig = !!((conf.projectionShowFormat && conf.projectionShowFormat[projection] && typeof conf.projectionShowFormat[projection].decimals === 'number'));
-
-        let decimals = (isProjectionShowConfig) ? conf.projectionShowFormat[projection].decimals : this.mapModule.getProjectionDecimals(selectedProjection);
-
-        const isAllProjectionConfig = !!((conf.projectionShowFormat && typeof conf.projectionShowFormat.decimals === 'number'));
-
-        if (!isProjectionShowConfig && isAllProjectionConfig) {
-            decimals = conf.projectionShowFormat.decimals;
-        } else if (!isProjectionShowConfig && conf.roundToDecimals) {
-            decimals = conf.roundToDecimals;
-            this.sandbox.printWarn('Deprecated coordinatetool.conf.roundToDecimals - please use coordinatetool.conf.projectionShowFormat.decimals or ' +
-                'coordinatetool.conf.projectionShowFormat["projection"].decimals instead.');
-        }
-        return decimals;
-    }
-
     markersSupported () {
         const builder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
         return !!builder;
@@ -407,9 +410,9 @@ class UIHandler extends StateHandler {
             const response = await getTransformedCoordinates(this.originalProjection, data, fromProjection, toProjection);
             if (response?.lat && response?.lon) {
                 const newData = {
-                    'lonlat': {
-                        'lon': response.lon,
-                        'lat': response.lat
+                    lonlat: {
+                        lon: response.lon,
+                        lat: response.lat
                     }
                 };
                 this.setLoading(false);
