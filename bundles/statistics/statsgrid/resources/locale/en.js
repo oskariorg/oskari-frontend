@@ -12,19 +12,9 @@ Oskari.registerLocalization({
             'title': 'Thematic maps'
         },
         'dataProviderInfoTitle': 'Indicators',
-        'layertools': {
-            'table_icon': {
-                'tooltip': 'Move to thematic maps',
-                'title': 'Thematic maps'
-            },
-            'diagram_icon': {
-                'tooltip': 'Show data in diagram',
-                'title': 'Diagram'
-            },
-            'statistics': {
-                'tooltip': 'Move to thematic maps',
-                'title': 'Statistics'
-            }
+        'layerTool': {
+            'tooltip': 'Move to thematic maps',
+            'title': 'Thematic maps'
         },
         'publisher': {
             "label": "Thematic maps",
@@ -95,7 +85,14 @@ Oskari.registerLocalization({
         },
         'diagram': {
             'title': 'Diagram',
-            'noValue': 'N/A'
+            'noValue': 'N/A',
+            'sort': {
+                'desc': 'Order',
+                'name-ascending': 'Name ascending',
+                'name-descending': 'Name descending',
+                'value-ascending': 'Value ascending',
+                'value-descending': 'Value descending'
+            }
         },
         'parameters': {
             'sex': 'Gender',
@@ -106,11 +103,6 @@ Oskari.registerLocalization({
             'to': 'to',
             'value': 'Value',
             'region': 'Region'
-        },
-        'datatable': 'Table',
-        'published': {
-            'showMap': 'Show map',
-            'showTable': 'Show table'
         },
         'classify': {
             'classify': 'Classification',
@@ -186,44 +178,6 @@ Oskari.registerLocalization({
             'regionsetName': 'Unknown',
             'indicator': 'Unknown indicator'
         },
-        'datacharts': {
-            'flyout': 'Searched data',
-            'barchart': 'Bar chart',
-            'linechart': 'Line chart',
-            'table': 'Table',
-            'desc': 'Table and graphs',
-            'nodata': 'Indicators were not chosen',
-            'indicatorVar': 'Variable to be shown in graph',
-            'descColor': 'Color of the graph',
-            'selectClr': 'Selected color',
-            'clrFromMap': 'Colors by classification in the map',
-            'chooseColor': 'Select color',
-            'sorting': {
-                'desc': 'Order',
-                'name-ascending': 'Name ascending',
-                'name-descending': 'Name descending',
-                'value-ascending': 'Value ascending',
-                'value-descending': 'Value descending'
-            }
-        },
-        'filter': {
-            'title': 'Filtering',
-            'indicatorToFilter': 'Variable to be filtered',
-            'condition': 'Condition',
-            'value': 'Value',
-            'variable': 'Variable',
-            'conditionPlaceholder': 'Select condition',
-            'greater': 'Greater than (>)',
-            'greaterEqual': 'Greater than or equal to (>=)',
-            'equal': 'Equal to (=)',
-            'lessEqual': 'Less than or equal to (<=)',
-            'lessThan': 'Less than (<)',
-            'between': 'Between (exclusive)',
-            'filter': 'Filter values',
-            'desc': 'Filter by values',
-            'filtered': 'Filtered values',
-            'area': 'Filter by areas'
-        },
         'layer': {
             'name': 'Areal division of thematic map',
             'inspireName': 'Thematic map',
@@ -231,19 +185,12 @@ Oskari.registerLocalization({
         },
         'tab': {
             'title': 'Indicators',
-            'edit': 'Edit',
-            'delete': 'Delete',
+            'confirmDelete': 'You are deleting the indicator "{name}". Do you want to delete the indicator?',
             'grid': {
                 'name': 'Name',
-                'edit': 'Edit',
-                'delete': 'Delete',
                 'actions': 'Actions',
                 'createDate': 'Created',
                 'updateDate': 'Updated'
-            },
-            'popup': {
-                'deletetitle': 'Delete Indicator',
-                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?'
             }
         },
         'userIndicators': {
@@ -301,14 +248,6 @@ Oskari.registerLocalization({
             'noMetadata': 'Service did not return {indicators, plural, one {description for the indicator} other {descriptions for the indicators}}',
             'updated': 'Last update',
             'nextUpdate': 'Next update'
-        },
-        'sumo': {
-            'placeholder': 'Select Here',
-            'captionFormat': '{0} selected',
-            'captionFormatAllSelected': 'All {0} selected!',
-            'searchText': 'Search...',
-            'noMatch': 'No results found matching "{0}"',
-            'locale': ['OK', 'Cancel', 'Select All']
         }
     }
 });

@@ -99,7 +99,14 @@ Oskari.registerLocalization(
         },
         "diagram": {
             "title": "Диаграмма",
-            "noValue": "Недоступно"
+            "noValue": "Недоступно",
+            "sort": {
+                "desc": "Порядок",
+                "name-ascending": "Название по возрастанию",
+                "name-descending": "Название по убыванию",
+                "value-ascending": "Значение по возрастанию",
+                "value-descending": "Значение по убыванию"
+            }
         },
         "parameters": {
             "sex": "Пол",
@@ -109,11 +116,6 @@ Oskari.registerLocalization(
             "to": "до",
             "value": "Значение",
             "region": "Облаcть"
-        },
-        "datatable": "Таблица",
-        "published": {
-            "showMap": "Показать карту",
-            "showTable": "Показать таблицу"
         },
         "classify": {
             "classify": "Классификация",
@@ -176,44 +178,6 @@ Oskari.registerLocalization(
             "noData": "Данные недоступны для выбранного момента времени.",
             "cannotCreateLegend": "Условные обозначения не могут быть созданы выбранными значениями, попробуйте разные значения."
         },
-        "datacharts": {
-            "flyout": "Искомые данные",
-            "barchart": "Гистограмма",
-            "linechart": "Линейный график",
-            "table": "Таблица",
-            "desc": "Таблица и графики",
-            "nodata": "Индикаторы не были выбраны",
-            "indicatorVar": "Переменная, показываемая на графике",
-            "descColor": "Цвет графика",
-            "selectClr": "Выбранный цвет",
-            "clrFromMap": "Цвета по классификации на карте",
-            "chooseColor": "Выбрать цвет",
-            "sorting": {
-                "desc": "Порядок",
-                "name-ascending": "Название по возрастанию",
-                "name-descending": "Название по убыванию",
-                "value-ascending": "Значение по возрастанию",
-                "value-descending": "Значение по убыванию"
-            }
-        },
-        "filter": {
-            "title": "Фильтр",
-            "indicatorToFilter": "Фильтр переменной",
-            "condition": "Условие",
-            "value": "Значение",
-            "variable": "Переменная",
-            "conditionPlaceholder": "Выбрать условие",
-            "greater": "Больше (>)",
-            "greaterEqual": "Больше или равно (>=)",
-            "equal": "Равно (=)",
-            "lessEqual": "Меньше или равно (<=)",
-            "lessThan": "Меньше(<)",
-            "between": "Между (исключительно)",
-            "filter": "Фильтр значений",
-            "desc": "Фильтр по значению",
-            "filtered": "Отфильтрованные значения",
-            "area": "Фильтр по области"
-        },
         "layer": {
             "name": "Ареал обитания на тематической карте",
             "inspireName": "Тематическая карта",
@@ -221,16 +185,9 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Индикаторы",
-            "edit": "Редактировать",
-            "delete": "Удалить",
+            "confirmDelete": "Вы удаляете индикатор \"{name}\". Вы действительно хотите удалить индикатор?",
             "grid": {
-                "name": "Название",
-                "edit": "Редактировать",
-                "delete": "Удалить"
-            },
-            "popup": {
-                "deletetitle": "Удалить индикатор",
-                "deletemsg": "Вы удаляете индикатор \"{name}\". Вы действительно хотите удалить индикатор?"
+                "name": "Название"
             }
         },
         "userIndicators": {
@@ -271,9 +228,6 @@ Oskari.registerLocalization(
             'title': 'Индикаторы',
             'removeAll': 'Remove all',
             'emptyMsg': 'Отсутствуют выбранные индикаторы'
-        },
-        'sumo': {
-            'locale': ['ОК', 'Отменить', 'Выбрать все']
         }
     }
 });

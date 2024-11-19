@@ -12,19 +12,9 @@ Oskari.registerLocalization({
             'title': 'Teemakartat'
         },
         'dataProviderInfoTitle': 'Indikaattorit',
-        'layertools': {
-            'table_icon': {
-                'tooltip': 'Siirry teemakarttoihin',
-                'title': 'Teemakartat'
-            },
-            'diagram_icon': {
-                'tooltip': 'Näytä tiedot diagrammissa',
-                'title': 'Diagrammi'
-            },
-            'statistics': {
-                'tooltip': 'siirry teemakarttoihin',
-                'title': 'Tilastot'
-            }
+        'layerTool': {
+            'tooltip': 'Siirry teemakarttoihin',
+            'title': 'Teemakartat'
         },
         'publisher': {
             "label": "Teemakartat",
@@ -95,7 +85,14 @@ Oskari.registerLocalization({
         },
         'diagram': {
             'title': 'Pylväsdiagrammi',
-            'noValue': 'Ei arvoa'
+            'noValue': 'Ei arvoa',
+            'sort': {
+                'desc': 'Järjestys',
+                'name-ascending': 'Nimen mukaan nouseva',
+                'name-descending': 'Nimen mukaan laskeva',
+                'value-ascending': 'Arvon mukaan nouseva',
+                'value-descending': 'Arvon mukaan laskeva'
+            }
         },
         'parameters': {
             'sex': 'Sukupuoli',
@@ -107,22 +104,17 @@ Oskari.registerLocalization({
             'value': 'Arvo',
             'region': 'Alue'
         },
-        'datatable': 'Taulukko',
-        'published': {
-            'showMap': 'Näytä kartta',
-            'showTable': 'Näytä taulukko'
-        },
         'classify': {
             'classify': 'Luokittelu',
             'labels': {
                 'method': 'Luokittelutapa',
-                'count': 'Luokkajako', // classes
+                'count': 'Luokkajako',
                 'mode': 'Luokkarajat',
                 'mapStyle': 'Kartan tyyli',
-                'type': 'Jakauma', // setselection
+                'type': 'Jakauma',
                 'reverseColors': 'Käännä värit',
                 'color': 'Väri',
-                'colorset': 'Värit', //button
+                'colorset': 'Värit',
                 'pointSize': 'Pisteen koko',
                 'transparency': 'Läpinäkyvyys',
                 'showValues': 'Näytä arvot',
@@ -186,44 +178,6 @@ Oskari.registerLocalization({
             'regionsetName': 'Tuntematon',
             'indicator': 'Tuntematon indikaattori'
         },
-        'datacharts': {
-            'flyout': 'Haettu aineisto',
-            'barchart': 'Pylväskuvio',
-            'linechart': 'Viivakuvio',
-            'table': 'Taulukko',
-            'desc': 'Taulukko ja kuvaajat',
-            'nodata': 'Ei valittuja indikaattoreita',
-            'indicatorVar': 'Kuvaajassa esitettävä muuttuja',
-            'descColor': 'Kuvaajan väri',
-            'selectClr': 'Valittu väri',
-            'clrFromMap': 'Värit kartalla olevan luokittelun mukaan',
-            'chooseColor': 'Valitse väri',
-            'sorting': {
-                'desc': 'Järjestys',
-                'name-ascending': 'Nimen mukaan nouseva',
-                'name-descending': 'Nimen mukaan laskeva',
-                'value-ascending': 'Arvon mukaan nouseva',
-                'value-descending': 'Arvon mukaan laskeva'
-            }
-        },
-        'filter': {
-            'title': 'Suodatus',
-            'indicatorToFilter': 'Suodatettava muuttuja',
-            'condition': 'Ehto',
-            'value': 'Arvo',
-            'variable': 'Muuttuja',
-            'conditionPlaceholder': 'Valitse ehto',
-            'greater': 'Suurempi kuin (>)',
-            'greaterEqual': 'Suurempi tai yhtäsuuri kuin (>=)',
-            'equal': 'Yhtäsuuri kuin (=)',
-            'lessEqual': 'Pienempi tai yhtäsuuri kuin (<=)',
-            'lessThan': 'Pienempi kuin (<)',
-            'between': 'Välillä (poissulkeva)',
-            'filter': 'Suodata arvot',
-            'desc': 'Suodata arvoilla',
-            'filtered': 'Suodatetut arvot',
-            'area': 'Suodata alueilla'
-        },
         'layer': {
             'name': 'Teemakartan aluejako',
             'inspireName': 'Teemakartta',
@@ -231,19 +185,12 @@ Oskari.registerLocalization({
         },
         'tab': {
             'title': 'Indikaattorit',
-            'edit': 'Muokkaa',
-            'delete': 'Poista',
+            'confirmDelete': 'Haluatko poistaa indikaattorin "{name}"?',
             'grid': {
                 'name': 'Nimi',
-                'edit': 'Muokkaa',
-                'delete': 'Poista',
                 'actions': 'Toiminnot',
                 'createDate': 'Luontiaika',
                 'updateDate': 'Muokkausaika'
-            },
-            'popup': {
-                'deletetitle': 'Poista indikaattori',
-                'deletemsg': 'Haluatko poistaa indikaattorin "{name}"?'
             }
         },
         'userIndicators': {
@@ -301,14 +248,6 @@ Oskari.registerLocalization({
             'noMetadata': 'Palvelusta ei saatu {indicators, plural, one {indikaattorin kuvausta} other {indikaattorien kuvauksia}}.',
             'updated': 'Viimeksi päivitetty',
             'nextUpdate': 'Seuraava päivitys'
-        },
-        'sumo': {
-            'placeholder': 'Valitse tästä',
-            'captionFormat': '{0} valittu',
-            'captionFormatAllSelected': 'Kaikki {0} valittu!',
-            'searchText': 'Etsi...',
-            'noMatch': 'Yhtään hakutulosta ei löytynyt haulla "{0}"',
-            'locale': ['OK', 'Peruuta', 'Valitse kaikki']
         }
     }
 });

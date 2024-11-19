@@ -12,19 +12,9 @@ Oskari.registerLocalization({
             'title': 'Tematiska kartor'
         },
         'dataProviderInfoTitle': 'Indikatorer',
-        'layertools': {
-            'table_icon': {
-                'tooltip': 'gå till tematiska kartor',
-                'title': 'Tematiska kartor'
-            },
-            'diagram_icon': {
-                'tooltip': 'Visa uppgifter i diagram',
-                'title': 'Diagram'
-            },
-            'statistics': {
-                'tooltip': 'gå till tematiska kartor',
-                'title': 'Statistik'
-            }
+        'layerTool': {
+            'tooltip': 'Gå till tematiska kartor',
+            'title': 'Tematiska kartor'
         },
         'publisher': {
             "label": "Statistik",
@@ -95,7 +85,14 @@ Oskari.registerLocalization({
         },
         'diagram': {
             'title': 'Stapeldiagram',
-            'noValue': 'Inte tillgänglig'
+            'noValue': 'Inte tillgänglig',
+            'sort': {
+                'desc': 'Sortera',
+                'name-ascending': 'Stigande enligt namn',
+                'name-descending': 'Sjunkande enligt namn',
+                'value-ascending': 'Stigande enligt värde',
+                'value-descending': 'Sjunkande enligt värde'
+            }
         },
         'parameters': {
             'sex': 'Kön',
@@ -106,11 +103,6 @@ Oskari.registerLocalization({
             'to': 'tills',
             'value': 'Värde',
             'region': 'Område'
-        },
-        'datatable': 'Tabell',
-        'published': {
-            'showMap': 'Visa karta',
-            'showTable': 'Visa tabell'
         },
         'classify': {
             'classify': 'Klassificering',
@@ -186,44 +178,6 @@ Oskari.registerLocalization({
             'regionsetName': 'Okänd',
             'indicator': 'Okänd indikator'
         },
-        'datacharts': {
-            'flyout': 'Sökta datamängden',
-            'barchart': 'Stapeldiagram',
-            'linechart': 'Linjediagram',
-            'table': 'Tabell',
-            'desc': 'Tabell och figurer',
-            'nodata': 'Inga valda indikatorer',
-            'indicatorVar': 'Variabeln som ska visas i figuren',
-            'descColor': 'Figurens färg',
-            'selectClr': 'Vald färg',
-            'clrFromMap': 'Färgsättning enligt kartas klassificering',
-            'chooseColor': 'Välj färg',
-            'sorting': {
-                'desc': 'Sortera',
-                'name-ascending': 'Stigande enligt namn',
-                'name-descending': 'Sjunkande enligt namn',
-                'value-ascending': 'Stigande enligt värde',
-                'value-descending': 'Sjunkande enligt värde'
-            }
-        },
-        'filter': {
-            'title': 'Filtrering',
-            'indicatorToFilter': 'Variabel som ska filtreras',
-            'condition': 'Villkor',
-            'value': 'Värde',
-            'variable': 'Variabel',
-            'conditionPlaceholder': 'Välj villkor',
-            'greater': 'Större än (>)',
-            'greaterEqual': 'Större än eller lika med (>=)',
-            'equal': 'Lika med (=)',
-            'lessEqual': 'Mindre än eller lika med (<=)',
-            'lessThan': 'Mindre än (<)',
-            'between': 'Mellan (uteslutande)',
-            'filter': 'Filtrera värden',
-            'desc': 'Filtrera med värden',
-            'filtered': 'Filtrerade värden',
-            'area': 'Filtrera med områden'
-        },
         'layer': {
             'name': 'Områdesindelning av tematiska kartan',
             'inspireName': 'Tematisk karta',
@@ -231,19 +185,12 @@ Oskari.registerLocalization({
         },
         'tab': {
             'title': 'Indikatorer',
-            'edit': 'Redigera',
-            'delete': 'Ta bort',
+            'confirmDelete': 'Vill du ta bort indikatorn "{name}"?',
             'grid': {
                 'name': 'Namn',
-                'edit': 'Redigera',
-                'delete': 'Ta bort',
                 'actions': 'Handlingar',
                 'createDate': 'Skapad',
                 'updateDate': 'Uppdaterad',
-            },
-            'popup': {
-                'deletetitle': 'Ta bort indikatorn',
-                'deletemsg': 'Vill du ta bort indikatorn "{name}"?'
             }
         },
         'userIndicators': {
@@ -260,8 +207,8 @@ Oskari.registerLocalization({
             'datasets': {
                 'title': 'Statistisk information',
                 'dataset': 'Datamängder',
-                'noIndicator': 'Tallenna indikaattorin tiedot lisätäksesi aineistoja.',
-                'noDatasets': 'Indikaattorilla ei ole tallennettuja aineistoja.'
+                'noIndicator': 'Spara indikatorinformation för att lägga till datauppsättningar.',
+                'noDatasets': 'Indikatorn har ingen datauppsättning.'
             },
             'import': {
                 'title': 'Hämta från urklipp',
@@ -302,14 +249,6 @@ Oskari.registerLocalization({
             'noMetadata': 'Tjänsten returnerade ingen beskrivning för {indicators, plural, one {indikatorn} other {indikatorer}}.',
             'updated': 'Senast uppdaterad',
             'nextUpdate': 'Nästa uppdatering'
-        },
-        'sumo': {
-            'placeholder': 'Välj här',
-            'captionFormat': '{0} valda',
-            'captionFormatAllSelected': 'Alla {0} valda!',
-            'searchText': 'Sök...',
-            'noMatch': 'Inga sökresultat hittades med "{0}"',
-            'locale': ['OK', 'Avbryt', 'Välj alla']
         }
     }
 });

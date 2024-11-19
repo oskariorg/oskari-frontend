@@ -13,19 +13,9 @@ Oskari.registerLocalization(
             "title": "Cartes thématiques"
         },
         "dataProviderInfoTitle": "Indicateurs",
-        "layertools": {
-            "table_icon": {
-                "tooltip": "Passer aux cartes thématiques",
-                "title": "Cartes thématiques"
-            },
-            "diagram_icon": {
-                "tooltip": "Afficher les données dans le schéma",
-                "title": "Schéma"
-            },
-            "statistics": {
-                "tooltip": "Passer aux cartes thématiques",
-                "title": "Statistiques"
-            }
+        "layerTool": {
+            "tooltip": "Passer aux cartes thématiques",
+            "title": "Cartes thématiques"
         },
         'publisher': {
             "label": "Cartes thématiques",
@@ -93,7 +83,14 @@ Oskari.registerLocalization(
         },
         "diagram": {
             "title": "Schéma",
-            "noValue": "S/O"
+            "noValue": "S/O",
+            "sort": {
+                "desc": "Ordre",
+                "name-ascending": "Nom en ordre croissant",
+                "name-descending": "Nom en ordre décroissant",
+                "value-ascending": "Valeur en ordre croissant",
+                "value-descending": "Valeur en ordre décroissant"
+            }
         },
         "parameters": {
             "sex": "Sexe",
@@ -103,11 +100,6 @@ Oskari.registerLocalization(
             "to": "à",
             "value": "Valeur",
             "region": "Région"
-        },
-        "datatable": "Tableau",
-        "published": {
-            "showMap": "Afficher la carte",
-            "showTable": "Afficher le tableau"
         },
         "classify": {
             "classify": "Classification",
@@ -176,44 +168,6 @@ Oskari.registerLocalization(
             "noData": "Les données ne sont pas accessibles pour le moment précis sélectionné.",
             "cannotCreateLegend": "Impossible de créer la légende à l'aide des  valeurs choisies. Veuillez essayer des valeurs différentes."
         },
-        "datacharts": {
-            "flyout": "Données recherchées",
-            "barchart": "Diagramme à barres",
-            "linechart": "Diagramme à ligne brisée",
-            "table": "Tableau",
-            "desc": "Tableau et graphiques",
-            "nodata": "Les indicateurs n'ont pas été choisis",
-            "indicatorVar": "La variable sera affichée dans le graphique",
-            "descColor": "Couleur du graphique",
-            "selectClr": "Couleur sélectionnée",
-            "clrFromMap": "Couleurs par classification dans la carte",
-            "chooseColor": "Sélectionner la couleur",
-            "sorting": {
-                "desc": "Ordre",
-                "name-ascending": "Nom en ordre croissant",
-                "name-descending": "Nom en ordre décroissant",
-                "value-ascending": "Valeur en ordre croissant",
-                "value-descending": "Valeur en ordre décroissant"
-            }
-        },
-        "filter": {
-            "title": "Filtrage",
-            "indicatorToFilter": "Variable à filtrer",
-            "condition": "Condition",
-            "value": "Valeur",
-            "variable": "Variable",
-            "conditionPlaceholder": "Sélectionner la condition",
-            "greater": "est supérieur(e) à (>)",
-            "greaterEqual": "est supérieur(e) ou égal(e) à (>=)",
-            "equal": "est égal(e) à (=)",
-            "lessEqual": "est inférieur(e) ou égal(e) à (<=)",
-            "lessThan": "est inférieur(e) à (<)",
-            "between": "Entre (exclusif)",
-            "filter": "Filtrer les valeurs",
-            "desc": "Filtrer par valeur",
-            "filtered": "Valeurs filtrées",
-            "area": "Filtrer par superficie"
-        },
         "layer": {
             "name": "Division par superficie de la carte thématique",
             "inspireName": "Carte thématique",
@@ -221,16 +175,9 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Indicateurs",
-            "edit": "Modifier",
-            "delete": "Supprimer",
+            "confirmDelete": "Vous supprimez l'indicateur \"{name}\". Souhaitez-vous supprimer l'indicateur?",
             "grid": {
-                "name": "Nom",
-                "edit": "Modifier",
-                "delete": "Supprimer"
-            },
-            "popup": {
-                "deletetitle": "Supprimer l'indicateur",
-                "deletemsg": "Vous supprimez l'indicateur \"{name}\". Souhaitez-vous supprimer l'indicateur?",
+                "name": "Nom"
             }
         },
         "userIndicators": {
