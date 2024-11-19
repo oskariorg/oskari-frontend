@@ -22,7 +22,7 @@ class IndicatorFormController extends StateHandler {
     async showIndicatorPopup (ds, id = null) {
         if (!ds) return;
         this.reset();
-        await this.preparePopupData(ds, id);
+        await this.preparePopupData({ id, ds });
         this.instance.getViewHandler()?.show('indicatorForm');
     }
 
@@ -32,7 +32,7 @@ class IndicatorFormController extends StateHandler {
 
     getInitState () {
         return {
-            indicator: {}, // TODO: is it ok to pass additional info (name,..) for other handlers??
+            indicator: {},
             datasets: [],
             selection: '',
             regionset: null,
@@ -46,40 +46,36 @@ class IndicatorFormController extends StateHandler {
         this.updateState(this.getInitState());
     }
 
-    async preparePopupData (ds, id) {
+    async preparePopupData (partialIndicator) {
         this.updateState({ loading: true });
-        const indicator = { id, ds };
-        const datasets = await this.populateIndicatorFromMetadata(indicator);
+        const { datasets, indicator } = await this.populateIndicatorFromMetadata(partialIndicator);
         this.updateState({ indicator, datasets, loading: false });
     }
 
-    async populateIndicatorFromMetadata (indicator) {
+    async populateIndicatorFromMetadata ({ ds, id }) {
         const datasets = [];
-        if (indicator.id && indicator.ds) {
+        let indicator = { ds, id };
+        if (id && ds) {
             try {
-                const { selectors, regionsets, name, description, source } = await getIndicatorMetadata(indicator.ds, indicator.id);
-                indicator.name = name;
-                indicator.description = description;
-                indicator.source = source;
-                selectors.forEach(sel => regionsets.forEach(regionset => sel.allowedValues.forEach(val => datasets.push({ [sel.id]: val.id, regionset }))));
+                const { selectors, regionsets, ...fromMeta } = await getIndicatorMetadata(ds, id);
+                indicator = { ...indicator, ...fromMeta };
+                // create dataset for every value and regionset compination like {year: 2024, regionset: 2036}
+                selectors.forEach(({ values, id }) => regionsets.forEach(regionset => values.forEach(({ value }) => datasets.push({ [id]: value, regionset }))));
             } catch (error) {
                 Messaging.error(Oskari.getMsg('StatsGrid', 'errors.indicatorMetadataError'));
             }
         }
-        return datasets;
+        return { datasets, indicator };
     }
 
-    // TODO: is this needed?
-    async getIndicatorDatasets (indicator) {
-        try {
-            const { selectors, regionsets, name, source, description } = await getIndicatorMetadata(indicator.ds, indicator.id);
-            const datasets = [];
-            // create dataset for every value and regionset compination like {year: 2024, regionset: 2036}
-            selectors.forEach(s => s.values.forEach(valObj => regionsets.forEach(regionset => datasets.push({ [s.id]: valObj.value, regionset }))));
-            this.updateState({ datasets, indicator: { ...indicator, name, source, description } });
-        } catch (error) {
-            Messaging.error(Oskari.getMsg('StatsGrid', 'errors.indicatorMetadataError'));
+    getFullIndicator (optSelection) {
+        const { indicator, selection } = this.getState();
+        const selections = { [SELECTOR]: optSelection || selection };
+        const full = { ...indicator, selections };
+        if (full.id) {
+            full.hash = getHashForIndicator(full);
         }
+        return full;
     }
 
     updateIndicator (key, value) {
@@ -115,14 +111,14 @@ class IndicatorFormController extends StateHandler {
 
     async showDataTable () {
         this.updateState({ loading: true, showDataTable: true });
-        const { indicator, regionset, selection } = this.getState();
-        const selections = { [SELECTOR]: selection };
+        const indicator = this.getFullIndicator();
+        const { regionset } = this.getState();
         try {
             const regions = await getRegionsAsync(regionset);
             let data = {};
             if (indicator.id) {
                 try {
-                    data = await getIndicatorData({ ...indicator, selections }, regionset);
+                    data = await getIndicatorData(indicator, regionset);
                 } catch (e) {
                     // no data saved for selections
                 }
@@ -139,7 +135,6 @@ class IndicatorFormController extends StateHandler {
     }
 
     closeDataTable () {
-        // TODO: selection, regionset??
         this.updateState({
             loading: false,
             showDataTable: false,
@@ -148,13 +143,17 @@ class IndicatorFormController extends StateHandler {
     }
 
     async saveIndicator () {
-        this.updateState({ loading: true });
         const { indicator } = this.getState();
+        if (typeof indicator.name !== 'string' || indicator.name.trim().length === 0) {
+            Messaging.warn(this.loc('userIndicators.validate.name'));
+            return;
+        }
+        this.updateState({ loading: true });
         try {
             const id = await saveIndicator(indicator);
             const updated = { ...indicator, id };
             this.updateState({ indicator: updated, loading: false });
-            this.notifyCacheUpdate(updated);
+            this.notifyCacheUpdate(updated, 'save');
             this.log.info(`Saved indicator with id: ${id}`, updated);
             Messaging.success(this.loc('userIndicators.success.indicatorSave'));
         } catch (error) {
@@ -166,13 +165,7 @@ class IndicatorFormController extends StateHandler {
     async saveData () {
         this.updateState({ loading: true });
         const { dataByRegions, regionset, selection } = this.getState();
-        const selections = { [SELECTOR]: selection };
-        const indicator = { ...this.getState().indicator, selections };
 
-        if (typeof indicator.name !== 'string' || indicator.name.trim().length === 0) {
-            Messaging.warn(this.loc('userIndicators.validate.name'));
-            return;
-        }
         const data = {};
         dataByRegions.forEach(({ key, value }) => {
             if (typeof value === 'undefined') {
@@ -189,36 +182,36 @@ class IndicatorFormController extends StateHandler {
             return;
         }
         try {
+            const indicator = this.getFullIndicator();
             await saveIndicatorData(indicator, data, regionset);
             const indicatorInfo = `Indicator: ${indicator.id}, selection: ${selection}, regionset: ${regionset}.`;
             this.log.info('Saved data form values', data, indicatorInfo);
             Messaging.success(this.loc('userIndicators.success.datasetSave'));
-            // add indicator only when data is saved
-            const dataset = { ...selections, regionset };
-            this.selectIndicator(dataset);
-
-            this.updateState({ datasets: [...this.getState().datasets, dataset] });
+            this.selectIndicator(selection, regionset);
+            this.preparePopupData(indicator);
             this.closeDataTable();
-            this.notifyCacheUpdate(indicator);
+            this.notifyCacheUpdate(indicator, 'data');
         } catch (error) {
-            this.updateSate({ loading: false });
+            this.updateState({ loading: false });
             Messaging.error(this.loc('userIndicators.error.datasetSave'));
         }
     }
 
-    notifyCacheUpdate (indicator) {
+    notifyCacheUpdate (indicator, operation) {
         this.instance.getSearchHandler()?.onCacheUpdate(indicator);
+        this.instance.getMyIndicatorsHandler()?.refreshIndicatorsList();
+        if (operation !== 'delete') {
+            this.instance.getStateHandler()?.onCacheUpdate(indicator, operation === 'data');
+        }
     }
 
-    selectIndicator (dataset) {
-        const selections = { [SELECTOR]: dataset[SELECTOR] };
-        const indicator = { ...this.getState().indicator, selections };
-        indicator.hash = getHashForIndicator(indicator);
-        this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, dataset.regionset);
-    }
-
-    selectSavedIndicator (indicator, regionset) {
-        this.instance.getStateHandler()?.getController().selectSavedIndicator(indicator, regionset);
+    async selectIndicator (selection, regionset) {
+        const indicator = this.getFullIndicator(selection);
+        const handler = this.instance.getStateHandler();
+        const { success } = await handler?.addIndicator(indicator, regionset) || {};
+        if (success) {
+            handler?.setActiveIndicator(indicator.hash);
+        }
     }
 
     importFromClipboard (data) {
@@ -261,12 +254,12 @@ class IndicatorFormController extends StateHandler {
     async deleteDataset (item = {}) {
         const selection = item[SELECTOR];
         if (!selection) {
-            // without selection deletes all datasets
+            // should always have selection
+            // without selection deleteIndicator removes all datasets
+            Messaging.error(this.loc('userIndicators.error.datasetDelete'));
             return;
         }
-        const selections = { [SELECTOR]: selection };
-        const indicator = { ...this.getState().indicator, selections };
-        indicator.hash = getHashForIndicator(indicator);
+        const indicator = this.getFullIndicator(selection);
         const handler = this.instance.getStateHandler();
         if (handler?.isIndicatorSelected(indicator, true)) {
             handler.getController().removeIndicator(indicator);
@@ -278,7 +271,7 @@ class IndicatorFormController extends StateHandler {
             Messaging.error(this.loc('userIndicators.error.datasetDelete'));
         }
         this.preparePopupData(indicator);
-        this.notifyCacheUpdate(indicator);
+        this.notifyCacheUpdate(indicator, 'delete');
     }
 }
 
