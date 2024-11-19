@@ -13,10 +13,12 @@ const Content = styled('div')`
     margin-top: 10px;
 `;
 const StyledSelect = styled(Select)`
-    max-width: 200px;
+    width: 200px;
+    margin-right: 10px;
 `;
 const YearField = styled(TextInput)`
     width: 100px;
+    margin-right: 10px;
 `;
 
 export const StatisticalInfo = ({ state, controller }) => {
