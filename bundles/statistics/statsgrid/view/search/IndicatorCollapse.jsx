@@ -38,7 +38,7 @@ const PanelExtra = ({ indicators = [], removeAll }) => {
         <div onClick={e => e.stopPropagation()}>
             <RemoveAll
                 type='delete'
-                confirmTitle={<Message messageKey='indicatorList.removeAll' />}
+                confirm={{ title: <Message messageKey='indicatorList.removeAll' /> }}
                 title={<Message messageKey='indicatorList.removeAll' />}
                 onConfirm={() => removeAll()}/>
         </div>
