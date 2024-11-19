@@ -70,8 +70,8 @@ const SearchFlyout = ({ state, controller }) => {
     const singleIndicatorSelected = state.selectedIndicators.length === 1;
     const multipleRegionsetsAvailable = regionsets.length > 1;
     const multipleDatasourcesAvailable = datasources.length > 1;
-    const Component = (
-        <React.Fragment>
+    return (
+        <Spin showTip spinning={state.loading}>
             <Field>
                 <b><Message messageKey='panels.newSearch.seriesTitle' /></b>
                 <ClickableArea>
@@ -146,12 +146,8 @@ const SearchFlyout = ({ state, controller }) => {
                     onClick={() => controller.search()}
                 />
             </ButtonContainer>
-        </React.Fragment>
+        </Spin>
     );
-    if (state.loading) {
-        return <Spin showTip={true}>{Component}</Spin>;
-    }
-    return Component;
 };
 SearchFlyout.propTypes = {
     state: PropTypes.object.isRequired,

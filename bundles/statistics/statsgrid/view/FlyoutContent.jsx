@@ -17,17 +17,15 @@ export const FlyoutContent = ({ state, children }) => {
     const { indicators, activeIndicator, loading } = state;
     const current = indicators.find(ind => ind.hash === activeIndicator);
 
-    const Component = (
+    return (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <Content>
-                {current ? children : <Message messageKey='statsgrid.noResults' />}
-            </Content>
+            <Spin showTip spinning={loading}>
+                <Content>
+                    {current ? children : <Message messageKey='statsgrid.noResults' />}
+                </Content>
+            </Spin>
         </LocaleProvider>
     );
-    if (loading) {
-        return <Spin showTip={true}>{Component}</Spin>;
-    }
-    return Component;
 };
 
 FlyoutContent.propTypes = {
