@@ -55,15 +55,18 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, f
             return fallback;
         }
     }
-
+    const injectedProps = {};
+    if (Oskari.isMsgDebugMode()) {
+        injectedProps.onClick = () => Oskari.log('Message').debug(`Text clicked - ${bundleKey}: ${messageKey}`);
+    }
     if (allowHTML) {
-        return (<LabelComponent dangerouslySetInnerHTML={{ __html: message }}></LabelComponent>);
+        return (<LabelComponent dangerouslySetInnerHTML={{ __html: message }} { ...injectedProps }></LabelComponent>);
     }
 
     return (
         <LabelComponent
             allowTextEllipsis={allowTextEllipsis}
-            onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
+            { ...injectedProps }>
             { message } { children }
         </LabelComponent>
     );
@@ -86,7 +89,7 @@ function getMessageUsingOskariGlobal (bundleKey, messageKey, messageArgs) {
         return Oskari.getMsg(bundleKey, messageKey, messageArgs);
     } catch (e) {
         // no locale provider OR bundleKey missing from locale provider
-        Oskari.log().warn(`Message tag used without LocaleProvider or bundleKey not provided when getting: ${messageKey}. Original error: ${e.message}`);
+        Oskari.log('Message').warn(`Message tag used without LocaleProvider or bundleKey not provided when getting: ${messageKey}. Original error: ${e.message}`);
     }
     return messageKey;
 }
