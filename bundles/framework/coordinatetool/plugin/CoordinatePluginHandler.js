@@ -1,7 +1,7 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showCoordinatePopup } from './CoordinatePopup';
 import { PLACEMENTS } from 'oskari-ui/components/window';
-import { getTransformedCoordinates, transformCoordinates, formatDegrees } from './helper';
+import { getTransformedCoordinates, transformCoordinates, isTransformAllowed } from './helper';
 
 class UIHandler extends StateHandler {
     constructor (plugin, mapModule, config) {
@@ -18,7 +18,7 @@ class UIHandler extends StateHandler {
         );
         this.sandbox.registerService(coordinateToolService);
         this.service = coordinateToolService;
-        this.originalProjection = this.mapModule.getProjection();
+        this.mapProjection = this.mapModule.getProjection();
         this.isReverseGeoCode = this.config.isReverseGeocode;
         this.reverseGeocodingIds = this.config.reverseGeocodingIds?.split(',');
         this.setState({
@@ -27,7 +27,7 @@ class UIHandler extends StateHandler {
             lonField: '',
             loading: false,
             showMouseCoordinates: false,
-            selectedProjection: this.originalProjection,
+            selectedProjection: this.mapProjection,
             emergencyInfo: null,
             reverseGeocodeNotImplementedError: false,
             reverseGeoCode: [],
@@ -37,7 +37,6 @@ class UIHandler extends StateHandler {
         this.popupControls = null;
         this.eventHandlers = this.createEventHandlers();
         this.decimalSeparator = Oskari.getDecimalSeparator();
-        this.preciseTransform = Array.isArray(this.config.supportedProjections);
         this.popupListeners = [];
         this.addStateListener(() => this.updatePopup());
     };
@@ -96,8 +95,46 @@ class UIHandler extends StateHandler {
         });
     }
 
+    isTransformAllowed () {
+        if (typeof this.__transformAllowed !== 'undefined') {
+            return this.__transformAllowed;
+        }
+        const { supportedProjections } = this.config;
+        this.__transformAllowed = isTransformAllowed(supportedProjections);
+        return this.__transformAllowed;
+    }
+
+    // prefer proj specific and default to global format
+    getProjectionShowFormat (selectedProj = this.state.selectedProjection) {
+        const projection = selectedProj || this.mapProjection;
+        const projConfig = this.config?.projectionShowFormat?.[projection] || {};
+        const globalFormat = this.config?.projectionShowFormat?.format;
+        return projConfig.format || globalFormat;
+    }
+
+    // prefer proj specific, global format, deprecated conf and default to mapmodule logic
+    getProjectionDecimals (selectedProj = this.state.selectedProjection) {
+        const projection = selectedProj || this.mapProjection;
+        const conf = this.config;
+        const projConfig = conf?.projectionShowFormat?.[projection] || {};
+        const globalFormat = conf?.projectionShowFormat?.decimals;
+        const decimalCount = projConfig.decimals || globalFormat;
+        if (typeof decimalCount === 'number' && decimalCount >= 0) {
+            return decimalCount;
+        }
+        const deprecatedConf = conf?.roundToDecimals;
+        if (deprecatedConf) {
+            Oskari.log('coordinatetool').warn('Deprecated coordinatetool.conf.roundToDecimals - please use coordinatetool.conf.projectionShowFormat.decimals or ' +
+                'coordinatetool.conf.projectionShowFormat["projection"].decimals instead.');
+            if (typeof deprecatedConf === 'number' && deprecatedConf >= 0) {
+                return conf.roundToDecimals;
+            }
+        }
+        return this.mapModule.getProjectionDecimals(projection);
+    }
+
     async useUserDefinedCoordinates () {
-        let data = {
+        const data = {
             lonlat: {
                 lon: this.formatNumber(this.state.lonField, '.'),
                 lat: this.formatNumber(this.state.latField, '.')
@@ -105,30 +142,23 @@ class UIHandler extends StateHandler {
         };
 
         // Check if format should be degrees and add '°' symbol if needed
-        let isDegrees = false;
-        if (this.config.projectionShowFormat[this.state.selectedProjection]) {
-            isDegrees = this.config.projectionShowFormat[this.state.selectedProjection].format === 'degrees';
-        } else {
-            isDegrees = this.config.projectionShowFormat.format === 'degrees';
-        }
+        const isDegrees = this.getProjectionShowFormat() === 'degrees';
         if (isDegrees) {
             if (data.lonlat.lon.indexOf('°') < 0) data.lonlat.lon = data.lonlat.lon + '°';
             if (data.lonlat.lat.indexOf('°') < 0) data.lonlat.lat = data.lonlat.lat + '°';
         }
 
-        const converted = await this.convertCoordinates(data, this.state.selectedProjection, this.originalProjection);
+        const converted = await this.convertCoordinates(data, this.state.selectedProjection, this.mapProjection);
         this.updateLonLat(converted, true, true, true);
     }
 
     coordinatesToMetric (data) {
         const converted = Oskari.util.coordinateDegreesToMetric([data.lonlat?.lon, data.lonlat?.lat], 10);
-        const lon = converted[0];
-        const lat = converted[1];
 
         return {
-            'lonlat': {
-                'lon': lon,
-                'lat': lat
+            lonlat: {
+                lon: converted[0],
+                lat: converted[1]
             }
         };
     }
@@ -158,7 +188,7 @@ class UIHandler extends StateHandler {
     }
 
     async convertCoordinates (data, fromProjection, toProjection) {
-        if (this.preciseTransform && this.state.selectedProjection !== this.originalProjection) {
+        if (this.isTransformAllowed() && this.state.selectedProjection !== this.mapProjection) {
             if (Oskari.util.coordinateIsDegrees([data.lonlat?.lon, data.lonlat?.lat])) {
                 data = this.coordinatesToMetric(data);
             }
@@ -192,25 +222,25 @@ class UIHandler extends StateHandler {
         let fromServer = false;
 
         if (getDataFromServer) {
-            data = await this.convertCoordinates(data, this.originalProjection, this.state.selectedProjection);
+            data = await this.convertCoordinates(data, this.mapProjection, this.state.selectedProjection);
             fromServer = true;
-        } else if (this.preciseTransform && (this.state.selectedProjection !== this.originalProjection)) {
+        } else if (this.isTransformAllowed() && (this.state.selectedProjection !== this.mapProjection)) {
             try {
-                data = transformCoordinates(this.mapModule, data, this.originalProjection, this.state.selectedProjection);
+                data = transformCoordinates(this.mapModule, data, this.mapProjection, this.state.selectedProjection);
             } catch (e) {
-                data = await this.convertCoordinates(data, this.originalProjection, this.state.selectedProjection);
+                data = await this.convertCoordinates(data, this.mapProjection, this.state.selectedProjection);
             }
         }
 
         const isSupported = !!((this.config && Array.isArray(this.config.supportedProjections)));
-        const isDifferentProjection = !!((this.state.selectedProjection !== this.originalProjection &&
+        const isDifferentProjection = !!((this.state.selectedProjection !== this.mapProjection &&
             data?.lonlat?.lat !== 0 && data?.lonlat?.lon !== 0));
 
         let lat = parseFloat(data?.lonlat?.lat);
         let lon = parseFloat(data?.lonlat?.lon);
 
         // Need to show degrees ?
-        if (this.allowDegrees() && !isNaN(lat) && !isNaN(lon)) {
+        if (this.isCurrentUnitDegrees() && !isNaN(lat) && !isNaN(lon)) {
             const degreePoint = Oskari.util.coordinateMetricToDegrees([lon, lat], this.getProjectionDecimals());
             lon = degreePoint[0];
             lat = degreePoint[1];
@@ -241,15 +271,11 @@ class UIHandler extends StateHandler {
         if (this.popupControls) {
             this.popupCleanup();
         } else {
-            const crsText = this.loc('display.crs')[this.state.selectedProjection] || this.loc('display.crs.default', { crs: this.state.selectedProjection });
             this.popupControls = showCoordinatePopup(
                 this.getState(),
                 this.getController(),
                 this.popupLocation(),
                 this.config?.supportedProjections,
-                this.preciseTransform,
-                crsText,
-                this.decimalSeparator,
                 this.reverseGeocodingIds?.length > 2,
                 () => this.popupCleanup()
             );
@@ -260,7 +286,7 @@ class UIHandler extends StateHandler {
 
     centerMap (coordinates) {
         try {
-            let data = coordinates || this.state.xy;
+            const data = coordinates || this.state.xy;
             this.centerMapToSelectedCoordinates(data);
         } catch (e) {
             Messaging.error(this.loc('display.checkValuesDialog.message'));
@@ -280,14 +306,14 @@ class UIHandler extends StateHandler {
         this.centerMap();
         const data = this.state.xy || this.getMapXY();
         const displayData = { lonlat: { lon: this.state.lonField, lat: this.state.latField } } || this.getMapXY();
-        let lat = displayData?.lonlat?.lat || data?.lonlat?.lat;
-        let lon = displayData?.lonlat?.lon || data?.lonlat?.lon;
+        const lat = displayData?.lonlat?.lat || data?.lonlat?.lat;
+        const lon = displayData?.lonlat?.lon || data?.lonlat?.lon;
         try {
             let msg = null;
-            if (Oskari.util.coordinateIsDegrees([lon, lat]) && this.allowDegrees()) {
+            if (Oskari.util.coordinateIsDegrees([lon, lat]) && this.isCurrentUnitDegrees()) {
                 msg = {
-                    lat: lat,
-                    lon: lon
+                    lat,
+                    lon
                 };
             } else {
                 msg = {
@@ -306,16 +332,16 @@ class UIHandler extends StateHandler {
         let lat = parseFloat(data.lonlat.lat);
         let lon = parseFloat(data.lonlat.lon);
         const inputLonLatData = {
-            'lonlat': {
-                'lat': lat,
-                'lon': lon
+            lonlat: {
+                lat,
+                lon
             }
         };
 
         // Check at data is given. If data is given then use for it.
         // If not then use input data's and try change data to map projection and use it to place marker
         try {
-            data = data || transformCoordinates(this.mapModule, inputLonLatData, this.state.selectedProjection, this.originalProjection);
+            data = data || transformCoordinates(this.mapModule, inputLonLatData, this.state.selectedProjection, this.mapProjection);
         } catch (err) {
             // Cannot transform coordinates in transformCoordinates -function
             Messaging.error(this.loc('cannotTransformCoordinates.message'));
@@ -336,7 +362,7 @@ class UIHandler extends StateHandler {
             const marker = {
                 x: data.lonlat.lon,
                 y: data.lonlat.lat,
-                msg: msg,
+                msg,
                 size: 5,
                 color: 'ee9900',
                 shape: 2
@@ -348,9 +374,9 @@ class UIHandler extends StateHandler {
     getMapXY () {
         const map = this.sandbox.getMap();
         const data = {
-            'lonlat': {
-                'lat': parseFloat(map.getY()),
-                'lon': parseFloat(map.getX())
+            lonlat: {
+                lat: parseFloat(map.getY()),
+                lon: parseFloat(map.getX())
             }
         };
         return data;
@@ -365,71 +391,23 @@ class UIHandler extends StateHandler {
         return coordinate;
     }
 
-    showDegrees () {
-        const projection = this.state.selectedProjection || this.originalProjection;
-        let showDegrees = (this.mapModule.getProjectionUnits() === 'degrees');
-        const projFormats = this.config.projectionShowFormat || {};
-        const formatDef = projFormats[projection];
-
-        if (formatDef) {
-            showDegrees = (formatDef.format === 'degrees');
-        }
-        return showDegrees;
-    }
-
-    allowDegrees (checkedProjection) {
-        const selectedProjection = this.state.selectedProjection ? this.state.selectedProjection : this.originalProjection;
-        const projection = checkedProjection || selectedProjection;
-
-        const isProjectionShowConfig = !!((this.config.projectionShowFormat && this.config.projectionShowFormat[projection] && this.config.projectionShowFormat[projection].format));
-        let isDegrees = !!(((isProjectionShowConfig && this.config.projectionShowFormat[projection].format === 'degrees') || this.mapModule.getProjectionUnits() === 'degrees'));
-
-        const isAllProjectionConfig = !!((this.config.projectionShowFormat && typeof this.config.projectionShowFormat.format === 'string'));
-        if (!isProjectionShowConfig && isAllProjectionConfig) {
-            isDegrees = (this.config.projectionShowFormat.format === 'degrees');
-        }
-        return isDegrees;
-    }
-
-    formatDegrees (lon, lat, type) {
-        return formatDegrees(lon, lat, type);
-    }
-
-    getProjectionDecimals (checkedProjection) {
-        const conf = this.config;
-        const selectedProjection = this.state.selectedProjection ? this.state.selectedProjection : this.originalProjection;
-        const projection = checkedProjection || selectedProjection;
-        const isProjectionShowConfig = !!((conf.projectionShowFormat && conf.projectionShowFormat[projection] && typeof conf.projectionShowFormat[projection].decimals === 'number'));
-
-        let decimals = (isProjectionShowConfig) ? conf.projectionShowFormat[projection].decimals : this.mapModule.getProjectionDecimals(selectedProjection);
-
-        const isAllProjectionConfig = !!((conf.projectionShowFormat && typeof conf.projectionShowFormat.decimals === 'number'));
-
-        if (!isProjectionShowConfig && isAllProjectionConfig) {
-            decimals = conf.projectionShowFormat.decimals;
-        } else if (!isProjectionShowConfig && conf.roundToDecimals) {
-            decimals = conf.roundToDecimals;
-            this.sandbox.printWarn('Deprecated coordinatetool.conf.roundToDecimals - please use coordinatetool.conf.projectionShowFormat.decimals or ' +
-                'coordinatetool.conf.projectionShowFormat["projection"].decimals instead.');
-        }
-        return decimals;
-    }
-
-    markersSupported () {
-        const builder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
-        return !!builder;
+    isCurrentUnitDegrees () {
+        const projection = this.state.selectedProjection || this.mapProjection;
+        const formatDef = this.getProjectionShowFormat(projection);
+        const defaultedToMapmodule = formatDef || this.mapModule.getProjectionUnits();
+        return defaultedToMapmodule === 'degrees';
     }
 
     async getTransformedCoordinatesFromServer (data, fromProjection, toProjection) {
         this.setLoading(true);
         data = data || this.getMapXY();
         try {
-            const response = await getTransformedCoordinates(this.originalProjection, data, fromProjection, toProjection);
+            const response = await getTransformedCoordinates(this.mapProjection, data, fromProjection, toProjection);
             if (response?.lat && response?.lon) {
                 const newData = {
-                    'lonlat': {
-                        'lon': response.lon,
-                        'lat': response.lat
+                    lonlat: {
+                        lon: response.lon,
+                        lat: response.lat
                     }
                 };
                 this.setLoading(false);
@@ -456,7 +434,7 @@ class UIHandler extends StateHandler {
             data = this.getMapXY();
         }
 
-        let reverseGeoCode = [];
+        const reverseGeoCode = [];
 
         service.getReverseGeocode(
             // Success callback
@@ -472,12 +450,12 @@ class UIHandler extends StateHandler {
                             title = r.type;
                         }
                         reverseGeoCode.push({
-                            title: title,
+                            title,
                             name: r.name
                         });
                     }
                     this.updateState({
-                        reverseGeoCode: reverseGeoCode
+                        reverseGeoCode
                     });
                 } else {
                     this.updateState({
@@ -512,21 +490,21 @@ class UIHandler extends StateHandler {
 
     async getEmergencyCallCoordinatesFromServer (data) {
         // get the transform from current data
-        const sourceProjection = this.originalProjection;
+        const sourceProjection = this.mapProjection;
 
         // If coordinates are not  EPSG:4326 then
         // need to get 'EPSG:4326' coordinates from service
         if (sourceProjection !== 'EPSG:4326') {
             try {
-                const response = await getTransformedCoordinates(this.originalProjection, data, sourceProjection, 'EPSG:4326');
+                const response = await getTransformedCoordinates(this.mapProjection, data, sourceProjection, 'EPSG:4326');
                 if (response?.lat && response?.lon) {
                     const newData = {
-                        'lonlat': {
-                            'lon': response.lon,
-                            'lat': response.lat
+                        lonlat: {
+                            lon: response.lon,
+                            lat: response.lat
                         }
                     };
-                    return this.formatEmergencyCallMessage(newData);
+                    return this.simplifyEmergencyData(newData);
                 }
             } catch (e) {
                 Messaging.error(this.loc('display.cannotTransformCoordinates.message'));
@@ -534,50 +512,41 @@ class UIHandler extends StateHandler {
         }
         // Else if coordinates are from 'EPSG:4326' then use these
         else {
-            return this.formatEmergencyCallMessage(data);
+            return this.simplifyEmergencyData(data);
         }
     }
 
     async getEmergencyCallInfo (data) {
-        const xy = data || this.getMapXY();
-
+        if (!this.config.showEmergencyCallMessage) {
+            return;
+        }
         // update emergency if configured
-        if (this.config.showEmergencyCallMessage) {
-            // already in degrees, don't fetch again
-            if (this.allowDegrees() && this.originalProjection === 'EPSG:4326') {
-                this.updateState({
-                    emergencyInfo: this.formatEmergencyCallMessage({
-                        'lonlat': {
-                            'lon': xy.lonlat.lon,
-                            'lat': xy.lonlat.lat
-                        }
-                    })
-                });
-            } else {
-                await this.getEmergencyCallCoordinatesFromServer(data)
-                    .then(emergencyData => {
-                        this.updateState({
-                            emergencyInfo: emergencyData
-                        });
+        const xy = data || this.getMapXY();
+        // already in degrees, don't fetch again
+        if (this.isCurrentUnitDegrees() && this.mapProjection === 'EPSG:4326') {
+            this.updateState({
+                emergencyInfo: this.simplifyEmergencyData({
+                    lonlat: {
+                        lon: xy.lonlat.lon,
+                        lat: xy.lonlat.lat
+                    }
+                })
+            });
+        } else {
+            await this.getEmergencyCallCoordinatesFromServer(data)
+                .then(emergencyData => {
+                    this.updateState({
+                        emergencyInfo: emergencyData
                     });
-            }
+                });
         }
     }
 
-    formatEmergencyCallMessage (data) {
-        const degmin = formatDegrees(data.lonlat.lon, data.lonlat.lat, 'min');
-
-        let minutesX = '' + parseFloat(degmin.minutesX.replace(this.decimalSeparator, '.')).toFixed(3);
-        minutesX = minutesX.replace('.', this.decimalSeparator);
-
-        let minutesY = '' + parseFloat(degmin.minutesY.replace(this.decimalSeparator, '.')).toFixed(3);
-        minutesY = minutesY.replace('.', this.decimalSeparator);
-
+    // just simplifying the object
+    simplifyEmergencyData (data) {
         return {
-            degreesX: this.loc('display.compass.i') + ' ' + degmin.degreesX,
-            degreesY: this.loc('display.compass.p') + ' ' + degmin.degreesY,
-            minutesX,
-            minutesY
+            lon: data.lonlat.lon,
+            lat: data.lonlat.lat
         };
     }
 
@@ -590,9 +559,9 @@ class UIHandler extends StateHandler {
             MouseHoverEvent: function (event) {
                 if (this.state.showMouseCoordinates && !this.state.loading) {
                     const data = {
-                        'lonlat': {
-                            'lat': parseFloat(event.getLat()),
-                            'lon': parseFloat(event.getLon())
+                        lonlat: {
+                            lat: parseFloat(event.getLat()),
+                            lon: parseFloat(event.getLon())
                         }
                     };
                     if (event.isPaused()) {
@@ -620,9 +589,9 @@ class UIHandler extends StateHandler {
                 if (!this.popupControls) return;
                 const lonlat = event.getLonLat();
                 const data = {
-                    'lonlat': {
-                        'lat': parseFloat(lonlat.lat),
-                        'lon': parseFloat(lonlat.lon)
+                    lonlat: {
+                        lat: parseFloat(lonlat.lat),
+                        lon: parseFloat(lonlat.lon)
                     }
                 };
                 if (!this.showMouseCoordinates) {
@@ -635,7 +604,7 @@ class UIHandler extends StateHandler {
     }
 
     onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
+        const handler = this.eventHandlers[e.getName()];
         if (!handler) {
             return;
         }
@@ -646,17 +615,14 @@ class UIHandler extends StateHandler {
 
 const wrapped = controllerMixin(UIHandler, [
     'toggleMouseCoordinates',
-    'showDegrees',
+    'isCurrentUnitDegrees',
     'showPopup',
-    'markersSupported',
     'setMarker',
     'centerMap',
     'setLonInputValue',
     'setLatInputValue',
     'setLoading',
     'setSelectedProjection',
-    'allowDegrees',
-    'formatDegrees',
     'toggleReverseGeoCode',
     'useUserDefinedCoordinates',
     'isMapCentered',
