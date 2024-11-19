@@ -155,7 +155,7 @@ class UIHandler extends AsyncStateHandler {
     }
 
     onSearchChange (state) {
-        const { search, metadata} = this.controls;
+        const { search, metadata } = this.controls;
         if (search) {
             search.update(state, this.stateHandler.getState().indicators);
         }
@@ -227,7 +227,7 @@ class UIHandler extends AsyncStateHandler {
         this.controls.metadata = showMedataPopup(indicators, () => this.close('metadata'));
     }
 
-    show (id) { // TODO: use optional options/params??
+    show (id) {
         if (!id || this.controls[id]) {
             // already shown, do nothing
             return;
