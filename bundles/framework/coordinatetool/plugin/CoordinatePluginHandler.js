@@ -1,7 +1,7 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showCoordinatePopup } from './CoordinatePopup';
 import { PLACEMENTS } from 'oskari-ui/components/window';
-import { getTransformedCoordinates, transformCoordinates, formatDegrees, isTransformAllowed } from './helper';
+import { getTransformedCoordinates, transformCoordinates, isTransformAllowed } from './helper';
 
 class UIHandler extends StateHandler {
     constructor (plugin, mapModule, config) {
