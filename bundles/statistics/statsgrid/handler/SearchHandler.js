@@ -23,7 +23,7 @@ class SearchController extends AsyncStateHandler {
         const ds = getDatasources().length === 1 ? getDatasources()[0] : null;
         if (ds && !isReset) {
             // prepopulate indicator options
-            setTimeout(() => this.fetchindicatorOptions(ds.id), 10000);
+            setTimeout(() => this.fetchIndicatorOptions(ds.id), 10000);
         }
         return {
             searchTimeseries: false,
@@ -47,7 +47,7 @@ class SearchController extends AsyncStateHandler {
     async populateForm (indicator) {
         const { id, ds } = indicator;
         this.updateState({ selectedDatasource: ds });
-        await this.fetchindicatorOptions();
+        await this.fetchIndicatorOptions();
         const indicators = id ? [id] : [];
         this.setSelectedIndicators(indicators);
     }
@@ -55,14 +55,14 @@ class SearchController extends AsyncStateHandler {
     onCacheUpdate (indicator = {}) {
         const { selectedDatasource, selectedIndicators } = this.getState();
         if (selectedDatasource === indicator.ds) {
-            this.fetchindicatorOptions();
+            this.fetchIndicatorOptions();
         }
         if (selectedIndicators.includes(indicator.id)) {
-            this.fetchIndicatorParams();
+            this.fetchIndicatorParamOptions();
         }
     }
 
-    async fetchindicatorOptions () {
+    async fetchIndicatorOptions () {
         const { selectedDatasource, isUserDatasource } = this.getState();
         if (!selectedDatasource) {
             return;
@@ -169,16 +169,19 @@ class SearchController extends AsyncStateHandler {
             indicatorParams: {},
             selectedRegionset: null
         });
-        this.fetchindicatorOptions();
+        this.fetchIndicatorOptions();
     }
 
     setSelectedIndicators (selectedIndicators) {
         this.updateState({ selectedIndicators });
-        if (!selectedIndicators.length) {
+        this.fetchIndicatorParamOptions();
+    }
+
+    fetchIndicatorParamOptions () {
+        const { selectedIndicators } = this.getState();
+        if (selectedIndicators.length === 0) {
             this.updateState({ indicatorParams: {}, selectedRegionset: null });
-            return;
-        }
-        if (selectedIndicators.length > 1) {
+        } else if (selectedIndicators.length > 1) {
             this.handleMultipleIndicatorParams(selectedIndicators);
         } else {
             this.handleSingleIndicatorParams(selectedIndicators[0]);
