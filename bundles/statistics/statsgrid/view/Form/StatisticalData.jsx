@@ -8,9 +8,15 @@ const StyledTable = styled(Table)`
     max-height: 475px;
     overflow-y: auto;
 `;
+const Space = styled.div`
+    height: 80px;
+`;
 
 export const StatisticalData = ({ state, controller }) => {
-    const { regionset, dataByRegions } = state;
+    const { regionset, dataByRegions, loading } = state;
+    if (loading) {
+        return <Space/>;
+    }
     if (!regionset || !dataByRegions.length) {
         return <Message messageKey='errors.regionsetsIsEmpty' />;
     }
