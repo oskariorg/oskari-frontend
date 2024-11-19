@@ -278,7 +278,7 @@ Oskari.registerLocalization({
             'error': {
                 'indicatorSave': 'Indikaattorin tallennus epäonnistui',
                 'indicatorDelete': 'Indikaattorin poisto epäonnistui',
-                'IndicatorNotfound': 'Indikaattoria ei löytynyt',
+                'indicatorNotfound': 'Indikaattoria ei löytynyt',
                 'datasetSave': 'Virhe tallennetaessa aineistoa',
                 'datasetDelete': 'Virhe poistaessa aineistoa'
             },

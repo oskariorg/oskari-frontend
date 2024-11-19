@@ -259,7 +259,7 @@ Oskari.registerLocalization(
             "error": {
                 "indicatorSave": "Erreur lors de l'enregistrement de l'indicateur",
                 "indicatorDelete": "L'indicateur n'a pas été supprimé",
-                "IndicatorNotfound": "Impossible de trouver l'indicateur",
+                "indicatorNotfound": "Impossible de trouver l'indicateur",
                 "datasetSave": "Erreur lors de l'enregistrement du jeu de données",
                 "datasetDelete": "Erreur lors de la suppression du jeu de données"
             },

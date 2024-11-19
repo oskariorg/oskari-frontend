@@ -258,7 +258,7 @@ Oskari.registerLocalization(
             "error": {
                 "indicatorSave": "Индикатор сохранения ошибок",
                 "indicatorDelete": "Индикатор не был удален.",
-                "IndicatorNotfound": "Индикатор не найден.",
+                "indicatorNotfound": "Индикатор не найден.",
                 "datasetSave": "Ошибка сохранения набора данных.",
                 "datasetDelete": "Ошибка удаления набора данных."
             },
