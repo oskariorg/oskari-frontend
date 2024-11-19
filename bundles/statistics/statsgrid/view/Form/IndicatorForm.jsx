@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, Button } from 'oskari-ui';
+import { Message, Button, Spin } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import { PrimaryButton, SecondaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { showPopup } from 'oskari-ui/components/window';
@@ -16,11 +16,11 @@ const Content = styled('div')`
     display: flex;
     flex-direction: column;
     padding: 20px;
-    min-width: 365px;
+    min-width: 460px;
 `;
 
 const Warning = styled.div`
-    width: 350px;
+    width: 420px;
     font-style: italic;
     margin-top: 10px;
 `;
@@ -40,31 +40,33 @@ const Title = ({ indicator, showDataTable, regionset, selection }) => {
 };
 Title.propTypes = {
     indicator: PropTypes.object.isRequired,
-    regionset: PropTypes.number.isRequired,
-    showDataTable: PropTypes.func.isRequired,
+    regionset: PropTypes.number,
+    showDataTable: PropTypes.bool.isRequired,
     selection: PropTypes.any.isRequired
 };
 
 const IndicatorForm = ({ state, controller, onClose }) => {
-    const { showDataTable, indicator } = state;
+    const { showDataTable, indicator, loading } = state;
     const showWarning = !showDataTable && !indicator.id && !Oskari.user().isLoggedIn();
     const Component = showDataTable ? StatisticalData : IndicatorCollapse;
     const onSave = () => showDataTable ? controller.saveData() : controller.saveIndicator();
     const onCancel = () => showDataTable ? controller.closeDataTable() : onClose();
     return (
-        <Content>
-            <Component state={state} controller={controller}/>
-            {showWarning && (<Warning><Message messageKey='userIndicators.notLoggedInWarning'/></Warning>)}
-            <ButtonContainer>
-                <SecondaryButton type='cancel' onClick={onCancel}/>
-                {showDataTable && (
-                    <Button onClick={() => controller.showClipboardPopup()} >
-                        <Message messageKey='userIndicators.import.title' />
-                    </Button>
-                )}
-                <PrimaryButton type='save' onClick={onSave}/>
-            </ButtonContainer>
-        </Content>
+        <Spin showTip spinning={loading}>
+            <Content>
+                <Component state={state} controller={controller}/>
+                {showWarning && (<Warning><Message messageKey='userIndicators.notLoggedInWarning'/></Warning>)}
+                <ButtonContainer>
+                    <SecondaryButton type='cancel' onClick={onCancel}/>
+                    {showDataTable && (
+                        <Button onClick={() => controller.showClipboardPopup()} >
+                            <Message messageKey='userIndicators.import.title' />
+                        </Button>
+                    )}
+                    <PrimaryButton type='save' onClick={onSave}/>
+                </ButtonContainer>
+            </Content>
+        </Spin>
     );
 };
 IndicatorForm.propTypes = {
