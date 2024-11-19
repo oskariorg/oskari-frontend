@@ -147,7 +147,7 @@ export const formatData = (data, classification) => {
 
 export const getUILabels = (ind, metadata) => {
     if (!metadata) {
-        return;
+        return {};
     }
     const { selections, series } = ind;
     const { name, selectors, source } = metadata;
@@ -163,16 +163,25 @@ export const getUILabels = (ind, metadata) => {
             paramsList.push({ id, value, label });
         }
     });
-    let selectorsFormatted = '(' + paramsList.map(l => l.label).join(' / ') + ')';
+    let selectorsFormatted = paramsList.length ? '(' + paramsList.map(l => l.label).join(' / ') + ')' : '';
     const range = series ? series.values[0] + ' - ' + series.values[series.values.length - 1] : '';
     if (range) {
         selectorsFormatted = range + ' ' + selectorsFormatted;
+    }
+    const max = 50;
+    const min = 20;
+    const full = name + ' ' + selectorsFormatted;
+    let short = '';
+    if (full.length > max) {
+        const end = Math.max(max - selectorsFormatted.length, min);
+        short = name.substring(0, end) + '... ' + selectorsFormatted;
     }
     return {
         indicator: name,
         source,
         params: selectorsFormatted,
-        full: name + ' ' + selectorsFormatted,
+        full,
+        short,
         paramsList,
         range
     };
