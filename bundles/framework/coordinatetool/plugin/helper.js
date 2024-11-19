@@ -112,3 +112,7 @@ export const formatDegrees = (lon, lat, type) => {
         };
     }
 };
+
+export const isTransformAllowed = (supportedProjections = []) => {
+    return Array.isArray(supportedProjections) && supportedProjections.length > 1;
+};
