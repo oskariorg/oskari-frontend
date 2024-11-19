@@ -83,8 +83,8 @@ Oskari.clazz.define(
             const myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
 
             if (myDataService) {
-                const indHandler = new MyIndicatorsHandler(this, formHandler, userDsId);
-                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, indHandler);
+                this.myIndicatorsHandler = new MyIndicatorsHandler(this, formHandler, userDsId);
+                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, this.myIndicatorsHandler);
             } else if (!appStarted) {
                 // Wait for the application to load all bundles and try again
                 Oskari.on('app.start', () => {
@@ -110,6 +110,9 @@ Oskari.clazz.define(
         },
         getSearchHandler: function () {
             return this.searchHandler;
+        },
+        getMyIndicatorsHandler: function () {
+            return this.myIndicatorsHandler;
         },
         removeDataProviverInfo: function (ind) {
             const service = this.getDataProviderInfoService();

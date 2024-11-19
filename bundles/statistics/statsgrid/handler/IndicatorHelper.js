@@ -13,7 +13,6 @@ const getDataCacheKey = (indicator, regionsetId) => {
     return 'hash_' + hash + '_rs_' + regionsetId;
 };
 const isRuntime = (indicator = {}) => typeof indicator.id === 'string' && indicator.id.startsWith(RUNTIME);
-
 // for guest user's own indicators
 const updateIndicatorMetadataInCache = (indicator, regionsetId) => {
     const { selections = {}, ...restToStore } = indicator;
@@ -52,12 +51,12 @@ const updateIndicatorMetadataInCache = (indicator, regionsetId) => {
             cachedSelectors.push(selector);
             return;
         }
-        selector.values.forEach(value => {
-            if (cached.values.some(v => v.id === value.id)) {
+        selector.values.forEach(val => {
+            if (cached.values.some(v => v.value === val.value)) {
                 // already added
                 return;
             }
-            cached.values.push(value);
+            cached.values.push(val);
         });
     });
 };
@@ -113,7 +112,7 @@ const processMetadata = (meta) => {
     const metaSelectors = meta.selectors || [];
     const selectors = [];
     metaSelectors.forEach(metaSelector => {
-        const { id, allowedValues, time = false } = metaSelector;
+        const { id, allowedValues = [], time = false } = metaSelector;
         const values = allowedValues.map(val => {
             // value or { name, id }
             const value = val.id || val;
@@ -122,6 +121,10 @@ const processMetadata = (meta) => {
             // use value, label to use as Select option
             return { value, label };
         });
+        if (!values.length) {
+            // don't add selector without values
+            return;
+        }
         const label = locParams[id] || id;
         const selector = { id, values, time, label };
         if (time) {
@@ -216,20 +219,21 @@ export const saveIndicator = async (indicator) => {
         return id;
     }
     // All keys used in Frontend doesn't match backend
+    const { id, ds, name, description = '', source = '' } = indicator;
     const body = {
-        datasource: indicator.ds,
-        name: indicator.name,
-        desc: indicator.description,
-        source: indicator.source
+        datasource: ds,
+        name,
+        desc: description,
+        source
     };
-    if (indicator.id) {
-        body.id = indicator.id;
+    if (id) {
+        body.id = id;
     }
     try {
         const response = await fetch(Oskari.urls.getRoute('SaveIndicator'), {
             method: 'POST',
             headers: {
-                'Accept': 'application/json'
+                Accept: 'application/json'
             },
             body: new URLSearchParams(body)
         });
@@ -238,7 +242,7 @@ export const saveIndicator = async (indicator) => {
         }
         const result = await response.json();
         // Flush cache as update is implemented only for quest user
-        removeIndicatorFromCache({ ds: indicator.ds });
+        removeIndicatorFromCache({ ds });
         return result.id;
     } catch (error) {
         throw new Error('Error saving data to server');
@@ -285,6 +289,9 @@ export const saveIndicatorData = async (indicator, data, regionsetId) => {
 };
 // selectors and regionset are optional -> will only delete dataset from indicator if given
 export const deleteIndicator = async (indicator, regionsetId) => {
+    if (!Oskari.user().isLoggedIn()) {
+        throw new Error('Guest user can not delete indicator');
+    }
     const flushDataCache = () => {
         // clearCacheOnDelete
         const cacheKey = getDataCacheKey(indicator, regionsetId);
@@ -301,12 +308,6 @@ export const deleteIndicator = async (indicator, regionsetId) => {
             });
         }
     };
-    if (!Oskari.user().isLoggedIn()) {
-        // just flush caches
-        flushDataCache();
-        removeIndicatorFromCache(indicator);
-        return;
-    }
     const data = {
         datasource: indicator.ds,
         id: indicator.id
@@ -321,7 +322,7 @@ export const deleteIndicator = async (indicator, regionsetId) => {
             method: 'POST',
             body: new URLSearchParams(data),
             headers: {
-                'Accept': 'application/json'
+                Accept: 'application/json'
             }
         });
         if (!response.ok) {
@@ -331,6 +332,7 @@ export const deleteIndicator = async (indicator, regionsetId) => {
         flushDataCache();
         // Flush caches as update is implemented only for quest user
         removeIndicatorFromCache({ ds: indicator.ds });
+        flushIndicatorMetadataCache(indicator);
     } catch (error) {
         throw new Error('Error on server');
     }

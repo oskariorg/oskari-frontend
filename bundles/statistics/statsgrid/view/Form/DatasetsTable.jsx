@@ -24,6 +24,7 @@ export const DatasetsTable = ({ state, controller }) => {
     if (!datasets.length) {
         return <Message messageKey='userIndicators.datasets.noDatasets'/>;
     }
+    const allowDelete = Oskari.user().isLoggedIn();
     const getRegionsetName = id => getRegionsets().find(rs => rs.id === id)?.name || '';
     const columnSettings = [
         {
@@ -34,7 +35,7 @@ export const DatasetsTable = ({ state, controller }) => {
             render: (title, item) => {
                 const { year, regionset } = item;
                 return (
-                    <a onClick={() => controller.selectIndicator(item)}>
+                    <a onClick={() => controller.selectIndicator(year, regionset)}>
                         <Message messageKey='parameters.year' /> {year} - {getRegionsetName(regionset)}
                     </a>
                 );
@@ -48,12 +49,12 @@ export const DatasetsTable = ({ state, controller }) => {
                     <ButtonContainer>
                         <IconButton
                             type='edit'
-                            onClick={() => controller.editDataset(item)}
-                        />
-                        <IconButton
-                            type='delete'
-                            onConfirm={() => controller.deleteDataset(item)}
-                        />
+                            onClick={() => controller.editDataset(item)}/>
+                        {allowDelete &&
+                            <IconButton
+                                type='delete'
+                                onConfirm={() => controller.deleteDataset(item)}/>
+                        }
                     </ButtonContainer>
                 );
             }
