@@ -216,16 +216,29 @@ class StatisticsController extends AsyncStateHandler {
         }
     }
 
-    async selectSavedIndicator (indicator, regionset) {
-        if (this.isIndicatorSelected(indicator, true)) {
-            // remove indicator first to get updated indicator and data
-            this.removeIndicator(indicator);
+    async onCacheUpdate (indicator, onlyData) {
+        // use strict (hash) comparison for only data update
+        if (!this.isIndicatorSelected(indicator, onlyData)) {
+            // nothing to update
+            return;
         }
-        const response = await this.addIndicator(indicator, regionset);
-        if (response.success) {
-            this.setActiveIndicator(indicator.hash);
+        const { indicators: current, regionset } = this.getState();
+        const indicators = [];
+        const meta = await getIndicatorMetadata(indicator.ds, indicator.id);
+        const { name, source, description } = indicator;
+        // async/await doesn't work with forEach()
+        for (let i = 0; i < current.length; i++) {
+            let ind = current[i];
+            if (ind.hash === indicator.hash) {
+                ind = await this.getIndicatorToAdd(indicator, regionset);
+            } else if (!onlyData && ind.id === indicator.id) {
+                // update indicator
+                ind = { ...ind, name, source, description };
+                ind.labels = getUILabels(ind, meta);
+            }
+            indicators.push(ind);
         }
-        return response;
+        this.updateState({ indicators });
     }
 
     async addIndicator (indicator, regionset) {
@@ -235,9 +248,6 @@ class StatisticsController extends AsyncStateHandler {
         }
         if (this.isIndicatorSelected(indicator, true)) {
             // already selected
-            if (regionset !== this.getState().regionset) {
-                await this.setActiveRegionset(regionset);
-            }
             return { success: true };
         }
         try {
@@ -298,9 +308,7 @@ const wrapped = controllerMixin(StatisticsController, [
     'setActiveRegionset',
     'setActiveRegion',
     'addIndicator',
-    'selectSavedIndicator',
     'resetState',
-    'updateIndicator',
     'updateClassification',
     'setSeriesValue'
 ]);
