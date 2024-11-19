@@ -135,7 +135,7 @@ Oskari.clazz.define(
             };
             if (!service.addItemToGroup(DATA_PROVIDER, data)) {
                 // if adding failed, it might because group was not registered.
-                service.addGroup(DATA_PROVIDER, this.getLocalization().dataProviderInfoTitle);
+                service.addGroup(DATA_PROVIDER, this.loc('dataProviderInfoTitle'));
                 // Try adding again
                 service.addItemToGroup(DATA_PROVIDER, data);
             }
@@ -150,16 +150,15 @@ Oskari.clazz.define(
          * Add vectorlayer to map for features. Layer is empty on module start.
          */
         addVectorLayer: function () {
-            const locale = this.getLocalization();
             this.sandbox.postRequestByName(
                 'VectorLayerRequest',
                 [
                     {
                         layerId: LAYER_ID,
                         showLayer: 'registerOnly',
-                        layerName: locale.layer.name,
-                        layerInspireName: locale.layer.inspireName,
-                        layerOrganizationName: locale.layer.organizationName,
+                        layerName: this.loc('layer.name'),
+                        layerInspireName: this.loc('layer.inspireName'),
+                        layerOrganizationName: this.loc('layer.organizationName'),
                         layerPermissions: {
                             publish: 'publication_permission_ok'
                         }
@@ -203,8 +202,7 @@ Oskari.clazz.define(
                 this.getViewHandler().updateLayer('onMap', true);
                 if (!this.getTile().isAttached() && this.stateHandler.getState().indicators.length < 1) {
                     // layer has added from layerlist and doesn't have indicators
-                    this.getViewHandler()?.show('search');
-                    this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
+                    this.showSearchFlyout();
                 }
             },
             'MapLayerVisibilityChangedEvent': function (event) {
@@ -234,6 +232,10 @@ Oskari.clazz.define(
                 this.getStateHandler().setActiveRegion(region);
             }
         },
+        showSearchFlyout: function () {
+            this.getViewHandler()?.show('search');
+            this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
+        },
 
         __addTool: function () {
             const service = this.getLayerService();
@@ -242,13 +244,11 @@ Oskari.clazz.define(
             if (!layerModel) {
                 return;
             }
-            const layerLoc = this.getLocalization('layertools').table_icon || {};
-            const label = layerLoc.title || 'Thematic maps';
             const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             tool.setName('table_icon');
-            tool.setTitle(label);
-            tool.setTooltip(layerLoc.tooltip || label);
-            tool.setCallback(() => this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']));
+            tool.setTitle(this.loc('layerTool.title'));
+            tool.setTooltip(this.loc('layerTool.tooltip'));
+            tool.setCallback(() => this.showSearchFlyout());
             service.addToolForLayer(layerModel, tool, false);
         },
         setState: function (newState) {
