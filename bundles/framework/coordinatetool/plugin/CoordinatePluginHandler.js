@@ -504,7 +504,7 @@ class UIHandler extends StateHandler {
                             lat: response.lat
                         }
                     };
-                    return this.formatEmergencyCallMessage(newData);
+                    return this.simplifyEmergencyData(newData);
                 }
             } catch (e) {
                 Messaging.error(this.loc('display.cannotTransformCoordinates.message'));
@@ -512,7 +512,7 @@ class UIHandler extends StateHandler {
         }
         // Else if coordinates are from 'EPSG:4326' then use these
         else {
-            return this.formatEmergencyCallMessage(data);
+            return this.simplifyEmergencyData(data);
         }
     }
 
@@ -525,7 +525,7 @@ class UIHandler extends StateHandler {
         // already in degrees, don't fetch again
         if (this.isCurrentUnitDegrees() && this.mapProjection === 'EPSG:4326') {
             this.updateState({
-                emergencyInfo: this.formatEmergencyCallMessage({
+                emergencyInfo: this.simplifyEmergencyData({
                     lonlat: {
                         lon: xy.lonlat.lon,
                         lat: xy.lonlat.lat
@@ -542,7 +542,8 @@ class UIHandler extends StateHandler {
         }
     }
 
-    formatEmergencyCallMessage (data) {
+    // just simplifying the object
+    simplifyEmergencyData (data) {
         return {
             lon: data.lonlat.lon,
             lat: data.lonlat.lat
