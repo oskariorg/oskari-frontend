@@ -1,8 +1,9 @@
 import React from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import { Message, Button, TextInput, Checkbox, Select, Option, Spin } from 'oskari-ui';
-import { Content, CoordinateFields, CoordinateField, DegreeContainer, CoordinateLabel, SelectField, EmergencyInfo, SelectLabel, ReverseGeoCodes, Approximation } from './styled';
+import { Content, CoordinateFields, CoordinateField, DegreeContainer, CoordinateLabel, SelectField, EmergencyInfoContainer, SelectLabel, ReverseGeoCodes, Approximation } from './styled';
 import { ButtonContainer } from 'oskari-ui/components/buttons';
+import { LocaleProvider } from 'oskari-ui/util';
 import { formatDegrees, isTransformAllowed } from './helper';
 import PropTypes from 'prop-types';
 
@@ -24,14 +25,14 @@ const isMarkersSupported = () => {
 const ProjectionChanger = ({ projection, onChange, supportedProjections = [] }) => {
     if (!isTransformAllowed(supportedProjections) || typeof onChange !== 'function') {
         return (
-            <Message bundleKey={BUNDLE_KEY} messageKey={`display.crs.${projection}`} fallback={
-                <Message bundleKey={BUNDLE_KEY} messageKey='display.crs.default' messageArgs={{ crs: projection }} />
+            <Message messageKey={`display.crs.${projection}`} fallback={
+                <Message messageKey='display.crs.default' messageArgs={{ crs: projection }} />
             }/>);
     }
     return (
         <SelectField>
             <SelectLabel>
-                <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.header' />
+                <Message messageKey='display.coordinatesTransform.header' />
             </SelectLabel>
             <Select
                 value={projection}
@@ -39,7 +40,7 @@ const ProjectionChanger = ({ projection, onChange, supportedProjections = [] }) 
             >
                 {supportedProjections.map(option => (
                     <Option key={option} value={option}>
-                        <Message bundleKey={BUNDLE_KEY} messageKey={`display.coordinatesTransform.projections.${option}`} />
+                        <Message messageKey={`display.coordinatesTransform.projections.${option}`} />
                     </Option>
                 )) }
             </Select>
@@ -56,9 +57,9 @@ ProjectionChanger.propTypes = {
 
 const LatLabel = ({ isDegrees }) => {
     if (isDegrees) {
-        return <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lat'} LabelComponent={ CoordinateLabel } />;
+        return <Message messageKey={'display.compass.lat'} LabelComponent={ CoordinateLabel } />;
     }
-    return <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.n'} LabelComponent={ CoordinateLabel } />;
+    return <Message messageKey={'display.compass.n'} LabelComponent={ CoordinateLabel } />;
 };
 LatLabel.propTypes = {
     isDegrees: PropTypes.bool
@@ -66,9 +67,9 @@ LatLabel.propTypes = {
 
 const LonLabel = ({ isDegrees }) => {
     if (isDegrees) {
-        return <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lon'} LabelComponent={ CoordinateLabel } />;
+        return <Message messageKey={'display.compass.lon'} LabelComponent={ CoordinateLabel } />;
     }
-    return <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.e'} LabelComponent={ CoordinateLabel } />;
+    return <Message messageKey={'display.compass.e'} LabelComponent={ CoordinateLabel } />;
 };
 LonLabel.propTypes = {
     isDegrees: PropTypes.bool
@@ -112,7 +113,7 @@ const HoverToggle = ({ isShowing, onChange }) => {
             checked={isShowing}
             onChange={onChange}
         >
-            <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.showMouseCoordinates' />
+            <Message messageKey='display.popup.showMouseCoordinates' />
         </Checkbox>
     );
 };
@@ -131,7 +132,7 @@ const MarkerButton = ({ isSupported, addMarker }) => {
             onClick={addMarker}
             className='t_add'
         >
-            <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.addMarkerButton' />
+            <Message messageKey='display.popup.addMarkerButton' />
         </Button>
     );
 };
@@ -149,7 +150,7 @@ const ReverseGeocodeCheckBox = ({ showCheckbox, showResults, toggleResults }) =>
             checked={showResults}
             onChange={toggleResults}
         >
-            <Message bundleKey={BUNDLE_KEY} messageKey='display.reversegeocode.moreInfo' />
+            <Message messageKey='display.reversegeocode.moreInfo' />
         </Checkbox>
     );
 };
@@ -178,88 +179,104 @@ ReverseGeocodeResults.propTypes = {
     results: PropTypes.array
 };
 
+const EmergencyInfo = ({ coords }) => {
+    if (!coords) {
+        return null;
+    }
+    const degmin = formatDegrees(coords.lon, coords.lat, 'min', 3);
+    // Coordinates are now on separate row
+    // the text would flow better if emergencyCallLabel Message-tag is used as wrapper for the other content
+    // But it might be intended to be on a separate row for clarity?
+    return (
+        <EmergencyInfoContainer>
+            <Message messageKey='display.coordinatesTransform.emergencyCallLabel' />
+            <Message messageKey='display.compass.p'>{` ${degmin.degreesY}° `}{` ${formatLeadingZero(degmin.minutesY)}' `}</Message>
+            {' '}<Message messageKey='display.coordinatesTransform.emergencyCallLabelAnd' />{' '}
+            <Message messageKey='display.compass.i'> {` ${degmin.degreesX}° `}{` ${formatLeadingZero(degmin.minutesX)}'`}</Message>
+        </EmergencyInfoContainer>
+    );
+};
+EmergencyInfo.propTypes = {
+    coords: PropTypes.object
+};
+
 const PopupContent = ({ state = {}, controller, supportedProjections, showReverseGeoCodeCheckbox }) => {
     const isDegrees = controller.isCurrentUnitDegrees();
 
     return (
-        <Spin spinning={state.loading}>
-            <Content>
-                <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.info' />
-                <ProjectionChanger
-                    projection={state.selectedProjection}
-                    onChange={value => controller.setSelectedProjection(value)}
-                    supportedProjections={supportedProjections} />
-                <CoordinateFields>
-                    <CoordinateField>
-                        <LatLabel isDegrees={isDegrees}/>
-                        <Approximation>
-                            {state.approxValue && ('~')}
-                        </Approximation>
-                        <TextInput
-                            value={state?.latField}
-                            onChange={(e) => controller.setLatInputValue(e.target.value)}
-                            onBlur={() => controller.useUserDefinedCoordinates()}
-                            disabled={state.showMouseCoordinates}
-                            className='t_lat'
-                        />
-                    </CoordinateField>
-                    <DegreesDisplay
-                        isDegrees={isDegrees}
-                        lat={state?.latField}
-                        lon={state.lonField}
-                        isLat={true} />
-                    <CoordinateField>
-                        <LonLabel isDegrees={isDegrees}/>
-                        <Approximation>
-                            {state.approxValue && ('~')}
-                        </Approximation>
-                        <TextInput
-                            value={state?.lonField}
-                            onChange={(e) => controller.setLonInputValue(e.target.value)}
-                            onBlur={() => controller.useUserDefinedCoordinates()}
-                            disabled={state.showMouseCoordinates}
-                            className='t_lon'
-                        />
-                    </CoordinateField>
-                    <DegreesDisplay
-                        isDegrees={isDegrees}
-                        lat={state?.latField}
-                        lon={state?.lonField}
-                        isLat={false} />
-                </CoordinateFields>
-                <HoverToggle
-                    isShowing={state.showMouseCoordinates}
-                    onChange={() => controller.toggleMouseCoordinates()} />
-                <ReverseGeocodeCheckBox
-                    showCheckbox={showReverseGeoCodeCheckbox}
-                    showResults={state.showReverseGeoCode}
-                    toggleResults={() => controller.toggleReverseGeoCode()} />
-                <ReverseGeocodeResults
-                    showResults={!showReverseGeoCodeCheckbox || state.showReverseGeoCode}
-                    results={state.reverseGeoCode} />
-                {state.emergencyInfo && (
-                    <EmergencyInfo>
-                        <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.emergencyCallLabel' />
-                        {` ${state.emergencyInfo.degreesY}° `}{` ${formatLeadingZero(state.emergencyInfo.minutesY)}' `}
-                        <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.emergencyCallLabelAnd' />
-                        {` ${state.emergencyInfo.degreesX}° `}{` ${formatLeadingZero(state.emergencyInfo.minutesX)}'`}
-                    </EmergencyInfo>
-                )}
-                <ButtonContainer>
-                    <Button
-                        type='default'
-                        disabled={state.showMouseCoordinates || controller.isMapCentered()}
-                        onClick={() => controller.centerMap()}
-                        className='t_center'
-                    >
-                        <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.searchButton' />
-                    </Button>
-                    <MarkerButton
-                        isSupported={isMarkersSupported()}
-                        addMarker={() => controller.setMarker()} />
-                </ButtonContainer>
-            </Content>
-        </Spin>
+        <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+            <Spin spinning={state.loading}>
+                <Content>
+                    <Message messageKey='display.popup.info' />
+                    <ProjectionChanger
+                        projection={state.selectedProjection}
+                        onChange={value => controller.setSelectedProjection(value)}
+                        supportedProjections={supportedProjections} />
+                    <CoordinateFields>
+                        <CoordinateField>
+                            <LatLabel isDegrees={isDegrees}/>
+                            <Approximation>
+                                {state.approxValue && ('~')}
+                            </Approximation>
+                            <TextInput
+                                value={state?.latField}
+                                onChange={(e) => controller.setLatInputValue(e.target.value)}
+                                onBlur={() => controller.useUserDefinedCoordinates()}
+                                disabled={state.showMouseCoordinates}
+                                className='t_lat'
+                            />
+                        </CoordinateField>
+                        <DegreesDisplay
+                            isDegrees={isDegrees}
+                            lat={state?.latField}
+                            lon={state.lonField}
+                            isLat={true} />
+                        <CoordinateField>
+                            <LonLabel isDegrees={isDegrees}/>
+                            <Approximation>
+                                {state.approxValue && ('~')}
+                            </Approximation>
+                            <TextInput
+                                value={state?.lonField}
+                                onChange={(e) => controller.setLonInputValue(e.target.value)}
+                                onBlur={() => controller.useUserDefinedCoordinates()}
+                                disabled={state.showMouseCoordinates}
+                                className='t_lon'
+                            />
+                        </CoordinateField>
+                        <DegreesDisplay
+                            isDegrees={isDegrees}
+                            lat={state?.latField}
+                            lon={state?.lonField}
+                            isLat={false} />
+                    </CoordinateFields>
+                    <HoverToggle
+                        isShowing={state.showMouseCoordinates}
+                        onChange={() => controller.toggleMouseCoordinates()} />
+                    <ReverseGeocodeCheckBox
+                        showCheckbox={showReverseGeoCodeCheckbox}
+                        showResults={state.showReverseGeoCode}
+                        toggleResults={() => controller.toggleReverseGeoCode()} />
+                    <ReverseGeocodeResults
+                        showResults={!showReverseGeoCodeCheckbox || state.showReverseGeoCode}
+                        results={state.reverseGeoCode} />
+                    <EmergencyInfo coords={state.emergencyInfo} />
+                    <ButtonContainer>
+                        <Button
+                            type='default'
+                            disabled={state.showMouseCoordinates || controller.isMapCentered()}
+                            onClick={() => controller.centerMap()}
+                            className='t_center'
+                        >
+                            <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.searchButton' />
+                        </Button>
+                        <MarkerButton
+                            isSupported={isMarkersSupported()}
+                            addMarker={() => controller.setMarker()} />
+                    </ButtonContainer>
+                </Content>
+            </Spin>
+        </LocaleProvider>
     );
 };
 

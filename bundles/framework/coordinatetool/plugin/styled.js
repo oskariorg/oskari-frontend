@@ -40,7 +40,7 @@ export const SelectField = styled('div')`
     flex-direction: column;
 `;
 
-export const EmergencyInfo = styled('div')`
+export const EmergencyInfoContainer = styled('div')`
     margin-top: 10px;
 `;
 

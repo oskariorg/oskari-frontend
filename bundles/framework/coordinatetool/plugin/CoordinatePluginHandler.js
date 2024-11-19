@@ -517,45 +517,35 @@ class UIHandler extends StateHandler {
     }
 
     async getEmergencyCallInfo (data) {
-        const xy = data || this.getMapXY();
-
+        if (!this.config.showEmergencyCallMessage) {
+            return;
+        }
         // update emergency if configured
-        if (this.config.showEmergencyCallMessage) {
-            // already in degrees, don't fetch again
-            if (this.isCurrentUnitDegrees() && this.mapProjection === 'EPSG:4326') {
-                this.updateState({
-                    emergencyInfo: this.formatEmergencyCallMessage({
-                        lonlat: {
-                            lon: xy.lonlat.lon,
-                            lat: xy.lonlat.lat
-                        }
-                    })
-                });
-            } else {
-                await this.getEmergencyCallCoordinatesFromServer(data)
-                    .then(emergencyData => {
-                        this.updateState({
-                            emergencyInfo: emergencyData
-                        });
+        const xy = data || this.getMapXY();
+        // already in degrees, don't fetch again
+        if (this.isCurrentUnitDegrees() && this.mapProjection === 'EPSG:4326') {
+            this.updateState({
+                emergencyInfo: this.formatEmergencyCallMessage({
+                    lonlat: {
+                        lon: xy.lonlat.lon,
+                        lat: xy.lonlat.lat
+                    }
+                })
+            });
+        } else {
+            await this.getEmergencyCallCoordinatesFromServer(data)
+                .then(emergencyData => {
+                    this.updateState({
+                        emergencyInfo: emergencyData
                     });
-            }
+                });
         }
     }
 
     formatEmergencyCallMessage (data) {
-        const degmin = formatDegrees(data.lonlat.lon, data.lonlat.lat, 'min');
-
-        let minutesX = '' + parseFloat(degmin.minutesX.replace(this.decimalSeparator, '.')).toFixed(3);
-        minutesX = minutesX.replace('.', this.decimalSeparator);
-
-        let minutesY = '' + parseFloat(degmin.minutesY.replace(this.decimalSeparator, '.')).toFixed(3);
-        minutesY = minutesY.replace('.', this.decimalSeparator);
-
         return {
-            degreesX: this.loc('display.compass.i') + ' ' + degmin.degreesX,
-            degreesY: this.loc('display.compass.p') + ' ' + degmin.degreesY,
-            minutesX,
-            minutesY
+            lon: data.lonlat.lon,
+            lat: data.lonlat.lat
         };
     }
 
