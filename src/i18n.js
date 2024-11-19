@@ -270,7 +270,7 @@ import IntlMessageFormat from 'intl-messageformat';
             value = locale[Oskari.getDefaultLanguage()];
         }
         if (!value) {
-            for (var key in locale) {
+            for (const key in locale) {
                 if (locale[key]) {
                     // any locale will do at this point
                     return locale[key];
@@ -328,5 +328,12 @@ import IntlMessageFormat from 'intl-messageformat';
             };
         }
         return new Intl.NumberFormat(oskariLang, opts);
+    };
+    let _msgDebugMode = 'TBD';
+    O.isMsgDebugMode = function () {
+        if (_msgDebugMode === 'TBD') {
+            _msgDebugMode = Oskari.util.getRequestParam('msgDebugMode', false) === 'true';
+        }
+        return _msgDebugMode;
     };
 }(Oskari));
