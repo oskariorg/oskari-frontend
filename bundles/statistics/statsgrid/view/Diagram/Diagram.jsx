@@ -1,10 +1,11 @@
 import React, { useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import styled from 'styled-components';
 import { getDataByRegions, getValueSorter } from '../../helper/StatisticsHelper';
 import { BUNDLE_KEY } from '../../constants';
 
-const MARGIN =  {
+const MARGIN = {
     top: 0,
     bottom: 20,
     left: 50,
@@ -55,7 +56,7 @@ const getDimensionsFromData = (data) => {
 
         const widestLabel = d3.max(data, (d) => d.name.length);
         const labelPx = widestLabel * pxPerChar;
-        let labelMargin = labelPx < MARGIN.maxForLabel ? labelPx : MARGIN.maxForLabel;
+        const labelMargin = labelPx < MARGIN.maxForLabel ? labelPx : MARGIN.maxForLabel;
         // TODO: why chartWidt and x are calculated with default values and later updated??
         let chartWidth = WIDTH - left - right;
         const x = d3.scaleLinear().domain(getScaleArray(min, max)).range([0, chartWidth]);
@@ -113,7 +114,7 @@ const getTextContent = (d, maxLength) => {
 };
 
 const getSortedData = (indicator, sortingType = 'value-descending') => {
-    const data =  getDataByRegions(indicator);
+    const data = getDataByRegions(indicator);
     if (sortingType === 'name-ascending') {
         return data.toSorted((a, b) => d3.descending(a.name, b.name));
     }
@@ -129,16 +130,14 @@ const getSortedData = (indicator, sortingType = 'value-descending') => {
     return data;
 };
 
-const createGraph = (ref, labelsRef, indicator, sortOrder ) => {
+const createGraph = (ref, labelsRef, indicator, sortOrder) => {
     const { groups, error } = indicator.classifiedData;
     const { min, max } = indicator.data;
     const data = getSortedData(indicator, sortOrder);
     const dimensions = calculateDimensions(data);
     const { format } = Oskari.getNumberFormatter();
-    let x;
-    let y;
-    x = d3.scaleLinear();
-    y = d3.scaleBand();
+    const x = d3.scaleLinear();
+    const y = d3.scaleBand();
     const xScaleDomain = getScaleArray(min, max);
     const yScaleDomain = data.map((d) => d.name);
     y.range([dimensions.chart?.height, 0]);
@@ -163,7 +162,6 @@ const createGraph = (ref, labelsRef, indicator, sortOrder ) => {
         .append('g')
         .attr('transform', 'translate(' + dimensions.margin.left + ',' + dimensions.margin.top + ')');
 
-
     svg.each(data => {
         const { chart: { height }, axis: { ticks, xOffset } } = dimensions;
         const xAxis = d3.axisTop(x)
@@ -171,18 +169,18 @@ const createGraph = (ref, labelsRef, indicator, sortOrder ) => {
             .tickSizeInner(-height + xOffset)
             .tickSizeOuter(0)
             .tickFormat(d => format(d));
-    
+
         const xtickAxis = svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate( 0, 0)')
-        .attr('shape-rendering', 'crispEdges')
-        .call(xAxis);
-    
+            .attr('class', 'x axis')
+            .attr('transform', 'translate( 0, 0)')
+            .attr('shape-rendering', 'crispEdges')
+            .call(xAxis);
+
         xtickAxis.selectAll('x axis, tick, text').remove();
         xtickAxis.select('.domain').remove();
         xtickAxis.selectAll('line')
             .attr('stroke', '#eee');
-    
+
         const { container, margin } = dimensions;
         // append the x-axis to different element so we can show the values when scrollign
         const labelheight = 12;
@@ -194,7 +192,7 @@ const createGraph = (ref, labelsRef, indicator, sortOrder ) => {
             .attr('class', 'x axis header')
             .attr('transform', 'translate(' + margin.left + ',' + labelheight + ')')
             .call(xAxis);
-    
+
         gx.select('.domain').remove();
         gx.selectAll('line').remove();
     });
@@ -311,9 +309,9 @@ const createGraph = (ref, labelsRef, indicator, sortOrder ) => {
     });
 };
 
-export const Diagram = ({ indicator,  sortOrder }) => {
-    let ref = useRef(null);
-    let labelsRef = useRef(null);
+export const Diagram = ({ indicator, sortOrder }) => {
+    const ref = useRef(null);
+    const labelsRef = useRef(null);
     useEffect(() => {
         if (ref?.current?.children?.length > 0) {
             ref.current.removeChild(ref.current.children[0]);
@@ -334,4 +332,8 @@ export const Diagram = ({ indicator,  sortOrder }) => {
             </Chart>
         </Content>
     );
+};
+Diagram.propTypes = {
+    indicator: PropTypes.object.isRequired,
+    sortOrder: PropTypes.string.isRequired
 };

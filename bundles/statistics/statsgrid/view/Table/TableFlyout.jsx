@@ -13,8 +13,8 @@ import { getDataByRegions } from '../../helper/StatisticsHelper';
 import { getRegions } from '../../helper/RegionsHelper';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getHeaderTheme } from 'oskari-ui/theme';
+import { BUNDLE_KEY } from '../../constants';
 
-const BUNDLE_KEY = 'StatsGrid';
 const COLUMN = 200;
 
 const StyledTable = styled(Table)`

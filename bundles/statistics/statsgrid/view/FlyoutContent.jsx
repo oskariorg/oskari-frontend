@@ -19,12 +19,11 @@ export const FlyoutContent = ({ state, children }) => {
 
     const Component = (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-             <Content>
+            <Content>
                 {current ? children : <Message messageKey='statsgrid.noResults' />}
-             </Content>
+            </Content>
         </LocaleProvider>
     );
-    
     if (loading) {
         return <Spin showTip={true}>{Component}</Spin>;
     }
@@ -32,5 +31,6 @@ export const FlyoutContent = ({ state, children }) => {
 };
 
 FlyoutContent.propTypes = {
-    state: PropTypes.object.isRequired
+    state: PropTypes.object.isRequired,
+    children: PropTypes.any
 };
