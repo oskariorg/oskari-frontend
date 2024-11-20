@@ -44,6 +44,10 @@ const MetadataButton = styled(Button)`
     margin-right: auto;
     padding: 0;
 `;
+const ParamsLabel = styled.div`
+    font-weight: bold;
+    margin-bottom: 10px;
+`;
 
 const UserIndicator = ({ isSingle, onClick }) => {
     const type = isSingle ? 'edit' : 'add';
@@ -130,7 +134,7 @@ const SearchFlyout = ({ state, controller }) => {
                     <Message messageKey='metadataPopup.open' messageArgs={{ indicators: state.selectedIndicators.length }} />
                 </MetadataButton>
             )}
-            <b><Message messageKey='panels.newSearch.refineSearchLabel' /></b>
+            <ParamsLabel><Message messageKey='panels.newSearch.refineSearchLabel' /></ParamsLabel>
             <IndicatorParams
                 { ...state }
                 allRegionsets={regionsets}
