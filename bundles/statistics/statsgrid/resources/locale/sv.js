@@ -207,8 +207,8 @@ Oskari.registerLocalization({
             'datasets': {
                 'title': 'Statistisk information',
                 'dataset': 'Datamängder',
-                'noIndicator': 'Spara indikatorinformation för att lägga till datauppsättningar.',
-                'noDatasets': 'Indikatorn har ingen datauppsättning.'
+                'noIndicator': 'Spara indikatorinformation för att lägga till datamängder.',
+                'noDatasets': 'Indikatorn har ingen lagrad datamängd.'
             },
             'import': {
                 'title': 'Hämta från urklipp',

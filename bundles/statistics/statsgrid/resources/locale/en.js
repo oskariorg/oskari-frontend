@@ -208,7 +208,7 @@ Oskari.registerLocalization({
                 'title': 'Statistical data',
                 'dataset': 'Dataset',
                 'noIndicator': 'Save indicator information to add datasets.',
-                'noDatasets': 'Indicator doesn\'t have any dataset.'
+                'noDatasets': 'Indicator doesn\'t have any stored dataset.'
             },
             'import': {
                 'title': 'Import from the clipboard',
