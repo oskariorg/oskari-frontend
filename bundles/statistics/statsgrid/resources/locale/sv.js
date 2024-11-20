@@ -170,6 +170,8 @@ Oskari.registerLocalization({
             'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}',
             'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}',
             'noActiveLegend': 'Inga valda datamängder, välj datamängd för att se kartans klassificering.',
+            'notAllowedRegionset': 'Ingen data vid den valda områdesindelning.',
+            'notAllowedSelection': 'Ingen data vid den valda datamängden.',
             'noEnough': 'Datamängden är för liten för att klassificeras, försök en annan datamängd eller avgränsning.',
             'noData': 'Ingen data vid den valda tidspunkten.',
             'cannotCreateLegend': 'Teckenförklaringen kan inte skapas utgående från de valda värden, vänligen försök andra värden.'

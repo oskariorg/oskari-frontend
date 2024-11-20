@@ -382,7 +382,8 @@ class SearchController extends AsyncStateHandler {
             if (!Array.isArray(values)) {
                 indSearchValues.selections[key] = values;
                 if (!checkAllowed(values)) {
-                    indSearchValues.error = 'invalidSelection';
+                    indSearchValues.error = 'notAllowedSelection';
+                    indSearchValues.notAllowedKey = key;
                 }
                 return;
             }
@@ -416,7 +417,7 @@ class SearchController extends AsyncStateHandler {
                 invalid: values.filter(val => !checkAllowed(val))
             });
         });
-        // Add own search for each value of the multiple select
+        // Add own search for each value of the multiple select (e.g Year)
         if (multiSelections.length) {
             const indicators = [];
             multiSelections.forEach(({ key, values, invalid }) => {
@@ -424,7 +425,8 @@ class SearchController extends AsyncStateHandler {
                     const selections = { ...indSearchValues.selections, [key]: val };
                     const indicator = { ...indSearchValues, selections };
                     if (invalid.includes(val)) {
-                        indicator.error = 'invalidSelection';
+                        indicator.error = 'notAllowedSelection';
+                        indicator.notAllowedKey = key;
                     }
                     indicators.push(indicator);
                 });

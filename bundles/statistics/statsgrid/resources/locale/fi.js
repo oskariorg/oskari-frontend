@@ -169,6 +169,8 @@ Oskari.registerLocalization({
             'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana',
             'noDataForIndicators': 'Palvelusta ei saatu tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}',
             'onlyPartialDataForIndicators': 'Palvelusta ei saatu kaikkia tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}',
+            'notAllowedRegionset': 'Aineistoa ei ole saatavilla valitulle aluejaolle.',
+            'notAllowedSelection': 'Aineistoa ei ole saatavilla valinnoille.',
             'noActiveLegend': 'Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun.',
             'noEnough': 'Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.',
             'noData': 'Aineistoa ei ole saatavilla valitsemaltasi ajankohdalta',

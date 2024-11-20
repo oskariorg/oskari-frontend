@@ -169,6 +169,8 @@ Oskari.registerLocalization({
             'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.',
             'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}',
             'onlyPartialDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}',
+            'notAllowedRegionset': 'Data is not available for the selected regional division.',
+            'notAllowedSelection': 'Data is not available for the selections.',
             'noActiveLegend': 'Data was not selected, select data to see map classification.',
             'noEnough': 'The data is too small to be classified, try different data or change limitings.',
             'noData': 'Data is not available for the selected point in time.',
