@@ -55,6 +55,8 @@ Oskari.registerLocalization(
                 "announcementsTime": "Voimasssa"
             },
             "publisher": {
+                "toolLabel": "Ilmoitukset",
+                "selectedAnnouncementsTitle": "Valitut ilmoitukset",
                 "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
             }
         }

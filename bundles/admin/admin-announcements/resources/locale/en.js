@@ -55,6 +55,8 @@ Oskari.registerLocalization(
             "announcementsTime": "Valid"
         },
         "publisher": {
+            "toolLabel": "Announcements",
+            "selectedAnnouncementsTitle": "Selected announcements",
             "noUI": "Hide user interface (Use RPC interface)"
         }
     }

@@ -64,7 +64,6 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Kartalla näytettävät työkalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
-                "AnnouncementsPlugin": "Ilmoitukset",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "FeaturedataPlugin": "Kohdetietotaulukko",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
