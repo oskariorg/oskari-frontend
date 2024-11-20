@@ -23,7 +23,7 @@ const Popup = ({ errors }) => {
                 const selection = partialSeries
                     ? getInvalidSerie(partialSeries)
                     : getSelection(selections);
-                const cause = errorLoc[error];
+                const cause = partialSeries ? errorLoc.noData : errorLoc[error];
                 const errorMsg = cause ? `: ${cause}` : '';
                 return <div key={i}>{`${name} (${selection})${errorMsg}`}</div>;
             })}
