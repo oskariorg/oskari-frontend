@@ -102,8 +102,7 @@ export const getIndicatorMetadata = async (datasourceId, indicatorId) => {
         indicatorMetadataStore[cacheKey] = processed;
         return processed;
     } catch (error) {
-        // TODO: indicatorMetadataError
-        throw new Error(error);
+        throw new Error('indicatorMetadataError');
     }
 };
 const processMetadata = (meta) => {

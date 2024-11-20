@@ -38,7 +38,6 @@ export const getRegionsAsync = async (regionset) => {
         regionsStore[regionset] = onlyWithNames;
         return onlyWithNames;
     } catch (error) {
-        // TODO: regionsDataError
-        throw new Error(error);
+        throw new Error('regionsDataError');
     }
 };
