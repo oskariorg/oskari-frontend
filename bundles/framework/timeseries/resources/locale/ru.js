@@ -31,6 +31,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "tooltip": "Показывать только слои с временными рядами",
             "timeseries": "Времянные ряды"
+        },
+        "publisher": {
+            "TimeseriesControlPlugin": {
+                "toolLabel": "Временные ряды"
+            }
         }
     }
 });

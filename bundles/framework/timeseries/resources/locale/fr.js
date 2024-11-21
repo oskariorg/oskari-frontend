@@ -31,6 +31,11 @@ Oskari.registerLocalization(
         "layerFilter": {
             "tooltip": "Afficher uniquement les couches avec série chronologique",
             "timeseries": "Série chronologique"
+        },
+        "publisher": {
+            "TimeseriesControlPlugin": {
+                "toolLabel": "Lecteur chronologique"
+            }
         }
     }
 });
