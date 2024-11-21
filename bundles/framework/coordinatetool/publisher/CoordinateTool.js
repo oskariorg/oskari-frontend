@@ -4,7 +4,7 @@ import { CoordinateToolHandler } from './CoordinateToolHandler';
 class CoordinateTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
+        this.index = 120;
         this.group = 'additional';
         this.bundleName = 'coordinatetool';
         this.handler = new CoordinateToolHandler(this);

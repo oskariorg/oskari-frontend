@@ -4,7 +4,7 @@ import { PanButtonsHandler } from './PanButtonsHandler';
 class PanButtonsTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
+        this.index = 70;
         this.group = 'additional';
         this.handler = new PanButtonsHandler(this);
     };

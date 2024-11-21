@@ -3,7 +3,7 @@ import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/Ab
 class IndexMapTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
+        this.index = 30;
         this.group = 'additional';
     }
 

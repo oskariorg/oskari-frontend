@@ -2,7 +2,7 @@ import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/Ab
 class SearchTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
+        this.index = 10;
         this.group = 'additional';
     }
 

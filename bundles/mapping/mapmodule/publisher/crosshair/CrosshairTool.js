@@ -3,7 +3,7 @@ import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/Ab
 class CrosshairTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
+        this.index = 110;
         this.group = 'additional';
     }
 

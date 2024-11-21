@@ -6,7 +6,7 @@ import { AnnouncementsToolHandler } from './AnnouncementsToolHandler';
 class AnnouncementsTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
+        this.index = 160;
         this.group = 'additional';
         this.handler = new AnnouncementsToolHandler(this);
 

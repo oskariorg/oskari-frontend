@@ -4,7 +4,7 @@ const SCALEBAR_TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPl
 class ScaleBarTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
+        this.index = 60;
         this.group = 'additional';
     }
 

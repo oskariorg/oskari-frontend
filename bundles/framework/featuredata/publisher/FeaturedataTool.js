@@ -3,7 +3,7 @@ import { AbstractPublisherTool } from '../../publisher2/tools/AbstractPublisherT
 class FeaturedataTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
+        this.index = 130;
         this.group = 'additional';
         this.bundleName = 'featuredata';
     }

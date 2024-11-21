@@ -5,7 +5,7 @@ import { MapRotatorToolComponent } from './MapRotatorToolComponent';
 class MapRotatorTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
+        this.index = 80;
         this.bundleName = 'maprotator';
         this.group = 'additional';
         this.handler = new MapRotatorToolHandler(this);

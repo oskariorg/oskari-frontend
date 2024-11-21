@@ -6,7 +6,7 @@ export const SWIPE_ID = 'Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipe
 class SwipeTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 5;
+        this.index = 40;
         this.group = 'additional';
     }
 
