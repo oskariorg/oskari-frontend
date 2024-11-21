@@ -64,7 +64,6 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
-                "TimeseriesControlPlugin": "Tidseriespelare",
                 "FeaturedataPlugin": "Objektuppgifter",
                 "GetInfoPlugin": "Frågverktyg för visande av objektuppgifter",
                 "selectDrawLayer": "Välj lager för nya funktioner",

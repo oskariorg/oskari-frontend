@@ -48,6 +48,11 @@ Oskari.registerLocalization(
             "helpMsg_range": 'Med denna tidsseriefunktion kan du granska bilder från flera år. Obs! I kartvyn visas den sista flygbilden för varje område. Du kan returnera till tidspunktfunktionen med att klicka på ikonen i övre höga hörnet av panelen:',
             "switchToRange": "Byt till tidsseriefunktion",
             "switchToYear": "Byt till tidspunktfunktion"
+        },
+        "publisher": {
+            "TimeseriesControlPlugin": {
+                "toolLabel": "Tidseriespelare"
+            }
         }
     }
 });

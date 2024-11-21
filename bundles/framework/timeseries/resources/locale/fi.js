@@ -48,6 +48,11 @@ Oskari.registerLocalization(
             "helpMsg_range": 'Tässä moodissa pääset tarkastelemaan valitun aikavälin sisällä tuotettua aineistoa. Huom! Näytettävä kuva on valitusta aikavälistä viimeisin saatavilla oleva. Jos haluat nähdä vain yksittäisen vuoden aineistoa vaihda moodia viereisestä ikonista:',
             "switchToRange": "Vaihda aikavälimoodiin",
             "switchToYear": "Vaihda yksittäisen vuoden valintamoodiin"
+        },
+        "publisher": {
+            "TimeseriesControlPlugin": {
+                "toolLabel": "Aikasarjatoistin"
+            }
         }
     }
 });
