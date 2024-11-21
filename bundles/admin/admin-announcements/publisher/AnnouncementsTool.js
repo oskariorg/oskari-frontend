@@ -65,11 +65,8 @@ class AnnouncementsTool extends AbstractPublisherTool {
     }
 
     stop () {
+        super.stop();
         this.handler.closePopup();
-        const plugin = this.getPlugin();
-        if (plugin) {
-            plugin.teardownUI();
-        }
     }
 
     getTool () {
