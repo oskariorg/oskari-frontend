@@ -46,7 +46,7 @@ export const AnnouncementToolComponent = ({ state, controller }) => {
             </Checkbox>
 
             <SelectedAnnouncements>
-                <SelectedAnnouncementsTitle>{Oskari.getMsg('admin-announcements', 'publisher.selectedAnnouncementsTitle')}</SelectedAnnouncementsTitle>
+<Message LabelComponent={SelectedAnnouncementsTitle} bundleKey={'admin-announcements'} messageKey={'publisher.selectedAnnouncementsTitle'} />
                 { announcements
                     .filter((ann) => selectedAnnouncements?.includes(ann.id))
                     .map((announcement) => {
