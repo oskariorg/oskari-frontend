@@ -3,6 +3,7 @@ import { LocaleProvider } from 'oskari-ui/util';
 import ReactDOM from 'react-dom';
 import { ToolPanelHandler } from '../handler/ToolPanelHandler';
 import { PublisherToolsList } from './form/PublisherToolsList';
+import { ThemeProvider } from 'oskari-ui/util';
 
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PanelAdditionalTools
@@ -82,12 +83,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelReactTools'
             const contentPanel = this.panel.getContainer();
 
             ReactDOM.render(
-                <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
-                    <PublisherToolsList
-                        state={this.handler.getState()}
-                        controller={this.handler.getController()}
-                    />
-                </LocaleProvider>,
+                <ThemeProvider>
+                    <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
+                        <PublisherToolsList
+                            state={this.handler.getState()}
+                            controller={this.handler.getController()}
+                        />
+                    </LocaleProvider>
+                </ThemeProvider>,
                 contentPanel[0]
             );
         },
