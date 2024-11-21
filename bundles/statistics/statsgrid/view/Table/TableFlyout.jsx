@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Select, Message } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
@@ -12,8 +13,8 @@ import { getDataByRegions } from '../../helper/StatisticsHelper';
 import { getRegions } from '../../helper/RegionsHelper';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getHeaderTheme } from 'oskari-ui/theme';
+import { BUNDLE_KEY } from '../../constants';
 
-const BUNDLE_KEY = 'StatsGrid';
 const COLUMN = 200;
 
 const StyledTable = styled(Table)`
@@ -66,6 +67,27 @@ const HeaderTools = styled.div`
     margin-top: 10px;
     height: 20px;
 `;
+const RegionsetSelect = ({ value, indicators, controller }) => {
+    const regionsets = getRegionsets();
+    if (Oskari.dom.isEmbedded()) {
+        return regionsets.find(r => r.id === value)?.name || '';
+    }
+    const ids = indicators.map(ind => ind.allowedRegionsets || []).flat();
+    const options = regionsets
+        .filter(rs => ids.includes(rs.id))
+        .map(rs => ({ value: rs.id, label: rs.name }));
+    return <Select
+        filterOption={false}
+        options={options}
+        value={value}
+        onChange={(value) => controller.setActiveRegionset(value)}/>;
+};
+
+RegionsetSelect.propTypes = {
+    value: PropTypes.any,
+    indicators: PropTypes.array.isRequired,
+    controller: PropTypes.object.isRequired
+};
 
 const TableFlyout = ThemeConsumer(({ state, controller, theme }) => {
     const { indicators, activeIndicator, regionset, activeRegion } = state;
@@ -77,34 +99,25 @@ const TableFlyout = ThemeConsumer(({ state, controller, theme }) => {
     const changeSortOrder = (column) => {
         let order = 'ascend';
         if (column === sortOrder.column) {
-            order = sortOrder.order === 'ascend' ? 'descend' : 'ascend'
+            order = sortOrder.order === 'ascend' ? 'descend' : 'ascend';
         }
         setSortOrder({ column, order });
     };
     // every value is set by looping regions => same indexes
     const dataByHash = indicators.reduce((data, ind) => {
-        data[ind.hash] = getDataByRegions(ind)
+        data[ind.hash] = getDataByRegions(ind);
         return data;
     }, {});
     const hashes = indicators.map(ind => ind.hash);
     const dataSource = regions.map(({ id, name }, i) => {
         const data = { key: id, name };
         hashes.forEach(hash => {
-            const { value, formatted } = dataByHash[hash][i];
+            const { value, formatted } = dataByHash[hash][i] || {};
             data[hash] = { value, formatted };
         });
         return data;
     });
     const columnSettings = [];
-    const regionsetIds = [];
-    indicators.forEach(ind => {
-        const sets = ind.allowedRegionsets || [];
-        sets.forEach(id => {
-            if (!regionsetIds.includes(id)) {
-                regionsetIds.push(id);
-            }
-        });
-    });
     const getCellStyle = (regionId, hash) => {
         const style = { background: '#ffffff' };
         if (regionId === activeRegion) {
@@ -138,18 +151,7 @@ const TableFlyout = ThemeConsumer(({ state, controller, theme }) => {
                 <HeaderCell>
                     <RegionHeader>
                         <Message messageKey='statsgrid.areaSelection.title' />
-                        {Oskari.dom.isEmbedded() ? (
-                            getRegionsets().find(r => r.id === regionset)?.name || ''
-                        ) : (
-                            <Select
-                                filterOption={false}
-                                options={getRegionsets()
-                                    .filter(rs => regionsetIds.includes(rs.id))
-                                    .map(rs => ({ value: rs.id, label: rs.name }))}
-                                value={regionset}
-                                onChange={(value) => controller.setActiveRegionset(value)}
-                            />
-                        )}
+                        <RegionsetSelect indicators={indicators} value={regionset} controller={controller}/>
                     </RegionHeader>
                     <HeaderTools>
                         <Sorter
@@ -163,7 +165,7 @@ const TableFlyout = ThemeConsumer(({ state, controller, theme }) => {
     });
     indicators?.forEach(indicator => {
         const { hash } = indicator;
-        const sorter = (c1,c2) => {
+        const sorter = (c1, c2) => {
             const a = c1[hash].value;
             const b = c2[hash].value;
             if (a === b) return 0;
@@ -207,7 +209,7 @@ const TableFlyout = ThemeConsumer(({ state, controller, theme }) => {
         columns={columnSettings}
         dataSource={dataSource}
         rowSelection={{ selectedRowKeys }}
-        onRow={item => ({onClick: () => controller.setActiveRegion(item.key)})} />
+        onRow={item => ({ onClick: () => controller.setActiveRegion(item.key) })} />;
 });
 
 export const showTableFlyout = (state, controller, onClose) => {
@@ -234,5 +236,5 @@ export const showTableFlyout = (state, controller, onClose) => {
                 />
             </FlyoutContent>
         )
-    }
+    };
 };

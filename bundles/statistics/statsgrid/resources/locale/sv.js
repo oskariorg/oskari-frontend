@@ -12,19 +12,9 @@ Oskari.registerLocalization({
             'title': 'Tematiska kartor'
         },
         'dataProviderInfoTitle': 'Indikatorer',
-        'layertools': {
-            'table_icon': {
-                'tooltip': 'gå till tematiska kartor',
-                'title': 'Tematiska kartor'
-            },
-            'diagram_icon': {
-                'tooltip': 'Visa uppgifter i diagram',
-                'title': 'Diagram'
-            },
-            'statistics': {
-                'tooltip': 'gå till tematiska kartor',
-                'title': 'Statistik'
-            }
+        'layerTool': {
+            'tooltip': 'Gå till tematiska kartor',
+            'title': 'Tematiska kartor'
         },
         'publisher': {
             "label": "Statistik",
@@ -85,13 +75,6 @@ Oskari.registerLocalization({
             'removeSource': 'Radera datamängd',
             'noIndicators': 'Börja användningen av tematiska kartor med att lägga till en indikator på kartan.'
         },
-        'legend': {
-            'title': 'Klassificering',
-            'noActive': 'Inga valda datamängder, välj datamängd för att se kartans klassificering.',
-            'noEnough': 'Datamängden är för liten för att klassificeras, försök en annan datamängd eller avgränsning.',
-            'noData': 'Ingen data vid den valda tidspunkten.',
-            'cannotCreateLegend': 'Teckenförklaringen kan inte skapas utgående från de valda värden, vänligen försök andra värden.'
-        },
         'series': {
             'speed': {
                 'label': 'Animeringshastighet',
@@ -102,7 +85,14 @@ Oskari.registerLocalization({
         },
         'diagram': {
             'title': 'Stapeldiagram',
-            'noValue': 'Inte tillgänglig'
+            'noValue': 'Inte tillgänglig',
+            'sort': {
+                'desc': 'Sortera',
+                'name-ascending': 'Stigande enligt namn',
+                'name-descending': 'Sjunkande enligt namn',
+                'value-ascending': 'Stigande enligt värde',
+                'value-descending': 'Sjunkande enligt värde'
+            }
         },
         'parameters': {
             'sex': 'Kön',
@@ -110,12 +100,9 @@ Oskari.registerLocalization({
             'Vuosi': 'År',
             'regionset': 'Områdesindelning',
             'from': 'från',
-            'to': 'tills'
-        },
-        'datatable': 'Tabell',
-        'published': {
-            'showMap': 'Visa karta',
-            'showTable': 'Visa tabell'
+            'to': 'tills',
+            'value': 'Värde',
+            'region': 'Område'
         },
         'classify': {
             'classify': 'Klassificering',
@@ -178,59 +165,20 @@ Oskari.registerLocalization({
             'regionsetsIsEmpty': 'Områdesindelningarna kunde inte hämtas för den valda datamängden.',
             'regionsDataError': 'Ett fel uppstod vid sökningen av områdets värden.',
             'regionsDataIsEmpty': 'Områdenas värden kunde inte ges till de valda datamängderna.',
-            'datasetSave': 'Ett fel uppstod vid sparning av data.',
-            'datasetDelete': 'Ett fel uppstod vid radering av data.',
-            'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.',
-            'myIndicatorNameInput': 'Namnfält kan inte vara tom.',
-            'myIndicatorYearInput': 'Årsfält kan inte vara tom.',
-            'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.',
-            'myIndicatorDatasource': 'Datakällan är tom.',
-            'myIndicatorInvalidData': 'Datamängder har ogiltiga värden.',
+            'datasourceIsEmpty': 'Datakällan är tom.',
             'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.',
             'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}',
-            'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}'
+            'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}',
+            'noActiveLegend': 'Inga valda datamängder, välj datamängd för att se kartans klassificering.',
+            'notAllowedRegionset': 'Ingen data vid den valda områdesindelning.',
+            'notAllowedSelection': 'Ingen data vid den valda datamängden.',
+            'noEnough': 'Datamängden är för liten för att klassificeras, försök en annan datamängd eller avgränsning.',
+            'noData': 'Ingen data vid den valda tidspunkten.',
+            'cannotCreateLegend': 'Teckenförklaringen kan inte skapas utgående från de valda värden, vänligen försök andra värden.'
         },
         'missing': {
             'regionsetName': 'Okänd',
             'indicator': 'Okänd indikator'
-        },
-        'datacharts': {
-            'flyout': 'Sökta datamängden',
-            'barchart': 'Stapeldiagram',
-            'linechart': 'Linjediagram',
-            'table': 'Tabell',
-            'desc': 'Tabell och figurer',
-            'nodata': 'Inga valda indikatorer',
-            'indicatorVar': 'Variabeln som ska visas i figuren',
-            'descColor': 'Figurens färg',
-            'selectClr': 'Vald färg',
-            'clrFromMap': 'Färgsättning enligt kartas klassificering',
-            'chooseColor': 'Välj färg',
-            'sorting': {
-                'desc': 'Sortera',
-                'name-ascending': 'Stigande enligt namn',
-                'name-descending': 'Sjunkande enligt namn',
-                'value-ascending': 'Stigande enligt värde',
-                'value-descending': 'Sjunkande enligt värde'
-            }
-        },
-        'filter': {
-            'title': 'Filtrering',
-            'indicatorToFilter': 'Variabel som ska filtreras',
-            'condition': 'Villkor',
-            'value': 'Värde',
-            'variable': 'Variabel',
-            'conditionPlaceholder': 'Välj villkor',
-            'greater': 'Större än (>)',
-            'greaterEqual': 'Större än eller lika med (>=)',
-            'equal': 'Lika med (=)',
-            'lessEqual': 'Mindre än eller lika med (<=)',
-            'lessThan': 'Mindre än (<)',
-            'between': 'Mellan (uteslutande)',
-            'filter': 'Filtrera värden',
-            'desc': 'Filtrera med värden',
-            'filtered': 'Filtrerade värden',
-            'area': 'Filtrera med områden'
         },
         'layer': {
             'name': 'Områdesindelning av tematiska kartan',
@@ -239,47 +187,30 @@ Oskari.registerLocalization({
         },
         'tab': {
             'title': 'Indikatorer',
-            'edit': 'Redigera',
-            'delete': 'Ta bort',
+            'confirmDelete': 'Vill du ta bort indikatorn "{name}"?',
             'grid': {
                 'name': 'Namn',
-                'edit': 'Redigera',
-                'delete': 'Ta bort',
                 'actions': 'Handlingar',
                 'createDate': 'Skapad',
                 'updateDate': 'Uppdaterad',
-            },
-            'popup': {
-                'deletetitle': 'Ta bort indikatorn',
-                'deletemsg': 'Vill du ta bort indikatorn "{name}"?',
-                'deleteSuccess': 'Indikatorn borttagen'
-            },
-            'button': {
-                'cancel': 'Avbryt',
-                'ok': 'OK'
-            },
-            'error': {
-                'title': 'Fel',
-                'notfound': 'Indikator saknas',
-                'notdeleted': 'Borttagning av indikatorn misslyckades'
             }
         },
         'userIndicators': {
-            'flyoutTitle': 'Skapa indikator',
-            'buttonTitle': 'Skapa indikator',
-            'buttonAddIndicator': 'Ange värden',
-            'panelGeneric': {
+            'title': 'Mina indikatorer',
+            'add': 'Skapa indikator',
+            'edit': 'Redigera indikator',
+            'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
+            'info': {
                 'title': 'Indikatorns uppgifter',
-                'formName': 'Namn',
-                'formDescription': 'Beskrivning',
-                'formDatasource': 'Källa'
+                'name': 'Namn',
+                'description': 'Beskrivning',
+                'source': 'Källa'
             },
-            'panelData': {
-                'title': 'Statistisk information'
-            },
-            'dialog': {
-                'successTitle': 'Sparad',
-                'successMsg': 'Informationen sparad.'
+            'datasets': {
+                'title': 'Statistisk information',
+                'dataset': 'Datamängder',
+                'noIndicator': 'Spara indikatorinformation för att lägga till datamängder.',
+                'noDatasets': 'Indikatorn har ingen lagrad datamängd.'
             },
             'import': {
                 'title': 'Hämta från urklipp',
@@ -288,12 +219,25 @@ Oskari.registerLocalization({
                 'Exempel 1: Helsinki;1234 \n' +
                 'Exempel 2: 011;5678'
             },
-            'notLoggedInTitle': 'Varning',
-            'notLoggedInWarning': 'Som utloggad användare kommer de skapade indikatorerna kunna användas endast under denna session. Logga in för att spara indikatorerna.',
-            'modify': {
-                'title': 'Indikator',
-                'edit': 'Redigera',
-                'remove': 'Ta bort'
+            'success': {
+                'indicatorSave': 'Indikatorns information sparad',
+                'indicatorDelete': 'Indikatorn borttagen',
+                'datasetSave': 'Datamängder har sparats',
+                'datasetDelete': 'Datamängder har tagits bort',
+            },
+            'error': {
+                'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.',
+                'indicatorDelete': 'Borttagning av indikatorn misslyckades',
+                'indicatorNotfound': 'Indikator saknas',
+                'datasetSave': 'Ett fel uppstod vid sparning av data',
+                'datasetDelete': 'Ett fel uppstod vid radering av data.'
+            },
+            'validate': {
+                'name': 'Namnfält kan inte vara tom',
+                'year': 'Årsfält kan inte vara tom',
+                'regionset': 'Områdesindelning kan inte vara tom',
+                'noData': 'Datamängder har inga värden',
+                'invalidData': 'Datamängder har ogiltiga värden',
             }
         },
         'indicatorList': {
@@ -307,14 +251,6 @@ Oskari.registerLocalization({
             'noMetadata': 'Tjänsten returnerade ingen beskrivning för {indicators, plural, one {indikatorn} other {indikatorer}}.',
             'updated': 'Senast uppdaterad',
             'nextUpdate': 'Nästa uppdatering'
-        },
-        'sumo': {
-            'placeholder': 'Välj här',
-            'captionFormat': '{0} valda',
-            'captionFormatAllSelected': 'Alla {0} valda!',
-            'searchText': 'Sök...',
-            'noMatch': 'Inga sökresultat hittades med "{0}"',
-            'locale': ['OK', 'Avbryt', 'Välj alla']
         }
     }
 });

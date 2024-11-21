@@ -1,12 +1,12 @@
 import React, { Fragment, useState } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { Diagram } from './Diagram';
 import { Select, Message } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
-import styled from 'styled-components';
 import { IndicatorName } from '../IndicatorName';
 import { FlyoutContent } from '../FlyoutContent';
-
-const BUNDLE_KEY = 'StatsGrid';
+import { BUNDLE_KEY } from '../../constants';
 
 const Selections = styled('div')`
     display: flex;
@@ -18,24 +18,8 @@ const StyledSelect = styled(Select)`
     max-width: 325px;
 `;
 
-const sortOptions = [
-    {
-        value: 'value-descending',
-        label: <Message messageKey='datacharts.sorting.value-descending' bundleKey={BUNDLE_KEY} />
-    },
-    {
-        value: 'value-ascending',
-        label: <Message messageKey='datacharts.sorting.value-ascending' bundleKey={BUNDLE_KEY} />
-    },
-    {
-        value: 'name-ascending',
-        label: <Message messageKey='datacharts.sorting.name-ascending' bundleKey={BUNDLE_KEY} />
-    },
-    {
-        value: 'name-descending',
-        label: <Message messageKey='datacharts.sorting.name-descending' bundleKey={BUNDLE_KEY} />
-    }
-];
+const sorters = ['value-descending', 'value-ascending', 'name-descending', 'name-ascending'];
+const sortOptions = sorters.map(value => ({ value, label: <Message messageKey={`diagram.sort.${value}`}/> }));
 
 const DiagramFlyout = ({ state, controller }) => {
     const { indicators, activeIndicator } = state;
@@ -56,12 +40,16 @@ const DiagramFlyout = ({ state, controller }) => {
                     options={sortOptions}
                     onChange={(value) => setSortOrder(value)}
                     value={sortOrder}
-                    placeholder={<Message messageKey='datacharts.sorting.desc' />}
+                    placeholder={<Message messageKey='diagram.sort.desc' />}
                 />
             </Selections>
             <Diagram indicator={current} sortOrder={sortOrder} />
         </Fragment>
     );
+};
+DiagramFlyout.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
 };
 
 export const showDiagramFlyout = (state, controller, onClose) => {
@@ -82,5 +70,5 @@ export const showDiagramFlyout = (state, controller, onClose) => {
                 <DiagramFlyout state={state} controller={controller} />
             </FlyoutContent>
         )
-    }
+    };
 };

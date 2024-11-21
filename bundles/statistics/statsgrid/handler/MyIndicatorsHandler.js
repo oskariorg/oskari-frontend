@@ -37,7 +37,8 @@ class IndicatorsHandler extends AsyncStateHandler {
                 },
                 error => {
                     this.updateState({ loading: false });
-                    Messaging.error(this.loc(error));
+                    const errorMsg = this.loc('errors')[error] || this.loc('errors.indicatorListError');
+                    Messaging.error(errorMsg);
                 });
         } catch (error) {
             Messaging.error(this.loc('errors.indicatorListError'));
@@ -52,7 +53,7 @@ class IndicatorsHandler extends AsyncStateHandler {
         const indicator = this.getState().indicators.find(ind => ind.id === id);
         if (!indicator) {
             // couldn't find indicator -> show an error
-            Messaging.error(this.loc('tab.error.notfound'));
+            Messaging.error(this.loc('userIndicators.error.indicatorNotfound'));
         }
         return indicator;
     }
@@ -60,16 +61,17 @@ class IndicatorsHandler extends AsyncStateHandler {
     async deleteIndicator (id) {
         const indicator = this.getIndicatorById(id);
         if (!indicator) {
-            Messaging.error(this.loc('tab.error.notdeleted'));
+            Messaging.error(this.loc('userIndicators.error.indicatorDelete'));
             return;
         }
         this.updateState({ loading: true });
         try {
             // removes all indicator data (no selections or regionset)
             await deleteIndicator({ ...indicator, ds: this.userDsId });
-            Messaging.success(this.loc('tab.popup.deleteSuccess'));
+            Messaging.success(this.loc('userIndicators.success.indicatorDelete'));
             this.refreshIndicatorsList();
         } catch (error) {
+            Messaging.error(this.loc('userIndicators.error.indicatorDelete'));
             this.updateState({ loading: false });
         }
     }
@@ -81,6 +83,7 @@ class IndicatorsHandler extends AsyncStateHandler {
     editIndicator (id) {
         this.formHandler.getController().showIndicatorPopup(this.userDsId, id);
     }
+
     openIndicator (indicator) {
         const viewHandler = this.instance.getViewHandler();
         viewHandler?.openSearchWithSelections({ ds: this.userDsId, ...indicator });

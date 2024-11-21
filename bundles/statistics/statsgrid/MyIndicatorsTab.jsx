@@ -15,9 +15,9 @@ export const MyIndicatorsTab = ({ state, controller }) => {
             />
         </LocaleProvider>
     );
-}
+};
 
 MyIndicatorsTab.propTypes = {
     state: PropTypes.object.isRequired,
     controller: PropTypes.object.isRequired
-}
+};

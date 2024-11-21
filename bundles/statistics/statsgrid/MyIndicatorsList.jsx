@@ -1,20 +1,15 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Button } from 'oskari-ui';
 import { Table, ToolsContainer, getSorterFor } from 'oskari-ui/components/Table';
-import { EditOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
+import { IconButton } from 'oskari-ui/components/buttons';
 
 const ButtonContainer = styled.div`
     margin: 10px 0 10px 0;
     display: flex;
     justify-content: flex-end;
 `;
-
-const editIconStyle = {
-    fontSize: '16px'
-};
 
 export const MyIndicatorsList = ({ controller, indicators = [], loading }) => {
     const columnSettings = [
@@ -24,11 +19,7 @@ export const MyIndicatorsList = ({ controller, indicators = [], loading }) => {
             title: <Message messageKey='tab.grid.name' />,
             sorter: getSorterFor('name'),
             defaultSortOrder: 'ascend',
-            render: (title, item) => {
-                return (
-                    <a onClick={() => controller.openIndicator(item)} >{title}</a>
-                )
-            }
+            render: (title, item) => <a onClick={() => controller.openIndicator(item)}>{title}</a>
         },
         {
             dataIndex: 'created',
@@ -52,30 +43,29 @@ export const MyIndicatorsList = ({ controller, indicators = [], loading }) => {
             title: <Message messageKey='tab.grid.actions' />,
             width: 100,
             render: (title, item) => {
+                const { id, name } = item;
                 return (
                     <ToolsContainer>
                         <IconButton
-                            className='t_edit'
-                            title={<Message messageKey='tab.grid.edit' />}
-                            icon={<EditOutlined style={editIconStyle} />}
-                            onClick={() => controller.editIndicator(item.id)}
+                            type='edit'
+                            onClick={() => controller.editIndicator(id)}
                         />
-                        <DeleteButton
-                            type='icon'
-                            title={<Message messageKey='tab.popup.deletemsg' messageArgs={{ name: item.name }} />}
-                            onConfirm={() => controller.deleteIndicator(item.id)}
+                        <IconButton
+                            type='delete'
+                            confirm={{ title: <Message messageKey='tab.confirmDelete' messageArgs={{ name }} /> }}
+                            onConfirm={() => controller.deleteIndicator(id)}
                         />
                     </ToolsContainer>
-                )
+                );
             }
         }
     ];
 
     return (
-        <>
+        <Fragment>
             <ButtonContainer>
                 <Button type='primary' onClick={() => controller.addNewIndicator()}>
-                    <Message messageKey='userIndicators.buttonTitle' />
+                    <Message messageKey='userIndicators.add' />
                 </Button>
             </ButtonContainer>
             <Table
@@ -87,7 +77,7 @@ export const MyIndicatorsList = ({ controller, indicators = [], loading }) => {
                 pagination={false}
                 loading={loading}
             />
-        </>
+        </Fragment>
     );
 };
 

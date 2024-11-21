@@ -31,7 +31,7 @@ const Form = ({
     if (!indicator) {
         return (
             <Content>
-                <Message bundleKey={BUNDLE_KEY} messageKey='legend.noActive'/>
+                <Message bundleKey={BUNDLE_KEY} messageKey='errors.noActiveLegend'/>
             </Content>
         );
     }
@@ -74,7 +74,7 @@ const Form = ({
                 onChange={method => controller.updateClassification({ method })}
                 options={getMethodOptions(indicator)}/>
             <div ref={ref} className="manual-class-view"/>
-            {error && <Message messageKey={'legend.noEnough' } bundleKey={BUNDLE_KEY} />}
+            {error && <Message messageKey={'errors.noEnough' } bundleKey={BUNDLE_KEY} />}
             <ButtonContainer>
                 <PrimaryButton type='close' onClick={onClose}/>
             </ButtonContainer>

@@ -13,19 +13,9 @@ Oskari.registerLocalization(
             "title": "Cartes thématiques"
         },
         "dataProviderInfoTitle": "Indicateurs",
-        "layertools": {
-            "table_icon": {
-                "tooltip": "Passer aux cartes thématiques",
-                "title": "Cartes thématiques"
-            },
-            "diagram_icon": {
-                "tooltip": "Afficher les données dans le schéma",
-                "title": "Schéma"
-            },
-            "statistics": {
-                "tooltip": "Passer aux cartes thématiques",
-                "title": "Statistiques"
-            }
+        "layerTool": {
+            "tooltip": "Passer aux cartes thématiques",
+            "title": "Cartes thématiques"
         },
         'publisher': {
             "label": "Cartes thématiques",
@@ -83,13 +73,6 @@ Oskari.registerLocalization(
             "orderByDescending": "Trier en ordre décroissant",
             "removeSource": "Supprimer les données"
         },
-        "legend": {
-            "title": "Classification",
-            "noActive": "Aucune donnée sélectionnée. Veuillez sélectionner les données pour voir la classification de la carte.",
-            "noEnough": "Les données sont trop petites pour être classifiées. Veuillez essayer des données différentes ou modifier les limites.",
-            "noData": "Les données ne sont pas accessibles pour le moment précis sélectionné.",
-            "cannotCreateLegend": "Impossible de créer la légende à l'aide des  valeurs choisies. Veuillez essayer des valeurs différentes."
-        },
         "series": {
             "speed": {
                 "label": "Vitesse d'animation",
@@ -100,19 +83,23 @@ Oskari.registerLocalization(
         },
         "diagram": {
             "title": "Schéma",
-            "noValue": "S/O"
+            "noValue": "S/O",
+            "sort": {
+                "desc": "Ordre",
+                "name-ascending": "Nom en ordre croissant",
+                "name-descending": "Nom en ordre décroissant",
+                "value-ascending": "Valeur en ordre croissant",
+                "value-descending": "Valeur en ordre décroissant"
+            }
         },
         "parameters": {
             "sex": "Sexe",
             "year": "Année",
             "regionset": "Superficie",
             "from": "de",
-            "to": "à"
-        },
-        "datatable": "Tableau",
-        "published": {
-            "showMap": "Afficher la carte",
-            "showTable": "Afficher le tableau"
+            "to": "à",
+            "value": "Valeur",
+            "region": "Région"
         },
         "classify": {
             "classify": "Classification",
@@ -174,51 +161,12 @@ Oskari.registerLocalization(
             "regionsetsIsEmpty": "Impossible d'aller chercher les sélections de superficie pour les données choisies.",
             "regionsDataError": "Une erreur est survenue lors de la recherche des valeurs de superficie.",
             "regionsDataIsEmpty": "Impossible d'aller chercher les valeurs de superficie pour les données choisies.",
-            "datasetSave": "Erreur lors de l'enregistrement du jeu de données.",
-            "datasetDelete": "Erreur lors de la suppression du jeu de données.",
-            "indicatorSave": "Erreur lors de l'enregistrement de l'indicateur",
-            "myIndicatorYearInput": "Le champ Année ne peut pas être vide.",
-            "myIndicatorRegionselect": "Le champ Sélection de la région ne peut pas être vide.",
-            "myIndicatorDatasource": "Le champ Source de données est vide.",
-            "cannotDisplayAsSeries": "Impossible d'analyser l'indicateur en tant que série."
-        },
-        "datacharts": {
-            "flyout": "Données recherchées",
-            "barchart": "Diagramme à barres",
-            "linechart": "Diagramme à ligne brisée",
-            "table": "Tableau",
-            "desc": "Tableau et graphiques",
-            "nodata": "Les indicateurs n'ont pas été choisis",
-            "indicatorVar": "La variable sera affichée dans le graphique",
-            "descColor": "Couleur du graphique",
-            "selectClr": "Couleur sélectionnée",
-            "clrFromMap": "Couleurs par classification dans la carte",
-            "chooseColor": "Sélectionner la couleur",
-            "sorting": {
-                "desc": "Ordre",
-                "name-ascending": "Nom en ordre croissant",
-                "name-descending": "Nom en ordre décroissant",
-                "value-ascending": "Valeur en ordre croissant",
-                "value-descending": "Valeur en ordre décroissant"
-            }
-        },
-        "filter": {
-            "title": "Filtrage",
-            "indicatorToFilter": "Variable à filtrer",
-            "condition": "Condition",
-            "value": "Valeur",
-            "variable": "Variable",
-            "conditionPlaceholder": "Sélectionner la condition",
-            "greater": "est supérieur(e) à (>)",
-            "greaterEqual": "est supérieur(e) ou égal(e) à (>=)",
-            "equal": "est égal(e) à (=)",
-            "lessEqual": "est inférieur(e) ou égal(e) à (<=)",
-            "lessThan": "est inférieur(e) à (<)",
-            "between": "Entre (exclusif)",
-            "filter": "Filtrer les valeurs",
-            "desc": "Filtrer par valeur",
-            "filtered": "Valeurs filtrées",
-            "area": "Filtrer par superficie"
+            "datasourceIsEmpty": "Le champ Source de données est vide.",
+            "cannotDisplayAsSeries": "Impossible d'analyser l'indicateur en tant que série.",
+            "noActiveLegend": "Aucune donnée sélectionnée. Veuillez sélectionner les données pour voir la classification de la carte.",
+            "noEnough": "Les données sont trop petites pour être classifiées. Veuillez essayer des données différentes ou modifier les limites.",
+            "noData": "Les données ne sont pas accessibles pour le moment précis sélectionné.",
+            "cannotCreateLegend": "Impossible de créer la légende à l'aide des  valeurs choisies. Veuillez essayer des valeurs différentes."
         },
         "layer": {
             "name": "Division par superficie de la carte thématique",
@@ -227,55 +175,44 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Indicateurs",
-            "edit": "Modifier",
-            "delete": "Supprimer",
+            "confirmDelete": "Vous supprimez l'indicateur \"{name}\". Souhaitez-vous supprimer l'indicateur?",
             "grid": {
-                "name": "Nom",
-                "edit": "Modifier",
-                "delete": "Supprimer"
-            },
-            "popup": {
-                "deletetitle": "Supprimer l'indicateur",
-                "deletemsg": "Vous supprimez l'indicateur \"{name}\". Souhaitez-vous supprimer l'indicateur?",
-                "deleteSuccess": "Indicateur supprimé"
-            },
-            "button": {
-                "cancel": "Annuler",
-                "ok": "OK"
-            },
-            "error": {
-                "title": "Erreur",
-                "notfound": "Impossible de trouver l'indicateur.",
-                "notdeleted": "L'indicateur n'a pas été supprimé."
+                "name": "Nom"
             }
         },
         "userIndicators": {
-            "flyoutTitle": "Ajouter un nouvel indicateur",
-            "buttonTitle": "Ajouter un nouvel indicateur",
-            "buttonAddIndicator": "Ajouter des données",
-            "panelGeneric": {
+            "title": "Mes indicateurs",
+            "add": "Ajouter un nouvel indicateur",
+            "edit": "Indicateur de modification",
+            "notLoggedInWarning": "Sans ouverture de session, impossible d'enregistrer les données, qui seront uniquement accessibles jusqu'à ce que la page soit rechargée. Ouvrir une session avant d'ajouter l'indicateur pour conserver les données.",
+            "info": {
                 "title": "Données de l'indicateur",
-                "formName": "Nom",
-                "formDescription": "Description",
-                "formDatasource": "Source de données"
+                "name": "Nom",
+                "description": "Description",
+                "source": "Source de données"
             },
-            "panelData": {
+            "datasets": {
                 "title": "Données statistiques"
-            },
-            "dialog": {
-                "successTitle": "Enregistré",
-                "successMsg": "Les données ont été enregistrées."
             },
             "import": {
                 "title": "Importation à partir du presse-papiers",
                 "placeholder": "Saisir les données de l'indicateur ici. Chaque rangée doit contenir une région et sa valeur. Saisir le nom ou l'identifiant de la région. Utiliser le point-virgule en tant que délimiteur. On peut importer les données dans les formats suivants : \nExemple 1 : Helsinki;1234 \nExample 2 : 011;5678"
             },
-            "notLoggedInTitle": "Avertissement",
-            "notLoggedInWarning": "Sans ouverture de session, impossible d'enregistrer les données, qui seront uniquement accessibles jusqu'à ce que la page soit rechargée. Ouvrir une session avant d'ajouter l'indicateur pour conserver les données.",
-            "modify": {
-                "title": "Indicateur",
-                "edit": "Modifier",
-                "remove": "Supprimer"
+            "success": {
+                "indicatorSave": "Les données ont été enregistrées",
+                "indicatorDelete": "Indicateur supprimé",
+                "datasetSave": "Les données ont été enregistrées"
+            },
+            "error": {
+                "indicatorSave": "Erreur lors de l'enregistrement de l'indicateur",
+                "indicatorDelete": "L'indicateur n'a pas été supprimé",
+                "indicatorNotfound": "Impossible de trouver l'indicateur",
+                "datasetSave": "Erreur lors de l'enregistrement du jeu de données",
+                "datasetDelete": "Erreur lors de la suppression du jeu de données"
+            },
+            'validate': {
+                "year": "Le champ Année ne peut pas être vide.",
+                "regionset": "Le champ Sélection de la région ne peut pas être vide."
             }
         }
     }

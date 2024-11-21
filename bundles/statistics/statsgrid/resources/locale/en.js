@@ -12,19 +12,9 @@ Oskari.registerLocalization({
             'title': 'Thematic maps'
         },
         'dataProviderInfoTitle': 'Indicators',
-        'layertools': {
-            'table_icon': {
-                'tooltip': 'Move to thematic maps',
-                'title': 'Thematic maps'
-            },
-            'diagram_icon': {
-                'tooltip': 'Show data in diagram',
-                'title': 'Diagram'
-            },
-            'statistics': {
-                'tooltip': 'Move to thematic maps',
-                'title': 'Statistics'
-            }
+        'layerTool': {
+            'tooltip': 'Move to thematic maps',
+            'title': 'Thematic maps'
         },
         'publisher': {
             "label": "Thematic maps",
@@ -85,13 +75,6 @@ Oskari.registerLocalization({
             'removeSource': 'Remove data',
             'noIndicators': 'Start using thematic maps by adding an indicator on the map.'
         },
-        'legend': {
-            'title': 'Classification',
-            'noActive': 'Data was not selected, select data to see map classification.',
-            'noEnough': 'The data is too small to be classified, try different data or change limitings.',
-            'noData': 'Data is not available for the selected point in time.',
-            'cannotCreateLegend': 'Legend cannot be created by chosen values, try different values.'
-        },
         'series': {
             'speed': {
                 'label': 'Animation speed',
@@ -102,7 +85,14 @@ Oskari.registerLocalization({
         },
         'diagram': {
             'title': 'Diagram',
-            'noValue': 'N/A'
+            'noValue': 'N/A',
+            'sort': {
+                'desc': 'Order',
+                'name-ascending': 'Name ascending',
+                'name-descending': 'Name descending',
+                'value-ascending': 'Value ascending',
+                'value-descending': 'Value descending'
+            }
         },
         'parameters': {
             'sex': 'Gender',
@@ -110,12 +100,9 @@ Oskari.registerLocalization({
             'Vuosi': 'Year',
             'regionset': 'Regional division',
             'from': 'from',
-            'to': 'to'
-        },
-        'datatable': 'Table',
-        'published': {
-            'showMap': 'Show map',
-            'showTable': 'Show table'
+            'to': 'to',
+            'value': 'Value',
+            'region': 'Region'
         },
         'classify': {
             'classify': 'Classification',
@@ -178,59 +165,20 @@ Oskari.registerLocalization({
             'regionsetsIsEmpty': 'Area selections could not be fetched for chosen data.',
             'regionsDataError': 'Error occurred in area value search.',
             'regionsDataIsEmpty': 'Area values could not be fetched for chosen data.',
-            'datasetSave': 'Error saving dataset.',
-            'datasetDelete': 'Error deleting dataset.',
-            'indicatorSave': 'Error saving indicator',
-            'myIndicatorNameInput': 'Name field cannot be empty.',
-            'myIndicatorYearInput': 'Year field cannot be empty.',
-            'myIndicatorRegionselect': 'Regionselect cannot be empty.',
-            'myIndicatorDatasource': 'Datasource is empty.',
-            'myIndicatorInvalidData': 'Data has invalid values.',
+            'datasourceIsEmpty': 'Datasource is empty.',
             'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.',
             'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}',
-            'onlyPartialDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}'
+            'onlyPartialDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}',
+            'notAllowedRegionset': 'Data is not available for the selected regional division.',
+            'notAllowedSelection': 'Data is not available for the selections.',
+            'noActiveLegend': 'Data was not selected, select data to see map classification.',
+            'noEnough': 'The data is too small to be classified, try different data or change limitings.',
+            'noData': 'Data is not available for the selected point in time.',
+            'cannotCreateLegend': 'Legend cannot be created by chosen values, try different values.'
         },
         'missing': {
             'regionsetName': 'Unknown',
             'indicator': 'Unknown indicator'
-        },
-        'datacharts': {
-            'flyout': 'Searched data',
-            'barchart': 'Bar chart',
-            'linechart': 'Line chart',
-            'table': 'Table',
-            'desc': 'Table and graphs',
-            'nodata': 'Indicators were not chosen',
-            'indicatorVar': 'Variable to be shown in graph',
-            'descColor': 'Color of the graph',
-            'selectClr': 'Selected color',
-            'clrFromMap': 'Colors by classification in the map',
-            'chooseColor': 'Select color',
-            'sorting': {
-                'desc': 'Order',
-                'name-ascending': 'Name ascending',
-                'name-descending': 'Name descending',
-                'value-ascending': 'Value ascending',
-                'value-descending': 'Value descending'
-            }
-        },
-        'filter': {
-            'title': 'Filtering',
-            'indicatorToFilter': 'Variable to be filtered',
-            'condition': 'Condition',
-            'value': 'Value',
-            'variable': 'Variable',
-            'conditionPlaceholder': 'Select condition',
-            'greater': 'Greater than (>)',
-            'greaterEqual': 'Greater than or equal to (>=)',
-            'equal': 'Equal to (=)',
-            'lessEqual': 'Less than or equal to (<=)',
-            'lessThan': 'Less than (<)',
-            'between': 'Between (exclusive)',
-            'filter': 'Filter values',
-            'desc': 'Filter by values',
-            'filtered': 'Filtered values',
-            'area': 'Filter by areas'
         },
         'layer': {
             'name': 'Areal division of thematic map',
@@ -239,47 +187,30 @@ Oskari.registerLocalization({
         },
         'tab': {
             'title': 'Indicators',
-            'edit': 'Edit',
-            'delete': 'Delete',
+            'confirmDelete': 'You are deleting the indicator "{name}". Do you want to delete the indicator?',
             'grid': {
                 'name': 'Name',
-                'edit': 'Edit',
-                'delete': 'Delete',
                 'actions': 'Actions',
                 'createDate': 'Created',
                 'updateDate': 'Updated'
-            },
-            'popup': {
-                'deletetitle': 'Delete Indicator',
-                'deletemsg': 'You are deleting the indicator "{name}". Do you want to delete the indicator?',
-                'deleteSuccess': 'Indicator removed'
-            },
-            'button': {
-                'cancel': 'Cancel',
-                'ok': 'OK'
-            },
-            'error': {
-                'title': 'Error',
-                'notfound': 'The indicator was not found.',
-                'notdeleted': 'The indicator was not removed.'
             }
         },
         'userIndicators': {
-            'flyoutTitle': 'Add new indicator',
-            'buttonTitle': 'Add new indicator',
-            'buttonAddIndicator': 'Add data',
-            'panelGeneric': {
+            'title': 'My indicators',
+            'add': 'Add new indicator',
+            'edit': 'Edit indicator',
+            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
+            'info': {
                 'title': 'Indicator data',
-                'formName': 'Name',
-                'formDescription': 'Description',
-                'formDatasource': 'Datasource'
+                'name': 'Name',
+                'description': 'Description',
+                'source': 'Source'
             },
-            'panelData': {
-                'title': 'Statistical data'
-            },
-            'dialog': {
-                'successTitle': 'Saved',
-                'successMsg': 'The data has been saved.'
+            'datasets': {
+                'title': 'Statistical data',
+                'dataset': 'Dataset',
+                'noIndicator': 'Save indicator information to add datasets.',
+                'noDatasets': 'Indicator doesn\'t have any stored dataset.'
             },
             'import': {
                 'title': 'Import from the clipboard',
@@ -287,12 +218,25 @@ Oskari.registerLocalization({
                 'Sample 1: Helsinki;1234 \n' +
                 'Sample 2: 011;5678'
             },
-            'notLoggedInTitle': 'Warning',
-            'notLoggedInWarning': 'Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.',
-            'modify': {
-                'title': 'Indicator',
-                'edit': 'Edit',
-                'remove': 'Remove'
+            'success': {
+                'indicatorSave': 'Indicator saved',
+                'indicatorDelete': 'Indicator removed',
+                'datasetSave': 'The dataset has been saved',
+                'datasetDelete': 'The dataset has been removed',
+            },
+            'error': {
+                'indicatorSave': 'Error saving indicator',
+                'indicatorDelete': 'The indicator was not removed',
+                'indicatorNotfound': 'The indicator was not found',
+                'datasetSave': 'Error saving dataset',
+                'datasetDelete': 'Error deleting dataset'
+            },
+            'validate': {
+                'name': 'Name field cannot be empty',
+                'year': 'Year field cannot be empty',
+                'regionset': 'Regionselect cannot be empty',
+                'noData': 'Data doesn\'t have values',
+                'invalidData': 'Data has invalid values'
             }
         },
         'indicatorList': {
@@ -306,14 +250,6 @@ Oskari.registerLocalization({
             'noMetadata': 'Service did not return {indicators, plural, one {description for the indicator} other {descriptions for the indicators}}',
             'updated': 'Last update',
             'nextUpdate': 'Next update'
-        },
-        'sumo': {
-            'placeholder': 'Select Here',
-            'captionFormat': '{0} selected',
-            'captionFormatAllSelected': 'All {0} selected!',
-            'searchText': 'Search...',
-            'noMatch': 'No results found matching "{0}"',
-            'locale': ['OK', 'Cancel', 'Select All']
         }
     }
 });

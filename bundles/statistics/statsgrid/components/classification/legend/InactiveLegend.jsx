@@ -10,7 +10,7 @@ const Container = styled.div`
 export const InactiveLegend = ({ error }) => {
     return (
         <Container className="t_legend-noactive">
-            <Message messageKey={`legend.${error}`}/>
+            <Message messageKey={`errors.${error}`}/>
         </Container>
     );
 };

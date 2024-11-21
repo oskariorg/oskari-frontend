@@ -1,5 +1,6 @@
 import React from 'react';
-import { Checkbox, Select, Message, Spin } from 'oskari-ui';
+import PropTypes from 'prop-types';
+import { Checkbox, Select, Message, Spin, Button } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
 import { ButtonContainer, PrimaryButton, SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
@@ -7,6 +8,7 @@ import { LocaleProvider } from 'oskari-ui/util';
 import { IndicatorParams } from './IndicatorParams';
 import { IndicatorCollapse } from './IndicatorCollapse';
 import { getDatasources, getRegionsets } from '../../helper/ConfigHelper';
+import { validateSelectionsForSearch } from '../../handler/SearchIndicatorOptionsHelper';
 
 const BUNDLE_KEY = 'StatsGrid';
 const Content = styled('div')`
@@ -38,15 +40,29 @@ const IndicatorField = styled('div')`
     flex-direction: column;
     width: 100%;
 `;
+const MetadataButton = styled(Button)`
+    margin-right: auto;
+    padding: 0;
+`;
+const ParamsLabel = styled.div`
+    font-weight: bold;
+    margin-bottom: 10px;
+`;
 
-const UserIndicator = ({isSingle, onClick}) => {
+const UserIndicator = ({ isSingle, onClick }) => {
     const type = isSingle ? 'edit' : 'add';
-    const title = isSingle ? 'userIndicators.modify.edit' : 'userIndicators.buttonTitle';
-    return <UserIndicatorButton bordered type={type} title={<Message messageKey={title} />} onClick={onClick} />
+    return <UserIndicatorButton bordered type={type} title={<Message messageKey={`userIndicators.${type}`} />} onClick={onClick} />;
+};
+UserIndicator.propTypes = {
+    isSingle: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired
 };
 
 // For preventing checkbox clickable area from stretching to 100% of content width
 const ClickableArea = ({ children }) => <div>{children}</div>;
+ClickableArea.propTypes = {
+    children: PropTypes.any
+};
 
 const SearchFlyout = ({ state, controller }) => {
     const datasources = getDatasources();
@@ -55,11 +71,11 @@ const SearchFlyout = ({ state, controller }) => {
         // Nothing to show -> show generic "data missing" message
         return (<b><Message messageKey='errors.indicatorListError' /></b>);
     }
-    const singleIndicatorSelected = state.selectedIndicators?.length === 1;
+    const singleIndicatorSelected = state.selectedIndicators.length === 1;
     const multipleRegionsetsAvailable = regionsets.length > 1;
     const multipleDatasourcesAvailable = datasources.length > 1;
-    const Component = (
-        <React.Fragment>
+    return (
+        <Spin showTip spinning={state.loading}>
             <Field>
                 <b><Message messageKey='panels.newSearch.seriesTitle' /></b>
                 <ClickableArea>
@@ -79,7 +95,7 @@ const SearchFlyout = ({ state, controller }) => {
                         optionFilterProp='label'
                         options={regionsets.map(rs => ({ value: rs.id, label: rs.name }))}
                         placeholder={<Message messageKey='panels.newSearch.selectRegionsetPlaceholder' />}
-                        value={state?.regionsetFilter}
+                        value={state.regionsetFilter}
                         onChange={(value) => controller.setRegionsetFilter(value)}
                     />
                 </Field>
@@ -90,7 +106,7 @@ const SearchFlyout = ({ state, controller }) => {
                     <StyledSelect
                         options={datasources.map(ds => ({ value: ds.id, label: ds.name, disabled: state.disabledDatasources.includes(ds.id) }))}
                         placeholder={<Message messageKey='panels.newSearch.selectDatasourcePlaceholder' />}
-                        value={state?.selectedDatasource}
+                        value={state.selectedDatasource}
                         onChange={(value) => controller.setSelectedDatasource(value)}
                     />
                 </Field>
@@ -101,11 +117,12 @@ const SearchFlyout = ({ state, controller }) => {
                         <b><Message messageKey='panels.newSearch.indicatorTitle' /></b>
                         <StyledSelect
                             mode='multiple'
+                            loading={!state.complete}
                             optionFilterProp='label'
-                            options={state?.indicatorOptions?.map(i => ({ value: i.id, label: i.title, disabled: !!i.disabled }))}
+                            options={state.indicatorOptions.map(i => ({ value: i.id, label: i.name, disabled: !!i.disabled }))}
                             placeholder={<Message messageKey='panels.newSearch.selectIndicatorPlaceholder' />}
-                            disabled={!state?.indicatorOptions || state?.indicatorOptions?.length < 1}
-                            value={state?.selectedIndicators}
+                            disabled={!state.indicatorOptions.length}
+                            value={state.selectedIndicators}
                             onChange={(value) => controller.setSelectedIndicators(value)}
                         />
                     </IndicatorField>
@@ -113,25 +130,15 @@ const SearchFlyout = ({ state, controller }) => {
                 </Row>
             </Field>
             {state.selectedIndicators && state.selectedIndicators.length > 0 && (
-                <div>
-                    <a onClick={() => controller.openMetadataPopup()}>
-                        <Message messageKey='metadataPopup.open' messageArgs={{ indicators: state.selectedIndicators.length }} />
-                    </a>
-                </div>
+                <MetadataButton type='link' onClick={() => controller.openMetadataPopup()}>
+                    <Message messageKey='metadataPopup.open' messageArgs={{ indicators: state.selectedIndicators.length }} />
+                </MetadataButton>
             )}
-            <b><Message messageKey='panels.newSearch.refineSearchLabel' /></b>
-            {!state.indicatorParams && (
-                <i><Message messageKey='panels.newSearch.refineSearchTooltip1' /></i>
-            )}
-            {state.indicatorParams && (
-                <IndicatorParams
-                    allRegionsets={regionsets}
-                    params={state.indicatorParams}
-                    regionsetFilter={state.regionsetFilter}
-                    searchTimeseries={state.searchTimeseries}
-                    controller={controller}
-                />
-            )}
+            <ParamsLabel><Message messageKey='panels.newSearch.refineSearchLabel' /></ParamsLabel>
+            <IndicatorParams
+                { ...state }
+                allRegionsets={regionsets}
+                controller={controller}/>
             <ButtonContainer>
                 <SecondaryButton
                     type='clear'
@@ -139,17 +146,16 @@ const SearchFlyout = ({ state, controller }) => {
                 />
                 <PrimaryButton
                     type='search'
-                    disabled={state.selectedIndicators?.length < 1}
+                    disabled={!validateSelectionsForSearch(state)}
                     onClick={() => controller.search()}
                 />
             </ButtonContainer>
-        </React.Fragment>
+        </Spin>
     );
-
-    if (state.loading) {
-        return <Spin showTip={true}>{Component}</Spin>;
-    }
-    return Component;
+};
+SearchFlyout.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
 };
 
 export const showSearchFlyout = (state, indicators = [], searchController, stateController, onClose) => {
