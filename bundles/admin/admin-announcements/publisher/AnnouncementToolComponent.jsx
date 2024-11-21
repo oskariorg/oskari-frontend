@@ -46,7 +46,7 @@ export const AnnouncementToolComponent = ({ state, controller }) => {
             </Checkbox>
 
             <SelectedAnnouncements>
-<Message LabelComponent={SelectedAnnouncementsTitle} bundleKey={'admin-announcements'} messageKey={'publisher.selectedAnnouncementsTitle'} />
+                <Message LabelComponent={SelectedAnnouncementsTitle} bundleKey={'admin-announcements'} messageKey={'publisher.selectedAnnouncementsTitle'} />
                 { announcements
                     .filter((ann) => selectedAnnouncements?.includes(ann.id))
                     .map((announcement) => {
