@@ -62,7 +62,7 @@ Oskari.registerLocalization(
                 "tooltip": "Determine the size of the map. The recommendation is to use the option \"Scalable/ Responsive\". Otherwise, the width should be from {minWidth} to {maxWidth} pixels and the height from {minHeight} to {maxHeight} pixels."
             },
             "maptools": {
-                "label": "Tools",
+                "label": "Additional tools",
                 "tooltip": "Select available map tools. Check a placement in the map preview.",
                 "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Feature query tool",
@@ -234,7 +234,7 @@ Oskari.registerLocalization(
                 "noLayers": "No selected map layers"
             },
             "reactTools": {
-                "label": "Additional tools"
+                "label": "Tools"
             },
             "preview": "Map preview",
             "location": "Location and zoom level",
