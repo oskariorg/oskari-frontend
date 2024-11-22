@@ -99,6 +99,7 @@ Oskari.registerLocalization(
                 "message": "Coordinates can not be transformed"
             },
             "publisher": {
+                "toolLabel": "Coordinate tool",
                 "showTransformationTools": "Show coordinate transformation tools",
                 "noUI": "Hide user interface (Use RPC interface)"
             }

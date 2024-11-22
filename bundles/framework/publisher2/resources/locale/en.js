@@ -64,11 +64,9 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Additional tools",
                 "tooltip": "Select available map tools. Check a placement in the map preview.",
-                "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Feature query tool",
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
-                "CoordinateToolPlugin": "Coordinate tool",
                 "MapLegend": "Show map legend",
                 "MapRotator": "Enable map rotation",
                 "CameraControls3d": "Camera tools",

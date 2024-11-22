@@ -100,6 +100,10 @@ Oskari.registerLocalization(
                         "tooltip": "Välj funktioner"
                     }
                 }
+            },
+            "publisher": {
+                "toolLabel": "Objektuppgifter"
             }
+
         }
     });

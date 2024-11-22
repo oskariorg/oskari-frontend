@@ -64,11 +64,9 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Ytterligare verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
-                "FeaturedataPlugin": "Objektuppgifter",
                 "GetInfoPlugin": "Frågverktyg för visande av objektuppgifter",
                 "selectDrawLayer": "Välj lager för nya funktioner",
                 "LayerSelectionPlugin": "Kartlagermeny",
-                "CoordinateToolPlugin": "Koordinatverktyg",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
                 "CameraControls3d": "Kameraverktyg",

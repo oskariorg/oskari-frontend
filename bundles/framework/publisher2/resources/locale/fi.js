@@ -64,11 +64,9 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Lisätyökalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
-                "FeaturedataPlugin": "Kohdetietotaulukko",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
                 "selectDrawLayer": "Valitse tallennustaso",
                 "LayerSelectionPlugin": "Karttatasovalikko",
-                "CoordinateToolPlugin": "Koordinaattityökalu",
                 "MapLegend": "Näytä karttaselitteet",
                 "MapRotator": "Salli kartan pyörittäminen",
                 "CameraControls3d": "Kameratyökalut",

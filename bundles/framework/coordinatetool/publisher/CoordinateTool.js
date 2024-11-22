@@ -42,7 +42,7 @@ class CoordinateTool extends AbstractPublisherTool {
     getTool () {
         return {
             id: 'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
-            title: Oskari.getMsg('Publisher2', 'BasicView.maptools.CoordinateToolPlugin'),
+            title: Oskari.getMsg('coordinatetool', 'display.publisher.toolLabel'),
             config: {
                 ...(this.state.pluginConfig || {})
             }

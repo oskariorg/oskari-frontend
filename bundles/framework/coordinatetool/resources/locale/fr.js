@@ -99,6 +99,7 @@ Oskari.registerLocalization(
                 "message": "Impossible de transformer les coordonnées"
             },
             "publisher": {
+                "toolLabel": "Coordonner l'outil",
                 "showTransformationTools": "Afficher les outils de transformation des coordonnées",
                 "noUI": "Masquer l'interface utilisateur (utiliser l'interface  RPC)"
             }

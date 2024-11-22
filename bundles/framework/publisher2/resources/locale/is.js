@@ -54,7 +54,6 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Fyrirspurnatól fyrir fitjur",
                 "selectDrawLayer": "Velja kortalag",
                 "LayerSelectionPlugin": "Valmynd fyrir kortalög",
-                "CoordinateToolPlugin": "Hnitatól",
                 "FeedbackServiceTool": "",
                 "toolbarToolNames": {
                     "history_back": "Færa í fyrri sýn",
