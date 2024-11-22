@@ -4,7 +4,7 @@ class CrosshairTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 110;
-        this.group = 'additional';
+        this.group = 'reactTools';
     }
 
     getTool () {

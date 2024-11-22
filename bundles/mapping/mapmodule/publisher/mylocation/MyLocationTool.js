@@ -6,7 +6,7 @@ class MyLocationTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 100;
-        this.group = 'additional';
+        this.group = 'reactTools';
         this.handler = new MyLocationToolHandler(this);
     };
 

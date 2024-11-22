@@ -7,7 +7,7 @@ class MapRotatorTool extends AbstractPublisherTool {
         super(...args);
         this.index = 80;
         this.bundleName = 'maprotator';
-        this.group = 'additional';
+        this.group = 'reactTools';
         this.handler = new MapRotatorToolHandler(this);
     }
 

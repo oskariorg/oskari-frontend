@@ -5,7 +5,7 @@ class ScaleBarTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 60;
-        this.group = 'additional';
+        this.group = 'reactTools';
     }
 
     getTool () {

@@ -3,7 +3,7 @@ class ControlsTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 90;
-        this.group = 'additional';
+        this.group = 'reactTools';
     }
 
     getTool () {

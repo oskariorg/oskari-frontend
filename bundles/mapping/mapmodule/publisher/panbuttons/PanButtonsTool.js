@@ -5,7 +5,7 @@ class PanButtonsTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 70;
-        this.group = 'additional';
+        this.group = 'reactTools';
         this.handler = new PanButtonsHandler(this);
     };
 

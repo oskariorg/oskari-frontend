@@ -7,7 +7,7 @@ class AnnouncementsTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 160;
-        this.group = 'additional';
+        this.group = 'reactTools';
         this.handler = new AnnouncementsToolHandler(this);
 
         this.sandbox = Oskari.getSandbox();
