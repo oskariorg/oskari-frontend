@@ -69,7 +69,6 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Kartlagermeny",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
-                "CameraControls3d": "Kameraverktyg",
                 "TimeControl3d": "Tidskontroll",
                 "toolbarToolNames": {
                     "history": "Gå bakåt eller framåt",
