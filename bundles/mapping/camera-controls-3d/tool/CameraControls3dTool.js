@@ -1,75 +1,65 @@
-Oskari.clazz.define('Oskari.mapping.cameracontrols3d.CameraControls3dTool',
-    function () {
-    }, {
-        index: 3,
-        lefthanded: 'top left',
-        righthanded: 'top right',
+import { AbstractPublisherTool } from '../../../framework/publisher2/tools/AbstractPublisherTool';
 
-        groupedSiblings: true,
-
-        /**
-    * Get tool object.
-    * @method getTool
-    *
-    * @returns {Object} tool description
-    */
-        getTool: function () {
-            return {
-                id: 'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
-                title: 'CameraControls3d',
-                config: {}
-            };
-        },
+class CameraControls3dTool extends AbstractPublisherTool {
+    constructor (...args) {
+        super(...args);
+        this.index = 170;
+        this.group = 'tools';
+        this.lefthanded = 'top left';
+        this.righthanded = 'top right';
+        this.groupedSiblings = true;
         // Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
-        bundleName: 'camera-controls-3d',
+        this.bundleName = 'camera-controls-3d';
+    }
 
-        /**
-      * Initialise tool
-      * @method init
-      */
-        init: function (data) {
-            if (data.configuration[this.bundleName]) {
-                this.setEnabled(true);
+    init (data) {
+        if (data.configuration[this.bundleName]) {
+            this.setEnabled(true);
+            const location = data.configuration[this.bundleName]?.conf?.location?.classes;
+            if (location) {
+                this.getPlugin().setLocation(location);
             }
-        },
-        /**
+        }
+    }
+
+    getTool () {
+        return {
+            id: 'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
+            title: Oskari.getMsg('CameraControls3d', 'publisher.toolLabel'),
+            config: {}
+        };
+    }
+
+    /**
     * Get values.
     * @method getValues
     * @public
     *
     * @returns {Object} tool value object
     */
-        getValues: function () {
-            if (this.state.enabled) {
-                var pluginConfig = this.getPlugin().getConfig();
-                var json = {
-                    configuration: {}
-                };
-                json.configuration[this.bundleName] = {
-                    conf: pluginConfig,
-                    state: {}
-                };
-                return json;
-            } else {
-                return null;
-            }
-        },
-        /**
-        * Stop tool.
-        * @method stop
-        * @public
-        */
-        stop: function () {
-            this.__started = false;
-            if (!this.__plugin) {
-                return;
-            }
-            if (this.getSandbox()) {
-                this.__plugin.stopPlugin(this.getSandbox());
-            }
-            this.__mapmodule.unregisterPlugin(this.__plugin);
+    getValues () {
+        if (this.state.enabled) {
+            const pluginConfig = this.getPlugin().getConfig();
+            const json = {
+                configuration: {}
+            };
+            json.configuration[this.bundleName] = {
+                conf: pluginConfig,
+                state: {}
+            };
+            return json;
+        } else {
+            return null;
         }
-    }, {
-        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol': ['Oskari.mapframework.publisher.Tool']
-    });
+    }
+}
+
+// Attach protocol to make this discoverable by Oskari publisher
+Oskari.clazz.defineES('Oskari.publisher.CameraControls3dTool',
+    CameraControls3dTool,
+    {
+        protocol: ['Oskari.mapframework.publisher.Tool']
+    }
+);
+
+export { CameraControls3dTool };
