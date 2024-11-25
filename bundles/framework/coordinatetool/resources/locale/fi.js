@@ -99,6 +99,7 @@ Oskari.registerLocalization(
                 "message": "Koordinaatteja ei saatu muunnettua"
             },
             "publisher": {
+                "toolLabel": "Koordinaattityökalu",
                 "showTransformationTools": "Näytä koordinaattimuunnostyökalut",
                 "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
             }

@@ -2,8 +2,8 @@ import { AbstractPublisherTool } from '../../../../framework/publisher2/tools/Ab
 class ControlsTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
-        this.group = 'additional';
+        this.index = 90;
+        this.group = 'tools';
     }
 
     getTool () {

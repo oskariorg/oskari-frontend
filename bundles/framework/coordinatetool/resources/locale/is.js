@@ -101,6 +101,7 @@ Oskari.registerLocalization(
                 "message": "Ekki er hægt að breyta hnitkerfi"
             },
             "publisher": {
+                "toolLabel": "Hnitatól",
                 "showTransformationTools": "Sýna hnitabreytingatól",
                 "noUI": "Fela notendaviðmót (Nota RPC viðmót)"
             }

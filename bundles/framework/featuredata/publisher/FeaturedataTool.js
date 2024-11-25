@@ -3,8 +3,8 @@ import { AbstractPublisherTool } from '../../publisher2/tools/AbstractPublisherT
 class FeaturedataTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
-        this.group = 'additional';
+        this.index = 130;
+        this.group = 'tools';
         this.bundleName = 'featuredata';
     }
 
@@ -40,7 +40,7 @@ class FeaturedataTool extends AbstractPublisherTool {
     getTool () {
         return {
             id: 'Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin',
-            title: Oskari.getMsg('Publisher2', 'BasicView.maptools.FeaturedataPlugin'),
+            title: Oskari.getMsg('FeatureData', 'publisher.toolLabel'),
             config: this.state.pluginConfig || {}
         };
     }

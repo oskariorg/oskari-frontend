@@ -3,8 +3,8 @@ import { AbstractPublisherTool } from '../../publisher2/tools/AbstractPublisherT
 class TimeSeriesTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
-        this.group = 'additional';
+        this.index = 150;
+        this.group = 'tools';
         this.allowedLocations = ['top center'];
         this.lefthanded = 'top center';
         this.righthanded = 'top center';

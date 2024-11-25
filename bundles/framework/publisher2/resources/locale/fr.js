@@ -66,7 +66,6 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Outil d'interrogation de fonctionnalité",
                 "selectDrawLayer": "Sélectionner la couche cartographique",
                 "LayerSelectionPlugin": "Menu des couches cartographiques",
-                "CoordinateToolPlugin": "Coordonner l'outil",
                 "FeedbackServiceTool": "Service de rétroaction (Open311)",
                 "MapLegend": "Afficher la légende de la carte",
                 "MapRotator": "Activer la rotation de la carte",

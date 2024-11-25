@@ -4,8 +4,8 @@ import { CoordinateToolHandler } from './CoordinateToolHandler';
 class CoordinateTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
-        this.group = 'additional';
+        this.index = 120;
+        this.group = 'tools';
         this.bundleName = 'coordinatetool';
         this.handler = new CoordinateToolHandler(this);
     }
@@ -42,7 +42,7 @@ class CoordinateTool extends AbstractPublisherTool {
     getTool () {
         return {
             id: 'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
-            title: Oskari.getMsg('Publisher2', 'BasicView.maptools.CoordinateToolPlugin'),
+            title: Oskari.getMsg('coordinatetool', 'display.publisher.toolLabel'),
             config: {
                 ...(this.state.pluginConfig || {})
             }

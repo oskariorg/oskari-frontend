@@ -67,7 +67,6 @@ Oskari.registerLocalization(
                 "GetInfoPlugin": "Инструмент запроса объектов",
                 "selectDrawLayer": "Выбрать слой карты",
                 "LayerSelectionPlugin": "Меню слоев карты",
-                "CoordinateToolPlugin": "Инструмент координат",
                 "FeedbackServiceTool": "Обратная связь (Open311) ",
                 "MapLegend": "Показать условные знаки",
                 "MapRotator": "Включить поворот карты",

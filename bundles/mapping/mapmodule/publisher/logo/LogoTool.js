@@ -4,7 +4,7 @@ class LogoTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 1;
-        this.group = 'additional';
+        this.group = 'tools';
         this.config = null;
     }
 

@@ -62,13 +62,11 @@ Oskari.registerLocalization(
                 "tooltip": "Valitse kartan koko. Suositus on käyttää skaalautuvaa vaihtoehtoa \"Skaalautuva / tilan täyttävä\". Muussa tapauksessa leveyden on oltava välillä {minWidth} ja {maxWidth} pikseliä ja korkeuden {minHeight} ja {maxHeight} pikseliä."
             },
             "maptools": {
-                "label": "Kartalla näytettävät työkalut",
+                "label": "Lisätyökalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
-                "FeaturedataPlugin": "Kohdetietotaulukko",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
                 "selectDrawLayer": "Valitse tallennustaso",
                 "LayerSelectionPlugin": "Karttatasovalikko",
-                "CoordinateToolPlugin": "Koordinaattityökalu",
                 "MapLegend": "Näytä karttaselitteet",
                 "MapRotator": "Salli kartan pyörittäminen",
                 "CameraControls3d": "Kameratyökalut",
@@ -233,8 +231,8 @@ Oskari.registerLocalization(
                 "noBaseLayers": "Ei valittuja taustakarttoja",
                 "noLayers": "Ei valittuja karttatasoja"
             },
-            "additional": {
-                "label": "Lisätyökalut"
+            "tools": {
+                "label": "Kartalla näytettävät työkalut"
             },
             "preview": "Kartan esikatselu",
             "location": "Sijainti ja mittakaavataso",

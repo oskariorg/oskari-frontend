@@ -100,6 +100,9 @@ Oskari.registerLocalization(
                         "tooltip": "Piirrä geometria ja valitse sen avulla kohteet."
                     }
                 }
+            },
+            "publisher": {
+                "toolLabel": "Kohdetietotaulukko"
             }
         }
     });

@@ -6,8 +6,8 @@ import { AnnouncementsToolHandler } from './AnnouncementsToolHandler';
 class AnnouncementsTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
-        this.group = 'additional';
+        this.index = 160;
+        this.group = 'tools';
         this.handler = new AnnouncementsToolHandler(this);
 
         this.sandbox = Oskari.getSandbox();

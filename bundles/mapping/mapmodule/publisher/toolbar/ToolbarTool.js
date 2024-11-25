@@ -4,8 +4,8 @@ import { ToolbarToolHandler } from './ToolbarToolHandler';
 class ToolbarTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
-        this.group = 'additional';
+        this.index = 20;
+        this.group = 'tools';
         this.handler = new ToolbarToolHandler(this);
     }
 

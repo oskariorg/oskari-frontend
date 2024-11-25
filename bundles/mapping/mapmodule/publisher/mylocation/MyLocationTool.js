@@ -5,8 +5,8 @@ import { MyLocationToolHandler } from './MyLocationHandler';
 class MyLocationTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
-        this.index = 1;
-        this.group = 'additional';
+        this.index = 100;
+        this.group = 'tools';
         this.handler = new MyLocationToolHandler(this);
     };
 
