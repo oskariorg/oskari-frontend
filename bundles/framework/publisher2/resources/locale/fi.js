@@ -69,7 +69,6 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Karttatasovalikko",
                 "MapLegend": "Näytä karttaselitteet",
                 "MapRotator": "Salli kartan pyörittäminen",
-                "TimeControl3d": "Ajanhetken säädin",
                 "toolbarToolNames": {
                     "history": "Siirtyminen edelliseen ja seuraavaan näkymään",
                     "history_back": "Siirtyminen edelliseen näkymään",

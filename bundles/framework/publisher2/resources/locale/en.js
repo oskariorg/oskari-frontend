@@ -69,7 +69,6 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Map layers menu",
                 "MapLegend": "Show map legend",
                 "MapRotator": "Enable map rotation",
-                "TimeControl3d": "Time control",
                 "toolbarToolNames": {
                     "history": "Move to previous or next view",
                     "history_back": "Move to previous view",
