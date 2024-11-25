@@ -231,7 +231,7 @@ Oskari.registerLocalization(
                 "noBaseLayers": "Ei valittuja taustakarttoja",
                 "noLayers": "Ei valittuja karttatasoja"
             },
-            "reactTools": {
+            "tools": {
                 "label": "Kartalla näytettävät työkalut"
             },
             "preview": "Kartan esikatselu",

@@ -4,7 +4,7 @@ class FeaturedataTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 130;
-        this.group = 'reactTools';
+        this.group = 'tools';
         this.bundleName = 'featuredata';
     }
 

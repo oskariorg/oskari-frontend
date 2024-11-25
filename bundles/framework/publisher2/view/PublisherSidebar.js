@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             this.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
             // separate tools that support react from ones that don't
-            const reactGroups = ['reactTools', 'data', 'statsgrid'];
+            const reactGroups = ['tools', 'data', 'statsgrid'];
             const reactGroupsTools = {};
             // create panel for each tool group
             Object.keys(publisherTools.groups).forEach(group => {

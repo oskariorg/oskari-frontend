@@ -7,7 +7,7 @@ class SwipeTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 40;
-        this.group = 'reactTools';
+        this.group = 'tools';
     }
 
     getTool () {

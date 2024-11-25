@@ -5,7 +5,7 @@ class CoordinateTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 120;
-        this.group = 'reactTools';
+        this.group = 'tools';
         this.bundleName = 'coordinatetool';
         this.handler = new CoordinateToolHandler(this);
     }

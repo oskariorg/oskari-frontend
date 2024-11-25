@@ -4,7 +4,7 @@ class TimeSeriesTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 150;
-        this.group = 'reactTools';
+        this.group = 'tools';
         this.allowedLocations = ['top center'];
         this.lefthanded = 'top center';
         this.righthanded = 'top center';

@@ -5,7 +5,7 @@ class ToolbarTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 20;
-        this.group = 'reactTools';
+        this.group = 'tools';
         this.handler = new ToolbarToolHandler(this);
     }
 

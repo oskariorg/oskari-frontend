@@ -4,7 +4,7 @@ class ZoombarTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 50;
-        this.group = 'reactTools';
+        this.group = 'tools';
     };
 
     /**

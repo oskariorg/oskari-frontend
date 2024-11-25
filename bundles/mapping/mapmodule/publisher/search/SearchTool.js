@@ -3,7 +3,7 @@ class SearchTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 10;
-        this.group = 'reactTools';
+        this.group = 'tools';
     }
 
     getTool () {

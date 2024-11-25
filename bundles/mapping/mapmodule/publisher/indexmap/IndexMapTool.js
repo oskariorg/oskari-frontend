@@ -4,7 +4,7 @@ class IndexMapTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.index = 30;
-        this.group = 'reactTools';
+        this.group = 'tools';
     }
 
     getTool () {
