@@ -251,10 +251,13 @@ class SearchController extends AsyncStateHandler {
         const hasValidSelection = (id, allowed, time) => {
             const cur = current[id];
             if (time) {
+                if (!Array.isArray(cur)) {
+                    return false;
+                }
                 if (searchTimeseries) {
                     return cur.length === 2 && cur[0] < cur[1];
                 }
-                return Array.isArray(cur) && cur.some(value => allowed.includes(value));
+                return cur.some(value => allowed.includes(value));
             }
             return allowed.includes(cur);
         };

@@ -127,6 +127,7 @@ const processMetadata = (meta) => {
         const label = locParams[id] || id;
         const selector = { id, values, time, label };
         if (time) {
+            values.sort((a, b) => Oskari.util.naturalSort(a.value, b.value, true));
             selectors.unshift(selector);
         } else {
             selectors.push(selector);
