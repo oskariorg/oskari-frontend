@@ -21,10 +21,25 @@ class MapRotatorTool extends AbstractPublisherTool {
         }
 
         // saved configuration -> restore.
-        const conf = data.configuration[this.bundleName].conf || {};
+        const bundleData = data.configuration[this.bundleName];
+        const conf = bundleData?.conf || {};
         this.handler.init(conf);
         this.storePluginConf(conf);
+        this.storePluginState(bundleData?.state || {});
         this.setEnabled(true);
+    }
+
+    storePluginState (state) {
+        this.state.pluginState = state || {};
+    }
+
+    setEnabled (enabled) {
+        super.setEnabled(enabled);
+        if (enabled && this.state.pluginState?.degrees) {
+            this.getPlugin().setRotation(this.state.pluginState?.degrees);
+        } else {
+            this.getMapmodule().getMap().getView().setRotation(0);
+        }
     }
 
     isDisplayed () {
