@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { LabeledInput, Select, Option, Message, Label } from 'oskari-ui';
 import styled from 'styled-components';
 import { InfoIcon } from 'oskari-ui/components/icons';
-
+import { PropTypes } from 'prop-types';
 const FieldWithInfo = styled('div')`
     display: flex;
     flex-direction: row;
@@ -13,12 +13,11 @@ const FieldWithInfo = styled('div')`
 const BUNDLE_KEY = 'Publisher2';
 
 export const GeneralInfoForm = ({ onChange, data }) => {
-
     const [state, setState] = useState({
         name: data.name.value ? data.name.value : null,
         domain: data.domain.value ? data.domain.value : null,
         language: data.language.value ? data.language.value : Oskari.getLang()
-    })
+    });
 
     const languages = Oskari.getSupportedLanguages();
 
@@ -73,6 +72,7 @@ export const GeneralInfoForm = ({ onChange, data }) => {
                         });
                         onChange('language', lang);
                     }}
+                    popupMatchSelectWidth={false}
                 >
                     {languages.map(lang => (
                         <Option value={lang} key={lang}>
@@ -84,4 +84,9 @@ export const GeneralInfoForm = ({ onChange, data }) => {
             </FieldWithInfo>
         </div>
     );
+};
+
+GeneralInfoForm.propTypes = {
+    onChange: PropTypes.func,
+    data: PropTypes.obj
 };
