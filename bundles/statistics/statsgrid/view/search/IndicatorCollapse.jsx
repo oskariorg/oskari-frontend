@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, Collapse } from 'oskari-ui';
+import { Message, Collapse, Badge } from 'oskari-ui';
 import { IconButton } from 'oskari-ui/components/buttons';
 import { IndicatorRow } from './IndicatorRow';
 import styled from 'styled-components';
@@ -8,8 +8,14 @@ import styled from 'styled-components';
 const StyledCollapse = styled(Collapse)`
     margin-top: 20px;
 `;
-const RemoveAll = styled(IconButton)`
+const Extra = styled.div`
     height: 20px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    > * {
+        margin-left: 5px;
+    }
 `;
 
 const Content = ({ indicators = [], removeIndicator, showMetadata }) => {
@@ -31,17 +37,18 @@ Content.propTypes = {
 };
 
 const PanelExtra = ({ indicators = [], removeAll }) => {
-    if (indicators.length < 2) {
-        return null;
-    }
+    const showDelete = indicators.length !== 0;
     return (
-        <div onClick={e => e.stopPropagation()}>
-            <RemoveAll
+        <Extra onClick={e => e.stopPropagation()}>
+            { showDelete && <IconButton
                 type='delete'
+                iconSize={18}
                 confirm={{ title: <Message messageKey='indicatorList.removeAll' /> }}
                 title={<Message messageKey='indicatorList.removeAll' />}
                 onConfirm={() => removeAll()}/>
-        </div>
+            }
+            <Badge count={indicators.length}/>
+        </Extra>
     );
 };
 PanelExtra.propTypes = {
