@@ -532,6 +532,10 @@ This seems to only happen on the Firefox browser
   z-index: 30050 !important;
 }
 
+.ant-tabs-dropdown {
+  z-index: 30050 !important;
+}
+
 .ant-popover {
   z-index: 30030 !important;
 }
