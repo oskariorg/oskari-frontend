@@ -24,7 +24,7 @@ const StyledSelect = styled(Select)`
     width: 100%;
 `;
 
-const TimeSeriesParams = ({ id, options, selectedValues, controller }) => (
+const TimeSeriesParams = ({ id, options, selectedValues = [], controller }) => (
     <Timeseries>
         <TimeseriesField>
             <b><Message messageKey='parameters.from' /></b>
@@ -47,7 +47,7 @@ const TimeSeriesParams = ({ id, options, selectedValues, controller }) => (
 TimeSeriesParams.propTypes = {
     id: PropTypes.string.isRequired,
     options: PropTypes.array.isRequired,
-    selectedValues: PropTypes.array.isRequired,
+    selectedValues: PropTypes.array,
     controller: PropTypes.object.isRequired
 };
 
