@@ -48,7 +48,7 @@ ClipboardPopup.propTypes = {
 };
 
 export const showClipboardPopup = (controller, onClose) => {
-    const title = <Message messageKey='userIndicators.flyoutTitle' bundleKey={BUNDLE_KEY} />;
+    const title = <Message messageKey='userIndicators.import.title' bundleKey={BUNDLE_KEY} />;
     return showPopup(
         title,
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
