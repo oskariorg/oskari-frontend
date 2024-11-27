@@ -199,8 +199,9 @@ class SearchController extends AsyncStateHandler {
                     params.regionsets.forEach(rs => regionsets.add(rs));
                     params.selectors.forEach((selector) => {
                         const existing = combinedSelectors.find(s => s.id === selector.id);
+                        // Note: selectors may come from metadata cache, don't mess up cached data
                         if (!existing) {
-                            combinedSelectors.push(selector);
+                            combinedSelectors.push({ ...selector });
                         } else {
                             const values = existing.values.map(s => s.value);
                             const newValues = selector.values.filter(v => !values.includes(v.value));
@@ -374,12 +375,15 @@ class SearchController extends AsyncStateHandler {
         const multiSelections = [];
         Object.keys(selections).forEach(key => {
             const metaSelector = metadata.selectors.find(selector => selector.id === key);
-            // use metadata for validity check. Params have combined selectors.
-            const checkAllowed = value => metaSelector.values.find(obj => obj.value === value);
             if (!metaSelector) {
-                indSearchValues.error = 'indicatorMetadataError';
+                // Only allowed selections are used for get/add indicator
+                // multi indicator selections may have selection which is missing from single indicator selectors
+                // skip selection and don't add error
                 return;
             }
+            // use metadata for validity check. Params have combined selectors.
+            const checkAllowed = value => metaSelector.values.find(obj => obj.value === value);
+
             const values = selections[key];
             // single
             if (!Array.isArray(values)) {
