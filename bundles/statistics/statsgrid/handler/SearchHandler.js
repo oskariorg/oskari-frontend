@@ -199,8 +199,9 @@ class SearchController extends AsyncStateHandler {
                     params.regionsets.forEach(rs => regionsets.add(rs));
                     params.selectors.forEach((selector) => {
                         const existing = combinedSelectors.find(s => s.id === selector.id);
+                        // Note: selectors may come from metadata cache, don't mess up cached data
                         if (!existing) {
-                            combinedSelectors.push(selector);
+                            combinedSelectors.push({ ...selector });
                         } else {
                             const values = existing.values.map(s => s.value);
                             const newValues = selector.values.filter(v => !values.includes(v.value));
