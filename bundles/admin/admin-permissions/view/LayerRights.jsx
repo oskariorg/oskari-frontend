@@ -85,11 +85,7 @@ export const LayerRights = ({ controller, state }) => {
                     title={<Message messageKey='flyout.unsavedChangesConfirm'/>}
                     open={roleConfirmOpen}
                     onConfirm={() => onRoleConfirm(true) }
-                    onCancel={() => onRoleConfirm(false) }
-                    okText={<Message bundleKey='oskariui' messageKey='buttons.yes'/>}
-                    cancelText={<Message bundleKey='oskariui' messageKey='buttons.cancel'/>}
-                    placement='top'
-                    popupStyle={{ zIndex: '999999' }}>
+                    onCancel={() => onRoleConfirm(false) }>
                     <StyledSelect
                         placeholder={<Message messageKey='flyout.select.placeholder'/>}
                         value={state.selected}

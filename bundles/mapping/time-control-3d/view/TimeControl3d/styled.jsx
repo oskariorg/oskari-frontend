@@ -1,8 +1,6 @@
 import styled from 'styled-components';
-import { Button, Slider, Select } from 'oskari-ui';
+import { ThemedButton, Select } from 'oskari-ui';
 import { CalendarOutlined, ClockCircleOutlined } from '@ant-design/icons';
-
-const thickSlider = 8; // default is 4
 
 export const CalendarIcon = styled(CalendarOutlined)`
     margin-right: 15px;
@@ -40,95 +38,20 @@ export const StyledInput = styled.input`
     text-align: center;
 `;
 
-const ThemedButton = styled(Button)`
-    background: ${props => props.color};
-    border: none;
-    font-size: 16px;
-    fill: currentColor;
-
-    &:focus,
-    &:active,
-    &&&:hover {
-        background: ${props => props.hover};
-        color: inherit;
-        border: none;
-    }
-`;
-
 export const StyledButton = styled(ThemedButton)`
+    font-size: 16px;
     width: 100%;
     height: 40px;
 `;
 
 export const StyledPlayButton = styled(ThemedButton)`
+    font-size: 16px;
     padding: 0;
     height: 42px;
     width: 40px;
 `;
 
-const StyledSlider = styled(Slider)`
-    &&& {
-        height: ${props => props.useThick ? 12 + thickSlider : 16}px;
-    }
-    .ant-slider-mark {
-        top: -21px;
-    }
-    .ant-slider-mark-text {
-        color: #ffffff;
-    }
-    .ant-slider-dot {
-        background: #3c3c3c;
-        border-radius: 0%;
-        border: 0;
-        margin-left: 0px;
-        width: 2px;
-        top: 0px;
-        height: ${props => props.useThick ? thickSlider : 4}px;
-    }
-    .ant-slider-dot:last-child {
-        margin-left: 0px;
-    }
-    .ant-slider-rail {
-        ${props => props.useThick ? 'height: ' + thickSlider + 'px;' : ''}
-        background: #ffffff !important;
-    }
-    .ant-slider-track {
-        ${props => props.useThick ? 'height: ' + thickSlider + 'px;' : ''}
-        background: ${props => props.color};
-    }
-    .ant-slider-handle {
-        top: -2px;
-        width: 8px;
-        height: ${props => props.useThick ? 12 + thickSlider : 16}px;
-        border-radius: 6px;
-        border: solid 1px #3c3c3c;
-        background-color: ${props => props.color} !important;
-
-        &:focus .ant-slider-track,
-        &:active .ant-slider-track,
-        &:hover .ant-slider-track {
-            background: ${props => props.hover} !important;
-        }
-        ::after {
-            display: none;
-        }
-    }
-    &:hover .ant-slider-track {
-        background: ${props => props.hover} !important;
-    }
-    &:hover .ant-slider-handle {
-        border: solid 1px #3c3c3c !important;
-        background-color: ${props => props.color} !important;
-    }
-`;
-
-export const StyledTimeSlider = styled(StyledSlider)`
-    &&& {
-        margin: 0px;
-    }
-`;
-
-export const StyledDateSlider = styled(StyledSlider)`
+export const DateSliderContainer = styled.div`
     width: 93%;
     margin-top: 20px;
 `;
@@ -155,6 +78,9 @@ export const ColFixed = styled.div`
     width: auto;
     max-width: 100%;
     position: relative;
+`;
+export const Divider = styled.div`
+    margin-bottom: 30px;
 `;
 export const TimeBorder = styled.div(({ isMobile }) => ({
     borderRadius: '4px',

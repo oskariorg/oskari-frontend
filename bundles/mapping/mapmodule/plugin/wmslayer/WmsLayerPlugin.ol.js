@@ -244,6 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                 if (typeof layerSource.getTileLoadFunction === 'function') {
                     var originalTileLoadFunction = new OskariTileWMS().getTileLoadFunction();
                     layerSource.setTileLoadFunction(function (image, src) {
+                        image._oskariGetMapUrl = src;
                         if (src.length >= 2048) {
                             me._imagePostFunction(image, src, proxyUrl);
                         } else {
@@ -255,6 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                 else if (typeof layerSource.getImageLoadFunction === 'function') {
                     var originalImageLoadFunction = new OskariImageWMS().getImageLoadFunction();
                     layerSource.setImageLoadFunction(function (image, src) {
+                        image._oskariGetMapUrl = src;
                         if (src.length >= 2048) {
                             me._imagePostFunction(image, src, proxyUrl);
                         } else {

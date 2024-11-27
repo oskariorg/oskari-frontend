@@ -5,6 +5,7 @@ export class OskariImageWMS extends olSourceImageWMS {
      * Return currently shown image url
      */
     getImageUrl () {
-        return this.image_.src_;
+        // WMSLayerPlugin sets up the load function that injects this value to image on updateLayerParams()
+        return this.image?._oskariGetMapUrl;
     }
 }

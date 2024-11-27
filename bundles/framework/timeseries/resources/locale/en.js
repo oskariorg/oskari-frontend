@@ -38,6 +38,11 @@ Oskari.registerLocalization(
             "helpMsg_range": 'In this mode you can select a time range for the data. Note! The latest available image for the selected range is shown on any given location. You can switch to single year mode by clicking the near by icon:',
             "switchToRange": "Switch to time range mode",
             "switchToYear": "Switch to single year mode"
+        },
+        "publisher": {
+            "TimeseriesControlPlugin": {
+                "toolLabel": "Time series player"
+            }
         }
     }
 });

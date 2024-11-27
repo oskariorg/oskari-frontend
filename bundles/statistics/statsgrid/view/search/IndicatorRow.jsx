@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { IconButton } from 'oskari-ui/components/buttons';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { IndicatorName } from '../IndicatorName';
@@ -36,4 +37,9 @@ export const IndicatorRow = ({ indicator, removeIndicator, showMetadata }) => {
             </Actions>
         </Row>
     );
+};
+IndicatorRow.propTypes = {
+    indicator: PropTypes.object.isRequired,
+    removeIndicator: PropTypes.func.isRequired,
+    showMetadata: PropTypes.func.isRequired
 };

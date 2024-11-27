@@ -50,17 +50,10 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Tól",
                 "tooltip": "Velja tiltæk kortatól. Athugaðu staðsetningu við forskoðun korts.",
-                "IndexMapPlugin": "Index kort",
-                "Portti2Zoombar": "Þysjunarstika",
-                "ControlsPlugin": "Hliðra með mús",
-                "SearchPlugin": "Leit eftir stað",
                 "FeaturedataPlugin": "Fitjugögn",
                 "GetInfoPlugin": "Fyrirspurnatól fyrir fitjur",
-                "PublisherToolbarPlugin": "Kortatól",
                 "selectDrawLayer": "Velja kortalag",
                 "LayerSelectionPlugin": "Valmynd fyrir kortalög",
-                "CoordinateToolPlugin": "Hnitatól",
-                "CrosshairTool": "Sýna aðalatriði korts",
                 "FeedbackServiceTool": "",
                 "toolbarToolNames": {
                     "history_back": "Færa í fyrri sýn",

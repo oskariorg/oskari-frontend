@@ -10,6 +10,9 @@ Oskari.registerLocalization(
                 "slow": "Hidas",
                 "normal": "Normaali",
                 "fast": "Nopea"
+            },
+            "publisher": {
+                "toolLabel": "Ajanhetken säädin"
             }
         }
     }

@@ -4,10 +4,10 @@ import { LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const Label = styled('div')`
-    display: ${props => props.allowTextEllipsis ? 'inline': 'inline-block'};
-    overflow: ${props => props.allowTextEllipsis ? 'hidden': ''};
-    white-space: ${props => props.allowTextEllipsis ? 'nowrap': ''};
-    text-overflow: ${props => props.allowTextEllipsis ? 'ellipsis': ''};
+    display: ${props => props.allowTextEllipsis ? 'inline' : 'inline-block'};
+    overflow: ${props => props.allowTextEllipsis ? 'hidden' : ''};
+    white-space: ${props => props.allowTextEllipsis ? 'nowrap' : ''};
+    text-overflow: ${props => props.allowTextEllipsis ? 'ellipsis' : ''};
 `;
 
 /**
@@ -34,7 +34,7 @@ const Label = styled('div')`
  *     <Message messageKey="hello" messageArgs={['Jack']}/>
  * </LocaleProvider>
  */
-const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, children, LabelComponent = Label, allowHTML = false, allowTextEllipsis = false }) => {
+const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, fallback, children, LabelComponent = Label, allowHTML = false, allowTextEllipsis = false }) => {
     if (!messageKey) {
         return null;
     }
@@ -49,18 +49,25 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
 
     // If we didn't find localization AND we have default value -> use it
     if (message === messageKey && defaultMsg) {
-        message = defaultMsg;
+        if (defaultMsg) {
+            message = defaultMsg;
+        } else if (fallback) {
+            return fallback;
+        }
     }
-
+    const injectedProps = {};
+    if (Oskari.isMsgDebugMode()) {
+        injectedProps.onClick = () => Oskari.log('Message').debug(`Text clicked - ${bundleKey}: ${messageKey}`);
+    }
     if (allowHTML) {
-        return ( <LabelComponent dangerouslySetInnerHTML={{ __html:message }}></LabelComponent> );
+        return (<LabelComponent dangerouslySetInnerHTML={{ __html: message }} { ...injectedProps }></LabelComponent>);
     }
 
     return (
         <LabelComponent
             allowTextEllipsis={allowTextEllipsis}
-            onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
-                { message } { children }
+            { ...injectedProps }>
+            { message } { children }
         </LabelComponent>
     );
 };
@@ -72,20 +79,20 @@ Message.propTypes = {
     getMessage: PropTypes.func,
     children: PropTypes.node,
     LabelComponent: PropTypes.elementType,
+    fallback: PropTypes.node,
     allowHTML: PropTypes.bool,
     allowTextEllipsis: PropTypes.bool
 };
 
-function getMessageUsingOskariGlobal(bundleKey, messageKey, messageArgs) {
+function getMessageUsingOskariGlobal (bundleKey, messageKey, messageArgs) {
     try {
         return Oskari.getMsg(bundleKey, messageKey, messageArgs);
-    } catch(e) {
+    } catch (e) {
         // no locale provider OR bundleKey missing from locale provider
-        Oskari.log().warn(`Message tag used without LocaleProvider or bundleKey not provided when getting: ${messageKey}. Original error: ${e.message}`);
+        Oskari.log('Message').warn(`Message tag used without LocaleProvider or bundleKey not provided when getting: ${messageKey}. Original error: ${e.message}`);
     }
     return messageKey;
 }
-
 
 const wrapped = LocaleConsumer(Message);
 export { wrapped as Message };

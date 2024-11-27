@@ -22,7 +22,8 @@ Oskari.registerLocalization({
             clear: 'Clear',
             accept: 'Accept',
             reject: 'Reject',
-            info: 'Show more information'
+            info: 'Show more information',
+            move: 'Move'
         },
         messages: {
             confirm: 'Are you sure you want to continue?',

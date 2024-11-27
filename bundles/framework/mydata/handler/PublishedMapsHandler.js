@@ -174,7 +174,7 @@ class MapsHandler extends StateHandler {
             dialog.close(true);
         });
         dialog.show(this.loc('projectionError').title, this.loc('projectionError').msg, [cancel, btn]);
-        dialog.makeDraggable();
+        dialog.makeModal();
     }
 
     editView (data) {
@@ -186,6 +186,7 @@ class MapsHandler extends StateHandler {
             this.createProjectionChangeDialog(() => {
                 window.location.href = this.constructUrlWithUuid(srs, embeddedMapUuid, data);
             });
+            return;
         }
 
         const resp = this.viewService.isViewLayersLoaded(data, sandbox);

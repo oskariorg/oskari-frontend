@@ -12,7 +12,6 @@ export const getRegions = (regionsetId) => {
 
 export const getRegionsAsync = async (regionset) => {
     if (!regionset) {
-        // log error message
         throw new Error('Regionset id missing');
     }
     const cachedResponse = regionsStore[regionset];
@@ -39,6 +38,6 @@ export const getRegionsAsync = async (regionset) => {
         regionsStore[regionset] = onlyWithNames;
         return onlyWithNames;
     } catch (error) {
-        throw new Error(error);
+        throw new Error('regionsDataError');
     }
 };

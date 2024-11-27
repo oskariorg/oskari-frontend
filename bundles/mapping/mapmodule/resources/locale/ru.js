@@ -140,6 +140,24 @@ Oskari.registerLocalization(
             },
             "PanButtons": {
                 "toolLabel": "Инструмент панорамирования"
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Номенклатура карты"
+            },
+            "Zoombar": {
+                "toolLabel": "Панель увеличения"
+            },
+            "CrosshairTool": {
+                "toolLabel": "Показать фокус карты"
+            },
+            "SearchPlugin": {
+                "toolLabel": "Поиск места"
+            },
+            "ControlsPlugin": {
+                "toolLabel": "Панорамирование мышью"
+            },
+            "PublisherToolbarPlugin": {
+                "toolLabel": "Инструмент карты"
             }
         }
     }

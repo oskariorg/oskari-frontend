@@ -12,19 +12,9 @@ Oskari.registerLocalization({
             'title': 'Teemakartat'
         },
         'dataProviderInfoTitle': 'Indikaattorit',
-        'layertools': {
-            'table_icon': {
-                'tooltip': 'Siirry teemakarttoihin',
-                'title': 'Teemakartat'
-            },
-            'diagram_icon': {
-                'tooltip': 'Näytä tiedot diagrammissa',
-                'title': 'Diagrammi'
-            },
-            'statistics': {
-                'tooltip': 'siirry teemakarttoihin',
-                'title': 'Tilastot'
-            }
+        'layerTool': {
+            'tooltip': 'Siirry teemakarttoihin',
+            'title': 'Teemakartat'
         },
         'publisher': {
             "label": "Teemakartat",
@@ -85,13 +75,6 @@ Oskari.registerLocalization({
             'removeSource': 'Poista aineisto',
             'noIndicators': 'Aloita teemakartan käyttö lisäämällä kartalle indikaattori.'
         },
-        'legend': {
-            'title': 'Luokittelu',
-            'noActive': 'Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun.',
-            'noEnough': 'Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.',
-            'noData': 'Aineistoa ei ole saatavilla valitsemaltasi ajankohdalta',
-            'cannotCreateLegend': 'Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla.'
-        },
         'series': {
             'speed': {
                 'label': 'Animaationopeus',
@@ -102,7 +85,14 @@ Oskari.registerLocalization({
         },
         'diagram': {
             'title': 'Pylväsdiagrammi',
-            'noValue': 'Ei arvoa'
+            'noValue': 'Ei arvoa',
+            'sort': {
+                'desc': 'Järjestys',
+                'name-ascending': 'Nimen mukaan nouseva',
+                'name-descending': 'Nimen mukaan laskeva',
+                'value-ascending': 'Arvon mukaan nouseva',
+                'value-descending': 'Arvon mukaan laskeva'
+            }
         },
         'parameters': {
             'sex': 'Sukupuoli',
@@ -110,24 +100,21 @@ Oskari.registerLocalization({
             'Vuosi': 'Vuosi',
             'regionset': 'Aluejako',
             'from': 'alkaen',
-            'to': 'päättyen'
-        },
-        'datatable': 'Taulukko',
-        'published': {
-            'showMap': 'Näytä kartta',
-            'showTable': 'Näytä taulukko'
+            'to': 'päättyen',
+            'value': 'Arvo',
+            'region': 'Alue'
         },
         'classify': {
             'classify': 'Luokittelu',
             'labels': {
                 'method': 'Luokittelutapa',
-                'count': 'Luokkajako', // classes
+                'count': 'Luokkajako',
                 'mode': 'Luokkarajat',
                 'mapStyle': 'Kartan tyyli',
-                'type': 'Jakauma', // setselection
+                'type': 'Jakauma',
                 'reverseColors': 'Käännä värit',
                 'color': 'Väri',
-                'colorset': 'Värit', //button
+                'colorset': 'Värit',
                 'pointSize': 'Pisteen koko',
                 'transparency': 'Läpinäkyvyys',
                 'showValues': 'Näytä arvot',
@@ -178,61 +165,20 @@ Oskari.registerLocalization({
             'regionsetsIsEmpty': 'Aluevalintoja ei saatu valitulle aineistolle.',
             'regionsDataError': 'Alueen arvojen haussa tapahtui virhe.',
             'regionsDataIsEmpty': 'Valitulle aineistolle ei saatu alueiden arvoja.',
-            'datasetSave': 'Virhe tallennetaessa aineistoa.',
-            'datasetDelete': 'Virhe poistaessa aineistoa.',
-            'indicatorSave': 'Virhe tallennettaessa muuttujaa.',
-            'indicatorDelete': 'Virhe poistaessa muuttujaa.',
-            'myIndicatorNameInput': 'Nimi kenttä ei voi olla tyhjä.',
-            'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
-            'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.',
-            'myIndicatorDatasource': 'Tietolähde on tyhjä.',
-            'myIndicatorNoData': 'Aineiston arvoja ei ole annettu.',
-            'myIndicatorInvalidData': 'Aineistossa on virheellisiä arvoja.',
+            'datasourceIsEmpty': 'Tietolähde on tyhjä.',
             'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana',
             'noDataForIndicators': 'Palvelusta ei saatu tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}',
-            'onlyPartialDataForIndicators': 'Palvelusta ei saatu kaikkia tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}'
+            'onlyPartialDataForIndicators': 'Palvelusta ei saatu kaikkia tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}',
+            'notAllowedRegionset': 'Aineistoa ei ole saatavilla valitulle aluejaolle.',
+            'notAllowedSelection': 'Aineistoa ei ole saatavilla valinnoille.',
+            'noActiveLegend': 'Ei valittuna aineistoa, valitse aineisto nähdäksesi kartan luokittelun.',
+            'noEnough': 'Aineisto on liian pieni luokittelun muodostamiseksi, kokeile eri aineistoa tai muuta rajauksia.',
+            'noData': 'Aineistoa ei ole saatavilla valitsemaltasi ajankohdalta',
+            'cannotCreateLegend': 'Legendaa ei saada tehtyä valitsemillasi arvoilla, kokeile eri arvoilla.'
         },
         'missing': {
             'regionsetName': 'Tuntematon',
             'indicator': 'Tuntematon indikaattori'
-        },
-        'datacharts': {
-            'flyout': 'Haettu aineisto',
-            'barchart': 'Pylväskuvio',
-            'linechart': 'Viivakuvio',
-            'table': 'Taulukko',
-            'desc': 'Taulukko ja kuvaajat',
-            'nodata': 'Ei valittuja indikaattoreita',
-            'indicatorVar': 'Kuvaajassa esitettävä muuttuja',
-            'descColor': 'Kuvaajan väri',
-            'selectClr': 'Valittu väri',
-            'clrFromMap': 'Värit kartalla olevan luokittelun mukaan',
-            'chooseColor': 'Valitse väri',
-            'sorting': {
-                'desc': 'Järjestys',
-                'name-ascending': 'Nimen mukaan nouseva',
-                'name-descending': 'Nimen mukaan laskeva',
-                'value-ascending': 'Arvon mukaan nouseva',
-                'value-descending': 'Arvon mukaan laskeva'
-            }
-        },
-        'filter': {
-            'title': 'Suodatus',
-            'indicatorToFilter': 'Suodatettava muuttuja',
-            'condition': 'Ehto',
-            'value': 'Arvo',
-            'variable': 'Muuttuja',
-            'conditionPlaceholder': 'Valitse ehto',
-            'greater': 'Suurempi kuin (>)',
-            'greaterEqual': 'Suurempi tai yhtäsuuri kuin (>=)',
-            'equal': 'Yhtäsuuri kuin (=)',
-            'lessEqual': 'Pienempi tai yhtäsuuri kuin (<=)',
-            'lessThan': 'Pienempi kuin (<)',
-            'between': 'Välillä (poissulkeva)',
-            'filter': 'Suodata arvot',
-            'desc': 'Suodata arvoilla',
-            'filtered': 'Suodatetut arvot',
-            'area': 'Suodata alueilla'
         },
         'layer': {
             'name': 'Teemakartan aluejako',
@@ -241,47 +187,30 @@ Oskari.registerLocalization({
         },
         'tab': {
             'title': 'Indikaattorit',
-            'edit': 'Muokkaa',
-            'delete': 'Poista',
+            'confirmDelete': 'Haluatko poistaa indikaattorin "{name}"?',
             'grid': {
                 'name': 'Nimi',
-                'edit': 'Muokkaa',
-                'delete': 'Poista',
                 'actions': 'Toiminnot',
                 'createDate': 'Luontiaika',
                 'updateDate': 'Muokkausaika'
-            },
-            'popup': {
-                'deletetitle': 'Poista indikaattori',
-                'deletemsg': 'Haluatko poistaa indikaattorin "{name}"?',
-                'deleteSuccess': 'Indikaattori poistettu'
-            },
-            'button': {
-                'cancel': 'Peruuta',
-                'ok': 'OK'
-            },
-            'error': {
-                'title': 'Virhe',
-                'notfound': 'Indikaattoria ei löytynyt',
-                'notdeleted': 'Indikaattorin poisto epäonnistui'
             }
         },
         'userIndicators': {
-            'flyoutTitle': 'Omat indikaattorit',
-            'buttonTitle': 'Lisää uusi indikaattori',
-            'buttonAddIndicator': 'Syötä dataa',
-            'panelGeneric': {
+            'title': 'Omat indikaattorit',
+            'add': 'Lisää uusi indikaattori',
+            'edit': 'Muokkaa indikaattoria',
+            'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
+            'info': {
                 'title': 'Indikaattorin tiedot',
-                'formName': 'Nimi',
-                'formDescription': 'Kuvaus',
-                'formDatasource': 'Lähde'
+                'name': 'Nimi',
+                'description': 'Kuvaus',
+                'source': 'Lähde'
             },
-            'panelData': {
-                'title': 'Tilastotieto'
-            },
-            'dialog': {
-                'successTitle': 'Tallennettu',
-                'successMsg': 'Tiedot tallennettu.'
+            'datasets': {
+                'title': 'Tilastotieto',
+                'dataset': 'Aineisto',
+                'noIndicator': 'Tallenna indikaattorin tiedot lisätäksesi aineistoja.',
+                'noDatasets': 'Indikaattorilla ei ole tallennettuja aineistoja.'
             },
             'import': {
                 'title': 'Tuo leikepöydältä',
@@ -289,12 +218,25 @@ Oskari.registerLocalization({
                 'Esimerkki 1: Helsinki;1234 \n' +
                 'Esimerkki 2: 011;5678'
             },
-            'notLoggedInTitle': 'Varoitus',
-            'notLoggedInWarning': 'Kirjautumattomana oman indikaattorin tiedot ovat käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi indikaattori.',
-            'modify': {
-                'title': 'Indikaattori',
-                'edit': 'Muokkaa',
-                'remove': 'Poista'
+            'success': {
+                'indicatorSave': 'Indikaattorin tiedot tallennettu',
+                'indicatorDelete': 'Indikaattorin tiedot poistettu',
+                'datasetSave': 'Aineisto tallennettu',
+                'datasetDelete': 'Aineisto poistettu'
+            },
+            'error': {
+                'indicatorSave': 'Indikaattorin tallennus epäonnistui',
+                'indicatorDelete': 'Indikaattorin poisto epäonnistui',
+                'indicatorNotfound': 'Indikaattoria ei löytynyt',
+                'datasetSave': 'Virhe tallennetaessa aineistoa',
+                'datasetDelete': 'Virhe poistaessa aineistoa'
+            },
+            'validate': {
+                'name': 'Nimi kenttä ei voi olla tyhjä',
+                'year': 'Vuosi kenttä ei voi olla tyhjä',
+                'regionset': 'Aluejako ei voi olla tyhjä',
+                'noData': 'Aineiston arvoja ei ole annettu',
+                'invalidData': 'Aineistossa on virheellisiä arvoja'
             }
         },
         'indicatorList': {
@@ -308,14 +250,6 @@ Oskari.registerLocalization({
             'noMetadata': 'Palvelusta ei saatu {indicators, plural, one {indikaattorin kuvausta} other {indikaattorien kuvauksia}}.',
             'updated': 'Viimeksi päivitetty',
             'nextUpdate': 'Seuraava päivitys'
-        },
-        'sumo': {
-            'placeholder': 'Valitse tästä',
-            'captionFormat': '{0} valittu',
-            'captionFormatAllSelected': 'Kaikki {0} valittu!',
-            'searchText': 'Etsi...',
-            'noMatch': 'Yhtään hakutulosta ei löytynyt haulla "{0}"',
-            'locale': ['OK', 'Peruuta', 'Valitse kaikki']
         }
     }
 });

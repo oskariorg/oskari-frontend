@@ -1,16 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { InputGroup } from 'oskari-ui';
-import { StyledTimeSlider, TimeBorder, StyledPlayButton } from './styled';
+import { InputGroup, ThemedSlider } from 'oskari-ui';
+import { TimeBorder, StyledPlayButton } from './styled';
 import { PlayButton } from './PlayButton';
-import { ThemeConsumer } from 'oskari-ui/util';
-import { getHeaderTheme } from 'oskari-ui/theme';
 
 const MINUTES = 1439;
-export const TimeSlider = ThemeConsumer(({ theme, isMobile, changeHandler, sliderTimeValue, playing, playHandler }) => {
-    const helper = getHeaderTheme(theme);
-    const color = helper.getAccentColor();
-    const hover = Oskari.util.getColorEffect(color, 30);
+export const TimeSlider = ({ isMobile, changeHandler, sliderTimeValue, playing, playHandler }) => {
     const clickPlayButton = () => {
         playHandler(!playing);
     };
@@ -30,13 +25,12 @@ export const TimeSlider = ThemeConsumer(({ theme, isMobile, changeHandler, slide
 
     return (
         <InputGroup block>
-            <StyledPlayButton onClick={clickPlayButton} hover={hover} color={color}>
+            <StyledPlayButton onClick={clickPlayButton}>
                 <PlayButton initial={playing} />
             </StyledPlayButton>
             <TimeBorder isMobile={isMobile}>
-                <StyledTimeSlider
-                    color={color}
-                    hover={hover}
+                <ThemedSlider
+                    noMargin
                     useThick={isMobile}
                     marks={marksForTime}
                     min={0} max={MINUTES}
@@ -46,7 +40,7 @@ export const TimeSlider = ThemeConsumer(({ theme, isMobile, changeHandler, slide
             </TimeBorder>
         </InputGroup>
     );
-});
+};
 TimeSlider.propTypes = {
     isMobile: PropTypes.bool.isRequired,
     sliderTimeValue: PropTypes.number.isRequired,

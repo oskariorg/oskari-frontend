@@ -62,25 +62,13 @@ Oskari.registerLocalization(
                 "tooltip": "Determine the size of the map. The recommendation is to use the option \"Scalable/ Responsive\". Otherwise, the width should be from {minWidth} to {maxWidth} pixels and the height from {minHeight} to {maxHeight} pixels."
             },
             "maptools": {
-                "label": "Tools",
+                "label": "Additional tools",
                 "tooltip": "Select available map tools. Check a placement in the map preview.",
-                "AnnouncementsPlugin": "Announcements",
-                "TimeseriesControlPlugin": "Time series player",
-                "IndexMapPlugin": "Index map",
-                "Portti2Zoombar": "Zoom bar",
-                "ControlsPlugin": "Pan by mouse",
-                "SearchPlugin": "Place search",
-                "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Feature query tool",
-                "PublisherToolbarPlugin": "Map tools",
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
-                "CoordinateToolPlugin": "Coordinate tool",
                 "MapLegend": "Show map legend",
                 "MapRotator": "Enable map rotation",
-                "CrosshairTool": "Show map focal point",
-                "CameraControls3d": "Camera tools",
-                "TimeControl3d": "Time control",
                 "toolbarToolNames": {
                     "history": "Move to previous or next view",
                     "history_back": "Move to previous view",
@@ -103,12 +91,7 @@ Oskari.registerLocalization(
                     "label": "My map layers"
                 },
                 "layerselection": {
-                    "info": "Select the background map layer. You can select the default background map layer in the map preview.",
                     "selectAsBaselayer": "Select as baselayer",
-                    "allowStyleChange": "Allow presentation style change",
-                    "showMetadata": "Show metadata links",
-                    "noMultipleStyles": "Only single presentation style available on the selected map layers.",
-                    "noMetadata": "No metadata links availabe on the selected map layers"
                 },
                 "mylocation": {
                     "modes": {
@@ -246,8 +229,8 @@ Oskari.registerLocalization(
                 "noBaseLayers": "No selected background maps",
                 "noLayers": "No selected map layers"
             },
-            "additional": {
-                "label": "Additional tools"
+            "tools": {
+                "label": "Tools"
             },
             "preview": "Map preview",
             "location": "Location and zoom level",

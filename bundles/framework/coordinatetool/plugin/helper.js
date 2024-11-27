@@ -75,7 +75,7 @@ export const transformCoordinates = (mapModule, data, srs, targetSRS) => {
 /**
  * format different degree presentations of lon/lat coordinates
  */
-export const formatDegrees = (lon, lat, type) => {
+export const formatDegrees = (lon, lat, type, accuracy) => {
     let degreesX,
         degreesY,
         minutesX,
@@ -87,28 +87,34 @@ export const formatDegrees = (lon, lat, type) => {
     case 'min':
         degreesX = parseInt(lon);
         degreesY = parseInt(lat);
-        minutesX = Number((lon - degreesX) * 60).toFixed(5);
-        minutesY = Number((lat - degreesY) * 60).toFixed(5);
+        // defaults to 5 and 0 ?? 5 = 0 (undefined ?? 5 = 5)
+        minutesX = Number((lon - degreesX) * 60).toFixed(accuracy ?? 5);
+        minutesY = Number((lat - degreesY) * 60).toFixed(accuracy ?? 5);
         return {
-            'degreesX': degreesX,
-            'degreesY': degreesY,
-            'minutesX': minutesX.replace('.', Oskari.getDecimalSeparator()),
-            'minutesY': minutesY.replace('.', Oskari.getDecimalSeparator())
+            degreesX,
+            degreesY,
+            minutesX: minutesX.replace('.', Oskari.getDecimalSeparator()),
+            minutesY: minutesY.replace('.', Oskari.getDecimalSeparator())
         };
     case 'sec':
         degreesX = parseInt(lon);
         degreesY = parseInt(lat);
         minutesX = parseFloat((lon - degreesX) * 60);
         minutesY = parseFloat((lat - degreesY) * 60);
-        secondsX = parseFloat((minutesX - parseInt(minutesX)) * 60).toFixed(3);
-        secondsY = parseFloat((minutesY - parseInt(minutesY)) * 60).toFixed(3);
+        // Note! Default to 3 instead of 5
+        secondsX = parseFloat((minutesX - parseInt(minutesX)) * 60).toFixed(accuracy ?? 3);
+        secondsY = parseFloat((minutesY - parseInt(minutesY)) * 60).toFixed(accuracy ?? 3);
         return {
-            'degreesX': degreesX,
-            'degreesY': degreesY,
-            'minutesX': parseInt(minutesX),
-            'minutesY': parseInt(minutesY),
-            'secondsX': secondsX.replace('.', Oskari.getDecimalSeparator()),
-            'secondsY': secondsY.replace('.', Oskari.getDecimalSeparator())
+            degreesX,
+            degreesY,
+            minutesX: parseInt(minutesX),
+            minutesY: parseInt(minutesY),
+            secondsX: secondsX.replace('.', Oskari.getDecimalSeparator()),
+            secondsY: secondsY.replace('.', Oskari.getDecimalSeparator())
         };
     }
+};
+
+export const isTransformAllowed = (supportedProjections = []) => {
+    return Array.isArray(supportedProjections) && supportedProjections.length > 1;
 };

@@ -43,7 +43,7 @@ export const SizeSlider = ({
     return (
         <div>
             <Message messageKey="classify.labels.pointSize"/>
-            <Slider
+            <Slider hideDots
                 value = {internalRange}
                 disabled = {disabled}
                 onChange={onChange}

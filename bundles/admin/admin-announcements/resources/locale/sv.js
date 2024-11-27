@@ -56,6 +56,8 @@ Oskari.registerLocalization(
                 "announcementsTime": "Datumintervall"
             },
             "publisher": {
+                "toolLabel": "Aviseringar",
+                "selectedAnnouncementsTitle": "Valda aviseringar",
                 "noUI": "Dölj användargränsnittet (Använd via RPC gränssnitt)"
             }
         }

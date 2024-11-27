@@ -139,6 +139,24 @@ Oskari.registerLocalization(
             },
             "PanButtons": {
                 "toolLabel": "Hliðrunartól"
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Index kort"
+            },
+            "Zoombar": {
+                "toolLabel": "Þysjunarstika"
+            },
+            "CrosshairTool": {
+                "toolLabel": "Sýna aðalatriði korts"
+            },
+            "SearchPlugin": {
+                "toolLabel": "Leit eftir stað"
+            },
+            "ControlsPlugin": {
+                "toolLabel": "Hliðra með mús"
+            },
+            "PublisherToolbarPlugin": {
+                "toolLabel": "Kortatól"
             }
         }
     }

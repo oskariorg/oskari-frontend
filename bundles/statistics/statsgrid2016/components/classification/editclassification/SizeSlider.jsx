@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Slider, Message } from 'oskari-ui';
-import styled from 'styled-components';
 
 // Overrride -50% translateX
 const SLIDER_PROPS = {
@@ -24,27 +23,6 @@ const SLIDER_PROPS = {
     }
 };
 
-const StyledSlider = styled(Slider)`
-    .ant-slider-track {
-        background-color: #0091ff;
-    }
-    .ant-slider-handle {
-        border: #0091ff solid 2px;
-        margin-top: -6px;
-    }
-    &:hover .ant-slider-track {
-        background-color: #003fc3 !important;
-    }
-    &:hover .ant-slider-handle {
-        border: #003fc3 solid 2px !important;
-    }
-    .ant-slider-dot {
-        width: 6px;
-        height: 6px;
-        left: 1px;
-    }
-`;
-
 export const SizeSlider = ({
     values,
     controller,
@@ -65,7 +43,7 @@ export const SizeSlider = ({
     return (
         <div>
             <Message messageKey="classify.labels.pointSize"/>
-            <StyledSlider
+            <Slider hideDots
                 value = {range}
                 disabled = {disabled}
                 onChange={onChange}

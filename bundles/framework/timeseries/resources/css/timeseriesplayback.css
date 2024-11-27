@@ -15,7 +15,7 @@
   display: inline-block;
   vertical-align: top;
 }
-.timeseries-aux select {
+.timeseries-aux .timeseries-menus select {
   width: 100%!important;
   height: 24px;
   padding-top: 0;

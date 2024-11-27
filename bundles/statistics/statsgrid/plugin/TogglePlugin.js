@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (handle
 }, {
     refresh: function (state = this.handler.getState()) {
         let el = this.getElement();
-        // TODO:
         if (!el) {
             el = this._createControlElement();
             this.addToPluginContainer(el);

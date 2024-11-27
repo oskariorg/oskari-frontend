@@ -1,10 +1,13 @@
 import React from 'react';
 import { MapModuleButton } from '../../MapModuleButton';
 import styled from 'styled-components';
-import { Slider } from 'oskari-ui';
+import { Slider } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { ThemeConsumer, ThemeProvider } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
+import { TextIcon } from 'oskari-ui/components/icons';
+
+const width = '8px';
 
 const Container = styled('div')`
     display: flex;
@@ -13,75 +16,30 @@ const Container = styled('div')`
     align-items: center;
     margin: 0 10px 10px 10px;
 `;
-const StyledMinus = styled(MinusOutlined)`
-    shape-rendering: optimizespeed;
-`;
-const StyledPlus = styled(PlusOutlined)`
-    shape-rendering: optimizespeed;
-`;
 
 const StyledSlider = styled(Slider)`
     height: 150px;
     opacity: ${props => props.opacity};
-    margin: 6px 10px;
+    margin: 6px 0;
     left: -1px;
+
+    .ant-slider-handle::after {
+        display: none;
+    }
+
     .ant-slider-mark-text {
         color: #ffffff;
     }
+
     .ant-slider-dot {
         height: 1px;
         background: ${props => props.dotColor};
         border: none;
-        width: 7px;
+        width: ${width};
         left: 0;
         opacity: 50%;
     }
-    .ant-slider-rail,
-    .ant-slider-track,
-    .ant-slider-step {
-        width: 7px;
-        background: ${props => props.railBackground};
-        border-radius: 5px;
-        box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 60%);
-        &:hover {
-            background: ${props => props.railBackground};
-        }
-        &:focus {
-            background: ${props => props.railBackground};
-        }
-        &:active {
-            background: ${props => props.railBackground};
-        }
-    }
-    .ant-slider-handle {
-        background: ${props => props.handleBackground};
-        border: 4px solid ${props => props.handleBorder};
-        box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 60%);
-        border-radius: ${props => props.rounding || '0%'};
-        width: 14px;
-        height: 14px;
-        left: 0;
-        &:hover {
-            background: ${props => props.handleBackground};
-            border: 4px solid ${props => props.handleBorder};
-        }
-        &:focus {
-            background: ${props => props.handleBackground};
-            border: 4px solid ${props => props.handleBorder};
-        }
-        &:active {
-            background: ${props => props.handleBackground};
-            border: 4px solid ${props => props.handleBorder};
-        }
-    }
-    .ant-slider-handle::after, .ant-slider-handle:hover::after {
-        background: none;
-        box-shadow: none !important;
-    }
-    .ant-slider:hover .ant-slider-handle::after {
-        box-shadow: none!important;
-    }
-    `;
+`;
 
 const MobileContainer = styled('div')`
     display: flex;
@@ -89,20 +47,29 @@ const MobileContainer = styled('div')`
     align-items: flex-end;
 `;
 
-const ThemedSlider = ThemeConsumer(({theme = {}, ...rest}) => {
+const ThemedSlider = ThemeConsumer(({ theme = {}, ...rest }) => {
     const helper = getNavigationTheme(theme);
-    const bgColor = helper.getButtonColor();
-    const icon = helper.getTextColor();
-    const rounding = helper.getButtonRoundness();
-    const opacity = helper.getButtonOpacity();
+
+    const backgroundColor = helper.getButtonColor();
+    const boxShadow = '0px 1px 2px 1px rgb(0 0 0 / 60%)';
+    const slider = { width, backgroundColor, boxShadow, borderRadius: '5px' };
+    const styles = {
+        track: slider,
+        rail: slider,
+        handle: {
+            width: '14px',
+            height: '14px',
+            backgroundColor,
+            boxShadow,
+            border: `4px solid ${helper.getTextColor()}`,
+            borderRadius: helper.getButtonRoundness() || '0%'
+        }
+    };
     return (
         <StyledSlider
-            railBackground={bgColor}
-            handleBackground={bgColor}
-            dotColor={icon}
-            rounding={rounding}
-            handleBorder={icon}
-            opacity={opacity}
+            styles={styles}
+            dotColor={helper.getTextColor()}
+            opacity={helper.getButtonOpacity()}
             {...rest}
         />
     );
@@ -122,7 +89,6 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
                     onClick={() => {
                         changeZoom(zoom < 100 ? zoom + 1 : 100);
                     }}
-                    size='32px'
                     className='t_plus'
                 />
                 <MapModuleButton
@@ -130,7 +96,6 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
                     onClick={() => {
                         changeZoom(zoom > 0 ? zoom - 1 : 0);
                     }}
-                    size='32px'
                     className='t_minus'
                 />
             </MobileContainer>
@@ -138,16 +103,19 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
     }
 
     const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+    // Use text icon for desktop as we are using small buttons and icons.
+    // Antd 5+ Minus/PlusOutlined icon rendering doesn't look nice with small buttons
+    // Note! minus icon text is minus sign (U+2212, not hyphen)
     return (
         <Container>
             <MapModuleButton
-                icon={<StyledPlus />}
+                icon={<TextIcon text='+'/>}
                 className='t_plus'
                 onClick={() => {
                     changeZoom(zoom < 100 ? zoom + 1 : 100);
                 }}
+                iconSize='14px'
                 size='18px'
-                iconSize='12px'
                 noMargin
             />
 
@@ -168,13 +136,13 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, isMobile = false, ..
             </ThemeProvider>
 
             <MapModuleButton
-                icon={<StyledMinus />}
+                icon={<TextIcon text='−'/>}
                 className='t_minus'
                 onClick={() => {
                     changeZoom(zoom > 0 ? zoom - 1 : 0);
                 }}
+                iconSize='14px'
                 size='18px'
-                iconSize='12px'
                 noMargin
             />
         </Container>

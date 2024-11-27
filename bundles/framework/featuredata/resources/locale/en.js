@@ -101,5 +101,8 @@ Oskari.registerLocalization(
                     }
                 }
             },
+            "publisher": {
+                "toolLabel": "Feature data"
             }
+        }
     });

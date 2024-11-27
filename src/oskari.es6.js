@@ -9,17 +9,17 @@ import pkg from '../package.json';
 import { DOMHelper } from './oskari.dom.js';
 import { Customization } from './oskari.customization.js';
 
-let defaultSequence = new Sequence();
-let sequences = {};
+const defaultSequence = new Sequence();
+const sequences = {};
 // keep track of existing loggers
-let loggers = {};
+const loggers = {};
 
-let _urls= {};
+let _urls = {};
 function getUrl (key) {
     return _urls[key];
 }
 
-function encodeParams(params) {
+function encodeParams (params) {
     if (typeof params !== 'object') {
         return '';
     }
@@ -29,7 +29,7 @@ function encodeParams(params) {
         .join('&');
 }
 
-function appendQueryToURL(url, query) {
+function appendQueryToURL (url, query) {
     if (typeof query === 'undefined' || query === '') {
         return url;
     }
@@ -65,77 +65,76 @@ const Oskari = {
     dom: DOMHelper,
     seq: defaultSequence,
     getSeq (type) {
-        if(typeof type === 'undefined') {
+        if (typeof type === 'undefined') {
             return defaultSequence;
         } else if (!sequences[type]) {
             sequences[type] = new Sequence();
         }
         return sequences[type];
     },
-    log(name = 'Oskari') {
+    log (name = 'Oskari') {
         if (loggers[name]) {
             return loggers[name];
         }
-        var log = new Logger(name);
+        const log = new Logger(name);
         loggers[name] = log;
         return log;
     },
     urls: {
-            /**
-             * Oskari.urls.set({
-                  "map" : "https://my.map.com",
-                  "api": "https://api.map.com/action?",
-                  "login" :"https://my.map.com/login",
-                  "register" :"http://some.auth.site.com/register",
-                  "tou" :"http://my.organization/map/tou",
-                });
-                OR
-                Oskari.urls.set('login', 'https://my.map.com/login');
-             */
-            set: function (urlsOrKey, optionalValue) {
-                if (typeof urlsOrKey === 'string') {
-                    _urls[urlsOrKey] = optionalValue;
-                } else if (typeof urlsOrKey === 'object') {
-                    _urls = urlsOrKey || {};
-                } else {
-                    throw new Error('Unrecognized parameter for urls: ' + urlsOrKey);
-                }
-            },
-            /**
-             * Generic url "location" getter
-             * @param  {String} key type of url like "login" or "registration"
-             * @return {String} URL that points to requested functionality
-             */
-            getLocation: function (key) {
-                return getUrl(key);
-            },
-            /**
-             * Action route urls
-             * @param  {String} route optional route name. Returns base url if name is not given.
-             * @param  {Object} optionalParams optional object that will be encoded as querystring parameters for the URL.
-             * @return {String} url to use when making API calls
-             */
-            getRoute: function (route, optionalParams) {
-                var url = appendQueryToURL(getUrl('api') || '/action?', encodeParams(optionalParams));
-
-                if (route) {
-                    return appendQueryToURL(url, 'action_route=' + route);
-                }
-                return url;
-            },
-            /**
-             * Builds an URL by attaching optional parameters to base url
-             * @param {String} url complete baseUrl that might already have querystring
-             * @param {*} optionalParams parameters that should be attached to baseUrl
-             * @returns base url with optional params included as querystring
-             */
-            buildUrl: function (url, optionalParams) {
-                return appendQueryToURL(url, encodeParams(optionalParams));
+        /**
+         * Oskari.urls.set({
+                 "map" : "https://my.map.com",
+                "api": "https://api.map.com/action?",
+                "login" :"https://my.map.com/login",
+                "register" :"http://some.auth.site.com/register",
+                "tou" :"http://my.organization/map/tou",
+            });
+            OR
+            Oskari.urls.set('login', 'https://my.map.com/login');
+            */
+        set: function (urlsOrKey, optionalValue) {
+            if (typeof urlsOrKey === 'string') {
+                _urls[urlsOrKey] = optionalValue;
+            } else if (typeof urlsOrKey === 'object') {
+                _urls = urlsOrKey || {};
+            } else {
+                throw new Error('Unrecognized parameter for urls: ' + urlsOrKey);
             }
+        },
+        /**
+         * Generic url "location" getter
+         * @param  {String} key type of url like "login" or "registration"
+         * @return {String} URL that points to requested functionality
+         */
+        getLocation: function (key) {
+            return getUrl(key);
+        },
+        /**
+         * Action route urls
+         * @param  {String} route optional route name. Returns base url if name is not given.
+         * @param  {Object} optionalParams optional object that will be encoded as querystring parameters for the URL.
+         * @return {String} url to use when making API calls
+         */
+        getRoute: function (route, optionalParams) {
+            const url = appendQueryToURL(getUrl('api') || '/action?', encodeParams(optionalParams));
+
+            if (route) {
+                return appendQueryToURL(url, 'action_route=' + route);
+            }
+            return url;
+        },
+        /**
+         * Builds an URL by attaching optional parameters to base url
+         * @param {String} url complete baseUrl that might already have querystring
+         * @param {*} optionalParams parameters that should be attached to baseUrl
+         * @returns base url with optional params included as querystring
+         */
+        buildUrl: function (url, optionalParams) {
+            return appendQueryToURL(url, encodeParams(optionalParams));
+        }
     }
 };
 
 window.Oskari = Oskari; // TODO: remove when whole of core is ES6
 
 export default Oskari;
-

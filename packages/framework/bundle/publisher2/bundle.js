@@ -95,39 +95,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/tools/ToolbarTool.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/tools/IndexMapTool.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/tools/ZoombarTool.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/tools/SearchTool.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/tools/MapLayerListTool.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/tools/ControlsTool.js"
-        },
-        {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/tools/GetInfoTool.js"
         },
         {
             "type": "text/javascript",
             "src": "../../../../bundles/mapping/mapmodule/publisher/tools.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/tools/CrosshairTool.js"
         },
         {
             "type": "text/css",

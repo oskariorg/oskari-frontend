@@ -12,19 +12,9 @@ Oskari.registerLocalization({
             "title": "Þemakort"
         },
         "dataProviderInfoTitle": "Indicators",
-        "layertools": {
-            "table_icon": {
-                "tooltip": "Move to thematic maps",
-                "title": "Thematic maps"
-            },
-            "diagram_icon": {
-                "tooltip": "Show data in diagram",
-                "title": "Diagram"
-            },
-            "statistics": {
-                "tooltip": "Move to thematic maps",
-                "title": "Statistics"
-            }
+        "layerTool": {
+            "tooltip": "Move to thematic maps",
+            "title": "Thematic maps"
         },
         'publisher': {
             "label": "Þemakort",
@@ -84,13 +74,6 @@ Oskari.registerLocalization({
             "orderByDescending": "Sort descending",
             "removeSource": "Remove data"
         },
-        "legend": {
-            "title": "Classification",
-            "noActive": "Data was not selected, select data to see map classification.",
-            "noEnough": "The data is too small to be classified, try different data or change limitings.",
-            "noData": "Data is not available for the selected point in time.",
-            "cannotCreateLegend": "Legend cannot be created by chosen values, try different values."
-        },
         "series": {
             "speed": {
                 "label": "Animation speed",
@@ -100,7 +83,14 @@ Oskari.registerLocalization({
             }
         },
         "diagram": {
-            "title": "Diagram"
+            "title": "Diagram",
+            "sort": {
+                "desc": "Order",
+                "name-ascending": "Name ascending",
+                "name-descending": "Name descending",
+                "value-ascending": "Value ascending",
+                "value-descending": "Value descending"
+            }
         },
         "parameters": {
             "sex": "Gender",
@@ -109,11 +99,6 @@ Oskari.registerLocalization({
             "regionset": "Regional division",
             "from": "from",
             "to": "to"
-        },
-        "datatable": "Table",
-        "published": {
-            "showMap": "Show map",
-            "showTable": "Show table"
         },
         "classify": {
             "classify": "Classification",
@@ -176,55 +161,16 @@ Oskari.registerLocalization({
             "regionsetsIsEmpty": "Area selections could not be fetched for chosen data.",
             "regionsDataError": "Error occurred in area value search.",
             "regionsDataIsEmpty": "Area values could not be fetched for chosen data.",
-            "datasetSave": "Error saving dataset.",
-            "datasetDelete": "Error deleting dataset.",
-            "indicatorSave": "Error saving indicator",
-            "myIndicatorYearInput": "Year field cannot be empty.",
-            "myIndicatorRegionselect": "Regionselect cannot be empty.",
-            "myIndicatorDatasource": "Datasource is empty.",
+            "datasourceIsEmpty": "Datasource is empty.",
             "cannotDisplayAsSeries": "Indicator cannot be inspected as a series.",
-            "noDataForIndicators": "Service did not return data for {indicators, plural, one {the indicator} other {indicators}}"
+            "noDataForIndicators": "Service did not return data for {indicators, plural, one {the indicator} other {indicators}}",
+            "noActiveLegend": "Data was not selected, select data to see map classification.",
+            "noEnough": "The data is too small to be classified, try different data or change limitings.",
+            "noData": "Data is not available for the selected point in time.",
+            "cannotCreateLegend": "Legend cannot be created by chosen values, try different values."
         },
         "missing": {
             "regionsetName": "Unknown"
-        },
-        "datacharts": {
-            "flyout": "Searched data",
-            "barchart": "Bar chart",
-            "linechart": "Line chart",
-            "table": "Table",
-            "desc": "Table and graphs",
-            "nodata": "Indicators were not chosen",
-            "indicatorVar": "Variable to be shown in graph",
-            "descColor": "Color of the graph",
-            "selectClr": "Selected color",
-            "clrFromMap": "Colors by classification in the map",
-            "chooseColor": "Select color",
-            "sorting": {
-                "desc": "Order",
-                "name-ascending": "Name ascending",
-                "name-descending": "Name descending",
-                "value-ascending": "Value ascending",
-                "value-descending": "Value descending"
-            }
-        },
-        "filter": {
-            "title": "Filtering",
-            "indicatorToFilter": "Variable to be filtered",
-            "condition": "Condition",
-            "value": "Value",
-            "variable": "Variable",
-            "conditionPlaceholder": "Select condition",
-            "greater": "Greater than (>)",
-            "greaterEqual": "Greater than or equal to (>=)",
-            "equal": "Equal to (=)",
-            "lessEqual": "Less than or equal to (<=)",
-            "lessThan": "Less than (<)",
-            "between": "Between (exclusive)",
-            "filter": "Filter values",
-            "desc": "Filter by values",
-            "filtered": "Filtered values",
-            "area": "Filter by areas"
         },
         "layer": {
             "name": "Areal division of thematic map",
@@ -233,56 +179,12 @@ Oskari.registerLocalization({
         },
         "tab": {
             "title": "Indicators",
-            "edit": "Edit",
-            "delete": "Delete",
+            "confirmDelete": "You are deleting the indicator \"{name}\". Do you want to delete the indicator?",
             "grid": {
-                "name": "Name",
-                "edit": "Edit",
-                "delete": "Delete"
-            },
-            "popup": {
-                "deletetitle": "Delete Indicator",
-                "deletemsg": "You are deleting the indicator \"{name}\". Do you want to delete the indicator?",
-                "deleteSuccess": "Indicator removed"
-            },
-            "button": {
-                "cancel": "Cancel",
-                "ok": "OK"
-            },
-            "error": {
-                "title": "Error",
-                "notfound": "The indicator was not found.",
-                "notdeleted": "The indicator was not removed."
+                "name": "Name"
             }
         },
         "userIndicators": {
-            "flyoutTitle": "Add new indicator",
-            "buttonTitle": "Add new indicator",
-            "buttonAddIndicator": "Add data",
-            "panelGeneric": {
-                "title": "Indicator data",
-                "formName": "Name",
-                "formDescription": "Description",
-                "formDatasource": "Datasource"
-            },
-            "panelData": {
-                "title": "Statistical data"
-            },
-            "dialog": {
-                "successTitle": "Saved",
-                "successMsg": "The data has been saved. Add the indicator to the map using the statistics search functionality."
-            },
-            "import": {
-                "title": "Import from the clipboard",
-                "placeholder": "Enter the indicators data here. Each row should contain a region and it's value. Enter the region's name or id. Use semicolon as a separator. Data can be imported in following formats:\nSample 1: Helsinki;1234\nSample 2: 011;5678"
-            },
-            "notLoggedInTitle": "Warning",
-            "notLoggedInWarning": "Without logging in the data cannot be saved and it will only be available until page reload. Log in before adding the indicator to preserve the data.",
-            "modify": {
-                "title": "Indicator",
-                "edit": "Edit",
-                "remove": "Remove"
-            }
         },
         "indicatorList": {
             "title": "Indicators",
@@ -293,14 +195,6 @@ Oskari.registerLocalization({
             "open": "Show indicator {indicators, plural, one {description} other {descriptions}}",
             "title": "Indicator {indicators, plural, one {description} other {descriptions}}",
             "noMetadata": "Service did not return {indicators, plural, one {description for the indicator} other {descriptions for the indicators}}"
-        },
-        "sumo": {
-            "placeholder": "Select Here",
-            "captionFormat": "{0} selected",
-            "captionFormatAllSelected": "All {0} selected!",
-            "searchText": "Search...",
-            "noMatch": "No results found matching '{0}'",
-            "locale": ["OK", "Cancel", "Select All"]
         }
     }
 });

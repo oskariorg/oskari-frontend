@@ -62,25 +62,13 @@ Oskari.registerLocalization(
                 "tooltip": "Välj kartans storlek. Vi rekommenderar den skalbara funktionen \"Skalbar / Fyll utrymmet\". Annars skall bredden vara minst {minWidth} och högst {maxWidth} pixel, och bredden mellan {minHeight} och {maxHeight} pixel."
             },
             "maptools": {
-                "label": "Verktyg",
+                "label": "Ytterligare verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
-                "AnnouncementsPlugin": "Aviseringar",
-                "TimeseriesControlPlugin": "Tidseriespelare",
-                "IndexMapPlugin": "Indexkarta",
-                "Portti2Zoombar": "Skalans glidreglage",
-                "ControlsPlugin": "Flytta kartvyn med musen",
-                "SearchPlugin": "Adress- och ortnamnssökning",
-                "FeaturedataPlugin": "Objektuppgifter",
                 "GetInfoPlugin": "Frågverktyg för visande av objektuppgifter",
-                "PublisherToolbarPlugin": "Kartverktyg",
                 "selectDrawLayer": "Välj lager för nya funktioner",
                 "LayerSelectionPlugin": "Kartlagermeny",
-                "CoordinateToolPlugin": "Koordinatverktyg",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
-                "CrosshairTool": "Visa kartans mittpunkt",
-                "CameraControls3d": "Kameraverktyg",
-                "TimeControl3d": "Tidskontroll",
                 "toolbarToolNames": {
                     "history": "Gå bakåt eller framåt",
                     "history_back": "Gå bakåt",
@@ -103,12 +91,7 @@ Oskari.registerLocalization(
                     "label": "Mina kartlager"
                 },
                 "layerselection": {
-                    "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                     "selectAsBaselayer": "Välj bakgrundskartlager",
-                    "allowStyleChange": "Tillåt val av visningsstil",
-                    "showMetadata": "Visa länkar för metadata",
-                    "noMultipleStyles": "Endast en visningsstil är tillgänglig för valda kartlager.",
-                    "noMetadata": "Metadatalänkar är inte tillgängliga på valda kartlager"
                 },
                 "mylocation": {
                     "modes": {
@@ -246,8 +229,8 @@ Oskari.registerLocalization(
                 "noBaseLayers": "Inga bakgrundskartor valda",
                 "noLayers": "Inga kartlager valda"
             },
-            "additional": {
-                "label": "Ytterligare verktyg"
+            "tools": {
+                "label": "Verktyg"
             },
             "preview": "Den publicerade kartans förhandsgranskningsvy",
             "location": "Läge och skalnivå.",

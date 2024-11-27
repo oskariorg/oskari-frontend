@@ -62,25 +62,13 @@ Oskari.registerLocalization(
                 "tooltip": "Valitse kartan koko. Suositus on käyttää skaalautuvaa vaihtoehtoa \"Skaalautuva / tilan täyttävä\". Muussa tapauksessa leveyden on oltava välillä {minWidth} ja {maxWidth} pikseliä ja korkeuden {minHeight} ja {maxHeight} pikseliä."
             },
             "maptools": {
-                "label": "Kartalla näytettävät työkalut",
+                "label": "Lisätyökalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
-                "AnnouncementsPlugin": "Ilmoitukset",
-                "TimeseriesControlPlugin": "Aikasarjatoistin",
-                "IndexMapPlugin": "Indeksikartta",
-                "Portti2Zoombar": "Mittakaavasäädin",
-                "ControlsPlugin": "Kartan liikuttaminen hiirellä raahaamalla",
-                "SearchPlugin": "Osoite- ja paikannimihaku",
-                "FeaturedataPlugin": "Kohdetietotaulukko",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
-                "PublisherToolbarPlugin": "Karttatyökalut",
                 "selectDrawLayer": "Valitse tallennustaso",
                 "LayerSelectionPlugin": "Karttatasovalikko",
-                "CoordinateToolPlugin": "Koordinaattityökalu",
                 "MapLegend": "Näytä karttaselitteet",
                 "MapRotator": "Salli kartan pyörittäminen",
-                "CrosshairTool": "Näytä kartan keskipiste",
-                "CameraControls3d": "Kameratyökalut",
-                "TimeControl3d": "Ajanhetken säädin",
                 "toolbarToolNames": {
                     "history": "Siirtyminen edelliseen ja seuraavaan näkymään",
                     "history_back": "Siirtyminen edelliseen näkymään",
@@ -103,12 +91,7 @@ Oskari.registerLocalization(
                     "label": "Omat karttatasot"
                 },
                 "layerselection": {
-                    "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
                     "selectAsBaselayer": "Valitse taustakartaksi",
-                    "allowStyleChange": "Salli esitystyylin valinta",
-                    "showMetadata": "Näytä metatietolinkit",
-                    "noMultipleStyles": "Vain yksi esitystyyli saatavilla valituilla karttatasoilla.",
-                    "noMetadata": "Metatietolinkkejä ei saatavilla valituilla karttatasoilla"
                 },
                 "mylocation": {
                     "modes": {
@@ -246,8 +229,8 @@ Oskari.registerLocalization(
                 "noBaseLayers": "Ei valittuja taustakarttoja",
                 "noLayers": "Ei valittuja karttatasoja"
             },
-            "additional": {
-                "label": "Lisätyökalut"
+            "tools": {
+                "label": "Kartalla näytettävät työkalut"
             },
             "preview": "Kartan esikatselu",
             "location": "Sijainti ja mittakaavataso",

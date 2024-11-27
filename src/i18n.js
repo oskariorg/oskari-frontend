@@ -1,13 +1,13 @@
-import IntlMessageFormat from 'intl-messageformat'
+import IntlMessageFormat from 'intl-messageformat';
 
 /**
  * Adds internalization support for Oskari
  */
 (function (O) {
-    var oskariLang = 'en';
-    var localizations = {};
-    var supportedLocales = null;
-    var log = Oskari.log('Oskari.deprecated');
+    let oskariLang = 'en';
+    const localizations = {};
+    let supportedLocales = null;
+    const log = Oskari.log('Oskari.deprecated');
     // FIXME: remove html from localization files to get rid of these!!
     // These are required by intl-messageformat as instructions for handling HTML-tags in locale strings
     const HTML_CONTEXT_VARIABLE_HANDLERS = {
@@ -76,10 +76,10 @@ import IntlMessageFormat from 'intl-messageformat'
      * @return {string[]} Supported languages
      */
     O.getSupportedLanguages = function () {
-        var langs = [];
-        var supported = O.getSupportedLocales();
-        var locale;
-        var i;
+        const langs = [];
+        const supported = O.getSupportedLocales();
+        let locale;
+        let i;
 
         for (i = 0; i < supported.length; i += 1) {
             locale = supported[i];
@@ -96,12 +96,12 @@ import IntlMessageFormat from 'intl-messageformat'
      * @return {string} Default language
      */
     O.getDefaultLanguage = function () {
-        var supported = O.getSupportedLocales();
+        const supported = O.getSupportedLocales();
 
         if (supported.length === 0) {
             return this.getLang();
         }
-        var locale = supported[0];
+        const locale = supported[0];
 
         if (locale.indexOf('_') !== -1) {
             return locale.substring(0, locale.indexOf('_'));
@@ -121,7 +121,7 @@ import IntlMessageFormat from 'intl-messageformat'
      * @param {string=} value Value
      *
      */
-    var setLocalization = function (lang, key, value) {
+    const setLocalization = function (lang, key, value) {
         if (lang === null || lang === undefined) {
             throw new TypeError(
                 'setLocalization(): Missing lang'
@@ -147,7 +147,7 @@ import IntlMessageFormat from 'intl-messageformat'
      */
     O.getLocalization = function (key, lang, fallbackToDefault) {
         log.deprecated('Oskari.getLocalization()', 'Use Oskari.getMsg() instead.');
-        var l = lang || oskariLang;
+        const l = lang || oskariLang;
         if (key === null || key === undefined) {
             throw new TypeError(
                 'getLocalization(): Missing key'
@@ -159,7 +159,7 @@ import IntlMessageFormat from 'intl-messageformat'
         if (localizations[l] && localizations[l][key]) {
             return localizations[l][key];
         } else {
-            var defaultLang = O.getDefaultLanguage();
+            const defaultLang = O.getDefaultLanguage();
             if (fallbackToDefault && localizations[defaultLang] && localizations[defaultLang][key]) {
                 return localizations[defaultLang][key];
             } else {
@@ -175,7 +175,7 @@ import IntlMessageFormat from 'intl-messageformat'
      *
      */
     O.registerLocalization = function (props, override) {
-        var p,
+        let p,
             pp,
             loc;
 
@@ -232,7 +232,7 @@ import IntlMessageFormat from 'intl-messageformat'
     // ------------------------------------------------
     // Decimal separators
     // ------------------------------------------------
-    var decimalSeparator;
+    let decimalSeparator;
 
     /**
      * @public @method setDecimalSeparator
@@ -265,12 +265,12 @@ import IntlMessageFormat from 'intl-messageformat'
         if (!lang) {
             lang = Oskari.getLang();
         }
-        var value = locale[lang];
+        let value = locale[lang];
         if (!value) {
             value = locale[Oskari.getDefaultLanguage()];
         }
         if (!value) {
-            for (var key in locale) {
+            for (const key in locale) {
                 if (locale[key]) {
                     // any locale will do at this point
                     return locale[key];
@@ -279,14 +279,14 @@ import IntlMessageFormat from 'intl-messageformat'
         }
         return value;
     };
-    var intlCache = {};
-    function resolvePath(key, path) {
-        var ob = O.getLocalization(key);
-        var parts = path.split('.');
-        for (var i = 0; i < parts.length; i++) {
+    const intlCache = {};
+    function resolvePath (key, path) {
+        let ob = O.getLocalization(key);
+        const parts = path.split('.');
+        for (let i = 0; i < parts.length; i++) {
             ob = ob[parts[i]];
             if (!ob) {
-                if(i === parts.length-1 && ob === '') {
+                if (i === parts.length - 1 && ob === '') {
                     return ob;
                 }
                 return null;
@@ -295,19 +295,19 @@ import IntlMessageFormat from 'intl-messageformat'
         return ob;
     }
     O.getMsg = function (key, path, values) {
-        var message;
+        let message;
         if (!values) {
             message = resolvePath(key, path);
-            if(message === null) {
+            if (message === null) {
                 return path;
             }
             return message;
         }
-        var cacheKey = oskariLang + '_' + key + '_' + path;
-        var formatter = intlCache[cacheKey];
+        const cacheKey = oskariLang + '_' + key + '_' + path;
+        let formatter = intlCache[cacheKey];
         if (!formatter) {
             message = resolvePath(key, path);
-            if(message === null) {
+            if (message === null) {
                 return path;
             }
             formatter = new IntlMessageFormat(message, oskariLang);
@@ -316,11 +316,11 @@ import IntlMessageFormat from 'intl-messageformat'
         const htmlValues = {
             ...values,
             ...HTML_CONTEXT_VARIABLE_HANDLERS
-        }
+        };
         return formatter.format(htmlValues);
     };
     O.getNumberFormatter = function (fractionDigits) {
-        var opts;
+        let opts;
         if (typeof fractionDigits !== 'undefined') {
             opts = {
                 minimumFractionDigits: fractionDigits,
@@ -328,5 +328,12 @@ import IntlMessageFormat from 'intl-messageformat'
             };
         }
         return new Intl.NumberFormat(oskariLang, opts);
-    }
+    };
+    let _msgDebugMode = 'TBD';
+    O.isMsgDebugMode = function () {
+        if (_msgDebugMode === 'TBD') {
+            _msgDebugMode = Oskari.util.getRequestParam('msgDebugMode', false) === 'true';
+        }
+        return _msgDebugMode;
+    };
 }(Oskari));

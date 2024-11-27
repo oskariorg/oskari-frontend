@@ -177,6 +177,32 @@ Oskari.registerLocalization(
                 "titles": {
                     "showArrows": "Pan tool"
                 }
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Index map",
+            },
+            "Zoombar": {
+                "toolLabel": "Zoom bar"
+            },
+            "CrosshairTool": {
+                "toolLabel": "Show map focal point"
+            },
+            "LayerSelection": {
+                "toolLabel": "Map layers menu",
+                "selectAsBaselayer": "Select as baselayer",
+                "allowStyleChange": "Allow presentation style change",
+                "showMetadata": "Show metadata links",
+                "noMultipleStyles": "Only single presentation style available on the selected map layers.",
+                "noMetadata": "No metadata links availabe on the selected map layers"
+            },
+            "SearchPlugin": {
+                "toolLabel": "Place search"
+            },
+            "ControlsPlugin": {
+                "toolLabel": "Pan by mouse"
+            },
+            "PublisherToolbarPlugin": {
+                "toolLabel": "Map tools"
             }
         }
     }

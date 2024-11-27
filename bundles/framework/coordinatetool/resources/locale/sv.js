@@ -99,6 +99,7 @@ Oskari.registerLocalization(
                 "message": "Koordinaterna kunde inte omvandlas"
             },
             "publisher": {
+                "toolLabel": "Koordinatverktyg",
                 "showTransformationTools": "Visa verktyg för koordinattransformation",
                 "noUI": "Dölj användargränsnittet (Använd via RPC gränssnitt)"
             }

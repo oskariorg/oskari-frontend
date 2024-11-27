@@ -11,7 +11,7 @@ Oskari.registerLocalization({
                 "inspire": "Inspire metadata",
                 "jhs": "ISO 19115 metadata",
                 "quality": "Data quality",
-                "actions": "Actions",
+                "actions": "Actions"
             },
             "actions": {
                 "xml": "ISO 19139 XML file",
@@ -21,7 +21,7 @@ Oskari.registerLocalization({
                 "showBBOX": "Show coverage area"
             },
             "error": {
-                "notFound": "Metadata was not found",
+                "notFound": "Metadata was not found"
             },
             "quality": {
                 "pass": {

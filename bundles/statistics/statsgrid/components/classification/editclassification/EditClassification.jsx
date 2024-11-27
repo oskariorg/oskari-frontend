@@ -9,13 +9,9 @@ import { EditTwoTone } from '@ant-design/icons';
 import { getEditOptions } from '../../../helper/ClassificationHelper';
 import { LAYER_ID } from '../../../constants';
 
-// remove mark dots (.ant-slider-dot)
 const Container = styled.div`
     background-color: #fafafa;
     padding: 6px 12px;
-    .ant-slider-dot {
-        display: none;
-    }
 `;
 
 const MethodContainer = styled.div`
@@ -103,7 +99,7 @@ export const EditClassification = ({
             <Color values = {values} disabled = {disabled} colorsets = {options.colorsets} controller = {controller}/>
 
             <Message messageKey='classify.labels.transparency'/>
-            <Slider
+            <Slider hideDots
                 value = {opacity}
                 disabled = {disabled}
                 onChange = {onOpacityChange}

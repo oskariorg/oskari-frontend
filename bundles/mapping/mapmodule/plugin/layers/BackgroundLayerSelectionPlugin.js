@@ -18,7 +18,7 @@ Oskari.clazz.define(
      *
      *
      */
-    function (config) {
+    function () {
         this._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayerSelectionPlugin';
         this._defaultLocation = 'bottom center';
@@ -26,6 +26,7 @@ Oskari.clazz.define(
         this._name = 'BackgroundLayerSelectionPlugin';
         // make sure baseLayers aren't numbers.
         this._baseLayerIds = this._config?.baseLayers?.map(id => typeof id === 'number' ? id.toString() : id);
+        this._baseLayerOptions = [];
         this._template = jQuery('<div class="backgroundLayerSelectionPlugin oskariui mapplugin"/>');
     }, {
         /** @static @property __name module name */
@@ -50,9 +51,8 @@ Oskari.clazz.define(
                  *
                  * Rearranges layers
                  */
-                AfterRearrangeSelectedMapLayerEvent: function (event) {
+                AfterRearrangeSelectedMapLayerEvent: function () {
                     // Update selection, bottom baselayer might've changed
-                    // this._updateUISelection();
                     this.refresh();
                 },
 
@@ -62,12 +62,8 @@ Oskari.clazz.define(
                  *
                  * Removes the layer from selection
                  */
-                AfterMapLayerRemoveEvent: function (event) {
-                    // Redo ui, one of our layers might've been deleted
-                    // TODO Check if event.getMapLayer() id is in our layers first...
-                    // if not, still do this._updateUISelection() as the selected
-                    // layer might still have changed
-                    // this._createLayerSelectionElements();
+                AfterMapLayerRemoveEvent: function () {
+                    // Update selection, bottom baselayer might've changed
                     this.refresh();
                 },
 
@@ -77,12 +73,8 @@ Oskari.clazz.define(
                  *
                  * Adds the layer to selection
                  */
-                AfterMapLayerAddEvent: function (event) {
-                    // Redo ui, we might've gotten a previously missing layer
-                    // TODO Check if event.getMapLayer() id is in our layers first...
-                    // if not, still do this._updateUISelection() as the selected
-                    // layer might still have changed
-                    // this._createLayerSelectionElements();
+                AfterMapLayerAddEvent: function () {
+                    // Update selection, bottom baselayer might've changed
                     this.refresh();
                 },
 
@@ -93,11 +85,18 @@ Oskari.clazz.define(
                  * Adds the layer to selection
                  */
                 MapLayerEvent: function (event) {
-                    // TODO add check for event.getMapLayer().getId() here?
-                    // this._createLayerSelectionElements();
+                    const layerId = event.getLayerId()?.toString();
+                    if (layerId && !this._getBaseLayerIds().includes(layerId)) {
+                        // handle mass events and base layers only
+                        return;
+                    }
+                    if (event.getOperation() === 'update') {
+                        // clear to get updated options on refresh
+                        this._baseLayerOptions = [];
+                    }
                     this.refresh();
                 },
-                MapSizeChangedEvent: function (evt) {
+                MapSizeChangedEvent: function () {
                     this.refresh();
                 }
             };
@@ -120,6 +119,23 @@ Oskari.clazz.define(
         },
         _getBaseLayerIds: function () {
             return this._baseLayerIds || [];
+        },
+        _getBaseLayerOptions: function () {
+            if (this._baseLayerOptions.length) {
+                return this._baseLayerOptions;
+            }
+            const ids = this._getBaseLayerIds();
+            const sb = this.getSandbox();
+            const options = ids.map(id => ({
+                id,
+                title: sb.findMapLayerFromAllAvailable(id)?.getName(),
+                action: () => this._onSelect(id)
+            })).filter(opt => opt.title);
+            if (ids.length === options.length) {
+                // store if we have full set
+                this._baseLayerOptions = options;
+            }
+            return options;
         },
         /**
          * Does the actual layer selection update
@@ -154,23 +170,16 @@ Oskari.clazz.define(
          */
         _createLayerSelectionElements: function () {
             const element = this.getElement();
-            const ids = this._getBaseLayerIds();
-            if (!element || !ids.length) {
+            if (!element) {
                 return;
             }
-            const sb = this.getSandbox();
-            const baseLayers = ids.map(id => ({
-                id,
-                title: sb.findMapLayerFromAllAvailable(id)?.getName(),
-                action: () => this._onSelect(id)
-            }));
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <BackgroundLayerSelection
                         isMobile={Oskari.util.isMobile()}
-                        baseLayers={baseLayers}
+                        baseLayers={this._getBaseLayerOptions()}
                         selectedId={this._getSelectedId()}
-                        mapWidth={sb.getMap().getWidth()}
+                        mapWidth={this.getSandbox().getMap().getWidth()}
                     />
                 </ThemeProvider>,
                 element[0]

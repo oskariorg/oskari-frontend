@@ -10,6 +10,9 @@ Oskari.registerLocalization(
                 "slow": "Långsam",
                 "normal": "Normal",
                 "fast": "Snabb"
+            },
+            "publisher": {
+                "toolLabel": "Tidskontroll"
             }
         }
     }

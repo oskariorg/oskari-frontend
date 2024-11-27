@@ -145,6 +145,24 @@ Oskari.registerLocalization(
             },
             "PanButtons": {
                 "toolLabel": "Outil pour panoramiser"
+            },
+            "IndexMapPlugin": {
+                "toolLabel": "Carte-index"
+            },
+            "Zoombar": {
+                "toolLabel": "Barre de zoom"
+            },
+            "CrosshairTool": {
+                "toolLabel": "Afficher le point d'intérêt de la carte"
+            },
+            "SearchPlugin": {
+                "toolLabel": "Recherche de lieu"
+            },
+            "ControlsPlugin": {
+                "toolLabel": "Panoramiser avec la souris"
+            },
+            "PublisherToolbarPlugin": {
+                "toolLabel": "Outils cartographiques"
             }
         }
     }
