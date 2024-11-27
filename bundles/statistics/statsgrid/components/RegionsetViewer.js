@@ -30,6 +30,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         }
         this._lastRenderCache.highlightRegionId = activeRegion;
     },
+    flushLastRenderStateCache: function () {
+        this._lastRenderStateForSelectedRegionOptimizing = {};
+    },
     isOnlyActiveRegionChange: function (state = {}) {
         const sameRegionset = this._lastRenderStateForSelectedRegionOptimizing.regionset === state.regionset;
         const sameIndicator = this._lastRenderStateForSelectedRegionOptimizing.activeIndicator === state.activeIndicator;

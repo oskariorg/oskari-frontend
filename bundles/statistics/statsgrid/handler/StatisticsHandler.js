@@ -194,6 +194,7 @@ class StatisticsController extends AsyncStateHandler {
         }
         this.updateState({ loading: true });
         try {
+            this.instance.regionsetViewer?.flushLastRenderStateCache();
             let active;
             const indicatorsToAdd = [];
             // async/await doesn't work with forEach()
@@ -206,7 +207,7 @@ class StatisticsController extends AsyncStateHandler {
                 }
             };
             const isSeriesActive = active ? !!active.series : false;
-            this.updateState({ activeIndicator, isSeriesActive, activeRegion, regionset, indicators: indicatorsToAdd, loading: false });
+            this.updateState({ activeIndicator, isSeriesActive, activeRegion, regionset, indicators: indicatorsToAdd });
             // reset active
             if (!active) {
                 this.setActiveIndicator();
@@ -214,6 +215,7 @@ class StatisticsController extends AsyncStateHandler {
         } catch (error) {
             this.log.warn('Failed to set stored state', error.message);
         }
+        this.updateState({ loading: false });
     }
 
     async onCacheUpdate (indicator, onlyData) {
