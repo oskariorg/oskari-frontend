@@ -40,7 +40,7 @@ export const LayerDetails = ({ controller, state }) => {
     const { layerDetails, pagination, loading, dataProviders } = state;
 
     const [filter, setFilter] = useState({});
-    const dataSource = layerDetails; // TODO: handle search or hide it
+    const dataSource = layerDetails;
 
     const general = [{
         title: <Message messageKey='flyout.layer.name' />,
@@ -74,8 +74,8 @@ export const LayerDetails = ({ controller, state }) => {
         filteredValue: filter.version,
         onFilter: (value, item) => item.version === value
     }];
-    // TODO: for now has only default lang locale. Fetch data from backend and remove slice
-    const locales = Oskari.getSupportedLanguages().slice(0, 1).map(lang => ({
+    // TODO: for now has only default lang locale. Fetch data from backend and remove filter
+    const locales = Oskari.getSupportedLanguages().filter(lang => lang === Oskari.getLang()).map(lang => ({
         title: <Message messageKey={`flyout.layer.${lang}`} />,
         maxWidth: '15em',
         dataIndex: lang,
