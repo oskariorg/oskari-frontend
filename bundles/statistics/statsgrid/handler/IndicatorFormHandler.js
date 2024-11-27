@@ -163,7 +163,6 @@ class IndicatorFormController extends StateHandler {
     }
 
     async saveData () {
-        this.updateState({ loading: true });
         const { dataByRegions, regionset, selection } = this.getState();
 
         const data = {};
@@ -182,6 +181,7 @@ class IndicatorFormController extends StateHandler {
             return;
         }
         try {
+            this.updateState({ loading: true });
             const indicator = this.getFullIndicator();
             await saveIndicatorData(indicator, data, regionset);
             const indicatorInfo = `Indicator: ${indicator.id}, selection: ${selection}, regionset: ${regionset}.`;
