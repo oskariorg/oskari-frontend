@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ToolPanelHandler } from '../handler/ToolPanelHandler';
 import { PublisherToolsList } from './form/PublisherToolsList';
-import { LocaleProvider } from 'oskari-ui/util';
+import { ThemeProvider, LocaleProvider } from 'oskari-ui/util';
 
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PanelRpc
@@ -100,12 +100,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
             }
             const contentPanel = this.panel.getContainer();
             ReactDOM.render(
-                <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
-                    <PublisherToolsList
-                        state={this.handler.getState()}
-                        controller={this.handler.getController()}
-                    />
-                </LocaleProvider>,
+                <ThemeProvider>
+                    <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
+                        <PublisherToolsList
+                            state={this.handler.getState()}
+                            controller={this.handler.getController()}
+                        />
+                    </LocaleProvider>
+                </ThemeProvider>,
                 contentPanel[0]
             );
         }

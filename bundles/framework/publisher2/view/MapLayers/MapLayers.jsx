@@ -32,7 +32,6 @@ const LayerTitle = styled('span')`
 const LayerContainer = styled('div')`
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
 `;
 
 export const MapLayers = ({ state, controller }) => {
@@ -46,49 +45,52 @@ export const MapLayers = ({ state, controller }) => {
                 <PublisherToolsList state={state} controller={controller} />
             </Card>
             {layerListPluginEnabled && (
+                <Card size='small' title={<Message messageKey='BasicView.mapLayers.baseLayers' />}>
+                    <LayerContainer>
+                        {baseLayers.map((layer) => {
+                            const disabled = !layer.isVisible();
+                            return (
+                                <LayerBox key={layer.getId()} disabled={disabled}>
+                                    <LayerTitle>{layer.getName()}</LayerTitle>
+                                    {!disabled && (
+                                        <IconButton
+                                            icon={<DownCircleOutlined />}
+                                            onClick={() => controller.removeBaseLayer(layer)}
+                                        />
+                                    )}
+                                </LayerBox>
+                            )
+                        })}
+                    </LayerContainer>
+                    {layerListPluginEnabled && baseLayers?.length < 1 && (
+                        <Message messageKey='BasicView.mapLayers.noBaseLayers' />
+                    )}
+                </Card>
+            )}
+            <Card size='small' title={<Message messageKey='BasicView.mapLayers.otherLayers' />}>
                 <LayerContainer>
-                    <h3><Message messageKey='BasicView.mapLayers.baseLayers' /></h3>
-                    {baseLayers.map((layer) => {
+                    <div className='ant-card-head-title'></div>
+                    {layers.map((layer) => {
                         const disabled = !layer.isVisible();
                         return (
                             <LayerBox key={layer.getId()} disabled={disabled}>
                                 <LayerTitle>{layer.getName()}</LayerTitle>
-                                {!disabled && (
-                                    <IconButton
-                                        icon={<DownCircleOutlined />}
-                                        onClick={() => controller.removeBaseLayer(layer)}
-                                    />
+                                {!disabled && layerListPluginEnabled && (
+                                    <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={<Message messageKey='BasicView.maptools.layerselection.selectAsBaselayer' />}>
+                                        <IconButton
+                                            icon={<UpCircleOutlined />}
+                                            onClick={() => controller.addBaseLayer(layer)}
+                                        />
+                                    </Tooltip>
                                 )}
                             </LayerBox>
                         )
                     })}
                 </LayerContainer>
-            )}
-            {layerListPluginEnabled && baseLayers?.length < 1 && (
-                <Message messageKey='BasicView.mapLayers.noBaseLayers' />
-            )}
-            <LayerContainer>
-                <h3><Message messageKey='BasicView.mapLayers.otherLayers' /></h3>
-                {layers.map((layer) => {
-                    const disabled = !layer.isVisible();
-                    return (
-                        <LayerBox key={layer.getId()} disabled={disabled}>
-                            <LayerTitle>{layer.getName()}</LayerTitle>
-                            {!disabled && layerListPluginEnabled && (
-                                <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={<Message messageKey='BasicView.maptools.layerselection.selectAsBaselayer' />}>
-                                    <IconButton
-                                        icon={<UpCircleOutlined />}
-                                        onClick={() => controller.addBaseLayer(layer)}
-                                    />
-                                </Tooltip>
-                            )}
-                        </LayerBox>
-                    )
-                })}
-            </LayerContainer>
-            {layers?.length < 1 && (
-                <Message messageKey='BasicView.mapLayers.noLayers' />
-            )}
+                {layers?.length < 1 && (
+                    <Message messageKey='BasicView.mapLayers.noLayers' />
+                )}
+            </Card>
             <ButtonContainer>
                 <Button onClick={() => controller.openSelectedLayerList()}>
                     <Message messageKey='BasicView.mapLayers.layersDisplay' />

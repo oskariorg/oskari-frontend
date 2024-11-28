@@ -1,5 +1,5 @@
 import React from 'react';
-import { LocaleProvider } from 'oskari-ui/util';
+import { ThemeProvider, LocaleProvider } from 'oskari-ui/util';
 import { MapLayers } from './MapLayers/MapLayers';
 import ReactDOM from 'react-dom';
 import { MapLayersHandler } from '../handler/MapLayersHandler';
@@ -189,12 +189,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             const contentPanel = this.panel.getContainer();
 
             ReactDOM.render(
-                <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
-                    <MapLayers
-                        state={this.handler.getState()}
-                        controller={this.handler.getController()}
-                    />
-                </LocaleProvider>,
+                <ThemeProvider>
+                    <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
+                        <MapLayers
+                            state={this.handler.getState()}
+                            controller={this.handler.getController()}
+                        />
+                    </LocaleProvider>
+                </ThemeProvider>,
                 contentPanel[0]
             );
         },
