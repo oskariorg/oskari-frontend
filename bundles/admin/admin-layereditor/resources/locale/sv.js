@@ -318,8 +318,24 @@ Oskari.registerLocalization(
                 "PUBLISH": "rätt att publicera",
                 "VIEW_LAYER": "rätt att visa",
                 "DOWNLOAD": "rätt att ladda ner",
-                "VIEW_PUBLISHED": "rätt att visa en publicerat vy",
-                "role": "Roll"
+                "VIEW_PUBLISHED": "rätt att visa en publicerat vy"
+            },
+            "permissions": {
+                "role": "Roll",
+                "default": "Standardrättigheter",
+                "onlyAdmin": "Endast admin",
+                "published": "Publicerat",
+                "removeOther": "Ta bort från ytterligare roller",
+                "confirm": {
+                    "remove": "Ta bort {count} rättigheter från kartlagret?",
+                    "override": "Layer har rättigheter för systemroller. Vill du ställa in standardrättigheter?"
+                },
+                "tooltip": {
+                    "default": "Ställ in standardbehörigheter för lagret (visa, publicera och visa publicerat)",
+                    "onlyAdmin": "För att ställa in lagret synligt endast för administratörsanvändare. Du kan även lägga till behörigheter för ytterligare roller för att begränsa synligheten.",
+                    "published": "Gästanvändare kan se lagret i publicerat vy.",
+                    "removeOther": "Ta bort alla behörigheter från ytterligare roller."
+                }
             }
         }
     }

@@ -26,7 +26,9 @@ export const RolesTab = ({ state, controller }) => {
         setStatus('');
         setRoleName('');
     };
-    const { roles, systemRoles, editingRole } = state;
+    const { roles, editingRole } = state;
+    const { system, additional } = roles;
+
     return (
         <Content>
             <LabelledField>
@@ -42,10 +44,10 @@ export const RolesTab = ({ state, controller }) => {
                 />
             </LabelledField>
             <Margin />
-            { roles.map(role => <RoleBlock key={role.id} role={role} controller={controller} editingRole={editingRole}/>) }
+            { additional.map(role => <RoleBlock key={role.id} role={role} controller={controller} editingRole={editingRole}/>) }
             <Margin />
             <StyledLabel><Message messageKey='roles.types.system' /></StyledLabel>
-            { systemRoles.map(role => <RoleBlock key={role.id} role={role} controller={controller} isSystemRole/>) }
+            { system.map(role => <RoleBlock key={role.id} role={role} controller={controller} isSystemRole/>) }
         </Content>
     );
 };

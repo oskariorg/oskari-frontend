@@ -320,8 +320,24 @@ Oskari.registerLocalization(
                 "PUBLISH": "Julkaisuoikeus",
                 "VIEW_LAYER": "Katseluoikeus",
                 "DOWNLOAD": "Latausoikeus",
-                "VIEW_PUBLISHED": "Katseluoikeus upotetussa kartassa",
-                "role": "Rooli"
+                "VIEW_PUBLISHED": "Katseluoikeus upotetussa kartassa"
+            },
+            "permissions": {
+                "role": "Rooli",
+                "default": "Oletusoikeudet",
+                "onlyAdmin": "Vain admin",
+                "published": "Julkinen",
+                "removeOther": "Poista lisärooleilta",
+                "confirm": {
+                    "remove": "Poistetaan karttatasolta {count} oikeutta?",
+                    "override": "Tasolla on jo perusrooleille oikeuksia. Haluatko asettaa oletusoikeudet?"
+                },
+                "tooltip": {
+                    "default": "Aseta tasolle oletusoikeudet (katselu- ja julkaisoikeus sekä katseluoikeus upotetussa kartassa)",
+                    "onlyAdmin": "Aseta näkyviin vain adminille. Voit lisäksi asettaa oikeuksia lisärooleille rajoittaaksesi tason näkyvyyttä.",
+                    "published": "Vierailijan katseluoikeus upotetussa kartassa",
+                    "removeOther": "Poista kaikki oikeudet lisärooleilta"
+                }
             }
         }
     }
