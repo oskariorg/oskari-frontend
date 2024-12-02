@@ -65,8 +65,8 @@ Added a [guide](UpdatingDependencies.md) for dependency updates that can be used
 - OpenLayers 7.2.2 -> 9.2.4
 - cesium 1.91 -> cesium/engine 10.1.0 (required a post install script for oskari-frontend)
 - olcs 2.13.1 -> 2.20 (2.21.0 released after this update is required when updating to OpenLayers 10: https://github.com/openlayers/ol-cesium/commit/fa317f96d1621c4bce17482a581de82eb83c9517)
-- antd 4.24.8 -> 5.20.4 (changes to many React components. See [antd migration notes](https://ant.design/docs/react/migration-v5))
-- @ant-design/icons 4.6.3 -> 5.2.6
+- antd 4.24.8 -> 5.21.6 (changes to many React components. See [antd migration notes](https://ant.design/docs/react/migration-v5))
+- @ant-design/icons 4.6.3 -> 5.5.1
 - node-sass replaced with sass which allows to use newer node.js version. Oskari-frontend can now use at least node 18 & 20 instead of being limited to node 16.
 - webpack 3.43.0 -> 4.47.0
 - webpack-cli 3.3.11 -> 4.10.0
