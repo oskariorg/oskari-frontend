@@ -5,6 +5,8 @@ import { Header } from 'oskari-ui';
 import styled from 'styled-components';
 import './PanelReactTools';
 import { mergeValues } from '../util/util';
+import { showModal } from 'oskari-ui/components/window';
+import { ValidationErrorMessage } from './dialog/ValidationErrorMessage';
 
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
@@ -23,6 +25,8 @@ class PublisherSidebar {
         this.normalMapPlugins = [];
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.panels = [];
+
+        this.validationErrorMessageDialog = null;
     }
 
     render (container) {
@@ -492,7 +496,7 @@ class PublisherSidebar {
     }
 
     /**
-     * @private @method _showValidationErrorMessage
+     * @private @method showValidationErrorMessage
      * Takes an error array as defined by Oskari.userinterface.component.FormInput validate() and
      * shows the errors on a  Oskari.userinterface.component.Popup
      *
@@ -500,20 +504,21 @@ class PublisherSidebar {
      *
      */
     showValidationErrorMessage (errors = []) {
-        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        const okBtn = dialog.createCloseButton(this.localization.buttons.ok);
-        const content = jQuery('<ul></ul>');
-        errors.map(err => {
-            const row = jQuery('<li></li>');
-            row.append(err.error);
-            return row;
-        }).forEach(row => content.append(row));
-        dialog.makeModal();
-        dialog.show(this.localization.error.title, content, [okBtn]);
+        const content = <ValidationErrorMessage errors={errors} closeCallback={() => this.closeValidationErrorMessage()}/>;
+        this.validationErrorMessageDialog = showModal(this.localization.error.title, content, () => {
+            this.validationErrorMessageDialog = null;
+        });
     };
 
+    closeValidationErrorMessage() {
+        if (this.validationErrorMessageDialog) {
+            this.validationErrorMessageDialog.close();
+            this.validationErrorMessageDialog = null;
+        }
+    }
+
     /**
-     * @private @method _showReplaceConfirm
+     * @private @method showReplaceConfirm
      * Shows a confirm dialog for replacing published map
      *
      * @param {Function} continueCallback function to call if the user confirms
