@@ -4,6 +4,7 @@ import { Messaging } from 'oskari-ui/util';
 import { Header } from 'oskari-ui';
 import styled from 'styled-components';
 import './PanelReactTools';
+import { mergeValues } from '../util/util';
 
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
@@ -25,12 +26,16 @@ class PublisherSidebar {
     }
 
     render (container) {
+        this.mainPanel = container;
         const content = <>
-            <StyledHeader
-                title={this.data.uuid ? this.localization?.titleEdit : this.localization?.title}
-                onClose={() => this.cancel()}
-            />
-            <div className="content"/>
+            <div className='basic_publisher'>
+                <StyledHeader
+                    title={this.data.uuid ? this.localization?.titleEdit : this.localization?.title}
+                    onClose={() => this.cancel()}
+                />
+                <div className='content'/>
+                <div className='buttons'/>
+            </div>
         </>;
 
         ReactDOM.render(content, container[0]);
@@ -118,6 +123,12 @@ class PublisherSidebar {
         // -- render to UI and setup buttons --
         const contentDiv = container.find('div.content');
         accordion.insertTo(contentDiv);
+        contentDiv.append(this.getButtons(container));
+        // disable keyboard map moving whenever a text-input is focused element
+        const inputs = contentDiv.find('input[type=text]');
+        const sandbox = this.instance.getSandbox();
+        inputs.on('focus', () => sandbox.postRequestByName('DisableMapKeyboardMovementRequest'));
+        inputs.on('blur', () => sandbox.postRequestByName('EnableMapKeyboardMovementRequest'));
     }
 
     /**
@@ -156,8 +167,8 @@ class PublisherSidebar {
     }
 
     /**
-     * @private @method _createMapSizePanel
-     * Creates the Map Sizes panel of publisher
+     * @private @method createMapPreviewPanel
+     * Creates the Map panel of publisher
      */
     createMapPreviewPanel (publisherTools) {
         const sandbox = this.instance.getSandbox();
@@ -326,6 +337,208 @@ class PublisherSidebar {
         // open generic info by default
         form.getPanel().open();
         return form;
+    }
+
+    /**
+     * @private @method getButtons
+     * Renders publisher buttons to DOM snippet and returns it.
+     *
+     *
+     * @return {jQuery} container with buttons
+     */
+    getButtons (container) {
+        const buttonCont = container.find('div.buttons');
+
+        // cancel
+        const cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+        cancelBtn.setHandler(() => {
+            this.cancel();
+        });
+        cancelBtn.insertTo(buttonCont);
+
+        // save
+        const saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+        if (!this.data.uuid) {
+            // only save when not editing
+            saveBtn.setTitle(this.localization.buttons.save);
+            saveBtn.setHandler(() => {
+                const selections = this.gatherSelections();
+                if (selections) {
+                    this.stopEditorPanels();
+                    this.publishMap(selections);
+                }
+            });
+            saveBtn.insertTo(buttonCont);
+            return buttonCont;
+        }
+
+        // buttons when editing
+        const save = () => {
+            const selections = this.gatherSelections();
+            if (selections) {
+                this.stopEditorPanels();
+                this.publishMap(selections);
+            }
+        };
+        saveBtn.setTitle(this.localization.buttons.saveNew);
+        saveBtn.setHandler(() => {
+            // clear the id to save this as a new embedded map
+            this.data.uuid = null;
+            delete this.data.uuid;
+            save();
+        });
+        saveBtn.insertTo(buttonCont);
+
+        // replace
+        const replaceBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        replaceBtn.setTitle(this.localization.buttons.replace);
+        replaceBtn.addClass('primary');
+        replaceBtn.setHandler(() => {
+            this.showReplaceConfirm(save);
+        });
+        replaceBtn.insertTo(buttonCont);
+        return buttonCont;
+    }
+
+    /**
+    * Gather selections.
+    * @method gatherSelections
+    * @private
+    */
+    gatherSelections () {
+        const sandbox = this.instance.getSandbox();
+        let errors = [];
+
+        const mapFullState = sandbox.getStatefulComponents().mapfull.getState();
+        let selections = {
+            configuration: {
+                mapfull: {
+                    state: mapFullState
+                }
+            }
+        };
+
+        this.panels.forEach((panel) => {
+            if (typeof panel.validate === 'function') {
+                errors = errors.concat(panel.validate());
+            }
+            selections = mergeValues(selections, panel.getValues());
+        });
+
+        if (errors.length > 0) {
+            this.showValidationErrorMessage(errors);
+            return null;
+        }
+        return selections;
+    }
+
+    /**
+     * @private @method publishMap
+     * Sends the gathered map data to the server to save them/publish the map.
+     *
+     * @param {Object} selections map data as returned by gatherSelections()
+     *
+     */
+    publishMap (selections) {
+        const me = this;
+        const sandbox = this.instance.getSandbox();
+        let totalWidth = '100%';
+        let totalHeight = '100%';
+        const errorHandler = () => {
+            this.progressSpinner.stop();
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const okBtn = dialog.createCloseButton(this.localization.buttons.ok);
+            dialog.show(this.localization.error.title, this.localization.error.saveFailed, [okBtn]);
+        };
+
+        if (selections.metadata.size) {
+            totalWidth = selections.metadata.size.width + 'px';
+            totalHeight = selections.metadata.size.height + 'px';
+        }
+
+        this.progressSpinner.start();
+
+        // make the ajax call
+        jQuery.ajax({
+            url: Oskari.urls.getRoute('AppSetup'),
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                publishedFrom: Oskari.app.getUuid(),
+                uuid: (this.data && this.data.uuid) ? this.data.uuid : undefined,
+                pubdata: JSON.stringify(selections)
+            },
+            success: function (response) {
+                me.progressSpinner.stop();
+                if (response.id > 0) {
+                    const event = Oskari.eventBuilder(
+                        'Publisher.MapPublishedEvent'
+                    )(
+                        response.id,
+                        totalWidth,
+                        totalHeight,
+                        response.lang,
+                        sandbox.createURL(response.url)
+                    );
+
+                    me.stopEditorPanels();
+                    sandbox.notifyAll(event);
+                } else {
+                    errorHandler();
+                }
+            },
+            error: errorHandler
+        });
+    }
+
+    /**
+     * @private @method _showValidationErrorMessage
+     * Takes an error array as defined by Oskari.userinterface.component.FormInput validate() and
+     * shows the errors on a  Oskari.userinterface.component.Popup
+     *
+     * @param {Object[]} errors validation error objects to show
+     *
+     */
+    showValidationErrorMessage (errors = []) {
+        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        const okBtn = dialog.createCloseButton(this.localization.buttons.ok);
+        const content = jQuery('<ul></ul>');
+        errors.map(err => {
+            const row = jQuery('<li></li>');
+            row.append(err.error);
+            return row;
+        }).forEach(row => content.append(row));
+        dialog.makeModal();
+        dialog.show(this.localization.error.title, content, [okBtn]);
+    };
+
+    /**
+     * @private @method _showReplaceConfirm
+     * Shows a confirm dialog for replacing published map
+     *
+     * @param {Function} continueCallback function to call if the user confirms
+     *
+     */
+    showReplaceConfirm (continueCallback) {
+        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        const okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(this.localization.buttons.replace);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function () {
+            dialog.close();
+            continueCallback();
+        });
+        const cancelBtn = dialog.createCloseButton(this.localization.buttons.cancel);
+        dialog.show(
+            this.localization.confirm.replace.title,
+            this.localization.confirm.replace.msg,
+            [cancelBtn, okBtn]
+        );
+    }
+
+    destroy () {
+        // TODO: this is still jQueryish. Make it not be.
+        this.mainPanel.remove();
     }
 }
 
