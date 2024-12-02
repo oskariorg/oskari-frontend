@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Tooltip, CopyField } from 'oskari-ui';
+import { Message, CopyField } from 'oskari-ui';
 import styled from 'styled-components';
 import { SecondaryButton, ButtonContainer, CopyButton } from 'oskari-ui/components/buttons';
 import { showPopup } from 'oskari-ui/components/window';
@@ -16,7 +15,7 @@ const Content = styled.div`
     margin: 12px 24px 24px;
 `;
 
-const SnippetPopup = ({html, onClose}) => {
+const SnippetPopup = ({ html, onClose }) => {
     const [highlighted, setHighlighted] = useState(false);
 
     const highlightUrl = () => {
@@ -24,7 +23,7 @@ const SnippetPopup = ({html, onClose}) => {
         setTimeout(() => {
             setHighlighted(false);
         }, 1000);
-    }
+    };
 
     return (
         <Content>
@@ -35,15 +34,16 @@ const SnippetPopup = ({html, onClose}) => {
             />
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={onClose}/>
-                <Tooltip title={<Message messageKey={`tabs.publishedmaps.published.copy`} />}>
-                    <CopyButton
-                        value={html}
-                        onClick={() => highlightUrl()}
-                    />
-                </Tooltip>
+                <CopyButton
+                    value={html}
+                    onClick={() => highlightUrl()}/>
             </ButtonContainer>
         </Content>
     );
+};
+SnippetPopup.propTypes = {
+    html: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired
 };
 
 export const showSnippetPopup = (view, onClose) => {
@@ -68,9 +68,4 @@ export const showSnippetPopup = (view, onClose) => {
         </LocaleProvider>
     );
     return showPopup(title, content, onClose, POPUP_OPTIONS);
-}
-
-showSnippetPopup.propTypes = {
-    view: PropTypes.object,
-    onClose: PropTypes.func.isRequired
 };
