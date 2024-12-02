@@ -35,7 +35,7 @@ export const StatisticalData = ({ state, controller }) => {
             render: (title, item) => {
                 return (
                     <TextInput
-                        value={item.value || ''}
+                        value={item.value}
                         onChange={(e) => controller.updateRegionValue(item.key, e.target.value)}
                     />
                 );
