@@ -283,6 +283,9 @@ export const saveIndicatorData = async (indicator, data, regionsetId) => {
         // Flush cache as update is implemented only for quest user
         removeIndicatorFromCache({ ds: indicator.ds });
         flushIndicatorMetadataCache(indicator);
+        // remove selections and regionset related data (one dataset)
+        const cacheKey = getDataCacheKey(indicator, regionsetId);
+        delete indicatorDataStore[cacheKey];
     } catch (error) {
         throw new Error('Error saving data to server');
     }
