@@ -22,7 +22,7 @@ The engine version can be found here: https://github.com/CesiumGS/cesium/blob/1.
 
 Maintained under openlayers and acts as glue between cesium and OpenLayers. We can use most of OpenLayers API while showing data on Cesium.
 
-Currently, doesn't have support for OpenLayers 10.x/prevents from updating to most recent version of OpenLayers.
+Support for OpenLayers 10.x added in this change https://github.com/openlayers/ol-cesium/commit/fa317f96d1621c4bce17482a581de82eb83c9517
 
 ## AntD
 
