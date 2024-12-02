@@ -25,18 +25,18 @@ class PublisherSidebar {
     }
 
     render (container) {
-        const contentDOMNode = jQuery('<div>' +
-            '<div class="header"></div>' +
-            '<div class="content"></div>' +
-        '</div>');
+        const contentDOMNode = jQuery('<div/>');
         container.prepend(contentDOMNode);
 
-        const header = <StyledHeader
-            title={this.data.uuid ? this.localization?.titleEdit : this.localization?.title}
-            onClose={() => this.cancel()}
-        />;
+        const content = <>
+            <StyledHeader
+                title={this.data.uuid ? this.localization?.titleEdit : this.localization?.title}
+                onClose={() => this.cancel()}
+            />
+            <div className="content"/>
+        </>;
 
-        ReactDOM.render(header, contentDOMNode.find('div.header')[0]);
+        ReactDOM.render(content, contentDOMNode[0]);
 
         const accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         const generalInfoPanel = this.createGeneralInfoPanel();
