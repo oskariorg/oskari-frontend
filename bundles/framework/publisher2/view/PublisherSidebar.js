@@ -25,9 +25,6 @@ class PublisherSidebar {
     }
 
     render (container) {
-        const contentDOMNode = jQuery('<div/>');
-        container.prepend(contentDOMNode);
-
         const content = <>
             <StyledHeader
                 title={this.data.uuid ? this.localization?.titleEdit : this.localization?.title}
@@ -36,7 +33,7 @@ class PublisherSidebar {
             <div className="content"/>
         </>;
 
-        ReactDOM.render(content, contentDOMNode[0]);
+        ReactDOM.render(content, container[0]);
 
         const accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         const generalInfoPanel = this.createGeneralInfoPanel();
@@ -119,15 +116,8 @@ class PublisherSidebar {
         accordion.addPanel(layoutPanel.getPanel());
 
         // -- render to UI and setup buttons --
-        const contentDiv = contentDOMNode.find('div.content');
+        const contentDiv = container.find('div.content');
         accordion.insertTo(contentDiv);
-        contentDiv.append(this.getButtons());
-
-        // disable keyboard map moving whenever a text-input is focused element
-        const inputs = this.mainPanel.find('input[type=text]');
-        const sandbox = this.instance.getSandbox();
-        inputs.on('focus', () => sandbox.postRequestByName('DisableMapKeyboardMovementRequest'));
-        inputs.on('blur', () => sandbox.postRequestByName('EnableMapKeyboardMovementRequest'));
     }
 
     /**
