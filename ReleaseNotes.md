@@ -9,51 +9,52 @@ https://github.com/oskariorg/oskari-frontend/milestone/48?closed=1
 
 Most of publisher tools have been migrated from jQuery to React.
 For users, this means they need to be listed on a different panel in publisher than the jQuery-based tools.
-For applications with custom publisher tools, this is a good time to migrate them to React-based ones.
+For applications with custom publisher tools, this is a good time to migrate the application specific tools to React.
 
-We will be migrating the whole publisher UI to React in a future release where jQuery-based tools will either break or not be listed on the publisher.
-In a future release, we will migrate the (jQuery-based) tool for GFI-popup by moving the theming related settings for it under the theming panel.
+We will be migrating the whole publisher UI to React in a future release where _jQuery-based tools will either break or not be listed on the publisher UI_.
+Before that happens we still need to migrate the (jQuery-based) tool for GFI-popup where we are moving the theming related settings for it under the theming panel.
 
-Publisher tools that control plugins under `mapmodule` have been moved from `publisher` to `mapmodule` (bundles/mapping/mapmodule/publisher/tools.js))
+Publisher tools that control plugins under `mapmodule` have been moved from `publisher` to `mapmodule` (bundles/mapping/mapmodule/publisher/tools.js)).
 
-Fixed an issue that allowed an embedded map to be opened on the publisher even when the projection on the embedded map did not match the current map projection. Now the popup is modal and prevents modifying an embedded map with the wrong projection and forces the user to reload the page with the proper projection before allowing editing.
+Fixed an issue that allowed an embedded map to be opened on the publisher even when the projection on the embedded map did not match the current map projection. Now the popup for this is modal and prevents modifying an embedded map with the wrong projection and forces the user to reload the page with the proper projection before allowing editing.
 
 ### Admin
 
-- AdminLayerEditor now shows the layers parsed capabilities JSON in the `JSON` tab instead of the `Additional` tab
-- `admin-users` bundle now separates the built-in system roles before listing any additional roles.
+- `admin-layereditor` now shows the layers parsed capabilities JSON in the `JSON` tab instead of the `Additional` tab
+- `admin-users` bundle now separates the built-in system roles from any additional roles listing to improve usability.
 - `admin-permissions` now show unsaved changes on the UI and the handling for changes have been refactored.
 - `admin-layereditor` now offers a button to remove saved default style for layer when all styles have been removed from the service (capabilities). This uncommon situation could not be solved through the UI until now and resulted in annoying popup for admins.
-- `announcements` now default to banner instead of popup since this is the more likely option for announcements
+- `announcements` now default to banner instead of popup since this is the more likely option for announcements.
 
 ### Other changes
 
-- `layerswipe` has been migrated to React and now supports touch screens as well.
+- `layerswipe` has been migrated to React and now supports touch screens as well. But due to changes in OpenLayers now does not work properly on _vector layers with transparency_.
 - `statsgrid` publisher tools now includes a button to open data search for statistical data. This enables changing the statistical data indicators while editing a previously published map.
-- `statsgrid` React-implementations of search and user indicator UIs and statehandling has been refactored for easier maintainability (https://github.com/oskariorg/oskari-frontend/pull/2737).
+- `statsgrid` React-implementations of search and user indicator UIs and statehandling has been refactored for maintainability (https://github.com/oskariorg/oskari-frontend/pull/2737).
 - `mydata` no longer shows "show on map" for embedded maps listing as it was a bit misleading. To preview the map the user can click the name like before to open the embedded map in another browser window.
 - `BackgroundLayerSelectionPlugin` now shows a "no selection" text if the configured layers are not available instead of defaulting to the name of the layer that is already on the map.
-- `metadataflyout` has been rewritten with React and can be switched on main.js by importing `bundles/catalogue/metadata/bundle.js`
+- `metadataflyout` has been rewritten with React and can be switched on main.js by importing `bundles/catalogue/metadata/bundle.js`.
 - `metadataflyout` actions tab now filters layers properly instead of listing too many.
 - `metadatasearch` now checks if there are advanced search options available before showing a link to show them (The options are not available by default on Geonetwork 4.x with GetDomain not implemented: https://github.com/geonetwork/core-geonetwork/issues/4727)
 - `timeseries` restoring saved state (on embedded maps/saved views) wasn't working as expected and now it is.
 - `featuredata` selecting features by drawing a selection on map is now more user-friendly.
-- `mapmodule` now has a getVersion() function that returns the version of the map engine implementation (OpenLayers/Cesium version depending on the 2D/3D map implementation)
-- removed some resource files like unused pngs and (s)css that are no longer used
-- 3D time control plugin has been migrated to React
-- `drawtools` fixed an issue where stopping a drawing with other id than the current one also stopped the current drawing (https://github.com/oskariorg/oskari-frontend/pull/2711)
+- `mapmodule` now has a getVersion() function that returns the version of the map engine implementation (OpenLayers/Cesium version depending on the 2D/3D map implementation).
+- removed some resource files like unused pngs and (s)css that are no longer used.
+- 3D time control plugin has been migrated to React.
+- `drawtools` fixed an issue where stopping a drawing with other id than the current one also stopped the current drawing (https://github.com/oskariorg/oskari-frontend/pull/2711).
 
-### Changes to UI library components
+### Changes to UI component library
 
-Most UI components that use AntD directly or through the oskariui component library needs to be wrapped with `<ThemeProvider>` with `import { ThemeProvider } from 'oskari-ui/util';`.
-Otherwise they will use for example different font than the rest of the UI. ThemeProvider includes the new Theming mechanism for AntD 5 components.
+Most UI components that use AntD directly or through the `oskari-ui` component library needs to be wrapped with `<ThemeProvider>` with `import { ThemeProvider } from 'oskari-ui/util';`.
+Otherwise they will use for example different font than the rest of the UI. `ThemeProvider` includes the new Theming mechanism for AntD 5 components.
 See https://github.com/oskariorg/oskari-frontend/pull/2668 for examples.
+Notes about AntD 5 migration: https://ant.design/docs/react/migration-v5
 
 - `ColorPicker` component has been changed to use the one from AntD component library.
-- `RichEditor` (WYSIWYG-text editor) component implementation has been changed from `draft-js` to `jodit`
-- `Button` component in `oskari-ui` now also exposes a `ThemedButton` that uses theming values.
-- `Slider` component in `oskari-ui` now also exposes a `ThemedSlider` that uses theming values.
-- `TextIcon` is a new component in `oskari-ui` that can include text as value but can be treated like SVG-icons.
+- `RichEditor` (WYSIWYG-text editor) component implementation has been changed from (no longer maintained) `draft-js` to (maintained) `jodit`.
+- `Button` component now also exposes a `ThemedButton` that uses theming values.
+- `Slider` component now also exposes a `ThemedSlider` that uses theming values.
+- `TextIcon` is a new component that can include text as value but can be treated like SVG-icons.
 - `Message` component now has a fallback-prop that can be used to render something else if the requested localization is not found.
 - `Message` component added a bunch of unused onClick handlers to the UI for debugging purposes. It no longer does this by default, but the debugging can be activated when needed (https://github.com/oskariorg/oskari-frontend/pull/2736)
 
@@ -62,11 +63,11 @@ See https://github.com/oskariorg/oskari-frontend/pull/2668 for examples.
 Added a [guide](UpdatingDependencies.md) for dependency updates that can be used to document restrictions and other notes for consideration when updating dependencies.
 
 - OpenLayers 7.2.2 -> 9.2.4
-- cesium 1.91 -> cesium/engine 10.1.0(required a post install script for oskari-frontend)
+- cesium 1.91 -> cesium/engine 10.1.0 (required a post install script for oskari-frontend)
 - olcs 2.13.1 -> 2.20 (2.21.0 released after this update is required when updating to OpenLayers 10: https://github.com/openlayers/ol-cesium/commit/fa317f96d1621c4bce17482a581de82eb83c9517)
-- antd 4.24.8 -> 5.20.4 (changes to React components. See [antd migration notes](https://ant.design/docs/react/migration-v5))
+- antd 4.24.8 -> 5.20.4 (changes to many React components. See [antd migration notes](https://ant.design/docs/react/migration-v5))
 - @ant-design/icons 4.6.3 -> 5.2.6
-- node-sass replaced with sass which allows to use newer node.js version. Oskari-frontend can now use at least node 18 & 20 instead of being limited to node 16
+- node-sass replaced with sass which allows to use newer node.js version. Oskari-frontend can now use at least node 18 & 20 instead of being limited to node 16.
 - webpack 3.43.0 -> 4.47.0
 - webpack-cli 3.3.11 -> 4.10.0
 - webpack-dev-server 3.8.0 -> 4.15.2
