@@ -7,6 +7,7 @@ import './PanelReactTools';
 import { mergeValues } from '../util/util';
 import { showModal } from 'oskari-ui/components/window';
 import { ValidationErrorMessage } from './dialog/ValidationErrorMessage';
+import { ReplaceConfirmDialogContent } from './dialog/ReplaceConfirmDialogContent';
 
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
@@ -27,6 +28,7 @@ class PublisherSidebar {
         this.panels = [];
 
         this.validationErrorMessageDialog = null;
+        this.replaceConfirmDialog = null;
     }
 
     render (container) {
@@ -525,20 +527,23 @@ class PublisherSidebar {
      *
      */
     showReplaceConfirm (continueCallback) {
-        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        const okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        okBtn.setTitle(this.localization.buttons.replace);
-        okBtn.addClass('primary');
-        okBtn.setHandler(function () {
-            dialog.close();
-            continueCallback();
-        });
-        const cancelBtn = dialog.createCloseButton(this.localization.buttons.cancel);
-        dialog.show(
-            this.localization.confirm.replace.title,
-            this.localization.confirm.replace.msg,
-            [cancelBtn, okBtn]
-        );
+        const content = <ReplaceConfirmDialogContent
+            replaceButtonTitle={this.localization.buttons.replace}
+            message={this.localization.confirm.replace.msg}
+            okCallback={() => {
+                continueCallback();
+                this.closeReplaceConfirm();
+            }}
+            closeCallback={() => this.closeReplaceConfirm()}/>;
+
+        this.replaceConfirmDialog = showModal(this.localization.confirm.replace.title, content);
+    }
+
+    closeReplaceConfirm () {
+        if (this.replaceConfirmDialog) {
+            this.replaceConfirmDialog.close();
+            this.replaceConfirmDialog = null;
+        }
     }
 
     destroy () {
