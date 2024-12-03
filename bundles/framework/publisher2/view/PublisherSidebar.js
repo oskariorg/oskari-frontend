@@ -5,9 +5,7 @@ import { Header } from 'oskari-ui';
 import styled from 'styled-components';
 import './PanelReactTools';
 import { mergeValues } from '../util/util';
-import { showModal } from 'oskari-ui/components/window';
-import { ValidationErrorMessage } from './dialog/ValidationErrorMessage';
-import { ReplaceConfirmDialogContent } from './dialog/ReplaceConfirmDialogContent';
+import { PublisherSidebarHandler } from './PublisherSideBarHandler';
 
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
@@ -27,8 +25,7 @@ class PublisherSidebar {
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.panels = [];
 
-        this.validationErrorMessageDialog = null;
-        this.replaceConfirmDialog = null;
+        this.handler = new PublisherSidebarHandler();
     }
 
     render (container) {
@@ -400,7 +397,7 @@ class PublisherSidebar {
         replaceBtn.setTitle(this.localization.buttons.replace);
         replaceBtn.addClass('primary');
         replaceBtn.setHandler(() => {
-            this.showReplaceConfirm(save);
+            this.handler.showReplaceConfirm(save);
         });
         replaceBtn.insertTo(buttonCont);
         return buttonCont;
@@ -432,7 +429,7 @@ class PublisherSidebar {
         });
 
         if (errors.length > 0) {
-            this.showValidationErrorMessage(errors);
+            this.handler.showValidationErrorMessage(errors);
             return null;
         }
         return selections;
@@ -495,55 +492,6 @@ class PublisherSidebar {
             },
             error: errorHandler
         });
-    }
-
-    /**
-     * @private @method showValidationErrorMessage
-     * Takes an error array as defined by Oskari.userinterface.component.FormInput validate() and
-     * shows the errors on a  Oskari.userinterface.component.Popup
-     *
-     * @param {Object[]} errors validation error objects to show
-     *
-     */
-    showValidationErrorMessage (errors = []) {
-        const content = <ValidationErrorMessage errors={errors} closeCallback={() => this.closeValidationErrorMessage()}/>;
-        this.validationErrorMessageDialog = showModal(this.localization.error.title, content, () => {
-            this.validationErrorMessageDialog = null;
-        });
-    };
-
-    closeValidationErrorMessage() {
-        if (this.validationErrorMessageDialog) {
-            this.validationErrorMessageDialog.close();
-            this.validationErrorMessageDialog = null;
-        }
-    }
-
-    /**
-     * @private @method showReplaceConfirm
-     * Shows a confirm dialog for replacing published map
-     *
-     * @param {Function} continueCallback function to call if the user confirms
-     *
-     */
-    showReplaceConfirm (continueCallback) {
-        const content = <ReplaceConfirmDialogContent
-            replaceButtonTitle={this.localization.buttons.replace}
-            message={this.localization.confirm.replace.msg}
-            okCallback={() => {
-                continueCallback();
-                this.closeReplaceConfirm();
-            }}
-            closeCallback={() => this.closeReplaceConfirm()}/>;
-
-        this.replaceConfirmDialog = showModal(this.localization.confirm.replace.title, content);
-    }
-
-    closeReplaceConfirm () {
-        if (this.replaceConfirmDialog) {
-            this.replaceConfirmDialog.close();
-            this.replaceConfirmDialog = null;
-        }
     }
 
     destroy () {
