@@ -346,24 +346,6 @@ class PublisherSidebar {
     }
 
     /**
-     * @private @method _createGeneralInfoPanel
-     * Creates the Location panel of publisher
-     */
-    createGeneralInfoPanel (data) {
-        const sandbox = this.instance.getSandbox();
-        const form = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo',
-            sandbox, this.localization
-        );
-
-        // initialize form (restore data when editing)
-        form.init(this.data);
-        // open generic info by default
-//        form.getPanel().open();
-        return form;
-    }
-
-    /**
      * @private @method getButtons
      * Renders publisher buttons to DOM snippet and returns it.
      *
