@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Messaging } from 'oskari-ui/util';
-import { Header } from 'oskari-ui';
+import { Collapse, Header } from 'oskari-ui';
 import styled from 'styled-components';
 import './PanelReactTools';
 import { mergeValues } from '../util/util';
 import { PublisherSidebarHandler } from './PublisherSideBarHandler';
-
+import { PANEL_GENERAL_INFO_ID, PanelGeneralInfo } from './PanelGeneralInfo';
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
 `;
@@ -24,19 +24,39 @@ class PublisherSidebar {
         this.normalMapPlugins = [];
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.panels = [];
-
+        /**
+         * TODO: figure out a better way of storing and accessing the panel objects.
+         * These two are somewhat redundant. The first one is used for rendering jsx-children in collapse and the latter for storing the entire object
+         * which has validation rules and contains getValues.
+        */
+        this.reactPanels = [];
+        this.collapseItems = [];
         this.handler = new PublisherSidebarHandler();
     }
 
     render (container) {
         this.mainPanel = container;
+        const generalInfoPanel = new PanelGeneralInfo({
+            data: this.data,
+            localization: this.localization
+        });
+
+        this.reactPanels.push(generalInfoPanel);
+        this.collapseItems = [{
+            key: PANEL_GENERAL_INFO_ID,
+            label: this.localization.domain.title,
+            children: generalInfoPanel.render()
+        }];
+
         const content = <>
             <div className='basic_publisher'>
                 <StyledHeader
                     title={this.data.uuid ? this.localization?.titleEdit : this.localization?.title}
                     onClose={() => this.cancel()}
                 />
-                <div className='content'/>
+                <div className='content'>
+                    <Collapse items={this.collapseItems}/>
+                </div>
                 <div className='buttons'/>
             </div>
         </>;
@@ -44,11 +64,12 @@ class PublisherSidebar {
         ReactDOM.render(content, container[0]);
 
         const accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+        /*
         const generalInfoPanel = this.createGeneralInfoPanel();
         generalInfoPanel.getPanel().addClass('t_generalInfo');
         this.panels.push(generalInfoPanel);
         accordion.addPanel(generalInfoPanel.getPanel());
-
+        */
         const publisherTools = this.createToolGroupings(accordion);
 
         const mapPreviewPanel = this.createMapPreviewPanel(publisherTools.tools);
@@ -338,7 +359,7 @@ class PublisherSidebar {
         // initialize form (restore data when editing)
         form.init(this.data);
         // open generic info by default
-        form.getPanel().open();
+//        form.getPanel().open();
         return form;
     }
 
@@ -422,6 +443,13 @@ class PublisherSidebar {
         };
 
         this.panels.forEach((panel) => {
+            if (typeof panel.validate === 'function') {
+                errors = errors.concat(panel.validate());
+            }
+            selections = mergeValues(selections, panel.getValues());
+        });
+
+        this.reactPanels.forEach((panel) => {
             if (typeof panel.validate === 'function') {
                 errors = errors.concat(panel.validate());
             }
