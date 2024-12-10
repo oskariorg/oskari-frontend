@@ -123,6 +123,10 @@ const getModuleRules = (isProd = false, antThemeFile) => {
     const styleFileRules = getStyleFileRules(isProd, antThemeFile);
     const rules = [
         {
+            test: /\.js$/,
+            loader: require.resolve('@open-wc/webpack-import-meta-loader')
+        },
+        {
             test: require.resolve('sumoselect'),
             use: [{
                 loader: 'imports-loader',
