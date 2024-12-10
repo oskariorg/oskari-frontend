@@ -11,6 +11,7 @@ if (!fs.existsSync(pathToCesium)) {
 // try again with non-dev-mode
 if (!fs.existsSync(pathToCesium)) {
     // something went terribly wrong
+    throw new Error('Couldn\'t find @cesium');
 } else {
     // Overwrites node_modules/@cesium/engine/Source/Core/buildModuleUrl.js
     // with a modified on to fix issues with Webpack 4.x
