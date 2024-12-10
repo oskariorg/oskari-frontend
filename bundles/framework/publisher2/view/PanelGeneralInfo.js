@@ -1,6 +1,5 @@
 import React from 'react';
 import { GeneralInfoForm } from './form/GeneralInfoForm';
-import { ThemeProvider } from 'oskari-ui/util';
 import { PropTypes } from 'prop-types';
 
 export const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
@@ -9,7 +8,7 @@ export class PanelGeneralInfo extends React.Component {
         super(props);
         const { localization, data } = props;
         this.localization = localization;
-        this.data = props.data;
+        this.data = data;
         this.fields = {
             name: {
                 label: this.localization.name.label,
@@ -33,12 +32,18 @@ export class PanelGeneralInfo extends React.Component {
         };
     };
 
+    getId () {
+        return PANEL_GENERAL_INFO_ID;
+    }
+
+    getLabel () {
+        return this.localization?.domain?.title || '';
+    }
+
     render () {
-        return <ThemeProvider>
-            <div className={'t_generalInfo'}>
-                <GeneralInfoForm onChange={(key, value) => this.onChange(key, value)} data={this.fields} />
-            </div>
-        </ThemeProvider>;
+        return <div className={'t_generalInfo'}>
+            <GeneralInfoForm onChange={(key, value) => this.onChange(key, value)} data={this.fields} />
+        </div>;
     }
 
     onChange (key, value) {

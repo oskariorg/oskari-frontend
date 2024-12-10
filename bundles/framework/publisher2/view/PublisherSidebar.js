@@ -1,14 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Messaging } from 'oskari-ui/util';
-import { Collapse, Header } from 'oskari-ui';
+import { ThemeProvider, LocaleProvider, Messaging } from 'oskari-ui/util';
+import { Collapse, Header, Button, Message } from 'oskari-ui';
 import styled from 'styled-components';
 import './PanelReactTools';
 import { mergeValues } from '../util/util';
 import { PublisherSidebarHandler } from './PublisherSideBarHandler';
-import { PANEL_GENERAL_INFO_ID, PanelGeneralInfo } from './PanelGeneralInfo';
+import { PanelGeneralInfo } from './PanelGeneralInfo';
+import { ButtonContainer } from './dialog/Styled';
+import { SecondaryButton } from 'oskari-ui/components/buttons';
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
+`;
+
+const CollapseContent = styled('div')`
+    margin: 0.25em;
 `;
 
 /**
@@ -42,24 +48,37 @@ class PublisherSidebar {
         });
 
         this.reactPanels.push(generalInfoPanel);
-        this.collapseItems = [{
-            key: PANEL_GENERAL_INFO_ID,
-            label: this.localization.domain.title,
-            children: generalInfoPanel.render()
-        }];
+        this.collapseItems = this.reactPanels.map((panel) => {
+            return {
+                key: panel.getId(),
+                label: panel.getLabel(),
+                children: panel.render()
+            };
+        });
 
-        const content = <>
-            <div className='basic_publisher'>
-                <StyledHeader
-                    title={this.data.uuid ? this.localization?.titleEdit : this.localization?.title}
-                    onClose={() => this.cancel()}
-                />
-                <div className='content'>
-                    <Collapse items={this.collapseItems}/>
+        /* cancel, save, replace */
+        const content = <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
+            <ThemeProvider>
+                <div className='basic_publisher'>
+                    <StyledHeader
+                        title={this.data.uuid ? this.localization?.titleEdit : this.localization?.title}
+                        onClose={() => this.cancel()}
+                    />
+                    <CollapseContent>
+                        <Collapse items={this.collapseItems}/>
+                        <div id='jqueryAccordions'/>
+                    </CollapseContent>
+                    <ButtonContainer>
+                        <SecondaryButton type='cancel' onClick={() => this.cancel()}/>
+                        <Button type='primary' onClick={() => this.saveAsNew()}>
+                            { this.data?.uuid ? <Message messageKey='BasicView.buttons.saveNew'/> : <Message messageKey='BasicView.buttons.save'/> }
+                        </Button>
+                        { this.data?.uuid && <Button type='primary' onClick={() => this.confirmReplace()}><Message messageKey='BasicView.buttons.replace'/></Button> }
+
+                    </ButtonContainer>
                 </div>
-                <div className='buttons'/>
-            </div>
-        </>;
+            </ThemeProvider>
+        </LocaleProvider>;
 
         ReactDOM.render(content, container[0]);
 
@@ -145,9 +164,8 @@ class PublisherSidebar {
         accordion.addPanel(layoutPanel.getPanel());
 
         // -- render to UI and setup buttons --
-        const contentDiv = container.find('div.content');
+        const contentDiv = container.find('div#jqueryAccordions');
         accordion.insertTo(contentDiv);
-        contentDiv.append(this.getButtons(container));
         // disable keyboard map moving whenever a text-input is focused element
         const inputs = contentDiv.find('input[type=text]');
         const sandbox = this.instance.getSandbox();
@@ -345,65 +363,24 @@ class PublisherSidebar {
         this.instance.setPublishMode(false);
     }
 
-    /**
-     * @private @method getButtons
-     * Renders publisher buttons to DOM snippet and returns it.
-     *
-     *
-     * @return {jQuery} container with buttons
-     */
-    getButtons (container) {
-        const buttonCont = container.find('div.buttons');
+    confirmReplace () {
+        this.handler.showReplaceConfirm(() => this.save());
+    }
 
-        // cancel
-        const cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-        cancelBtn.setHandler(() => {
-            this.cancel();
-        });
-        cancelBtn.insertTo(buttonCont);
-
-        // save
-        const saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
-        if (!this.data.uuid) {
-            // only save when not editing
-            saveBtn.setTitle(this.localization.buttons.save);
-            saveBtn.setHandler(() => {
-                const selections = this.gatherSelections();
-                if (selections) {
-                    this.stopEditorPanels();
-                    this.publishMap(selections);
-                }
-            });
-            saveBtn.insertTo(buttonCont);
-            return buttonCont;
+    save () {
+        const selections = this.gatherSelections();
+        if (selections) {
+            this.stopEditorPanels();
+            this.publishMap(selections);
         }
+    }
 
-        // buttons when editing
-        const save = () => {
-            const selections = this.gatherSelections();
-            if (selections) {
-                this.stopEditorPanels();
-                this.publishMap(selections);
-            }
-        };
-        saveBtn.setTitle(this.localization.buttons.saveNew);
-        saveBtn.setHandler(() => {
-            // clear the id to save this as a new embedded map
+    saveAsNew () {
+        if (this.data?.uuid) {
             this.data.uuid = null;
             delete this.data.uuid;
-            save();
-        });
-        saveBtn.insertTo(buttonCont);
-
-        // replace
-        const replaceBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        replaceBtn.setTitle(this.localization.buttons.replace);
-        replaceBtn.addClass('primary');
-        replaceBtn.setHandler(() => {
-            this.handler.showReplaceConfirm(save);
-        });
-        replaceBtn.insertTo(buttonCont);
-        return buttonCont;
+        }
+        this.save();
     }
 
     /**
