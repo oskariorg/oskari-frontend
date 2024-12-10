@@ -88,5 +88,5 @@ export const GeneralInfoForm = ({ onChange, data }) => {
 
 GeneralInfoForm.propTypes = {
     onChange: PropTypes.func,
-    data: PropTypes.obj
+    data: PropTypes.object
 };

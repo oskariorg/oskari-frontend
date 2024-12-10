@@ -1,178 +1,107 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { GeneralInfoForm } from './form/GeneralInfoForm';
 import { ThemeProvider } from 'oskari-ui/util';
+import { PropTypes } from 'prop-types';
 
-/**
- * @class Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
- *
- * Represents the basic info (name, domain, language) view for the publisher
- * as an Oskari.userinterface.component.AccordionPanel
- */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo',
-
-    /**
-     * @method create called automatically on construction
-     * @static
-     * @param {Object} sandbox
-     * @param {Object} localization
-     *       publisher localization data
-     */
-    function (sandbox, localization) {
-        this.loc = localization;
-        this.sandbox = sandbox;
+export const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
+export class PanelGeneralInfo extends React.Component {
+    constructor (props) {
+        super(props);
+        const { localization, data } = props;
+        this.localization = localization;
+        this.data = props.data;
         this.fields = {
             name: {
-                label: localization.name.label,
-                placeholder: localization.name.placeholder,
+                label: this.localization.name.label,
+                placeholder: this.localization.name.placeholder,
                 helptags: 'portti,help,publisher,name',
-                tooltip: localization.name.tooltip,
-                value: null
+                tooltip: this.localization.name.tooltip,
+                validator: (key, value) => this.validateName(key, value),
+                value: data?.metadata?.name ? data?.metadata?.name : null
             },
             domain: {
-                label: localization.domain.label,
-                placeholder: localization.domain.placeholder,
+                label: this.localization.domain.label,
+                placeholder: this.localization.domain.placeholder,
                 helptags: 'portti,help,publisher,domain',
-                tooltip: localization.domain.tooltip,
-                value: null
+                tooltip: this.localization.domain.tooltip,
+                validator: (key, value) => this.validateDomain(key, value),
+                value: data?.metadata?.domain ? data?.metadata?.domain : null
             },
             language: {
-                value: null
+                value: data?.metadata?.language ? data?.metadata?.language : Oskari.getLang()
             }
         };
-        this.panel = null;
-    }, {
-        /**
-         * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
-         * sets up validation etc. Prepopulates the form fields if pData parameter is given.
-         *
-         * @method init
-         * @param {Object} pData initial data
-         */
-        init: function (pData) {
-            const me = this;
-            let selectedLang = Oskari.getLang();
+    };
 
-            me.fields.name.validator = function (value) {
-                const name = 'name';
-                const errors = [];
-                const sanitizedValue = Oskari.util.sanitize(value);
-                if (!value || !value.trim().length) {
-                    errors.push({
-                        field: name,
-                        error: me.loc.error.name
-                    });
-                    return errors;
-                }
-                if (sanitizedValue !== value) {
-                    errors.push({
-                        field: name,
-                        error: me.loc.error.nameIllegalCharacters
-                    });
-                    return errors;
-                }
-                return errors;
-            };
+    render () {
+        return <ThemeProvider>
+            <div className={'t_generalInfo'}>
+                <GeneralInfoForm onChange={(key, value) => this.onChange(key, value)} data={this.fields} />
+            </div>
+        </ThemeProvider>;
+    }
 
-            me.fields.domain.validator = function (value) {
-                const name = 'domain';
-                const errors = [];
-                if (value && value.indexOf('://') !== -1) {
-                    errors.push({
-                        field: name,
-                        error: me.loc.error.domainStart
-                    });
-                    return errors;
-                }
-                return errors;
-            };
+    onChange (key, value) {
+        this.fields[key].value = value;
+    }
 
-            if (pData.metadata) {
-                // set initial values
-                me.fields.domain.value = pData.metadata.domain;
-                me.fields.name.value = pData.metadata.name;
-                if (pData.metadata.language) {
-                    // if we get data as param -> use lang from it, otherwise use Oskari.getLang()
-                    selectedLang = pData.metadata.language;
-                }
+    getValues () {
+        const values = {
+            metadata: {}
+        };
+
+        for (const key in this.fields) {
+            values.metadata[key] = this.fields[key].value;
+        }
+        return values;
+    };
+
+    validate () {
+        let errors = [];
+
+        for (const key in this.fields) {
+            const field = this.fields[key];
+            if (field.validator) {
+                errors = errors.concat(field.validator(key, field.value));
             }
-            me.fields.language.value = selectedLang;
-        },
-        onChange: function (key, value) {
-            this.fields[key].value = value;
-        },
-        /**
-         * Returns the UI panel and populates it with the data that we want to show the user.
-         *
-         * @method getPanel
-         * @return {Oskari.userinterface.component.AccordionPanel}
-         */
-        getPanel: function () {
-            if (this.panel) {
-                return this.panel;
-            }
-            const panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-            const contentPanel = panel.getContainer();
+        }
+        return errors;
+    }
 
-            ReactDOM.render(
-                <ThemeProvider>
-                    <GeneralInfoForm onChange={(key, value) => this.onChange(key, value)} data={this.fields} />
-                </ThemeProvider>,
-                contentPanel[0]
-            );
-
-            panel.setTitle(this.loc.domain.title);
-            this.panel = panel;
-            return panel;
-        },
-        /**
-         * Returns the selections the user has done with the form inputs.
-         * {
-         *     domain : <domain field value>,
-         *     name : <name field value>,
-         *     language : <language user selected>
-         * }
-         *
-         * @method getValues
-         * @return {Object}
-         */
-        getValues: function () {
-            var values = {
-                    metadata: {}
-                },
-                fkey,
-                data;
-
-            for (fkey in this.fields) {
-                if (this.fields.hasOwnProperty(fkey)) {
-                    data = this.fields[fkey];
-                    values.metadata[fkey] = data.value;
-                }
-            }
-            return values;
-        },
-
-        /**
-         * Returns any errors found in validation or an empty
-         * array if valid. Error object format is defined in Oskari.userinterface.component.FormInput
-         * validate() function.
-         *
-         * @method validate
-         * @return {Object[]}
-         */
-        validate: function () {
-            var errors = [],
-                fkey,
-                data;
-
-            for (fkey in this.fields) {
-                if (this.fields.hasOwnProperty(fkey)) {
-                    data = this.fields[fkey];
-                    if (data.validator) {
-                        errors = errors.concat(data.validator(data.value));
-                    }
-                }
-            }
+    validateName (name, value) {
+        const errors = [];
+        const sanitizedValue = Oskari.util.sanitize(value);
+        if (!value || !value.trim().length) {
+            errors.push({
+                field: name,
+                error: this.localization.error.name
+            });
             return errors;
         }
-    });
+        if (sanitizedValue !== value) {
+            errors.push({
+                field: name,
+                error: this.localization.error.nameIllegalCharacters
+            });
+            return errors;
+        }
+        return errors;
+    }
+
+    validateDomain (name, value) {
+        const errors = [];
+        if (value && value.indexOf('://') !== -1) {
+            errors.push({
+                field: name,
+                error: this.localization.error.domainStart
+            });
+            return errors;
+        }
+        return errors;
+    }
+}
+
+PanelGeneralInfo.propTypes = {
+    data: PropTypes.object,
+    localization: PropTypes.object
+};
