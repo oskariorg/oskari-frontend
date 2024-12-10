@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master, develop ]
   pull_request:
-    branches: [ master, develop, 'hotfix/*' ]
+    branches: [ master, develop, 'hotfix/*', 'feature/*' ]
 
 # Cancel job when new commit is pushed for the same build
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [ 16 ]
+        node: [ 18 ]
 
     steps:
       - uses: actions/checkout@v3
