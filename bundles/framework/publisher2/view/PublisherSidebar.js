@@ -9,6 +9,7 @@ import { PublisherSidebarHandler } from './PublisherSideBarHandler';
 import { PanelGeneralInfo } from './PanelGeneralInfo';
 import { ButtonContainer } from './dialog/Styled';
 import { SecondaryButton } from 'oskari-ui/components/buttons';
+import { PanelMapPreview } from './PanelMapPreview';
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
 `;
@@ -47,7 +48,13 @@ class PublisherSidebar {
             localization: this.localization
         });
 
+        const mapPreviewPanel = new PanelMapPreview({
+            data: this.data,
+            localization: this.localization
+        });
+
         this.reactPanels.push(generalInfoPanel);
+        this.reactPanels.push(mapPreviewPanel);
         this.collapseItems = this.reactPanels.map((panel) => {
             return {
                 key: panel.getId(),
@@ -83,18 +90,7 @@ class PublisherSidebar {
         ReactDOM.render(content, container[0]);
 
         const accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-        /*
-        const generalInfoPanel = this.createGeneralInfoPanel();
-        generalInfoPanel.getPanel().addClass('t_generalInfo');
-        this.panels.push(generalInfoPanel);
-        accordion.addPanel(generalInfoPanel.getPanel());
-        */
         const publisherTools = this.createToolGroupings(accordion);
-
-        const mapPreviewPanel = this.createMapPreviewPanel(publisherTools.tools);
-        mapPreviewPanel.getPanel().addClass('t_size');
-        this.panels.push(mapPreviewPanel);
-        accordion.addPanel(mapPreviewPanel.getPanel());
 
         // Separate handling for RPC and layers group from other tools
         // layers panel is added before other tools
@@ -206,22 +202,6 @@ class PublisherSidebar {
             groups: grouping,
             tools: allTools
         };
-    }
-
-    /**
-     * @private @method createMapPreviewPanel
-     * Creates the Map panel of publisher
-     */
-    createMapPreviewPanel (publisherTools) {
-        const sandbox = this.instance.getSandbox();
-        const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview',
-            sandbox, mapModule, this.localization, this.instance, publisherTools
-        );
-
-        // initialize form (restore data when editing)
-        form.init(this.data);
-        return form;
     }
 
     addToolConfig (tool) {
@@ -349,6 +329,12 @@ class PublisherSidebar {
      */
     stopEditorPanels () {
         this.panels.forEach(function (panel) {
+            if (typeof panel.stop === 'function') {
+                panel.stop();
+            }
+        });
+
+        this.reactPanels.forEach(function (panel) {
             if (typeof panel.stop === 'function') {
                 panel.stop();
             }
