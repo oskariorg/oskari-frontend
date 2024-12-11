@@ -12,4 +12,3 @@ export const DialogContentContainer = styled('div')`
     display: flex;
     flex-direction: column;
 `;
-
