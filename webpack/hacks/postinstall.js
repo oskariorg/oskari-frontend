@@ -6,7 +6,7 @@ const srcFileCesiumHack = path.join(__dirname, 'cesium', 'buildModuleUrl.js.modi
 let pathToCesium = path.join(__dirname, '..', '..', 'node_modules', '@cesium');
 if (!fs.existsSync(pathToCesium)) {
     // installed in non-dev-mode
-    pathToCesium = path.join(__dirname, '..', '..', '@cesium');
+    pathToCesium = path.join(__dirname, '..', '..', '..', '@cesium');
 }
 // try again with non-dev-mode
 if (!fs.existsSync(pathToCesium)) {
