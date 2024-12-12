@@ -19,9 +19,7 @@ export const cleanUrl = (url) => {
     keysToDelete.forEach((key) => urlObj.searchParams.delete(key));
 
     const parts = urlObj.toString().split('://');
-    if (parts.length > 1) {
-        return parts[1];
-    }
-
-    return urlObj.toString();
+    const retValString = parts.length > 1 ? parts[1] : urlObj.toString();
+    const decoded = decodeURIComponent(retValString);
+    return decoded;
 };
