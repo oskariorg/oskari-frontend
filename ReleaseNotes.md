@@ -1,5 +1,16 @@
 # Release Notes
 
+## 2.14.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/52?closed=1
+
+Fixed an issue where layers with URL templates couldn't be added with the admin UI.
+
+Removed postinstall script that did not work properly when dev-mode was not used. It was replaced with a Babel-plugin that can handle Cesium quirks.
+
+Updated dompurify 2.3.6 -> 2.5.8
+
 ## 2.14.0
 
 For a full list of changes see:
