@@ -59,5 +59,13 @@ describe('ServiceUrlInputHelper Tests ', () => {
             const url = 'www.com/';
             expect(cleanUrl(url)).toBe(url);
         });
+
+        it('should NOT encode URL params', () => {
+            const url = 'avoin-karttakuva.maanmittauslaitos.fi/kiinteisto-avoin/tiles/wmts/1.0.0/kiinteistojaotus/default/v3/ETRS-TM35FIN/{z}/{y}/{x}.pbf';
+            expect(cleanUrl(url)).toBe(url);
+
+            const url2 = 'www.com/?first=1&SECOND=2&thiRd=3';
+            expect(cleanUrl(url2)).toBe(url2);
+        });
     });
 });
