@@ -122,6 +122,11 @@ const BABEL_LOADER_RULE = {
 const getModuleRules = (isProd = false, antThemeFile) => {
     const styleFileRules = getStyleFileRules(isProd, antThemeFile);
     const rules = [
+/*
+webpack-import-meta-loader fixes this error for building Cesium:
+ERROR in ../oskari-frontend/node_modules/@cesium/engine/Source/Core/buildModuleUrl.js 42:43
+Module parse failed: Unexpected token (42:43)
+*/
         {
             test: /\.js$/,
             loader: require.resolve('@open-wc/webpack-import-meta-loader')
