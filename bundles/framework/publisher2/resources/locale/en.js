@@ -241,7 +241,7 @@ Oskari.registerLocalization(
                 "size": "The map size is invalid. The width should be from {minWidth} to {maxWidth} pixels and the height from {minHeight} to {maxHeight} pixels.",
                 "domain": "The website is required. Please type an address and try again.",
                 "domainStart": "The website is invalid. Please type an address without http or www prefixes and try again.",
-                "name": "The map name is required. Plese type a name and try again.",
+                "name": "The map name is required. Please type a name and try again.",
                 "nohelp": "The user guide is not available.",
                 "saveFailed": "The embedded map could not be saved.",
                 "nameIllegalCharacters": "The map name contains illegal characters (e.g. html-tags). Please correct the name and try again.",
