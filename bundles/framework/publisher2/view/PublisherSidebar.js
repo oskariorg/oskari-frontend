@@ -1,20 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ThemeProvider, LocaleProvider, Messaging } from 'oskari-ui/util';
-import { Collapse, Header, Button, Message } from 'oskari-ui';
+import { Header, Button, Message } from 'oskari-ui';
 import styled from 'styled-components';
 import './PanelReactTools';
 import { mergeValues } from '../util/util';
 import { PublisherSidebarHandler } from './PublisherSideBarHandler';
-import { PanelGeneralInfo } from './PanelGeneralInfo';
 import { ButtonContainer } from './dialog/Styled';
 import { SecondaryButton } from 'oskari-ui/components/buttons';
-import { PanelMapPreview } from './PanelMapPreview';
+import { CollapseContent } from './CollapseContent';
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
 `;
 
-const CollapseContent = styled('div')`
+const CollapseWrapper = styled('div')`
     margin: 0.25em;
 `;
 
@@ -31,39 +30,12 @@ class PublisherSidebar {
         this.normalMapPlugins = [];
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.panels = [];
-        /**
-         * TODO: figure out a better way of storing and accessing the panel objects.
-         * These two are somewhat redundant. The first one is used for rendering jsx-children in collapse and the latter for storing the entire object
-         * which has validation rules and contains getValues.
-        */
-        this.reactPanels = [];
-        this.collapseItems = [];
         this.handler = new PublisherSidebarHandler();
+        this.handler.init(data);
     }
 
     render (container) {
         this.mainPanel = container;
-        const generalInfoPanel = new PanelGeneralInfo({
-            data: this.data,
-            localization: this.localization
-        });
-
-        const mapPreviewPanel = new PanelMapPreview({
-            data: this.data,
-            localization: this.localization
-        });
-
-        this.reactPanels.push(generalInfoPanel);
-        this.reactPanels.push(mapPreviewPanel);
-        this.collapseItems = this.reactPanels.map((panel) => {
-            return {
-                key: panel.getId(),
-                label: panel.getLabel(),
-                children: panel.render()
-            };
-        });
-
-        /* cancel, save, replace */
         const content = <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
             <ThemeProvider>
                 <div className='basic_publisher'>
@@ -71,10 +43,10 @@ class PublisherSidebar {
                         title={this.data.uuid ? this.localization?.titleEdit : this.localization?.title}
                         onClose={() => this.cancel()}
                     />
-                    <CollapseContent>
-                        <Collapse items={this.collapseItems}/>
+                    <CollapseWrapper>
+                        <CollapseContent controller={this.handler}/>
                         <div id='jqueryAccordions'/>
-                    </CollapseContent>
+                    </CollapseWrapper>
                     <ButtonContainer>
                         <SecondaryButton type='cancel' onClick={() => this.cancel()}/>
                         <Button type='primary' onClick={() => this.saveAsNew()}>
@@ -334,11 +306,7 @@ class PublisherSidebar {
             }
         });
 
-        this.reactPanels.forEach(function (panel) {
-            if (typeof panel.stop === 'function') {
-                panel.stop();
-            }
-        });
+        this.handler.stop();
     }
 
     /**
@@ -394,12 +362,8 @@ class PublisherSidebar {
             selections = mergeValues(selections, panel.getValues());
         });
 
-        this.reactPanels.forEach((panel) => {
-            if (typeof panel.validate === 'function') {
-                errors = errors.concat(panel.validate());
-            }
-            selections = mergeValues(selections, panel.getValues());
-        });
+        errors = errors.concat(this.handler.validate());
+        selections = mergeValues(selections, this.handler.getValues());
 
         if (errors.length > 0) {
             this.handler.showValidationErrorMessage(errors);

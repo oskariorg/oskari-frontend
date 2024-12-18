@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { LabeledInput, Select, Option, Message, Label } from 'oskari-ui';
 import styled from 'styled-components';
 import { InfoIcon } from 'oskari-ui/components/icons';
@@ -13,14 +13,7 @@ const FieldWithInfo = styled('div')`
 const BUNDLE_KEY = 'Publisher2';
 
 export const GeneralInfoForm = ({ onChange, data }) => {
-    const [state, setState] = useState({
-        name: data.name.value ? data.name.value : null,
-        domain: data.domain.value ? data.domain.value : null,
-        language: data.language.value ? data.language.value : Oskari.getLang()
-    });
-
     const languages = Oskari.getSupportedLanguages();
-
     return (
         <div>
             <FieldWithInfo>
@@ -28,16 +21,12 @@ export const GeneralInfoForm = ({ onChange, data }) => {
                     type='text'
                     label={<Message messageKey='BasicView.name.label' bundleKey={BUNDLE_KEY} />}
                     name='name'
-                    value={state.name}
+                    value={data.name}
                     mandatory={true}
                     onChange={(e) => {
-                        setState({
-                            ...state,
-                            name: e.target.value
-                        });
                         onChange('name', e.target.value);
                     }}
-                    placeholder={data.name.placeholder}
+                    placeholder={Oskari.getMsg(BUNDLE_KEY, 'BasicView.name.placeholder')}
                 />
                 <InfoIcon><Message messageKey='BasicView.name.tooltip' bundleKey={BUNDLE_KEY} /></InfoIcon>
             </FieldWithInfo>
@@ -46,15 +35,11 @@ export const GeneralInfoForm = ({ onChange, data }) => {
                     type='text'
                     label={<Message messageKey='BasicView.domain.label' bundleKey={BUNDLE_KEY} />}
                     name='domain'
-                    value={state.domain}
+                    value={data.domain}
                     onChange={(e) => {
-                        setState({
-                            ...state,
-                            domain: e.target.value
-                        });
                         onChange('domain', e.target.value);
                     }}
-                    placeholder={data.domain.placeholder}
+                    placeholder={Oskari.getMsg(BUNDLE_KEY, 'BasicView.domain.placeholder')}
                 />
                 <InfoIcon><Message messageKey='BasicView.domain.tooltip' bundleKey={BUNDLE_KEY} /></InfoIcon>
             </FieldWithInfo>
@@ -64,12 +49,8 @@ export const GeneralInfoForm = ({ onChange, data }) => {
             <FieldWithInfo>
                 <Select
                     name='language'
-                    value={state.language}
+                    value={data.language}
                     onChange={(lang) => {
-                        setState({
-                            ...state,
-                            language: lang
-                        });
                         onChange('language', lang);
                     }}
                     popupMatchSelectWidth={false}
