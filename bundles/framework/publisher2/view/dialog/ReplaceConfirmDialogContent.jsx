@@ -8,7 +8,7 @@ import { LocaleProvider } from 'oskari-ui/util';
 export const ReplaceConfirmDialogContent = ({ okCallback, closeCallback }) => {
     return <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
         <DialogContentContainer>
-            {<Message messageKey='BasicView.confirm.replace.msg'/>}
+            <Message messageKey='BasicView.confirm.replace.msg'/>
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={closeCallback}/>
                 <Button type='primary' onClick={okCallback}>
@@ -20,8 +20,6 @@ export const ReplaceConfirmDialogContent = ({ okCallback, closeCallback }) => {
 };
 
 ReplaceConfirmDialogContent.propTypes = {
-    message: PropTypes.string,
     okCallback: PropTypes.func,
-    closeCallback: PropTypes.func,
-    replaceButtonTitle: PropTypes.string
+    closeCallback: PropTypes.func
 };
