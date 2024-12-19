@@ -10,7 +10,7 @@ Oskari.registerLocalization({
                 "basic": "Grundläggande information",
                 "inspire": "Inspire metadata",
                 "jhs": "ISO 19115 metadata",
-                "quality": "Data kvalität",
+                "quality": "Datakvalitet",
                 "actions": "Handlingar"
             },
             "actions": {

@@ -315,7 +315,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
                 // call set enabled before rendering the panels (avoid duplicate "normal map plugins")
                 me.publisher.setEnabled(true);
-                me.publisher.render(root);
+                const publisherDiv = jQuery('<div/>');
+                root.prepend(publisherDiv);
+                me.publisher.render(publisherDiv);
             } else {
                 Oskari.setLang(me.oskariLang);
                 if (me.publisher) {
