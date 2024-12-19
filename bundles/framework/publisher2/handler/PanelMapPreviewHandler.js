@@ -56,7 +56,6 @@ class UIHandler extends StateHandler {
     }
 
     updateMapSize (mapSize) {
-        console.log('updateMapSize: ', mapSize);
         this.updateState({
             ...mapSize
         });
@@ -124,7 +123,6 @@ class UIHandler extends StateHandler {
                 height: selected.height
             };
         }
-        console.log('values: ', values);
         return values;
     }
 
