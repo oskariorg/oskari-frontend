@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Radio, TextInput } from 'oskari-ui';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { CUSTOM_MAP_SIZE_LIMITS } from '../PanelMapPreview';
-import { CUSTOM_MAP_SIZE_ID } from '../../handler/PanelMapPreviewHandler';
+import { CUSTOM_MAP_SIZE_ID, CUSTOM_MAP_SIZE_LIMITS } from '../../handler/PanelMapPreviewHandler';
 import { PUBLISHER_BUNDLE_ID } from '../PublisherSideBarHandler';
 
 const Row = styled('div')`
