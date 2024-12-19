@@ -146,7 +146,6 @@ class UIHandler extends StateHandler {
      * @return {Object} size
      */
     getSelectedMapSize () {
-        console.log('getselectedmapsize ', this.getState())
         return {
             ...this.state
         };
