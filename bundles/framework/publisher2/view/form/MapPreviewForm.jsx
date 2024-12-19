@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Radio, TextInput } from 'oskari-ui';
+import { Radio, TextInput, Message } from 'oskari-ui';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { CUSTOM_MAP_SIZE_ID, CUSTOM_MAP_SIZE_LIMITS } from '../../handler/PanelMapPreviewHandler';
@@ -29,11 +29,11 @@ const RowContainer = styled('div')`
 
 const Label = (props) => {
     const { option } = props;
-    let text = Oskari.getMsg(PUBLISHER_BUNDLE_ID, 'BasicView.sizes.' + option.id);
+    let extraInfo = '';
     if (option.id !== CUSTOM_MAP_SIZE_ID && !isNaN(parseInt(option.width)) && !isNaN(parseInt(option.height))) {
-        text += ' (' + option.width + ' x ' + option.height + 'px)';
+        extraInfo = '(' + option.width + ' x ' + option.height + 'px)';
     }
-    return <div>{text}</div>;
+    return <Message messageKey={ 'BasicView.sizes.' + option.id}>{ extraInfo }</Message>;
 };
 
 Label.propTypes = {
