@@ -8,25 +8,72 @@ import { PanelGeneralInfoHandler } from '../handler/PanelGeneralInfoHandler';
 import { MAP_SIZES, PanelMapPreviewHandler } from '../handler/PanelMapPreviewHandler';
 import { MapPreviewForm, MapPreviewTooltip } from './form/MapPreviewForm';
 import { mergeValues } from '../util/util';
+import { PanelMapLayersHandler } from '../handler/PanelMapLayersHandler';
+import { MapLayers } from './MapLayers/MapLayers';
 
 export const PUBLISHER_BUNDLE_ID = 'Publisher2';
 const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
 const PANEL_MAPPREVIEW_ID = 'panelMapPreview';
+const PANEL_MAPLAYERS_ID = 'panelMapLayers';
 
 class PublisherSidebarUIHandler extends StateHandler {
     constructor () {
         super();
         this.validationErrorMessageDialog = null;
         this.replaceConfirmDialog = null;
-
-        this.generalInfoPanelHandler = new PanelGeneralInfoHandler();
-        this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
-
         this.state = {
             collapseItems: []
         };
     }
 
+    init (data, publisherTools) {
+        const layerTools = publisherTools.groups.layers;
+        this.generalInfoPanelHandler = new PanelGeneralInfoHandler();
+        this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
+        this.mapLayersHandler = new PanelMapLayersHandler(layerTools, Oskari.getSandbox());
+
+        /** general info - panel */
+        this.generalInfoPanelHandler.init(data);
+        this.generalInfoPanelHandler.addStateListener(() => this.updateGeneralInfoPanel());
+
+        /** map preview - panel */
+        this.mapPreviewPanelHandler.init(data);
+        this.mapPreviewPanelHandler.addStateListener(() => this.updateMapPreviewPanel());
+
+        /** map layers - panel */
+        this.mapLayersHandler.init(data);
+        this.mapLayersHandler.addStateListener(() => this.updateMapLayersPanel());
+
+        const collapseItems = [];
+        collapseItems.push({
+            key: PANEL_GENERAL_INFO_ID,
+            label: Oskari.getMsg('Publisher2', 'BasicView.domain.title'),
+            children: this.renderGeneralInfoPanel()
+        });
+
+        collapseItems.push({
+            key: PANEL_MAPPREVIEW_ID,
+            label: Oskari.getMsg('Publisher2', 'BasicView.size.label'),
+            children: this.renderMapPreviewPanel()
+        });
+
+        collapseItems.push({
+            key: PANEL_MAPLAYERS_ID,
+            label: Oskari.getMsg('Publisher2', 'BasicView.mapLayers.label'),
+            children: this.renderMapLayersPanel()
+        });
+
+        this.updateState({
+            collapseItems
+        });
+    }
+
+    /**
+     * TODO: rethink/refactor the way jsx is rendered and updated
+     * In the future we probably do not want to have jsx rendering in handler.
+     * As for now, in development mode where we still hava jquery panels and react panels mixed, it's easiest
+     * to do partial re-rendering this way (so we won't have to regenerate every panel from scratch each time a keystroke happens in name - field of generalinfo).
+     */
     updateGeneralInfoPanel () {
         const newCollapseItems = this.getState().collapseItems.map(item => item);
         const generalInfoPanel = newCollapseItems.find(item => item.key === PANEL_GENERAL_INFO_ID);
@@ -64,36 +111,28 @@ class PublisherSidebarUIHandler extends StateHandler {
         </div>;
     }
 
+    updateMapLayersPanel () {
+        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const panel = newCollapseItems.find(item => item.key === PANEL_MAPLAYERS_ID);
+        panel.children = this.renderMapLayersPanel();
+        this.updateState({
+            collapseItems: newCollapseItems
+        });
+    }
+
+    renderMapLayersPanel () {
+        // wonder if these t_clasnames are used anywhere?
+        return <div className={'t_layers'}>
+            <MapLayers
+                state={this.mapLayersHandler.getState()}
+                controller={this.mapLayersHandler.getController()}
+            />
+        </div>;
+    }
+
     getCollapseItems () {
         const { collapseItems } = this.getState();
         return collapseItems;
-    }
-
-    init (data) {
-        /** general info - panel */
-        this.generalInfoPanelHandler.init(data);
-        this.generalInfoPanelHandler.addStateListener(() => this.updateGeneralInfoPanel());
-
-        /** map preview - panel */
-        this.mapPreviewPanelHandler.init(data);
-        this.mapPreviewPanelHandler.addStateListener(() => this.updateMapPreviewPanel());
-
-        const collapseItems = [];
-        collapseItems.push({
-            key: PANEL_GENERAL_INFO_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.domain.title'),
-            children: this.renderGeneralInfoPanel()
-        });
-
-        collapseItems.push({
-            key: PANEL_MAPPREVIEW_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.size.label'),
-            children: this.renderMapPreviewPanel()
-        });
-
-        this.updateState({
-            collapseItems
-        });
     }
 
     getValues () {
