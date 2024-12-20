@@ -31,7 +31,8 @@ class PublisherSidebar {
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.panels = [];
         this.handler = new PublisherSidebarHandler();
-        this.handler.init(data);
+        this.publisherTools = this.createToolGroupings();
+        this.handler.init(data, this.publisherTools);
     }
 
     render (container) {
@@ -62,27 +63,21 @@ class PublisherSidebar {
         ReactDOM.render(content, container[0]);
 
         const accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-        const publisherTools = this.createToolGroupings(accordion);
 
         // Separate handling for RPC and layers group from other tools
         // layers panel is added before other tools
         // RPC panel is added after other tools
-        const rpcTools = publisherTools.groups.rpc;
-        const layerTools = publisherTools.groups.layers;
+        const rpcTools = this.publisherTools.groups.rpc;
         // clear rpc/layers groups from others for looping/group so they are not listed twice
-        delete publisherTools.groups.rpc;
-        delete publisherTools.groups.layers;
+        delete this.publisherTools.groups.rpc;
+        delete this.publisherTools.groups.layers;
 
-        const mapLayersPanel = this.createMapLayersPanel(layerTools);
-        mapLayersPanel.getPanel().addClass('t_layers');
-        this.panels.push(mapLayersPanel);
-        accordion.addPanel(mapLayersPanel.getPanel());
         // separate tools that support react from ones that don't
         const reactGroups = ['tools', 'data', 'statsgrid'];
         const reactGroupsTools = {};
         // create panel for each tool group
-        Object.keys(publisherTools.groups).forEach(group => {
-            const tools = publisherTools.groups[group];
+        Object.keys(this.publisherTools.groups).forEach(group => {
+            const tools = this.publisherTools.groups[group];
             if (reactGroups.includes(group)) {
                 // panels with react groups handled after this
                 reactGroupsTools[group] = tools;
@@ -121,7 +116,7 @@ class PublisherSidebar {
             this.panels.push(rpcPanel);
             accordion.addPanel(rpcPanel.getPanel());
         }
-        const toolLayoutPanel = this.createToolLayoutPanel(publisherTools.tools);
+        const toolLayoutPanel = this.createToolLayoutPanel(this.publisherTools.tools);
         toolLayoutPanel.getPanel().addClass('t_toollayout');
         this.panels.push(toolLayoutPanel);
         accordion.addPanel(toolLayoutPanel.getPanel());
@@ -182,14 +177,6 @@ class PublisherSidebar {
             return;
         }
         tool.toolConfig = conf.toolsConfig[tool.bundleName];
-    }
-
-    createMapLayersPanel (tools) {
-        const sandbox = this.instance.getSandbox();
-        const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers', tools, sandbox, mapModule, this.localization, this.instance);
-        form.init(this.data);
-        return form;
     }
 
     /**
