@@ -15,6 +15,7 @@ const StyledHeader = styled(Header)`
 
 const CollapseWrapper = styled('div')`
     margin: 0.25em;
+    overflow-y: auto;
 `;
 
 /**
@@ -31,12 +32,15 @@ class PublisherSidebar {
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.panels = [];
         this.handler = new PublisherSidebarHandler();
-        this.publisherTools = this.createToolGroupings();
-        this.handler.init(data, this.publisherTools);
     }
 
     render (container) {
         this.mainPanel = container;
+        // TODO: implement an init of somekind for publishersidebar.
+        // If we do handler init in constructor bad things will happen because the whole enabling/disabling plugins roulette is still on it's way,
+        // but I can see this here getting refactored out of render pretty quickly...
+        this.publisherTools = this.createToolGroupings();
+        this.handler.init(this.data, this.publisherTools);
         const content = <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
             <ThemeProvider>
                 <div className='basic_publisher'>
@@ -77,12 +81,18 @@ class PublisherSidebar {
         const reactGroupsTools = {};
         // create panel for each tool group
         Object.keys(this.publisherTools.groups).forEach(group => {
+            // tools is neither a jquery panel or a react-group-panel.
+            if (group === 'tools') {
+                return;
+            }
+
             const tools = this.publisherTools.groups[group];
             if (reactGroups.includes(group)) {
                 // panels with react groups handled after this
                 reactGroupsTools[group] = tools;
                 return;
             }
+            // TODO: make infobox a reactified panel like the rest of them and get rid of PanelMaptools.
             const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 group, tools, this.instance, this.localization
             );
@@ -95,8 +105,10 @@ class PublisherSidebar {
                 accordion.addPanel(panel);
             }
         });
+
         Object.keys(reactGroupsTools).forEach(group => {
             const tools = reactGroupsTools[group];
+            // TODO: make data/statsgrid similar to the way maptools is rendered and get rid of this here implementation.
             const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelReactTools', tools, group);
             const hasToolsToShow = toolPanel.init(this.data);
             this.panels.push(toolPanel);
@@ -292,7 +304,6 @@ class PublisherSidebar {
                 panel.stop();
             }
         });
-
         this.handler.stop();
     }
 
