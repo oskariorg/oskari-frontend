@@ -121,6 +121,7 @@ class PublisherSidebar {
         });
 
         // add RPC panel if there are tools for it
+        /*
         if (rpcTools) {
             const rpcPanel = this.createRpcPanel(rpcTools);
             rpcPanel.getPanel().addClass('t_rpc');
@@ -128,6 +129,7 @@ class PublisherSidebar {
             this.panels.push(rpcPanel);
             accordion.addPanel(rpcPanel.getPanel());
         }
+        */
         const toolLayoutPanel = this.createToolLayoutPanel(this.publisherTools.tools);
         toolLayoutPanel.getPanel().addClass('t_toollayout');
         this.panels.push(toolLayoutPanel);
