@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Divider, Collapse, CollapsePanel } from 'oskari-ui';
+import { Message, Divider, Collapse } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
 import { FeatureFilter, cleanFilter, getDescription } from 'oskari-ui/components/FeatureFilter';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';

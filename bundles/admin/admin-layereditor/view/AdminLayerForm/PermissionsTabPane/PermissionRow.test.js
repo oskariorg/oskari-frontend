@@ -9,7 +9,7 @@ describe('<PermissionRow/>', () => {
         const mockText = 'Mock rolename text';
         const mockCheckboxes = [<Checkbox data-testid={mockText} key={'key1'} onChange={() => console.log('Not called in this test')}/>,
             <Checkbox data-testid={mockText} key={'key2'} onChange={() => console.log('Not called in this test')}/>];
-        const row = render(<PermissionRow text={mockText} checkboxes={mockCheckboxes}
+        const row = render(<PermissionRow text={mockText} checkboxes={mockCheckboxes} role={{ name: mockText }}
             isHeaderRow={false}/>);
 
         expect(screen.queryAllByText(mockText)).toHaveLength(1);
