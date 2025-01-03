@@ -87,6 +87,7 @@ class PublisherSidebarUIHandler extends StateHandler {
             children: this.renderMapToolsPanel()
         });
 
+        // RPC panel should be the last in line after all other (react collapsified) panels
         collapseItems.push({
             key: PANEL_RPC_ID,
             label: Oskari.getMsg('Publisher2', 'BasicView.rpc.label'),

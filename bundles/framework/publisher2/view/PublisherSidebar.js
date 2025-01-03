@@ -70,8 +70,6 @@ class PublisherSidebar {
 
         // Separate handling for RPC and layers group from other tools
         // layers panel is added before other tools
-        // RPC panel is added after other tools
-        const rpcTools = this.publisherTools.groups.rpc;
         // clear rpc/layers groups from others for looping/group so they are not listed twice
         delete this.publisherTools.groups.rpc;
         delete this.publisherTools.groups.layers;
@@ -120,16 +118,6 @@ class PublisherSidebar {
             }
         });
 
-        // add RPC panel if there are tools for it
-        /*
-        if (rpcTools) {
-            const rpcPanel = this.createRpcPanel(rpcTools);
-            rpcPanel.getPanel().addClass('t_rpc');
-            // add rpc panel after the other tools
-            this.panels.push(rpcPanel);
-            accordion.addPanel(rpcPanel.getPanel());
-        }
-        */
         const toolLayoutPanel = this.createToolLayoutPanel(this.publisherTools.tools);
         toolLayoutPanel.getPanel().addClass('t_toollayout');
         this.panels.push(toolLayoutPanel);
@@ -224,15 +212,6 @@ class PublisherSidebar {
         // initialize form (restore data when editing)
         form.init(this.data);
 
-        return form;
-    }
-
-    createRpcPanel (tools) {
-        const sandbox = this.instance.getSandbox();
-        const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
-            tools, sandbox, this.localization, this.instance
-        );
-        form.init(this.data);
         return form;
     }
 
