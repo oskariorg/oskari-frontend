@@ -10,11 +10,15 @@ import { MapPreviewForm, MapPreviewTooltip } from './form/MapPreviewForm';
 import { mergeValues } from '../util/util';
 import { PanelMapLayersHandler } from '../handler/PanelMapLayersHandler';
 import { MapLayers } from './MapLayers/MapLayers';
+import { PublisherToolsList } from './form/PublisherToolsList';
+import { ToolPanelHandler } from '../handler/ToolPanelHandler';
 
 export const PUBLISHER_BUNDLE_ID = 'Publisher2';
 const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
 const PANEL_MAPPREVIEW_ID = 'panelMapPreview';
 const PANEL_MAPLAYERS_ID = 'panelMapLayers';
+const PANEL_MAPTOOLS_ID = 'panelMapTools';
+const PANEL_RPC_ID = 'panelRpc';
 
 class PublisherSidebarUIHandler extends StateHandler {
     constructor () {
@@ -28,9 +32,16 @@ class PublisherSidebarUIHandler extends StateHandler {
 
     init (data, publisherTools) {
         const layerTools = publisherTools.groups.layers;
+        let mapTools = publisherTools.groups.tools;
+        mapTools = mapTools ? [...mapTools] : [];
+        mapTools = [...mapTools].sort((a, b) => a.index - b.index);
+
+        const rpcTools = publisherTools.groups.rpc;
         this.generalInfoPanelHandler = new PanelGeneralInfoHandler();
         this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
         this.mapLayersHandler = new PanelMapLayersHandler(layerTools, Oskari.getSandbox());
+        this.mapToolsHandler = new ToolPanelHandler(mapTools);
+        this.rpcPanelHandler = new ToolPanelHandler(rpcTools);
 
         /** general info - panel */
         this.generalInfoPanelHandler.init(data);
@@ -43,6 +54,13 @@ class PublisherSidebarUIHandler extends StateHandler {
         /** map layers - panel */
         this.mapLayersHandler.init(data);
         this.mapLayersHandler.addStateListener(() => this.updateMapLayersPanel());
+
+        /** map tools - panel */
+        this.mapToolsHandler.init(data);
+        this.mapToolsHandler.addStateListener(() => this.updateMapToolsPanel());
+
+        this.rpcPanelHandler.init(data);
+        this.rpcPanelHandler.addStateListener(() => this.updateRpcPanel());
 
         const collapseItems = [];
         collapseItems.push({
@@ -61,6 +79,19 @@ class PublisherSidebarUIHandler extends StateHandler {
             key: PANEL_MAPLAYERS_ID,
             label: Oskari.getMsg('Publisher2', 'BasicView.mapLayers.label'),
             children: this.renderMapLayersPanel()
+        });
+
+        collapseItems.push({
+            key: PANEL_MAPTOOLS_ID,
+            label: Oskari.getMsg('Publisher2', 'BasicView.tools.label'),
+            children: this.renderMapToolsPanel()
+        });
+
+        // RPC panel should be the last in line after all other (react collapsified) panels
+        collapseItems.push({
+            key: PANEL_RPC_ID,
+            label: Oskari.getMsg('Publisher2', 'BasicView.rpc.label'),
+            children: this.renderRpcPanel()
         });
 
         this.updateState({
@@ -121,11 +152,46 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     renderMapLayersPanel () {
-        // wonder if these t_clasnames are used anywhere?
         return <div className={'t_layers'}>
             <MapLayers
                 state={this.mapLayersHandler.getState()}
                 controller={this.mapLayersHandler.getController()}
+            />
+        </div>;
+    }
+
+    updateMapToolsPanel () {
+        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const panel = newCollapseItems.find(item => item.key === PANEL_MAPTOOLS_ID);
+        panel.children = this.renderMapToolsPanel();
+        this.updateState({
+            collapseItems: newCollapseItems
+        });
+    }
+
+    renderMapToolsPanel () {
+        return <div className={'t_tools t_maptools'}>
+            <PublisherToolsList
+                state={this.mapToolsHandler.getState()}
+                controller={this.mapToolsHandler.getController()}
+            />
+        </div>;
+    }
+
+    updateRpcPanel () {
+        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const panel = newCollapseItems.find(item => item.key === PANEL_RPC_ID);
+        panel.children = this.renderRpcPanel();
+        this.updateState({
+            collapseItems: newCollapseItems
+        });
+    }
+
+    renderRpcPanel () {
+        return <div className={'t_tools t_rpc'}>
+            <PublisherToolsList
+                state={this.rpcPanelHandler.getState()}
+                controller={this.rpcPanelHandler.getController()}
             />
         </div>;
     }
@@ -152,6 +218,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     stop () {
         // TODO: stop individual panels that need stopping. Maybe put these into some array or smthng
         this.mapPreviewPanelHandler.stop();
+        this.mapToolsHandler.stop();
     }
 
     /**

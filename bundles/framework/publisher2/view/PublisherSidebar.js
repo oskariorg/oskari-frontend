@@ -15,6 +15,7 @@ const StyledHeader = styled(Header)`
 
 const CollapseWrapper = styled('div')`
     margin: 0.25em;
+    overflow-y: auto;
 `;
 
 /**
@@ -31,12 +32,15 @@ class PublisherSidebar {
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.panels = [];
         this.handler = new PublisherSidebarHandler();
-        this.publisherTools = this.createToolGroupings();
-        this.handler.init(data, this.publisherTools);
     }
 
     render (container) {
         this.mainPanel = container;
+        // TODO: implement an init of somekind for publishersidebar.
+        // If we do handler init in constructor bad things will happen because the whole enabling/disabling plugins roulette is still on it's way,
+        // but I can see this here getting refactored out of render pretty quickly...
+        this.publisherTools = this.createToolGroupings();
+        this.handler.init(this.data, this.publisherTools);
         const content = <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
             <ThemeProvider>
                 <div className='basic_publisher'>
@@ -66,8 +70,6 @@ class PublisherSidebar {
 
         // Separate handling for RPC and layers group from other tools
         // layers panel is added before other tools
-        // RPC panel is added after other tools
-        const rpcTools = this.publisherTools.groups.rpc;
         // clear rpc/layers groups from others for looping/group so they are not listed twice
         delete this.publisherTools.groups.rpc;
         delete this.publisherTools.groups.layers;
@@ -77,12 +79,18 @@ class PublisherSidebar {
         const reactGroupsTools = {};
         // create panel for each tool group
         Object.keys(this.publisherTools.groups).forEach(group => {
+            // tools is neither a jquery panel or a react-group-panel.
+            if (group === 'tools') {
+                return;
+            }
+
             const tools = this.publisherTools.groups[group];
             if (reactGroups.includes(group)) {
                 // panels with react groups handled after this
                 reactGroupsTools[group] = tools;
                 return;
             }
+            // TODO: make infobox a reactified panel like the rest of them and get rid of PanelMaptools.
             const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 group, tools, this.instance, this.localization
             );
@@ -95,8 +103,10 @@ class PublisherSidebar {
                 accordion.addPanel(panel);
             }
         });
+
         Object.keys(reactGroupsTools).forEach(group => {
             const tools = reactGroupsTools[group];
+            // TODO: make data/statsgrid similar to the way maptools is rendered and get rid of this here implementation.
             const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelReactTools', tools, group);
             const hasToolsToShow = toolPanel.init(this.data);
             this.panels.push(toolPanel);
@@ -108,14 +118,6 @@ class PublisherSidebar {
             }
         });
 
-        // add RPC panel if there are tools for it
-        if (rpcTools) {
-            const rpcPanel = this.createRpcPanel(rpcTools);
-            rpcPanel.getPanel().addClass('t_rpc');
-            // add rpc panel after the other tools
-            this.panels.push(rpcPanel);
-            accordion.addPanel(rpcPanel.getPanel());
-        }
         const toolLayoutPanel = this.createToolLayoutPanel(this.publisherTools.tools);
         toolLayoutPanel.getPanel().addClass('t_toollayout');
         this.panels.push(toolLayoutPanel);
@@ -213,15 +215,6 @@ class PublisherSidebar {
         return form;
     }
 
-    createRpcPanel (tools) {
-        const sandbox = this.instance.getSandbox();
-        const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
-            tools, sandbox, this.localization, this.instance
-        );
-        form.init(this.data);
-        return form;
-    }
-
     /**
      * @method setEnabled
      * "Activates" the published map preview when enabled
@@ -292,7 +285,6 @@ class PublisherSidebar {
                 panel.stop();
             }
         });
-
         this.handler.stop();
     }
 
