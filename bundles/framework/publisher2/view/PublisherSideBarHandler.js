@@ -12,6 +12,8 @@ import { PanelMapLayersHandler } from '../handler/PanelMapLayersHandler';
 import { MapLayers } from './MapLayers/MapLayers';
 import { PublisherToolsList } from './form/PublisherToolsList';
 import { ToolPanelHandler } from '../handler/ToolPanelHandler';
+import { LAYOUT_AVAILABLE_FONTS, PanelLayoutHandler } from '../handler/PanelLayoutHandler';
+import { PanelToolStyles } from './PanelToolStyles';
 
 export const PUBLISHER_BUNDLE_ID = 'Publisher2';
 const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
@@ -19,6 +21,7 @@ const PANEL_MAPPREVIEW_ID = 'panelMapPreview';
 const PANEL_MAPLAYERS_ID = 'panelMapLayers';
 const PANEL_MAPTOOLS_ID = 'panelMapTools';
 const PANEL_RPC_ID = 'panelRpc';
+const PANEL_LAYOUT_ID = 'panelLayout';
 
 class PublisherSidebarUIHandler extends StateHandler {
     constructor () {
@@ -41,6 +44,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
         this.mapLayersHandler = new PanelMapLayersHandler(layerTools, Oskari.getSandbox());
         this.mapToolsHandler = new ToolPanelHandler(mapTools);
+        this.layoutHandler = new PanelLayoutHandler();
         this.rpcPanelHandler = new ToolPanelHandler(rpcTools);
 
         /** general info - panel */
@@ -58,6 +62,9 @@ class PublisherSidebarUIHandler extends StateHandler {
         /** map tools - panel */
         this.mapToolsHandler.init(data);
         this.mapToolsHandler.addStateListener(() => this.updateMapToolsPanel());
+
+        this.layoutHandler.init(data);
+        this.layoutHandler.addStateListener(() => this.updateLayoutPanel());
 
         this.rpcPanelHandler.init(data);
         this.rpcPanelHandler.addStateListener(() => this.updateRpcPanel());
@@ -85,6 +92,12 @@ class PublisherSidebarUIHandler extends StateHandler {
             key: PANEL_MAPTOOLS_ID,
             label: Oskari.getMsg('Publisher2', 'BasicView.tools.label'),
             children: this.renderMapToolsPanel()
+        });
+
+        collapseItems.push({
+            key: PANEL_LAYOUT_ID,
+            label: Oskari.getMsg('Publisher2', 'BasicView.layout.label'),
+            children: this.renderLayoutPanel()
         });
 
         // RPC panel should be the last in line after all other (react collapsified) panels
@@ -196,6 +209,25 @@ class PublisherSidebarUIHandler extends StateHandler {
         </div>;
     }
 
+    updateLayoutPanel () {
+        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const panel = newCollapseItems.find(item => item.key === PANEL_LAYOUT_ID);
+        panel.children = this.renderLayoutPanel();
+        this.updateState({
+            collapseItems: newCollapseItems
+        });
+    }
+
+    renderLayoutPanel () {
+        const { theme } = this.layoutHandler.getState();
+        return <div className={'t_style'}>
+            <PanelToolStyles
+                mapTheme={theme}
+                changeTheme={(theme) => this.layoutHandler.getController().updateTheme(theme)}
+                fonts={LAYOUT_AVAILABLE_FONTS}/>
+        </div>;
+    }
+
     getCollapseItems () {
         const { collapseItems } = this.getState();
         return collapseItems;
@@ -205,6 +237,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         let returnValue = {};
         returnValue = mergeValues(returnValue, this.generalInfoPanelHandler.getValues());
         returnValue = mergeValues(returnValue, this.mapPreviewPanelHandler.getValues());
+        returnValue = mergeValues(returnValue, this.layoutHandler.getValues());
         return returnValue;
     }
 
@@ -219,6 +252,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         // TODO: stop individual panels that need stopping. Maybe put these into some array or smthng
         this.mapPreviewPanelHandler.stop();
         this.mapToolsHandler.stop();
+        this.layoutHandler.stop();
     }
 
     /**
