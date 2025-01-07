@@ -1,6 +1,4 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { PUBLISHER_BUNDLE_ID } from '../view/PublisherSideBarHandler';
-import { theme } from 'antd';
 
 export const LAYOUT_AVAILABLE_FONTS = [
     {
