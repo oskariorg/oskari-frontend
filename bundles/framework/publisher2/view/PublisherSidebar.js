@@ -88,9 +88,10 @@ class PublisherSidebar {
             if (reactGroups.includes(group)) {
                 // panels with react groups handled after this
                 reactGroupsTools[group] = tools;
-                return;
+//                return;
             }
             // TODO: make infobox a reactified panel like the rest of them and get rid of PanelMaptools.
+            /*
             const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 group, tools, this.instance, this.localization
             );
@@ -102,6 +103,7 @@ class PublisherSidebar {
                 panel.addClass('t_' + group);
                 accordion.addPanel(panel);
             }
+                */
         });
 
         Object.keys(reactGroupsTools).forEach(group => {
