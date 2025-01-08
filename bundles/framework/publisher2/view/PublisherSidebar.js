@@ -123,11 +123,6 @@ class PublisherSidebar {
         this.panels.push(toolLayoutPanel);
         accordion.addPanel(toolLayoutPanel.getPanel());
 
-        const layoutPanel = this.createLayoutPanel();
-        layoutPanel.getPanel().addClass('t_style');
-        this.panels.push(layoutPanel);
-        accordion.addPanel(layoutPanel.getPanel());
-
         // -- render to UI and setup buttons --
         const contentDiv = container.find('div#jqueryAccordions');
         accordion.insertTo(contentDiv);
@@ -195,23 +190,6 @@ class PublisherSidebar {
 
         // initialize form (restore data when editing)
         form.init(this.data);
-        return form;
-    }
-
-    /**
-     * @private @method _createLayoutPanel
-     * Creates the layout panel of publisher
-     */
-    createLayoutPanel () {
-        const sandbox = this.instance.getSandbox();
-        const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
-            sandbox, mapModule, this.localization, this.instance
-        );
-
-        // initialize form (restore data when editing)
-        form.init(this.data);
-
         return form;
     }
 
