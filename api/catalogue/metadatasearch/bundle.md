@@ -1,35 +1,18 @@
-# metadatacatalogue
+# metadatasearch
+
+Provides metadata catalogue search user-interface for an application.
 
 ## Description
 
-Bundle provides metadata catalogue search functionality for the map.
+The metadata search UI integrates on the generic search UI when `Search.AddTabRequest` is available or creates a new menu item/tile for metadata search when the search flyout is not available.
 
 ## Bundle configuration
 
-No configuration is required, but there is two possible configurations:
+No configuration is required, but allows configuration:
 
-```javascript
-{
-  "hideMetadataXMLLink" : true,
-  "hideMetaDataPrintLink": true
-}
-```
+- `noUI` (optional boolean, default false)
 
-Setting hideMetadataXMLLink to true will hide metadata XML link (ISO 19139 XML -file).
-
-Setting hideMetaDataPrintLink to true will hide print link.
-
-
-## Requests the bundle handles
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>MetadataSearchRequest</td><td>Make a metadata search query.</td>
-  </tr>
-</table>
+Can be configured to true to prevent UI from rendering with intent on being used programmatically using the request/event API (for example on an embedded map with custom search UI).
 
 ## Requests the bundle sends out
 
@@ -77,7 +60,6 @@ Setting hideMetaDataPrintLink to true will hide print link.
   </tr>
 </table>
 
-
 ## Events the bundle sends out
 
 <table class="table">
@@ -86,23 +68,5 @@ Setting hideMetaDataPrintLink to true will hide print link.
   </tr>
   <tr>
     <td> MetadataSearchResultEvent </td><td> Notifies that a metadata search has been performed and the result is accessible through the event </td>
-  </tr>
-</table>
-
-## Dependencies
-
-<table class="table">
-  <tr>
-    <th>Dependency</th><th>Linked from</th><th>Purpose</th>
-  </tr>
-  <tr>
-    <td> [jQuery](http://api.jquery.com/) </td>
-    <td> Version 1.7.1 assumed to be linked on the page</td>
-    <td> Used to create the UI</td>
-  </tr>
-  <tr>
-    <td> [Oskari divmanazer](/documentation/bundles/framework/divmanazer)</td>
-    <td> Expects to be present in the application setup </td>
-    <td> For Tile/Flyout and other UI components</td>
   </tr>
 </table>

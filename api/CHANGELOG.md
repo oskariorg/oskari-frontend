@@ -9,6 +9,24 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 3.0.0
+
+### [rem] Removed `framework/admin-layerrights` bundle
+
+Replaced by the `admin/admin-permissions` bundle.
+
+### [rem] Removed `catalogue/metadatacatalogue` bundle
+
+Replaced by the `catalogue/metadatasearch` bundle.
+
+### [rem] Removed `AddSearchResultActionRequest` request
+
+Was provided by `catalogue/metadatacatalogue`, but it was not used so it was not implemented on the new metadatasearch bundle.
+
+### [rem] Removed `MetaData.FinishedDrawingEvent` event
+
+Was provided by `catalogue/metadatacatalogue` and this was technically still present on the codebase, but it hasn't been used for quite some time. The drawn geometry selection has used events from the drawtools bundle for quite some time.
+
 ## 2.13.0
 
 ### [add] Added `metadatasearch` bundle
