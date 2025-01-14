@@ -12,6 +12,7 @@ import { MapLayerListTool } from './layers/MapLayerListTool';
 import { SearchTool } from './search/SearchTool';
 import { ControlsTool } from './controls/ControlsTool';
 import { ToolbarTool } from './toolbar/ToolbarTool';
+import { GetInfoTool } from './getinfo/GetInfoTool';
 
 export {
     LogoTool,
@@ -24,5 +25,6 @@ export {
     MapLayerListTool,
     SearchTool,
     ControlsTool,
-    ToolbarTool
+    ToolbarTool,
+    GetInfoTool
 };

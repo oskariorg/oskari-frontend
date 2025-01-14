@@ -88,19 +88,6 @@ class PublisherSidebar {
             if (reactGroups.includes(group)) {
                 // panels with react groups handled after this
                 reactGroupsTools[group] = tools;
-                return;
-            }
-            // TODO: make infobox a reactified panel like the rest of them and get rid of PanelMaptools.
-            const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
-                group, tools, this.instance, this.localization
-            );
-            const hasToolsToShow = toolPanel.init(this.data);
-            this.panels.push(toolPanel);
-            if (hasToolsToShow) {
-                const panel = toolPanel.getPanel();
-                panel.addClass('t_tools');
-                panel.addClass('t_' + group);
-                accordion.addPanel(panel);
             }
         });
 
@@ -122,11 +109,6 @@ class PublisherSidebar {
         toolLayoutPanel.getPanel().addClass('t_toollayout');
         this.panels.push(toolLayoutPanel);
         accordion.addPanel(toolLayoutPanel.getPanel());
-
-        const layoutPanel = this.createLayoutPanel();
-        layoutPanel.getPanel().addClass('t_style');
-        this.panels.push(layoutPanel);
-        accordion.addPanel(layoutPanel.getPanel());
 
         // -- render to UI and setup buttons --
         const contentDiv = container.find('div#jqueryAccordions');
@@ -195,23 +177,6 @@ class PublisherSidebar {
 
         // initialize form (restore data when editing)
         form.init(this.data);
-        return form;
-    }
-
-    /**
-     * @private @method _createLayoutPanel
-     * Creates the layout panel of publisher
-     */
-    createLayoutPanel () {
-        const sandbox = this.instance.getSandbox();
-        const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
-            sandbox, mapModule, this.localization, this.instance
-        );
-
-        // initialize form (restore data when editing)
-        form.init(this.data);
-
         return form;
     }
 
