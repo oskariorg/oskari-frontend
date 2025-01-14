@@ -1,5 +1,10 @@
 # Release Notes
 
+## 3.0.0
+
+Removed bundles:
+- `framework/admin-layerrights` replaced by `admin/admin-permissions` 
+
 ## 2.14.1
 
 For a full list of changes see:
