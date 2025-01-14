@@ -19,13 +19,21 @@ Replaced by the `admin/admin-permissions` bundle.
 
 Replaced by the `catalogue/metadatasearch` bundle.
 
+### [rem] Removed `catalogue/metadataflyout` bundle
+
+Replaced by the `catalogue/metadata` bundle.
+
 ### [rem] Removed `AddSearchResultActionRequest` request
 
-Was provided by `catalogue/metadatacatalogue`, but it was not used so it was not implemented on the new metadatasearch bundle.
+Was provided by `catalogue/metadatacatalogue`, but it was not used so it was not implemented on the new `metadatasearch` bundle.
 
 ### [rem] Removed `MetaData.FinishedDrawingEvent` event
 
 Was provided by `catalogue/metadatacatalogue` and this was technically still present on the codebase, but it hasn't been used for quite some time. The drawn geometry selection has used events from the drawtools bundle for quite some time.
+
+### [rem] Removed `catalogue.AddTabRequest` request
+
+Was provided by `catalogue/metadataflyout`, but it was not used so it was not implemented on the new `metadata` bundle.
 
 ## 2.13.0
 
