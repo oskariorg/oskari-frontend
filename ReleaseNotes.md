@@ -3,7 +3,8 @@
 ## 3.0.0
 
 Removed bundles:
-- `framework/admin-layerrights` replaced by `admin/admin-permissions` 
+- `framework/admin-layerrights` replaced by `admin/admin-permissions`
+- `catalogue/metadatacatalogue` replaced by `catalogue/metadatasearch`
 
 ## 2.14.1
 
