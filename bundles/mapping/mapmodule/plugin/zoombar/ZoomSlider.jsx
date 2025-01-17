@@ -49,17 +49,17 @@ const MobileContainer = styled('div')`
 
 const ThemedSlider = ThemeConsumer(({ theme = {}, ...rest }) => {
     const helper = getNavigationTheme(theme);
-
-    const backgroundColor = helper.getButtonColor();
+    // button color is background (linear-gradient) not actual color for 3D effect
+    const background = helper.getButtonColor();
     const boxShadow = '0px 1px 2px 1px rgb(0 0 0 / 60%)';
-    const slider = { width, backgroundColor, boxShadow, borderRadius: '5px' };
+    const slider = { width, background, boxShadow, borderRadius: '5px' };
     const styles = {
         track: slider,
         rail: slider,
         handle: {
             width: '14px',
             height: '14px',
-            backgroundColor,
+            background,
             boxShadow,
             border: `4px solid ${helper.getTextColor()}`,
             borderRadius: helper.getButtonRoundness() || '0%'
