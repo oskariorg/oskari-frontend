@@ -1,5 +1,13 @@
 # Release Notes
 
+## 2.14.2
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/54?closed=1
+
+- Fixed an issue with metadata not saving the current metadata for links/state.
+- Fixed zoombar visually when 3D-effect was used for map controls.
+
 ## 2.14.1
 
 For a full list of changes see:
