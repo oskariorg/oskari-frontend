@@ -8,6 +8,7 @@ class MetadataHandler extends StateHandler {
         this.setState({
             activeTab: 'basic',
             loading: false,
+            current: null, // { uuid, layerId }
             layers: [],
             showFullGraphics: false,
             metadata: {},
@@ -46,6 +47,10 @@ class MetadataHandler extends StateHandler {
         this.updateState({ layers: layers.map(layer => layer.layerId === layerId ? { ...layer, isVisible, isSelected } : layer) });
     }
 
+    onFlyoutClose () {
+        this.updateState({ current: null });
+    }
+
     fetchMetadata ({ layerId, uuid }) {
         // clear previous
         this.updateState({ loading: true, metadata: {}, identifications: [], layers: [] });
@@ -66,7 +71,8 @@ class MetadataHandler extends StateHandler {
         }).then(json => {
             const { metadata, identifications } = mapResponseForRender(json);
             const layers = this._getLayers(uuid, layerId, metadata.fileIdentifier);
-            this.updateState({ loading: false, metadata, layers, identifications });
+            const current = { layerId, uuid: uuid || metadata.fileIdentifier };
+            this.updateState({ loading: false, current, metadata, layers, identifications });
         }).catch(error => {
             this.updateState({ loading: false });
             Oskari.log('MetadataHandler').error(error);
