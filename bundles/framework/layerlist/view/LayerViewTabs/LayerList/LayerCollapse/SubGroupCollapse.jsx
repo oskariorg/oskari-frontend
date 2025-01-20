@@ -11,7 +11,7 @@ const StyledSubCollapse = styled(Collapse)`
     border-top: 1px solid #d9d9d9;
     padding-left: 15px !important;
 `;
-export const SubGroupList = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts, controller, propsNeededForPanel }) => {
+export const SubGroupCollapse = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts, controller, propsNeededForPanel }) => {
     if (!subgroups?.length) {
         // no subgroups
         return null;
@@ -39,7 +39,7 @@ export const SubGroupList = ({ subgroups = [], selectedLayerIds, openGroupTitles
     />;
 };
 
-SubGroupList.propTypes = {
+SubGroupCollapse.propTypes = {
     subgroups: PropTypes.any.isRequired,
     selectedLayerIds: PropTypes.array.isRequired,
     openGroupTitles: PropTypes.array.isRequired,
