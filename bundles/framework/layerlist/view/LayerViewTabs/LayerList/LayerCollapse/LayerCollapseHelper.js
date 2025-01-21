@@ -23,14 +23,16 @@ export const getCollapseItems = (groups, openGroupTitles, selectedLayerIds, opts
         const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
         // set group switch active if all layers in group are selected
         const allLayersOnMap = layerRows.length > 0 && layerRows.every(layer => selectedLayerIds.includes(layer.id));
-        const hasChildren = layerRows.length > 0 || group.getGroups().length > 0;
+        // collapsible 'disabled' affects also to extra tools (cursor, style) and empty groups are shown only for admin
+        // for now use always 'header' (not 'disabled' for !hasChildren)
+        // const hasChildren = layerRows.length > 0 || group.getGroups().length > 0;
         const propsNeededForPanel = panelProps || {};
 
         return {
             key,
             label: group.getTitle(),
             className: `t_group gid_${key}`,
-            collapsible: hasChildren ? 'header' : 'disabled',
+            collapsible: 'header',
             extra: <PanelToolContainer
                 group={group}
                 opts={opts}
