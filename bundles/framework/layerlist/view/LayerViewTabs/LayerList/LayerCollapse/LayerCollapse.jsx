@@ -29,10 +29,10 @@ const StyledCollapse = styled(Collapse)`
 `;
 
 const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, opts, controller }) => {
-    if (!Array.isArray(groups) || groups.length === 0) {
+    const items = getCollapseItems(groups, openGroupTitles, selectedLayerIds, opts, controller);
+    if (!items.length) {
         return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
     }
-    const items = getCollapseItems(groups, openGroupTitles, selectedLayerIds, opts, controller);
     return (
         <StyledCollapse
             bordered

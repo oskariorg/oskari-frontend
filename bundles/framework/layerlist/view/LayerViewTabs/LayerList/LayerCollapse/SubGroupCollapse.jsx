@@ -10,12 +10,12 @@ const StyledSubCollapse = styled(Collapse)`
     border-top: 1px solid #d9d9d9;
     padding-left: 15px !important;
 `;
-export const SubGroupCollapse = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts, controller, propsNeededForPanel }) => {
-    if (!subgroups?.length) {
+export const SubGroupCollapse = ({ subgroups, selectedLayerIds, openGroupTitles, opts, controller, propsNeededForPanel }) => {
+    const items = getCollapseItems(subgroups, openGroupTitles, selectedLayerIds, opts, controller, propsNeededForPanel);
+    if (!items.length) {
         // no subgroups
         return null;
     }
-    const items = getCollapseItems(subgroups, openGroupTitles, selectedLayerIds, opts, controller, propsNeededForPanel);
     return <StyledSubCollapse
         activeKey={openGroupTitles}
         onChange={keys => controller.updateOpenGroupTitles(keys)}

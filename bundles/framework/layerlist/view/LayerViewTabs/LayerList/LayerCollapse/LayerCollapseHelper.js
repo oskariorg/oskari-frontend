@@ -15,6 +15,9 @@ const getLayerRowModels = (layers = [], selectedLayerIds = [], controller, opts)
 };
 
 export const getCollapseItems = (groups, openGroupTitles, selectedLayerIds, opts, controller, panelProps) => {
+    if (!Array.isArray(groups)) {
+        return [];
+    }
     return groups.map(group => {
         const key = group.getId();
         const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts);
