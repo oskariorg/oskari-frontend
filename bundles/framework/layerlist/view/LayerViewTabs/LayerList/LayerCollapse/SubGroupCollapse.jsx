@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'oskari-ui';
-import { LayerCollapsePanel } from './LayerCollapsePanel';
 import styled from 'styled-components';
 import { Controller } from 'oskari-ui/util';
-import { getLayerRowModels } from './LayerCollapse';
+import { getCollapseItems } from './LayerCollapseHelper';
 
 const StyledSubCollapse = styled(Collapse)`
     border: none;
@@ -16,22 +15,7 @@ export const SubGroupCollapse = ({ subgroups = [], selectedLayerIds, openGroupTi
         // no subgroups
         return null;
     }
-    const items = subgroups.map(group => {
-        return {
-            key: group.getId(),
-            label: group.getTitle(),
-            children: <LayerCollapsePanel
-                key={group.getId()}
-                group={group}
-                selectedLayerIds={selectedLayerIds}
-                openGroupTitles={openGroupTitles}
-                controller={controller}
-                opts={opts}
-                {... propsNeededForPanel}
-                layerRows={getLayerRowModels(group.getLayers(), selectedLayerIds, controller, opts)}
-            />
-        };
-    });
+    const items = getCollapseItems(subgroups, openGroupTitles, selectedLayerIds, opts, controller, propsNeededForPanel);
     return <StyledSubCollapse
         activeKey={openGroupTitles}
         onChange={keys => controller.updateOpenGroupTitles(keys)}
