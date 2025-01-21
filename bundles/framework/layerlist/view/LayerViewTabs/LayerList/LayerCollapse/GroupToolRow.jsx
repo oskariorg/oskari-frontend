@@ -48,7 +48,8 @@ const GroupTool = ({ group, tool, theme }) => {
 
 GroupTool.propTypes = {
     group: PropTypes.any.isRequired,
-    tool: PropTypes.any.isRequired
+    tool: PropTypes.any.isRequired,
+    theme: PropTypes.object
 };
 
 export const GroupToolRow = ThemeConsumer(({ theme = {}, group }) => {
