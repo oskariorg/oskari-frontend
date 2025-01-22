@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Divider, Message, Slider, Checkbox, Dropdown, Button, Select, Option, NumberInput } from 'oskari-ui';
 import { ColorPicker } from 'oskari-ui/components/ColorPicker';
+import { PropTypes } from 'prop-types';
 
 const BUNDLE_KEY = 'Publisher2';
 
@@ -57,6 +58,9 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
     const [popupHeader, setPopupHeader] = useState(mapTheme?.color?.header?.bg);
     const [popupHeaderText, setPopupHeaderText] = useState(mapTheme?.color?.header?.text);
 
+    const [infoboxHeader, setInfoboxHeader] = useState(mapTheme?.infobox?.color?.bg);
+    const [infoboxHeaderText, setInfoboxHeaderText] = useState(mapTheme?.infobox?.color?.text);
+
     const [buttonBackground, setButtonBackground] = useState(mapTheme?.navigation?.color?.primary);
     const [buttonText, setButtonText] = useState(mapTheme?.navigation?.color?.text);
     const [buttonAccent, setButtonAccent] = useState(mapTheme?.navigation?.color?.accent);
@@ -87,18 +91,27 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 },
                 roundness: buttonRounding,
                 effect: buttonEffect
+            },
+            infobox: {
+                ...mapTheme.infobox,
+                color: {
+                    bg: infoboxHeader,
+                    text: infoboxHeaderText
+                }
             }
         };
         changeTheme(theme);
-    }, [font, popupHeader, popupHeaderText, buttonBackground, buttonText, buttonAccent, buttonRounding, buttonEffect]);
+    }, [font, popupHeader, popupHeaderText, infoboxHeader, infoboxHeaderText, buttonBackground, buttonText, buttonAccent, buttonRounding, buttonEffect]);
 
     const setPreset = (style) => {
         let rounding = 100;
         let popupBg = '#3c3c3c';
         let buttonBg = '#141414';
         let icon = '#ffffff';
-        let hover = '#ffd400';
-        let effect = undefined;
+        let effect;
+        const hover = '#ffd400';
+        const infoboxHeader = '#424343';
+        const infoboxHeaderText = '#FFFFFF';
 
         if (style.includes('sharp')) {
             rounding = 0;
@@ -120,6 +133,8 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
         setButtonAccent(hover);
         setButtonEffect(effect);
         setPopupHeaderText(icon);
+        setInfoboxHeader(infoboxHeader);
+        setInfoboxHeaderText(infoboxHeaderText);
     };
 
     const toolStyles = Oskari.getMsg(BUNDLE_KEY, 'BasicView.layout.fields.toolStyles') || {};
@@ -228,6 +243,31 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                     />
                 </StyledColorPicker>
             </Field>
+            <Divider><Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.title.infobox' /></Divider>
+            <Field>
+                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.colours.customLabels.bgLabel' />
+                <StyledColorPicker>
+                    <ColorPicker
+                        value={infoboxHeader}
+                        onChange={setInfoboxHeader}
+                    />
+                </StyledColorPicker>
+            </Field>
+            <Field>
+                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.colours.customLabels.titleLabel' />
+                <StyledColorPicker>
+                    <ColorPicker
+                        value={infoboxHeaderText}
+                        onChange={setInfoboxHeaderText}
+                    />
+                </StyledColorPicker>
+            </Field>
         </Content>
     );
+};
+
+PanelToolStyles.propTypes = {
+    mapTheme: PropTypes.object,
+    changeTheme: PropTypes.func,
+    fonts: PropTypes.array
 };

@@ -132,7 +132,8 @@ Oskari.registerLocalization(
                 "label": "Ulkoasu",
                 "title": {
                     "popup": "Ponnahdusikkuna",
-                    "buttons": "Painikkeet"
+                    "buttons": "Painikkeet",
+                    "infobox": "Kohdetietojen kyselytyökalu"
                 },
                 "fields": {
                     "colours": {

@@ -132,7 +132,8 @@ Oskari.registerLocalization(
                 "label": "Graphic Layout",
                 "title": {
                     "popup": "Popup window",
-                    "buttons": "Buttons"
+                    "buttons": "Buttons",
+                    "infobox": "Feature query tool"
                 },
                 "fields": {
                     "colours": {

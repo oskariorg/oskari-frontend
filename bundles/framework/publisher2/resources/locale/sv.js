@@ -132,7 +132,8 @@ Oskari.registerLocalization(
                 "label": "Grafisk layout",
                 "title": {
                     "popup": "Popupfönster",
-                    "buttons": "Knappar"
+                    "buttons": "Knappar",
+                    "infobox": "Frågverktyg av objektuppgifter"
                 },
                 "fields": {
                     "colours": {
