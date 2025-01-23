@@ -31,10 +31,10 @@ class UIHandler extends StateHandler {
 
     init (data) {
         // Set the initial values
-        const theme = data?.metadata?.theme;
+        const mapTheme = data?.metadata?.theme?.map;
 
-        if (theme) {
-            this.updateTheme(theme);
+        if (mapTheme) {
+            this.updateTheme(mapTheme);
         }
     }
 
@@ -52,7 +52,10 @@ class UIHandler extends StateHandler {
         const { theme } = this.getState();
         return {
             metadata: {
-                theme
+                theme: {
+                    ...this.originalTheme,
+                    map: theme
+                }
             }
         };
     }

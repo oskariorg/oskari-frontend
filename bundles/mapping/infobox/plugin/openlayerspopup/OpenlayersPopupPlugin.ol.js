@@ -178,6 +178,16 @@ Oskari.clazz.define(
                 popupType,
                 popupDOM,
                 popup;
+
+            const mapTheme = mapModule.getMapTheme();
+            if (mapTheme) {
+                colourScheme = {
+                    ...colourScheme,
+                    bgColour: mapTheme?.infobox?.color?.bg,
+                    titleColour: mapTheme?.infobox?.color?.text
+                };
+            }
+
             jQuery(contentDiv).addClass('infoboxPopupNoMargin');
             if (isMarker) {
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
