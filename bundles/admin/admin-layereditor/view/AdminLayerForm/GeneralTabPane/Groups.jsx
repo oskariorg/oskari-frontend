@@ -15,19 +15,20 @@ const StyledListItem = styled(ListItem)`
 // add subgroups on the list recursively and hierarchically
 const SubGroupsListItem = ({ group, layer, controller }) => {
     return (
-        <List dataSource={group.getGroups().map(subgroup =>
-            <StyledDiv key={subgroup.id}>
-                <StyledListItem>
-                    <Checkbox key={subgroup.id}
-                        onChange={evt => controller.setGroup(evt.target.checked, subgroup)}
-                        checked={!!layer.groups.find(cur => cur === subgroup.id)}
-                    >
-                        {subgroup.getName()}
-                    </Checkbox>
-                </StyledListItem>
-                {subgroup.groups.length > 0 && <SubGroupsListItem group={subgroup} layer={layer} controller={controller}/>}
-            </StyledDiv>
-        )} renderItem={item => item}/>
+        <List dataSource={group.getGroups()}
+            renderItem = {subgroup =>
+                <StyledDiv key={subgroup.id}>
+                    <StyledListItem>
+                        <Checkbox key={subgroup.id}
+                            onChange={evt => controller.setGroup(evt.target.checked, subgroup)}
+                            checked={!!layer.groups.find(cur => cur === subgroup.id)}
+                        >
+                            {subgroup.getName()}
+                        </Checkbox>
+                    </StyledListItem>
+                    {subgroup.groups.length > 0 && <SubGroupsListItem group={subgroup} layer={layer} controller={controller}/>}
+                </StyledDiv>
+            }/>
     );
 };
 
