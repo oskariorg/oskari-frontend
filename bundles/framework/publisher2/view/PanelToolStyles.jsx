@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Divider, Message, Slider, Checkbox, Dropdown, Button, Select, Option, NumberInput } from 'oskari-ui';
 import { ColorPicker } from 'oskari-ui/components/ColorPicker';
 import { PropTypes } from 'prop-types';
+import { getDefaultMapTheme } from '../../..//mapping/mapmodule/util/MapThemeHelper.js'
 
 const BUNDLE_KEY = 'Publisher2';
 
@@ -58,8 +59,8 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
     const [popupHeader, setPopupHeader] = useState(mapTheme?.color?.header?.bg);
     const [popupHeaderText, setPopupHeaderText] = useState(mapTheme?.color?.header?.text);
 
-    const [infoboxHeader, setInfoboxHeader] = useState(mapTheme?.infobox?.color?.bg);
-    const [infoboxHeaderText, setInfoboxHeaderText] = useState(mapTheme?.infobox?.color?.text);
+    const [infoboxHeader, setInfoboxHeader] = useState(mapTheme?.infobox?.header?.bg);
+    const [infoboxHeaderText, setInfoboxHeaderText] = useState(mapTheme?.infobox?.header?.text);
 
     const [buttonBackground, setButtonBackground] = useState(mapTheme?.navigation?.color?.primary);
     const [buttonText, setButtonText] = useState(mapTheme?.navigation?.color?.text);
@@ -94,7 +95,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
             },
             infobox: {
                 ...mapTheme.infobox,
-                color: {
+                header: {
                     bg: infoboxHeader,
                     text: infoboxHeaderText
                 }
@@ -110,8 +111,11 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
         let icon = '#ffffff';
         let effect;
         const hover = '#ffd400';
-        const infoboxHeader = '#424343';
-        const infoboxHeaderText = '#FFFFFF';
+
+        // reset infobox to defaults
+        const infoboxDefaults = getDefaultMapTheme()?.infobox;
+        const infoboxHeader = infoboxDefaults?.header?.bg;
+        const infoboxHeaderText = infoboxDefaults?.header?.text;
 
         if (style.includes('sharp')) {
             rounding = 0;

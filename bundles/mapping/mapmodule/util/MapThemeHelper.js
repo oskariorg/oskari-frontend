@@ -29,7 +29,7 @@ export const getDefaultMapTheme = () => {
         // ----------------------------------
         // For gfi infoboxes:
         infobox: {
-            color: {
+            header: {
                 bg: '#424343',
                 text: '#FFFFFF'
             }

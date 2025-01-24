@@ -183,8 +183,8 @@ Oskari.clazz.define(
             if (mapTheme) {
                 colourScheme = {
                     ...colourScheme,
-                    bgColour: mapTheme?.infobox?.color?.bg,
-                    titleColour: mapTheme?.infobox?.color?.text
+                    bgColour: mapTheme?.infobox?.header?.bg,
+                    titleColour: mapTheme?.infobox?.header?.text
                 };
             }
 
