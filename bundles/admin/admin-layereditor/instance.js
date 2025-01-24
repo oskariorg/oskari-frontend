@@ -236,6 +236,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 flyout.show();
             }
         }
+
         getDataProviders () {
             const dataProviders = this._getLayerService().getDataProviders();
             dataProviders.sort(function (a, b) {
@@ -245,11 +246,10 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         }
 
         getGroups () {
-            const groups = this._getLayerService().getAllLayerGroups();
-            groups.sort(function (a, b) {
-                return Oskari.util.naturalSort(Oskari.getLocalized(a.name), Oskari.getLocalized(b.name));
-            });
-            return groups;
+            // filter runtime groups (negative ids)
+            return this._getLayerService().getAllLayerGroups()
+                .filter(group => group.id > 0)
+                .toSorted((a, b) => Oskari.util.naturalSort(Oskari.getLocalized(a.name), Oskari.getLocalized(b.name)));
         }
 
         /**
