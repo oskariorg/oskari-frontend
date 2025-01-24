@@ -27,7 +27,7 @@ const SubGroupsListItem = ({ group, layer, controller }) => {
                 </StyledListItem>
                 {subgroup.groups.length > 0 && <SubGroupsListItem group={subgroup} layer={layer} controller={controller}/>}
             </StyledDiv>
-        )}/>
+        )} renderItem={item => item}/>
     );
 };
 
