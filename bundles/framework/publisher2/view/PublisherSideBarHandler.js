@@ -31,6 +31,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         this.state = {
             collapseItems: []
         };
+        this.sandbox = Oskari.getSandbox();
     }
 
     init (data, publisherTools) {
@@ -42,7 +43,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         const rpcTools = publisherTools.groups.rpc;
         this.generalInfoPanelHandler = new PanelGeneralInfoHandler();
         this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
-        this.mapLayersHandler = new PanelMapLayersHandler(layerTools, Oskari.getSandbox());
+        this.mapLayersHandler = new PanelMapLayersHandler(layerTools, this.sandbox);
         this.mapToolsHandler = new ToolPanelHandler(mapTools);
         this.layoutHandler = new PanelLayoutHandler();
         this.rpcPanelHandler = new ToolPanelHandler(rpcTools);
@@ -219,12 +220,15 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     renderLayoutPanel () {
-        const { theme } = this.layoutHandler.getState();
+        const { theme, infoBoxPreviewVisible } = this.layoutHandler.getState();
         return <div className={'t_style'}>
             <PanelToolStyles
                 mapTheme={theme}
                 changeTheme={(theme) => this.layoutHandler.getController().updateTheme(theme)}
-                fonts={LAYOUT_AVAILABLE_FONTS}/>
+                fonts={LAYOUT_AVAILABLE_FONTS}
+                infoBoxPreviewVisible={infoBoxPreviewVisible}
+                updateInfoBoxPreviewVisible={(isOpen) => this.layoutHandler.getController().updateInfoBoxPreviewVisible(isOpen)}
+            />
         </div>;
     }
 

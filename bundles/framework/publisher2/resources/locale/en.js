@@ -132,7 +132,8 @@ Oskari.registerLocalization(
                 "label": "Graphic Layout",
                 "title": {
                     "popup": "Popup window",
-                    "buttons": "Buttons"
+                    "buttons": "Buttons",
+                    "infobox": "Feature query tool"
                 },
                 "fields": {
                     "colours": {
@@ -168,6 +169,9 @@ Oskari.registerLocalization(
                     },
                     "popupHeaderColor": "Title background color",
                     "popupHeaderTextColor": "Title color",
+                    "infoboxHeaderColor": "Identifier background",
+                    "infoboxHeaderTextColor": "Identifier text",
+                    "infoboxPreview": "Preview",
                     "buttonBackgroundColor": "Background color",
                     "buttonTextColor": "Icon color",
                     "buttonAccentColor": "Icon effect color",

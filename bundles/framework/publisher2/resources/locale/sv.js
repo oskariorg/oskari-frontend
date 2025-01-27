@@ -132,7 +132,8 @@ Oskari.registerLocalization(
                 "label": "Grafisk layout",
                 "title": {
                     "popup": "Popupfönster",
-                    "buttons": "Knappar"
+                    "buttons": "Knappar",
+                    "infobox": "Frågverktyg av objektuppgifter"
                 },
                 "fields": {
                     "colours": {
@@ -168,6 +169,9 @@ Oskari.registerLocalization(
                     },
                     "popupHeaderColor": "Rubrikens bakgrundsfärg",
                     "popupHeaderTextColor": "Rubrikens färg",
+                    "infoboxHeaderColor": "Etikettens bakgrundsfärg",
+                    "infoboxHeaderTextColor": "Etikettext",
+                    "infoboxPreview": "Esikatselu",
                     "buttonBackgroundColor": "Bakgrundsfärg",
                     "buttonTextColor": "Ikonernas färg",
                     "buttonAccentColor": "Ikonernas effektfärg",
