@@ -63,10 +63,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/PanelGeneralInfo.js"
-        },
-        {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/view/PanelMapTools.js"
         },
         {
@@ -75,27 +71,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/PanelMapPreview.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/PanelMapLayers.js"
-        },
-        {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/view/PanelToolLayout.js"
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/view/PanelLayout.js"
-        },
-        {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/view/PanelRpc.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/tools/GetInfoTool.js"
         },
         {
             "type": "text/javascript",

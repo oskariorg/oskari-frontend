@@ -24,8 +24,17 @@ export const getDefaultMapTheme = () => {
             }
             // accent should be inherited from global theme accent if not configured
             // accent: '#ffd400'
-        }
+        },
         // /For popup headers opened by map ^
+        // ----------------------------------
+        // For gfi infoboxes:
+        infobox: {
+            header: {
+                bg: '#424343',
+                text: '#FFFFFF'
+            }
+        }
+        // /For gfi infoboxes ^
     };
 };
 

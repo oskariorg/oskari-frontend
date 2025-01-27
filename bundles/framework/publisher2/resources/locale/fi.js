@@ -132,7 +132,8 @@ Oskari.registerLocalization(
                 "label": "Ulkoasu",
                 "title": {
                     "popup": "Ponnahdusikkuna",
-                    "buttons": "Painikkeet"
+                    "buttons": "Painikkeet",
+                    "infobox": "Kohdetietojen kyselytyökalu"
                 },
                 "fields": {
                     "colours": {
@@ -168,6 +169,9 @@ Oskari.registerLocalization(
                     },
                     "popupHeaderColor": "Otsikon taustaväri",
                     "popupHeaderTextColor": "Otsikon väri",
+                    "infoboxHeaderColor": "Otsikon tausta",
+                    "infoboxHeaderTextColor": "Otsikon teksti",
+                    "infoboxPreview": "Esikatselu",
                     "buttonBackgroundColor": "Taustaväri",
                     "buttonTextColor": "Ikonien väri",
                     "buttonAccentColor": "Ikonien tehosteväri",

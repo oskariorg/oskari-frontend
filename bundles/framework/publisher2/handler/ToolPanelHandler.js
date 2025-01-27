@@ -7,7 +7,9 @@ class UIHandler extends StateHandler {
         this.setState({
             tools: []
         });
-        this.addStateListener(consumer);
+        if (consumer) {
+            this.addStateListener(consumer);
+        }
     }
 
     init (data) {
