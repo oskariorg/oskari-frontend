@@ -7,6 +7,7 @@ https://github.com/oskariorg/oskari-frontend/milestone/54?closed=1
 
 - Fixed an issue with metadata not saving the current metadata for links/state.
 - Fixed zoombar visually when 3D-effect was used for map controls.
+- Fixed an issue where map layer sub groups were not properly shown on `layerlist` and `admin-layereditor`.
 
 ## 2.14.1
 

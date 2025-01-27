@@ -9,6 +9,12 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.14.0
+
+### [add] Added catalogue/`metadata` bundle
+
+React-implementation and drop-in replacement for `catalogue/metadataflyout` bundle.
+
 ## 2.13.0
 
 ### [add] Added `metadatasearch` bundle
