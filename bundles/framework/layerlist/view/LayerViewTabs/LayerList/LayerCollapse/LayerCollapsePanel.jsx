@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List, ListItem } from 'oskari-ui';
 import { Controller, ErrorBoundary } from 'oskari-ui/util';
 import { Layer } from './Layer/';
-import { SubGroupList } from './SubGroupList';
+import { SubGroupCollapse } from './SubGroupCollapse';
 import styled from 'styled-components';
 
 /* ----- Layer list ------ */
@@ -62,7 +62,7 @@ const LayerCollapsePanel = (props) => {
     return (
         <ErrorBoundary hide={true} debug={{ group, selectedLayerIds }}>
             <StyledCollapsePanel>
-                <SubGroupList
+                <SubGroupCollapse
                     subgroups={group.getGroups()}
                     selectedLayerIds={selectedLayerIds}
                     opts={opts}

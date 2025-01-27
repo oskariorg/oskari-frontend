@@ -27,6 +27,12 @@ Was provided by `catalogue/metadatacatalogue`, but it was not used so it was not
 
 Was provided by `catalogue/metadatacatalogue` and this was technically still present on the codebase, but it hasn't been used for quite some time. The drawn geometry selection has used events from the drawtools bundle for quite some time.
 
+## 2.14.0
+
+### [add] Added catalogue/`metadata` bundle
+
+React-implementation and drop-in replacement for `catalogue/metadataflyout` bundle.
+
 ## 2.13.0
 
 ### [add] Added `metadatasearch` bundle

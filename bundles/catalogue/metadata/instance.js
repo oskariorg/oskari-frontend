@@ -44,6 +44,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadata.MetadataBundleInstance',
                 const metadata = Array.isArray(current) ? current[0] : current;
                 this.showMetadata(metadata);
             }
+            this.sandbox.registerAsStateful(this.mediator.bundleId, this);
         },
         /**
          * Fetches reference to the map layer service
@@ -160,12 +161,27 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadata.MetadataBundleInstance',
             if (this.flyoutControls) {
                 this.flyoutControls.close();
             }
+            this.handler.onFlyoutClose();
             this.flyoutControls = null;
         },
         onStateUpdate: function (state) {
             if (this.flyoutControls) {
                 this.flyoutControls.update(state);
             }
+        },
+        getState: function () {
+            const { current } = this.handler.getState();
+            if (!current) {
+                return {};
+            }
+            return { current: [current] };
+        },
+        getStateParameters: function () {
+            const { uuid } = this.handler.getState().current || {};
+            if (!uuid) {
+                return '';
+            }
+            return `metadata=${uuid}`;
         }
     }, {
         protocol: [
