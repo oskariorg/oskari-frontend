@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, Collapse, CollapsePanel, List, ListItem, Message } from 'oskari-ui';
+import { Checkbox, Collapse, List, ListItem, Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
 import styled from 'styled-components';
@@ -15,19 +15,20 @@ const StyledListItem = styled(ListItem)`
 // add subgroups on the list recursively and hierarchically
 const SubGroupsListItem = ({ group, layer, controller }) => {
     return (
-        <List dataSource={group.getGroups().map(subgroup =>
-            <StyledDiv key={subgroup.id}>
-                <StyledListItem>
-                    <Checkbox key={subgroup.id}
-                        onChange={evt => controller.setGroup(evt.target.checked, subgroup)}
-                        checked={!!layer.groups.find(cur => cur === subgroup.id)}
-                    >
-                        {subgroup.getName()}
-                    </Checkbox>
-                </StyledListItem>
-                {subgroup.groups.length > 0 && <SubGroupsListItem group={subgroup} layer={layer} controller={controller}/>}
-            </StyledDiv>
-        )}/>
+        <List dataSource={group.getGroups()}
+            renderItem = {subgroup =>
+                <StyledDiv key={subgroup.id}>
+                    <StyledListItem>
+                        <Checkbox key={subgroup.id}
+                            onChange={evt => controller.setGroup(evt.target.checked, subgroup)}
+                            checked={!!layer.groups.find(cur => cur === subgroup.id)}
+                        >
+                            {subgroup.getName()}
+                        </Checkbox>
+                    </StyledListItem>
+                    {subgroup.groups.length > 0 && <SubGroupsListItem group={subgroup} layer={layer} controller={controller}/>}
+                </StyledDiv>
+            }/>
     );
 };
 
