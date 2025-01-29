@@ -255,6 +255,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     stop () {
         // TODO: stop individual panels that need stopping. Maybe put these into some array or smthng
         this.mapPreviewPanelHandler.stop();
+        this.mapLayersHandler.stop();
         this.mapToolsHandler.stop();
         this.layoutHandler.stop();
     }
