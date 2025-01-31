@@ -105,11 +105,6 @@ class PublisherSidebar {
             }
         });
 
-        const toolLayoutPanel = this.createToolLayoutPanel(this.publisherTools.tools);
-        toolLayoutPanel.getPanel().addClass('t_toollayout');
-        this.panels.push(toolLayoutPanel);
-        accordion.addPanel(toolLayoutPanel.getPanel());
-
         // -- render to UI and setup buttons --
         const contentDiv = container.find('div#jqueryAccordions');
         accordion.insertTo(contentDiv);
@@ -161,23 +156,6 @@ class PublisherSidebar {
             return;
         }
         tool.toolConfig = conf.toolsConfig[tool.bundleName];
-    }
-
-    /**
-     * @private @method _createToolLayoutPanel
-     * Creates the tool layout panel of publisher
-     * @param {Oskari.mapframework.publisher.tool.Tool[]} tools
-     */
-    createToolLayoutPanel (tools) {
-        const sandbox = this.instance.getSandbox();
-        const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout',
-            tools, sandbox, mapModule, this.localization, this.instance
-        );
-
-        // initialize form (restore data when editing)
-        form.init(this.data);
-        return form;
     }
 
     /**

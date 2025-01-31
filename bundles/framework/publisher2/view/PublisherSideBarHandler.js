@@ -14,6 +14,8 @@ import { PublisherToolsList } from './form/PublisherToolsList';
 import { ToolPanelHandler } from '../handler/ToolPanelHandler';
 import { LAYOUT_AVAILABLE_FONTS, PanelLayoutHandler } from '../handler/PanelLayoutHandler';
 import { PanelToolStyles } from './PanelToolStyles';
+import { ToolLayout } from './form/ToolLayout';
+import { PanelToolLayoutHandler } from '../handler/PanelToolLayoutHandler';
 
 export const PUBLISHER_BUNDLE_ID = 'Publisher2';
 const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
@@ -22,7 +24,7 @@ const PANEL_MAPLAYERS_ID = 'panelMapLayers';
 const PANEL_MAPTOOLS_ID = 'panelMapTools';
 const PANEL_RPC_ID = 'panelRpc';
 const PANEL_LAYOUT_ID = 'panelLayout';
-
+const PANEL_TOOL_LAYOUT_ID = 'panelToolLayout';
 class PublisherSidebarUIHandler extends StateHandler {
     constructor () {
         super();
@@ -47,6 +49,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         this.mapToolsHandler = new ToolPanelHandler(mapTools);
         this.layoutHandler = new PanelLayoutHandler();
         this.rpcPanelHandler = new ToolPanelHandler(rpcTools);
+        this.toolLayoutPanelHandler = new PanelToolLayoutHandler(publisherTools.tools);
 
         /** general info - panel */
         this.generalInfoPanelHandler.init(data);
@@ -69,6 +72,9 @@ class PublisherSidebarUIHandler extends StateHandler {
 
         this.rpcPanelHandler.init(data);
         this.rpcPanelHandler.addStateListener(() => this.updateRpcPanel());
+
+        this.toolLayoutPanelHandler.init(data);
+        this.toolLayoutPanelHandler.addStateListener(() => this.updateToolLayoutPanel());
 
         const collapseItems = [];
         collapseItems.push({
@@ -99,6 +105,12 @@ class PublisherSidebarUIHandler extends StateHandler {
             key: PANEL_LAYOUT_ID,
             label: Oskari.getMsg('Publisher2', 'BasicView.layout.label'),
             children: this.renderLayoutPanel()
+        });
+
+        collapseItems.push({
+            key: PANEL_TOOL_LAYOUT_ID,
+            label: Oskari.getMsg('Publisher2', 'BasicView.toollayout.label'),
+            children: this.renderToolLayoutPanel()
         });
 
         // RPC panel should be the last in line after all other (react collapsified) panels
@@ -229,6 +241,31 @@ class PublisherSidebarUIHandler extends StateHandler {
                 infoBoxPreviewVisible={infoBoxPreviewVisible}
                 updateInfoBoxPreviewVisible={(isOpen) => this.layoutHandler.getController().updateInfoBoxPreviewVisible(isOpen)}
             />
+        </div>;
+    }
+
+    updateToolLayoutPanel () {
+        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const panel = newCollapseItems.find(item => item.key === PANEL_TOOL_LAYOUT_ID);
+        panel.children = this.renderToolLayoutPanel();
+        this.updateState({
+            collapseItems: newCollapseItems
+        });
+    }
+
+    renderToolLayoutPanel () {
+        return <div className={'t_toollayout'}>
+            <ToolLayout
+                onSwitch={() => this.toolLayoutPanelHandler.getController().switchControlSides()}
+                isEdit={this.toolLayoutPanelHandler.getController().getToolLayoutEditMode()}
+                onEditMode={(isEdit) => {
+                    if (isEdit) {
+                        this.toolLayoutPanelHandler.getController().editToolLayoutOn();
+                    } else {
+                        // remove edit mode
+                        this.toolLayoutPanelHandler.getController().editToolLayoutOff();
+                    }
+                }}/>
         </div>;
     }
 
