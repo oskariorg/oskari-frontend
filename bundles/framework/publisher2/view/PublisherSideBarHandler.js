@@ -14,6 +14,8 @@ import { PublisherToolsList } from './form/PublisherToolsList';
 import { ToolPanelHandler } from '../handler/ToolPanelHandler';
 import { LAYOUT_AVAILABLE_FONTS, PanelLayoutHandler } from '../handler/PanelLayoutHandler';
 import { PanelToolStyles } from './PanelToolStyles';
+import { ToolLayout } from './form/ToolLayout';
+import { PanelToolLayoutHandler } from '../handler/PanelToolLayoutHandler';
 
 export const PUBLISHER_BUNDLE_ID = 'Publisher2';
 const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
@@ -22,7 +24,7 @@ const PANEL_MAPLAYERS_ID = 'panelMapLayers';
 const PANEL_MAPTOOLS_ID = 'panelMapTools';
 const PANEL_RPC_ID = 'panelRpc';
 const PANEL_LAYOUT_ID = 'panelLayout';
-
+const PANEL_TOOL_LAYOUT_ID = 'panelToolLayout';
 class PublisherSidebarUIHandler extends StateHandler {
     constructor () {
         super();
@@ -39,14 +41,13 @@ class PublisherSidebarUIHandler extends StateHandler {
         let mapTools = publisherTools.groups.tools;
         mapTools = mapTools ? [...mapTools] : [];
         mapTools = [...mapTools].sort((a, b) => a.index - b.index);
-
         const rpcTools = publisherTools.groups.rpc;
         this.generalInfoPanelHandler = new PanelGeneralInfoHandler();
         this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
         this.mapLayersHandler = new PanelMapLayersHandler(layerTools, this.sandbox);
         this.mapToolsHandler = new ToolPanelHandler(mapTools);
         this.layoutHandler = new PanelLayoutHandler();
-        this.rpcPanelHandler = new ToolPanelHandler(rpcTools);
+        this.toolLayoutPanelHandler = new PanelToolLayoutHandler(publisherTools.tools);
 
         /** general info - panel */
         this.generalInfoPanelHandler.init(data);
@@ -67,8 +68,8 @@ class PublisherSidebarUIHandler extends StateHandler {
         this.layoutHandler.init(data);
         this.layoutHandler.addStateListener(() => this.updateLayoutPanel());
 
-        this.rpcPanelHandler.init(data);
-        this.rpcPanelHandler.addStateListener(() => this.updateRpcPanel());
+        this.toolLayoutPanelHandler.init(data);
+        this.toolLayoutPanelHandler.addStateListener(() => this.updateToolLayoutPanel());
 
         const collapseItems = [];
         collapseItems.push({
@@ -101,12 +102,23 @@ class PublisherSidebarUIHandler extends StateHandler {
             children: this.renderLayoutPanel()
         });
 
-        // RPC panel should be the last in line after all other (react collapsified) panels
         collapseItems.push({
-            key: PANEL_RPC_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.rpc.label'),
-            children: this.renderRpcPanel()
+            key: PANEL_TOOL_LAYOUT_ID,
+            label: Oskari.getMsg('Publisher2', 'BasicView.toollayout.label'),
+            children: this.renderToolLayoutPanel()
         });
+
+        // RPC panel should be the last in line after all other (react collapsified) panels
+        if (rpcTools && rpcTools.length) {
+            this.rpcPanelHandler = new ToolPanelHandler(rpcTools);
+            this.rpcPanelHandler.init(data);
+            this.rpcPanelHandler.addStateListener(() => this.updateRpcPanel());
+            collapseItems.push({
+                key: PANEL_RPC_ID,
+                label: Oskari.getMsg('Publisher2', 'BasicView.rpc.label'),
+                children: this.renderRpcPanel()
+            });
+        }
 
         this.updateState({
             collapseItems
@@ -131,7 +143,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     renderGeneralInfoPanel () {
         return <div className={'t_generalInfo'}>
             <GeneralInfoForm
-                onChange={(key, value) => this.generalInfoPanelHandler.getController().onChange(key, value)}
+                onChange={(key, value) => this.generalInfoPanelHandler.onChange(key, value)}
                 data={this.generalInfoPanelHandler.getState()}
             />
         </div>;
@@ -150,9 +162,9 @@ class PublisherSidebarUIHandler extends StateHandler {
         return <div className={'t_size'}>
             <MapPreviewTooltip/>
             <MapPreviewForm
-                onChange={(value) => { this.mapPreviewPanelHandler.getController().updateMapSize(value); }}
+                onChange={(value) => { this.mapPreviewPanelHandler.updateMapSize(value); }}
                 mapSizeOptions={MAP_SIZES}
-                initialSelection={this.mapPreviewPanelHandler.getController().getSelectedMapSize() || null}/>
+                initialSelection={this.mapPreviewPanelHandler.getSelectedMapSize() || null}/>
         </div>;
     }
 
@@ -224,11 +236,36 @@ class PublisherSidebarUIHandler extends StateHandler {
         return <div className={'t_style'}>
             <PanelToolStyles
                 mapTheme={theme}
-                changeTheme={(theme) => this.layoutHandler.getController().updateTheme(theme)}
+                changeTheme={(theme) => this.layoutHandler.updateTheme(theme)}
                 fonts={LAYOUT_AVAILABLE_FONTS}
                 infoBoxPreviewVisible={infoBoxPreviewVisible}
-                updateInfoBoxPreviewVisible={(isOpen) => this.layoutHandler.getController().updateInfoBoxPreviewVisible(isOpen)}
+                updateInfoBoxPreviewVisible={(isOpen) => this.layoutHandler.updateInfoBoxPreviewVisible(isOpen)}
             />
+        </div>;
+    }
+
+    updateToolLayoutPanel () {
+        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const panel = newCollapseItems.find(item => item.key === PANEL_TOOL_LAYOUT_ID);
+        panel.children = this.renderToolLayoutPanel();
+        this.updateState({
+            collapseItems: newCollapseItems
+        });
+    }
+
+    renderToolLayoutPanel () {
+        return <div className={'t_toollayout'}>
+            <ToolLayout
+                onSwitch={() => this.toolLayoutPanelHandler.switchControlSides()}
+                isEdit={this.toolLayoutPanelHandler.getToolLayoutEditMode()}
+                onEditMode={(isEdit) => {
+                    if (isEdit) {
+                        this.toolLayoutPanelHandler.editToolLayoutOn();
+                    } else {
+                        // remove edit mode
+                        this.toolLayoutPanelHandler.editToolLayoutOff();
+                    }
+                }}/>
         </div>;
     }
 
