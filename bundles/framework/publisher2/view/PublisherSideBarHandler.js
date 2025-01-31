@@ -41,14 +41,12 @@ class PublisherSidebarUIHandler extends StateHandler {
         let mapTools = publisherTools.groups.tools;
         mapTools = mapTools ? [...mapTools] : [];
         mapTools = [...mapTools].sort((a, b) => a.index - b.index);
-
         const rpcTools = publisherTools.groups.rpc;
         this.generalInfoPanelHandler = new PanelGeneralInfoHandler();
         this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
         this.mapLayersHandler = new PanelMapLayersHandler(layerTools, this.sandbox);
         this.mapToolsHandler = new ToolPanelHandler(mapTools);
         this.layoutHandler = new PanelLayoutHandler();
-        this.rpcPanelHandler = new ToolPanelHandler(rpcTools);
         this.toolLayoutPanelHandler = new PanelToolLayoutHandler(publisherTools.tools);
 
         /** general info - panel */
@@ -69,9 +67,6 @@ class PublisherSidebarUIHandler extends StateHandler {
 
         this.layoutHandler.init(data);
         this.layoutHandler.addStateListener(() => this.updateLayoutPanel());
-
-        this.rpcPanelHandler.init(data);
-        this.rpcPanelHandler.addStateListener(() => this.updateRpcPanel());
 
         this.toolLayoutPanelHandler.init(data);
         this.toolLayoutPanelHandler.addStateListener(() => this.updateToolLayoutPanel());
@@ -114,11 +109,16 @@ class PublisherSidebarUIHandler extends StateHandler {
         });
 
         // RPC panel should be the last in line after all other (react collapsified) panels
-        collapseItems.push({
-            key: PANEL_RPC_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.rpc.label'),
-            children: this.renderRpcPanel()
-        });
+        if (rpcTools && rpcTools.length) {
+            this.rpcPanelHandler = new ToolPanelHandler(rpcTools);
+            this.rpcPanelHandler.init(data);
+            this.rpcPanelHandler.addStateListener(() => this.updateRpcPanel());
+            collapseItems.push({
+                key: PANEL_RPC_ID,
+                label: Oskari.getMsg('Publisher2', 'BasicView.rpc.label'),
+                children: this.renderRpcPanel()
+            });
+        }
 
         this.updateState({
             collapseItems
