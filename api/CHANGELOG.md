@@ -21,7 +21,7 @@ Replaced by the `catalogue/metadatasearch` bundle.
 
 ### [rem] Removed `catalogue/metadataflyout` bundle
 
-Replaced by the `catalogue/metadata` bundle.
+Replaced by the `catalogue/metadata` bundle. Bundle id is still `metadataflyout`.
 
 ### [rem] Removed `AddSearchResultActionRequest` request
 
@@ -33,13 +33,13 @@ Was provided by `catalogue/metadatacatalogue` and this was technically still pre
 
 ### [rem] Removed `catalogue.AddTabRequest` request
 
-Was provided by `catalogue/metadataflyout`, but it was not used so it was not implemented on the new `metadata` bundle.
+Was provided by `catalogue/metadataflyout`, but it was not used so it was not implemented on the new `metadataflyout` bundle implementation.
 
 ## 2.14.0
 
 ### [add] Added new implementation for `metadataflyout` bundle
 
-React-implementation in `catalogue/metadata` is a drop-in replacement for `catalogue/metadataflyout` bundle.
+React-implementation in `catalogue/metadata` is a drop-in replacement for `catalogue/metadataflyout` bundle.  Bundle id is still `metadataflyout`.
 
 ## 2.13.0
 
