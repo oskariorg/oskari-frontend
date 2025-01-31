@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Radio, TextInput } from 'oskari-ui';
+import { Radio, TextInput, Message } from 'oskari-ui';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { CUSTOM_MAP_SIZE_LIMITS } from '../PanelMapPreview';
-
-const MESSAGE_BUNDLE_KEY = 'Publisher2';
-export const CUSTOM_MAP_SIZE_ID = 'custom';
+import { CUSTOM_MAP_SIZE_ID, CUSTOM_MAP_SIZE_LIMITS } from '../../handler/PanelMapPreviewHandler';
+import { PUBLISHER_BUNDLE_ID } from '../PublisherSideBarHandler';
 
 const Row = styled('div')`
     margin-top: 0.5em;
@@ -31,11 +29,11 @@ const RowContainer = styled('div')`
 
 const Label = (props) => {
     const { option } = props;
-    let text = Oskari.getMsg(MESSAGE_BUNDLE_KEY, 'BasicView.sizes.' + option.id);
+    let extraInfo = '';
     if (option.id !== CUSTOM_MAP_SIZE_ID && !isNaN(parseInt(option.width)) && !isNaN(parseInt(option.height))) {
-        text += ' (' + option.width + ' x ' + option.height + 'px)';
+        extraInfo = '(' + option.width + ' x ' + option.height + 'px)';
     }
-    return <div>{text}</div>;
+    return <Message messageKey={ 'BasicView.sizes.' + option.id}>{ extraInfo }</Message>;
 };
 
 Label.propTypes = {
@@ -43,7 +41,7 @@ Label.propTypes = {
 };
 
 export const MapPreviewTooltip = () => {
-    let tooltip = Oskari.getMsg(MESSAGE_BUNDLE_KEY, 'BasicView.size.tooltip');
+    let tooltip = Oskari.getMsg(PUBLISHER_BUNDLE_ID, 'BasicView.size.tooltip');
     tooltip = tooltip.replace('{minWidth}', CUSTOM_MAP_SIZE_LIMITS.minWidth);
     tooltip = tooltip.replace('{maxWidth}', CUSTOM_MAP_SIZE_LIMITS.maxWidth);
     tooltip = tooltip.replace('{minHeight}', CUSTOM_MAP_SIZE_LIMITS.minHeight);
@@ -100,14 +98,14 @@ export const MapPreviewForm = (props) => {
         {
             <Row>
                 <TextInput
-                    placeholder={Oskari.getMsg(MESSAGE_BUNDLE_KEY, 'BasicView.sizes.width')}
+                    placeholder={Oskari.getMsg(PUBLISHER_BUNDLE_ID, 'BasicView.sizes.width')}
                     disabled={customInputDisabled}
                     className={!customInputDisabled && errors?.width ? 'customsize error' : 'customsize'}
                     onChange={((evt) => { widthChanged(evt.currentTarget.value); })}
                     value={customWidth}/>
                 <CustomSeparator>X</CustomSeparator>
                 <TextInput
-                    placeholder={Oskari.getMsg(MESSAGE_BUNDLE_KEY, 'BasicView.sizes.height')}
+                    placeholder={Oskari.getMsg(PUBLISHER_BUNDLE_ID, 'BasicView.sizes.height')}
                     disabled={customInputDisabled}
                     className={!customInputDisabled && errors?.height ? 'customsize error' : 'customsize'}
                     onChange={((evt) => { heightChanged(evt.currentTarget.value); })}
