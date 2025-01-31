@@ -143,7 +143,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     renderGeneralInfoPanel () {
         return <div className={'t_generalInfo'}>
             <GeneralInfoForm
-                onChange={(key, value) => this.generalInfoPanelHandler.getController().onChange(key, value)}
+                onChange={(key, value) => this.generalInfoPanelHandler.onChange(key, value)}
                 data={this.generalInfoPanelHandler.getState()}
             />
         </div>;
@@ -162,9 +162,9 @@ class PublisherSidebarUIHandler extends StateHandler {
         return <div className={'t_size'}>
             <MapPreviewTooltip/>
             <MapPreviewForm
-                onChange={(value) => { this.mapPreviewPanelHandler.getController().updateMapSize(value); }}
+                onChange={(value) => { this.mapPreviewPanelHandler.updateMapSize(value); }}
                 mapSizeOptions={MAP_SIZES}
-                initialSelection={this.mapPreviewPanelHandler.getController().getSelectedMapSize() || null}/>
+                initialSelection={this.mapPreviewPanelHandler.getSelectedMapSize() || null}/>
         </div>;
     }
 
@@ -236,10 +236,10 @@ class PublisherSidebarUIHandler extends StateHandler {
         return <div className={'t_style'}>
             <PanelToolStyles
                 mapTheme={theme}
-                changeTheme={(theme) => this.layoutHandler.getController().updateTheme(theme)}
+                changeTheme={(theme) => this.layoutHandler.updateTheme(theme)}
                 fonts={LAYOUT_AVAILABLE_FONTS}
                 infoBoxPreviewVisible={infoBoxPreviewVisible}
-                updateInfoBoxPreviewVisible={(isOpen) => this.layoutHandler.getController().updateInfoBoxPreviewVisible(isOpen)}
+                updateInfoBoxPreviewVisible={(isOpen) => this.layoutHandler.updateInfoBoxPreviewVisible(isOpen)}
             />
         </div>;
     }
@@ -256,14 +256,14 @@ class PublisherSidebarUIHandler extends StateHandler {
     renderToolLayoutPanel () {
         return <div className={'t_toollayout'}>
             <ToolLayout
-                onSwitch={() => this.toolLayoutPanelHandler.getController().switchControlSides()}
-                isEdit={this.toolLayoutPanelHandler.getController().getToolLayoutEditMode()}
+                onSwitch={() => this.toolLayoutPanelHandler.switchControlSides()}
+                isEdit={this.toolLayoutPanelHandler.getToolLayoutEditMode()}
                 onEditMode={(isEdit) => {
                     if (isEdit) {
-                        this.toolLayoutPanelHandler.getController().editToolLayoutOn();
+                        this.toolLayoutPanelHandler.editToolLayoutOn();
                     } else {
                         // remove edit mode
-                        this.toolLayoutPanelHandler.getController().editToolLayoutOff();
+                        this.toolLayoutPanelHandler.editToolLayoutOff();
                     }
                 }}/>
         </div>;
