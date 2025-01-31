@@ -11,9 +11,9 @@ Some extra tags:
 
 ## 2.14.0
 
-### [add] Added catalogue/`metadata` bundle
+### [add] Added new implementation for `metadataflyout` bundle
 
-React-implementation and drop-in replacement for `catalogue/metadataflyout` bundle.
+React-implementation in `catalogue/metadata` is a drop-in replacement for `catalogue/metadataflyout` bundle.
 
 ## 2.13.0
 
