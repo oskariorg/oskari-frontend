@@ -16,7 +16,7 @@ import { LAYOUT_AVAILABLE_FONTS, PanelLayoutHandler } from '../handler/PanelLayo
 import { PanelToolStyles } from './PanelToolStyles';
 import { ToolLayout } from './form/ToolLayout';
 import { PanelToolLayoutHandler } from '../handler/PanelToolLayoutHandler';
-import { TooltipIcon } from './TooltipIcon';
+import { Info } from 'oskari-ui/components/icons/Info';
 
 export const PUBLISHER_BUNDLE_ID = 'Publisher2';
 const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
@@ -96,7 +96,7 @@ class PublisherSidebarUIHandler extends StateHandler {
             key: PANEL_MAPTOOLS_ID,
             label: Oskari.getMsg('Publisher2', 'BasicView.tools.label'),
             children: this.renderMapToolsPanel(),
-            extra: <TooltipIcon tooltip={Oskari.getMsg('Publisher2', 'BasicView.maptools.tooltip')}/>
+            extra: <Info title={Oskari.getMsg('Publisher2', 'BasicView.maptools.tooltip')}/>
         });
 
         collapseItems.push({
@@ -109,7 +109,7 @@ class PublisherSidebarUIHandler extends StateHandler {
             key: PANEL_TOOL_LAYOUT_ID,
             label: Oskari.getMsg('Publisher2', 'BasicView.toollayout.label'),
             children: this.renderToolLayoutPanel(),
-            extra: <TooltipIcon tooltip={Oskari.getMsg('Publisher2', 'BasicView.domain.title')}/>
+            extra: <Info title={Oskari.getMsg('Publisher2', 'BasicView.domain.title')}/>
         });
 
         // RPC panel should be the last in line after all other (react collapsified) panels
@@ -121,7 +121,7 @@ class PublisherSidebarUIHandler extends StateHandler {
                 key: PANEL_RPC_ID,
                 label: Oskari.getMsg('Publisher2', 'BasicView.rpc.label'),
                 children: this.renderRpcPanel(),
-                extra: <TooltipIcon tooltip={Oskari.getMsg('Publisher2', 'BasicView.rpc.info')}/>
+                extra: <Info title={Oskari.getMsg('Publisher2', 'BasicView.rpc.info')}/>
 
             });
         }
@@ -166,7 +166,6 @@ class PublisherSidebarUIHandler extends StateHandler {
 
     renderMapPreviewPanel () {
         return <div className={'t_size'}>
-            <MapPreviewTooltip/>
             <MapPreviewForm
                 onChange={(value) => { this.mapPreviewPanelHandler.updateMapSize(value); }}
                 mapSizeOptions={MAP_SIZES}
