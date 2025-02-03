@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { CUSTOM_MAP_SIZE_ID, CUSTOM_MAP_SIZE_LIMITS } from '../../handler/PanelMapPreviewHandler';
 import { PUBLISHER_BUNDLE_ID } from '../PublisherSideBarHandler';
+import { TooltipIcon } from '../TooltipIcon';
 
 const Row = styled('div')`
     margin-top: 0.5em;
@@ -46,7 +47,7 @@ export const MapPreviewTooltip = () => {
     tooltip = tooltip.replace('{maxWidth}', CUSTOM_MAP_SIZE_LIMITS.maxWidth);
     tooltip = tooltip.replace('{minHeight}', CUSTOM_MAP_SIZE_LIMITS.minHeight);
     tooltip = tooltip.replace('{maxHeight}', CUSTOM_MAP_SIZE_LIMITS.maxHeight);
-    return <div className='help icon-info' title={tooltip}/>;
+    return <TooltipIcon tooltip={tooltip}/>;
 };
 
 export const MapPreviewForm = (props) => {
