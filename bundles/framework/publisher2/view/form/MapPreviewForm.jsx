@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Radio, TextInput, Message } from 'oskari-ui';
+import { Info } from 'oskari-ui/components/icons/Info';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { CUSTOM_MAP_SIZE_ID, CUSTOM_MAP_SIZE_LIMITS } from '../../handler/PanelMapPreviewHandler';
@@ -46,7 +47,7 @@ export const MapPreviewTooltip = () => {
     tooltip = tooltip.replace('{maxWidth}', CUSTOM_MAP_SIZE_LIMITS.maxWidth);
     tooltip = tooltip.replace('{minHeight}', CUSTOM_MAP_SIZE_LIMITS.minHeight);
     tooltip = tooltip.replace('{maxHeight}', CUSTOM_MAP_SIZE_LIMITS.maxHeight);
-    return <div className='help icon-info' title={tooltip}/>;
+    return <Info title={tooltip}/>;
 };
 
 export const MapPreviewForm = (props) => {
