@@ -283,6 +283,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         let returnValue = {};
         returnValue = mergeValues(returnValue, this.generalInfoPanelHandler.getValues());
         returnValue = mergeValues(returnValue, this.mapPreviewPanelHandler.getValues());
+        returnValue = mergeValues(returnValue, this.toolLayoutPanelHandler.getValues());
         returnValue = mergeValues(returnValue, this.layoutHandler.getValues());
         return returnValue;
     }
