@@ -334,6 +334,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         this.mapLayersHandler.stop();
         this.mapToolsHandler.stop();
         this.layoutHandler.stop();
+        this.toolLayoutPanelHandler.stop();
         if (this.statsGridPanelHandler) {
             this.statsGridPanelHandler.stop();
         }
