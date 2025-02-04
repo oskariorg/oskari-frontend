@@ -26,6 +26,8 @@ const PANEL_MAPTOOLS_ID = 'panelMapTools';
 const PANEL_RPC_ID = 'panelRpc';
 const PANEL_LAYOUT_ID = 'panelLayout';
 const PANEL_TOOL_LAYOUT_ID = 'panelToolLayout';
+const PANEL_STATSGRID_ID = 'panelStatsgrid';
+
 class PublisherSidebarUIHandler extends StateHandler {
     constructor () {
         super();
@@ -43,12 +45,16 @@ class PublisherSidebarUIHandler extends StateHandler {
         mapTools = mapTools ? [...mapTools] : [];
         mapTools = [...mapTools].sort((a, b) => a.index - b.index);
         const rpcTools = publisherTools.groups.rpc;
+        const statsgridTools = publisherTools.groups?.statsgrid || null;
+
         this.generalInfoPanelHandler = new PanelGeneralInfoHandler();
         this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
         this.mapLayersHandler = new PanelMapLayersHandler(layerTools, this.sandbox);
         this.mapToolsHandler = new ToolPanelHandler(mapTools);
         this.layoutHandler = new PanelLayoutHandler();
         this.toolLayoutPanelHandler = new PanelToolLayoutHandler(publisherTools.tools);
+        this.statsGridPanelHandler = new ToolPanelHandler(statsgridTools);
+        const showStatsGridPanel = this.statsGridPanelHandler.init(data);
 
         /** general info - panel */
         this.generalInfoPanelHandler.init(data);
@@ -123,6 +129,15 @@ class PublisherSidebarUIHandler extends StateHandler {
                 children: this.renderRpcPanel(),
                 extra: <Info title={Oskari.getMsg('Publisher2', 'BasicView.rpc.info')}/>
 
+            });
+        }
+
+        if (showStatsGridPanel) {
+            this.statsGridPanelHandler.addStateListener(() => this.updateStatsgridPanel());
+            collapseItems.push({
+                key: PANEL_STATSGRID_ID,
+                label: Oskari.getMsg('Publisher2', 'BasicView.statsgrid.label'),
+                children: this.renderStatsGridPanel()
             });
         }
 
@@ -274,6 +289,24 @@ class PublisherSidebarUIHandler extends StateHandler {
         </div>;
     }
 
+    updateStatsgridPanel () {
+        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const panel = newCollapseItems.find(item => item.key === PANEL_STATSGRID_ID);
+        panel.children = this.renderStatsGridPanel();
+        this.updateState({
+            collapseItems: newCollapseItems
+        });
+    }
+
+    renderStatsGridPanel () {
+        return <div className={'t_tools t_statsgrid'}>
+            <PublisherToolsList
+                state={this.statsGridPanelHandler.getState()}
+                controller={this.statsGridPanelHandler.getController()}
+            />
+        </div>;
+    }
+
     getCollapseItems () {
         const { collapseItems } = this.getState();
         return collapseItems;
@@ -301,6 +334,9 @@ class PublisherSidebarUIHandler extends StateHandler {
         this.mapLayersHandler.stop();
         this.mapToolsHandler.stop();
         this.layoutHandler.stop();
+        if (this.statsGridPanelHandler) {
+            this.statsGridPanelHandler.stop();
+        }
     }
 
     /**
