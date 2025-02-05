@@ -43,7 +43,7 @@ class PublisherSidebar {
         this.handler.init(this.data, this.publisherTools);
         const content = <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
             <ThemeProvider>
-                <div id="publisherWrapperDiv" className='basic_publisher'>
+                <div className='basic_publisher'>
                     <StyledHeader
                         title={this.data.uuid ? this.localization?.titleEdit : this.localization?.title}
                         onClose={() => this.cancel()}
@@ -64,13 +64,6 @@ class PublisherSidebar {
         </LocaleProvider>;
 
         ReactDOM.render(content, container[0]);
-
-        // disable keyboard map moving whenever a text-input is focused element
-        const contentDiv = container.find('div#publisherWrapperDiv');
-        const inputs = contentDiv.find('input[type=text]');
-        const sandbox = this.instance.getSandbox();
-        inputs.on('focus', () => sandbox.postRequestByName('DisableMapKeyboardMovementRequest'));
-        inputs.on('blur', () => sandbox.postRequestByName('EnableMapKeyboardMovementRequest'));
     }
 
     /**
