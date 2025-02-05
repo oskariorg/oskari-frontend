@@ -50,7 +50,6 @@ class PublisherSidebar {
                     />
                     <CollapseWrapper>
                         <CollapseContent controller={this.handler}/>
-                        <div id='jqueryAccordions'/>
                     </CollapseWrapper>
                     <ButtonContainer>
                         <SecondaryButton type='cancel' onClick={() => this.cancel()}/>
@@ -65,54 +64,6 @@ class PublisherSidebar {
         </LocaleProvider>;
 
         ReactDOM.render(content, container[0]);
-
-        const accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-
-        // Separate handling for RPC and layers group from other tools
-        // layers panel is added before other tools
-        // clear rpc/layers groups from others for looping/group so they are not listed twice
-        delete this.publisherTools.groups.rpc;
-        delete this.publisherTools.groups.layers;
-
-        // separate tools that support react from ones that don't
-        const reactGroups = ['tools', 'data', 'statsgrid'];
-        const reactGroupsTools = {};
-        // create panel for each tool group
-        Object.keys(this.publisherTools.groups).forEach(group => {
-            // tools is neither a jquery panel or a react-group-panel.
-            if (group === 'tools') {
-                return;
-            }
-
-            const tools = this.publisherTools.groups[group];
-            if (reactGroups.includes(group)) {
-                // panels with react groups handled after this
-                reactGroupsTools[group] = tools;
-            }
-        });
-
-        Object.keys(reactGroupsTools).forEach(group => {
-            const tools = reactGroupsTools[group];
-            // TODO: make data/statsgrid similar to the way maptools is rendered and get rid of this here implementation.
-            const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelReactTools', tools, group);
-            const hasToolsToShow = toolPanel.init(this.data);
-            this.panels.push(toolPanel);
-            if (hasToolsToShow) {
-                const panel = toolPanel.getPanel();
-                panel.addClass('t_tools');
-                panel.addClass('t_' + group);
-                accordion.addPanel(panel);
-            }
-        });
-
-        // -- render to UI and setup buttons --
-        const contentDiv = container.find('div#jqueryAccordions');
-        accordion.insertTo(contentDiv);
-        // disable keyboard map moving whenever a text-input is focused element
-        const inputs = contentDiv.find('input[type=text]');
-        const sandbox = this.instance.getSandbox();
-        inputs.on('focus', () => sandbox.postRequestByName('DisableMapKeyboardMovementRequest'));
-        inputs.on('blur', () => sandbox.postRequestByName('EnableMapKeyboardMovementRequest'));
     }
 
     /**
