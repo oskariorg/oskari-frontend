@@ -5,15 +5,24 @@ class UIHandler extends StateHandler {
         super();
         this.tool = tool;
         this.setState({
-            history_back: false,
-            history_forward: false,
-            measureline: false,
-            measurearea: false
+            history_back: true,
+            history_forward: true,
+            measureline: true,
+            measurearea: true
         });
     };
 
     init (config) {
-        this.setState({
+        const plugin = this.tool?.getPlugin();
+
+        // toggle off the tools not available in given config
+        Object.keys(config).forEach((key) => {
+            if (!config[key]) {
+                plugin.removeToolButton(key);
+            };
+        });
+
+        this.updateState({
             ...config
         });
     }
