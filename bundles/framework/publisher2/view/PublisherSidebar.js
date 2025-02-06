@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { ThemeProvider, LocaleProvider, Messaging } from 'oskari-ui/util';
 import { Header, Button, Message } from 'oskari-ui';
 import styled from 'styled-components';
-import './PanelReactTools';
 import { mergeValues } from '../util/util';
 import { PublisherSidebarHandler } from './PublisherSideBarHandler';
 import { ButtonContainer } from './dialog/Styled';
