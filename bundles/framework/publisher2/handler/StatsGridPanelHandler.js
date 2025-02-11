@@ -5,15 +5,14 @@ class UIHandler extends ToolPanelHandler {
     constructor (tools, sandbox, toggleStatsGridPanel) {
         super(tools);
         this.sandbox = sandbox;
-        this.toggleStatsGridPanel = toggleStatsGridPanel;
         this.eventHandlers = {
             /**
              * @method AfterMapLayerAddEvent
              * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
              */
             AfterMapLayerAddEvent: function (event) {
-                if (!!this.toggleStatsGridPanel && event.getMapLayer().getId() === STATSGRID_LAYER_ID) {
-                    this.toggleStatsGridPanel(true);
+                if (!!toggleStatsGridPanel && event.getMapLayer().getId() === STATSGRID_LAYER_ID) {
+                    toggleStatsGridPanel(true);
                 }
             },
 
@@ -58,7 +57,7 @@ class UIHandler extends ToolPanelHandler {
     }
 
     getName () {
-        return 'Oskari.mapframework.bundle.publisher2.view.PanelMapLayers';
+        return 'Oskari.mapframework.bundle.publisher2.handler.PanelMapLayers';
     }
 }
 
