@@ -299,8 +299,7 @@ class PublisherSidebarUIHandler extends StateHandler {
 
     toggleStatsGridPanel (visible) {
         const newCollapseItems = this.getState().collapseItems
-            .filter(item => item.key !== PANEL_STATSGRID_ID)
-            .map(item => item);
+            .filter(item => item.key !== PANEL_STATSGRID_ID);
 
         if (visible) {
             // this is empty when thematic maps was off by default. We gotta gather these tools somehow
