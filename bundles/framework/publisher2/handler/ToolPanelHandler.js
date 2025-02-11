@@ -3,7 +3,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 class UIHandler extends StateHandler {
     constructor (tools, consumer) {
         super();
-        this.toolsToInit = tools ? [...tools] : [];
+        this.allAvailableTools = tools ? [...tools] : [];
         this.setState({
             tools: []
         });
@@ -17,7 +17,8 @@ class UIHandler extends StateHandler {
         this.state = {
             tools: []
         };
-        this.toolsToInit.forEach((tool) => {
+
+        this.allAvailableTools.forEach((tool) => {
             try {
                 tool.init(data);
                 if (tool.isDisplayed(data)) {
