@@ -153,7 +153,7 @@ class PublisherSidebarUIHandler extends StateHandler {
      * to do partial re-rendering this way (so we won't have to regenerate every panel from scratch each time a keystroke happens in name - field of generalinfo).
      */
     updateGeneralInfoPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const generalInfoPanel = newCollapseItems.find(item => item.key === PANEL_GENERAL_INFO_ID);
         generalInfoPanel.children = this.renderGeneralInfoPanel();
         this.updateState({
@@ -171,7 +171,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateMapPreviewPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_MAPPREVIEW_ID);
         panel.children = this.renderMapPreviewPanel();
         this.updateState({
@@ -189,7 +189,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateMapLayersPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_MAPLAYERS_ID);
         panel.children = this.renderMapLayersPanel();
         this.updateState({
@@ -207,7 +207,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateMapToolsPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_MAPTOOLS_ID);
         panel.children = this.renderMapToolsPanel();
         this.updateState({
@@ -225,7 +225,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateRpcPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_RPC_ID);
         panel.children = this.renderRpcPanel();
         this.updateState({
@@ -243,7 +243,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateLayoutPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_LAYOUT_ID);
         panel.children = this.renderLayoutPanel();
         this.updateState({
@@ -265,7 +265,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateToolLayoutPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_TOOL_LAYOUT_ID);
         panel.children = this.renderToolLayoutPanel();
         this.updateState({
@@ -316,7 +316,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateStatsgridPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_STATSGRID_ID);
 
         if (!panel) {
