@@ -57,7 +57,7 @@ class UIHandler extends ToolPanelHandler {
     }
 
     getName () {
-        return 'Oskari.mapframework.bundle.publisher2.handler.PanelMapLayers';
+        return 'Oskari.mapframework.bundle.publisher2.handler.StatsGridPanelHandler';
     }
 }
 
