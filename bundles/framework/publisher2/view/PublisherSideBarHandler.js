@@ -17,6 +17,7 @@ import { PanelToolStyles } from './PanelToolStyles';
 import { ToolLayout } from './form/ToolLayout';
 import { PanelToolLayoutHandler } from '../handler/PanelToolLayoutHandler';
 import { Info } from 'oskari-ui/components/icons/Info';
+import { StatsGridPanelHandler } from '../handler/StatsGridPanelHandler';
 
 export const PUBLISHER_BUNDLE_ID = 'Publisher2';
 const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
@@ -40,21 +41,25 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     init (data, publisherTools) {
+        this.data = data;
         const layerTools = publisherTools.groups.layers;
         let mapTools = publisherTools.groups.tools;
         mapTools = mapTools ? [...mapTools] : [];
         mapTools = [...mapTools].sort((a, b) => a.index - b.index);
         const rpcTools = publisherTools.groups.rpc;
-        const statsgridTools = publisherTools.groups?.statsgrid || null;
-
+        this.statsgridTools = publisherTools.groups?.statsgrid || null;
         this.generalInfoPanelHandler = new PanelGeneralInfoHandler();
         this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
         this.mapLayersHandler = new PanelMapLayersHandler(layerTools, this.sandbox);
         this.mapToolsHandler = new ToolPanelHandler(mapTools);
         this.layoutHandler = new PanelLayoutHandler();
         this.toolLayoutPanelHandler = new PanelToolLayoutHandler(publisherTools.tools);
-        this.statsGridPanelHandler = new ToolPanelHandler(statsgridTools);
+        this.statsGridPanelHandler = new StatsGridPanelHandler(this.statsgridTools, this.sandbox, (visible) => this.toggleStatsGridPanel(visible));
+        // we need this state listener set exactly once regardless if the panel is visible at first or not since it might become visible later
         const showStatsGridPanel = this.statsGridPanelHandler.init(data);
+        this.statsGridPanelHandler.addStateListener((params) => {
+            this.updateStatsgridPanel();
+        });
 
         /** general info - panel */
         this.generalInfoPanelHandler.init(data);
@@ -133,12 +138,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         }
 
         if (showStatsGridPanel) {
-            this.statsGridPanelHandler.addStateListener(() => this.updateStatsgridPanel());
-            collapseItems.push({
-                key: PANEL_STATSGRID_ID,
-                label: Oskari.getMsg('Publisher2', 'BasicView.statsgrid.label'),
-                children: this.renderStatsGridPanel()
-            });
+            collapseItems.push(this.getStatsGridPanelItem());
         }
 
         this.updateState({
@@ -153,7 +153,7 @@ class PublisherSidebarUIHandler extends StateHandler {
      * to do partial re-rendering this way (so we won't have to regenerate every panel from scratch each time a keystroke happens in name - field of generalinfo).
      */
     updateGeneralInfoPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const generalInfoPanel = newCollapseItems.find(item => item.key === PANEL_GENERAL_INFO_ID);
         generalInfoPanel.children = this.renderGeneralInfoPanel();
         this.updateState({
@@ -171,7 +171,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateMapPreviewPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_MAPPREVIEW_ID);
         panel.children = this.renderMapPreviewPanel();
         this.updateState({
@@ -189,7 +189,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateMapLayersPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_MAPLAYERS_ID);
         panel.children = this.renderMapLayersPanel();
         this.updateState({
@@ -207,7 +207,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateMapToolsPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_MAPTOOLS_ID);
         panel.children = this.renderMapToolsPanel();
         this.updateState({
@@ -225,7 +225,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateRpcPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_RPC_ID);
         panel.children = this.renderRpcPanel();
         this.updateState({
@@ -243,7 +243,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateLayoutPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_LAYOUT_ID);
         panel.children = this.renderLayoutPanel();
         this.updateState({
@@ -265,7 +265,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     updateToolLayoutPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_TOOL_LAYOUT_ID);
         panel.children = this.renderToolLayoutPanel();
         this.updateState({
@@ -289,9 +289,39 @@ class PublisherSidebarUIHandler extends StateHandler {
         </div>;
     }
 
+    getStatsGridPanelItem () {
+        return {
+            key: PANEL_STATSGRID_ID,
+            label: Oskari.getMsg('Publisher2', 'BasicView.statsgrid.label'),
+            children: this.renderStatsGridPanel()
+        };
+    }
+
+    toggleStatsGridPanel (visible) {
+        const newCollapseItems = this.getState().collapseItems
+            .filter(item => item.key !== PANEL_STATSGRID_ID);
+
+        if (visible) {
+            // this is empty when thematic maps was off by default. We gotta gather these tools somehow
+            const hasTools = this.statsGridPanelHandler.initTools();
+            if (hasTools) {
+                const statsGridPanelItem = this.getStatsGridPanelItem();
+                newCollapseItems.push(statsGridPanelItem);
+            }
+        }
+
+        this.updateState({
+            collapseItems: newCollapseItems
+        });
+    }
+
     updateStatsgridPanel () {
-        const newCollapseItems = this.getState().collapseItems.map(item => item);
+        const newCollapseItems = [...this.getState().collapseItems];
         const panel = newCollapseItems.find(item => item.key === PANEL_STATSGRID_ID);
+
+        if (!panel) {
+            return;
+        }
         panel.children = this.renderStatsGridPanel();
         this.updateState({
             collapseItems: newCollapseItems

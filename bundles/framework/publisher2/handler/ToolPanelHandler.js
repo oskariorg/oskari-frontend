@@ -3,7 +3,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 class UIHandler extends StateHandler {
     constructor (tools, consumer) {
         super();
-        this.toolsToInit = tools ? [...tools] : [];
+        this.allAvailableTools = tools ? [...tools] : [];
         this.setState({
             tools: []
         });
@@ -12,26 +12,31 @@ class UIHandler extends StateHandler {
         }
     }
 
-    init (data) {
+    init (data, silent) {
         this.data = data;
-        while (this.toolsToInit.length) {
-            const tool = this.toolsToInit.shift();
+        this.state = {
+            tools: []
+        };
+
+        this.allAvailableTools.forEach((tool) => {
             try {
                 tool.init(data);
                 if (tool.isDisplayed(data)) {
-                    this._addToolToState(tool);
+                    this._addToolToState(tool, silent);
                 }
             } catch (err) {
                 Oskari.log('ToolPanelHandler').error('Error initializing publisher tool:', tool);
             }
-        }
+        });
+
         const { tools } = this.getState();
         return tools.length > 0;
     }
 
-    _addToolToState (tool) {
+    _addToolToState (tool, silent) {
         const toolComponent = tool.getComponent();
-        if (toolComponent.handler) {
+        // silent flag added for statsgrid's purposes
+        if (toolComponent.handler && !silent) {
             toolComponent.handler.addStateListener(() => this.notify());
         }
         const { id, title, hideCheckbox } = tool.getTool();
