@@ -35,6 +35,10 @@ Was provided by `catalogue/metadatacatalogue` and this was technically still pre
 
 Was provided by `catalogue/metadataflyout`, but it was not used so it was not implemented on the new `metadataflyout` bundle implementation.
 
+### [rem] Removed parallel version for `statsgrid` bundle
+
+The new implementation has been in `bundles/statistics/statsgrid` for some time already so the older version from `bundles/statistics/statsgrid2016` was been removed.
+
 ## 2.14.0
 
 ### [add] Added new implementation for `metadataflyout` bundle
