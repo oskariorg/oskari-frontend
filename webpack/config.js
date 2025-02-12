@@ -131,17 +131,6 @@ const getModuleRules = (isProd = false, antThemeFile) => {
             test: /\.js$/,
             loader: require.resolve('@open-wc/webpack-import-meta-loader')
         },
-        {
-            test: require.resolve('sumoselect'),
-            use: [{
-                loader: 'imports-loader',
-                options: {
-                    imports: [
-                        'side-effects sumoselect'
-                    ]
-                }
-            }]
-        },
         BABEL_LOADER_RULE,
         ...styleFileRules,
         {
