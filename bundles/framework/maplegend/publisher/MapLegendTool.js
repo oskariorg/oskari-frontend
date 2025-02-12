@@ -1,6 +1,7 @@
 import { AbstractPublisherTool } from '../../../framework/publisher2/tools/AbstractPublisherTool';
 
 const BUNDLE_ID = 'maplegend';
+
 class MapLegendTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
@@ -22,6 +23,7 @@ class MapLegendTool extends AbstractPublisherTool {
     }
 
     init (data) {
+        this.data = data;
         const myData = data?.configuration[BUNDLE_ID];
         if (myData) {
             this.storePluginConf(myData.conf);
@@ -35,6 +37,17 @@ class MapLegendTool extends AbstractPublisherTool {
     }
 
     onLayersChanged () {
+        const { alreadyInitialized } = this.state;
+        const layers = [...this.getSandbox().findAllSelectedMapLayers()];
+        const confLayers = this.data?.configuration?.mapfull?.conf?.layers || [];
+        if (layers?.length === confLayers?.length && !alreadyInitialized) {
+            this.state.alreadyInitialized = true;
+            if (this.data?.configuration && this.data?.configuration[BUNDLE_ID] && !this.isDisabled()) {
+                this.setEnabled(true);
+                return;
+            }
+        }
+
         if (this.isEnabled() && this.isDisabled()) {
             // disable if layers changed and there is no longer layers with legends on map
             this.setEnabled(false);
