@@ -218,7 +218,7 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
                 };
                 return;
             }
-            const features = getMVTFeaturesInExtent(layerImpls[0].getSource(), extent);
+            const features = getMVTFeaturesInExtent(layerImpls[0], extent);
             if (!features) {
                 return;
             }
