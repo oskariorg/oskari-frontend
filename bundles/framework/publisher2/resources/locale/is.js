@@ -93,17 +93,6 @@ Oskari.registerLocalization(
                 "label": "Þemakort",
                 "tooltip": "Sýna þemakort á kortinu."
             },
-            /* for deprecated statsgrid2016 */
-            "data": {
-                "label": "Þemakort",
-                "tooltip": "Sýna þemakort á kortinu.",
-                "grid": "Sýna þemagögn í töflunni.",
-                "allowClassification": "Leyfa flokkun",
-                "transparent": "Set classification background transparent",
-                "displayDiagram" : "Display charts",
-                "allowHidingClassification" : "Allow hiding classification",
-                "allowHidingSeriesControl" : "Allow hiding series player"
-            },
             "layout": {
                 "label": "Grafískt útlit",
                 "fields": {
