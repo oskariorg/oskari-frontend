@@ -6,7 +6,7 @@ import { Message, Select } from 'oskari-ui';
 import { PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { manualClassificationEditor } from './editor';
 import { getMethodOptions } from '../../helper/ClassificationHelper';
-import '../../../statsgrid2016/resources/scss/manualClassification.scss';
+import '../../../statsgrid/resources/scss/manualClassification.scss';
 
 const BUNDLE_KEY = 'StatsGrid';
 
