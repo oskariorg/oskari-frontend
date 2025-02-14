@@ -108,15 +108,6 @@ Oskari.registerLocalization(
                 "label": "Cartes thématiques",
                 "tooltip": "Afficher les cartes thématiques sur la carte."
             },
-            /* for deprecated statsgrid2016 */
-            "data": {
-                "label": "Cartes thématiques",
-                "tooltip": "Afficher les cartes thématiques sur la carte.",
-                "grid": "Afficher les données thématiques dans le tableau",
-                "allowClassification": "Permettre la classification",
-                "transparent": "Établir l'arrière-plan transparent de la classification",
-                "displayDiagram": "Afficher les schémas"
-            },
             "layout": {
                 "label": "Représentation graphique",
                 "fields": {

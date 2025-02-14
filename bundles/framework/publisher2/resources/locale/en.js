@@ -117,17 +117,6 @@ Oskari.registerLocalization(
                 "label": "Thematic maps",
                 "tooltip": "Show thematic maps on the map."
             },
-            /* for deprecated statsgrid2016 */
-            "data": {
-                "label": "Thematic maps",
-                "tooltip": "Show thematic maps on the map.",
-                "grid": "Show thematic data in table",
-                "allowClassification": "Allow classification",
-                "transparent": "Set classification background transparent",
-                "displayDiagram" : "Display charts",
-                "allowHidingClassification" : "Allow hiding classification",
-                "allowHidingSeriesControl" : "Allow hiding series player"
-            },
             "layout": {
                 "label": "Graphic Layout",
                 "title": {

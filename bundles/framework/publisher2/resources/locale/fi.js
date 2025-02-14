@@ -117,17 +117,6 @@ Oskari.registerLocalization(
                 "label": "Teemakartat",
                 "tooltip": "Näytä tilastotiedot taulukossa kartan yhteydessä."
             },
-            /* for deprecated statsgrid2016 */
-            "data": {
-                "label": "Teemakartat",
-                "tooltip": "Näytä tilastotiedot taulukossa kartan yhteydessä.",
-                "grid": "Näytä tilastotiedot taulukossa",
-                "allowClassification": "Salli luokittelu",
-                "transparent": "Aseta luokittelun tausta läpinäkyväksi",
-                "displayDiagram" : "Näytä pylväsdiagrammi",
-                "allowHidingClassification" : "Salli luokittelun piilottaminen",
-                "allowHidingSeriesControl" : "Salli sarjatoistimen piilottaminen"
-            },
             "layout": {
                 "label": "Ulkoasu",
                 "title": {
