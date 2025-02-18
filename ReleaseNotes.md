@@ -8,6 +8,33 @@ Removed bundles:
 - `catalogue/metadatacatalogue` replaced by `catalogue/metadatasearch`
 - `catalogue/metadataflyout` replaced by `catalogue/metadata`
 
+### Changes for bundle registrations 
+
+In preparation of removing the packages-folder from oskari-frontend and migrating any bundle.js files under it to bundles-folder as index.js files.
+
+import 'oskari-loader!oskari-frontend/packages/admin/bundle/admin/bundle.js';
+
+New loaders for application main.js usage:
+- `oskari-bundle` replaces oskari-loader and supports more streamlined bundle registrations
+- `oskari-lazy-bundle` replaces oskari-lazy-loader for adding support to lazy-load bundles with the streamlined bundle registration
+
+This allows linking bundles like this:
+```
+import 'oskari-bundle!oskari-frontend/bundles/admin/admin';
+```
+instead of:
+```
+import 'oskari-loader!oskari-frontend/packages/admin/bundle/admin/bundle.js';
+```
+and removes the unnecessary complication that comes with the packages-folder.
+
+These changes shouldn't really affect your app, but things that have changed inside the "engine":
+
+- New core component `src/BundleRegister` for managing bundles and exposes Oskari.bundle() (previously part of src/loader.js) and Oskari.lazyBundle() functions.
+- Oskari.bundle_manager functions removed:
+    - registerDynamic() - replaced by BundleRegister.lazyBundle() that is exposed as Oskari.lazyBundle()
+    - loadDynamic() - moved to src/loader.js as private function as it doesn't need to be exposed
+
 ## 2.14.2
 
 For a full list of changes see:

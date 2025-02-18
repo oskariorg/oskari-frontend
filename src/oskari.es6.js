@@ -3,11 +3,12 @@
  *
  * A set of methods to support loosely coupled classes and instances for the mapframework
  */
-import Sequence from './counter.es6.js';
-import Logger from './logger.es6.js';
+import Sequence from './counter.es6';
+import Logger from './logger.es6';
 import pkg from '../package.json';
-import { DOMHelper } from './oskari.dom.js';
-import { Customization } from './oskari.customization.js';
+import { DOMHelper } from './oskari.dom';
+import { Customization } from './oskari.customization';
+import { BundleRegister } from './BundleRegister';
 
 const defaultSequence = new Sequence();
 const sequences = {};
@@ -59,6 +60,9 @@ const Oskari = {
         Oskari.log('Oskari').deprecated('getDefaultMarker', 'Use Oskari.custom.getMarker() instead');
         return Customization.getMarker();
     },
+    // from BundleRegister.js
+    bundle: BundleRegister.bundle,
+    lazyBundle: BundleRegister.lazyBundle,
     // from oskari.customization.js
     custom: Customization,
     // from oskari.dom

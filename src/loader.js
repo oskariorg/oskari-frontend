@@ -1,38 +1,8 @@
 /**
- * Bundle register.
- * Usage:
- *
- *     // get
- *     var bundledetails = Oskari.bundle('mybundle');
- *     // set
- *     Oskari.bundle('mybundle', bundledetails);
- *
- * Details contain an object with:
- *    {
- *        clazz : instance of class defined in packages/.../bundle.js,
- *        metadata : metadata for above bundle.js including scripts to load for the bundle
- *    }
- *
- */
-(function (o) {
-    if (!o) {
-        // can't add bundle if no Oskari ref
-        return;
-    }
-    var _bundleRegistry = {};
-    // Add the bundle method to Oskari
-    o.bundle = function (bundleId, value) {
-        if (value) {
-            _bundleRegistry[bundleId] = value;
-        }
-        return _bundleRegistry[bundleId];
-    };
-}(Oskari));
-/**
  * Startupsequence processor for Oskari. Bundles have ether been bundled/minfied
  * into the application JS file or separate chunks. In both cases bundles must be
  * declared in miniferAppSetup.json
- * 
+ *
  * Usage:
  *
  *     var startupSequence = [...bundles to load/start... ];
@@ -52,14 +22,30 @@
     if (o.loader) {
         // loader already present, but we might want another?
     }
-    var log = Oskari.log('Loader');
-    var linkFile = function (href, rel, type) {
-        var importParentElement = document.head || document.body;
-        var linkElement = document.createElement('link');
+    const log = Oskari.log('Loader');
+    const linkFile = function (href, rel, type) {
+        const importParentElement = document.head || document.body;
+        const linkElement = document.createElement('link');
         linkElement.rel = rel || 'stylesheet';
         linkElement.type = type || 'text/css';
         linkElement.href = href;
         importParentElement.appendChild(linkElement);
+    };
+
+    /**
+     * @method loadDynamic
+     * Called to start dynamic loading of a bundle
+     *
+     * @param {string} bundlename Bundle name
+     *
+     * @return Promise that resolves when all modules have loaded
+     */
+    const loadDynamic = function (bundlename) {
+        const loaders = Oskari.lazyBundle(bundlename);
+        if (loaders) {
+            return Promise.all(loaders.map((l) => l.call()));
+        }
+        return null;
     };
 
     /**
@@ -97,7 +83,7 @@
              * @param  {Function} done callback
              */
             processSequence: function (done, suppressStartEvent = false) {
-                var me = this;
+                const me = this;
                 if (sequence.length === 0) {
                     // everything has been loaded
                     if (typeof done === 'function') {
@@ -108,7 +94,7 @@
                     }
                     return;
                 }
-                var seqToLoad = sequence.shift();
+                const seqToLoad = sequence.shift();
                 if (typeof seqToLoad !== 'object') {
                     // log warning: block not object
                     log.warn('StartupSequence item is a ' + typeof seqToLoad + ' instead of object. Skipping');
@@ -117,7 +103,7 @@
                     return;
                 }
 
-                var bundleToStart = seqToLoad.bundlename;
+                const bundleToStart = seqToLoad.bundlename;
                 if (!bundleToStart) {
                     log.warn('StartupSequence item doesn\'t contain bundlename. Skipping ', seqToLoad);
                     // iterate to next
@@ -125,8 +111,8 @@
                     return;
                 }
                 // if bundleinstancename is missing, use bundlename for config key.
-                var configId = seqToLoad.bundleinstancename || bundleToStart;
-                var config = appConfig[configId] || {};
+                const configId = seqToLoad.bundleinstancename || bundleToStart;
+                const config = appConfig[configId] || {};
 
                 if (Oskari.bundle(bundleToStart)) {
                     log.debug('Bundle preloaded ' + bundleToStart);
@@ -134,7 +120,7 @@
                     this.processSequence(done, suppressStartEvent);
                     return;
                 }
-                let bundlePromise = Oskari.bundle_manager.loadDynamic(bundleToStart);
+                const bundlePromise = loadDynamic(bundleToStart);
                 if (!bundlePromise) {
                     log.warn('Bundle wasn\'t preloaded nor registered as dynamic. Skipping ', bundleToStart);
                     this.processSequence(done, suppressStartEvent);
