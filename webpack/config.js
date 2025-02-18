@@ -1,7 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const getStyleFileRules = (isProd, antThemeFile) => {
+const getStyleFileRules = (isProd) => {
     const prodStyleConfig = {
         loader: MiniCssExtractPlugin.loader,
         options: {
@@ -9,15 +9,6 @@ const getStyleFileRules = (isProd, antThemeFile) => {
         }
     };
     const styleLoaderImpl = isProd ? prodStyleConfig : 'style-loader';
-
-    const lessLoaderOptions = {
-        javascriptEnabled: true
-    };
-    if (antThemeFile) {
-        lessLoaderOptions.modifyVars = {
-            hack: `true; @import "${antThemeFile}";`
-        };
-    };
 
     const rules = [
         {
@@ -33,17 +24,6 @@ const getStyleFileRules = (isProd, antThemeFile) => {
                 styleLoaderImpl,
                 { loader: 'css-loader', options: { } },
                 'sass-loader' // compiles Sass to CSS
-            ]
-        },
-        {
-            test: /\.less$/,
-            use: [
-                styleLoaderImpl,
-                { loader: 'css-loader' },
-                {
-                    loader: 'less-loader',
-                    options: lessLoaderOptions
-                }
             ]
         }
     ];
@@ -141,15 +121,6 @@ const getModuleRules = (isProd = false, antThemeFile) => {
                     options: {
                         outputPath: 'assets/'
                     }
-                }
-            ]
-        },
-        {
-            type: 'javascript/auto',
-            test: /minifierAppSetup.json$/,
-            use: [
-                {
-                    loader: path.resolve(__dirname, './minifierLoader.js')
                 }
             ]
         }
