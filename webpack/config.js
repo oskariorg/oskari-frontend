@@ -144,6 +144,7 @@ const RESOLVE_LOADER = {
     mainFields: ['loader', 'main'],
     alias: {
         'oskari-loader': path.resolve(__dirname, './oskariLoader.js'),
+        'oskari-bundle': path.resolve(__dirname, './oskariBundleLoader.js'),
         'oskari-lazy-loader': path.resolve(__dirname, './oskariLazyLoader.js')
     }
 };
