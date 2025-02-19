@@ -71,18 +71,17 @@
      *         }
      * @param  {Object}   config          configuration for bundles
      */
-    var loader = function (startupSequence, config) {
-        var sequence = [];
+    const loader = function (startupSequence, config) {
+        let sequence = [];
         if (startupSequence && typeof startupSequence.slice === 'function') {
             sequence = startupSequence.slice(0);
         } else {
             log.warn('No startupsequence given to loader or sequence is not an array');
         }
-        var appConfig = config || {};
+        const appConfig = config || {};
 
-        var globalExpose = {};
         // Listen to started bundles
-        var result = {
+        const result = {
             bundles: [],
             errors: []
         };
@@ -94,7 +93,7 @@
         });
 
         return {
-            /** 
+            /**
              * @param  {Function} done callback
              */
             processSequence: function (done, suppressStartEvent = false) {
@@ -152,20 +151,26 @@
                     });
             },
             startBundle: function (bundleId, config, instanceId) {
-                var bundle = Oskari.bundle(bundleId);
+                const bundle = Oskari.bundle(bundleId);
                 if (!bundle) {
                     throw new Error('Bundle not loaded ' + bundleId);
                 }
-                var instance = bundle.clazz.create();
+                let instance;
+                if (typeof bundle === 'function') {
+                    instance = bundle();
+                } else {
+                    // assume old bundle def
+                    instance = bundle.clazz.create();
+                }
                 if (!instance) {
                     throw new Error('Couldn\'t create an instance of bundle ' + bundleId);
                 }
                 instance.mediator = {
-                    bundleId: bundleId,
-                    instanceId: instanceId
+                    bundleId,
+                    instanceId
                 };
                 // quick'n'dirty property injection
-                for (var key in config) {
+                for (const key in config) {
                     instance[key] = config[key];
                 }
                 log.debug('Starting bundle ' + bundleId);
