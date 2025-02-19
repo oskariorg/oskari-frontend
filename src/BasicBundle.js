@@ -29,13 +29,21 @@ Oskari.clazz.define('Oskari.BasicBundle', function () {
     },
 
     /**
+     * Returns reference to the application sandbox.
+     * Sandbox is used for interacting with other bundles
+     * @memberof BasicBundle
+     */
+    getSandbox: function () {
+        return this.sandbox;
+    },
+    /**
      * @memberof BasicBundle
      * @param {Oskari.mapframework.event.Event} event A Oskari event object.
      * Event is handled forwarded to correct {@link BasicBundle#eventHandlers|eventHandler}
      * if found or discarded if not.
      */
     onEvent: function (event) {
-        var handler = this.eventHandlers[event.getName()];
+        const handler = this.eventHandlers[event.getName()];
         if (!handler) {
             return;
         }
@@ -101,5 +109,5 @@ Oskari.clazz.define('Oskari.BasicBundle', function () {
         sandbox.unregister(this);
     }
 }, {
-    'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+    protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });
