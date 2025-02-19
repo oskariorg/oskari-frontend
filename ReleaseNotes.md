@@ -12,7 +12,6 @@ Removed bundles:
 
 In preparation of removing the packages-folder from oskari-frontend and migrating any bundle.js files under it to bundles-folder as index.js files.
 
-import 'oskari-loader!oskari-frontend/packages/admin/bundle/admin/bundle.js';
 
 New loaders for application main.js usage:
 - `oskari-bundle` replaces oskari-loader and supports more streamlined bundle registrations
