@@ -1,29 +1,27 @@
-
 (function (o) {
     if (!o || !o.clazz) {
         // can't add loader if no Oskari ref
         return;
     }
-    var log = Oskari.log('Oskari.BundleManager');
+    const log = Oskari.log('Oskari.BundleManager');
     /**
      * singleton instance of the class system
      */
-    var cs = o.clazz;
+    const cs = o.clazz;
 
     /* legacy Bundle_manager */
 
     /**
      * @singleton @class Oskari.Bundle_manager
      */
-    var BundleManager = function () {
+    const BundleManager = function () {
         this.clazz = o.clazz;
-        var me = this;
+        const me = this;
         me.serial = 0;
         me.bundleDefinitions = {};
         me.sources = {};
         me.bundleInstances = {};
         me.bundles = {};
-        me.dynamicLoaders = {};
 
         /*
          * CACHE for lookups state management
@@ -55,8 +53,8 @@
          * @private @method _purge
          */
         _purge: function () {
-            var p;
-            var me = this;
+            let p;
+            const me = this;
 
             for (p in me.sources) {
                 if (me.sources.hasOwnProperty(p)) {
@@ -88,8 +86,8 @@
          *
          */
         _install: function (biid, bundleDefinition, srcFiles, bundleMetadata) {
-            var me = this;
-            var defState = me.bundleDefinitionStates[biid];
+            const me = this;
+            let defState = me.bundleDefinitionStates[biid];
 
             if (defState) {
                 defState.state = 1;
@@ -120,11 +118,11 @@
          *
          */
         installBundleClass: function (biid, className) {
-            var clazz = Oskari.clazz.create(className);
+            const clazz = Oskari.clazz.create(className);
             if (clazz) {
                 // Oskari.bundle is the new registry for requirejs loader
                 Oskari.bundle(biid, {
-                    clazz: clazz,
+                    clazz,
                     metadata: cs.getMetadata(className)
                 });
             }
@@ -141,10 +139,10 @@
          * @return {Object}      Bundle
          */
         createBundle: function (biid, bid) {
-            var bundle;
-            var bundleDefinition;
-            var me = this;
-            var bundleDefinitionState;
+            const me = this;
+            let bundle;
+            let bundleDefinition;
+            let bundleDefinitionState;
 
             if (biid === null || biid === undefined) {
                 throw new TypeError('createBundle(): Missing biid');
@@ -193,10 +191,10 @@
             // creates a bundle_instance
             // any configuration and setup IS BUNDLE / BUNDLE INSTANCE specific
             // create / config / start / process / stop / destroy ...
-            var me = this;
-            var bundle;
-            var bundleInstance;
-            var bundleInstanceId;
+            const me = this;
+            let bundle;
+            let bundleInstance;
+            let bundleInstanceId;
 
             if (bid === null || bid === undefined) {
                 throw new TypeError('createInstance(): Missing bid');
@@ -244,7 +242,7 @@
          * @return
          */
         _destroyInstance: function (biid) {
-            var bundleInstance;
+            let bundleInstance;
 
             if (biid === null || biid === undefined) {
                 throw new TypeError('_destroyInstance(): Missing biid');
@@ -255,34 +253,6 @@
             bundleInstance = null;
 
             return bundleInstance;
-        },
-        /**
-         * @method registerDynamic
-         * Register bundle for run-time loading with ES import()
-         *
-         * @param {string} bundlename Bundle name
-         * @param {Function} loader function that returns an promise that resolve to the module to be loaded
-         */
-        registerDynamic: function(bundlename, loader) {
-            if (!this.dynamicLoaders[bundlename]) {
-                this.dynamicLoaders[bundlename] = [];
-            }
-            this.dynamicLoaders[bundlename].push(loader);
-        },
-        /**
-         * @method loadDynamic
-         * Called to start dynamic loading of a bundle
-         *
-         * @param {string} bundlename Bundle name
-         *
-         * @return Promise that resolves when all modules have loaded
-         */
-        loadDynamic: function(bundlename) {
-            const loaders = this.dynamicLoaders[bundlename];
-            if (loaders) {
-                return Promise.all(loaders.map((l) => l.call()));
-            }
-            return null;
         }
     };
 
