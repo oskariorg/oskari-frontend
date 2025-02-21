@@ -70,6 +70,38 @@ export class BasicBundleInstance extends BaseModule {
         }
     }
 
+    // FIXME: this doesn't work:
+    /*
+    This was the plan:
+```
+class BaseRequest {
+    constructor (name = 'BaseRequest' + Oskari.getSeq('BaseModule').nextVal()) {
+        this.name = name;
+    }
+
+    getName () {
+        return this.name;
+    }
+}
+
+class HelloRequest extends BaseRequest {
+    constructor(id) {
+        super('HelloRequest');
+        this._id = id;
+    }
+
+    getId () {
+        return this._id;
+    }
+};
+```
+Then on bundle:
+```
+    this.registerRequestImpl(HelloRequest);
+    this.addRequestHandler('HelloRequest', (req) => console.log(req));
+```
+Or even just: `this.addRequestHandler(HelloRequest, (req) => console.log(req));`
+     */
     registerRequestImpl (bundleRequestClass) {
         // we should find a way for es classes to register for metadata without creating the random name
         Oskari.clazz.defineES('Oskari.random.Request' + Oskari.getSeq('BaseRequest').nextVal(), bundleRequestClass, {
