@@ -1,28 +1,43 @@
-export class BasicBundleInstance {
-    constructor (name = 'BasicBundleInstance') {
-        // override
-        this._name = name;
+import { BaseModule } from './BaseModule';
+
+const DEFAULT_NAME = 'BasicBundleInstance';
+
+export class BasicBundleInstance extends BaseModule {
+    constructor (name = DEFAULT_NAME) {
+        super(name);
         this._loc = undefined;
-        this._sandbox = undefined;
-        this._listeners = {
-            event: Oskari.createStore('listener'),
-            request: Oskari.createStore('handler')
-        };
+        this._requestHandlers = undefined;
     }
 
-    getName () {
-        if (this._name !== 'BasicBundleInstance') {
-            // default overridden
-            return this._name;
-        }
-        if (this.mediator?.bundleId) {
-            this._name = this.mediator.bundleId;
-        } else {
-            Oskari.log('BasicBundleInstance').warn('Defaulting name to bundle id:', this._name);
-        }
-        return this._name;
+    /**
+     * This is the starting point of the bundle. This gets run when the bundle is started by the AppSetup loader.
+     * This is probably the function you want to override, but remember to call super.start(sandbox) to skip the boilerplate code.
+     * @param {Oskari.Sandbox} sandbox the sandbox this module operates in
+     */
+    start (sandbox) {
+        // do the usual startup like registering to sandboc
+        super.start(sandbox);
+        // start() here is for documentation purposes as it's something bundles will likely override
     }
 
+    /**
+     * If you need to do any cleanup when the bundle is stopped, this is the place to do it.
+     * If you override this, remember to call super.stop() that handles the usual cleanup for event listeners and request handlers.
+     */
+    stop () {
+        // do the usual
+        super.stop();
+        // and remove any requests handlers in case the bundle added some
+        this.removeRequestHandler();
+    }
+
+    /**
+     * Returns a localization for the given key and options args.
+     * Uses getName() for mapping localization file for this.
+     * @param {String} key localization key
+     * @param {Object} args arguments object with key: value pairs to be used in templating
+     * @returns the localized value
+     */
     loc (key, args) {
         if (!this._loc) {
             this._loc = Oskari.getMsg.bind(null, this.getName());
@@ -30,52 +45,18 @@ export class BasicBundleInstance {
         return this._loc(key, args);
     }
 
-    start (sandbox) {
-        this._sandbox = sandbox;
-        sandbox.register(this);
-    }
-
-    stop () {
-        this.off();
-        this.getSandbox().unregister(this);
-    }
-
-    getSandbox () {
-        return this._sandbox;
-    }
-
-    init () {
-        // called by sandbox when the bundle is registered to sandbox
-    }
-
-    on (eventName, handlerFn) {
-        if (!eventName) {
-            throw new Error('Tried to register listener without event name');
-        }
-        if (typeof handlerFn !== 'function') {
-            throw new Error('Tried to register listener for event without the handler');
-        }
-        // TODO: register to sandbox
-        this.getSandbox().registerForEventByName(this, eventName);
-        this._listeners.event.listener(eventName, handlerFn);
-    }
-
-    off (eventName) {
-        if (eventName) {
-            this.getSandbox().unregisterFromEventByName(this, eventName);
-            this._listeners.event.reset(eventName);
-        } else {
-            // if not defined, remove all listeners
-            this._listeners.event.listener().forEach(evtName => this.off(evtName));
-        }
-    }
-
     addRequestHandler (requestName, handlerFn) {
         if (!requestName) {
             throw new Error('Tried to register handler without request name');
         }
+        if (typeof handlerFn !== 'function') {
+            throw new Error(`Tried to register handler for ${requestName} without handlerFn`);
+        }
+        if (!this._requestHandlers) {
+            this._requestHandlers = Oskari.createStore('handler');
+        }
         this.getSandbox().requestHandler(requestName, (req) => handlerFn(req));
-        this._listeners.request.handler(requestName, handlerFn);
+        this._requestHandlers.handler(requestName, handlerFn);
     }
 
     removeRequestHandler (requestName) {
@@ -85,17 +66,32 @@ export class BasicBundleInstance {
             this._listeners.request.reset(requestName);
         } else {
             // remove all request handlers
-            this._listeners.request.handler().forEach(reqName => this.requestHandler(reqName));
+            this._listeners.request.handler().forEach(reqName => this.removeRequestHandler(reqName));
         }
     }
 
-    // called by sandbox when event this listens has been triggered
-    // this is framework function, use on() to register listeners.
-    onEvent (event) {
-        const handler = this._listeners.event.listener(event.getName());
-        if (!handler) {
-            return;
+    registerRequestImpl (bundleRequestClass) {
+        // we should find a way for es classes to register for metadata without creating the random name
+        Oskari.clazz.defineES('Oskari.random.Request' + Oskari.getSeq('BaseRequest').nextVal(), bundleRequestClass, {
+            protocol: ['Oskari.mapframework.request.Request']
+        });
+    }
+
+    // jump through some additional hoops to default name as the bundleId if it hasn't been overridden
+    /**
+     * Tries to use bundle id as name if name isn't given for constructor
+     * @returns String the name of the bundle (used for referencing on sandbox, mapping the correct localization file)
+     */
+    getName () {
+        if (this._name !== DEFAULT_NAME) {
+            // default has been overridden
+            return this._name;
         }
-        return handler(event);
+        if (this.mediator?.bundleId) {
+            this._name = this.mediator.bundleId;
+        } else {
+            Oskari.log('BasicBundleInstance').info('Defaulting name to bundle id:', this._name);
+        }
+        return this._name;
     }
 };
