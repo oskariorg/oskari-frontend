@@ -12,7 +12,49 @@ Oskari.registerLocalization(
             "title": "Rätter för kartlager",
             "instruction": "Börja med att välja en roll",
             "unsavedChangesConfirm": "Du kommer att förlora dina osparade ändringar, vill du fortsätta?",
-            "name": "Kartlager"
+            "name": "Kartlager",
+            "select": {
+                "label": "Välja",
+                "placeholder": "sammanfattning eller roll",
+                "summary": "Sammanfattningar",
+                "permissions": "Rollbehörigheter",
+                "layer": "Kartlagerdetaljer"
+            },
+            "summary": {
+                "published": "Publicerat",
+                "publishedTooltip": "Gästanvändare kan se lagret i publicerat vy.",
+                "anonymous": "Gäst",
+                "user": "Inloggad",
+                "admin": "Admin",
+                "otherRoles": "Ytterligare roller",
+                "otherRigthts": "{roles} 5 ytterligare roller har {permissions} behörigheter",
+                "otherTooltip": "Behörigheter inställda för roller: {names}",
+                "filter": {
+                    "adminOnly": "Endast admin",
+                    "default": "Standardrättigheter",
+                    "hasOthers": "Ytterligare roller",
+                    "systemOnly": "Endast systemroller",
+                    'unpublished': "Opublicerad"
+                }
+            },
+            "layer": {
+                "name": "Namn",
+                "type": "Typ",
+                "version": "Version",
+                "fi": "Finska",
+                "en": "Engelska",
+                "sv": "Svensk",
+                "provider": "Källa",
+                "groups": "Tema",
+                "opacity": "Opacitet",
+                "legend": "Förklaring",
+                "filter": {
+                    "localization": "Översättningar saknas",
+                    "metadata": "Metadata saknas",
+                    "legend": "Förklaringen saknas",
+                    "scale": "Ogiltig skala"
+                }
+            }
         },
         "permissions": {
             "type": {

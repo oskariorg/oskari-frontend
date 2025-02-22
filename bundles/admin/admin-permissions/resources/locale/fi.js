@@ -10,9 +10,51 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Karttatasojen oikeuksien hallinta",
-            "instruction": "Aloita valitsemalla rooli",
+            "instruction": "Aloita valitsemalla yhteenveto tai rooli",
             "unsavedChangesConfirm": "Tallentamattomat muutoksesi häviävät, haluatko jatkaa?",
             "name": "Karttataso",
+            "select": {
+                "label": "Valitse",
+                "placeholder": "yhteenveto tai rooli",
+                "summary": "Yhteenvedot",
+                "permissions": "Roolien oikeudet",
+                "layer": "Karttatasojen tiedot"
+            },
+            "summary": {
+                "published": "Upotus",
+                "publishedTooltip": "Vierailijan katseluoikeus upotetussa kartassa",
+                "anonymous": "Vierailija",
+                "user": "Kirjautunut",
+                "admin": "Ylläpitäjä",
+                "otherRoles": "Lisäroolit",
+                "otherRigthts": "{roles} lisäroolilla on {permissions} oikeutta",
+                "otherTooltip": "Oikeuksia on rooleilla: {names}",
+                "filter": {
+                    "adminOnly": "Vain admin",
+                    "default": "Oletusoikeudet",
+                    "hasOthers": "Oikeuksia lisärooleilla",
+                    "systemOnly": "Vain perusrooleilla",
+                    'unpublished': "Ei julkaistu vierailijalle"
+                }
+            },
+            "layer": {
+                "name": "Nimi",
+                "type": "Tyyppi",
+                "version": "Versio",
+                "fi": "Suomi",
+                "en": "Englanti",
+                "sv": "Ruotsi",
+                "provider": "Lähde",
+                "groups": "Aihe",
+                "opacity": "Läpinäkyvyys",
+                "legend": "Selite",
+                "filter": {
+                    "localization": "Puutteelliset kielistykset",
+                    "metadata": "Metadata puuttuu",
+                    "legend": "Karttaselite puuttuu",
+                    "scale": "Virheellinen mittakaava"
+                }
+            }
         },
         "permissions": {
             "type": {
