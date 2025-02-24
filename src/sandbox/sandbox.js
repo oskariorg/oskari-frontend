@@ -48,7 +48,7 @@
             me.requestAndEventGather = [];
             me._eventLoopGuard = 0;
         }, {
-            getLog : function() {
+            getLog: function () {
                 return log;
             },
             /**
@@ -56,7 +56,7 @@
              * @param  {String}  requestName request to check
              * @return {Boolean}             true if request is being handled.
              */
-            hasHandler : function(requestName) {
+            hasHandler: function (requestName) {
                 return !!requestHandlers[requestName] && !!Oskari.requestBuilder(requestName);
             },
             /**
@@ -65,7 +65,7 @@
              * @return {Boolean}          true if debug is enabled
              */
             debug: function (setDebug) {
-                if(typeof setDebug === 'undefined') {
+                if (typeof setDebug === 'undefined') {
                     // getter
                     return isDebugMode;
                 }
@@ -279,14 +279,21 @@
              * @return {Boolean} Returns true, if request was handled, false otherwise
              */
             processRequest: function (request) {
-                var requestName = request.getName();
+                const requestName = request.getName();
 
-                var handlerClsInstance = this.requestHandler(requestName);
-                if (!handlerClsInstance || typeof handlerClsInstance.handleRequest !== 'function') {
+                const handlerClsInstance = this.requestHandler(requestName);
+                if (!handlerClsInstance) {
                     log.warn('No handler for request', requestName);
                     return;
                 }
-                handlerClsInstance.handleRequest.apply(handlerClsInstance, [undefined, request]);
+                if (typeof handlerClsInstance?.handleRequest === 'function') {
+                    // used to send reference to "core" as first param, but it's now always undefined
+                    handlerClsInstance.handleRequest(undefined, request);
+                } else if (typeof handlerClsInstance === 'function') {
+                    handlerClsInstance(request);
+                } else {
+                    log.warn('No handler for request', requestName);
+                }
             },
 
             /**
@@ -336,16 +343,16 @@
              * @param {Array} requestArgs (optional)
              */
             postRequestByName: function (requestName, requestArgs, syncDoNotUseWillBeRemoved) {
-                var me = this,
-                    requestBuilder = Oskari.requestBuilder(requestName);
+                const me = this;
+                const requestBuilder = Oskari.requestBuilder(requestName);
                 if (!requestBuilder || !this.hasHandler(requestName)) {
                     log.warn('Trying to post request', requestName, 'that is undefined or missing a handler. Skipping!');
                     return;
                 }
-                var handleReg = function () {
-                    var request = requestBuilder.apply(me, requestArgs || []),
-                        creatorComponent = me.postMasterComponent,
-                        rv = null;
+                const handleReg = function () {
+                    var request = requestBuilder.apply(me, requestArgs || []);
+                    const creatorComponent = me.postMasterComponent;
+                    let rv = null;
 
                     request._creator = creatorComponent;
 
@@ -365,14 +372,12 @@
                     if (me.debug()) {
                         me._debugPopRequest();
                     }
-
                 };
-                if(syncDoNotUseWillBeRemoved) {
+                if (syncDoNotUseWillBeRemoved) {
                     handleReg();
                 } else {
                     window.setTimeout(handleReg, 0);
                 }
-
             },
 
             /**
@@ -487,12 +492,12 @@
              * @param {String} requestName - name of the request
              * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
              */
-            requestHandler : function(requestName, handler) {
-                if(typeof handler === 'undefined') {
+            requestHandler: function (requestName, handler) {
+                if (typeof handler === 'undefined') {
                     // getter
                     return requestHandlers[requestName];
                 }
-                if(requestHandlers[requestName] && handler !== null) {
+                if (requestHandlers[requestName] && handler !== null) {
                     log.warn('Overwriting request handler for "' + requestName + '"!!');
                 }
                 // setter, removal with handler value <null>
