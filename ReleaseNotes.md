@@ -8,8 +8,12 @@ Removed bundles:
 - `catalogue/metadatacatalogue` replaced by `catalogue/metadatasearch`
 - `catalogue/metadataflyout` replaced by `catalogue/metadata`
 
-Moved bundles from under `packages` to `bundles`:
-- admin/bundle/admin-announcements/bundle.js -> admin/admin-announcements/index.js
+Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader syntax:
+
+- bundles/admin/admin-layeranalytics/bundle.js -> bundles/admin/admin-layeranalytics/
+
+- packages/admin/bundle/admin-announcements/bundle.js -> bundles/admin/admin-announcements/
+- packages/admin/bundle/admin-layereditor/bundle.js -> bundles/admin/admin-layereditor/
 
 
 ### Changes for bundle registrations 
