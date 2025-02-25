@@ -1,5 +1,7 @@
 import { showMetadataFlyout } from './view/MetadataFlyout';
 import { MetadataHandler } from './handler/MetadataHandler';
+import './request/ShowMetadataRequest';
+import './request/ShowMetadataRequestHandler';
 
 Oskari.clazz.define('Oskari.catalogue.bundle.metadata.MetadataBundleInstance',
     function () {
