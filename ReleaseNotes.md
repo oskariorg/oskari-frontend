@@ -17,6 +17,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/admin/bundle/admin-permissions/bundle.js -> bundles/admin/admin-permissions/
 - packages/admin/bundle/appsetup/bundle.js -> bundles/admin/appsetup/
 - packages/admin/bundle/metrics/bundle.js -> bundles/admin/metrics/
+- packages/catalogue/metadatasearch/bundle.js -> bundles/catalogue/metadatasearch/
 
 
 ### Changes for bundle registrations 
