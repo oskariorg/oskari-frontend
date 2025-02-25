@@ -15,6 +15,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/admin/bundle/admin-announcements/bundle.js -> bundles/admin/admin-announcements/
 - packages/admin/bundle/admin-layereditor/bundle.js -> bundles/admin/admin-layereditor/
 - packages/admin/bundle/admin-permissions/bundle.js -> bundles/admin/admin-permissions/
+- packages/admin/bundle/appsetup/bundle.js -> bundles/admin/appsetup/
 
 
 ### Changes for bundle registrations 
