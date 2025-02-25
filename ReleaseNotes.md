@@ -8,6 +8,10 @@ Removed bundles:
 - `catalogue/metadatacatalogue` replaced by `catalogue/metadatasearch`
 - `catalogue/metadataflyout` replaced by `catalogue/metadata`
 
+Moved bundles from under `packages` to `bundles`:
+- admin/bundle/admin-announcements/bundle.js -> admin/admin-announcements/index.js
+
+
 ### Changes for bundle registrations 
 
 In preparation of removing the packages-folder from oskari-frontend and migrating any bundle.js files under it to bundles-folder as index.js files.
