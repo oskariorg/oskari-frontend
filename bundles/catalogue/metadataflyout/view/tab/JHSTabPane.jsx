@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Title, LabeledItem, Images, Content, ResponsibleParties } from './';
+import { Title, LabeledItem, Images, Content, ResponsibleParties } from '.';
 
 export const JHSTabPane = ({ metadata, identification, showFullGraphics, controller }) => {
     return (

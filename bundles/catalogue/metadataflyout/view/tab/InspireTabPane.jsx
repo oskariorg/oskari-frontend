@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Title, LabeledItem, Images, Content, DataQualities, ResponsibleParties } from './';
+import { Title, LabeledItem, Images, Content, DataQualities, ResponsibleParties } from '.';
 
 export const InspireTabPane = ({ metadata, identification, showFullGraphics, controller }) => {
     return (

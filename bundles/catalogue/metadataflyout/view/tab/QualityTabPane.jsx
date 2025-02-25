@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LabeledItem, DataQualities, Content } from './';
+import { LabeledItem, DataQualities, Content } from '.';
 
 export const QualityTabPane = ({ metadata }) => {
     return (

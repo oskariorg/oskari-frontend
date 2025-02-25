@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, Link, Button } from 'oskari-ui';
-import { Content, Label } from './';
+import { Content, Label } from '.';
 
 const LayerList = styled.ul`
     list-style-type: none;

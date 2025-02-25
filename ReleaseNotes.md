@@ -11,6 +11,7 @@ Removed bundles:
 Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader syntax:
 
 - bundles/admin/admin-layeranalytics/bundle.js -> bundles/admin/admin-layeranalytics/
+- bundles/catalogue/metadata/bundle.js -> bundles/catalogue/metadataflyout/
 
 - packages/admin/bundle/admin-announcements/bundle.js -> bundles/admin/admin-announcements/
 - packages/admin/bundle/admin-layereditor/bundle.js -> bundles/admin/admin-layereditor/
