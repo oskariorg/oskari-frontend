@@ -320,8 +320,24 @@ Oskari.registerLocalization(
                 "PUBLISH": "Publish",
                 "VIEW_LAYER": "View",
                 "DOWNLOAD": "Download",
-                "VIEW_PUBLISHED": "View in Embedded map",
-                "role": "Role"
+                "VIEW_PUBLISHED": "View in Embedded map"
+            },
+            "permissions": {
+                "role": "Role",
+                "default": "Default permissions",
+                "onlyAdmin": "Only admin",
+                "published": "Published",
+                "removeOther": "Remove from additional roles",
+                "confirm": {
+                    "remove": "Remove {count} permissions from the map layer?",
+                    "override": "Layer has permissions for system roles. Do you want to set default permissions?"
+                },
+                "tooltip": {
+                    "default": "Set default permissions for the layer (view, publish and view published)",
+                    "onlyAdmin": "To set the layer visible only for admin users. You can add also permissions for additional roles to limit visibility.",
+                    "published": "Guest user can view the map layer in published/embedded map.",
+                    "removeOther": "Remove all permissions from additional roles."
+                }
             }
         }
     }

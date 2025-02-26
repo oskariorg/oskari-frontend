@@ -16,7 +16,7 @@ export const UsersByRoleTab = ({ state, controller }) => {
         <Content>
             <RoleSelect
                 onlyAdmin
-                state={state}
+                roles={state.roles}
                 value={roleId}
                 onChange={controller.showUsersByRole}/>
             <Margin />

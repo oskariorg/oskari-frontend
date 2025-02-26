@@ -193,6 +193,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
                 if (event.getViewState() === 'close') {
                     this.plugins['Oskari.userinterface.Flyout'].resetFlyout();
                 }
+            },
+            'MapLayerEvent': function (event) {
+                if (event.getOperation() !== 'update') {
+                    // handle update layer only
+                    return;
+                }
+                this.plugins['Oskari.userinterface.Flyout'].handler?.onLayerUpdate();
             }
         }
     }, {

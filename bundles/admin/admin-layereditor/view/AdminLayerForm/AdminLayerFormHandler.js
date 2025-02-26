@@ -5,6 +5,7 @@ import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
 import { getWarningsForStyles } from './VisualizationTabPane/RasterStyle/helper';
 import { TIME_SERIES_UI } from './VisualizationTabPane/TimeSeries';
+import { getRolesFromResponse } from '../../../util/rolesHelper';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
@@ -1087,10 +1088,11 @@ class UIHandler extends StateHandler {
                 this.loadingCount--;
                 const currentLayer = this.getState().layer;
                 this.layerHelper.initPermissionsForLayer(currentLayer, data.roles);
+                const roles = getRolesFromResponse(data, 'name');
                 this.updateState({
                     layer: currentLayer,
                     loading: this.isLoading(),
-                    metadata: data
+                    metadata: { ...data, roles }
                 });
                 // invalidate cache if it was populated
                 Object.keys(__VALIDATOR_CACHE).forEach(key => delete __VALIDATOR_CACHE[key]);
@@ -1133,6 +1135,12 @@ class UIHandler extends StateHandler {
         const layer = this.getState().layer;
         handlePermissionForSingleRole(layer.role_permissions, permission, role);
 
+        this.updateState({ layer });
+    }
+
+    setPermissions (permissions = {}) {
+        const { layer } = this.getState();
+        layer.role_permissions = permissions;
         this.updateState({ layer });
     }
 
@@ -1281,6 +1289,7 @@ const wrapped = controllerMixin(UIHandler, [
     'showLayerMetadata',
     'clearLayerCoverage',
     'showLayerCoverage',
-    'toggleDeclutter'
+    'toggleDeclutter',
+    'setPermissions'
 ]);
 export { wrapped as AdminLayerFormHandler };

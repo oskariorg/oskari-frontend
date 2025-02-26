@@ -53,9 +53,9 @@ const getPermissionTableHeader = ({ name, type }) => {
 };
 
 export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => {
-    const { permissions, selectedRole, resources, pagination, roles, filtered, loading, unSavedChanges } = state;
+    const { permissions, selected, resources, pagination, roles, filtered, loading, unSavedChanges } = state;
     const dataSource = Array.isArray(filtered) ? filtered : resources;
-    const roleName = roles.find(r => r.value === selectedRole)?.label || '';
+    const roleName = roles.find(r => r.id === selected)?.name || '';
 
     const handleScroll = (key) => {
         document.querySelector(`[data-row-key="${key}"]`)?.scrollIntoView({ block: 'center' });
@@ -68,7 +68,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
     };
     const allChecked = type => {
         return getVisibleResources()
-            .every(({ permissions, id }) => (unSavedChanges[id] || permissions[selectedRole])?.includes(type));
+            .every(({ permissions, id }) => (unSavedChanges[id] || permissions[selected])?.includes(type));
     };
     const onCheckAll = (type, enabled) => {
         const ids = getVisibleResources().map(r => r.id);
@@ -108,7 +108,7 @@ export const LayerRightsTable = ThemeConsumer(({ theme, controller, state }) => 
                 dataIndex: 'permissions',
                 render: (permissions, item) => {
                     const tooltip = <span>{roleName}: <Message messageKey={`rights.${permission.type}`} defaultMsg={permission.name} /></span>;
-                    const stored = permissions[selectedRole]?.includes(permission.type) || false;
+                    const stored = permissions[selected]?.includes(permission.type) || false;
                     const modified = unSavedChanges[item.id]?.includes(permission.type);
                     const checked = (typeof modified === 'boolean' ? modified : stored) || false;
                     const isModified = typeof modified === 'boolean' && stored !== modified;

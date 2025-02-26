@@ -1,4 +1,6 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { getRolesFromResponse } from '../../util/rolesHelper';
+import { getZoomLevelHelper } from '../../../mapping/mapmodule/util/scale';
 
 const DEFAULT_PERMISSIONS = ['VIEW_LAYER', 'VIEW_PUBLISHED', 'PUBLISH', 'DOWNLOAD'];
 
@@ -10,8 +12,10 @@ class UIHandler extends StateHandler {
             roles: [],
             permissions: [],
             resources: [],
+            layerDetails: [],
+            dataProviders: [],
             filtered: null,
-            selectedRole: null,
+            selected: null,
             loading: false,
             unSavedChanges: {}, // {[id]: [permissions] }
             pagination: {
@@ -27,16 +31,41 @@ class UIHandler extends StateHandler {
         return 'LayerRightsHandler';
     }
 
-    setSelectedRole (selectedRole) {
+    async onLayerUpdate () {
+        const { selected } = this.getState();
+        if (!selected) {
+            // without selection no need to update
+            // selection => fluout is visible and resources are loaded
+            // resources and selection is cleared on flyout close
+            return;
+        }
+        await this.fetchPermissions();
+        if (selected === 'layer') {
+            this.initLayerDetails();
+        }
+    }
+
+    async setSelected (selected) {
         // unsaved changes are role related, clear on select
-        this.updateState({ selectedRole, unSavedChanges: {} });
+        this.updateState({ selected, unSavedChanges: {} });
         if (!this.getState().resources.length) {
-            this.fetchPermissions();
+            await this.fetchPermissions();
+        }
+        if (selected === 'layer') {
+            this.initLayerDetails();
         }
     }
 
     setLoading (loading) {
         this.updateState({ loading });
+    }
+
+    editLayer (layerId) {
+        this.instance.getSandbox().postRequestByName('ShowLayerEditorRequest', [layerId]);
+    }
+
+    addLayer (layerId) {
+        this.instance.getSandbox().postRequestByName('AddMapLayerRequest', [layerId]);
     }
 
     reset (full) {
@@ -50,7 +79,7 @@ class UIHandler extends StateHandler {
             }
         };
         if (full) {
-            newState.selectedRole = null;
+            newState.selected = null;
             newState.resources = [];
         }
         this.updateState(newState);
@@ -69,8 +98,8 @@ class UIHandler extends StateHandler {
     }
 
     getUpdatedPermissions (id, type, enabled) {
-        const { resources, selectedRole, unSavedChanges } = this.getState();
-        const current = unSavedChanges[id] || resources.find(p => p.id === id)?.permissions?.[selectedRole] || [];
+        const { resources, selected, unSavedChanges } = this.getState();
+        const current = unSavedChanges[id] || resources.find(p => p.id === id)?.permissions?.[selected] || [];
         if (enabled) {
             // also used for check all -> don't add duplicates
             return current.includes(type) ? current : [...current, type];
@@ -113,11 +142,8 @@ class UIHandler extends StateHandler {
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
-            const { rolelist, systemRoles } = await response.json();
-            const systemRoleNames = Object.values(systemRoles);
-            const roles = rolelist
-                .map(({ name, id }) => ({ value: id, label: name, isSystem: systemRoleNames.includes(name) }))
-                .sort((a, b) => Oskari.util.naturalSort(a.label, b.label));
+            const jsonResponse = await response.json();
+            const roles = getRolesFromResponse(jsonResponse);
             this.updateState({ roles });
         } catch (e) {
             Messaging.error(this.instance.loc('roles.error.fetch'));
@@ -128,6 +154,7 @@ class UIHandler extends StateHandler {
     _mapLayerToResource (json) {
         const { id, layerType, ...rest } = json;
         const layer = this.instance.getSandbox().findMapLayerFromAllAvailable(id);
+        // TODO: hasTimeseries from backend
         return {
             ...rest,
             id,
@@ -135,6 +162,45 @@ class UIHandler extends StateHandler {
             type: layer?.getLayerType() || layerType.replace('layer', ''),
             hasTimeseries: layer?.hasTimeseries() || false,
             isAvailable: !!layer
+        };
+    }
+
+    initLayerDetails () {
+        const sb = this.instance.getSandbox();
+        // TODO: Should fetch details from backend to get url, locale, opacity...
+        // override or from capa for metadata and legend
+        const { resources } = this.getState();
+        const scales = sb.findRegisteredModuleInstance('MainMapModule')?.getScaleArray();
+        const zoomLevelHelper = getZoomLevelHelper(scales);
+        const layerDetails = resources
+            .map(r => this._mapResourceToLayerDetails(r, zoomLevelHelper))
+            .filter(nonNull => nonNull);
+
+        const dataProviders = sb.getService('Oskari.mapframework.service.MapLayerService')
+            ?.getDataProviders().filter(dp => dp.id > 0) || [];
+
+        this.updateState({ layerDetails, dataProviders });
+    }
+
+    _mapResourceToLayerDetails (resource, zoomLevelHelper) {
+        const lang = Oskari.getLang();
+        const layer = this.instance.getSandbox().findMapLayerFromAllAvailable(resource.id);
+        if (!layer) {
+            return null;
+        }
+        return {
+            ...resource,
+            name: layer.getLayerName(),
+            [lang]: layer.getName(),
+            version: layer.getVersion(),
+            providerId: layer.getDataProviderId(),
+            groups: layer.getGroups(),
+            url: layer.getLayerUrls().join(),
+            min: zoomLevelHelper.getMinZoom(layer.getMinScale()),
+            max: zoomLevelHelper.getMaxZoom(layer.getMaxScale()),
+            opacity: layer.getOpacity(),
+            legend: layer.getLegendImage(),
+            metadata: layer.getMetadataIdentifier()
         };
     }
 
@@ -186,7 +252,7 @@ class UIHandler extends StateHandler {
     async savePermissions () {
         try {
             this.setLoading(true);
-            const { unSavedChanges, selectedRole: roleId } = this.getState();
+            const { unSavedChanges, selected: roleId } = this.getState();
 
             const changedPermissions = Object.keys(unSavedChanges)
                 .map(id => ({ id, roleId, permissions: unSavedChanges[id] }));
@@ -240,14 +306,16 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'setSelectedRole',
+    'setSelected',
     'togglePermission',
     'savePermissions',
     'setCheckAllForPermission',
     'setPagination',
     'search',
     'clearSearch',
-    'cancel'
+    'cancel',
+    'addLayer',
+    'editLayer'
 ]);
 
 export { wrapped as LayerRightsHandler };
