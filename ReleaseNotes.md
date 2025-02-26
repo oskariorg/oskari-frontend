@@ -10,19 +10,21 @@ Removed bundles:
 
 Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader syntax:
 
-- bundles/admin/admin-layeranalytics/bundle.js -> bundles/admin/admin-layeranalytics
 - bundles/catalogue/metadata/bundle.js -> bundles/catalogue/metadataflyout
+- packages/catalogue/metadatasearch/bundle.js -> bundles/catalogue/metadatasearch
 
 - packages/admin/bundle/admin-announcements/bundle.js -> bundles/admin/admin-announcements
 - packages/admin/bundle/admin-layereditor/bundle.js -> bundles/admin/admin-layereditor
 - packages/admin/bundle/admin-permissions/bundle.js -> bundles/admin/admin-permissions
+- bundles/admin/admin-layeranalytics/bundle.js -> bundles/admin/admin-layeranalytics
 - packages/admin/bundle/admin/bundle.js -> bundles/admin/admin
 - packages/admin/bundle/appsetup/bundle.js -> bundles/admin/appsetup
 - packages/admin/bundle/metrics/bundle.js -> bundles/admin/metrics
-- packages/catalogue/metadatasearch/bundle.js -> bundles/catalogue/metadatasearch
+
 - packages/framework/layerlist/bundle.js -> bundles/framework/layerlist
 
 - packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change
+- packages/mapping/camera-controls-3d/bundle.js -> bundles/mapping/camera-controls-3d
 
 ### Changes for bundle registrations 
 
