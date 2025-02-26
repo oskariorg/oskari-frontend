@@ -21,6 +21,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/admin/bundle/admin/bundle.js -> bundles/admin/admin
 - packages/admin/bundle/appsetup/bundle.js -> bundles/admin/appsetup
 - packages/admin/bundle/metrics/bundle.js -> bundles/admin/metrics
+- packages/framework/bundle/admin-publish-transfer/bundle.js -> bundles/admin/admin-publish-transfer
 
 - packages/framework/layerlist/bundle.js -> bundles/framework/layerlist
 
