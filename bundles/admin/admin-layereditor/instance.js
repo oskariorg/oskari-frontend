@@ -111,7 +111,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 case 'getOrganizationName':
                     popupKey = FLYOUT.DATA_PROVIDER;
                     break;
-                case 'getInspireName':
+                case 'getGroups':
                     popupKey = FLYOUT.THEME;
                     break;
                 default:
