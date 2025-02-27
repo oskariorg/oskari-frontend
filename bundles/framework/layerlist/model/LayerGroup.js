@@ -1,7 +1,7 @@
 export class LayerGroup {
-    constructor (id, type, title, description, parentId, groups) {
+    constructor (id, groupMethod, title, description, parentId, groups) {
         this.id = id;
-        this.type = type;
+        this.groupMethod = groupMethod;
         this.name = title;
         this.description = description;
         this.layers = [];
@@ -44,11 +44,11 @@ export class LayerGroup {
     }
 
     /**
-     * @method getType
+     * @method groupMethod
      * @return {String}
      */
-    getType () {
-        return this.type;
+    getGroupMethod () {
+        return this.groupMethod;
     }
 
     /**
