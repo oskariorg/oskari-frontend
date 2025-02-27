@@ -2,7 +2,7 @@ export const GROUPING_PRESET = [
     {
         key: 'THEME',
         localeKey: 'inspire',
-        method: 'getInspireName'
+        method: 'getGroups'
     },
     {
         key: 'ORGANIZATION',
