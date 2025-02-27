@@ -23,7 +23,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             this.loc = Oskari.getMsg.bind(null, this.__name);
             this.layerListFormHandler = new LayerListFormHandler();
             this.eventHandlers = {
-                'MapLayerEvent': (event) => {
+                MapLayerEvent: (event) => {
                     if (event.getOperation() !== 'add') {
                         // only handle add layer
                         return;
@@ -36,6 +36,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 }
             };
         }
+
         _startImpl () {
             this._setupLayerTools();
             this._setupAdminTooling();
@@ -46,6 +47,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             layerService.on('theme.update', () => this._getFlyout().setMapLayerGroups(this.getGroups()));
             layerService.on('dataProvider.update', () => this._getFlyout().setDataProviders(this.getDataProviders()));
         }
+
         /**
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
@@ -124,7 +126,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             addSubthemeTool.setIconComponent(<PlusCircleOutlined/>);
             addSubthemeTool.setTooltip(this.loc('addSubtheme'));
             addSubthemeTool.setIconCls('add-sub-theme');
-            addSubthemeTool.setTypes(['layergroup', 'getInspireName']);
+            addSubthemeTool.setTypes(['layergroup', 'getGroups']);
             addSubthemeTool.setCallback(addSubthemeCallback);
             toolingService.addTool(addSubthemeTool);
 
@@ -133,7 +135,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             editThemeTool.setIconComponent(<EditOutlined/>);
             editThemeTool.setTooltip(this.loc('editTheme'));
             editThemeTool.setIconCls('edit-layer');
-            editThemeTool.setTypes(['layergroup', 'getInspireName']);
+            editThemeTool.setTypes(['layergroup', 'getGroups']);
             editThemeTool.setCallback(editGroupCallBack);
             toolingService.addTool(editThemeTool);
 
@@ -333,7 +335,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     const me = this;
                     jQuery.ajax({
                         type: 'DELETE',
-                        url: Oskari.urls.getRoute('MapLayerGroups', { id: id, deleteLayers: deleteLayers }),
+                        url: Oskari.urls.getRoute('MapLayerGroups', { id, deleteLayers }),
                         success: response => {
                             this.layerListFormHandler.getController().setLoading(false);
                             this.layerListFormHandler.getController().closePopup();
@@ -445,7 +447,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     this.layerListFormHandler.setLoading(true);
                     jQuery.ajax({
                         type: 'DELETE',
-                        url: Oskari.urls.getRoute('DataProvider', { id: id, deleteLayers: deleteLayers }),
+                        url: Oskari.urls.getRoute('DataProvider', { id, deleteLayers }),
                         success: response => {
                             this.layerListFormHandler.getController().setLoading(false);
                             this.layerListFormHandler.getController().closePopup();
