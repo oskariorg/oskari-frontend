@@ -2,20 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { GroupingOption } from '../../../model/GroupingOption';
 import { Labelled } from './Labelled';
-import { Select, Option } from 'oskari-ui';
+import { Select } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 
 const Grouping = ({ selected, options, controller }) =>
     <Labelled label={'grouping.title'}>
-        <Select value={selected} onChange={controller.setGrouping} className="t_grouping">
-            {
-                options.map(cur =>
-                    <Option key={cur.getKey()} value={cur.getKey()}>
-                        {cur.getTitle()}
-                    </Option>
-                )
-            }
-        </Select>
+        <Select value={selected} onChange={controller.setGrouping} className="t_grouping"
+            options={options.map(opt => ({ value: opt.key, label: opt.title }))}/>
     </Labelled>;
 
 Grouping.propTypes = {
