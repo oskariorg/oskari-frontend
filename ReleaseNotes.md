@@ -24,6 +24,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 
 - packages/framework/layerlist/bundle.js -> bundles/framework/layerlist
 - packages/framework/featuredata/bundle.js -> bundles/framework/featuredata
+- packages/framework/bundle/language-selector/bundle.js -> bundles/framework/language-selector
 
 - packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change
 - packages/mapping/camera-controls-3d/bundle.js -> bundles/mapping/camera-controls-3d
