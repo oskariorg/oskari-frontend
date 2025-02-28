@@ -30,7 +30,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/framework/bundle/coordinatedisplay/bundle.js -> bundles/framework/coordinatedisplay
 - packages/framework/bundle/coordinatetool/bundle.js -> bundles/framework/coordinatetool
 - packages/framework/bundle/guidedtour/bundle.js -> bundles/framework/guidedtour
-
+- packages/framework/bundle/feedbackService/bundle.js -> bundles/framework/feedbackService
 
 - packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change
 - packages/mapping/camera-controls-3d/bundle.js -> bundles/mapping/camera-controls-3d

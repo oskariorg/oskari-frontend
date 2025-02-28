@@ -1,3 +1,9 @@
+import './event/FeedbackResultEvent';
+import './request/GetFeedbackServiceRequest';
+import './request/GetFeedbackRequest';
+import './request/PostFeedbackRequest';
+import './publisher/FeedbackServiceTool';
+
 /**
  * @class Oskari.mapframework.bundle.feedbackService.FeedbackServiceBundleInstance
  */
