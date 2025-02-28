@@ -366,6 +366,7 @@ var supportedFunctions = [
   "getSupportedRequests",
   "getInfo",
   "getAllLayers",
+  "getGroupsWithLayerIds",
   "getMapBbox",
   "getMapPosition",
   "getZoomRange",

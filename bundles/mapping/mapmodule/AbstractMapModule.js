@@ -2366,6 +2366,73 @@ Oskari.clazz.define(
                 });
             });
 
+            rpcService.addFunction('getGroupsWithLayerIds', function () {
+                const layerIds = me._mapLayerService.getAllLayers().map(layer => layer.getId());
+
+                function _loadLayerGroupsFromBackend () {
+                    return new Promise((resolve, reject) => {
+                        const callbackSuccess = function (result) {
+                            resolve(result);
+                        };
+                        const callbackFailure = function () {
+                            reject(new Error('Cannot fetch layer groups from backend'));
+                        };
+                        me._mapLayerService.loadAllLayerGroupsAjax(callbackSuccess, callbackFailure, { id: layerIds.join(',') });
+                    });
+                }
+
+                function _getFirstAncestorGroup (layerHierarchy, childGroup) {
+                    if (childGroup.parentId === -1) {
+                        return childGroup;
+                    }
+                    const parentGroup = layerHierarchy.find(group => group.id === childGroup.parentID);
+                    return _getFirstAncestorGroup(layerHierarchy, parentGroup);
+                }
+
+                function _getStrippedGroup (group, layerIds) {
+                    return {
+                        id: group.id,
+                        name: group.name,
+                        groups: group.groups
+                            .sort((a, b) => a.orderNumber - b.orderNumber)
+                            .map(subGroup => _getStrippedGroup(subGroup, layerIds)),
+                        layers: group.layers
+                            .filter(layer => layerIds.includes(layer.id))
+                            .sort((a, b) => a.orderNumber - b.orderNumber)
+                            .map(layer => layer.id)
+                    };
+                }
+
+                function _parseLayerGroups (layerHierarchy) {
+                    const groupsFlat =
+                        layerHierarchy.filter(group => group.layers.some(layer => layerIds.includes(layer.id)));
+                    const groupsHierarchy = [];
+
+                    groupsFlat.forEach(function (group) {
+                        const firstAncestor = _getFirstAncestorGroup(layerHierarchy, group);
+                        if (!groupsHierarchy.some(group => group.id === firstAncestor.id)) {
+                            groupsHierarchy.push(firstAncestor);
+                        }
+                    });
+                    groupsHierarchy.sort((a, b) => a.orderNumber - b.orderNumber);
+                    const groupsHierarchyStrip = [];
+                    groupsHierarchy.forEach(function (group) {
+                        groupsHierarchyStrip.push(_getStrippedGroup(group, layerIds));
+                    });
+
+                    return groupsHierarchyStrip;
+                }
+
+                return _loadLayerGroupsFromBackend()
+                    .then(() => {
+                        return _parseLayerGroups(me._mapLayerService.getAllLayerGroups());
+                    })
+                    .catch(error => {
+                        console.warn(error.message);
+                        return [];
+                    });
+            });
+
             rpcService.addFunction('getZoomRange', function () {
                 return {
                     min: 0,

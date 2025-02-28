@@ -48,6 +48,29 @@ describe('Map', function () {
     });
 
 
+    describe('Get layer groups with ids of available map layers', function () {
+
+        it('Get layer groups with layer ids', function (done) {
+            channel.getGroupsWithLayerIds(function (data) {
+                // Expect at least the background map group to be found.
+                expect(Object.keys(data).length).toBeGreaterThan(0);
+                // Expect the group to have at least four elements.
+                expect(Object.keys(data[0]).length).toBeGreaterThanOrEqual(4);
+                expect(data[0].groups).toBeDefined();
+                expect(data[0].id).toBeDefined();
+                expect(data[0].name).toBeDefined();
+                // Expect the group to include at least one layer.
+                expect(data[0].layers.length).toBeGreaterThanOrEqual(1);
+
+                channel.log('Get layer groups with ids of available map layers done. ', data);
+                counter++;
+                done();
+            });
+        });
+
+    });
+
+
     describe('Change layer properties', function () {
 
         var baseLayer;
