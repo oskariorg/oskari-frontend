@@ -27,6 +27,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/framework/bundle/language-selector/bundle.js -> bundles/framework/language-selector
 - packages/framework/bundle/announcements/bundle.js -> bundles/framework/announcements
 - packages/framework/bundle/backendstatus/bundle.js -> bundles/framework/backendstatus
+- packages/framework/bundle/coordinatedisplay/bundle.js -> bundles/framework/coordinatedisplay
 
 
 - packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change

@@ -1,3 +1,6 @@
+import './plugin/CoordinatesPlugin';
+import './resources/scss/coordinatedisplay.scss';
+
 /**
  * @class Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisplayBundleInstance
  *
