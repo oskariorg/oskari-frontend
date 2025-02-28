@@ -34,6 +34,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/framework/bundle/findbycoordinates/bundle.js -> bundles/framework/findbycoordinates
 - packages/framework/bundle/mapfull/bundle.js -> bundles/framework/mapfull
 - packages/framework/bundle/maplegend/bundle.js -> bundles/framework/maplegend
+- packages/framework/bundle/myplaces3/bundle.js -> bundles/framework/myplaces3
 
 - packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change
 - packages/mapping/camera-controls-3d/bundle.js -> bundles/mapping/camera-controls-3d
