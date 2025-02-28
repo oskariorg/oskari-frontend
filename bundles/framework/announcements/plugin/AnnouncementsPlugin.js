@@ -1,5 +1,6 @@
 import { Messaging } from 'oskari-ui/util';
 import { getDateRange } from '../service/util';
+import '../resources/scss/announcementsplugin.ol.scss';
 
 /**
  * @class Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin
