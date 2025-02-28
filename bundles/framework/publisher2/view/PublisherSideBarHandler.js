@@ -120,7 +120,7 @@ class PublisherSidebarUIHandler extends StateHandler {
             key: PANEL_TOOL_LAYOUT_ID,
             label: Oskari.getMsg('Publisher2', 'BasicView.toollayout.label'),
             children: this.renderToolLayoutPanel(),
-            extra: <Info title={Oskari.getMsg('Publisher2', 'BasicView.domain.title')}/>
+            extra: <Info title={Oskari.getMsg('Publisher2', 'BasicView.toollayout.tooltip')}/>
         });
 
         // RPC panel should be the last in line after all other (react collapsified) panels
