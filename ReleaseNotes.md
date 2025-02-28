@@ -38,6 +38,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/framework/bundle/myplacesimport/bundle.js -> bundles/framework/myplacesimport
 - packages/framework/bundle/publishedstatehandler/bundle.js -> bundles/framework/publishedstatehandler
 - packages/framework/bundle/printout/bundle.js -> bundles/framework/printout
+- packages/framework/bundle/routingService/bundle.js -> bundles/framework/routingService
 
 
 - packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change
