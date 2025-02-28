@@ -1354,10 +1354,20 @@ Oskari.clazz.define(
         getCursorStyle: function () {
             return this._cursorStyle;
         },
-        setCursorStyle: function (cursorStyle) {
-            var element = this.getMapEl();
-            jQuery(element).css('cursor', cursorStyle);
+
+        setCursorStyle: function (cursorStyle = '', setBy) {
+            const element = this.getMapDOMEl();
+            if (setBy !== this._cursorStyleLastSetBy && !cursorStyle) {
+                // if reseting and we are not the last that set the style, do nothing
+                // Otherwise there's a race condition with findbycoordinates and markerplugin
+                // both set style on start and reset it at stop but the start order matters which one wins
+                return;
+            }
+            if (element?.style) {
+                element.style.cursor = cursorStyle;
+            }
             this._cursorStyle = cursorStyle;
+            this._cursorStyleLastSetBy = setBy;
             return this._cursorStyle;
         },
 
@@ -2431,7 +2441,7 @@ Oskari.clazz.define(
             });
 
             rpcService.addFunction('setCursorStyle', function (cursorStyle) {
-                return me.setCursorStyle(cursorStyle);
+                return me.setCursorStyle(cursorStyle, 'RPC');
             });
 
             rpcService.addFunction('getVectorFeatures', function (geojsonFilter, opts) {
