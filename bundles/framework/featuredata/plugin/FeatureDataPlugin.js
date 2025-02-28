@@ -5,6 +5,8 @@ import { ThemeProvider } from 'oskari-ui/util';
 import { FeatureDataPluginHandler } from './FeatureDataPluginHandler';
 import { FEATUREDATA_WFS_STATUS } from '../view/FeatureDataContainer';
 import { MapModuleTextButton } from '../../../mapping/mapmodule/MapModuleTextButton';
+// FeaturedataPlugin extends BasicMapModulePlugin
+import '../../../mapping/mapmodule/plugin/BasicMapModulePlugin';
 
 /**
  * @class Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin
