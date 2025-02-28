@@ -1,6 +1,8 @@
 import { showFindByCoordinatesPopup } from './view/FindByCoordinatesPopup';
 import { boundingExtent } from 'ol/extent';
 
+import './service/findbycoordinatesservice';
+
 const MARKER_ID_PREFIX = 'findbycoordinates_';
 const FIND_BY_COORDINATES_DEFAULT_ZOOM = 7;
 
@@ -124,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             var me = this;
             me.tool.active = true;
             const mapmodule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
-            mapmodule.getMapEl().addClass('findbycoordinates-cursor');
+            mapmodule.setCursorStyle('crosshair', this.getName());
             me._hidePopups();
             me.closePopup();
             me.enableGFI(false);
@@ -146,7 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             }
             this.tool.active = false;
             const mapmodule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
-            mapmodule.getMapEl().removeClass('findbycoordinates-cursor');
+            mapmodule.setCursorStyle('', this.getName());
             this.enableGFI(true);
         },
         closePopup: function () {
