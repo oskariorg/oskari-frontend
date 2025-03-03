@@ -89,9 +89,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/component/Badge.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/Alert.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/Popup.js"
             }, {
                 "type": "text/javascript",
@@ -102,9 +99,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/Button.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/FilterDialog.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/Form.js"
@@ -159,12 +153,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/component/SelectList.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/Chart.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/LanguageSelect.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/MultiLevelSelect.js"
             }, {
                 "type": "text/javascript",
@@ -187,9 +175,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/NumberInput.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/PasswordInput.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/extension/DefaultModule.js"
@@ -272,9 +257,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/scss/badge.scss"
-            }, {
-                "type": "text/css",
-                "src": "../../../../bundles/framework/divmanazer/resources/scss/alert.scss"
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/scss/formcomponent.scss"
