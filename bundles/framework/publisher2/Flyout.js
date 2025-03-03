@@ -1,3 +1,5 @@
+import './view/FlyoutNotLoggedIn';
+import './view/FlyoutStartView';
 /**
  * @class Oskari.mapframework.bundle.publisher2.Flyout
  *

@@ -39,6 +39,8 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/framework/bundle/publishedstatehandler/bundle.js -> bundles/framework/publishedstatehandler
 - packages/framework/bundle/printout/bundle.js -> bundles/framework/printout
 - packages/framework/bundle/routingService/bundle.js -> bundles/framework/routingService
+- packages/framework/bundle/publisher2/bundle.js -> bundles/framework/publisher2
+
 - bundles/statistics/statsgrid/bundle.js -> bundles/statistics/statsgrid
 
 - packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change

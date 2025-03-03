@@ -8,6 +8,7 @@ import { PublisherSidebarHandler } from './PublisherSideBarHandler';
 import { ButtonContainer } from './dialog/Styled';
 import { SecondaryButton } from 'oskari-ui/components/buttons';
 import { CollapseContent } from './CollapseContent';
+
 const StyledHeader = styled(Header)`
     padding: 15px 15px 10px 10px;
 `;
