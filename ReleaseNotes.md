@@ -41,6 +41,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/framework/bundle/routingService/bundle.js -> bundles/framework/routingService
 - packages/framework/bundle/publisher2/bundle.js -> bundles/framework/publisher2
 - packages/framework/bundle/postprocessor/bundle.js -> bundles/framework/postprocessor
+- packages/framework/bundle/search/bundle.js -> bundles/framework/search
 
 - bundles/statistics/statsgrid/bundle.js -> bundles/statistics/statsgrid
 
