@@ -1,3 +1,6 @@
+import './plugin/TimeControl3dPlugin';
+import './tool/TimeControl3dTool';
+
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
 Oskari.clazz.defineES('Oskari.mapping.time-control-3d.instance',
