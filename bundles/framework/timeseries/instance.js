@@ -1,4 +1,11 @@
+import './request/ConfigurationRequest';
+import './service/TimeseriesService';
+import './service/TimeseriesLayerService';
+import './view/TimeseriesControlPlugin';
 import './view/TimeSeriesRangeControlPlugin';
+import './publisher/TimeseriesTool';
+import './WMSAnimator';
+import './resources/css/timeseriesplayback.css';
 
 /**
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance
