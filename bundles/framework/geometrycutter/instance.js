@@ -1,3 +1,11 @@
+import './EditState';
+import './GeometryProcessor';
+import './request/StartGeometryCuttingRequest';
+import './request/StartGeometryCuttingRequestHandler';
+import './request/StopGeometryCuttingRequest';
+import './request/StopGeometryCuttingRequestHandler';
+import './event/GeometryCuttingEvent';
+
 /**
  * @class Oskari.mapframework.ui.module.common.geometrycutter.GeometryCutterBundleInstance
  */

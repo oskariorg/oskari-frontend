@@ -48,6 +48,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - bundles/statistics/statsgrid/bundle.js -> bundles/statistics/statsgrid
 - packages/framework/bundle/usagetracker/bundle.js -> bundles/framework/usagetracker
 - packages/framework/bundle/userguide/bundle.js -> bundles/framework/userguide
+- packages/framework/bundle/geometrycutter/bundle.js -> bundles/framework/geometrycutter
 
 - packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change
 - packages/mapping/camera-controls-3d/bundle.js -> bundles/mapping/camera-controls-3d
