@@ -11,6 +11,10 @@ Some extra tags:
 
 ## 3.0.0
 
+### [rem] Removed `framework/featuredata2` bundle
+
+Replaced by the React-implementation of the same functionality `framework/featuredata` bundle.
+
 ### [rem] Removed `framework/admin-layerrights` bundle
 
 Replaced by the `admin/admin-permissions` bundle.
@@ -21,7 +25,7 @@ Replaced by the `catalogue/metadatasearch` bundle.
 
 ### [rem] Removed `catalogue/metadataflyout` bundle
 
-Replaced by the `catalogue/metadata` bundle. Bundle id is still `metadataflyout`.
+Replaced by the React-implementation `catalogue/metadata` bundle and the bundle folder has been renamed back to `catalogue/metadataflyout`. Bundle id remains as `metadataflyout`.
 
 ### [rem] Removed `AddSearchResultActionRequest` request
 
