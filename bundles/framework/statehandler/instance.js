@@ -1,3 +1,14 @@
+import '../../../libraries/jquery/plugins/jquery.cookie';
+import './state-methods';
+import './session-methods';
+import './plugin/Plugin';
+import './plugin/SaveViewPlugin';
+import './request/SetStateRequest';
+import './request/SetStateRequestHandler';
+import './request/SaveStateRequest';
+import './request/SaveStateRequestHandler';
+import './event/StateSavedEvent';
+
 /**
  * @class Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance
  * Handles modules implementing Stateful protocol to get application state
