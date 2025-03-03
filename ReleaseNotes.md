@@ -54,6 +54,7 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 
 - packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change
 - packages/mapping/camera-controls-3d/bundle.js -> bundles/mapping/camera-controls-3d
+- packages/mapping/time-control-3d/bundle.js -> bundles/mapping/time-control-3d
 
 ### Changes for bundle registrations 
 
