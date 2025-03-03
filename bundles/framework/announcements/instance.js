@@ -1,4 +1,8 @@
+import './service/AnnouncementsService';
+import './Flyout';
+import './plugin//AnnouncementsPlugin';
 import { AnnouncementsHandler, showAnnouncementsPopup, showAnnouncementsBanner, showBannerDescriptionPopup } from './view/';
+
 const NOT_DISPLAYED = 'display-none';
 /**
  * @class Oskari.framework.bundle.announcements.AnnouncementsBundleInstance

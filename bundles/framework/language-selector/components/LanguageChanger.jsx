@@ -7,10 +7,10 @@ const handleLanguageChange = (langCode) => {
     const newLang = 'lang=' + langCode;
     if (oldSearch === '') {
         return redirect('?' + newLang);
-    } 
+    }
     if (oldSearch.indexOf('lang=') > -1) {
         return redirect(oldSearch.replace(/lang=[^&]+/, newLang));
-    } 
+    }
     return redirect(oldSearch + '&' + newLang);
 };
 

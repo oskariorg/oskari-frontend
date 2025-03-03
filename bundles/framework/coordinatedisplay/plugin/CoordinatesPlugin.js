@@ -1,3 +1,6 @@
+// CoordinatesPlugin extends BasicMapModulePlugin
+import '../../../mapping/mapmodule/plugin/BasicMapModulePlugin';
+
 /**
  * @class Oskari    .mapframework.bundle.coordinatedisplay.plugin.CoordinatesPlugin
  * Provides a coordinate display for map

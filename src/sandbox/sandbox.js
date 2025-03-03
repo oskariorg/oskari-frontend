@@ -350,9 +350,8 @@
                     return;
                 }
                 const handleReg = function () {
-                    var request = requestBuilder.apply(me, requestArgs || []);
+                    const request = requestBuilder.apply(me, requestArgs || []);
                     const creatorComponent = me.postMasterComponent;
-                    let rv = null;
 
                     request._creator = creatorComponent;
 
@@ -367,7 +366,7 @@
                         me._debugPushRequest(creatorComponent, request);
                     }
 
-                    rv = me.processRequest(request);
+                    me.processRequest(request);
 
                     if (me.debug()) {
                         me._debugPopRequest();
@@ -389,8 +388,8 @@
              * @return {Oskari.mapframework.module.Module[]} modules listening to the event
              */
             _findModulesInterestedIn: function (event) {
-                var eventName = event.getName(),
-                    currentListeners = this._listeners[eventName];
+                const eventName = event.getName();
+                const currentListeners = this._listeners[eventName];
                 if (!currentListeners) {
                     return [];
                 }

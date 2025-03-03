@@ -1,4 +1,9 @@
+import './request/AddToGuidedTourRequest';
+import './request/AddToGuidedTourRequestHandler';
+import '../../../libraries/jquery/plugins/jquery.cookie.js';
 import { GuidedTourHandler } from './handler/GuidedTourHandler';
+import './resources/scss/style.scss';
+
 /**
  * @class Oskari.mapframework.bundle.guidedtour.GuidedTourBundleInstance
  *

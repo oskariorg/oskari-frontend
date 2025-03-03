@@ -8,6 +8,48 @@ Removed bundles:
 - `catalogue/metadatacatalogue` replaced by `catalogue/metadatasearch`
 - `catalogue/metadataflyout` replaced by `catalogue/metadata`
 
+Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader syntax:
+
+- bundles/catalogue/metadata/bundle.js -> bundles/catalogue/metadataflyout
+- packages/catalogue/metadatasearch/bundle.js -> bundles/catalogue/metadatasearch
+
+- packages/admin/bundle/admin-announcements/bundle.js -> bundles/admin/admin-announcements
+- packages/admin/bundle/admin-layereditor/bundle.js -> bundles/admin/admin-layereditor
+- packages/admin/bundle/admin-permissions/bundle.js -> bundles/admin/admin-permissions
+- bundles/admin/admin-layeranalytics/bundle.js -> bundles/admin/admin-layeranalytics
+- packages/framework/bundle/admin-users/bundle.js -> bundles/admin/admin-users
+- packages/admin/bundle/admin/bundle.js -> bundles/admin/admin
+- packages/admin/bundle/appsetup/bundle.js -> bundles/admin/appsetup
+- packages/admin/bundle/metrics/bundle.js -> bundles/admin/metrics
+
+- packages/framework/layerlist/bundle.js -> bundles/framework/layerlist
+- packages/framework/featuredata/bundle.js -> bundles/framework/featuredata
+- packages/framework/bundle/language-selector/bundle.js -> bundles/framework/language-selector
+- packages/framework/bundle/announcements/bundle.js -> bundles/framework/announcements
+- packages/framework/bundle/backendstatus/bundle.js -> bundles/framework/backendstatus
+- packages/framework/bundle/coordinatedisplay/bundle.js -> bundles/framework/coordinatedisplay
+- packages/framework/bundle/coordinatetool/bundle.js -> bundles/framework/coordinatetool
+- packages/framework/bundle/guidedtour/bundle.js -> bundles/framework/guidedtour
+- packages/framework/bundle/feedbackService/bundle.js -> bundles/framework/feedbackService
+- packages/framework/bundle/findbycoordinates/bundle.js -> bundles/framework/findbycoordinates
+- packages/framework/bundle/mapfull/bundle.js -> bundles/framework/mapfull
+- packages/framework/bundle/maplegend/bundle.js -> bundles/framework/maplegend
+- packages/framework/bundle/myplaces3/bundle.js -> bundles/framework/myplaces3
+- packages/framework/bundle/myplacesimport/bundle.js -> bundles/framework/myplacesimport
+- packages/framework/bundle/publishedstatehandler/bundle.js -> bundles/framework/publishedstatehandler
+- packages/framework/bundle/printout/bundle.js -> bundles/framework/printout
+- packages/framework/bundle/routingService/bundle.js -> bundles/framework/routingService
+- packages/framework/bundle/publisher2/bundle.js -> bundles/framework/publisher2
+- packages/framework/bundle/postprocessor/bundle.js -> bundles/framework/postprocessor
+- packages/framework/bundle/search/bundle.js -> bundles/framework/search
+- packages/framework/bundle/routingUI/bundle.js -> bundles/framework/routingUI
+- packages/framework/bundle/timeseries/bundle.js -> bundles/framework/timeseries
+- packages/framework/bundle/statehandler/bundle.js -> bundles/framework/statehandler
+- bundles/statistics/statsgrid/bundle.js -> bundles/statistics/statsgrid
+
+- packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change
+- packages/mapping/camera-controls-3d/bundle.js -> bundles/mapping/camera-controls-3d
+
 ### Changes for bundle registrations 
 
 In preparation of removing the packages-folder from oskari-frontend and migrating any bundle.js files under it to bundles-folder as index.js files.

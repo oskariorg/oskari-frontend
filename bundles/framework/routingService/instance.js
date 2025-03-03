@@ -1,3 +1,7 @@
+import './event/RouteResultEvent';
+import './request/GetRouteRequest';
+import './request/GetRouteRequestHandler';
+
 /**
  * @class Oskari.mapframework.bundle.routingService.RoutingServiceBundleInstance
  */

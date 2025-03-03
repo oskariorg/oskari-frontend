@@ -1,3 +1,6 @@
+import './popupRouting';
+import './resources/scss/style.scss';
+
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);

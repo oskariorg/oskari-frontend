@@ -10,6 +10,9 @@
 import { FEATUREDATA_BUNDLE_ID } from './view/FeatureDataContainer';
 import { SelectToolPopupHandler } from './view/SelectToolPopupHandler.js';
 import './publisher/FeaturedataTool';
+import './plugin/FeatureDataPlugin';
+import './request/ShowFeatureDataRequest';
+import './request/ShowFeatureDataRequestHandler';
 
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.FeatureDataBundleInstance',
     function () {},

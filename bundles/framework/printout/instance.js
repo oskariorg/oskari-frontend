@@ -5,6 +5,10 @@ import { showTooManyLayersPopup } from './view/TooManyLayersPopup';
 import { PrintoutHandler } from './PrintoutHandler';
 import { PrintoutPanel } from './view/PrintoutPanel';
 
+import './service/PrintService';
+import './request/PrintMapRequest';
+import './request/PrintMapRequestHandler';
+
 /**
  * @class Oskari.mapframework.bundle.printout.PrintoutBundleInstance
  *
@@ -161,12 +165,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @static
          */
         eventHandlers: {
-            'Printout.PrintableContentEvent': function (event) {
-                this._log.deprecated('Printout.PrintableContentEvent');
-            },
-            'Printout.PrintWithoutUIEvent': function (event) {
-                this._log.deprecated('Printout.PrintWithoutUIEvent');
-            }
         },
 
         /**
