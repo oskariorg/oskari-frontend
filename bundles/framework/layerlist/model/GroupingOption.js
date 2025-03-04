@@ -4,12 +4,15 @@ export class GroupingOption {
         this.title = title;
         this.method = method;
     }
+
     getKey () {
         return this.key;
     }
+
     getTitle () {
         return this.title;
     }
+
     getMethod () {
         return this.method;
     }
