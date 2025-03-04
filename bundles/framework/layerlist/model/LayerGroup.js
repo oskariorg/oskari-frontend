@@ -144,7 +144,7 @@ export class LayerGroup {
     }
 
     clone () {
-        const clone = new LayerGroup(this.id, this.type, this.name, this.description, this.parentId);
+        const clone = new LayerGroup(this.id, this.groupMethod, this.name, this.description, this.parentId);
         clone.layers = [...this.layers];
         clone.groups = [...this.groups];
         clone.searchIndex = { ...this.searchIndex };
