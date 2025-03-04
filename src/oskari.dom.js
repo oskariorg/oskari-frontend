@@ -62,6 +62,8 @@ const setRootEl = (id) => {
         mapContainerEl = document.createElement('div');
         // do we need the id here?
         mapContainerEl.setAttribute('id', MAP_CONTAINER_ID);
+        // add "published" for published maps
+        mapContainerEl.classList.add(Oskari.app.getType());
         rootEl.append(mapContainerEl);
     }
     mapContainerEl.classList.add(MAP_CONTAINER_EL_CLASS_FOR_STYLING);
@@ -110,6 +112,7 @@ const isEmbedded = () => {
     // 'published' is assumed to be in map container as class when the app is in "embedded mode"
     // publisher functionality sets this to fake it
     // published.jsp on server has it by default
+    // TODO: Maybe we should just `return Oskari.app.getType() === APP_EMBEDDED_CLASS`
     return getMapContainerEl().classList.contains(APP_EMBEDDED_CLASS);
 };
 
@@ -130,11 +133,11 @@ const isNavigationVisible = () => {
     if (!nav) return false;
     const style = window.getComputedStyle(nav);
     return style.getPropertyValue('display') !== 'none';
-}
+};
 
 const getNavigationEl = () => {
     return [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
-}
+};
 
 const setMenuScrollIndicator = () => {
     const indicatorNotNeeded = () => {
@@ -171,7 +174,7 @@ const setMenuScrollIndicator = () => {
             }
         }
     }
-}
+};
 
 export const DOMHelper = {
     setRootEl,
