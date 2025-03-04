@@ -33,6 +33,14 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
         "scripts" : [
         {
             "type" : "text/javascript",
+            "src" : "../../../../libraries/chosen/1.5.1/chosen.jquery.js"
+        },
+        {
+            "type" : "text/css",
+            "src" : "../../../../libraries/chosen/1.5.1/chosen.css"
+        },
+        {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/Component.js"
         }, {
             "type" : "text/javascript",
@@ -94,6 +102,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/Select.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/divmanazer/component/SelectList.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/ProgressBar.js"
