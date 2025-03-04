@@ -1,0 +1,29 @@
+.chosen-container.chosen-drop-up .chosen-drop{
+   top: auto;
+   bottom: 100%;
+}
+.oskari-select{
+  display: inline-block;
+}
+
+/* Chosen fixes */
+.chosen-container.chosen-drop-up .chosen-drop {
+    border-bottom: 1;
+    border-radius: 4px 4px 0 0;
+    border-top: 1px solid #aaa;
+    bottom: 100%;
+    box-shadow: none;
+    top: auto;
+}
+
+.chosen-container-active.chosen-with-drop.chosen-drop-up .chosen-single {
+    background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(40%,#eee),color-stop(90%,#fff));
+    background-image: -webkit-linear-gradient(#fff 40%,#eee 90%);
+    background-image: -moz-linear-gradient(#fff 40%,#eee 90%);
+    background-image: -o-linear-gradient(#fff 40%,#eee 90%);
+    background-image: linear-gradient(#fff 40%,#eee 90%);
+    border-radius: 0 0 4px 4px;
+    border-top: 0;
+    box-shadow: 0 1px 0 #fff inset;
+}
+
