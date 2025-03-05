@@ -67,9 +67,12 @@ Run only one test by specifying the test name in URL or by clicking the test nam
 ## RPC documentation
 
 * [RPC example](https://www.oskari.org/examples/rpc-api/)
+* RPC documentation
+    * [latest stable](https://www.oskari.org/documentation/api/bundles/latest/RPC)
+    * [nightly build](https://www.oskari.org/documentation/api/bundles/unreleased/RPC)
 * [Bundles](https://www.oskari.org/documentation/api/bundles)
-* [RPC Requests](https://www.oskari.org/documentation/api/requests)
-* [RPC Events](https://www.oskari.org/documentation/api/events)
+* [RPC requests](https://www.oskari.org/documentation/api/requests)
+* [RPC events](https://www.oskari.org/documentation/api/events)
 
 ## License
 
