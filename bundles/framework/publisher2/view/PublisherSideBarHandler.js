@@ -20,7 +20,7 @@ import { Info } from 'oskari-ui/components/icons/Info';
 import { StatsGridPanelHandler } from '../handler/StatsGridPanelHandler';
 
 export const PUBLISHER_BUNDLE_ID = 'Publisher2';
-const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
+export const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
 const PANEL_MAPPREVIEW_ID = 'panelMapPreview';
 const PANEL_MAPLAYERS_ID = 'panelMapLayers';
 const PANEL_MAPTOOLS_ID = 'panelMapTools';
@@ -32,22 +32,21 @@ const PANEL_STATSGRID_ID = 'panelStatsgrid';
 class PublisherSidebarUIHandler extends StateHandler {
     constructor () {
         super();
+        this.log = Oskari.log('PublisherSidebarUIHandler');
         this.validationErrorMessageDialog = null;
         this.replaceConfirmDialog = null;
         this.state = {
             collapseItems: []
         };
         this.sandbox = Oskari.getSandbox();
+        this.panels = []; // TODO: for now contains only extra (panels, handlers) maybe add all to clean code
     }
 
     init (data, publisherTools) {
         this.data = data;
-        const layerTools = publisherTools.groups.layers;
-        let mapTools = publisherTools.groups.tools;
-        mapTools = mapTools ? [...mapTools] : [];
-        mapTools = [...mapTools].sort((a, b) => a.index - b.index);
-        const rpcTools = publisherTools.groups.rpc;
-        this.statsgridTools = publisherTools.groups?.statsgrid || null;
+        const { layers: layerTools, tools: mapTools, rpc: rpcTools, statsgrid, ...extraGroups } = publisherTools.groups;
+        this.statsgridTools = statsgrid;
+
         this.generalInfoPanelHandler = new PanelGeneralInfoHandler();
         this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
         this.mapLayersHandler = new PanelMapLayersHandler(layerTools, this.sandbox);
@@ -124,7 +123,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         });
 
         // RPC panel should be the last in line after all other (react collapsified) panels
-        if (rpcTools && rpcTools.length) {
+        if (rpcTools?.length) {
             this.rpcPanelHandler = new ToolPanelHandler(rpcTools);
             this.rpcPanelHandler.init(data);
             this.rpcPanelHandler.addStateListener(() => this.updateRpcPanel());
@@ -140,10 +139,49 @@ class PublisherSidebarUIHandler extends StateHandler {
         if (showStatsGridPanel) {
             collapseItems.push(this.getStatsGridPanelItem());
         }
+        Object.keys(extraGroups).forEach(group => {
+            // TODO: group info (label, tooltip, handler) should be passed somehow (protocol publisher.Panel, getGroupInfo, this.group = {},..)
+            const tools = extraGroups[group];
+            const { tooltip, label } = Oskari.getMsg(PUBLISHER_BUNDLE_ID, `BasicView.${group}`);
+            if (!label) {
+                this.log.warn(`No label for "${group}" group, skipping!`);
+                return;
+            }
+            const handler = new ToolPanelHandler(tools, () => this.updateExtraItems(group));
+            handler.init(data);
+            const panel = {
+                key: `${group}Panel`,
+                label,
+                children: this.getExtraItems(group, handler)
+            };
+            if (tooltip) {
+                panel.extra = <Info title={tooltip}/>;
+            }
+            collapseItems.push(panel);
+            this.panels.push({ group, handler, panel });
+        });
 
         this.updateState({
             collapseItems
         });
+    }
+
+    getExtraItems (group, handler) {
+        return <div className={`t_tools t_${group}`}>
+            <PublisherToolsList state={handler.getState()} controller={handler.getController()}/>
+        </div>;
+    }
+
+    updateExtraItems (group) {
+        const { panel, handler } = this.panels.find(p => p.group === group) || {};
+        if (!panel || !handler) {
+            this.log.error(`Couldn't find panel or handler for: ${group}.`);
+            return;
+        }
+        panel.children = this.getExtraItems(group, handler);
+        const collapseItems = this.getState().collapseItems
+            .map(p => p.key === panel.key ? panel : p);
+        this.updateState({ collapseItems });
     }
 
     /**
