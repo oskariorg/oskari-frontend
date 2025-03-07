@@ -7,6 +7,7 @@ Removed bundles:
 - `framework/admin-layerrights` replaced by `admin/admin-permissions`
 - `catalogue/metadatacatalogue` replaced by `catalogue/metadatasearch`
 - `catalogue/metadataflyout` replaced by `catalogue/metadata`
+- `framework/admin-publish-transfer` removed as app specific
 
 Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader syntax:
 
