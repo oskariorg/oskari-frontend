@@ -29,12 +29,13 @@ describe('Map', function () {
                 // Expect atleast basemap layer to be found.
                 expect(Object.keys(data).length).toBeGreaterThan(0);
                 // Expect basemap layer to be have at least 4 elements.
-                expect(Object.keys(data[0]).length).toBeGreaterThanOrEqual(4);
+                expect(Object.keys(data[0]).length).toBeGreaterThanOrEqual(5);
                 // id, opacity, visible, name
                 expect(data[0].id).toBeDefined();
                 expect(data[0].opacity).not.toBeGreaterThan(100);
                 expect(data[0].visible).toBeTruthy();
                 expect(data[0].name).toBeDefined();
+                expect(data[0].description).toBeDefined();
                 //layer can have max/min zoom
                 //expect(data.minZoom).toBeDefined();
                 //expect(data.maxZoom).toBeDefined();
@@ -100,7 +101,7 @@ describe('Map', function () {
         });
 
         it('Reorders layers', function (done) {
-            
+
             var layerId = baseLayer.id;
             var newPos = 1;
 
@@ -156,7 +157,7 @@ describe('Map', function () {
             })
 
             channel.getMapPosition(function (data) {
-                // Compare current map position to test parameters, since AfterMapMove event 
+                // Compare current map position to test parameters, since AfterMapMove event
                 // triggers only when starting position is not the same as end position
                 var xIsDifferent = data.centerX !== moveMapParams.x;
                 var yIsDifferent = data.centery !== moveMapParams.y;
@@ -175,7 +176,7 @@ describe('Map', function () {
 
         it('Gets map bbox', function (done) {
             channel.getMapBbox(function (data) {
-                // Expect getMapBbox data to have 4 elements. 
+                // Expect getMapBbox data to have 4 elements.
                 expect(Object.keys(data).length).toEqual(4);
                 // Bbox varies by screen size
                 expect(data.bottom).toEqual(jasmine.any(Number));
@@ -283,7 +284,7 @@ describe('Map', function () {
                 // Zoom functions do not move the map
                 expect(data.centerX).toEqual(position.centerX);
                 expect(data.centerY).toEqual(position.centerY);
-                // Zoom and scale change 
+                // Zoom and scale change
                 expect(data.zoom).not.toEqual(position.zoom);
                 expect(data.scale).not.toEqual(position.scale);
             });
@@ -552,7 +553,7 @@ describe('Map', function () {
         it('Changes map layer style', function (done) {
             channel.postRequest('MapModulePlugin.MapLayerUpdateRequest', [layerParams.layerId, true, layerParams.changeLayerStyle]);
             channel.log('MapModulePlugin.MapLayerUpdateRequest', [layerParams.layerId, true, layerParams.changeLayerStyle]);
-            
+
             counter++;
             done();
         });
@@ -560,7 +561,7 @@ describe('Map', function () {
         it ('Resets map layer style', function (done) {
             channel.postRequest('MapModulePlugin.MapLayerUpdateRequest', [layerParams.layerId, true, layerParams.resetLayerStyle]);
             channel.log('MapModulePlugin.MapLayerUpdateRequest', [layerParams.layerId, true, layerParams.resetLayerStyle]);
-            
+
             counter++;
             done();
         })
@@ -578,7 +579,7 @@ describe('Map', function () {
             // Zoom level changes depending on the size of map view port, can not expect an absolute value
             expect(data.zoomLevel).toBeDefined();
             expect(data.zoomLevel).toEqual(jasmine.any(Number))
-            
+
             counter++;
             done();
         });

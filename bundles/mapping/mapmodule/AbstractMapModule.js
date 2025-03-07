@@ -2342,6 +2342,7 @@ Oskari.clazz.define(
                         opacity: layer.getOpacity(),
                         visible: layer.isVisible(),
                         name: layer.getName(),
+                        description: layer.getDescription(),
                         config: dataAttributes
                     };
 
