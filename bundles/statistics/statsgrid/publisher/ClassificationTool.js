@@ -5,6 +5,9 @@ class ClassificationTool extends AbstractStatsPluginTool {
         super(...args);
         this.index = 1;
         this.id = 'allowClassification';
+        this.state = {
+            enabled: true // enabled for default
+        };
     }
 
     init (data) {
@@ -32,6 +35,12 @@ class ClassificationTool extends AbstractStatsPluginTool {
             return;
         }
         handler.updateClassificationState('editEnabled', true);
+    }
+
+    // override to include config always. setEnabled checks explicitly if false
+    getValues () {
+        const id = this._getToolId();
+        return this.getConfiguration({ [id]: this.isEnabled() });
     }
 };
 
