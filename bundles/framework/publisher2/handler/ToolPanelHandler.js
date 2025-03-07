@@ -3,7 +3,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 class UIHandler extends StateHandler {
     constructor (tools, consumer) {
         super();
-        this.allAvailableTools = tools ? [...tools] : [];
+        this.allAvailableTools = Array.isArray(tools) ? tools.toSorted((a, b) => a.index - b.index) : [];
         this.setState({
             tools: []
         });
