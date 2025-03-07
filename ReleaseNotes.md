@@ -7,6 +7,7 @@ Removed bundles:
 - `framework/admin-layerrights` replaced by `admin/admin-permissions`
 - `catalogue/metadatacatalogue` replaced by `catalogue/metadatasearch`
 - `catalogue/metadataflyout` replaced by `catalogue/metadata`
+- `framework/admin-publish-transfer` removed as app specific
 
 Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader syntax:
 
@@ -21,7 +22,6 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/admin/bundle/admin/bundle.js -> bundles/admin/admin
 - packages/admin/bundle/appsetup/bundle.js -> bundles/admin/appsetup
 - packages/admin/bundle/metrics/bundle.js -> bundles/admin/metrics
-- packages/framework/bundle/admin-publish-transfer/bundle.js -> bundles/admin/admin-publish-transfer
 
 - packages/framework/layerlist/bundle.js -> bundles/framework/layerlist
 - packages/framework/featuredata/bundle.js -> bundles/framework/featuredata
