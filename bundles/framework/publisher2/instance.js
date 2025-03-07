@@ -1,5 +1,20 @@
 import React from 'react';
 import { Message } from 'oskari-ui';
+
+import './Flyout';
+import './view/PublisherSidebar';
+import './tools/AbstractPluginTool';
+import '../../mapping/mapmodule/publisher/tools';
+import './service/PublisherService';
+import './event/MapPublishedEvent';
+import './event/ToolEnabledChangedEvent';
+// FIXME: remove/ColourSchemeChangedEvent isn't sent anymore after theming support
+import './event/ColourSchemeChangedEvent';
+import './event/LayerToolsEditModeEvent';
+import './request/PublishMapEditorRequest';
+import './request/PublishMapEditorRequestHandler';
+import './resources/scss/style.scss';
+
 /**
  * @class Oskari.mapframework.bundle.publisher2.PublisherBundleInstance
  *

@@ -350,9 +350,8 @@
                     return;
                 }
                 const handleReg = function () {
-                    var request = requestBuilder.apply(me, requestArgs || []);
+                    const request = requestBuilder.apply(me, requestArgs || []);
                     const creatorComponent = me.postMasterComponent;
-                    let rv = null;
 
                     request._creator = creatorComponent;
 
@@ -367,7 +366,7 @@
                         me._debugPushRequest(creatorComponent, request);
                     }
 
-                    rv = me.processRequest(request);
+                    me.processRequest(request);
 
                     if (me.debug()) {
                         me._debugPopRequest();
@@ -389,8 +388,8 @@
              * @return {Oskari.mapframework.module.Module[]} modules listening to the event
              */
             _findModulesInterestedIn: function (event) {
-                var eventName = event.getName(),
-                    currentListeners = this._listeners[eventName];
+                const eventName = event.getName();
+                const currentListeners = this._listeners[eventName];
                 if (!currentListeners) {
                     return [];
                 }
@@ -406,48 +405,26 @@
              * @param {Boolean} retainEvent true to not send event but only print debug which modules are listening, usually left undefined (optional)
              */
             notifyAll: function (event, retainEvent) {
-                var eventName;
-                if (!retainEvent) {
-                    eventName = event.getName();
-                    log.debug(
-                        'Sandbox received notifyall for event \'' + eventName + '\''
-                    );
-                }
-
-                var modules = this._findModulesInterestedIn(event),
-                    i,
-                    module;
-                if (!retainEvent) {
-                    log.debug(
-                        'Found ' + modules.length + ' interested modules'
-                    );
-                }
-                for (i = 0; i < modules.length; i += 1) {
-                    module = modules[i];
+                const eventName = event.getName();
+                log.debug(`Sandbox received notifyAll for event '${eventName}'.`);
+                // make a copy of list so unregistering during notifications doesn't stop calling interested modules
+                const modules = [...this._findModulesInterestedIn(event)];
+                log.debug(`Found ${modules.length} interested modules.`);
+                modules.forEach(mod => {
                     if (!retainEvent) {
-                        log.debug(
-                            'Notifying module \'' + module.getName() + '\'.'
-                        );
-
-                        if (this.debug()) {
-                            this._pushRequestAndEventGather(
-                                'Sandbox->' + module.getName() + ':', eventName
-                            );
-                        }
+                        log.debug(`Notifying module '${mod.getName()}'.`);
                     }
-
-                    this._debugPushEvent(
-                        event._creator || 'NA',
-                        module,
-                        event
-                    );
+                    if (this.debug()) {
+                        this._pushRequestAndEventGather(`Sandbox->${mod.getName()}:`, eventName);
+                    }
+                    this._debugPushEvent(event._creator || 'NA', mod, event);
                     try {
-                        module.onEvent(event);
-                    } catch(err) {
-                        log.warn('Error notifying',  module.getName(), 'about', eventName, event, err);
+                        mod.onEvent(event);
+                    } catch (err) {
+                        log.warn(`Error notifying ${mod.getName()} about ${eventName}`, event, err);
                     }
                     this._debugPopEvent();
-                }
+                });
             },
 
             /**
@@ -458,7 +435,7 @@
              * @return {Oskari.mapframework.module.Module} registered module or null if not found, map of modules if name is not given
              */
             findRegisteredModuleInstance: function (name) {
-                if(!name) {
+                if (!name) {
                     return this._modulesByName;
                 }
                 return this._modulesByName[name];

@@ -1,3 +1,9 @@
+import '../statehandler/request/SaveStateRequest';
+import '../statehandler/request/SaveStateRequestHandler';
+import '../statehandler/request/SetStateRequest';
+import '../statehandler/request/SetStateRequestHandler';
+import './state-methods';
+
 /**
  * @class Oskari.mapframework.bundle.publishedstatehandler.PublishedStateHandlerBundleInstance
  * Handles modules implementing Stateful protocol to get application state

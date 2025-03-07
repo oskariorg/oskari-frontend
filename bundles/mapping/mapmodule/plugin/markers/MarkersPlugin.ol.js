@@ -253,7 +253,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this.markerPopupControls = showMarkerPopup(() => this.removeMarkers(), () => this.closeMarkerPopup());
             }
 
-            this.getMapModule().setCursorStyle('crosshair');
+            this.getMapModule().setCursorStyle('crosshair', this.getName());
         },
         /**
          * Stops the marker location selector
@@ -267,7 +267,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             if (this.popupControls) {
                 this.popupCleanup();
             }
-            this.getMapModule().setCursorStyle('');
+            this.getMapModule().setCursorStyle('', this.getName());
             if (!selectDefault) {
                 return;
             }

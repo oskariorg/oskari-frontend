@@ -1,5 +1,10 @@
 import React from 'react';
 import { Message } from 'oskari-ui';
+import './plugin/CoordinateToolPlugin';
+import './service/CoordinateToolService';
+// make the publisher tool available for publisher when this is loaded/registered
+import './publisher/CoordinateTool';
+
 /**
  * @class Oskari.mapframework.bundle.coordinatetool.CoordinateToolBundleInstance
  *

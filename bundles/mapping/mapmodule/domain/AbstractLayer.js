@@ -299,33 +299,7 @@ Oskari.clazz.define(
          * @return {String} organization name under which the layer is listed in UI
          */
         getOrganizationName: function (lang) {
-            if (this._organizationName && typeof this._organizationName === 'object') {
-                if (!lang) {
-                    lang = Oskari.getLang();
-                }
-                var value = this._organizationName[lang];
-                if (!value) {
-                    value = this._organizationName[Oskari.getDefaultLanguage()];
-                }
-                return value;
-            }
-            return this._organizationName;
-        },
-
-        /**
-         * Returns an inspire name for the layer.
-         * If the name is populated with a string, always returns it.
-         * With populated object assumes that the object keys are language codes.
-         * If language param is not given, uses Oskari.getLang()
-         * @method getInspireName
-         * @return {String} inspire theme name under which the layer is listed in UI
-         */
-        getInspireName: function () {
-            const groups = this.getGroups();
-            if (!groups.length) {
-                return '';
-            }
-            return groups[0].name;
+            return Oskari.getLocalized(this._organizationName, lang);
         },
 
         /**

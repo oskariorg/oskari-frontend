@@ -23,11 +23,11 @@ const Address = styled('div')`
 
 const Channel = styled.div`
     margin-bottom: 24px;
-`
+`;
 
 const Heading = styled.h3`
     padding-bottom: 0px;
-`
+`;
 
 const PopupContent = ({ results, onClose }) => {
     const channels = Oskari.getMsg(BUNDLE_NAME, 'channels');
@@ -51,7 +51,7 @@ const PopupContent = ({ results, onClose }) => {
                                 </Row>
                             ))}
                         </Channel>
-                    )
+                    );
                 })}
                 <ButtonContainer>
                     <PrimaryButton
@@ -70,7 +70,7 @@ export const showFindByCoordinatesPopup = (channelResults, theme, onClose) => {
         theme
     };
 
-    const PopupComponent = <PopupContent 
+    const PopupComponent = <PopupContent
         results={channelResults}
         onClose={onClose}
     />;

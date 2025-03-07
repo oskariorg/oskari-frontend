@@ -1,3 +1,6 @@
+import './request/show-map-layer-info-request';
+import './event/BackendStatusChangedEvent';
+
 /**
  * @class Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance
  *

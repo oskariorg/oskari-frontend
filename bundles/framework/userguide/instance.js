@@ -1,5 +1,11 @@
 import React from 'react';
 import { Message } from 'oskari-ui';
+import './Flyout';
+import './SimpleFlyout';
+import './request/ShowUserGuideRequest';
+import './request/ShowUserGuideRequestHandler';
+import './resources/scss/style.scss';
+
 /**
  * @class Oskari.mapframework.bundle.userguide.UserGuideBundleInstance
  *

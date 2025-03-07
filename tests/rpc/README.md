@@ -1,12 +1,21 @@
 # RPC tests
 
-JasmineJS test suite for testing Oskari rpc functions, events and requests.
+JasmineJS test suite for testing Oskari RPC functions, events and requests.
 
 ## Getting Started
 
 ### Published map
 
-To run tests on your published map set the URL in common_parts.js.
+By default, tests use the demo map in Paikkatietoikkuna. If you add a new RPC function, event, or request, you need to run a test for it on your own published map that includes the new feature.
+
+To run tests on your published map, set `SpecRunner.html` to use `common_parameters.js`.
+
+``` html
+  <!-- include source files here... -->
+  <script src="src/common_parameters.js" defer></script>
+```
+
+Set the URL in `common_parameters.js` and adjust other parameters if needed.
 
 ``` javascript
 var mapURL = 'http://demo.oskari.org/?lang=en&uuid=8016f9be-131b-44ab-bcee-5055628dbd42'
@@ -14,7 +23,7 @@ var mapURL = 'http://demo.oskari.org/?lang=en&uuid=8016f9be-131b-44ab-bcee-50556
 
 ### Adding tests
 
-Add specs to SpecRunner.html
+Add specs to `SpecRunner.html`.
 
 ``` html
   <!-- include spec files here... -->
@@ -23,11 +32,13 @@ Add specs to SpecRunner.html
 
 ## Running the tests
 
-SpecRunner.html runs the defined specs. Open it from server (for example [http://localhost:8080/Oskari/tests/rpc/SpecRunner.html](http://localhost:8080/Oskari/tests/rpc/SpecRunner.html)).
+The `tests` folder must be deployed to some file server running locally so that it can be accessed using localhost. For example, if you use the Jetty package of Oskari, you can copy the `tests` folder under `/oskari-server/sample-application/dist`.
+
+SpecRunner.html runs the defined specs. Open it from a server (for example [http://localhost:8080/Oskari/tests/rpc/SpecRunner.html](http://localhost:8080/Oskari/tests/rpc/SpecRunner.html)).
 
 ### All tests
 
-To run all tests open SpecRunner.html in browser.
+To run all tests open `SpecRunner.html` in browser.
 
 ``` bash
 /SpecRunner.html
@@ -55,11 +66,13 @@ Run only one test by specifying the test name in URL or by clicking the test nam
 
 ## RPC documentation
 
-* [RPC example](http://www.oskari.org/examples/rpc-api/rpc_example.html)
-* [RPC documentation](https://www.oskari.org/api/bundles#/unreleased/framework/rpc)
-* [Bundles](http://www.oskari.org/api/bundles)
-* [RPC Requests](http://www.oskari.org/api/requests)
-* [RPC Events](http://www.oskari.org/api/events)
+* [RPC example](https://www.oskari.org/examples/rpc-api/)
+* RPC documentation
+    * [latest stable](https://www.oskari.org/documentation/api/bundles/latest/RPC)
+    * [nightly build](https://www.oskari.org/documentation/api/bundles/unreleased/RPC)
+* [Bundles](https://www.oskari.org/documentation/api/bundles)
+* [RPC requests](https://www.oskari.org/documentation/api/requests)
+* [RPC events](https://www.oskari.org/documentation/api/events)
 
 ## License
 

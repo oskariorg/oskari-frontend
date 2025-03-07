@@ -1,5 +1,12 @@
 import React from 'react';
 import { Message } from 'oskari-ui';
+
+import './Flyout';
+import './Tile';
+import './plugin/MapLegendPlugin';
+import './publisher/MapLegendTool';
+import './resources/scss/style.scss';
+
 /**
  * @class Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance
  *

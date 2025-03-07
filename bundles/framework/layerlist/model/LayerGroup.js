@@ -15,15 +15,19 @@ export class LayerGroup {
     getParentId () {
         return this.parentId;
     }
+
     setParentId (parentId) {
         this.parentId = parentId;
     }
+
     getGroups () {
         return this.groups;
     }
+
     setGroups (newGroups) {
         this.groups = newGroups;
     }
+
     /**
      * @method getId
      * @return {String}
@@ -31,19 +35,22 @@ export class LayerGroup {
     getId () {
         return this.id;
     }
+
     /**
      * @return {Boolean}
      */
     isEditable () {
         return this.id > 0;
     }
+
     /**
-     * @method getGroupMethod
+     * @method groupMethod
      * @return {String}
      */
     getGroupMethod () {
         return this.groupMethod;
     }
+
     /**
      * @method setTitle
      * @param {String} name
@@ -51,6 +58,7 @@ export class LayerGroup {
     setTitle (name) {
         this.name = name;
     }
+
     /**
      * @method getTitle
      * @return {String}
@@ -58,12 +66,15 @@ export class LayerGroup {
     getTitle () {
         return this.name || '';
     }
+
     setDescription (description) {
         this.description = description;
     }
+
     getDescription () {
         return this.description;
     }
+
     /**
      * @method addLayer
      * @param {Layer} layer
@@ -76,11 +87,13 @@ export class LayerGroup {
         this.layers.push(layer);
         this.searchIndex[layer.getId()] = this._getSearchIndex(layer);
     }
+
     getLayerCount () {
         return this.getGroups().reduce((prev, cur) => {
             return prev + cur.getLayerCount();
         }, this.layers.length);
     }
+
     /**
      * @method addTool
      * @param {Oskari.mapframework.domain.Tool} tool
@@ -92,6 +105,7 @@ export class LayerGroup {
     getTools () {
         return this.tools;
     }
+
     /**
      * @method getLayers
      * @return {Layer[]}
@@ -99,23 +113,27 @@ export class LayerGroup {
     getLayers () {
         return this.layers;
     }
+
     setLayers (newLayers = []) {
         this.layers = [];
         this.searchIndex = {};
         newLayers.forEach(layer => this.addLayer(layer));
     }
+
     _getSearchIndex (layer) {
-        let val = layer.getName() + ' ' +
-            layer.getInspireName() + ' ' +
-            layer.getOrganizationName();
-        // TODO: maybe filter out undefined texts
+        const index = layer.getGroups().map(group => group.name);
+        index.push(layer.getName());
+        index.push(layer.getOrganizationName());
         if (this._isAdmin) {
-            val = val + ' ' +
-                layer.getId() + ' ' +
-                layer.getLayerName();
+            index.push(layer.getId());
+            index.push(layer.getLayerName());
         }
-        return val.toLowerCase();
+        return index
+            .filter(nonEmpty => nonEmpty)
+            .join(' ')
+            .toLowerCase();
     }
+
     matchesKeyword (layerId, keyword) {
         const searchableIndex = this.searchIndex[layerId];
         let terms = keyword;
@@ -124,6 +142,7 @@ export class LayerGroup {
         }
         return terms.every(key => searchableIndex.indexOf(key.toLowerCase()) !== -1);
     }
+
     clone () {
         const clone = new LayerGroup(this.id, this.groupMethod, this.name, this.description, this.parentId);
         clone.layers = [...this.layers];

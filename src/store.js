@@ -1,15 +1,15 @@
 (function (o) {
     // default impl for validator and defaultValue generator
-    var noop = function () { return true; };
+    const noop = function () { return true; };
 
-    var setterGetter = function setterGetterFn (collection, key, value, defaultValue, validator) {
+    const setterGetter = function setterGetterFn (collection, key, value, defaultValue, validator) {
         if (!collection) {
             return;
         }
 
         // setter
         if (key && value) {
-            var currentValue = collection[key];
+            const currentValue = collection[key];
 
             // validate if validator is provided, pass is value and previous value
             if (!validator(value, currentValue)) {
@@ -23,8 +23,8 @@
         // getters
         if (!key) {
             // get registered keys
-            var result = [];
-            for (var prop in collection) {
+            const result = [];
+            for (const prop in collection) {
                 result.push(prop);
             };
             return result;
@@ -47,7 +47,7 @@
     - data(key, value) :
         - the actual method name can be overridden with constructor arg (defaults to data)
     */
-    var Storage = function (methodName, options) {
+    const Storage = function (methodName, options) {
         // normalize params
         if (typeof methodName !== 'string') {
             options = methodName;
@@ -59,8 +59,8 @@
             options = {};
         }
 
-        var _collection = {};
-        var _me = {
+        let _collection = {};
+        const _me = {
             reset: function (key) {
                 if (!key) {
                     // do we need to loop and delete here to save memory?
@@ -71,11 +71,11 @@
             }
         };
         // Initialize default value function to no-op if not a function
-        var defaultValue = options.defaultValue;
+        let defaultValue = options.defaultValue;
         if (typeof defaultValue !== 'function') {
             defaultValue = noop;
         }
-        var validator = options.validator;
+        let validator = options.validator;
         if (typeof validator !== 'function') {
             validator = noop;
         }

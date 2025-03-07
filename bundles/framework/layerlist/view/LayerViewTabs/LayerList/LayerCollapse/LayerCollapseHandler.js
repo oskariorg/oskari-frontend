@@ -1,8 +1,7 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { groupLayers } from './util';
 import { FILTER_ALL_LAYERS } from '..';
 import { GROUPING_PRESET, GROUPING_DATAPROVIDER } from '../preset';
-import { Messaging } from 'oskari-ui/util';
 
 const ANIMATION_TIMEOUT = 400;
 const LAYER_REFRESH_THROTTLE = 2000;
@@ -107,6 +106,7 @@ class ViewHandler extends StateHandler {
         };
         this.eventHandlers = this._createEventHandlers();
     }
+
     setGroupingType (groupingType = GROUPING_PRESET[0].key) {
         if (this.groupingType === groupingType) {
             // grouping stays the same
@@ -115,6 +115,7 @@ class ViewHandler extends StateHandler {
         this.groupingType = groupingType;
         this.updateLayerGroups();
     }
+
     setFilter (activeId, searchText = '') {
         const previousSearchText = this.filter.searchText;
         // Generate search terms by splitting by * and space
@@ -321,6 +322,7 @@ class ViewHandler extends StateHandler {
         });
         this.updateState({ groups });
     }
+
     _refreshAllLayers () {
         if (this.state.groups.length === 0) {
             return;
