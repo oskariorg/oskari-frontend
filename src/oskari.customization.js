@@ -117,8 +117,17 @@ const setThemeColors = (theme = {}) => {
     }
     _themeColors = { ...theme.color };
     // Add theme colors to predefined colors
-    const colors = [...COLORS, ...Object.values(_themeColors)];
-    setColors([...new Set(colors)]);
+    const colorsFromTheme = Object.values(_themeColors).reduce((colors, cur) => {
+        if (Array.isArray(cur)) {
+            return [...colors, ...cur];
+        }
+        if (typeof cur === 'object') {
+            return [...colors, ...Object.values(cur)];
+        }
+        return [...colors, cur];
+    }, []).filter(color => Oskari.util.colorToArray(color).length);
+
+    setColors([...new Set([...COLORS, ...colorsFromTheme])]);
 };
 
 export const Customization = {
