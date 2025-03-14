@@ -65,7 +65,7 @@ class MetadataHandler extends StateHandler {
             }
         }).then(response => {
             if (!response.ok) {
-                Messaging.error(this.instance.loc('advancedSearch.fetchAdvancedSearchOptionsFailed'));
+                Messaging.error(this.instance.loc('flyout.error.notFound'));
             }
             return response.json();
         }).then(json => {
