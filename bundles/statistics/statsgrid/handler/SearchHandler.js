@@ -188,39 +188,35 @@ class SearchController extends AsyncStateHandler {
         }
     }
 
-    handleMultipleIndicatorParams (indicators) {
+    async handleMultipleIndicatorParams (selectedIndicators) {
         const combinedSelectors = [];
         const regionsets = new Set();
 
-        const promise = new Promise((resolve, reject) => {
-            indicators.forEach((indId, index) => {
-                this.handleSingleIndicatorParams(indId, (params) => {
-                    // include missing regionsets
-                    params.regionsets.forEach(rs => regionsets.add(rs));
-                    params.selectors.forEach((selector) => {
-                        const existing = combinedSelectors.find(s => s.id === selector.id);
-                        // Note: selectors may come from metadata cache, don't mess up cached data
-                        if (!existing) {
-                            combinedSelectors.push({ ...selector });
-                        } else {
-                            const values = existing.values.map(s => s.value);
-                            const newValues = selector.values.filter(v => !values.includes(v.value));
-                            if (newValues.length) {
-                                existing.values = [...existing.values, ...newValues].sort((a, b) => b.value - a.value);
-                            }
+        for (const indId of selectedIndicators) {
+            await this.handleSingleIndicatorParams(indId, (params) => {
+                // include missing regionsets
+                params.regionsets.forEach(rs => regionsets.add(rs));
+                params.selectors.forEach((selector) => {
+                    const existing = combinedSelectors.find(s => s.id === selector.id);
+                    // Note: selectors may come from metadata cache, don't mess up cached data
+                    if (!existing) {
+                        combinedSelectors.push({ ...selector });
+                    } else {
+                        const values = existing.values.map(s => s.value);
+                        const newValues = selector.values.filter(v => !values.includes(v.value));
+                        if (newValues.length) {
+                            existing.values = [...existing.values, ...newValues].sort((a, b) => b.value - a.value);
                         }
-                    });
+                    }
                 });
-                if (index === indicators.length - 1) resolve();
             });
-        });
-        promise.then(() => {
-            const indicatorParams = {
-                selectors: combinedSelectors,
-                regionsets: [...regionsets]
-            };
-            this.setIndicatorParams(indicatorParams);
-        });
+        };
+
+        const indicatorParams = {
+            selectors: combinedSelectors,
+            regionsets: [...regionsets]
+        };
+        this.setIndicatorParams(indicatorParams);
     }
 
     async handleSingleIndicatorParams (indicatorId, cb) {
