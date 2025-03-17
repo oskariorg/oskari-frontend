@@ -2,18 +2,73 @@
 
 ## 3.0.0
 
-Removed bundles:
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/53?closed=1
 
-- `framework/admin-layerrights` replaced by `admin/admin-permissions`
-- `catalogue/metadatacatalogue` replaced by `catalogue/metadatasearch`
-- `catalogue/metadataflyout` replaced by `catalogue/metadata`
-- `framework/admin-publish-transfer` removed as app specific
+This release mostly focuses on server-side and updating the Java-version Oskari is built with. Most of the frontend changes are cleaning up older code and moving things around. While we didn't finish all of the work for the frontend cleanup that was dreamed of, you should be able to see where we are going with this. While it might seem a lot of manual migration of frontend changes for this upgrade, doing it while rotating the major version is what major versions are for. This allows us to improve developer experience of Oskari and make things better for future development. This means that there are quite a few changes that Oskari-based applications require when upgrading to Oskari 3.0, but it should be fairly straightforward and mostly changing references to bundles.
 
-Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader syntax:
+### New base class for bundle instances
+
+Introduced in https://github.com/oskariorg/oskari-frontend/pull/2794 and usage is demonstrated on the sample-applications `sample-info` bundle: https://github.com/oskariorg/sample-application/tree/ea1bc81852f306fe1f31707f8626500ca9a1eb7a/bundles/sample-info
+
+The bundle might have more comments on what it does and why so it should be pretty easy to follow. Main things are the new `index.js` and that you can now import a base ES class for your bundle instance and might not need to care about the `Oskari.clazz.define()` way of doing things. A very simply bundle with id `hello-world` that prints out a dev-console message on startup can now be defined like this:
+
+```javascript
+import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
+
+class MyBundleInstance extends BasicBundleInstance {
+    start () {
+        console.log('Hello world')
+    }
+}
+
+Oskari.bundle('hello-world', () => new MyBundleInstance());
+```
+
+### Publisher
+
+The publisher bundle now uses React.js for rendering most of the UI. This means that any publisher tools _other bundles_ want to show on the publisher UI now need to be React-based. What such publisher tool controls doesn't matter as much, but the tool implementation requires React-based code.
+
+Example publisher tool migrations from 2.14.0:
+- coordinatetool-bundle:  https://github.com/oskariorg/oskari-frontend/pull/2728 
+- time and camera controls for 3D-map: https://github.com/oskariorg/oskari-frontend/pull/2741
+
+An issue with layers being loaded asynchronously was fixed (affecting the map legend tool):
+- https://github.com/oskariorg/oskari-documentation/issues/81
+
+Thematic maps panel is now toggled on the publisher UI if statistical data layer is added/removed while using the publisher.
+
+### Changes for bundle registrations 
+
+The packages folder that Oskari-frontend uses and it's connection to the bundles folder has raised quite a few questions during the years. With this release we have started moving the "bundle definition" files (`bundle.js`) from under `packages` folder to be next to the actual implementation files under `bundles` (as `index.js` files). In the progress we have also simplified the format (_removing roughly 95+% of the content/all of the boilerplate of these_).
+
+Since we have the new format for `index.js` per bundle we also needed new loaders to process the new way of importing bundles to applications. New loaders are now available for application `main.js` usage:
+- `oskari-bundle` replaces oskari-loader and supports more streamlined bundle registrations (https://github.com/oskariorg/oskari-frontend/pull/2791)
+- `oskari-lazy-bundle` replaces oskari-lazy-loader for adding support to lazy-load bundles with the streamlined bundle registration (https://github.com/oskariorg/oskari-frontend/pull/2792)
+
+This allows linking bundles like this:
+```javascript
+import 'oskari-bundle!oskari-frontend/bundles/admin/admin';
+```
+instead of:
+```javascript
+import 'oskari-loader!oskari-frontend/packages/admin/bundle/admin/bundle.js';
+```
+and removes the unnecessary complication that comes with the packages-folder.
+
+The frontend now always requires a build process and we use it to automate how localization files for a bundle are linked. The new loader detects localization files for the bundle by searching `resources/locale` folder for localization files (relative to the `index.js` file) so you don't need to link them manually like on `bundle.js`. The old loader is still required for bundles that need to link files under libraries with the "expose-loader" or ones that link localization from other bundle folders. We will continue working on this.
+
+#### Migrated bundles
+
+These bundles have been migrated from under `packages` to `bundles` and/or to the new bundle-loader syntax. Applications will need to modify the `main.js` files like describe here: https://github.com/oskariorg/oskari-frontend/pull/2793. The pull request also shows how much easier it is to declare a bundle with the new format.
+
+```diff
+- import 'oskari-loader!oskari-frontend/packages/framework/layerlist/bundle.js';
++ import 'oskari-bundle!oskari-frontend/bundles/framework/layerlist/';
+```
 
 - bundles/catalogue/metadata/bundle.js -> bundles/catalogue/metadataflyout
 - packages/catalogue/metadatasearch/bundle.js -> bundles/catalogue/metadatasearch
-
 - packages/admin/bundle/admin-announcements/bundle.js -> bundles/admin/admin-announcements
 - packages/admin/bundle/admin-layereditor/bundle.js -> bundles/admin/admin-layereditor
 - packages/admin/bundle/admin-permissions/bundle.js -> bundles/admin/admin-permissions
@@ -22,7 +77,6 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/admin/bundle/admin/bundle.js -> bundles/admin/admin
 - packages/admin/bundle/appsetup/bundle.js -> bundles/admin/appsetup
 - packages/admin/bundle/metrics/bundle.js -> bundles/admin/metrics
-
 - packages/framework/layerlist/bundle.js -> bundles/framework/layerlist
 - packages/framework/featuredata/bundle.js -> bundles/framework/featuredata
 - packages/framework/bundle/language-selector/bundle.js -> bundles/framework/language-selector
@@ -52,36 +106,41 @@ Migrated bundles from under `packages` to `bundles` and/or to new bundle-loader 
 - packages/framework/bundle/usagetracker/bundle.js -> bundles/framework/usagetracker
 - packages/framework/bundle/userguide/bundle.js -> bundles/framework/userguide
 - packages/framework/bundle/geometrycutter/bundle.js -> bundles/framework/geometrycutter
-
 - packages/mapping/dimension-change/bundle.js -> bundles/mapping/dimension-change
 - packages/mapping/camera-controls-3d/bundle.js -> bundles/mapping/camera-controls-3d
 - packages/mapping/time-control-3d/bundle.js -> bundles/mapping/time-control-3d
 
-### Changes for bundle registrations 
+#### Changes to internals
 
-In preparation of removing the packages-folder from oskari-frontend and migrating any bundle.js files under it to bundles-folder as index.js files.
+These changes shouldn't really affect an Oskari-based application that has been migrated to 2.0+ before, but things that have changed inside the "engine":
 
+- New core component `src/BundleRegister` for managing bundles and exposes `Oskari.bundle()` (previously part of src/loader.js) and `Oskari.lazyBundle()` functions. These also validate the parameters and try to offer friendlier error messages when trying to pass non-Oskari-bundle'ish references.
+- `Oskari.bundle_manager` functions removed:
+    - `registerDynamic()` - replaced by `BundleRegister.lazyBundle()` that is exposed as `Oskari.lazyBundle()`
+    - `loadDynamic()` - moved to `src/loader.js` as private function as it doesn't need to be exposed
 
-New loaders for application main.js usage:
-- `oskari-bundle` replaces oskari-loader and supports more streamlined bundle registrations
-- `oskari-lazy-bundle` replaces oskari-lazy-loader for adding support to lazy-load bundles with the streamlined bundle registration
+Removed support for `minifierAppSetup.json` files. These haven't been used after we migrated to main.js usage on applications and the support for parsing them on build was now removed.
 
-This allows linking bundles like this:
-```
-import 'oskari-bundle!oskari-frontend/bundles/admin/admin';
-```
-instead of:
-```
-import 'oskari-loader!oskari-frontend/packages/admin/bundle/admin/bundle.js';
-```
-and removes the unnecessary complication that comes with the packages-folder.
+### Styling changes
 
-These changes shouldn't really affect your app, but things that have changed inside the "engine":
+Removed support for styling using LESS as that was added for AntD and AntD no longer uses it. For styling we currently prefer styled-components, but also support CSS and SCSS.
 
-- New core component `src/BundleRegister` for managing bundles and exposes Oskari.bundle() (previously part of src/loader.js) and Oskari.lazyBundle() functions.
-- Oskari.bundle_manager functions removed:
-    - registerDynamic() - replaced by BundleRegister.lazyBundle() that is exposed as Oskari.lazyBundle()
-    - loadDynamic() - moved to src/loader.js as private function as it doesn't need to be exposed
+### Cleaning up
+
+Removed bundles (jQuery -> React implementations):
+
+- `framework/admin-layerrights` replaced by `admin/admin-permissions`
+- `catalogue/metadatacatalogue` replaced by `catalogue/metadatasearch`
+- `framework/featuredata2` replaced by `framework/featuredata`
+- `catalogue/metadataflyout` implementation switched in-place from jQuery to React-implementation (React-impl was previously in folder `catalogue/metadata`, but as the jQuery-based version was removed the React-version was renamed to match the bundle id)
+- `statistics/statsgrid2016` replaced by `statistics/statsgrid` (bundle id remains `statsgrid`)
+- `framework/admin-publish-transfer` removed as app specific
+- `sample/*` removed as they were not maintained and it's better to build these on the sample-application repository
+
+Removed jQuery-components that were not used by anything on this repository:
+- https://github.com/oskariorg/oskari-frontend/pull/2805
+- The `SelectList` and `chosen.js` library were restored for now, but can be considered deprecated and waiting for removal as well: https://github.com/oskariorg/oskari-frontend/pull/2808
+- React-based components are the currently maintained components in the library and we will continue removing the jQuery components. If you use these on your application, you do have a choice of copying the removed implementation to be part of your application and continue using them like before.
 
 ## 2.14.2
 
