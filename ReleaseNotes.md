@@ -5,7 +5,7 @@
 For a full list of changes see:
 https://github.com/oskariorg/oskari-frontend/milestone/53?closed=1
 
-This release mostly focuses on server-side and updating the Java-version Oskari is built with. Most of the frontend changes are cleaning up older code and moving things around. While we didn't finish all of the work for the frontend cleanup that was dreamed of, you should be able to see where we are going with this. While it might seem a lot of manual migration of frontend changes for this upgrade, doing it while rotating the major version is what major versions are for. This allows us to improve developer experience of Oskari and make things better for future development. This means that there is quite a few migrations that Oskari-based applications need to do to when upgrading to Oskari 3.0, but it should be mostly straightforward of updating references on the frontend.
+This release mostly focuses on server-side and updating the Java-version Oskari is built with. Most of the frontend changes are cleaning up older code and moving things around. While we didn't finish all of the work for the frontend cleanup that was dreamed of, you should be able to see where we are going with this. While it might seem a lot of manual migration of frontend changes for this upgrade, doing it while rotating the major version is what major versions are for. This allows us to improve developer experience of Oskari and make things better for future development. This means that there are quite a few changes that Oskari-based applications require when upgrading to Oskari 3.0, but it should be fairly straightforward and mostly changing references to bundles.
 
 ### New base class for bundle instances
 
