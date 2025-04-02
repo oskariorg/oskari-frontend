@@ -32,6 +32,14 @@ export const UserForm = ({ state, controller, isExternal }) => {
                     error={errors.includes('roles')}
                     onChange={value => controller.updateUserFormState('roles', value)}/>
             </LabelledField>
+            <LabelledField>
+                <StyledLabel><Message messageKey='users.created' /></StyledLabel>
+                <StyledLabel>{Oskari.util.formatDate(userFormState.created)}</StyledLabel>
+            </LabelledField>
+            <LabelledField>
+                <StyledLabel><Message messageKey='users.lastLogin' /></StyledLabel>
+                <StyledLabel>{Oskari.util.formatDate(userFormState.lastLogin)}</StyledLabel>
+            </LabelledField>
             <ButtonContainer>
                 <SecondaryButton
                     type='cancel'
