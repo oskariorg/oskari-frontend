@@ -11,6 +11,10 @@ Some extra tags:
 
 ## 3.0.0
 
+### [mod] [rpc] [breaking] Changed `MetadataSearchResultEvent` event
+
+Event previously returned list of results for RPC. Now it returns an object with `results` key that has the search results as value and `success` key with a boolean value if there was a problem making the search. Previously in case of an error the event was not sent or the results were just empty. Now we can signal if there was a problem.
+
 ### [rem] Removed `framework/featuredata2` bundle
 
 Replaced by the React-implementation of the same functionality `framework/featuredata` bundle.
