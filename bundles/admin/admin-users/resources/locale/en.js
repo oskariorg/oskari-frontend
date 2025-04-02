@@ -22,6 +22,8 @@ Oskari.registerLocalization(
             "addRole": "Select role(s)",
             "noMatch": "No results matched",
             "searchResults": "Search results",
+            "created": "Account created",
+            "lastLogin": "Previous login",
             "passwordRequirements": {
                 "title": "Password requirements: ",
                 "length": "Minimum length:  {length}",

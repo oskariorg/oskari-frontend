@@ -22,6 +22,8 @@ Oskari.registerLocalization(
             "addRole": "Välj rol(ler)",
             "noMatch": "Inga sökresultat.",
             "searchResults": "Sökresultat",
+            "created": "Konto skapad",
+            "lastLogin": "Tidigare inloggning",
             "passwordRequirements": {
                 "title": "Lösenordskrav: ",
                 "length": "Minsta längd:  {length}",
