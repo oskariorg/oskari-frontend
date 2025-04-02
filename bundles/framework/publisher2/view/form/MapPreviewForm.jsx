@@ -41,14 +41,7 @@ Label.propTypes = {
     option: PropTypes.any
 };
 
-export const MapPreviewTooltip = () => {
-    let tooltip = Oskari.getMsg(PUBLISHER_BUNDLE_ID, 'BasicView.size.tooltip');
-    tooltip = tooltip.replace('{minWidth}', CUSTOM_MAP_SIZE_LIMITS.minWidth);
-    tooltip = tooltip.replace('{maxWidth}', CUSTOM_MAP_SIZE_LIMITS.maxWidth);
-    tooltip = tooltip.replace('{minHeight}', CUSTOM_MAP_SIZE_LIMITS.minHeight);
-    tooltip = tooltip.replace('{maxHeight}', CUSTOM_MAP_SIZE_LIMITS.maxHeight);
-    return <Info title={tooltip}/>;
-};
+export const MapPreviewTooltip = () => <Info title={<Message messageKey='BasicView.size.tooltip' messageArgs={CUSTOM_MAP_SIZE_LIMITS} />}/>;
 
 export const MapPreviewForm = (props) => {
     const { onChange, mapSizeOptions, initialSelection } = props;
