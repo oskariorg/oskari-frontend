@@ -623,10 +623,16 @@ Oskari.clazz.define(
         },
         /**
          * @method getMapEl
-         * Get jQuery reference to map element
+         * Get reference to map element
          */
         getMapDOMEl: function () {
             return this._mapDivEl;
+        },
+        setMapSize: function (size = {}) {
+            const { width = '100%', height = '100%' } = size;
+            const mapDiv = this.getMapEl();
+            mapDiv.width(width);
+            mapDiv.height(height);
         },
         /**
          * @method getMap
