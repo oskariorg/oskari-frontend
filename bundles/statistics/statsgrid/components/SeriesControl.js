@@ -1,4 +1,3 @@
-import { template } from 'lodash';
 import * as d3 from 'd3';
 import '../resources/css/seriesplayback.css';
 
@@ -13,7 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
     this.loc = locale;
     this.log = Oskari.log('Oskari.statistics.statsgrid.SeriesControl');
     this.__templates = {
-        main: template(
+        main:
             '<div class="statsgrid-series-control-container">' +
                 '<svg class="line-svg">' +
                     '<g class="axis"></g>' +
@@ -25,13 +24,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
                 '</svg>' +
                 '<div class="value-controls">' +
                 '</div>' +
-            '</div>'),
-        stepper: template(
+            '</div>',
+        stepper:
             '<div class="stats-series-stepper">' +
                 '<div class="stats-series-back"></div>' +
                 '<div class="stats-series-playpause"></div>' +
                 '<div class="stats-series-forward"></div>' +
-            '</div>')
+            '</div>'
     };
     this._lineWidth = 500;
     this._minWidth = 290;
@@ -81,7 +80,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
         var me = this;
         var controlPanel = me._element.find('.value-controls');
 
-        var stepper = jQuery(this.__templates.stepper());
+        const stepper = jQuery(this.__templates.stepper);
 
         stepper.find('.stats-series-playpause').on('click', function (e) {
             me._setAnimationState(!me.getState().animating);
@@ -160,7 +159,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (contr
         return index >= 0 && index < this._uiState.values.length;
     },
     render: function (el) {
-        this._element = jQuery(this.__templates.main());
+        this._element = jQuery(this.__templates.main);
         this._initControls();
         if (Oskari.util.isMobile()) {
             this.setWidth(this._minWidth);
