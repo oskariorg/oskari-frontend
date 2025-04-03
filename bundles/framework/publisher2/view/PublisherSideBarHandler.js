@@ -220,9 +220,8 @@ class PublisherSidebarUIHandler extends StateHandler {
     renderMapPreviewPanel () {
         return <div className={'t_size'}>
             <MapPreviewForm
-                onChange={(value) => { this.mapPreviewPanelHandler.updateMapSize(value); }}
-                mapSizeOptions={MAP_SIZES}
-                initialSelection={this.mapPreviewPanelHandler.getSelectedMapSize() || null}/>
+                state={this.mapPreviewPanelHandler.getState()}
+                controller={this.mapPreviewPanelHandler.getController()} />
         </div>;
     }
 
