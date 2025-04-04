@@ -1,22 +1,30 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, CopyField } from 'oskari-ui';
+import { Message, CopyField, Switch } from 'oskari-ui';
 import styled from 'styled-components';
 import { SecondaryButton, ButtonContainer, CopyButton } from 'oskari-ui/components/buttons';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { showPopup } from 'oskari-ui/components/window';
 import { LocaleProvider } from 'oskari-ui/util';
+import { BUNDLE_KEY } from '../../constants';
 
-const BUNDLE_NAME = 'MyData';
 const POPUP_OPTIONS = {
-    id: BUNDLE_NAME + '-snippet'
+    id: BUNDLE_KEY + '-snippet'
 };
 
 const Content = styled.div`
     margin: 12px 24px 24px;
 `;
 
-const SnippetPopup = ({ html, onClose }) => {
+const ParamsToggle = styled.div`
+    display: flex;
+    flex-flow: row nowrap;
+    margin-top: 24px;
+`;
+
+const SnippetPopup = ({ view, params, onClose }) => {
     const [highlighted, setHighlighted] = useState(false);
+    const [showParams, setShowParams] = useState(false);
 
     const highlightUrl = () => {
         setHighlighted(true);
@@ -24,16 +32,33 @@ const SnippetPopup = ({ html, onClose }) => {
             setHighlighted(false);
         }, 1000);
     };
+    const { url, published, metadata } = view;
+    const { width, height } = metadata.size || {};
+
+    // prepareQueryString if params are shown
+    let src = Oskari.getSandbox().createURL(url, showParams);
+    if (params && showParams) {
+        const paramsList = Object.entries(params).map(([key, value]) => `${key}=${value}`);
+        src += paramsList.join('&');
+    }
+    const w = isNaN(width) ? '100%' : width + 'px';
+    const h = isNaN(height) ? '100%' : height + 'px';
+    const html = `<iframe src="${src}" allow="geolocation" style="border: none; width: ${w}; height: ${h};"></iframe>`;
 
     return (
         <Content>
-            <Message messageKey="tabs.publishedmaps.published.desc" />
+            <Message messageKey={`${published ? 'published' : 'snippet'}.desc`} />
             <CopyField
                 value={html}
-                highlighted={highlighted}
-            />
+                highlighted={highlighted} />
+            { !!params &&
+                <ParamsToggle>
+                    <Switch size='small' checked={showParams} onChange={setShowParams} label={<Message messageKey='snippet.params'/>}/>
+                    <InfoIcon title={<Message messageKey='snippet.paramsTip'/>}/>
+                </ParamsToggle>
+            }
             <ButtonContainer>
-                <SecondaryButton type='cancel' onClick={onClose}/>
+                <SecondaryButton type='close' onClick={onClose}/>
                 <CopyButton
                     value={html}
                     onClick={() => highlightUrl()}/>
@@ -42,30 +67,29 @@ const SnippetPopup = ({ html, onClose }) => {
     );
 };
 SnippetPopup.propTypes = {
-    html: PropTypes.string.isRequired,
+    view: PropTypes.object.isRequired,
+    params: PropTypes.object,
     onClose: PropTypes.func.isRequired
 };
 
-export const showSnippetPopup = (view, onClose) => {
-    const title = <Message messageKey="tabs.publishedmaps.getHTML" bundleKey={BUNDLE_NAME} />;
-
-    const url = Oskari.getSandbox().createURL(view.url);
-    const size = view.metadata && view.metadata.size ? view.metadata.size : undefined;
-    const width = size ? size.width + 'px' : '100%';
-    const height = size ? size.height + 'px' : '100%';
-    let iframeCode = '<iframe src="' + url + '" allow="geolocation" style="border: none;';
-    if (width !== null && width !== undefined) {
-        iframeCode += ' width: ' + width + ';';
-    }
-    if (height !== null && height !== undefined) {
-        iframeCode += ' height: ' + height + ';';
-    }
-    iframeCode += '"></iframe>';
+export const showSnippetPopup = (view, onClose, params) => {
+    const title = <Message messageKey={`${view.published ? 'published' : 'snippet'}.title`} bundleKey={BUNDLE_KEY} />;
 
     const content = (
-        <LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
-            <SnippetPopup html={iframeCode} onClose={onClose} />
+        <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+            <SnippetPopup view={view} params={params} onClose={onClose} />
         </LocaleProvider>
     );
-    return showPopup(title, content, onClose, POPUP_OPTIONS);
+    const controls = showPopup(title, content, onClose, POPUP_OPTIONS);
+    return {
+        ...controls,
+        update: (params) => (
+            controls.update(
+                title,
+                <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+                    <SnippetPopup view={view} params={params} onClose={onClose} />
+                </LocaleProvider>
+            )
+        )
+    };
 };
