@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { showPopup, showModal } from 'oskari-ui/components/window';
 import { Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
-import { BUNDLE_KEY } from '../constants';
+import { BUNDLE_KEY } from '../../constants';
 
 const FADEOUT = 5000;
 
