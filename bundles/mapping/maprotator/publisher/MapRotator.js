@@ -72,6 +72,13 @@ class MapRotatorTool extends AbstractPublisherTool {
             return null;
         }
         const pluginConfig = this.state.pluginConfig;
+        const handlerState = this.handler.getState();
+        for (const key in handlerState) {
+            pluginConfig[key] = handlerState[key];
+            if (key === 'noUI' && !handlerState[key]) {
+                delete pluginConfig[key];
+            }
+        }
         const json = {
             configuration: {}
         };

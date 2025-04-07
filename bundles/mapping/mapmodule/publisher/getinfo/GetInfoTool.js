@@ -11,6 +11,12 @@ class GetInfoTool extends AbstractPublisherTool {
         this.handler = new GetInfoToolHandler(this);
     }
 
+    init (data) {
+        super.init(data);
+        const pluginConfig = this.getPlugin().getConfig() || {};
+        this.handler.init(pluginConfig);
+    }
+
     getTool () {
         const config = {
             ...this.state?.pluginConfig,
@@ -42,6 +48,9 @@ class GetInfoTool extends AbstractPublisherTool {
         for (const key in state) {
             if (state.hasOwnProperty(key)) {
                 pluginConfig[key] = state[key];
+                if (key === 'noUI' && !state[key]) {
+                    delete pluginConfig[key];
+                }
             }
         }
         return {
