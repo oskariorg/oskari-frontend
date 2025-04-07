@@ -15,10 +15,13 @@ class UIHandler extends StateHandler {
 
     init (config) {
         this.updateState({
-            noUI: config?.noUI,
             announcements: config?.announcements,
             selectedAnnouncements: config?.selectedAnnouncements || []
         });
+
+        if (config?.noUI) {
+            this.setNoUI(config.noUI);
+        }
     }
 
     setNoUI (value) {
