@@ -1,12 +1,16 @@
-import './view/FlyoutNotLoggedIn';
-import './view/FlyoutStartView';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { FlyoutContent } from './view/flyout/FlyoutContent';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
+import { Spin } from 'oskari-ui';
+import { showTouPopup } from './view/dialog/TouPopup';
+import { UserDataLayer } from '../../mapping/mapuserdatalayer/domain/UserDataLayer';
+
 /**
  * @class Oskari.mapframework.bundle.publisher2.Flyout
  *
  * Renders the "publisher" flyout. The flyout shows different view
- * depending of application state. Currently implemented views are:
- * Oskari.mapframework.bundle.publisher2.view.NotLoggedIn (shown for guests) and
- * Oskari.mapframework.bundle.publisher2.view.StartView (shown for logged in users).
+ * depending of application state.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
 
@@ -18,8 +22,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
      */
     function (instance) {
         this.instance = instance;
-        this.template = jQuery('<div></div>');
         this.container = null;
+        this.hasAcceptedTou = null;
     }, {
         /**
          * @method getName
@@ -29,17 +33,76 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
             return 'Oskari.mapframework.bundle.publisher2.Flyout';
         },
         setEl: function (el, flyout) {
-            this.container = jQuery(el[0]);
+            this.container = el[0];
             jQuery(this.container).addClass('publisher');
             flyout.addClass('publisher');
         },
-        /**
-         * @method startPlugin
-         *
-         * Interface method implementation, assigns the HTML templates
-         * that will be used to create the UI
-         */
-        startPlugin: function () {
+        getAcceptedTou () {
+            if (typeof this.hasAcceptedTou === 'boolean') {
+                return this.hasAcceptedTou;
+            }
+            this.instance.getService().checkTouAccepted(response => {
+                this.hasAcceptedTou = response;
+                this.lazyRender();
+            });
+        },
+        setAcceptTou () {
+            this.instance.getSandbox().postRequestByName('Publisher.PublishMapEditorRequest');
+            this.instance.getService().markTouAccepted(response => {
+                this.hasAcceptedTou = response;
+            });
+        },
+        showTouPopup () {
+            this.instance.getService().getTouArticle(response => {
+                const content = response || {
+                    title: this.instance.loc('BasicView.error.title'),
+                    body: this.instance.loc('StartView.tou.notfound')
+                };
+                showTouPopup(content);
+            });
+        },
+        getUrls: function () {
+            const { termsOfUseUrl, loginUrl, registerUrl } = this.instance.conf || {};
+            return {
+                tou: Oskari.getLocalized(termsOfUseUrl),
+                login: Oskari.getLocalized(loginUrl) || Oskari.urls.getLocation('login'),
+                register: Oskari.getLocalized(registerUrl) || Oskari.urls.getLocation('register')
+            };
+        },
+        getActions: function () {
+            return {
+                close: () => this.instance.getFlyout().close(),
+                continue: () => this.instance.getSandbox().postRequestByName('Publisher.PublishMapEditorRequest'),
+                acceptTou: () => this.setAcceptTou(),
+                showTou: () => this.showTouPopup()
+            };
+        },
+        getLayers: function () {
+            const layers = [];
+            const deniedLayers = [];
+            const noRights = this.instance.loc('StartView.noRights');
+            const userData = this.instance.loc('StartView.myPlacesDisclaimer');
+            const service = this.instance.getService();
+            this.instance.getSandbox().findAllSelectedMapLayers().forEach(layer => {
+                const { unsupported } = layer.getVisibilityInfo();
+                const name = layer.getName();
+                const reasons = [];
+                if (!service.hasPublishRight(layer)) {
+                    reasons.push(noRights);
+                }
+                if (unsupported) {
+                    reasons.push(unsupported.getDescription());
+                }
+
+                if (reasons.length) {
+                    deniedLayers.push({ name, info: reasons.join() });
+                } else if (layer instanceof UserDataLayer) {
+                    layers.push({ name, info: userData, userDataLayer: true });
+                } else {
+                    layers.push({ name });
+                }
+            });
+            return { layers, deniedLayers };
         },
         /**
          * @method lazyRender
@@ -48,36 +111,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
          * Selects the view to show based on user (guest/loggedin)
          */
         lazyRender: function () {
-            var flyout = this.container;
-            flyout.empty();
-
-            // check if the user is logged in
-            if (!Oskari.user().isLoggedIn()) {
-                this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.FlyoutNotLoggedIn',
-                    this.instance,
-                    this.instance.getLocalization('NotLoggedView'));
-            } else {
-                // proceed with publisher view
-                this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView',
-                    this.instance,
-                    this.instance.getLocalization('StartView'));
+            if (!this.container) {
+                return;
             }
-
-            this.view.render(flyout);
-        },
-        /**
-         * @method handleLayerSelectionChanged
-         * Calls the current views handleLayerSelectionChanged method if one is defined
-         */
-        handleLayerSelectionChanged: function () {
-            if (this.view && this.view.handleLayerSelectionChanged) {
-                this.view.handleLayerSelectionChanged();
-            }
+            const hasAcceptedTou = this.getAcceptedTou();
+            const content = (
+                <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
+                    <ThemeProvider>
+                        <Spin spinning={typeof hasAcceptedTou !== 'boolean'}>
+                            <FlyoutContent
+                                {...this.getLayers()}
+                                hasAcceptedTou={hasAcceptedTou}
+                                urls={this.getUrls()}
+                                actions={this.getActions()}/>
+                        </Spin>
+                    </ThemeProvider>
+                </LocaleProvider>
+            );
+            ReactDOM.render(content, this.container);
         }
     }, {
         /**
          * @property {String[]} protocol
          * @static
          */
-        'extend': ['Oskari.userinterface.extension.DefaultFlyout']
+        extend: ['Oskari.userinterface.extension.DefaultFlyout']
     });
