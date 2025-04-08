@@ -22,6 +22,7 @@ const ParamsToggle = styled.div`
     margin-top: 24px;
 `;
 
+// For now only map params (location) are handled
 const SnippetPopup = ({ view, params, onClose }) => {
     const [highlighted, setHighlighted] = useState(false);
     const [showParams, setShowParams] = useState(false);
