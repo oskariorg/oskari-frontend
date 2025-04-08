@@ -266,7 +266,7 @@ class MapsHandler extends StateHandler {
             'Publisher.MapPublishedEvent': (event) => {
                 this.refreshViewsList();
             },
-            'AfterMapMoveEvent': event => this.refreshHtmlSnippet(event)
+            'AfterMapMoveEvent': event => this.refreshHtmlSnippet()
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;
