@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
             const layers = [];
             const deniedLayers = [];
             const noRights = this.instance.loc('StartView.noRights');
-            const userData = this.instance.loc('StartView.myPlacesDisclaimer');
+            const userData = this.instance.loc('StartView.userDataLayerDisclaimer');
             const service = this.instance.getService();
             this.instance.getSandbox().findAllSelectedMapLayers().forEach(layer => {
                 const { unsupported } = layer.getVisibilityInfo();
