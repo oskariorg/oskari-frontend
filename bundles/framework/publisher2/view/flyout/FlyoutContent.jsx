@@ -95,7 +95,7 @@ export const FlyoutContent = ({
     const noPublishableLayers = !layers.length;
     const primaryBtn = hasAcceptedTou ? 'continue' : 'continueAndAccept';
     const primaryClick = hasAcceptedTou ? actions.continue : actions.acceptTou;
-    const layerListFooter = layers.some(l => l.userDataLayer) ? 'userDataDisclaimer' : '';
+    const layerListFooter = layers.some(l => l.userDataLayer) ? 'hasUserDataDisclaimer' : '';
 
     return (
         <Content>

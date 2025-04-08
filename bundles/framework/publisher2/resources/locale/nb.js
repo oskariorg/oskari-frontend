@@ -211,7 +211,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "De valgte kartlagene kan ikke publiseres i et 'embedded' kart. Kontrollér rettighetene for publisering i menyen \"Valgte kartlag\" før du lager kartet",
             "layerlist_denied": "Kartlaget kan ikke publiseres i et 'embedded' kart",
             "denied_tooltip": "Dataprodusentene har ikke gitt tillatelse til å publisere de valgte kartlagene i et 'embedded' kart. Kontrollér rettighetene for publisering i menyen \"Valgte kartlag\" før du lager kartet",
-            "myPlacesDisclaimer": "NB. Du publiserer ditt eget kartlag",
+            "userDataLayerDisclaimer": "NB. Du publiserer ditt eget kartlag",
             "buttons": {
                 "continue": "Fortsett",
                 "continueAndAccept": "Akseptér vilkår for bruk og fortsett",
