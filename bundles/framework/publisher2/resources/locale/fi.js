@@ -14,6 +14,12 @@ Oskari.registerLocalization(
             "desc": "Kartta on valmis. Julkaise kartta verkkosivulla liittämällä alla oleva html-koodi verkkosivun koodiin:",
             "copy": "Kopioi leikepöydälle"
         },
+        "snippet": {
+            "title": "HTML-koodi",
+            "desc": "Lisää alla oleva koodi html-koodiin verkkosivullasi. Kartta tulee näkyviin verkkosivullesi.",
+            "params": "Käytä karttaupotusta nykyisellä sijainnilla ja mittakaavatasolla",
+            "paramsTip": "Oletusarvoisesti karttaikkunan keskipiste on se, joka karttaikkunassa on julkaisuhetkellä."
+        },
         "edit": {
             "popup": {
                 "title": "Päivitetään upotettua karttaa…",

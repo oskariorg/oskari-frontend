@@ -13,6 +13,10 @@ Oskari.registerLocalization(
             "title": "Ívafið kort vistað",
             "desc": "Ívafna kortið er vistað. Gefðu það út á vefsíðunni þinni með því að afrita þennan kóða í html kóðann á vefsíðunni þinni:"
         },
+        "snippet": {
+            "title": "HTML kóði",
+            "desc": "Ívefðu kortið með því að bæta HTML kóðanum hér fyrir neðan á vefsíðuna þína."
+        },
         "edit": {
             "popup": {
                 "title": "Opna ívafið kort",

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Message } from 'oskari-ui';
+import { showInfoPopup } from './view/dialog/InfoPopup';
+import { showSnippetPopup } from './view/dialog/SnippetPopup';
 
 import './Flyout';
 import './view/PublisherSidebar';
@@ -34,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
      */
     function () {
         // override defaults
-        var conf = this.getConfiguration();
+        const conf = this.getConfiguration();
         conf.name = 'Publisher2';
         conf.flyoutClazz = 'Oskari.mapframework.bundle.publisher2.Flyout';
         this.defaultConf = conf;
@@ -60,14 +62,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
          */
         onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
+            const handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
             return handler.apply(this, [event]);
         },
         init: function () {
-            var tileElem = jQuery(this.getConfiguration().tileElement);
+            const tileElem = jQuery(this.getConfiguration().tileElement);
             if (tileElem.length && tileElem.length !== 0) {
                 this.customTileRef = this.getConfiguration().tileElement;
                 this.conf.tileClazz = null;
@@ -85,61 +87,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
              * @param {Oskari.mapframework.bundle.publisher.event.MapPublishedEvent} event
              */
             'Publisher.MapPublishedEvent': function (event) {
-                var me = this;
-                let iframeCode = event.getUrl() + '" allow="geolocation" style="border: none;';
-                var width = event.getWidth();
-                var height = event.getHeight();
-
-                if (width !== null && width !== undefined) {
-                    iframeCode += ' width: ' + width + ';';
-                }
-
-                if (height !== null && height !== undefined) {
-                    iframeCode += ' height: ' + height + ';';
-                }
-
-                const textCode = '<iframe src="' + iframeCode + '"></iframe>';
-                const codeSnippet = '<div class="codesnippet"><code>&lt;iframe src="' + iframeCode + '"&gt;&lt;/iframe&gt;</code></div>';
-
-                var content = me.loc('published.desc') + '<br/><br/>' + codeSnippet;
-
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var closeBtn = dialog.createCloseButton();
-                closeBtn.addClass('primary');
-                const copyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                copyBtn.setTitle(me.loc('published.copy'));
-                copyBtn.setHandler(() => {
-                    const el = dialog.getElement().find('.codesnippet');
-                    Oskari.util.copyTextToClipboard(textCode, el);
-                });
-                const title = me.loc('published.title');
-                dialog.show(title, content, [copyBtn, closeBtn]);
-                me.setPublishMode(false);
+                const view = {
+                    published: true,
+                    url: event.getUrl(),
+                    metadata: {
+                        size: {
+                            width: event.getWidth(),
+                            height: event.getHeight()
+                        }
+                    }
+                };
+                const onClose = () => {
+                    this.snippet?.close();
+                    this.snippet = null;
+                };
+                this.snippet = showSnippetPopup(view, onClose);
+                // TODO: handle in fetch??
+                this.setPublishMode(false);
             }
         },
         /**
          * @method afterStart
          */
         afterStart: function () {
-            var me = this;
-            var sandbox = this.getSandbox();
-            var loc = this.getLocalization();
-
+            const sandbox = this.getSandbox();
             this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
 
             // Let's add publishable filter to layerlist if user is logged in
             if (Oskari.user().isLoggedIn()) {
-                var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-                mapLayerService.registerLayerFilter('publishable', function (layer) {
-                    return layer.hasPermission('publish');
-                });
+                const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+                mapLayerService.registerLayerFilter('publishable', layer => layer.hasPermission('publish'));
 
                 // Add layerlist filter button
-                var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+                const layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
                 if (layerlistService) {
                     layerlistService.registerLayerlistFilterButton(
-                        loc.layerFilter.buttons.publishable,
-                        loc.layerFilter.tooltips.publishable,
+                        this.loc('layerFilter.buttons.publishable'),
+                        this.loc('layerFilter.tooltips.publishable'),
                         {
                             active: 'layer-publishable',
                             deactive: 'layer-publishable-disabled'
@@ -148,29 +132,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 }
             }
 
-            var infoDialog;
-            var openingOnAppStart = false;
+            let openingOnAppStart = false;
             // check from url parameters if publisher should be opened to edit some specific view.
-            var uuid = Oskari.util.getRequestParam('editPublished');
+            const uuid = Oskari.util.getRequestParam('editPublished');
+            let closeInfoDialog = () => {};
             if (uuid) {
                 // Create an info popup. Opening publisher might take a while since we have to wait for the map layers to load.
-                infoDialog = me._showOpeningPublisherMsg();
+                closeInfoDialog = this._showOpeningPublisherMsg();
                 // Create edit request handler callback
                 openingOnAppStart = true;
                 // Send request on app start
-                Oskari.on('app.start', function () {
+                Oskari.on('app.start', () => {
                     if (Oskari.user().isLoggedIn()) {
-                        me._sendEditRequest(uuid);
+                        this._sendEditRequest(uuid);
                     } else {
-                        infoDialog.close();
-                        me._showOpeningPublisherErrorMsg('login');
+                        closeInfoDialog();
+                        this._showOpeningPublisherErrorMsg('login');
                     }
                 });
             }
             // create and register request handler
-            var reqHandler = Oskari.clazz.create(
+            const reqHandler = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
-                me._openPublisherForEditingCbFactory(infoDialog, openingOnAppStart)
+                this._openPublisherForEditingCbFactory(closeInfoDialog, openingOnAppStart)
             );
             sandbox.requestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
@@ -180,11 +164,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @private @method _openPublisherForEditingCbFactory
          * Factory function to create a callback function for PublishMapEditorRequestHandler.
          * Callback function waits for required layers to load and opens the publisher.
-         * @return {Oskari.userinterface.component.Popup} infoDialog for closing when callback finishes (optional)
+         * @return {function} callback for closing info dialog when callback finishes
          * @return {Boolean} openingOnAppStart (optional)
          * @return {function} callback function for PublishMapEditorRequestHandler
          */
-        _openPublisherForEditingCbFactory: function (infoDialog, openingOnAppStart) {
+        _openPublisherForEditingCbFactory: function (closeInfoDialog, openingOnAppStart) {
             const me = this;
             let layerCheckDone = false;
             return function (data) {
@@ -200,9 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 layerCheckDone = true;
 
                 if (!selectedLayers.length) {
-                    if (infoDialog) {
-                        infoDialog.fadeout();
-                    }
+                    closeInfoDialog();
                     me._showOpeningPublisherErrorMsg();
                     return;
                 }
@@ -218,9 +200,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
                     // try until we get the layers...
                     if (layersFound) {
-                        if (infoDialog) {
-                            infoDialog.close();
-                        }
+                        closeInfoDialog();
                         clearInterval(intervalId);
                         me.setPublishMode(true, data);
                         return;
@@ -230,9 +210,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     // ...or the max try count is reached
                     if (numTries === maxTries) {
                         clearInterval(intervalId);
-                        if (infoDialog) {
-                            infoDialog.fadeout();
-                        }
+                        closeInfoDialog();
                         me._showOpeningPublisherErrorMsg();
                     }
                 }, timeoutInMillis);
@@ -245,10 +223,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @param uuid {String} Uuid for the view to edit.
          */
         _sendEditRequest: function (uuid) {
-            var requestBuilder = Oskari.requestBuilder('Publisher.PublishMapEditorRequest');
-            this.sandbox.request(this, requestBuilder({
-                uuid: uuid
-            }));
+            const requestBuilder = Oskari.requestBuilder('Publisher.PublishMapEditorRequest');
+            this.sandbox.request(this, requestBuilder({ uuid }));
         },
         /**
          * @return {Oskari.mapframework.bundle.publisher2.PublisherService} service for state holding
@@ -267,7 +243,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @param {jQuery} tileElement
          */
         customElementClickHandler: function (tileElement) {
-            var me = this;
+            const me = this;
             tileElement.on('click', function () {
                 me.getSandbox().postRequestByName(
                     'userinterface.UpdateExtensionRequest', [me, 'toggle']
@@ -366,9 +342,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 },
                 featuredata: {
                     conf: {}
-                },
-                featuredata2: {
-                    conf: {}
                 }
             };
             if (!this.getSandbox().getMap().getSupports3D()) {
@@ -379,7 +352,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             // setup current mapstate so layers are not removed
             const state = this.getSandbox().getCurrentState();
             // merge state to initial config
-            return { configuration: jQuery.extend(true, config, state) };
+            const configuration = Oskari.util.deepClone(config, state);
+            return { configuration };
         },
         /**
          * @method _showEditNotification
@@ -387,20 +361,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @private
          */
         _showEditNotification: function () {
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(this.loc('edit.popup.title'), this.loc('edit.popup.msg'));
-            dialog.fadeout();
+            showInfoPopup('edit.popup.title', 'edit.popup.msg', { fadeout: true });
         },
         /**
          * @private @method _showOpeningPublisherMsg
          * Notify user that we are getting ready to open his map view for editing.
-         * @return {Oskari.userinterface.component.Popup} The popup dialog for closing it later on.
+         * @return {function} callback for closing popup later on.
          */
         _showOpeningPublisherMsg: function () {
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(this.loc('edit.popup.title'), this.loc('edit.popup.published.msg'));
-            dialog.makeModal();
-            return dialog;
+            return showInfoPopup('edit.popup.title', 'edit.popup.published.msg', { modal: true });
         },
         /**
          * @private @method _showOpeningPublisherErrorMsg
@@ -408,10 +377,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @param {String} errorKey Localization key for the error message (optional)
          */
         _showOpeningPublisherErrorMsg: function (errorKey) {
-            errorKey = 'edit.popup.published.error.' + (errorKey || 'common');
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(this.loc('edit.popup.published.error.title'), this.loc(errorKey));
-            setTimeout(function () { dialog.fadeout(); }, 3000);
+            const message = 'edit.popup.published.error.' + (errorKey || 'common');
+            showInfoPopup('edit.popup.published.error.title', message, { fadeout: true });
         },
 
         /**
@@ -424,12 +391,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * list of layers that can't be published.
          */
         getNonPublisherLayers: function () {
-            var selectedLayers = this.sandbox.getMap().getLayers();
-            var service = this.getService();
-            var deniedLayers = selectedLayers.filter((layer) => {
-                return !service.hasPublishRight(layer) || !this.sandbox.getMap().isLayerSupported(layer);
-            });
-            return deniedLayers;
+            const map = this.sandbox.getMap();
+            const service = this.getService();
+            return map.getLayers().filter(layer => !service.hasPublishRight(layer) || !map.isLayerSupported(layer));
         },
         /**
          * @static
@@ -446,22 +410,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']);
             },
             getTitle: function () {
-                return this.getLocalization().guidedTour.title;
+                return this.loc('guidedTour.title');
             },
             getContent: function () {
                 return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getLinks: function () {
-                var me = this;
-                var loc = this.getLocalization().guidedTour;
+                const me = this;
                 return [
                     {
-                        title: loc.openLink,
+                        title: this.loc('guidedTour.openLink'),
                         onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']),
                         visible: false
                     },
                     {
-                        title: loc.closeLink,
+                        title: this.loc('guidedTour.closeLink'),
                         onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']),
                         visible: true
                     }
@@ -474,14 +437,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
         _registerForGuidedTour: function () {
-            var me = this;
+            const me = this;
             function sendRegister () {
-                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                const requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
                 if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
-                    var delegate = {
+                    const delegate = {
                         bundleName: me.getName()
                     };
-                    for (var prop in me.__guidedTourDelegateTemplate) {
+                    for (const prop in me.__guidedTourDelegateTemplate) {
                         if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
@@ -498,7 +461,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 }
             }
 
-            var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
+            const tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
             if (tourInstance) {
                 sendRegister();
             } else {
@@ -506,6 +469,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             }
         }
     }, {
-        'extend': ['Oskari.userinterface.extension.DefaultExtension']
+        extend: ['Oskari.userinterface.extension.DefaultExtension']
     }
 );
