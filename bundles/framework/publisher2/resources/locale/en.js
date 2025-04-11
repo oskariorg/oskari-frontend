@@ -14,6 +14,12 @@ Oskari.registerLocalization(
             "desc": "The embedded map has been saved. Publish it on your website by copying this code to the html code on your website:",
             "copy": "Copy to the clipboard"
         },
+        "snippet": {
+            "title": "HTML code",
+            "desc": "Copy the HTML code below to your html code and the map will be visible on your website.",
+            "params": "Use published map from current map location and zoom level",
+            "paramsTip": "By default, the center of the map is the one in the map window at the time of publication."
+        },
         "edit": {
             "popup": {
                 "title": "Opening embedded map…",

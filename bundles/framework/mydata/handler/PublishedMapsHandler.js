@@ -1,5 +1,5 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { showSnippetPopup } from '../view/embedded/SnippetPopup';
+import { showSnippetPopup } from '../../publisher2/view/dialog/SnippetPopup';
 
 class MapsHandler extends StateHandler {
     constructor (instance) {

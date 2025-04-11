@@ -36,7 +36,8 @@ const InfoIcon = styled(InfoCircleOutlined)`
     margin-right: 10px;
 `;
 
-const StyledCheckbox = styled(Checkbox)`
+const StyledCheckboxAlignCenter = styled(Checkbox)`
+    margin: auto auto;
 `;
 
 const StyledTitle = styled.span`
@@ -47,6 +48,8 @@ const StyledTitle = styled.span`
 const Column = styled.div`
     display: flex;
     flex-direction: column;
+    word-wrap: break-word;
+    white-space: wrap;
 `;
 
 const InfoContainer = styled.div`
@@ -63,8 +66,11 @@ const Row = styled.div`
     width: 100%;
 `;
 
-const AlignCenter = styled.div`
-margin: auto 0;
+const ColumnFitContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    min-width: fit-content;
+    margin: auto 0;
 `;
 
 const Margin = styled.div`
@@ -99,11 +105,11 @@ const ThemedNotificationContent = ThemeConsumer(({ theme, state, link, content, 
     const textColor = getTextColor(theme?.color?.primary);
     const linkColor = Oskari.util.isDarkColor(theme?.color?.primary) ? textColor : DEFAULT_POPUP_LINK_COLOR;
     const pagingSection = <>
-        <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
+        <StyledCheckboxAlignCenter checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
             <TextColorWrapper textColor={textColor}>
                 <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
             </TextColorWrapper>
-        </StyledCheckbox>
+        </StyledCheckboxAlignCenter>
         <StyledPagination textColor={textColor} simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
     </>;
     return <>
@@ -118,8 +124,8 @@ const ThemedNotificationContent = ThemeConsumer(({ theme, state, link, content, 
             </Column>
         </InfoContainer>
         <Margin/>
-        { isMobile && <Row>{pagingSection}</Row> }
-        { !isMobile && <Column><AlignCenter>{pagingSection}</AlignCenter></Column> }
+        { isMobile && <Row><ColumnFitContent>{pagingSection}</ColumnFitContent></Row> }
+        { !isMobile && <ColumnFitContent>{pagingSection}</ColumnFitContent> }
     </>;
 });
 
