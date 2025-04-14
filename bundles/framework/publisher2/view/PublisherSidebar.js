@@ -29,7 +29,6 @@ class PublisherSidebar {
         this.localization = localization;
         this.data = data;
         this.normalMapPlugins = [];
-        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.panels = [];
         this.handler = new PublisherSidebarHandler();
     }
@@ -255,21 +254,11 @@ class PublisherSidebar {
     publishMap (selections) {
         const me = this;
         const sandbox = this.instance.getSandbox();
-        let totalWidth = '100%';
-        let totalHeight = '100%';
         const errorHandler = () => {
-            this.progressSpinner.stop();
             const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             const okBtn = dialog.createCloseButton(this.localization.buttons.ok);
             dialog.show(this.localization.error.title, this.localization.error.saveFailed, [okBtn]);
         };
-
-        if (selections.metadata.size) {
-            totalWidth = selections.metadata.size.width + 'px';
-            totalHeight = selections.metadata.size.height + 'px';
-        }
-
-        this.progressSpinner.start();
 
         // make the ajax call
         jQuery.ajax({
@@ -282,14 +271,13 @@ class PublisherSidebar {
                 pubdata: JSON.stringify(selections)
             },
             success: function (response) {
-                me.progressSpinner.stop();
                 if (response.id > 0) {
                     const event = Oskari.eventBuilder(
                         'Publisher.MapPublishedEvent'
                     )(
                         response.id,
-                        totalWidth,
-                        totalHeight,
+                        selections.metadata.size?.width,
+                        selections.metadata.size?.height,
                         response.lang,
                         sandbox.createURL(response.url)
                     );

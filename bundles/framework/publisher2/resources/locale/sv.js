@@ -14,6 +14,12 @@ Oskari.registerLocalization(
             "desc": "Karta har skapats. Bädda in kartan genom att lägga till HTML-koden nedan till din webbplats och du har kartan på din webbplats:",
             "copy": "Kopiera till klippbordet"
         },
+        "snippet": {
+            "title": "HTML-kod",
+            "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats.",
+            "params": "Använd kartinbäddning från aktuell läge och skalnivå",
+            "paramsTip": "Som standard är mitten av kartfönstret den som finns i kartfönstret vid publiceringstillfället."
+        },
         "edit": {
             "popup": {
                 "title": "Öppna den inbäddade kartan för redigering",

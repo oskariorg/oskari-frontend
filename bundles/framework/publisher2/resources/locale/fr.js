@@ -13,6 +13,10 @@ Oskari.registerLocalization(
             "title": "Carte embarquée enregistrée",
             "desc": "La carte embarquée a été enregistrée. Veuillez la publier sur votre site Web en copiant le code suivant dans le code html de votre site Web :"
         },
+        "snippet": {
+            "title": "Code HTML",
+            "desc": "Intégrer la carte en ajoutant à votre site internet le code HTML ci-dessous."
+        },
         "edit": {
             "popup": {
                 "title": "Ouverture de la carte embarquée…",
