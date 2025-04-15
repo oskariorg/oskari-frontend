@@ -1,19 +1,18 @@
 {
   "name": "oskari-tools",
   "version": "0.0.1",
-  "description": "Build tools for Oskari applications",
+  "description": "Helper tools for Oskari frontend",
   "author": "nls-oskari",
   "license": "MIT",
   "keywords": [
     "Oskari"
   ],
-  "main": "grunt.js",
   "dependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "glob": "^7.1.3",
-    "merge": "^1.2.1"
+    "merge": "^2.1.1"
   }
 }
