@@ -90,6 +90,40 @@ body, button, input, select, textarea {
   line-height: 21px;
 }
 
+/**
+Print profile to make the map printable since it uses vw/vh sizes:
+- hides announcement banners and guided tour popup
+- hides the main navigation under oskari root el
+- hides all map-plugins other than logo and scalebar
+- makes the oskari root el "full size" on page
+- adds a border for debugging mostly
+
+If the screen is not "big enough" the page will have an empty section where map could be.
+On 3D, cesium seems to render for printing in a way that messes up aspect ratio, but couldn't find a nice fix for that.
+*/
+@media print {
+  /* Hide the main oskari nav, announcement banner and Guided Tour */
+  .oskari-root-el nav, .oskari-root-el .t_banner.t_announcements, .oskari-react-tmp-container .t_popup.t_GuidedTour {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  /* Hide most map plugins */
+  .oskari-root-el .mappluginsContainer:not(:has(.mapplugin.scalebar, .mapplugin.logoplugin)) {
+    display: none !important;
+  }
+  /* Make the Oskari element "full screen" */
+  .oskari-root-el {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    box-sizing: border-box;
+    width: 99%;
+    height: 99%;
+    border: 1px dashed;
+  }
+}
+
 em {
   font-style: italic;
 }
