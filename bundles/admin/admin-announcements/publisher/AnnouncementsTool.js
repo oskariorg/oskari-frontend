@@ -48,7 +48,7 @@ class AnnouncementsTool extends AbstractPublisherTool {
                     const announcement = announcements.find(ann => ann.id === announcementId);
                     if (announcement !== undefined && this.isAnnouncementValid(announcement)) {
                         // make sure there are no duplicates
-                        const alreadyAdded = selectedAnnouncements.some(ann => ann.id === announcement.id);
+                        const alreadyAdded = selectedAnnouncements.some(ann => ann === announcement.id);
                         if (!alreadyAdded) {
                             selectedAnnouncements.push(announcement.id);
                         }
