@@ -2,7 +2,9 @@ import React from 'react';
 import { LabeledInput, Select, Option, Message, Label } from 'oskari-ui';
 import styled from 'styled-components';
 import { InfoIcon } from 'oskari-ui/components/icons';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
+import { BUNDLE_KEY } from '../../constants';
+
 const FieldWithInfo = styled('div')`
     display: flex;
     flex-direction: row;
@@ -10,64 +12,58 @@ const FieldWithInfo = styled('div')`
     align-items: center;
 `;
 
-const BUNDLE_KEY = 'Publisher2';
-
-export const GeneralInfoForm = ({ onChange, data }) => {
+export const GeneralInfoForm = ({ name, domain, language, controller }) => {
     const languages = Oskari.getSupportedLanguages();
     return (
-        <div>
+        <div className={'t_generalInfo'}>
             <FieldWithInfo>
                 <LabeledInput
                     type='text'
-                    label={<Message messageKey='BasicView.name.label' bundleKey={BUNDLE_KEY} />}
+                    label={<Message messageKey='BasicView.generalInfo.name.label' />}
                     name='name'
-                    value={data.name}
+                    value={name}
                     mandatory={true}
-                    onChange={(e) => {
-                        onChange('name', e.target.value);
-                    }}
-                    placeholder={Oskari.getMsg(BUNDLE_KEY, 'BasicView.name.placeholder')}
+                    onChange={(e) => controller.onChange('name', e.target.value)}
+                    placeholder={Oskari.getMsg(BUNDLE_KEY, 'BasicView.generalInfo.name.placeholder')}
                 />
-                <InfoIcon><Message messageKey='BasicView.name.tooltip' bundleKey={BUNDLE_KEY} /></InfoIcon>
+                <InfoIcon title={<Message messageKey='BasicView.generalInfo.name.tooltip'/> }/>
             </FieldWithInfo>
             <FieldWithInfo>
                 <LabeledInput
                     type='text'
-                    label={<Message messageKey='BasicView.domain.label' bundleKey={BUNDLE_KEY} />}
+                    label={<Message messageKey='BasicView.generalInfo.domain.label' />}
                     name='domain'
-                    value={data.domain}
-                    onChange={(e) => {
-                        onChange('domain', e.target.value);
-                    }}
-                    placeholder={Oskari.getMsg(BUNDLE_KEY, 'BasicView.domain.placeholder')}
+                    value={domain}
+                    onChange={(e) => controller.onChange('domain', e.target.value)}
+                    placeholder={Oskari.getMsg(BUNDLE_KEY, 'BasicView.generalInfo.domain.placeholder')}
                 />
-                <InfoIcon><Message messageKey='BasicView.domain.tooltip' bundleKey={BUNDLE_KEY} /></InfoIcon>
+                <InfoIcon title={<Message messageKey='BasicView.generalInfo.domain.tooltip'/> }/>
             </FieldWithInfo>
             <Label>
-                <Message messageKey='BasicView.language.label' bundleKey={BUNDLE_KEY} />
+                <Message messageKey='BasicView.generalInfo.language.label'/>
             </Label>
             <FieldWithInfo>
                 <Select
                     name='language'
-                    value={data.language}
-                    onChange={(lang) => {
-                        onChange('language', lang);
-                    }}
+                    value={language}
+                    onChange={(lang) => controller.onChange('language', lang)}
                     popupMatchSelectWidth={false}
                 >
                     {languages.map(lang => (
                         <Option value={lang} key={lang}>
-                            <Message messageKey={`BasicView.language.options.${lang}`} bundleKey={BUNDLE_KEY} />
+                            <Message messageKey={`BasicView.generalInfo.language.options.${lang}`} />
                         </Option>
                     ))}
                 </Select>
-                <InfoIcon><Message messageKey='BasicView.language.tooltip' bundleKey={BUNDLE_KEY} /></InfoIcon>
+                <InfoIcon title={<Message messageKey='BasicView.generalInfo.language.tooltip'/> }/>
             </FieldWithInfo>
         </div>
     );
 };
 
 GeneralInfoForm.propTypes = {
-    onChange: PropTypes.func,
-    data: PropTypes.object
+    name: PropTypes.string,
+    domain: PropTypes.string,
+    language: PropTypes.string,
+    controller: PropTypes.object
 };
