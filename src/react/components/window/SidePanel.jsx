@@ -33,7 +33,7 @@ const StyledHeader = styled(Header)`
 
 export const SidePanel = ThemeConsumer(({ title, onClose, children, theme = {}, options }) => {
     return (
-        <StyledPanel className={`t_print_panel ${getFontClass(theme)}`} width={options.width}>
+        <StyledPanel className={`t_panel t_${options.id} ${getFontClass(theme)}`} width={options.width}>
             <Content>
                 <StyledHeader
                     title={title}
