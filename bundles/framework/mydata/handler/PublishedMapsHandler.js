@@ -30,7 +30,22 @@ class MapsHandler extends StateHandler {
         if (this.popupControls) {
             this.popupCleanup();
         }
-        this.popupControls = showSnippetPopup(view, () => this.popupCleanup());
+        this.popupControls = showSnippetPopup(view, () => this.popupCleanup(), this.getParamsForHtml());
+    }
+
+    refreshHtmlSnippet () {
+        if (!this.popupControls) {
+            return;
+        }
+        this.popupControls.update(this.getParamsForHtml());
+    }
+
+    getParamsForHtml () {
+        const { x, y, zoom } = this.sandbox.getMap().getLocation();
+        return {
+            zoomLevel: zoom,
+            coord: `${x}_${y}`
+        };
     }
 
     refreshViewsList () {
@@ -250,7 +265,8 @@ class MapsHandler extends StateHandler {
         const handlers = {
             'Publisher.MapPublishedEvent': (event) => {
                 this.refreshViewsList();
-            }
+            },
+            'AfterMapMoveEvent': event => this.refreshHtmlSnippet()
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;

@@ -302,6 +302,8 @@ Oskari.clazz.define(
             }
 
             me._map = me.createMap();
+            // createMap registers epsg codes for proj4, store decimals after that
+            me._sandbox.getMap().setSrsDecimals(me.getProjectionDecimals(me._projectionCode));
 
             if (me._options?.crosshair) {
                 me.toggleCrosshair(true);
@@ -593,8 +595,7 @@ Oskari.clazz.define(
          * @return {Integer} projetion decimals (decimal count spefied by units)
          */
         getProjectionDecimals: function (srs) {
-            var me = this;
-            var units = me.getProjectionUnits(srs);
+            const units = this.getProjectionUnits(srs);
             if (units === 'm') {
                 return 0;
             } else if (units === 'degrees') {
