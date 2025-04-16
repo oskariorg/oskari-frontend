@@ -152,7 +152,7 @@ class UIHandler extends StateHandler {
             this.sandbox.postRequestByName('InfoBox.HideInfoBoxRequest', [INFOBOX_PREVIEW_ID]);
             return;
         }
-        const { title, featureName, featureDesc } = Oskari.getMsg(BUNDLE_KEY, 'BasicView.layout.popup.gfiDialog');
+        const { title, featureName, featureDesc } = Oskari.getMsg(BUNDLE_KEY, 'BasicView.layout.gfiDialog', null, {});
         const html = getInfoboxHtml(featureName, featureDesc);
 
         const infoboxData = [

@@ -85,7 +85,7 @@ export const LayoutForm = ({ mapTheme, infoBoxPreviewVisible, presets, controlle
                 </Dropdown>
             </Field>
             <Field>
-                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.fonts.label' />
+                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.font' />
                 <StyledSelect
                     value={font}
                     onChange={val => controller.updateTheme('font', val) }

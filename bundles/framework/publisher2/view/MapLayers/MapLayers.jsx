@@ -73,7 +73,7 @@ export const MapLayers = ({ layers, baseLayers, tools, layerListPluginActive, co
                             <LayerBox key={layer.getId()} disabled={disabled}>
                                 <LayerTitle>{layer.getName()}</LayerTitle>
                                 {!disabled && layerListPluginActive && (
-                                    <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={<Message messageKey='BasicView.maptools.layerselection.selectAsBaselayer' />}>
+                                    <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={<Message messageKey='BasicView.layers.selectAsBaselayer' />}>
                                         <IconButton
                                             icon={<UpCircleOutlined />}
                                             onClick={() => controller.addBaseLayer(layer)}
