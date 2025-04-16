@@ -18,7 +18,7 @@ const Content = styled.div`
 export const showInfoPopup = (title, message, options = {}) => {
     // no need to update
     const showFunction = options.modal ? showModal : showPopup;
-    const { close } = showFunction(
+    const controls = showFunction(
         <Message messageKey={title} bundleKey={BUNDLE_KEY} />,
         (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Content>
@@ -26,7 +26,7 @@ export const showInfoPopup = (title, message, options = {}) => {
             </Content>
         </LocaleProvider>), () => {}, POPUP_OPTIONS);
     if (options.fadeout) {
-        setTimeout(() => close(), FADEOUT);
+        setTimeout(() => controls.close(), FADEOUT);
     }
-    return close;
+    return controls;
 };
