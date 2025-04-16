@@ -5,7 +5,7 @@ import { ReplaceConfirmDialogContent } from './dialog/ReplaceConfirmDialogConten
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { GeneralInfoForm } from './form/GeneralInfoForm';
 import { PanelGeneralInfoHandler } from '../handler/PanelGeneralInfoHandler';
-import { MAP_SIZES, PanelMapPreviewHandler } from '../handler/PanelMapPreviewHandler';
+import { PanelMapPreviewHandler } from '../handler/PanelMapPreviewHandler';
 import { MapPreviewForm, MapPreviewTooltip } from './form/MapPreviewForm';
 import { mergeValues } from '../util/util';
 import { PanelMapLayersHandler } from '../handler/PanelMapLayersHandler';
