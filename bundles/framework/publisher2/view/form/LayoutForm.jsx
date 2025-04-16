@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Divider, Message, Slider, Checkbox, Dropdown, Button, Select, NumberInput } from 'oskari-ui';
 import { ColorPicker } from 'oskari-ui/components/ColorPicker';
 import PropTypes from 'prop-types';
-import { BUNDLE_KEY } from '../constants.js';
+import { BUNDLE_KEY } from '../../constants.js';
 
 const FONTS = [
     {
@@ -71,7 +71,7 @@ const StyledSelect = styled(Select)`
     width: 200px;
 `;
 
-export const PanelToolStyles = ({ mapTheme, infoBoxPreviewVisible, presets, controller }) => {
+export const LayoutForm = ({ mapTheme, infoBoxPreviewVisible, presets, controller }) => {
     const { font = FONTS[0].value, color = {}, navigation = {}, infobox = {} } = mapTheme;
     const [buttonRounding, setButtonRounding] = useState(navigation.roundness);
 
@@ -195,7 +195,7 @@ export const PanelToolStyles = ({ mapTheme, infoBoxPreviewVisible, presets, cont
     );
 };
 
-PanelToolStyles.propTypes = {
+LayoutForm.propTypes = {
     mapTheme: PropTypes.object.isRequired,
     presets: PropTypes.array.isRequired,
     infoBoxPreviewVisible: PropTypes.bool.isRequired,

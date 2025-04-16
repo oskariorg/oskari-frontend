@@ -1,5 +1,5 @@
 import React from 'react';
-import { PanelToolStyles } from '../view/PanelToolStyles';
+import { LayoutForm } from '../view/form/LayoutForm';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { getDefaultMapTheme } from '../../..//mapping/mapmodule/util/MapThemeHelper.js';
 import { BUNDLE_KEY } from '../constants';
@@ -97,7 +97,7 @@ class UIHandler extends StateHandler {
     }
 
     getPanelContent () {
-        return <PanelToolStyles {...this.getState()} presets={this.getPresetOptions()} controller={this.getController()}/>;
+        return <LayoutForm {...this.getState()} presets={this.getPresetOptions()} controller={this.getController()}/>;
     }
 
     getPresetOptions () {
