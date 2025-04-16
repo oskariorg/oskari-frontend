@@ -178,6 +178,9 @@ Oskari.registerLocalization(
                     "showArrows": "Pan tool"
                 }
             },
+            "GetInfoPlugin": {
+                "toolLabel": "Feature query tool"
+            },
             "IndexMapPlugin": {
                 "toolLabel": "Index map",
             },

@@ -173,6 +173,9 @@ Oskari.registerLocalization(
                     "showArrows": "Panoreringsverktyg"
                 }
             },
+            "GetInfoPlugin": {
+                "toolLabel": "Frågverktyg för visande av objektuppgifter"
+            },
             "IndexMapPlugin": {
                 "toolLabel": "Indexkarta"
             },

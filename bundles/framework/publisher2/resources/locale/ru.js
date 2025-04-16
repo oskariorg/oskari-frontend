@@ -70,7 +70,6 @@ Oskari.registerLocalization(
                 "label": "Инструменты",
                 "tooltip": "Выберите доступные инструменты карты. Проверка размещения в окне предварительного просмотра карты.",
                 "FeaturedataPlugin": "Данные объекта",
-                "GetInfoPlugin": "Инструмент запроса объектов",
                 "selectDrawLayer": "Выбрать слой карты",
                 "LayerSelectionPlugin": "Меню слоев карты",
                 "FeedbackServiceTool": "Обратная связь (Open311) ",

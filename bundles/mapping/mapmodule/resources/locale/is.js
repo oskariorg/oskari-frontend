@@ -140,6 +140,9 @@ Oskari.registerLocalization(
             "PanButtons": {
                 "toolLabel": "Hliðrunartól"
             },
+            "GetInfoPlugin": {
+                "toolLabel": "Fyrirspurnatól fyrir fitjur"
+            },
             "IndexMapPlugin": {
                 "toolLabel": "Index kort"
             },

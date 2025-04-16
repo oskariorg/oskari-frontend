@@ -178,6 +178,9 @@ Oskari.registerLocalization(
                     "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
                 }
             },
+            "GetInfoPlugin": {
+                "toolLabel": "Kohdetietojen kyselytyökalu"
+            },
             "IndexMapPlugin": {
                 "toolLabel": "Indeksikartta"
             },

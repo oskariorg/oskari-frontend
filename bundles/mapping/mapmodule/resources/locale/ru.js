@@ -141,6 +141,9 @@ Oskari.registerLocalization(
             "PanButtons": {
                 "toolLabel": "Инструмент панорамирования"
             },
+            "GetInfoPlugin": {
+                "toolLabel": "Инструмент запроса объектов"
+            },
             "IndexMapPlugin": {
                 "toolLabel": "Номенклатура карты"
             },
