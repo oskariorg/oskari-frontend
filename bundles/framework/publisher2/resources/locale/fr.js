@@ -67,35 +67,7 @@ Oskari.registerLocalization(
             },
             "tools": {
                 "label": "Outils",
-                "tooltip": "Sélectionner les outils de carte accessibles. Consulter une mise en place dans la prévisualisation de carte.",
-                "FeaturedataPlugin": "Données de fonctionnalité",
-                "selectDrawLayer": "Sélectionner la couche cartographique",
-                "LayerSelectionPlugin": "Menu des couches cartographiques",
-                "FeedbackServiceTool": "Service de rétroaction (Open311)",
-                "MapLegend": "Afficher la légende de la carte",
-                "MapRotator": "Activer la rotation de la carte",
-                "toolbarToolNames": {
-                    "history_back": "Passer à la vue précédente",
-                    "history_forward": "Passer à la vue suivante",
-                    "drawTools": "Outils de dessin",
-                    "point": "Ajout de ses propres lieux",
-                    "line": "Permettre les éléments ponctuels",
-                    "area": "Permettre les éléments linéaires"
-                },
-                "layers": {
-                    "add": "Permettre les éléments zonaux",
-                    "label": "Couches cartographiques",
-                    "addselect": "Ajouter une couche de dessin aux couches cartographiques.",
-                    "defaultLayer": "(Couche cartographique par défaut)",
-                    "useAsDefaultLayer": "Utiliser en tant que couche par défaut"
-                },
-                "myplaces": {
-                    "label": "Mes couches cartographiques"
-                },
-                "layerselection": {
-                    "info": "Sélectionner la couche cartographique d'arrière-plan. Vous pouvez sélectionner la couche cartographique d'arrière-plan par défaut dans la prévisualisation de la carte.",
-                    "selectAsBaselayer": "Sélectionner en tant que couche de base"
-                }
+                "tooltip": "Sélectionner les outils de carte accessibles. Consulter une mise en place dans la prévisualisation de carte."
             },
             "toolLayout": {
                 "label": "Mise en place des outils",
@@ -113,29 +85,6 @@ Oskari.registerLocalization(
             "layout": {
                 "label": "Représentation graphique",
                 "fields": {
-                    "colours": {
-                        "label": "Schéma de couleur",
-                        "placeholder": "Schéma de couleur",
-                        "buttonLabel": "Sélectionner",
-                        "light_grey": "Gris clair",
-                        "dark_grey": "Gris foncé",
-                        "blue": "Bleu",
-                        "red": "Rouge",
-                        "green": "Vert",
-                        "yellow": "Jaune",
-                        "custom": "Mon schéma de couleur",
-                        "customLabels": {
-                            "bgLabel": "Arrière-plan de l'identifiant",
-                            "titleLabel": "Texte de l'identifiant",
-                            "headerLabel": "Nom de lieu",
-                            "iconLabel": "Icône",
-                            "iconCloseLabel": "Foncé",
-                            "iconCloseWhiteLabel": "Clair"
-                        }
-                    },
-                    "fonts": {
-                        "label": "Style de police"
-                    },
                     "toolStyles": {
                         "label": "Style d'outil",
                         "default": "Style par défaut",
@@ -145,16 +94,13 @@ Oskari.registerLocalization(
                         "sharp-light": "Anguleux (clair)",
                         "3d-dark": "Tridimensionnel (foncé)",
                         "3d-light": "Tridimensionnel (clair)"
-                    }
+                    },
+                    "font": "Style de police"
                 },
-                "popup": {
-                    "title": "Sélectionner le schéma de couleur",
-                    "close": "Fermer",
-                    "gfiDialog": {
-                        "title": "Infos sur la fonctionnalité",
-                        "featureName": "Prévisualisation",
-                        "featureDesc": "Le schéma de couleur sélectionné modifie la représentation graphique de la fonctionnalité et les fenêtres de renseignements en menu contextuel de couches cartograpgiques."
-                    }
+                "gfiDialog": {
+                    "title": "Infos sur la fonctionnalité",
+                    "featureName": "Prévisualisation",
+                    "featureDesc": "Le schéma de couleur sélectionné modifie la représentation graphique de la fonctionnalité et les fenêtres de renseignements en menu contextuel de couches cartograpgiques."
                 }
             },
             "sizes": {
@@ -170,10 +116,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Enregistrer",
                 "saveNew": "Enregistrer la nouvelle carte",
-                "ok": "OK",
-                "replace": "Actualiser la carte",
-                "cancel": "Annuler",
-                "add": "Ajouter la couche cartographique"
+                "replace": "Actualiser la carte"
             },
             "confirm": {
                 "replace": {
@@ -181,16 +124,10 @@ Oskari.registerLocalization(
                     "msg": "Les actualisations sont affichées immédiatement sur la carte. Vous n'avez pas à modifier le code html sur votre site Web."
                 }
             },
-            "layerselection": {
+            "layers": {
                 "label": "Couches cartographiques",
-                "info": "Sélectionner les couches cartographiques à afficher sur la carte publiée",
-                "tooltip": "La couche d'arrière-plan est affichée dans la couche inférieure de la carte. Si vous sélectionnez plusieurs cartes d'arrière-plan, vous ne pourrez en voir qu'une seule à la fois. L'utilisateur peut sélectionner une couche d'arrière-plan dans l'interface utilisateur. Veuillez sélectionner une carte d'arrière-plan par défaut dans la prévisualisation de la carte.",
-                "promote": "Souhaitez-vous également afficher des orthophotos sur la carte?"
+                "selectAsBaselayer": "Sélectionner en tant que couche de base"
             },
-            "preview": "Prévisualisation de la carte",
-            "location": "Emplacement et niveau de zoom",
-            "zoomlevel": "Niveau de zoom",
-            "help": "Aide",
             "error": {
                 "title": "Erreur",
                 "size": "La taille de la carte n'est pas valide. La largeur doit être d'au moins 30 pixels et la longueur doit être d'au moins 20 pixels. Utiliser un point en tant que séparateur décimal.",
@@ -219,25 +156,12 @@ Oskari.registerLocalization(
             "userDataLayerDisclaimer": "REMARQUE! Si vous utilisez cette couche cartographique dans une carte embarquée, la couche cartographique sera publiée.",
             "buttons": {
                 "continue": "Continuer",
-                "continueAndAccept": "Accepter et continuer",
-                "cancel": "Annuler",
-                "close": "Fermer"
+                "continueAndAccept": "Accepter et continuer"
             },
             "tou": {
                 "notfound": "Impossible de trouver les conditions d'utilisation.",
                 "reject": "Refuser",
                 "accept": "Accepter"
-            }
-        },
-        "layer": {
-            "show": "Afficher",
-            "hide": "Masquer",
-            "hidden": "La couche cartographique est temporairement masquée.",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Publiable",
-                    "tooltip": "La couche cartographique est publiable dans des cartes embarquées. La quantité d'utilisateurs hebdomadaires peut être limitée."
-                }
             }
         },
         "layerFilter": {
