@@ -14,7 +14,6 @@ import './event/ColourSchemeChangedEvent';
 import './event/LayerToolsEditModeEvent';
 import './request/PublishMapEditorRequest';
 import './request/PublishMapEditorRequestHandler';
-import './resources/scss/style.scss';
 import '../../mapping/mapmodule/publisher/tools';
 
 /**
