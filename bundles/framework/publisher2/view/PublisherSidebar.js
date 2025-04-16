@@ -1,6 +1,6 @@
 import React from 'react';
 import { Message } from 'oskari-ui';
-import { PublisherSidebarHandler } from './PublisherSideBarHandler';
+import { PublisherSidebarHandler } from '../handler/PublisherSidebarHandler';
 import { PublisherPanel } from './PublisherPanel';
 import { showSidePanel } from 'oskari-ui/components/window';
 import { BUNDLE_KEY } from '../constants';
