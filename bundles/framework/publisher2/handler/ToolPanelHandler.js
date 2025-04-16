@@ -1,58 +1,47 @@
+import React from 'react';
+import { PublisherToolsList } from '../view/form/PublisherToolsList';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
-    constructor (tools, consumer) {
+    constructor (sandbox, tools) {
         super();
         this.allAvailableTools = Array.isArray(tools) ? tools.toSorted((a, b) => a.index - b.index) : [];
         this.setState({
             tools: []
         });
-        if (consumer) {
-            this.addStateListener(consumer);
-        }
     }
 
-    init (data, silent) {
-        this.data = data;
-        this.state = {
-            tools: []
-        };
-
+    init (data) {
+        const tools = [];
         this.allAvailableTools.forEach((tool) => {
             try {
                 tool.init(data);
-                if (tool.isDisplayed(data)) {
-                    this._addToolToState(tool, silent);
+                if (tool.isDisplayed()) {
+                    tools.push(tool);
                 }
             } catch (err) {
                 Oskari.log('ToolPanelHandler').error('Error initializing publisher tool:', tool);
             }
         });
-
-        const { tools } = this.getState();
-        return tools.length > 0;
+        // Note that handler is for extra component. Every tool doesn't have extra + handler
+        // Trigger re-render if handlers state changes
+        tools.forEach(tool => tool.getComponent().handler?.addStateListener(() => this.notify()));
+        this.updateState({ tools });
     }
 
-    _addToolToState (tool, silent) {
-        const toolComponent = tool.getComponent();
-        // silent flag added for statsgrid's purposes
-        if (toolComponent.handler && !silent) {
-            toolComponent.handler.addStateListener(() => this.notify());
+    setPanelVisibility (visible) {
+        // Remove tools from state to hide panel
+        const tools = visible ? this.allAvailableTools.filter(tool => tool.isDisplayed()) : [];
+        this.updateState({ tools });
+    }
+
+    getPanelContent () {
+        const { tools } = this.getState();
+        if (!tools.length) {
+            // don't render empty panel (collapse without content/children is filtered)
+            return null;
         }
-        const { id, title, hideCheckbox } = tool.getTool();
-        this.updateState({
-            tools: [
-                ...this.state.tools,
-                {
-                    id,
-                    title,
-                    hideCheckbox,
-                    component: toolComponent.component,
-                    handler: toolComponent.handler,
-                    publisherTool: tool
-                }
-            ]
-        });
+        return <PublisherToolsList tools={tools} controller={this.getController()}/>;
     }
 
     setToolEnabled (tool, enabled) {
@@ -65,7 +54,7 @@ class UIHandler extends StateHandler {
         const { tools } = this.getState();
         tools.forEach(tool => {
             try {
-                tool.publisherTool.stop();
+                tool.stop();
             } catch (e) {
                 Oskari.log('Publisher.ToolPanelHandler')
                     .error('Error stopping publisher tool:', tool.id);
