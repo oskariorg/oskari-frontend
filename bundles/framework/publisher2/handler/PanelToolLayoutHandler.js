@@ -1,28 +1,30 @@
+import React from 'react';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { ToolLayout } from '../view/form/ToolLayout';
 import { mergeValues } from '../util/util';
 
 class UIHandler extends StateHandler {
-    constructor (tools) {
+    constructor (sandbox, tools) {
         super();
         this.tools = tools;
-        this.sandbox = Oskari.getSandbox();
+        this.sandbox = sandbox;
         this.eventHandlers = {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
-                if (!this.toolLayoutEditMode) {
-                    return;
+                const { toolLayoutEditMode } = this.getState();
+                if (toolLayoutEditMode) {
+                    this.enableToolDraggable(event.getTool());
                 }
-                this.enableToolDraggable(event.getTool());
             }
         };
 
         this.addedDraggables = [];
-        this.state = {
-            toolLayoutEditmode: false
-        };
+        this.setState({
+            toolLayoutEditMode: false
+        });
     }
 
     getName () {
-        return 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout';
+        return 'Publisher2.PanelToolLayoutHandler';
     }
 
     /**
@@ -35,12 +37,17 @@ class UIHandler extends StateHandler {
             .forEach(eventName => this.sandbox.registerForEventByName(this, eventName));
     }
 
+    getPanelContent () {
+        return <ToolLayout {...this.getState()} controller={this.getController()}/>;
+    }
+
     /**
      * Returns the selections the user has done with the form inputs.
      * @method getValues
      * @return {Object}
      */
     getValues () {
+        // TODO: does tool really return only values which should be stored here? it looks like this is storing too much
         let values = {};
 
         this.tools.forEach(tool => {
@@ -94,11 +101,6 @@ class UIHandler extends StateHandler {
         return handler.apply(this, [event]);
     }
 
-    getToolLayoutEditMode () {
-        const { toolLayoutEditMode } = this.getState();
-        return toolLayoutEditMode;
-    }
-
     /**
      * @private @method _editToolLayoutOn
      *
@@ -149,7 +151,7 @@ class UIHandler extends StateHandler {
             tolerance: 'pointer' // bit of a compromise, we'd need a combination of pointer and intersect
         });
 
-        var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(true);
+        const event = Oskari.eventBuilder('LayerToolsEditModeEvent')(true);
         this.sandbox.notifyAll(event);
 
         this.updateState({
@@ -455,9 +457,6 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'validate',
-    'getValues',
-    'getToolLayoutEditMode',
     'editToolLayoutOn',
     'editToolLayoutOff',
     'switchControlSides'

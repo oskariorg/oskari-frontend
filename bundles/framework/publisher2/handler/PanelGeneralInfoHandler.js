@@ -1,23 +1,24 @@
+import React from 'react';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { PUBLISHER_BUNDLE_ID } from '../view/PublisherSideBarHandler';
+import { GeneralInfoForm } from '../view/form/GeneralInfoForm';
 
 class UIHandler extends StateHandler {
-    constructor () {
+    constructor (sandbox) {
         super();
-        this.state = {
+        this.setState({
             name: null,
             domain: null,
             language: null
-        };
+        });
     }
 
     init (data) {
-        const { name, domain, language } = data?.metadata || {};
-        this.updateState({
-            name: name || null,
-            domain: domain || null,
-            language: language || Oskari.getLang()
-        });
+        const { name, domain, language = Oskari.getLang() } = data?.metadata || {};
+        this.updateState({ name, domain, language });
+    }
+
+    getPanelContent () {
+        return <GeneralInfoForm {...this.getState()} controller={this.getController()}/>;
     }
 
     getValues () {
@@ -26,63 +27,46 @@ class UIHandler extends StateHandler {
                 ...this.getState()
             }
         };
-    };
+    }
 
     onChange (key, value) {
-        const { oldState } = this.getState();
-        const newState = {
-            ...oldState
-        };
-        newState[key] = value;
-        this.updateState({
-            ...newState
-        });
+        this.updateState({ [key]: value });
     }
 
     validate () {
-        let errors = [];
-        const { name, domain } = this.state;
-        errors = errors.concat(this.validateName(name));
-        errors = errors.concat(this.validateDomain(domain));
-        return errors;
+        const { name, domain } = this.getState();
+        return [...this.validateName(name), ...this.validateDomain(domain)];
     }
 
     validateName (value) {
-        const errors = [];
-        const sanitizedValue = Oskari.util.sanitize(value);
         if (!value || !value.trim().length) {
-            errors.push({
-                field: name,
-                error: Oskari.getMsg(PUBLISHER_BUNDLE_ID, 'BasicView.error.name')
-            });
-            return errors;
+            return [{
+                field: 'name',
+                error: 'BasicView.error.name'
+            }];
         }
+        const sanitizedValue = Oskari.util.sanitize(value);
         if (sanitizedValue !== value) {
-            errors.push({
-                field: name,
-                error: Oskari.getMsg(PUBLISHER_BUNDLE_ID, 'BasicView.error.nameIllegalCharacters')
-            });
-            return errors;
+            return [{
+                field: 'name',
+                error: 'BasicView.error.nameIllegalCharacters'
+            }];
         }
-        return errors;
+        return [];
     }
 
-    validateDomain (name, value) {
-        const errors = [];
+    validateDomain (value) {
         if (value && value.indexOf('://') !== -1) {
-            errors.push({
-                field: name,
-                error: Oskari.getMsg(PUBLISHER_BUNDLE_ID, 'BasicView.error.domainStart')
-            });
-            return errors;
+            return [{
+                field: 'domain',
+                error: 'BasicView.error.domainStart'
+            }];
         }
-        return errors;
+        return [];
     }
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'validate',
-    'getValues',
     'onChange'
 ]);
 

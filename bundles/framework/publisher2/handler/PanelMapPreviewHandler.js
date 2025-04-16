@@ -1,5 +1,6 @@
+import React from 'react';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { PUBLISHER_BUNDLE_ID } from '../view/PublisherSideBarHandler';
+import { MapPreviewForm } from '../view/form/MapPreviewForm';
 
 export const CUSTOM_MAP_SIZE = 'custom';
 const DEFAULT_MAP_SIZE = 'fill';
@@ -29,14 +30,14 @@ export const CUSTOM_MAP_SIZE_LIMITS = {
 };
 
 class UIHandler extends StateHandler {
-    constructor () {
+    constructor (sandbox) {
         super();
-        this.mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-        this.state = {
+        this.mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        this.setState({
             preview: DEFAULT_MAP_SIZE,
             customSize: {},
             errors: []
-        };
+        });
     }
 
     init (data) {
@@ -51,6 +52,10 @@ class UIHandler extends StateHandler {
         }
         // use set preview to adjust map size
         this.setPreview(preview);
+    }
+
+    getPanelContent () {
+        return <MapPreviewForm {...this.getState()} controller={this.getController()}/>;
     }
 
     setPreview (preview) {
@@ -124,7 +129,8 @@ class UIHandler extends StateHandler {
         if (preview === CUSTOM_MAP_SIZE && errors.length) {
             return [{
                 field: 'size',
-                error: Oskari.getMsg(PUBLISHER_BUNDLE_ID, 'BasicView.error.size', CUSTOM_MAP_SIZE_LIMITS)
+                error: 'BasicView.error.size',
+                args: CUSTOM_MAP_SIZE_LIMITS
             }];
         }
         return [];
