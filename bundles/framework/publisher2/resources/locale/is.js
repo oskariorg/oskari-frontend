@@ -63,8 +63,6 @@ Oskari.registerLocalization(
                 "toolbarToolNames": {
                     "history_back": "Færa í fyrri sýn",
                     "history_forward": "Færa í næstu sýn",
-                    "measureline": "Mæla fjarlægð",
-                    "measurearea": "Mæla svæði",
                     "drawTools": "Teiknitól",
                     "point": "Bæta við eigin stöðum",
                     "line": "Leyfa punktafitjur",

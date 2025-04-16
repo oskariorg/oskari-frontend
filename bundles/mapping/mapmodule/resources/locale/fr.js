@@ -165,7 +165,10 @@ Oskari.registerLocalization(
                 "toolLabel": "Panoramiser avec la souris"
             },
             "PublisherToolbarPlugin": {
-                "toolLabel": "Outils cartographiques"
+                "toolLabel": "Outils cartographiques",
+                "history": "Passer à la vue précédente ou suivante",
+                "measureline": "Mesurer la distance",
+                "measurearea": "Mesurer l'aire"
             }
         }
     }

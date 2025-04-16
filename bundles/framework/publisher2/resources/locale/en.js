@@ -78,11 +78,8 @@ Oskari.registerLocalization(
                 "MapLegend": "Show map legend",
                 "MapRotator": "Enable map rotation",
                 "toolbarToolNames": {
-                    "history": "Move to previous or next view",
                     "history_back": "Move to previous view",
                     "history_forward": "Move to next view",
-                    "measureline": "Measure distance",
-                    "measurearea": "Measure area",
                     "drawTools": "Drawing tools",
                     "point": "Adding own places",
                     "line": "Allow point features",

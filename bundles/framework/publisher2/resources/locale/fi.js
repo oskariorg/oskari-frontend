@@ -78,11 +78,8 @@ Oskari.registerLocalization(
                 "MapLegend": "Näytä karttaselitteet",
                 "MapRotator": "Salli kartan pyörittäminen",
                 "toolbarToolNames": {
-                    "history": "Siirtyminen edelliseen ja seuraavaan näkymään",
                     "history_back": "Siirtyminen edelliseen näkymään",
                     "history_forward": "Siirtyminen seuraavaan näkymään",
-                    "measureline": "Matkan mittaus",
-                    "measurearea": "Pinta-alan mittaus",
                     "drawTools": "Omien kohteiden tallennus",
                     "point": "Salli pisteiden tallennus.",
                     "line": "Salli viivojen tallennus.",

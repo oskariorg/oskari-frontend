@@ -205,7 +205,10 @@ Oskari.registerLocalization(
                 "toolLabel": "Kartan liikuttaminen hiirellä raahaamalla",
             },
             "PublisherToolbarPlugin": {
-                "toolLabel": "Karttatyökalut"
+                "toolLabel": "Karttatyökalut",
+                "history": "Siirtyminen edelliseen ja seuraavaan näkymään",
+                "measureline": "Matkan mittaus",
+                "measurearea": "Pinta-alan mittaus"
             }
 
         }

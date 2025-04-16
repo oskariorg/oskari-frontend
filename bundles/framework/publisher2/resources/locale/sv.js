@@ -79,11 +79,8 @@ Oskari.registerLocalization(
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
                 "toolbarToolNames": {
-                    "history": "Gå bakåt eller framåt",
                     "history_back": "Gå bakåt",
                     "history_forward": "Gå framåt",
-                    "measureline": "Mät avstånd",
-                    "measurearea": "Mät område",
                     "drawTools": "Ritningsverktyg",
                     "point": "Tillåt användare att lägga till punkter.",
                     "line": "Tillåt användare att lägga till linjer.",

@@ -159,7 +159,9 @@ Oskari.registerLocalization(
                 "toolLabel": "Hliðra með mús"
             },
             "PublisherToolbarPlugin": {
-                "toolLabel": "Kortatól"
+                "toolLabel": "Kortatól",
+                "measureline": "Mæla fjarlægð",
+                "measurearea": "Mæla svæði"
             }
         }
     }

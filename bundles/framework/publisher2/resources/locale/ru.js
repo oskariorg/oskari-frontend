@@ -76,11 +76,8 @@ Oskari.registerLocalization(
                 "MapLegend": "Показать условные знаки",
                 "MapRotator": "Включить поворот карты",
                 "toolbarToolNames": {
-                    "history": "Перейти к предыдущему или следующему виду",
                     "history_back": "Перейти к предыдущему виду",
                     "history_forward": "Перейти к следующему виду",
-                    "measureline": "Измерить расстояние",
-                    "measurearea": "Измерить площадь",
                     "drawTools": "Инструменты для рисования",
                     "point": "Добавление личных мест",
                     "line": "Разрешить точечные объекты",
