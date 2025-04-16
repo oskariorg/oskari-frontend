@@ -72,43 +72,7 @@ Oskari.registerLocalization(
             "tools": {
                 "label": "Kartalla näytettävät työkalut",
                 "additional": "Lisätyökalut",
-                "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
-                "selectDrawLayer": "Valitse tallennustaso",
-                "LayerSelectionPlugin": "Karttatasovalikko",
-                "MapLegend": "Näytä karttaselitteet",
-                "MapRotator": "Salli kartan pyörittäminen",
-                "toolbarToolNames": {
-                    "history_back": "Siirtyminen edelliseen näkymään",
-                    "history_forward": "Siirtyminen seuraavaan näkymään",
-                    "drawTools": "Omien kohteiden tallennus",
-                    "point": "Salli pisteiden tallennus.",
-                    "line": "Salli viivojen tallennus.",
-                    "area": "Salli alueiden tallennus."
-                },
-                "layers": {
-                    "add": "Luo kohteille uusi tallennustaso",
-                    "label": "Näytettävät karttatasot",
-                    "addselect": "Lisää tallennustaso näytettäviin karttatasoihin",
-                    "defaultLayer": "(Oletusvalinta)",
-                    "useAsDefaultLayer": "Käytä oletuksena"
-                },
-                "myplaces": {
-                    "label": "Omat karttatasot"
-                },
-                "layerselection": {
-                    "selectAsBaselayer": "Valitse taustakartaksi",
-                },
-                "mylocation": {
-                    "modes": {
-                        "single": "Yksittäinen",
-                        "continuous": "Jatkuva"
-                    },
-                    "titles": {
-                        "mode": "Toiminto",
-                        "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
-                        "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
-                    }
-                },
+                "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta."
             },
             "toolLayout": {
                 "label": "Työkalujen asettelu kartalla",
@@ -130,29 +94,6 @@ Oskari.registerLocalization(
                     "infobox": "Kohdetietojen kyselytyökalu"
                 },
                 "fields": {
-                    "colours": {
-                        "label": "Värimaailma",
-                        "placeholder": "Värimaailma",
-                        "buttonLabel": "Valitse",
-                        "light_grey": "Vaaleanharmaa",
-                        "dark_grey": "Tummanharmaa",
-                        "blue": "Sininen",
-                        "red": "Punainen",
-                        "green": "Vihreä",
-                        "yellow": "Keltainen",
-                        "custom": "Omat värit",
-                        "customLabels": {
-                            "bgLabel": "Otsikon tausta",
-                            "titleLabel": "Otsikon teksti",
-                            "headerLabel": "Oman kohteen nimi",
-                            "iconLabel": "Ikoni",
-                            "iconCloseLabel": "Tumma",
-                            "iconCloseWhiteLabel": "Vaalea"
-                        }
-                    },
-                    "fonts": {
-                        "label": "Valitse fontti"
-                    },
                     "toolStyles": {
                         "rounded-dark": "Pyöristetty (tumma)",
                         "rounded-light": "Pyöristetty (vaalea)",
@@ -161,6 +102,7 @@ Oskari.registerLocalization(
                         "3d-dark": "Kolmiulotteinen (tumma)",
                         "3d-light": "Kolmiulotteinen (vaalea)"
                     },
+                    "font": "Valitse fontti",
                     "popupHeaderColor": "Otsikon taustaväri",
                     "popupHeaderTextColor": "Otsikon väri",
                     "infoboxHeaderColor": "Otsikon tausta",
@@ -174,14 +116,10 @@ Oskari.registerLocalization(
                     "3d": "3D",
                     "presets": "Valmiit tyylimääritykset"
                 },
-                "popup": {
-                    "title": "Valitse värimaailma",
-                    "close": "Sulje",
-                    "gfiDialog": {
-                        "title": "Kohteen tiedot",
-                        "featureName": "Esikatselu",
-                        "featureDesc": "Värimaailma vaikuttaa kohdetietojen, omien kohteiden tietojen ja karttatasolaatikon väreihin."
-                    }
+                "gfiDialog": {
+                    "title": "Kohteen tiedot",
+                    "featureName": "Esikatselu",
+                    "featureDesc": "Värimaailma vaikuttaa kohdetietojen, omien kohteiden tietojen ja karttatasolaatikon väreihin."
                 }
             },
             "sizes": {
@@ -197,22 +135,13 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Tallenna",
                 "saveNew": "Tallenna uusi",
-                "ok": "OK",
-                "replace": "Päivitä",
-                "cancel": "Peruuta",
-                "add": "Lisää karttataso"
+                "replace": "Päivitä"
             },
             "confirm": {
                 "replace": {
                     "title": "Haluatko päivittää upotetun kartan?",
                     "msg": "Haluatko päivittää upotetun kartan? Päivitykset näkyvät välittömästi upotetussa kartassa. Sinun ei tarvitse muuttaa html-koodia paitsi jos olet muuttanut kartan kokoa."
                 }
-            },
-            "layerselection": {
-                "label": "Karttatasovalikko",
-                "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
-                "tooltip": "Valitse julkaistavalla kartalla näytettävät karttatasot.",
-                "promote": "Haluatko näyttää kartalla myös ilmakuvia?"
             },
             "rpc": {
                 "label": "Ohjelmallinen käyttö (RPC-rajapinta)",
@@ -221,6 +150,7 @@ Oskari.registerLocalization(
             "layers": {
                 "label": "Karttatasot",
                 "tools": "Lisätyökalut",
+                "selectAsBaselayer": "Valitse taustakartaksi",
                 "otherLayers": "Muut kartat",
                 "selectLayers": "Valitse tasot",
                 "layersDisplay": "Tasojen esitystapa",
@@ -228,10 +158,6 @@ Oskari.registerLocalization(
                 "noBaseLayers": "Ei valittuja taustakarttoja",
                 "noLayers": "Ei valittuja karttatasoja"
             },
-            "preview": "Kartan esikatselu",
-            "location": "Sijainti ja mittakaavataso",
-            "zoomlevel": "Mittakaavataso",
-            "help": "Ohje",
             "error": {
                 "title": "Virhe",
                 "size": "Kartan koko on virheellinen. Leveyden on oltava välillä {minWidth} ja {maxWidth} pikseliä ja korkeuden {minHeight} ja {maxHeight} pikseliä.",
@@ -264,25 +190,12 @@ Oskari.registerLocalization(
             "noRights": "ei julkaisuoikeutta",
             "buttons": {
                 "continue": "Jatka",
-                "continueAndAccept": "Hyväksy ehdot ja jatka",
-                "cancel": "Peruuta",
-                "close": "Sulje"
+                "continueAndAccept": "Hyväksy ehdot ja jatka"
             },
             "tou": {
                 "notfound": "Käyttöehtoja ei löytynyt.",
                 "reject": "Hylkää",
                 "accept": "Hyväksy"
-            }
-        },
-        "layer": {
-            "show": "Näytä",
-            "hide": "Piilota",
-            "hidden": "Karttataso on piilotettu tilapäisesti.",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Julkaistavissa",
-                    "tooltip": "Karttataso on julkaistavissa upotetussa kartassa. Viikoittainen käyttömäärä voi olla rajoitettu."
-                }
             }
         },
         "layerFilter": {

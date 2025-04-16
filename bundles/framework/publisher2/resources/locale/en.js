@@ -72,43 +72,7 @@ Oskari.registerLocalization(
             "tools": {
                 "label": "Tools",
                 "additional": "Additional tools",
-                "tooltip": "Select available map tools. Check a placement in the map preview.",
-                "selectDrawLayer": "Select map layer",
-                "LayerSelectionPlugin": "Map layers menu",
-                "MapLegend": "Show map legend",
-                "MapRotator": "Enable map rotation",
-                "toolbarToolNames": {
-                    "history_back": "Move to previous view",
-                    "history_forward": "Move to next view",
-                    "drawTools": "Drawing tools",
-                    "point": "Adding own places",
-                    "line": "Allow point features",
-                    "area": "Allow line features"
-                },
-                "layers": {
-                    "add": "Allow area features",
-                    "label": "Map Layers",
-                    "addselect": "Add a drawing layer to map layers.",
-                    "defaultLayer": "(Default map layer)",
-                    "useAsDefaultLayer": "Use as default"
-                },
-                "myplaces": {
-                    "label": "My map layers"
-                },
-                "layerselection": {
-                    "selectAsBaselayer": "Select as baselayer",
-                },
-                "mylocation": {
-                    "modes": {
-                        "single": "Single",
-                        "continuous": "Continuous"
-                    },
-                    "titles": {
-                        "mode": "Mode",
-                        "mobileOnly": "Enable functionality only for mobile devices",
-                        "centerMapAutomatically": "Center map on user location at startup"
-                    }
-                },
+                "tooltip": "Select available map tools. Check a placement in the map preview."
             },
             "toolLayout": {
                 "label": "Tool Placement",
@@ -130,29 +94,6 @@ Oskari.registerLocalization(
                     "infobox": "Feature query tool"
                 },
                 "fields": {
-                    "colours": {
-                        "label": "Color scheme",
-                        "placeholder": "Color scheme",
-                        "buttonLabel": "Select",
-                        "light_grey": "Light gray",
-                        "dark_grey": "Dark gray",
-                        "blue": "Blue",
-                        "red": "Red",
-                        "green": "Green",
-                        "yellow": "Yellow",
-                        "custom": "My colour scheme",
-                        "customLabels": {
-                            "bgLabel": "Identifier background",
-                            "titleLabel": "Identifier text",
-                            "headerLabel": "Placename",
-                            "iconLabel": "Icon",
-                            "iconCloseLabel": "Dark",
-                            "iconCloseWhiteLabel": "Light"
-                        }
-                    },
-                    "fonts": {
-                        "label": "Font style"
-                    },
                     "toolStyles": {
                         "rounded-dark": "Rounded (dark)",
                         "rounded-light": "Rounded (light)",
@@ -161,6 +102,7 @@ Oskari.registerLocalization(
                         "3d-dark": "Three-dimensional (dark)",
                         "3d-light": "Three-dimensional (light)"
                     },
+                    "font": "Font style",
                     "popupHeaderColor": "Title background color",
                     "popupHeaderTextColor": "Title color",
                     "infoboxHeaderColor": "Identifier background",
@@ -174,14 +116,10 @@ Oskari.registerLocalization(
                     "3d": "3D",
                     "presets": "Style presets"
                 },
-                "popup": {
-                    "title": "Select Color Scheme",
-                    "close": "Close",
-                    "gfiDialog": {
-                        "title": "Feature Info",
-                        "featureName": "Preview",
-                        "featureDesc": "The selected color scheme affects a graphic layout of feature and map layer popup info windows."
-                    }
+                "gfiDialog": {
+                    "title": "Feature Info",
+                    "featureName": "Preview",
+                    "featureDesc": "The selected color scheme affects a graphic layout of feature and map layer popup info windows."
                 }
             },
             "sizes": {
@@ -197,22 +135,13 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Save",
                 "saveNew": "Save new map",
-                "ok": "OK",
-                "replace": "Update map",
-                "cancel": "Cancel",
-                "add": "Add map layer"
+                "replace": "Update map"
             },
             "confirm": {
                 "replace": {
                     "title": "Do you want to update this map?",
                     "msg": "Do you want to update this map? Updates are shown immediately on the map. You do not need to update the html code on your website unless you have changed the size of the map."
                 }
-            },
-            "layerselection": {
-                "label": "Map Layers",
-                "info": "Select the map layers to show on the published map",
-                "tooltip": "The background layer is shown at the bottom layer on the map. If you select several background maps, only one of them can be visible at a time. User can select a background layer in the user interface. Please select a default background map in the map preview.",
-                "promote": "Do you want to show also orthophotos on the map?"
             },
             "rpc": {
                 "label": "Programmatic use (RPC API)",
@@ -221,6 +150,7 @@ Oskari.registerLocalization(
             "layers": {
                 "label": "Map layers",
                 "tools": "Additional tools",
+                "selectAsBaselayer": "Select as baselayer",
                 "otherLayers": "Other maps",
                 "selectLayers": "Select map layers",
                 "layersDisplay": "Layer presentation",
@@ -228,10 +158,6 @@ Oskari.registerLocalization(
                 "noBaseLayers": "No selected background maps",
                 "noLayers": "No selected map layers"
             },
-            "preview": "Map preview",
-            "location": "Location and zoom level",
-            "zoomlevel": "Zoom level",
-            "help": "Help",
             "error": {
                 "title": "Error",
                 "size": "The map size is invalid. The width should be from {minWidth} to {maxWidth} pixels and the height from {minHeight} to {maxHeight} pixels.",
@@ -264,25 +190,12 @@ Oskari.registerLocalization(
             "noRights": "no permission",
             "buttons": {
                 "continue": "Continue",
-                "continueAndAccept": "Accept and continue",
-                "cancel": "Cancel",
-                "close": "Close"
+                "continueAndAccept": "Accept and continue"
             },
             "tou": {
                 "notfound": "Terms of Use could not be found.",
                 "reject": "Reject",
                 "accept": "Accept"
-            }
-        },
-        "layer": {
-            "show": "Show",
-            "hide": "Hide",
-            "hidden": "The map layer is temporarily hidden.",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Publishable",
-                    "tooltip": "The map layer is publishable in embedded maps. The weekly user amount can be limited."
-                }
             }
         },
         "layerFilter": {

@@ -73,43 +73,6 @@ Oskari.registerLocalization(
                 "label": "Verktyg",
                 "additional": "Ytterligare verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
-                "GetInfoPlugin": "Frågverktyg för visande av objektuppgifter",
-                "selectDrawLayer": "Välj lager för nya funktioner",
-                "LayerSelectionPlugin": "Kartlagermeny",
-                "MapLegend": "Visa kartförklaringen",
-                "MapRotator": "Tillåt kartrotation",
-                "toolbarToolNames": {
-                    "history_back": "Gå bakåt",
-                    "history_forward": "Gå framåt",
-                    "drawTools": "Ritningsverktyg",
-                    "point": "Tillåt användare att lägga till punkter.",
-                    "line": "Tillåt användare att lägga till linjer.",
-                    "area": "Tillåt användare att lägga till områden."
-                },
-                "layers": {
-                    "add": "Lägg till nytt lager för nya funktioner.",
-                    "label": "Kartlager",
-                    "addselect": "Lägg till ritningslager till kartan",
-                    "defaultLayer": "(Förvalt kartlager)",
-                    "useAsDefaultLayer": "Använd som förvalt kartlager."
-                },
-                "myplaces": {
-                    "label": "Mina kartlager"
-                },
-                "layerselection": {
-                    "selectAsBaselayer": "Välj bakgrundskartlager",
-                },
-                "mylocation": {
-                    "modes": {
-                        "single": "Enskild",
-                        "continuous": "Fortsatt"
-                    },
-                    "titles": {
-                        "mode": "Funktion",
-                        "mobileOnly": "Tillåt funktionen endast för mobilapparater",
-                        "centerMapAutomatically": "Centrera kartan till användarens plats vid start"
-                    }
-                },
             },
             "toolLayout": {
                 "label": "Verktygsplacering",
@@ -131,29 +94,6 @@ Oskari.registerLocalization(
                     "infobox": "Frågverktyg av objektuppgifter"
                 },
                 "fields": {
-                    "colours": {
-                        "label": "Färgschema",
-                        "placeholder": "Välj färgschemat",
-                        "buttonLabel": "Välj",
-                        "light_grey": "Ljusgrå",
-                        "dark_grey": "Mörkgrå",
-                        "blue": "Blå",
-                        "red": "Röd",
-                        "green": "Grön",
-                        "yellow": "Gul",
-                        "custom": "Eget färgschema",
-                        "customLabels": {
-                            "bgLabel": "Etikettens bakgrundsfärg",
-                            "titleLabel": "Etikettext",
-                            "headerLabel": "Rubriktext",
-                            "iconLabel": "Ikon",
-                            "iconCloseLabel": "Mörk",
-                            "iconCloseWhiteLabel": "Ljus"
-                        }
-                    },
-                    "fonts": {
-                        "label": "Välj font"
-                    },
                     "toolStyles": {
                         "rounded-dark": "Avrundad (mörk)",
                         "rounded-light": "Avrundad (ljus)",
@@ -162,6 +102,7 @@ Oskari.registerLocalization(
                         "3d-dark": "3D (mörk)",
                         "3d-light": "3D (ljus)"
                     },
+                    "font": "Välj font",
                     "popupHeaderColor": "Rubrikens bakgrundsfärg",
                     "popupHeaderTextColor": "Rubrikens färg",
                     "infoboxHeaderColor": "Etikettens bakgrundsfärg",
@@ -175,14 +116,10 @@ Oskari.registerLocalization(
                     "3d": "3D",
                     "presets": "Färdiga stilkonfigurationer"
                 },
-                "popup": {
-                    "title": "Välj färgschema",
-                    "close": "Stäng",
-                    "gfiDialog": {
-                        "title": "Funktionsinfo",
-                        "featureName": "Förhandsgranskning",
-                        "featureDesc": "Färgschemat påverkar bara färgen på popup-fönstret för faktarutan för kartobjektet och kartlagret."
-                    }
+                "gfiDialog": {
+                    "title": "Funktionsinfo",
+                    "featureName": "Förhandsgranskning",
+                    "featureDesc": "Färgschemat påverkar bara färgen på popup-fönstret för faktarutan för kartobjektet och kartlagret."
                 }
             },
             "sizes": {
@@ -198,22 +135,13 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Spara",
                 "saveNew": "Spara ny",
-                "ok": "OK",
-                "replace": "Ersätt",
-                "cancel": "Avbryt",
-                "add": "Lägg till kartlagret"
+                "replace": "Ersätt"
             },
             "confirm": {
                 "replace": {
                     "title": "Vill du ersätta den inbäddade kartan?",
                     "msg": "Vill du uppdatera den inbäddade kartan? Förändringarna till den tidigare inbäddade kartan kommer att visas utan dröjsmål på kartan. Du behöver inte ändra html-koden på din webbplats om du inte ändrat kartans storlek."
                 }
-            },
-            "layerselection": {
-                "label": "Kartlager",
-                "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
-                "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn.",
-                "promote": "Vill du också visa flygbilder?"
             },
             "rpc": {
                 "label": "Programmatisk användning (RPC API)",
@@ -222,6 +150,7 @@ Oskari.registerLocalization(
             "layers": {
                 "label": "Kartlager",
                 "tools": "Ytterligare verktyg",
+                "selectAsBaselayer": "Välj bakgrundskartlager",
                 "otherLayers": "Andra kartlager",
                 "selectLayers": "Välj kartlager",
                 "layersDisplay": "Kartlagrens visualisering",
@@ -229,10 +158,6 @@ Oskari.registerLocalization(
                 "noBaseLayers": "Inga bakgrundskartor valda",
                 "noLayers": "Inga kartlager valda"
             },
-            "preview": "Den publicerade kartans förhandsgranskningsvy",
-            "location": "Läge och skalnivå.",
-            "zoomlevel": "Skalnivå",
-            "help": "Hjälp",
             "error": {
                 "title": "Fel!",
                 "size": "Fel i storleksdefinitionerna. Skall bredden vara minst {minWidth} och högst {maxWidth} pixel, och bredden mellan {minHeight} och {maxHeight} pixel.",
@@ -263,25 +188,12 @@ Oskari.registerLocalization(
             "noRights": "inget tillstånd",
             "buttons": {
                 "continue": "Fortsätt",
-                "continueAndAccept": "Godkänn användningsvillkor och fortsätt",
-                "cancel": "Avbryt",
-                "close": "Stäng"
+                "continueAndAccept": "Godkänn användningsvillkor och fortsätt"
             },
             "tou": {
                 "notfound": "Användningsvillkoren kunde inte hittas",
                 "reject": "Avvisa",
                 "accept": "Acceptera"
-            }
-        },
-        "layer": {
-            "show": "Visa",
-            "hide": "Göm",
-            "hidden": "Kartlagret är tillfälligt gömt.",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Kartlagret kan publiceras i en inbäddad karta.",
-                    "tooltip": "Kartlagret kan publiceras i en inbäddad karta. Antalet användare per vecka kan vara begränsat."
-                }
             }
         },
         "layerFilter": {
