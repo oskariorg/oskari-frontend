@@ -45,13 +45,14 @@ TermsOfUse.propTypes = {
     action: PropTypes.func.isRequired
 };
 
-const LayerList = ({ list, header, footer }) => {
+const LayerList = ({ list, header, footer, info }) => {
     if (!list.length) {
         return null;
     }
+    const infoNode = info && <InfoIcon title={<Message messageKey={`StartView.${info}`} />} />;
     return (
         <List dataSource={list} bordered size='small'
-            header={<Message messageKey={`StartView.${header}`} LabelComponent={Header}/>}
+            header={<Message messageKey={`StartView.${header}`} LabelComponent={Header}>{infoNode}</Message>}
             renderItem={({ name, info }) => (
                 <StyledListItem>
                     {name}
@@ -64,7 +65,8 @@ const LayerList = ({ list, header, footer }) => {
 LayerList.propTypes = {
     list: PropTypes.array.isRequired,
     header: PropTypes.string.isRequired,
-    footer: PropTypes.string
+    footer: PropTypes.string,
+    info: PropTypes.string
 };
 
 export const FlyoutContent = ({
@@ -102,7 +104,7 @@ export const FlyoutContent = ({
             <Message messageKey='StartView.text' />
             { noPublishableLayers && <Alert type='error' message={<Message messageKey='StartView.layerlist_empty' />}/>}
             <LayerList list={layers} header='layerlist_title' footer={layerListFooter} />
-            <LayerList list={deniedLayers} header='layerlist_denied' />
+            <LayerList list={deniedLayers} header='layerlist_denied' info='denied_tooltip'/>
             <TermsOfUse url={urls.tou} action={actions.showTou} />
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={actions.close} />
