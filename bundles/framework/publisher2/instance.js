@@ -9,8 +9,6 @@ import './Flyout';
 import './tools/AbstractPluginTool';
 import './event/MapPublishedEvent';
 import './event/ToolEnabledChangedEvent';
-// FIXME: remove/ColourSchemeChangedEvent isn't sent anymore after theming support
-import './event/ColourSchemeChangedEvent';
 import './event/LayerToolsEditModeEvent';
 import './request/PublishMapEditorRequest';
 import './request/PublishMapEditorRequestHandler';
