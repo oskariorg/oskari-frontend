@@ -2,6 +2,7 @@ import React from 'react';
 import { Message } from 'oskari-ui';
 import { showInfoPopup } from './view/dialog/InfoPopup';
 import { showSnippetPopup } from './view/dialog/SnippetPopup';
+import { PublisherService } from './service/PublisherService';
 
 import './Flyout';
 import './view/PublisherSidebar';
@@ -111,7 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          */
         afterStart: function () {
             const sandbox = this.getSandbox();
-            this.__service = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.PublisherService', sandbox);
+            this.__service = new PublisherService(sandbox);
 
             // Let's add publishable filter to layerlist if user is logged in
             if (Oskari.user().isLoggedIn()) {
