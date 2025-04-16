@@ -118,8 +118,11 @@ On 3D, cesium seems to render for printing in a way that messes up aspect ratio,
     left: 0;
 
     box-sizing: border-box;
-    width: 99%;
-    height: 99%;
+    width: 100%;
+    height: 100%;
+  }
+  /* add a border when not embedded/published map */
+  .oskari-root-el:not(:has(.oskari-map-container-el.published)) {
     border: 1px dashed;
   }
 }
