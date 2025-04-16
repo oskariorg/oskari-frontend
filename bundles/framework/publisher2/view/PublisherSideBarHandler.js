@@ -36,10 +36,10 @@ class PublisherSidebarUIHandler extends StateHandler {
         this.log = Oskari.log('PublisherSidebarUIHandler');
         this.validationErrorMessageDialog = null;
         this.replaceConfirmDialog = null;
-        this.state = {
+        this.setState({
             uuid: null,
             collapseItems: []
-        };
+        });
         this.sandbox = instance.getSandbox();
         this.service = instance.getService();
         this.loc = instance.loc;
@@ -80,7 +80,7 @@ class PublisherSidebarUIHandler extends StateHandler {
         });
 
         const collapseItems = this.panels.map(({ id, handler, tooltipArgs }) => {
-            const info = this.loc(`BasicView.${id}.label`, tooltipArgs, '');
+            const info = this.loc(`BasicView.${id}.tooltip`, tooltipArgs, '');
             return {
                 key: id,
                 label: this.loc(`BasicView.${id}.label`),
