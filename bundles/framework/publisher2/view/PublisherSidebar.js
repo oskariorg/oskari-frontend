@@ -66,49 +66,6 @@ class PublisherSidebar {
     }
 
     /**
-     * @private @method _createToolGroupings
-     * Finds classes annotated as 'Oskari.mapframework.publisher.Tool'.
-     * Determines tool groups from tools and creates tool panels for each group. Returns an object containing a list of panels and their tools as well as a list of
-     * all tools, even those that aren't displayed in the tools' panels.
-     *
-     * @return {Object} Containing {Oskari.mapframework.bundle.publisher2.view.PanelMapTools[]} list of panels
-     * and {Oskari.mapframework.publisher.tool.Tool[]} tools not displayed in panel
-     */
-    createToolGroupings () {
-        const sandbox = this.instance.getSandbox();
-        const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        const definedTools = [...Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool'),
-            ...Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool')
-        ];
-
-        const grouping = {};
-        const allTools = [];
-        // group tools per tool-group
-        definedTools.forEach(toolname => {
-            const tool = Oskari.clazz.create(toolname, sandbox, mapmodule, this.localization);
-            const group = tool.getGroup();
-            if (!grouping[group]) {
-                grouping[group] = [];
-            }
-            this.addToolConfig(tool);
-            grouping[group].push(tool);
-            allTools.push(tool);
-        });
-        return {
-            groups: grouping,
-            tools: allTools
-        };
-    }
-
-    addToolConfig (tool) {
-        const conf = this.instance.conf || {};
-        if (!conf.toolsConfig || !tool.bundleName) {
-            return;
-        }
-        tool.toolConfig = conf.toolsConfig[tool.bundleName];
-    }
-
-    /**
      * @method setEnabled
      * "Activates" the published map preview when enabled
      * and returns to normal mode on disable
@@ -124,49 +81,6 @@ class PublisherSidebar {
             this.stopEditorPanels();
             this.disablePreview();
         }
-    }
-
-    /**
-     * @private @method _enablePreview
-     * Modifies the main map to show what the published map would look like
-     *
-     *
-     */
-    enablePreview () {
-        const sandbox = this.instance.sandbox;
-        const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        Object.values(mapModule.getPluginInstances())
-            .filter(plugin => plugin.isShouldStopForPublisher && plugin.isShouldStopForPublisher())
-            .forEach(plugin => {
-                try {
-                    plugin.stopPlugin(sandbox);
-                    mapModule.unregisterPlugin(plugin);
-                    this.normalMapPlugins.push(plugin);
-                } catch (err) {
-                    Oskari.log('Publisher').error('Enable preview', err);
-                    Messaging.error(this.localization?.error.enablePreview);
-                }
-            });
-    }
-
-    /**
-     * @private @method _disablePreview
-     * Returns the main map from preview to normal state
-     *
-     */
-    disablePreview () {
-        const sandbox = this.instance.sandbox;
-        const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        // resume normal plugins
-        this.normalMapPlugins.forEach(plugin => {
-            mapModule.registerPlugin(plugin);
-            plugin.startPlugin(sandbox);
-            if (plugin.refresh) {
-                plugin.refresh();
-            }
-        });
-        // reset listing
-        this.normalMapPlugins = [];
     }
 
     /**
