@@ -203,7 +203,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Engin útgefanleg kortalög eru opin í kortaglugganum. Vinsamlegast athugaðu útgefanleg kortalög í Valin Lög valmyndinni.",
             "layerlist_denied": "Óútgefanleg kortalög opin í kortaglugga:",
             "denied_tooltip": "Það er ekki hægt að gefa þessi kortalög út með ívöfnum kortum. Gagnaframleiðendur hafa ekki veitt leyfi fyrir útgáfu. Vinsamlegast athugið útgefanleg kortalög í Valin lög valmyndinni.",
-            "myPlacesDisclaimer": "Athugaðu að ef þú ert að nota þetta kortalag í ívöfnu korti verður kortalagið gefið út.",
+            "userDataLayerDisclaimer": "Athugaðu að ef þú ert að nota þetta kortalag í ívöfnu korti verður kortalagið gefið út.",
             "buttons": {
                 "continue": "Halda áfram",
                 "continueAndAccept": "Samþykkja og halda áfram",

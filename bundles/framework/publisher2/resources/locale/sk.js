@@ -211,7 +211,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Nie sú otvorené žiadne zverejniteľné mapové vrstvy v mapovom okne. Prosím, skontrolujte zverejniteľné mapové vrstvy v menu \"Zvolené vrstvy\".",
             "layerlist_denied": "Nezverejniteľné mapové vrstvy sú otvorené v mapovom okne:",
             "denied_tooltip": "Tieto mapové vrstvy sa nedajú zverejniť vo vložených mapách. Poskytovatelia údajov nedali povolenie na zverejnenie. Prosím, skontrolujte zverejniteľné mapové vrstvy v menu \"Zvolené vrstvy\".",
-            "myPlacesDisclaimer": "POZNÁMKA! Pokiaľ používate túto mapovú vrstvu vo vloženej mape, tak táto vrstva bude zverejnená.",
+            "userDataLayerDisclaimer": "POZNÁMKA! Pokiaľ používate túto mapovú vrstvu vo vloženej mape, tak táto vrstva bude zverejnená.",
             "buttons": {
                 "continue": "Pokračovať",
                 "continueAndAccept": "Prijať a pokračovať",
