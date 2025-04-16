@@ -41,34 +41,37 @@ Oskari.registerLocalization(
                 "label": "Överföra konfigurationen",
                 "PublishTransfer": "Aktivera överföring"
             },
-            "domain": {
-                "title": "Webbplats",
-                "label": "Begränsa inbäddning endast till följande webbadress:",
-                "placeholder": "Webbplats adress",
-                "tooltip": "Skriv namnet på webbplatsens hemsida dvs. domainnamn utan prefixerna http och www samt utan undersida. Exempel: minhemsida.com",
-                "inputWarning": "Kontrollera nätverksadressen du angav"
-            },
-            "name": {
-                "label": "Kartans namn",
-                "placeholder": "Obligatorisk uppgift",
-                "tooltip": "Ge namn åt kartan. Välj språket med hänsyn till webbsidans språk."
-            },
-            "language": {
-                "label": "Språk",
-                "options": {
-                    "fi": "Finska",
-                    "sv": "Svenska",
-                    "en": "Engelska"
+            "generalInfo": {
+                "label": "Webbplats",
+                "domain": {
+                    "label": "Begränsa inbäddning endast till följande webbadress:",
+                    "placeholder": "Webbplats adress",
+                    "tooltip": "Skriv namnet på webbplatsens hemsida dvs. domainnamn utan prefixerna http och www samt utan undersida. Exempel: minhemsida.com",
+                    "inputWarning": "Kontrollera nätverksadressen du angav"
                 },
-                "tooltip": "Välj ett språk på kartan. Språket användas på användargänsnitt och text på kartan. Obs! Valt språk visas inte på förhandsvisningskartan.",
-                "languageChangedDisclaimer": "Obs! Valt språk visas inte på förhandsvisningskartan."
+                "name": {
+                    "label": "Kartans namn",
+                    "placeholder": "Obligatorisk uppgift",
+                    "tooltip": "Ge namn åt kartan. Välj språket med hänsyn till webbsidans språk."
+                },
+                "language": {
+                    "label": "Språk",
+                    "options": {
+                        "fi": "Finska",
+                        "sv": "Svenska",
+                        "en": "Engelska"
+                    },
+                    "tooltip": "Välj ett språk på kartan. Språket användas på användargänsnitt och text på kartan. Obs! Valt språk visas inte på förhandsvisningskartan.",
+                    "languageChangedDisclaimer": "Obs! Valt språk visas inte på förhandsvisningskartan."
+                }
             },
-            "size": {
+            "mapPreview": {
                 "label": "Kartstorlek",
                 "tooltip": "Välj kartans storlek. Vi rekommenderar den skalbara funktionen \"Skalbar / Fyll utrymmet\". Annars skall bredden vara minst {minWidth} och högst {maxWidth} pixel, och bredden mellan {minHeight} och {maxHeight} pixel."
             },
-            "maptools": {
-                "label": "Ytterligare verktyg",
+            "tools": {
+                "label": "Verktyg",
+                "additional": "Ytterligare verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
                 "GetInfoPlugin": "Frågverktyg för visande av objektuppgifter",
                 "selectDrawLayer": "Välj lager för nya funktioner",
@@ -111,7 +114,7 @@ Oskari.registerLocalization(
                     }
                 },
             },
-            "toollayout": {
+            "toolLayout": {
                 "label": "Verktygsplacering",
                 "tooltip": "Välj placering för det verktyg som ska visas på kartan.",
                 "swapUI": "Byt sida",
@@ -219,17 +222,15 @@ Oskari.registerLocalization(
                 "label": "Programmatisk användning (RPC API)",
                 "info": "Med RPC gränssnittet kan du utnyttja publicerad kartor. Mer information https://oskari.org/documentation/features/rpc/"
             },
-            "mapLayers": {
+            "layers": {
                 "label": "Kartlager",
+                "tools": "Ytterligare verktyg",
                 "otherLayers": "Andra kartlager",
                 "selectLayers": "Välj kartlager",
                 "layersDisplay": "Kartlagrens visualisering",
                 "baseLayers": "Bakgrundskartor",
                 "noBaseLayers": "Inga bakgrundskartor valda",
                 "noLayers": "Inga kartlager valda"
-            },
-            "tools": {
-                "label": "Verktyg"
             },
             "preview": "Den publicerade kartans förhandsgranskningsvy",
             "location": "Läge och skalnivå.",

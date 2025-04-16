@@ -22,32 +22,34 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Vytvoriť vloženú mapu",
             "titleEdit": "Aktualizovať vloženú mapu",
-            "domain": {
-                "title": "Základné nastavenia",
-                "label": "Adresa webstránky (bez predpôn http a www)",
-                "placeholder": "Adresa webstránky",
-                "tooltip": "Zadajte URL adresu stránky bez predpôn alebo adresu podstránky. Napríklad: homepage.com."
-            },
-            "name": {
-                "label": "Názov mapy (vyžaduje sa)",
-                "placeholder": "Názov mapy",
-                "tooltip": "Zadadjte názov mapy. Prosím, všimnite si jazyk použitý na mape"
-            },
-            "language": {
-                "label": "Jazyk",
-                "options": {
-                    "fi": "Fínčina",
-                    "sv": "Švédčina",
-                    "en": "Angličtina"
+            "generalInfo": {
+                "label": "Základné nastavenia",
+                "domain": {
+                    "label": "Adresa webstránky (bez predpôn http a www)",
+                    "placeholder": "Adresa webstránky",
+                    "tooltip": "Zadajte URL adresu stránky bez predpôn alebo adresu podstránky. Napríklad: homepage.com."
                 },
-                "tooltip": "Vyberte jazyk, ktorý sa použije na koncovej mape. Bude to mať vplyv na používateľské rozhranie a text na mape. Poznámka! Výber jazyka nie je viditeľný v náhľade.",
-                "languageChangedDisclaimer": "Poznámka! Výber jazyka nie je viditeľný v náhľade."
+                "name": {
+                    "label": "Názov mapy (vyžaduje sa)",
+                    "placeholder": "Názov mapy",
+                    "tooltip": "Zadadjte názov mapy. Prosím, všimnite si jazyk použitý na mape"
+                },
+                "language": {
+                    "label": "Jazyk",
+                    "options": {
+                        "fi": "Fínčina",
+                        "sv": "Švédčina",
+                        "en": "Angličtina"
+                    },
+                    "tooltip": "Vyberte jazyk, ktorý sa použije na koncovej mape. Bude to mať vplyv na používateľské rozhranie a text na mape. Poznámka! Výber jazyka nie je viditeľný v náhľade.",
+                    "languageChangedDisclaimer": "Poznámka! Výber jazyka nie je viditeľný v náhľade."
+                }
             },
-            "size": {
+            "mapPreview": {
                 "label": "Veľkosť mapy",
                 "tooltip": "Vybrať mód náhľadu."
             },
-            "maptools": {
+            "tools": {
                 "label": "Nástroje",
                 "tooltip": "Zvoliť dostupné mapové nástroje. Skontrolovať umiestnenie v náhľade mapy.",
                 "ScaleBarPlugin": "Bežec mierky",
@@ -90,7 +92,7 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Zvoliť ako základnú vrstvu"
                 }
             },
-            "toollayout": {
+            "toolLayout": {
                 "label": "Umiestnenie nástrojov",
                 "tooltip": "Vyberte umiestnenie pre mapové nástroje.",
                 "lefthanded": "Ľavostranné",
@@ -99,7 +101,7 @@ Oskari.registerLocalization(
                 "usereditmode": "Začať editovanie",
                 "usereditmodeoff": "Ukončiť editovanie"
             },
-            "data": {
+            "statsgrid": {
                 "label": "Tematické mapy",
                 "tooltip": "Zobraziť tematické mapy na mape.",
                 "grid": "Zobraziť tematické údaje v tabuľke",
@@ -211,7 +213,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Nie sú otvorené žiadne zverejniteľné mapové vrstvy v mapovom okne. Prosím, skontrolujte zverejniteľné mapové vrstvy v menu \"Zvolené vrstvy\".",
             "layerlist_denied": "Nezverejniteľné mapové vrstvy sú otvorené v mapovom okne:",
             "denied_tooltip": "Tieto mapové vrstvy sa nedajú zverejniť vo vložených mapách. Poskytovatelia údajov nedali povolenie na zverejnenie. Prosím, skontrolujte zverejniteľné mapové vrstvy v menu \"Zvolené vrstvy\".",
-            "userDataLayerDisclaimer": "POZNÁMKA! Pokiaľ používate túto mapovú vrstvu vo vloženej mape, tak táto vrstva bude zverejnená.",
+            "myPlacesDisclaimer": "POZNÁMKA! Pokiaľ používate túto mapovú vrstvu vo vloženej mape, tak táto vrstva bude zverejnená.",
             "buttons": {
                 "continue": "Pokračovať",
                 "continueAndAccept": "Prijať a pokračovať",

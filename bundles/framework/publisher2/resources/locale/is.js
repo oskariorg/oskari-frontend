@@ -26,32 +26,34 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Búa til ívafið kort",
             "titleEdit": "Uppfæra ívafið kort",
-            "domain": {
-                "title": "Grunnstillingar",
-                "label": "Veffang (án http og www)",
-                "placeholder": "Veffang",
-                "tooltip": "Skrifaðu veffang URL án forskeyta eða undirsíðu. T.d.: heimasida.is."
-            },
-            "name": {
-                "label": "Nafn korts (áskilið)",
-                "placeholder": "Nafn korts",
-                "tooltip": "Skrifaðu nafn korts. Vinsamlegast athugaðu tungumálið sem er á kortinu."
-            },
-            "language": {
-                "label": "Tungumál",
-                "options": {
-                    "fi": "Íslenska",
-                    "sv": "NO is TRANSLATION",
-                    "en": "Enska"
+            "generalInfo": {
+                "label": "Grunnstillingar",
+                "domain": {
+                    "label": "Veffang (án http og www)",
+                    "placeholder": "Veffang",
+                    "tooltip": "Skrifaðu veffang URL án forskeyta eða undirsíðu. T.d.: heimasida.is."
                 },
-                "tooltip": "Veldu tungumál sem á að nota á lokaútgáfu kortsins. Það hefur áhrif á notandaviðmótið og textann á kortinu. Athugið að tungumálavalið er ekki sýnilegt við forskoðun.",
-                "languageChangedDisclaimer": "Athugið að tungumálavalið er ekki sýnilegt við forskoðun."
+                "name": {
+                    "label": "Nafn korts (áskilið)",
+                    "placeholder": "Nafn korts",
+                    "tooltip": "Skrifaðu nafn korts. Vinsamlegast athugaðu tungumálið sem er á kortinu."
+                },
+                "language": {
+                    "label": "Tungumál",
+                    "options": {
+                        "fi": "Íslenska",
+                        "sv": "NO is TRANSLATION",
+                        "en": "Enska"
+                    },
+                    "tooltip": "Veldu tungumál sem á að nota á lokaútgáfu kortsins. Það hefur áhrif á notandaviðmótið og textann á kortinu. Athugið að tungumálavalið er ekki sýnilegt við forskoðun.",
+                    "languageChangedDisclaimer": "Athugið að tungumálavalið er ekki sýnilegt við forskoðun."
+                }
             },
-            "size": {
+            "mapPreview": {
                 "label": "Stærð korts",
                 "tooltip": "Velja forskoðun."
             },
-            "maptools": {
+            "tools": {
                 "label": "Tól",
                 "tooltip": "Velja tiltæk kortatól. Athugaðu staðsetningu við forskoðun korts.",
                 "FeaturedataPlugin": "Fitjugögn",
@@ -84,7 +86,7 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Velja sem grunnlag"
                 }
             },
-            "toollayout": {
+            "toolLayout": {
                 "label": "Staðsetning tóla",
                 "tooltip": "Velja staðsetningu fyrir kortatól.",
                 "lefthanded": "Örvhentur",

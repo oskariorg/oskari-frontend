@@ -41,34 +41,37 @@ Oskari.registerLocalization(
                 "label": "Transfer configuration",
                 "PublishTransfer": "Enable transfer"
             },
-            "domain": {
-                "title": "Basic settings",
-                "label": "Restrict embedding only to the following web address:",
-                "placeholder": "Allowed domain",
-                "tooltip": "Type a website URL-address without prefixes or a subpage address. For example: homepage.com.",
-                "inputWarning": "Verify typed web address"
-            },
-            "name": {
-                "label": "Map name (required)",
-                "placeholder": "Map name",
-                "tooltip": "Type a map name. Please note the language used on the map."
-            },
-            "language": {
-                "label": "Language",
-                "options": {
-                    "fi": "Finnish",
-                    "sv": "Swedish",
-                    "en": "English"
+            "generalInfo": {
+                "label": "Basic settings",
+                "domain": {
+                    "label": "Restrict embedding only to the following web address:",
+                    "placeholder": "Allowed domain",
+                    "tooltip": "Type a website URL-address without prefixes or a subpage address. For example: homepage.com.",
+                    "inputWarning": "Verify typed web address"
                 },
-                "tooltip": "Select a language to be used on the final map. It affects the user interface and text on the map. Note! The language selection is not visible on the preview.",
-                "languageChangedDisclaimer": "Note! The language selection is not visible on the preview."
+                "name": {
+                    "label": "Map name (required)",
+                    "placeholder": "Map name",
+                    "tooltip": "Type a map name. Please note the language used on the map."
+                },
+                "language": {
+                    "label": "Language",
+                    "options": {
+                        "fi": "Finnish",
+                        "sv": "Swedish",
+                        "en": "English"
+                    },
+                    "tooltip": "Select a language to be used on the final map. It affects the user interface and text on the map. Note! The language selection is not visible on the preview.",
+                    "languageChangedDisclaimer": "Note! The language selection is not visible on the preview."
+                }
             },
-            "size": {
+            "mapPreview": {
                 "label": "Map Size",
                 "tooltip": "Determine the size of the map. The recommendation is to use the option \"Scalable/ Responsive\". Otherwise, the width should be from {minWidth} to {maxWidth} pixels and the height from {minHeight} to {maxHeight} pixels."
             },
-            "maptools": {
-                "label": "Additional tools",
+            "tools": {
+                "label": "Tools",
+                "additional": "Additional tools",
                 "tooltip": "Select available map tools. Check a placement in the map preview.",
                 "GetInfoPlugin": "Feature query tool",
                 "selectDrawLayer": "Select map layer",
@@ -111,7 +114,7 @@ Oskari.registerLocalization(
                     }
                 },
             },
-            "toollayout": {
+            "toolLayout": {
                 "label": "Tool Placement",
                 "tooltip": "Select a placement for map tools.",
                 "swapUI": "Swap sides",
@@ -219,17 +222,15 @@ Oskari.registerLocalization(
                 "label": "Programmatic use (RPC API)",
                 "info": "With the RPC API you can utilize published maps. For more information https://oskari.org/documentation/features/rpc/"
             },
-            "mapLayers": {
+            "layers": {
                 "label": "Map layers",
+                "tools": "Additional tools",
                 "otherLayers": "Other maps",
                 "selectLayers": "Select map layers",
                 "layersDisplay": "Layer presentation",
                 "baseLayers": "Background maps",
                 "noBaseLayers": "No selected background maps",
                 "noLayers": "No selected map layers"
-            },
-            "tools": {
-                "label": "Tools"
             },
             "preview": "Map preview",
             "location": "Location and zoom level",

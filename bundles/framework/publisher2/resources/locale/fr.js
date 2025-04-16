@@ -38,32 +38,34 @@ Oskari.registerLocalization(
                 "label": "Transférer la configuration",
                 "PublishTransfer": "Exécuter le transfert"
             },
-            "domain": {
-                "title": "Réglages de base",
-                "label": "Adresse du site Web (sans les préfixes http et www)",
-                "placeholder": "Adresse du site Web",
-                "tooltip": "Saisir une adresse URL de site Web sans préfixe ou ou une adresse de sous-page. Par exemple : pageaccueil.com."
-            },
-            "name": {
-                "label": "Nom de carte (obligatoire)",
-                "placeholder": "Nom de carte",
-                "tooltip": "Saisir un nom de carte. Veuillez noter la langue utilisée sur la carte."
-            },
-            "language": {
-                "label": "Langue",
-                "options": {
-                    "fi": "Finlandais",
-                    "sv": "Suédois",
-                    "en": "Anglais"
+            "generalInfo": {
+                "label": "Réglages de base",
+                "domain": {
+                    "label": "Adresse du site Web (sans les préfixes http et www)",
+                    "placeholder": "Adresse du site Web",
+                    "tooltip": "Saisir une adresse URL de site Web sans préfixe ou ou une adresse de sous-page. Par exemple : pageaccueil.com."
                 },
-                "tooltip": "Sélectionner une langue à utiliser dans la carte finale. Elle a une incidence sur l'interface utilisateur et le texte de la carte. Remarque! Le choix de la langue n'est pas visible dans la prévisualisation.",
-                "languageChangedDisclaimer": "Remarque! Le choix de la langue n'est pas visible dans la prévisualisation."
+                "name": {
+                    "label": "Nom de carte (obligatoire)",
+                    "placeholder": "Nom de carte",
+                    "tooltip": "Saisir un nom de carte. Veuillez noter la langue utilisée sur la carte."
+                },
+                "language": {
+                    "label": "Langue",
+                    "options": {
+                        "fi": "Finlandais",
+                        "sv": "Suédois",
+                        "en": "Anglais"
+                    },
+                    "tooltip": "Sélectionner une langue à utiliser dans la carte finale. Elle a une incidence sur l'interface utilisateur et le texte de la carte. Remarque! Le choix de la langue n'est pas visible dans la prévisualisation.",
+                    "languageChangedDisclaimer": "Remarque! Le choix de la langue n'est pas visible dans la prévisualisation."
+                }
             },
-            "size": {
+            "mapPreview": {
                 "label": "Taille de carte",
                 "tooltip": "Sélectionner le mode de prévisualisation."
             },
-            "maptools": {
+            "tools": {
                 "label": "Outils",
                 "tooltip": "Sélectionner les outils de carte accessibles. Consulter une mise en place dans la prévisualisation de carte.",
                 "FeaturedataPlugin": "Données de fonctionnalité",
@@ -99,7 +101,7 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Sélectionner en tant que couche de base"
                 }
             },
-            "toollayout": {
+            "toolLayout": {
                 "label": "Mise en place des outils",
                 "tooltip": "Sélectionner une mise en place pour les outils cartographiques.",
                 "lefthanded": "À gauche",

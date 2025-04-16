@@ -41,34 +41,37 @@ Oskari.registerLocalization(
                 "label": "Siirrä konfiguraatio",
                 "PublishTransfer": "Salli siirto"
             },
-            "domain": {
-                "title": "Julkaisutiedot",
-                "label": "Rajoita kartan upotus vain seuraavaan verkko-osoitteeseen:",
-                "placeholder": "Sivuston osoite",
-                "tooltip": "Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com.",
-                "inputWarning": "Tarkista syötetty verkko-osoite"
-            },
-            "name": {
-                "label": "Kartan nimi (pakollinen tieto)",
-                "placeholder": "Kartan nimi",
-                "tooltip": "Anna kartalle nimi. Ota huomioon kartalla käytössä oleva kieli."
-            },
-            "language": {
-                "label": "Kieli",
-                "options": {
-                    "fi": "suomi",
-                    "sv": "ruotsi",
-                    "en": "englanti"
+            "generalInfo": {
+                "label": "Julkaisutiedot",
+                "domain": {
+                    "label": "Rajoita kartan upotus vain seuraavaan verkko-osoitteeseen:",
+                    "placeholder": "Sivuston osoite",
+                    "tooltip": "Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com.",
+                    "inputWarning": "Tarkista syötetty verkko-osoite"
                 },
-                "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja kartalla näkyviin teksteihin. Huom! Kielivalinnat eivät näy esikatselukartalla.",
-                "languageChangedDisclaimer": "Huom! Kielivalinnat eivät näy esikatselukartalla."
+                "name": {
+                    "label": "Kartan nimi (pakollinen tieto)",
+                    "placeholder": "Kartan nimi",
+                    "tooltip": "Anna kartalle nimi. Ota huomioon kartalla käytössä oleva kieli."
+                },
+                "language": {
+                    "label": "Kieli",
+                    "options": {
+                        "fi": "suomi",
+                        "sv": "ruotsi",
+                        "en": "englanti"
+                    },
+                    "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja kartalla näkyviin teksteihin. Huom! Kielivalinnat eivät näy esikatselukartalla.",
+                    "languageChangedDisclaimer": "Huom! Kielivalinnat eivät näy esikatselukartalla."
+                }
             },
-            "size": {
+            "mapPreview": {
                 "label": "Kartan koko",
                 "tooltip": "Valitse kartan koko. Suositus on käyttää skaalautuvaa vaihtoehtoa \"Skaalautuva / tilan täyttävä\". Muussa tapauksessa leveyden on oltava välillä {minWidth} ja {maxWidth} pikseliä ja korkeuden {minHeight} ja {maxHeight} pikseliä."
             },
-            "maptools": {
-                "label": "Lisätyökalut",
+            "tools": {
+                "label": "Kartalla näytettävät työkalut",
+                "additional": "Lisätyökalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
                 "selectDrawLayer": "Valitse tallennustaso",
@@ -111,7 +114,7 @@ Oskari.registerLocalization(
                     }
                 },
             },
-            "toollayout": {
+            "toolLayout": {
                 "label": "Työkalujen asettelu kartalla",
                 "tooltip": "Valitse, miten työkalut asetellaan kartalle.",
                 "swapUI": "Vaihda puolet",
@@ -217,19 +220,17 @@ Oskari.registerLocalization(
             },
             "rpc": {
                 "label": "Ohjelmallinen käyttö (RPC-rajapinta)",
-                "info": "RPC-rajapinnan avulla voit hyödyntää julkaistuja karttoja. Lisätietoa https://oskari.org/documentation/features/rpc/"
+                "tooltip": "RPC-rajapinnan avulla voit hyödyntää julkaistuja karttoja. Lisätietoa https://oskari.org/documentation/features/rpc/"
             },
-            "mapLayers": {
+            "layers": {
                 "label": "Karttatasot",
+                "tools": "Lisätyökalut",
                 "otherLayers": "Muut kartat",
                 "selectLayers": "Valitse tasot",
                 "layersDisplay": "Tasojen esitystapa",
                 "baseLayers": "Taustakartat",
                 "noBaseLayers": "Ei valittuja taustakarttoja",
                 "noLayers": "Ei valittuja karttatasoja"
-            },
-            "tools": {
-                "label": "Kartalla näytettävät työkalut"
             },
             "preview": "Kartan esikatselu",
             "location": "Sijainti ja mittakaavataso",

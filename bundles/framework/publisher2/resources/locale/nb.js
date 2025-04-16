@@ -22,32 +22,35 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Lag 'embedded' kart",
             "titleEdit": "Tilpass det 'embedded' kartet",
-            "domain": {
-                "title": "Basis innstillinger",
-                "label": "Nettadresse uten http eller www",
-                "placeholder": "Nettsted",
-                "tooltip": "Oppgi domenenavn for nettstedet (url uten http, www eller underadresse), for eksempel: homepage.com."
-            },
-            "name": {
-                "label": "Kartnavn (obligatorisk)",
-                "placeholder": "Kartnavn",
-                "tooltip": "Gi kartet et beskrivende navn. Merk at navnet skal være på samme språk som brukergrensesnittet."
-            },
-            "language": {
-                "label": "Språk",
-                "options": {
-                    "fi": "Finsk",
-                    "sv": "Svensk",
-                    "en": "Engelsk"
+            "generalInfo": {
+                "label": "Basis innstillinger",
+                "domain": {
+                    "label": "Nettadresse uten http eller www",
+                    "placeholder": "Nettsted",
+                    "tooltip": "Oppgi domenenavn for nettstedet (url uten http, www eller underadresse), for eksempel: homepage.com."
                 },
-                "tooltip": "Velg et språk til det ferdige kartet. Gjelder både brukergrensesnitt og tekst på kartet. NB! Valgt språk er ikke synlig i forhåndsvisningen.",
-                "languageChangedDisclaimer": "NB! Valgt språk er ikke synlig i forhåndsvisningen."
+                "name": {
+                    "label": "Kartnavn (obligatorisk)",
+                    "placeholder": "Kartnavn",
+                    "tooltip": "Gi kartet et beskrivende navn. Merk at navnet skal være på samme språk som brukergrensesnittet."
+                },
+                "language": {
+                    "label": "Språk",
+                    "options": {
+                        "fi": "Finsk",
+                        "sv": "Svensk",
+                        "en": "Engelsk"
+                    },
+                    "tooltip": "Velg et språk til det ferdige kartet. Gjelder både brukergrensesnitt og tekst på kartet. NB! Valgt språk er ikke synlig i forhåndsvisningen.",
+                    "languageChangedDisclaimer": "NB! Valgt språk er ikke synlig i forhåndsvisningen."
+            
+                }
             },
-            "size": {
+            "mapPreview": {
                 "label": "Størrelse",
                 "tooltip": "Velg forhåndsvisning"
             },
-            "maptools": {
+            "tools": {
                 "label": "Verktøy",
                 "tooltip": "Velg verktøy som skal vises på kartet. Sjekk plasseringen av verktøy i vinduet for forhåndsvisning.",
                 "ScaleBarPlugin": "Målestokk",
@@ -90,7 +93,7 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Velg som basis lag"
                 }
             },
-            "toollayout": {
+            "toolLayout": {
                 "label": "Verktøyplassering",
                 "tooltip": "Velg plassering av verktøyet på kartet",
                 "lefthanded": "Venstrehånds",
@@ -99,7 +102,7 @@ Oskari.registerLocalization(
                 "usereditmode": "Start redigering",
                 "usereditmodeoff": "Avslutt editering"
             },
-            "data": {
+            "statsgrid": {
                 "label": "Tematiske kart",
                 "tooltip": "Vis kartstatistikk",
                 "grid": "Vis statistikk",
