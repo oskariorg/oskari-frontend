@@ -2,409 +2,131 @@ import React from 'react';
 import { showModal } from 'oskari-ui/components/window';
 import { ValidationErrorMessage } from './dialog/ValidationErrorMessage';
 import { ReplaceConfirmDialogContent } from './dialog/ReplaceConfirmDialogContent';
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { GeneralInfoForm } from './form/GeneralInfoForm';
-import { PanelGeneralInfoHandler } from '../handler/PanelGeneralInfoHandler';
-import { PanelMapPreviewHandler } from '../handler/PanelMapPreviewHandler';
-import { MapPreviewForm, MapPreviewTooltip } from './form/MapPreviewForm';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { mergeValues } from '../util/util';
+import { BUNDLE_KEY } from '../constants';
+
+import { PanelGeneralInfoHandler } from '../handler/PanelGeneralInfoHandler';
+import { PanelMapPreviewHandler, CUSTOM_MAP_SIZE_LIMITS } from '../handler/PanelMapPreviewHandler';
 import { PanelMapLayersHandler } from '../handler/PanelMapLayersHandler';
-import { MapLayers } from './MapLayers/MapLayers';
-import { PublisherToolsList } from './form/PublisherToolsList';
 import { ToolPanelHandler } from '../handler/ToolPanelHandler';
-import { LAYOUT_AVAILABLE_FONTS, PanelLayoutHandler } from '../handler/PanelLayoutHandler';
-import { PanelToolStyles } from './PanelToolStyles';
-import { ToolLayout } from './form/ToolLayout';
+import { PanelLayoutHandler } from '../handler/PanelLayoutHandler';
 import { PanelToolLayoutHandler } from '../handler/PanelToolLayoutHandler';
-import { Info } from 'oskari-ui/components/icons/Info';
 import { StatsGridPanelHandler } from '../handler/StatsGridPanelHandler';
 
-export const PUBLISHER_BUNDLE_ID = 'Publisher2';
-export const PANEL_GENERAL_INFO_ID = 'panelGeneralInfo';
-const PANEL_MAPPREVIEW_ID = 'panelMapPreview';
-const PANEL_MAPLAYERS_ID = 'panelMapLayers';
-const PANEL_MAPTOOLS_ID = 'panelMapTools';
-const PANEL_RPC_ID = 'panelRpc';
-const PANEL_LAYOUT_ID = 'panelLayout';
-const PANEL_TOOL_LAYOUT_ID = 'panelToolLayout';
-const PANEL_STATSGRID_ID = 'panelStatsgrid';
+export const PANEL_GENERAL_INFO_ID = 'generalInfo';
+
+// id has to be same than in localization or tool group
+// Panel extra is rendered if loc.{id}.tooltip exists
+const PANELS = [
+    { id: 'generalInfo', HandlerImpl: PanelGeneralInfoHandler },
+    { id: 'mapPreview', HandlerImpl: PanelMapPreviewHandler, tooltipArgs: CUSTOM_MAP_SIZE_LIMITS },
+    { id: 'layers', HandlerImpl: PanelMapLayersHandler },
+    { id: 'tools', HandlerImpl: ToolPanelHandler },
+    { id: 'rpc', HandlerImpl: ToolPanelHandler },
+    { id: 'statsgrid', HandlerImpl: StatsGridPanelHandler },
+    { id: 'layout', HandlerImpl: PanelLayoutHandler },
+    { id: 'toolLayout', HandlerImpl: PanelToolLayoutHandler }
+];
 
 class PublisherSidebarUIHandler extends StateHandler {
-    constructor () {
+    constructor (instance) {
         super();
         this.log = Oskari.log('PublisherSidebarUIHandler');
         this.validationErrorMessageDialog = null;
         this.replaceConfirmDialog = null;
         this.state = {
+            uuid: null,
             collapseItems: []
         };
-        this.sandbox = Oskari.getSandbox();
-        this.panels = []; // TODO: for now contains only extra (panels, handlers) maybe add all to clean code
+        this.sandbox = instance.getSandbox();
+        this.service = instance.getService();
+        this.loc = instance.loc;
+        this.panels = []; // [{ id, label, tooltip, handler }]
     }
 
-    init (data, publisherTools) {
-        this.data = data;
-        const { layers: layerTools, tools: mapTools, rpc: rpcTools, statsgrid, ...extraGroups } = publisherTools.groups;
-        this.statsgridTools = statsgrid;
+    getSandbox () {
+        return this.sandbox;
+    }
 
-        this.generalInfoPanelHandler = new PanelGeneralInfoHandler();
-        this.mapPreviewPanelHandler = new PanelMapPreviewHandler();
-        this.mapLayersHandler = new PanelMapLayersHandler(layerTools, this.sandbox);
-        this.mapToolsHandler = new ToolPanelHandler(mapTools);
-        this.layoutHandler = new PanelLayoutHandler();
-        this.toolLayoutPanelHandler = new PanelToolLayoutHandler(publisherTools.tools);
-        this.statsGridPanelHandler = new StatsGridPanelHandler(this.statsgridTools, this.sandbox, (visible) => this.toggleStatsGridPanel(visible));
-        // we need this state listener set exactly once regardless if the panel is visible at first or not since it might become visible later
-        const showStatsGridPanel = this.statsGridPanelHandler.init(data);
-        this.statsGridPanelHandler.addStateListener((params) => {
-            this.updateStatsgridPanel();
+    init (data) {
+        const toolGroups = this.service.createToolGroupings();
+        const getTools = groupId => groupId === 'toolLayout' ? Object.values(toolGroups).flat() : toolGroups[groupId];
+        this.panels = PANELS.map(({ id, HandlerImpl, ...rest }) => {
+            const handler = new HandlerImpl(this.sandbox, getTools(id));
+            return { id, handler, ...rest };
         });
 
-        /** general info - panel */
-        this.generalInfoPanelHandler.init(data);
-        this.generalInfoPanelHandler.addStateListener(() => this.updateGeneralInfoPanel());
-
-        /** map preview - panel */
-        this.mapPreviewPanelHandler.init(data);
-        this.mapPreviewPanelHandler.addStateListener(() => this.updateMapPreviewPanel());
-
-        /** map layers - panel */
-        this.mapLayersHandler.init(data);
-        this.mapLayersHandler.addStateListener(() => this.updateMapLayersPanel());
-
-        /** map tools - panel */
-        this.mapToolsHandler.init(data);
-        this.mapToolsHandler.addStateListener(() => this.updateMapToolsPanel());
-
-        this.layoutHandler.init(data);
-        this.layoutHandler.addStateListener(() => this.updateLayoutPanel());
-
-        this.toolLayoutPanelHandler.init(data);
-        this.toolLayoutPanelHandler.addStateListener(() => this.updateToolLayoutPanel());
-
-        const collapseItems = [];
-        collapseItems.push({
-            key: PANEL_GENERAL_INFO_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.domain.title'),
-            children: this.renderGeneralInfoPanel()
-        });
-
-        collapseItems.push({
-            key: PANEL_MAPPREVIEW_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.size.label'),
-            children: this.renderMapPreviewPanel(),
-            extra: <MapPreviewTooltip/>
-        });
-
-        collapseItems.push({
-            key: PANEL_MAPLAYERS_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.mapLayers.label'),
-            children: this.renderMapLayersPanel()
-        });
-
-        collapseItems.push({
-            key: PANEL_MAPTOOLS_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.tools.label'),
-            children: this.renderMapToolsPanel(),
-            extra: <Info title={Oskari.getMsg('Publisher2', 'BasicView.maptools.tooltip')}/>
-        });
-
-        collapseItems.push({
-            key: PANEL_LAYOUT_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.layout.label'),
-            children: this.renderLayoutPanel()
-        });
-
-        collapseItems.push({
-            key: PANEL_TOOL_LAYOUT_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.toollayout.label'),
-            children: this.renderToolLayoutPanel(),
-            extra: <Info title={Oskari.getMsg('Publisher2', 'BasicView.toollayout.tooltip')}/>
-        });
-
-        // RPC panel should be the last in line after all other (react collapsified) panels
-        if (rpcTools?.length) {
-            this.rpcPanelHandler = new ToolPanelHandler(rpcTools);
-            this.rpcPanelHandler.init(data);
-            this.rpcPanelHandler.addStateListener(() => this.updateRpcPanel());
-            collapseItems.push({
-                key: PANEL_RPC_ID,
-                label: Oskari.getMsg('Publisher2', 'BasicView.rpc.label'),
-                children: this.renderRpcPanel(),
-                extra: <Info title={Oskari.getMsg('Publisher2', 'BasicView.rpc.info')}/>
-
-            });
-        }
-
-        if (showStatsGridPanel) {
-            collapseItems.push(this.getStatsGridPanelItem());
-        }
-        Object.keys(extraGroups).forEach(group => {
-            // TODO: group info (label, tooltip, handler) should be passed somehow (protocol publisher.Panel, getGroupInfo, this.group = {},..)
-            const tools = extraGroups[group];
-            const { tooltip, label } = Oskari.getMsg(PUBLISHER_BUNDLE_ID, `BasicView.${group}`);
+        /* --- deprecated ---> */
+        const handledGroups = this.panels.map(p => p.id);
+        const extraGroups = Object.keys(toolGroups).filter(group => !handledGroups.includes(group));
+        Object.keys(extraGroups).forEach(id => {
+            this.log().deprecated('Implement panel for own tools');
+            const tools = extraGroups[id];
+            const { label, tooltip } = Oskari.getMsg(BUNDLE_KEY, `BasicView.${id}`);
             if (!label) {
-                this.log.warn(`No label for "${group}" group, skipping!`);
+                this.log.warn(`No label for "${id}" group, skipping!`);
                 return;
             }
-            const handler = new ToolPanelHandler(tools, () => this.updateExtraItems(group));
+            const handler = new ToolPanelHandler(this.sandbox, tools);
+            this.panels.push({ id, label, tooltip, handler });
+        });
+        /* <--- deprecated --- */
+
+        this.panels.forEach(({ id, handler }) => {
             handler.init(data);
-            const panel = {
-                key: `${group}Panel`,
-                label,
-                children: this.getExtraItems(group, handler)
+            handler.addStateListener(() => this.updateCollapseItem(id));
+        });
+
+        const collapseItems = this.panels.map(({ id, handler, tooltipArgs }) => {
+            const info = this.loc(`BasicView.${id}.label`, tooltipArgs, '');
+            return {
+                key: id,
+                label: this.loc(`BasicView.${id}.label`),
+                extra: info ? <InfoIcon title={info} /> : null,
+                children: handler.getPanelContent()
             };
-            if (tooltip) {
-                panel.extra = <Info title={tooltip}/>;
-            }
-            collapseItems.push(panel);
-            this.panels.push({ group, handler, panel });
         });
 
-        this.updateState({
-            collapseItems
-        });
-    }
-
-    getExtraItems (group, handler) {
-        return <div className={`t_tools t_${group}`}>
-            <PublisherToolsList state={handler.getState()} controller={handler.getController()}/>
-        </div>;
-    }
-
-    updateExtraItems (group) {
-        const { panel, handler } = this.panels.find(p => p.group === group) || {};
-        if (!panel || !handler) {
-            this.log.error(`Couldn't find panel or handler for: ${group}.`);
-            return;
-        }
-        panel.children = this.getExtraItems(group, handler);
-        const collapseItems = this.getState().collapseItems
-            .map(p => p.key === panel.key ? panel : p);
         this.updateState({ collapseItems });
     }
 
-    /**
-     * TODO: rethink/refactor the way jsx is rendered and updated
-     * In the future we probably do not want to have jsx rendering in handler.
-     * As for now, in development mode where we still hava jquery panels and react panels mixed, it's easiest
-     * to do partial re-rendering this way (so we won't have to regenerate every panel from scratch each time a keystroke happens in name - field of generalinfo).
-     */
-    updateGeneralInfoPanel () {
-        const newCollapseItems = [...this.getState().collapseItems];
-        const generalInfoPanel = newCollapseItems.find(item => item.key === PANEL_GENERAL_INFO_ID);
-        generalInfoPanel.children = this.renderGeneralInfoPanel();
-        this.updateState({
-            collapseItems: newCollapseItems
-        });
-    }
-
-    renderGeneralInfoPanel () {
-        return <div className={'t_generalInfo'}>
-            <GeneralInfoForm
-                onChange={(key, value) => this.generalInfoPanelHandler.onChange(key, value)}
-                data={this.generalInfoPanelHandler.getState()}
-            />
-        </div>;
-    }
-
-    updateMapPreviewPanel () {
-        const newCollapseItems = [...this.getState().collapseItems];
-        const panel = newCollapseItems.find(item => item.key === PANEL_MAPPREVIEW_ID);
-        panel.children = this.renderMapPreviewPanel();
-        this.updateState({
-            collapseItems: newCollapseItems
-        });
-    }
-
-    renderMapPreviewPanel () {
-        return <div className={'t_size'}>
-            <MapPreviewForm
-                state={this.mapPreviewPanelHandler.getState()}
-                controller={this.mapPreviewPanelHandler.getController()} />
-        </div>;
-    }
-
-    updateMapLayersPanel () {
-        const newCollapseItems = [...this.getState().collapseItems];
-        const panel = newCollapseItems.find(item => item.key === PANEL_MAPLAYERS_ID);
-        panel.children = this.renderMapLayersPanel();
-        this.updateState({
-            collapseItems: newCollapseItems
-        });
-    }
-
-    renderMapLayersPanel () {
-        return <div className={'t_layers'}>
-            <MapLayers
-                state={this.mapLayersHandler.getState()}
-                controller={this.mapLayersHandler.getController()}
-            />
-        </div>;
-    }
-
-    updateMapToolsPanel () {
-        const newCollapseItems = [...this.getState().collapseItems];
-        const panel = newCollapseItems.find(item => item.key === PANEL_MAPTOOLS_ID);
-        panel.children = this.renderMapToolsPanel();
-        this.updateState({
-            collapseItems: newCollapseItems
-        });
-    }
-
-    renderMapToolsPanel () {
-        return <div className={'t_tools t_maptools'}>
-            <PublisherToolsList
-                state={this.mapToolsHandler.getState()}
-                controller={this.mapToolsHandler.getController()}
-            />
-        </div>;
-    }
-
-    updateRpcPanel () {
-        const newCollapseItems = [...this.getState().collapseItems];
-        const panel = newCollapseItems.find(item => item.key === PANEL_RPC_ID);
-        panel.children = this.renderRpcPanel();
-        this.updateState({
-            collapseItems: newCollapseItems
-        });
-    }
-
-    renderRpcPanel () {
-        return <div className={'t_tools t_rpc'}>
-            <PublisherToolsList
-                state={this.rpcPanelHandler.getState()}
-                controller={this.rpcPanelHandler.getController()}
-            />
-        </div>;
-    }
-
-    updateLayoutPanel () {
-        const newCollapseItems = [...this.getState().collapseItems];
-        const panel = newCollapseItems.find(item => item.key === PANEL_LAYOUT_ID);
-        panel.children = this.renderLayoutPanel();
-        this.updateState({
-            collapseItems: newCollapseItems
-        });
-    }
-
-    renderLayoutPanel () {
-        const { theme, infoBoxPreviewVisible } = this.layoutHandler.getState();
-        return <div className={'t_style'}>
-            <PanelToolStyles
-                mapTheme={theme}
-                changeTheme={(theme) => this.layoutHandler.updateTheme(theme)}
-                fonts={LAYOUT_AVAILABLE_FONTS}
-                infoBoxPreviewVisible={infoBoxPreviewVisible}
-                updateInfoBoxPreviewVisible={(isOpen) => this.layoutHandler.updateInfoBoxPreviewVisible(isOpen)}
-            />
-        </div>;
-    }
-
-    updateToolLayoutPanel () {
-        const newCollapseItems = [...this.getState().collapseItems];
-        const panel = newCollapseItems.find(item => item.key === PANEL_TOOL_LAYOUT_ID);
-        panel.children = this.renderToolLayoutPanel();
-        this.updateState({
-            collapseItems: newCollapseItems
-        });
-    }
-
-    renderToolLayoutPanel () {
-        return <div className={'t_toollayout'}>
-            <ToolLayout
-                onSwitch={() => this.toolLayoutPanelHandler.switchControlSides()}
-                isEdit={this.toolLayoutPanelHandler.getToolLayoutEditMode()}
-                onEditMode={(isEdit) => {
-                    if (isEdit) {
-                        this.toolLayoutPanelHandler.editToolLayoutOn();
-                    } else {
-                        // remove edit mode
-                        this.toolLayoutPanelHandler.editToolLayoutOff();
-                    }
-                }}/>
-        </div>;
-    }
-
-    getStatsGridPanelItem () {
-        return {
-            key: PANEL_STATSGRID_ID,
-            label: Oskari.getMsg('Publisher2', 'BasicView.statsgrid.label'),
-            children: this.renderStatsGridPanel()
-        };
-    }
-
-    toggleStatsGridPanel (visible) {
-        const newCollapseItems = this.getState().collapseItems
-            .filter(item => item.key !== PANEL_STATSGRID_ID);
-
-        if (visible) {
-            // this is empty when thematic maps was off by default. We gotta gather these tools somehow
-            const hasTools = this.statsGridPanelHandler.initTools();
-            if (hasTools) {
-                const statsGridPanelItem = this.getStatsGridPanelItem();
-                newCollapseItems.push(statsGridPanelItem);
-            }
-        }
-
-        this.updateState({
-            collapseItems: newCollapseItems
-        });
-    }
-
-    updateStatsgridPanel () {
-        const newCollapseItems = [...this.getState().collapseItems];
-        const panel = newCollapseItems.find(item => item.key === PANEL_STATSGRID_ID);
-
-        if (!panel) {
+    updateCollapseItem (id) {
+        const { handler } = this.panels.find(p => p.id === id) || {};
+        if (!handler) {
+            this.log.error(`Couldn't find handler for: ${id} to update collapse items.`);
             return;
         }
-        panel.children = this.renderStatsGridPanel();
-        this.updateState({
-            collapseItems: newCollapseItems
-        });
+        const children = handler.getPanelContent();
+        const collapseItems = this.getState().collapseItems
+            .map(item => item.key === id ? { ...item, children } : item);
+        this.updateState({ collapseItems });
     }
 
-    renderStatsGridPanel () {
-        return <div className={'t_tools t_statsgrid'}>
-            <PublisherToolsList
-                state={this.statsGridPanelHandler.getState()}
-                controller={this.statsGridPanelHandler.getController()}
-            />
-        </div>;
-    }
-
-    getCollapseItems () {
-        const { collapseItems } = this.getState();
-        return collapseItems;
-    }
-
-    getValues () {
-        let returnValue = {};
-        returnValue = mergeValues(returnValue, this.generalInfoPanelHandler.getValues());
-        returnValue = mergeValues(returnValue, this.mapPreviewPanelHandler.getValues());
-        returnValue = mergeValues(returnValue, this.toolLayoutPanelHandler.getValues());
-        returnValue = mergeValues(returnValue, this.layoutHandler.getValues());
-        return returnValue;
+    getAppSetupToPublish () {
+        const { mapfull } = this.sandbox.getStatefulComponents();
+        const appSetup = {
+            configuration: {
+                mapfull: {
+                    state: mapfull.getState()
+                }
+            }
+        };
+        return this.panels.reduce((values, { handler }) => mergeValues(values, handler.getValues()), appSetup);
     }
 
     validate () {
-        let errors = [];
-        errors = errors.concat(this.generalInfoPanelHandler.validate());
-        errors = errors.concat(this.mapPreviewPanelHandler.validate());
-        return errors;
+        return this.panels
+            .filter(({ handler }) => typeof handler.validate === 'function')
+            .map(({ handler }) => handler.validate())
+            .flat();
     }
 
     stop () {
-        // TODO: stop individual panels that need stopping. Maybe put these into some array or smthng
-        this.mapPreviewPanelHandler.stop();
-        this.mapLayersHandler.stop();
-        this.mapToolsHandler.stop();
-        this.layoutHandler.stop();
-        this.toolLayoutPanelHandler.stop();
-        if (this.statsGridPanelHandler) {
-            this.statsGridPanelHandler.stop();
-        }
+        this.panels
+            .filter(({ handler }) => typeof handler.stop === 'function')
+            .forEach(({ handler }) => handler.stop());
     }
 
     /**
@@ -416,42 +138,96 @@ class PublisherSidebarUIHandler extends StateHandler {
      *
      */
     showValidationErrorMessage (errors = []) {
-        const content = <ValidationErrorMessage errors={errors} closeCallback={() => this.closeValidationErrorMessage()}/>;
-        this.validationErrorMessageDialog = showModal(Oskari.getMsg('Publisher2', 'BasicView.error.title'), content, () => {
-            this.validationErrorMessageDialog = null;
-        });
+        const title = this.loc('BasicView.error.title');
+        const onClose = () => this.closeValidationErrorMessage();
+        const content = <ValidationErrorMessage errors={errors} closeCallback={onClose}/>;
+        this.validationErrorMessageDialog = showModal(title, content, onClose);
     };
 
     closeValidationErrorMessage () {
         if (this.validationErrorMessageDialog) {
             this.validationErrorMessageDialog.close();
-            this.validationErrorMessageDialog = null;
         }
+        this.validationErrorMessageDialog = null;
     }
 
     /**
      * @private @method showReplaceConfirm
      * Shows a confirm dialog for replacing published map
      *
-     * @param {Function} continueCallback function to call if the user confirms
-     *
      */
-    showReplaceConfirm (continueCallback) {
+    showReplaceConfirm () {
+        const title = this.loc('BasicView.confirm.replace.title');
         const content = <ReplaceConfirmDialogContent
             okCallback={() => {
-                continueCallback();
+                this.publishMap(false);
                 this.closeReplaceConfirm();
             }}
             closeCallback={() => this.closeReplaceConfirm()}/>;
 
-        this.replaceConfirmDialog = showModal(Oskari.getMsg('Publisher2', 'BasicView.confirm.replace.title'), content);
+        this.replaceConfirmDialog = showModal(title, content);
     }
 
     closeReplaceConfirm () {
         if (this.replaceConfirmDialog) {
             this.replaceConfirmDialog.close();
-            this.replaceConfirmDialog = null;
         }
+        this.replaceConfirmDialog = null;
+    }
+
+    save (asNew) {
+        const { uuid } = this.getState();
+        if (uuid && !asNew) {
+            // TODO: errors should be shown before confirm
+            this.showReplaceConfirm();
+            return;
+        }
+        this.publishMap(asNew);
+    }
+
+    publishMap (asNew) {
+        const errors = this.validate();
+        if (errors.length) {
+            this.showValidationErrorMessage(errors);
+            return;
+        }
+        const appSetup = this.getAppSetupToPublish();
+        const { uuid } = this.getState();
+        const payload = {
+            publishedFrom: Oskari.app.getUuid(),
+            pubdata: JSON.stringify(appSetup)
+        };
+        if (uuid && !asNew) {
+            payload.uuid = uuid;
+        }
+        // or FormData
+        fetch(Oskari.urls.getRoute('AppSetup'), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            return response.json();
+        }).then(response => {
+            this.notifyPublished(response, appSetup);
+        }).catch(() => {
+            Messaging.error(this.loc('BasicView.error.saveFailed'));
+        });
+    }
+
+    notifyPublished (response, appSetup) {
+        // TODO: does lang work properly (also metadata.language)
+        const { id, lang, url } = response;
+        const { width, height } = appSetup.metadata.size || {};
+        const builder = Oskari.eventBuilder('Publisher.MapPublishedEvent');
+        // this.sandbox.createURL(url)
+        const event = builder(id, width, height, lang, url);
+        this.sandbox.notifyAll(event);
     }
 }
 
@@ -460,10 +236,7 @@ const wrapped = controllerMixin(PublisherSidebarUIHandler, [
     'closeValidationErrorMessage',
     'showReplaceConfirm',
     'closeReplaceConfirm',
-    'validate',
-    'getValues',
-    'getCollapseItems',
-    'stop'
+    'save'
 ]);
 
 export { wrapped as PublisherSidebarHandler };
