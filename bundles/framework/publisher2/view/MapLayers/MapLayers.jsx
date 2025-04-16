@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Message, Tooltip, Card } from 'oskari-ui';
 import { ButtonContainer, IconButton } from 'oskari-ui/components/buttons';
@@ -34,18 +35,14 @@ const LayerContainer = styled('div')`
     flex-direction: column;
 `;
 
-export const MapLayers = ({ state, controller }) => {
-    const layerListPluginEnabled = state.layerListPluginActive;
-    const layers = state.layers;
-    const baseLayers = state.baseLayers;
-
+export const MapLayers = ({ layers, baseLayers, tools, layerListPluginActive, controller }) => {
     return (
-        <Content>
-            <Card size='small' title={<Message messageKey='BasicView.maptools.label' />}>
-                <PublisherToolsList state={state} controller={controller} />
+        <Content className='t_layers'>
+            <Card size='small' title={<Message messageKey='BasicView.layers.tools' />}>
+                <PublisherToolsList tools={tools} controller={controller} groupId='layers' />
             </Card>
-            {layerListPluginEnabled && (
-                <Card size='small' title={<Message messageKey='BasicView.mapLayers.baseLayers' />}>
+            {layerListPluginActive && (
+                <Card size='small' title={<Message messageKey='BasicView.layers.baseLayers' />}>
                     <LayerContainer>
                         {baseLayers.map((layer) => {
                             const disabled = !layer.isVisible();
@@ -59,15 +56,15 @@ export const MapLayers = ({ state, controller }) => {
                                         />
                                     )}
                                 </LayerBox>
-                            )
+                            );
                         })}
                     </LayerContainer>
-                    {layerListPluginEnabled && baseLayers?.length < 1 && (
-                        <Message messageKey='BasicView.mapLayers.noBaseLayers' />
+                    {layerListPluginActive && baseLayers?.length < 1 && (
+                        <Message messageKey='BasicView.layers.noBaseLayers' />
                     )}
                 </Card>
             )}
-            <Card size='small' title={<Message messageKey='BasicView.mapLayers.otherLayers' />}>
+            <Card size='small' title={<Message messageKey='BasicView.layers.otherLayers' />}>
                 <LayerContainer>
                     <div className='ant-card-head-title'></div>
                     {layers.map((layer) => {
@@ -75,7 +72,7 @@ export const MapLayers = ({ state, controller }) => {
                         return (
                             <LayerBox key={layer.getId()} disabled={disabled}>
                                 <LayerTitle>{layer.getName()}</LayerTitle>
-                                {!disabled && layerListPluginEnabled && (
+                                {!disabled && layerListPluginActive && (
                                     <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={<Message messageKey='BasicView.maptools.layerselection.selectAsBaselayer' />}>
                                         <IconButton
                                             icon={<UpCircleOutlined />}
@@ -84,21 +81,29 @@ export const MapLayers = ({ state, controller }) => {
                                     </Tooltip>
                                 )}
                             </LayerBox>
-                        )
+                        );
                     })}
                 </LayerContainer>
                 {layers?.length < 1 && (
-                    <Message messageKey='BasicView.mapLayers.noLayers' />
+                    <Message messageKey='BasicView.layers.noLayers' />
                 )}
             </Card>
             <ButtonContainer>
                 <Button onClick={() => controller.openSelectedLayerList()}>
-                    <Message messageKey='BasicView.mapLayers.layersDisplay' />
+                    <Message messageKey='BasicView.layers.layersDisplay' />
                 </Button>
                 <Button onClick={() => controller.openLayerList()}>
-                    <Message messageKey='BasicView.mapLayers.selectLayers' />
+                    <Message messageKey='BasicView.layers.selectLayers' />
                 </Button>
             </ButtonContainer>
         </Content>
     );
+};
+
+MapLayers.propTypes = {
+    layers: PropTypes.array.isRequired,
+    baseLayers: PropTypes.array.isRequired,
+    tools: PropTypes.array.isRequired,
+    layerListPluginActive: PropTypes.bool.isRequired,
+    controller: PropTypes.object.isRequired
 };
