@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Collapse, Button, Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import { ButtonContainer, SecondaryButton } from 'oskari-ui/components/buttons';
-import { PANEL_GENERAL_INFO_ID } from './PublisherSideBarHandler';
+import { PANEL_GENERAL_INFO_ID } from '../handler/PublisherSidebarHandler';
 import { BUNDLE_KEY } from '../constants';
 
 const CollapseWrapper = styled('div')`

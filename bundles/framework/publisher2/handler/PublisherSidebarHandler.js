@@ -1,7 +1,7 @@
 import React from 'react';
 import { showModal } from 'oskari-ui/components/window';
-import { ValidationErrorMessage } from './dialog/ValidationErrorMessage';
-import { ReplaceConfirmDialogContent } from './dialog/ReplaceConfirmDialogContent';
+import { ValidationErrorMessage } from '../view/dialog/ValidationErrorMessage';
+import { ReplaceConfirmDialogContent } from '../view//dialog/ReplaceConfirmDialogContent';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { InfoIcon } from 'oskari-ui/components/icons';
 import { mergeValues } from '../util/util';
