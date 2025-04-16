@@ -6,11 +6,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Function} openEditor
-     *          function to call to open the publish editor. Optional initial data can be passed as parameter.
      */
-    function (openEditor) {
-        this.openEditor = openEditor;
+    function (instance) {
+        this.instance = instance;
     }, {
         /**
          * @method handleRequest
@@ -22,27 +20,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var me = this;
-
-            if (!request.getEditMap()) {
-                me.openEditor();
+            const { uuid } = request.getEditMap() || {};
+            if (!uuid) {
+                this.instance.setPublishMode(true);
                 return;
             }
-            // get the uuid from the request
-            var uuid = request.getEditMap().uuid || null;
-            // make the ajax call
-            jQuery.ajax({
-                url: Oskari.urls.getRoute('AppSetup'),
-                data: {
-                    uuid: uuid
-                },
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    data.uuid = uuid;
-                    me.openEditor(data);
-                }
-            });
+            const cb = data => data && this.instance.setPublishMode(true, data);
+            this.instance.getService().fetchAppSetup(uuid, cb);
         }
     }, {
         /**

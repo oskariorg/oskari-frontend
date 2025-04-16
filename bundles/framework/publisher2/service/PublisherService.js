@@ -228,9 +228,9 @@ export class PublisherService {
         }).catch(() => cb(null));
     }
 
-    getAppSetup (uuid, cb) {
-        if (!uuid) {
-            // messaging error? log error?
+    fetchAppSetup (uuid, cb) {
+        if (!uuid || !cb) {
+            Messaging.error(this.loc('BasicView.error.enablePreview'));
             return;
         }
         fetch(Oskari.urls.getRoute('AppSetup', { uuid }), {
@@ -246,6 +246,9 @@ export class PublisherService {
         }).then(json => {
             const view = { ...json, uuid };
             cb(view);
-        }).catch(() => {}); // messaging error
+        }).catch(() => {
+            cb();
+            Messaging.error(this.loc('BasicView.error.enablePreview'));
+        });
     }
 };
