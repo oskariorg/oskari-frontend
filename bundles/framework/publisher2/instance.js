@@ -301,6 +301,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             const configuration = Oskari.util.deepClone(config, state);
             return { configuration };
         },
+        getAppSetupToPublish: function (validate) {
+            const { handler } = this.publisher || {};
+            if (validate && handler?.validate().length) {
+                return null;
+            }
+            return handler?.getAppSetupToPublish() || null;
+        },
         /**
          * @method _showEditNotification
          * Shows notification that the user starts editing an existing published map
