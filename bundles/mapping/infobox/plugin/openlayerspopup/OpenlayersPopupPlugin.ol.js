@@ -181,7 +181,6 @@ Oskari.clazz.define(
                 popupDOM,
                 popup;
 
-
             colourScheme = { ...this.colourScheme, ...colourScheme };
 
             jQuery(contentDiv).addClass('infoboxPopupNoMargin');
