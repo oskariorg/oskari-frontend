@@ -4,25 +4,7 @@ import { Divider, Message, Slider, Checkbox, Dropdown, Button, Select, NumberInp
 import { ColorPicker } from 'oskari-ui/components/ColorPicker';
 import PropTypes from 'prop-types';
 import { BUNDLE_KEY } from '../../constants.js';
-
-const FONTS = [
-    {
-        label: 'Arial (sans-serif)',
-        value: 'arial'
-    },
-    {
-        label: 'Georgia (serif)',
-        value: 'georgia'
-    },
-    {
-        label: 'Fantasy (sans-serif)',
-        value: 'fantasy'
-    },
-    {
-        label: 'Verdana (sans-serif)',
-        value: 'verdana'
-    }
-];
+import { FONTS, DEFAULT_FONT } from 'oskari-ui/theme/constants';
 
 const Content = styled('div')`
     margin-top: 10px;
@@ -72,7 +54,7 @@ const StyledSelect = styled(Select)`
 `;
 
 export const LayoutForm = ({ mapTheme, infoBoxPreviewVisible, presets, controller }) => {
-    const { font = FONTS[0].value, color = {}, navigation = {}, infobox = {} } = mapTheme;
+    const { font = DEFAULT_FONT, color = {}, navigation = {}, infobox = {} } = mapTheme;
     const [buttonRounding, setButtonRounding] = useState(navigation.roundness);
 
     return (
