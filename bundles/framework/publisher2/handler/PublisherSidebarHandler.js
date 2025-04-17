@@ -158,9 +158,6 @@ class PublisherSidebarUIHandler extends StateHandler {
      *
      */
     showReplaceConfirm () {
-        if (this.replaceConfirmDialog) {
-            return;
-        }
         const title = this.loc('BasicView.confirm.replace.title');
         const content = <ReplaceConfirmDialogContent
             okCallback={() => {
