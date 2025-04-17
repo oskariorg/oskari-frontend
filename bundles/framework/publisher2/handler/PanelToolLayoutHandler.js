@@ -1,7 +1,6 @@
 import React from 'react';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { ToolLayout } from '../view/form/ToolLayout';
-import { mergeValues } from '../util/util';
 
 class UIHandler extends StateHandler {
     constructor (sandbox, tools) {
@@ -39,21 +38,6 @@ class UIHandler extends StateHandler {
 
     getPanelContent () {
         return <ToolLayout {...this.getState()} controller={this.getController()}/>;
-    }
-
-    /**
-     * Returns the selections the user has done with the form inputs.
-     * @method getValues
-     * @return {Object}
-     */
-    getValues () {
-        // TODO: does tool really return only values which should be stored here? it looks like this is storing too much
-        let values = {};
-
-        this.tools.forEach(tool => {
-            values = mergeValues(values, tool.getValues());
-        });
-        return values;
     }
 
     switchControlSides () {

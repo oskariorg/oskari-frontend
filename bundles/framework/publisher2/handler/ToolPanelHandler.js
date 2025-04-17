@@ -1,6 +1,7 @@
 import React from 'react';
 import { PublisherToolsList } from '../view/form/PublisherToolsList';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { mergeValues } from '../util/util';
 
 class UIHandler extends StateHandler {
     constructor (sandbox, tools) {
@@ -48,6 +49,15 @@ class UIHandler extends StateHandler {
         tool.setEnabled(enabled);
         // trigger re-render
         this.notify();
+    }
+
+    getValues () {
+        const { tools } = this.getState();
+        let values = {};
+        tools.forEach(tool => {
+            values = mergeValues(values, tool.getValues());
+        });
+        return values;
     }
 
     stop () {
