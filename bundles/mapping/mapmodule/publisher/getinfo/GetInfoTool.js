@@ -13,7 +13,7 @@ class GetInfoTool extends AbstractPublisherTool {
 
     init (data) {
         super.init(data);
-        const pluginConfig = this.getPlugin().getConfig() || {};
+        const pluginConfig = this.getPlugin()?.getConfig() || {};
         this.handler.init(pluginConfig);
     }
 
