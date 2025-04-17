@@ -12,7 +12,6 @@ class UIHandler extends StateHandler {
     };
 
     init (config) {
-        super.init(config);
         this.updateState({
             ...config,
             noUI: config?.noUI,
