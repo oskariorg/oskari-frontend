@@ -23,6 +23,7 @@ Oskari.clazz.define(
         me._popups = {};
         me.markers = {};
         me.markerPopups = {};
+        this.colourScheme = {};
 
         me._mobileBreakpoints = {
             width: 500,
@@ -83,6 +84,7 @@ Oskari.clazz.define(
             me._popupWrapper = jQuery(
                 '<div class="olPopup"></div>'
             );
+            this.setColorSchemeFromTheme();
         },
 
         /**
@@ -168,7 +170,7 @@ Oskari.clazz.define(
                 popupContentHtml = me._renderPopupContent(id, sanitizedTitle, contentDiv, additionalTools, lonlat, options.showCoordinates),
                 popupElement = me._popupWrapper.clone(),
                 lonlatArray = [lonlat.lon, lonlat.lat],
-                colourScheme = options.colourScheme,
+                colourScheme = options.colourScheme || {},
                 font = options.font,
                 offsetX = 0,
                 offsetY = -20,
@@ -179,14 +181,8 @@ Oskari.clazz.define(
                 popupDOM,
                 popup;
 
-            const mapTheme = mapModule.getMapTheme();
-            if (mapTheme) {
-                colourScheme = {
-                    ...colourScheme,
-                    bgColour: mapTheme?.infobox?.header?.bg,
-                    titleColour: mapTheme?.infobox?.header?.text
-                };
-            }
+
+            colourScheme = { ...this.colourScheme, ...colourScheme };
 
             jQuery(contentDiv).addClass('infoboxPopupNoMargin');
             if (isMarker) {
@@ -776,7 +772,19 @@ Oskari.clazz.define(
                 me.getMapModule().panMapByPixels(panX, panY);
             }
         },
-
+        setColorSchemeFromTheme: function (mapTheme = this.getMapModule().getMapTheme()) {
+            const { infobox } = mapTheme || {};
+            if (!infobox) {
+                return;
+            }
+            if (infobox.header?.bg) {
+                this.colourScheme.bgColour = infobox.header.bg;
+            }
+            if (infobox.header?.text) {
+                this.colourScheme.titleColour = infobox.header.text;
+            }
+            this._changeColourScheme(this.colourScheme, jQuery('.olPopup:visible'));
+        },
         /**
          * Changes the colour scheme of the plugin
          *
