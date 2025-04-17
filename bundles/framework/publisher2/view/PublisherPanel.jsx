@@ -26,7 +26,7 @@ export const PublisherPanel = ({ collapseItems, uuid, controller, onClose }) => 
             <Actions>
                 <SecondaryButton type='cancel' onClick={onClose} />
                 { !!uuid && (
-                    <Button type='primary' onClick={() => controller.save(true)}>
+                    <Button onClick={() => controller.save(true)}>
                         <Message messageKey='BasicView.buttons.saveNew'/>
                     </Button>
                 )}
