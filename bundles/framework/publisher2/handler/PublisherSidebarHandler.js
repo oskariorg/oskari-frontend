@@ -24,10 +24,10 @@ const PANELS = [
     { id: 'mapPreview', HandlerImpl: PanelMapPreviewHandler, tooltipArgs: CUSTOM_MAP_SIZE_LIMITS },
     { id: 'layers', HandlerImpl: PanelMapLayersHandler },
     { id: 'tools', HandlerImpl: ToolPanelHandler },
-    { id: 'rpc', HandlerImpl: ToolPanelHandler },
     { id: 'statsgrid', HandlerImpl: StatsGridPanelHandler },
     { id: 'layout', HandlerImpl: PanelLayoutHandler },
-    { id: 'toolLayout', HandlerImpl: PanelToolLayoutHandler }
+    { id: 'toolLayout', HandlerImpl: PanelToolLayoutHandler },
+    { id: 'rpc', HandlerImpl: ToolPanelHandler }
 ];
 
 class PublisherSidebarUIHandler extends StateHandler {
@@ -62,9 +62,8 @@ class PublisherSidebarUIHandler extends StateHandler {
         const handledGroups = this.panels.map(p => p.id);
         const extraGroups = Object.keys(toolGroups).filter(group => !handledGroups.includes(group));
         Object.keys(extraGroups).forEach(id => {
-            this.log().deprecated('Implement panel for own tools');
             const tools = extraGroups[id];
-            const { label, tooltip } = Oskari.getMsg(BUNDLE_KEY, `BasicView.${id}`);
+            const { label, tooltip } = Oskari.getMsg(BUNDLE_KEY, `BasicView.${id}`, null, {});
             if (!label) {
                 this.log.warn(`No label for "${id}" group, skipping!`);
                 return;
@@ -88,8 +87,8 @@ class PublisherSidebarUIHandler extends StateHandler {
                 children: handler.getPanelContent()
             };
         });
-
-        this.updateState({ collapseItems });
+        const { uuid } = data;
+        this.updateState({ collapseItems, uuid });
     }
 
     updateCollapseItem (id) {
@@ -159,6 +158,9 @@ class PublisherSidebarUIHandler extends StateHandler {
      *
      */
     showReplaceConfirm () {
+        if (this.replaceConfirmDialog) {
+            return;
+        }
         const title = this.loc('BasicView.confirm.replace.title');
         const content = <ReplaceConfirmDialogContent
             okCallback={() => {
@@ -178,9 +180,13 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     save (asNew) {
+        const errors = this.validate();
+        if (errors.length) {
+            this.showValidationErrorMessage(errors);
+            return;
+        }
         const { uuid } = this.getState();
         if (uuid && !asNew) {
-            // TODO: errors should be shown before confirm
             this.showReplaceConfirm();
             return;
         }
@@ -188,11 +194,6 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     publishMap (asNew) {
-        const errors = this.validate();
-        if (errors.length) {
-            this.showValidationErrorMessage(errors);
-            return;
-        }
         const appSetup = this.getAppSetupToPublish();
         const { uuid } = this.getState();
         const payload = {
