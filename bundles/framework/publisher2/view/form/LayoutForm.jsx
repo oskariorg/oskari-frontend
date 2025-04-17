@@ -164,7 +164,7 @@ export const LayoutForm = ({ mapTheme, infoBoxPreviewVisible, presets, controlle
                 <StyledColorPicker>
                     <ColorPicker
                         value={infobox.header?.text}
-                        onChange={val => controller.updateTheme('infobox.header.bg', val)}
+                        onChange={val => controller.updateTheme('infobox.header.text', val)}
                     />
                 </StyledColorPicker>
             </Field>
