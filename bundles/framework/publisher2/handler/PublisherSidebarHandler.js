@@ -202,14 +202,13 @@ class PublisherSidebarUIHandler extends StateHandler {
         if (uuid && !asNew) {
             payload.uuid = uuid;
         }
-        // or FormData
+
         fetch(Oskari.urls.getRoute('AppSetup'), {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                Accept: 'application/json'
             },
-            body: JSON.stringify(payload)
+            body: new URLSearchParams(payload)
         }).then(response => {
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -223,11 +222,9 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     notifyPublished (response, appSetup) {
-        // TODO: does lang work properly (also metadata.language)
         const { id, lang, url } = response;
         const { width, height } = appSetup.metadata.size || {};
         const builder = Oskari.eventBuilder('Publisher.MapPublishedEvent');
-        // this.sandbox.createURL(url)
         const event = builder(id, width, height, lang, url);
         this.sandbox.notifyAll(event);
     }
