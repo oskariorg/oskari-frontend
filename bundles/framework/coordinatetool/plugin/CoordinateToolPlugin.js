@@ -58,6 +58,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             this.addToPluginContainer(this.getElement());
             this.refresh();
         },
+        setNoUI: function (value) {
+            this._config.noUI = value;
+        },
         hasUI: function () {
             return !this._config.noUI;
         },

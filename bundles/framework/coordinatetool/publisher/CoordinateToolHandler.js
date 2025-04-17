@@ -25,10 +25,16 @@ class UIHandler extends StateHandler {
             noUI: value
         });
 
+        const plugin = this.tool?.getPlugin() || null;
+        if (!plugin) {
+            return;
+        }
+
+        plugin.setNoUI(value);
         if (value) {
-            this.tool.getPlugin().teardownUI(true);
+            plugin.teardownUI(true);
         } else {
-            this.tool.getPlugin().redrawUI(Oskari.util.isMobile());
+            plugin.redrawUI(Oskari.util.isMobile());
         }
     }
 
