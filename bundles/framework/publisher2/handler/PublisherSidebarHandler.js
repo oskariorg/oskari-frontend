@@ -113,7 +113,9 @@ class PublisherSidebarUIHandler extends StateHandler {
                 }
             }
         };
-        return this.panels.reduce((values, { handler }) => mergeValues(values, handler.getValues()), appSetup);
+        return this.panels
+            .filter(({ handler }) => typeof handler.getValues === 'function')
+            .reduce((values, { handler }) => mergeValues(values, handler.getValues()), appSetup);
     }
 
     validate () {
