@@ -125,10 +125,10 @@ Oskari.clazz.define(
 
         _createEventHandlers: function () {
             return {
-                EscPressedEvent: function (evt) {
+                'EscPressedEvent': function (evt) {
                     this._closeGfiInfo();
                 },
-                MapClickedEvent: function (evt) {
+                'MapClickedEvent': function (evt) {
                     if (!this.isEnabled()) {
                         // disabled, do nothing
                         return;
@@ -141,37 +141,24 @@ Oskari.clazz.define(
                     }
                     this.handleGetInfo(click);
                 },
-                AfterMapLayerRemoveEvent: function (evt) {
+                'AfterMapLayerRemoveEvent': function (evt) {
                     this._refreshGfiInfo('remove', evt.getMapLayer().getId());
                 },
-                AfterMapLayerAddEvent: function (evt) {
+                'AfterMapLayerAddEvent': function (evt) {
                     this._refreshGfiInfo();
                 },
                 'InfoBox.InfoBoxEvent': function (evt) {
                     this._handleInfoBoxEvent(evt);
                 },
-                GetInfoResultEvent: function (evt) {
+                'GetInfoResultEvent': function (evt) {
                     if (this.isEnabled()) {
                         this._handleInfoResult(evt.getData());
                     }
                 },
                 'Realtime.RefreshLayerEvent': function (evt) {
                     this._refreshGfiInfo('update', evt.getMapLayer().getId());
-                },
-                'Publisher2.ColourSchemeChangedEvent': function (evt) {
-                    this._handleColourSchemeChangedEvent(evt);
                 }
             };
-        },
-
-        _handleColourSchemeChangedEvent: function (evt) {
-            if (this._config) {
-                this._config.colourScheme = evt.getColourScheme();
-            } else {
-                this._config = {
-                    colourScheme: evt.getColourScheme()
-                };
-            }
         },
 
         _createRequestHandlers: function () {
