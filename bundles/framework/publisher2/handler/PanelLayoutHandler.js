@@ -178,6 +178,10 @@ class UIHandler extends StateHandler {
     }
 
     stop () {
+        const { infoBoxPreviewVisible } = this.getState();
+        if (infoBoxPreviewVisible) {
+            this.sandbox.postRequestByName('InfoBox.HideInfoBoxRequest', [INFOBOX_PREVIEW_ID]);
+        }
         // change the mapmodule theme back to normal
         Oskari.app.getTheming().setTheme(this.originalTheme);
         Object.getOwnPropertyNames(this.eventHandlers).forEach(event => this.sandbox.unregisterFromEventByName(this, event));
