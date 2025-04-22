@@ -5,6 +5,7 @@ import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { Spin } from 'oskari-ui';
 import { showTouPopup } from './view/dialog/TouPopup';
 import { UserDataLayer } from '../../mapping/mapuserdatalayer/domain/UserDataLayer';
+import { hasPublishRight } from './util/util';
 
 /**
  * @class Oskari.mapframework.bundle.publisher2.Flyout
@@ -82,12 +83,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
             const deniedLayers = [];
             const noRights = this.instance.loc('StartView.noRights');
             const userData = this.instance.loc('StartView.userDataLayerDisclaimer');
-            const service = this.instance.getService();
             this.instance.getSandbox().findAllSelectedMapLayers().forEach(layer => {
                 const { unsupported } = layer.getVisibilityInfo();
                 const name = layer.getName();
                 const reasons = [];
-                if (!service.hasPublishRight(layer)) {
+                if (!hasPublishRight(layer)) {
                     reasons.push(noRights);
                 }
                 if (unsupported) {

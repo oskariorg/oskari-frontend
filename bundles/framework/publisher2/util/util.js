@@ -1,3 +1,14 @@
+/**
+ * @method hasPublishRight
+ * Checks if the layer can be published.
+ * @param
+ * {Oskari.mapframework.domain.AbstractLayer} layer layer to check
+ * @return {Boolean} true if the layer can be published
+ */
+export const hasPublishRight = layer => layer.hasPermission('publish');
+
+export const isPublishable = layer => hasPublishRight(layer) && !layer.getVisibilityInfo().unsuported;
+
 export const isEmpty = (value) => {
     if (value === null) {
         return true;

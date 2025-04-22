@@ -1,4 +1,5 @@
 import { Messaging } from 'oskari-ui/util';
+import { isPublishable } from '../util/util';
 
 export class PublisherService {
     constructor (instance) {
@@ -27,8 +28,7 @@ export class PublisherService {
      * @return {Oskari.mapframework.domain.AbstractLayer[]} list of layers that can't be published.
      */
     getDeniedSelectedLayers () {
-        const selectedLayers = this.sandbox.findAllSelectedMapLayers();
-        return selectedLayers.filter(layer => !this.hasPublishRight(layer) || layer.getVisibilityInfo().unsuported);
+        return this.sandbox.findAllSelectedMapLayers().filter(layer => !isPublishable(layer));
     }
 
     /**
@@ -64,19 +64,6 @@ export class PublisherService {
             grouping[group].push(tool);
         });
         return grouping;
-    }
-
-    /**
-     * @method hasPublishRight
-     * Checks if the layer can be published.
-     * @param
-     * {Oskari.mapframework.domain.AbstractLayer} layer layer to check
-     * @return {Boolean} true if the layer can be published
-     */
-    hasPublishRight (layer) {
-        // permission might be "no_publication_permission"
-        // or nothing at all
-        return layer.hasPermission('publish');
     }
 
     /**

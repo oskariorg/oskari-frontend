@@ -4,6 +4,7 @@ import { showInfoPopup } from './view/dialog/InfoPopup';
 import { showSnippetPopup } from './view/dialog/SnippetPopup';
 import { PublisherService } from './service/PublisherService';
 import { PublisherSidebar } from './view/PublisherSidebar';
+import { hasPublishRight } from './util/util';
 
 import './Flyout';
 import './tools/AbstractPluginTool';
@@ -119,7 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             // Let's add publishable filter to layerlist if user is logged in
             if (Oskari.user().isLoggedIn()) {
                 const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-                mapLayerService.registerLayerFilter('publishable', layer => this.service.hasPublishRight(layer));
+                mapLayerService.registerLayerFilter('publishable', hasPublishRight);
 
                 // Add layerlist filter button
                 const layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
