@@ -238,15 +238,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 if (data.uuid) {
                     this._showEditNotification();
                 }
-
+                // stop & store plugins before creating publisher handlers
                 this.getService().setPublishModeImpl(true, data);
-
                 this.publisher = new PublisherSidebar(this);
                 this.publisher.setPublishModeImpl(true, data);
             } else {
-                this.getService().setPublishModeImpl(false);
+                // stop publisher handlers before resuming removed plugins
                 this.publisher?.setPublishModeImpl(false);
                 this.publisher = null;
+                this.getService().setPublishModeImpl(false);
             }
             this.toggleClasses(blnEnabled);
             this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
