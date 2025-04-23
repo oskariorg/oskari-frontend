@@ -19,6 +19,7 @@ export const PANEL_GENERAL_INFO_ID = 'generalInfo';
 
 // id has to be same than in localization or tool group
 // Panel extra is rendered if loc.{id}.tooltip exists
+// AbstractPublisherPanel getPanel returns similiar object
 const PANELS = [
     { id: 'generalInfo', HandlerImpl: PanelGeneralInfoHandler },
     { id: 'mapPreview', HandlerImpl: PanelMapPreviewHandler, tooltipArgs: CUSTOM_MAP_SIZE_LIMITS },
@@ -52,8 +53,10 @@ class PublisherSidebarUIHandler extends StateHandler {
 
     init (data) {
         const toolGroups = this.service.createToolGroupings();
+        const extraPanels = this.service.createExtraPanels();
+
         const getTools = groupId => groupId === 'toolLayout' ? Object.values(toolGroups).flat() : toolGroups[groupId];
-        this.panels = PANELS.map(({ id, HandlerImpl, ...rest }) => {
+        this.panels = [...PANELS, ...extraPanels].map(({ id, HandlerImpl, ...rest }) => {
             const handler = new HandlerImpl(this.sandbox, getTools(id));
             return { id, handler, ...rest };
         });
@@ -61,8 +64,9 @@ class PublisherSidebarUIHandler extends StateHandler {
         /* --- deprecated ---> */
         const handledGroups = this.panels.map(p => p.id);
         const extraGroups = Object.keys(toolGroups).filter(group => !handledGroups.includes(group));
-        Object.keys(extraGroups).forEach(id => {
-            const tools = extraGroups[id];
+        extraGroups.forEach(id => {
+            this.log.warn('Creating panels for own tool group will be removed in future release. Implement panel for own tools');
+            const tools = getTools(id);
             const { label, tooltip } = Oskari.getMsg(BUNDLE_KEY, `BasicView.${id}`, null, {});
             if (!label) {
                 this.log.warn(`No label for "${id}" group, skipping!`);
@@ -78,11 +82,12 @@ class PublisherSidebarUIHandler extends StateHandler {
             handler.addStateListener(() => this.updateCollapseItem(id));
         });
 
-        const collapseItems = this.panels.map(({ id, handler, tooltipArgs }) => {
-            const info = this.loc(`BasicView.${id}.tooltip`, tooltipArgs, '');
+        const collapseItems = this.panels.map(({ id, label, tooltip, handler, tooltipArgs }) => {
+            // extra panels have label and optionally tooltip, check them for PANELS from localization
+            const info = tooltip || this.loc(`BasicView.${id}.tooltip`, tooltipArgs, null);
             return {
                 key: id,
-                label: this.loc(`BasicView.${id}.label`),
+                label: label || this.loc(`BasicView.${id}.label`),
                 extra: info ? <InfoIcon title={info} /> : null,
                 children: handler.getPanelContent()
             };

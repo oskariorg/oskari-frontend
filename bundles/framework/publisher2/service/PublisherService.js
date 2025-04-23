@@ -66,6 +66,11 @@ export class PublisherService {
         return grouping;
     }
 
+    createExtraPanels () {
+        return Oskari.clazz.protocol('Oskari.mapframework.publisher.Panel')
+            .map(panelClazz => Oskari.clazz.create(panelClazz, this.sandbox).getPanel());
+    }
+
     /**
      * @method setPublishModeImpl
      * Sets publisher into active mode
