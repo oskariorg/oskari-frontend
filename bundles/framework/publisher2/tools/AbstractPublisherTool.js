@@ -1,5 +1,5 @@
 export class AbstractPublisherTool {
-    constructor (sandbox, mapmodule, localization = {}) {
+    constructor (sandbox, mapmodule) {
         // override to change group
         this.group = 'tools';
         // index defines order in which the tools are listed on the group panel
@@ -18,7 +18,6 @@ export class AbstractPublisherTool {
             enabled: false,
             pluginConfig: null
         };
-        this.__loc = localization[this.group];
     }
 
     init (data) {
@@ -42,15 +41,6 @@ export class AbstractPublisherTool {
     getComponent () {
         return {};
     };
-
-    // deprecated - new (React based) tools should use getTool().title instead
-    getTitle () {
-        const toolTitle = this.getTool().title;
-        if (!this.__loc) {
-            return toolTitle;
-        }
-        return this.__loc[toolTitle];
-    }
 
     getGroup () {
         return this.group;
@@ -168,11 +158,6 @@ export class AbstractPublisherTool {
 
     getAllowedLocations () {
         return this.allowedLocations;
-    }
-
-    // old tools return jQuery object that renders the extra options for this tool
-    getExtraOptions () {
-        return null;
     }
 };
 
