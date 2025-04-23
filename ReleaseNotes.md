@@ -1,5 +1,19 @@
 # Release Notes
 
+## 3.0.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/56?closed=1
+
+- Fixed an issue where browsers printing functionality was not printing the map as expected
+- Fixes to several publisher tools for their "No UI"/"RPC Only" flags
+- Removed lodash as we don't use it anymore (our dependencies still use it)
+- Fixed alignment issues on announcement banner having long messages
+- Fixed an issue with `InfoBox.ShowInfoBoxRequest` where theme colors were used instead of colors passed with the request
+- Updated dependencies:
+  - dompurify 2.5.8 -> 3.2.5
+  - corejs and babel related updates
+
 ## 3.0.0
 
 For a full list of changes see:
