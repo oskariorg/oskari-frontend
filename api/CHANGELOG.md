@@ -9,6 +9,12 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 3.0.1
+
+### [mod] [rpc] Colors in `InfoBox.ShowInfoBoxRequest`
+
+Fixed a regression from 3.0 where theme colors were used instead of colors passed with the request.
+
 ## 3.0.0
 
 ### [mod] [rpc] [breaking] Changed `MetadataSearchResultEvent` event
