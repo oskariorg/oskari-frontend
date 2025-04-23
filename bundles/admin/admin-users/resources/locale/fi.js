@@ -22,6 +22,8 @@ Oskari.registerLocalization(
             "addRole": "Valitse rooli(t)",
             "noMatch": "Ei hakutuloksia.",
             "searchResults": "Hakutulokset",
+            "created": "Tili luotu",
+            "lastLogin": "Edellinen kirjautuminen",
             "passwordRequirements": {
                 "title": "Salasanan vaatimukset: ",
                 "length": "Vähimmäispituus:  {length}",
@@ -45,7 +47,7 @@ Oskari.registerLocalization(
                 "fetch": "Roolien haku epäonnistui",
                 "save": "Roolin tallennus epäonnistui.",
                 "delete": "Roolin poistaminen epäonnistui."
-            },               
+            },
             "types": {
                 "system": "Järjestelmäroolit",
                 "other": "Lisäroolit"

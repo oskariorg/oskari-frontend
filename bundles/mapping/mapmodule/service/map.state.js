@@ -55,6 +55,7 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
 
         // @property {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
         this._projectionCode = 'EPSG:3067';
+        this._projectionDecimals = 6;
 
         this._layerSupportedChecks = {};
     }, {
@@ -137,6 +138,14 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
          */
         getZoom: function () {
             return this._zoom;
+        },
+        getLocation: function () {
+            const decimals = this._projectionDecimals;
+            return {
+                x: this.getX().toFixed(decimals),
+                y: this.getY().toFixed(decimals),
+                zoom: this.getZoom()
+            };
         },
         /**
          * @method setScale
@@ -291,6 +300,9 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
          */
         setSrsName: function (projectionCode) {
             this._projectionCode = projectionCode;
+        },
+        setSrsDecimals: function (decimals) {
+            this._projectionDecimals = decimals;
         },
         /**
          * @method getSrsName

@@ -14,6 +14,12 @@ Oskari.registerLocalization(
             "desc": "The embedded map has been saved. Publish it on your website by copying this code to the html code on your website:",
             "copy": "Copy to the clipboard"
         },
+        "snippet": {
+            "title": "HTML code",
+            "desc": "Copy the HTML code below to your html code and the map will be visible on your website.",
+            "params": "Use published map from current map location and zoom level",
+            "paramsTip": "By default, the center of the map is the one in the map window at the time of publication."
+        },
         "edit": {
             "popup": {
                 "title": "Opening embedded map…",
@@ -256,7 +262,8 @@ Oskari.registerLocalization(
             "layerlist_empty": "No publishable map layers are open in the map window. Please check publishable map layers in the Selected Layers menu.",
             "layerlist_denied": "Unpublishable map layers open in map window:",
             "denied_tooltip": "These map layers are not publishable in embedded maps. Data producers have not granted permissions for publishing or the current map projection is unsupported. Please check publishable map layers in the Selected Layers menu.",
-            "myPlacesDisclaimer": "NOTE! If you are using this map layer in an embedded map, the map layer will be published.",
+            "userDataLayerDisclaimer": "NOTE! If you are using this map layer in an embedded map, the map layer will be published.",
+            "hasUserDataDisclaimer": "NOTE! If you are using your own map layers in an embedded map, the map layers will be published.",
             "noRights": "no permission",
             "buttons": {
                 "continue": "Continue",

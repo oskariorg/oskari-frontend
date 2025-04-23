@@ -41,7 +41,7 @@ class UIHandler extends StateHandler {
 
     showPanel (title, content, onClose) {
         if (!this.sidePanel) {
-            this.sidePanel = showSidePanel(title, content, onClose);
+            this.sidePanel = showSidePanel(title, content, onClose, { id: this.instance.getName() });
         }
         if (this._isTimeSeriesActive()) {
             this.updateState({ isTimeSeries: true });

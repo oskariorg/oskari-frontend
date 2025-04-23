@@ -212,7 +212,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Kaardiaknas ei ole avalikustatavaid kaardikihte. Kontrolli kaardkihtide menüüst.",
             "layerlist_denied": "Lõimkaart sisab kaardikihte, mida ei saa avalikustada.",
             "denied_tooltip": "Antud kaardikihid ei ole avalikustamiseks lõimkaardil, kuna andmevaldaja ei ole selleks luba andnud. Leia avalikustatavad andmekihid.",
-            "myPlacesDisclaimer": "OLULINE! Kasutades seda kaardikihti lõimkaardil, kaardikiht avalikustatakse.",
+            "userDataLayerDisclaimer": "OLULINE! Kasutades seda kaardikihti lõimkaardil, kaardikiht avalikustatakse.",
             "buttons": {
                 "continue": "Jätka",
                 "continueAndAccept": "Nõustu ja jätka.",

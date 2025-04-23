@@ -2,17 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List as AntList } from 'antd';
 
-export const List = ({ header, footer, dataSource, bordered, renderItem }) => {
-    return (
-        <AntList
-            header={header}
-            footer={footer}
-            bordered={bordered}
-            dataSource={dataSource}
-            renderItem={renderItem}
-        />
-    );
-};
+export const List = (props) => <AntList { ...props } />
 
 export const ListItem = ({ children, ...other }) => (
     <AntList.Item {...other}>
@@ -21,8 +11,8 @@ export const ListItem = ({ children, ...other }) => (
 );
 
 List.propTypes = {
-    header: PropTypes.string,
-    footer: PropTypes.string,
+    header: PropTypes.node,
+    footer: PropTypes.node,
     dataSource: PropTypes.array,
     bordered: PropTypes.bool,
     renderItem: PropTypes.func

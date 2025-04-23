@@ -8,7 +8,9 @@ const KVP = ':';
 
 /** -------- HELPERS -------- */
 const count = {};
-LANGS.forEach(lang => count[lang] = 0);
+LANGS.forEach(lang => {
+    count[lang] = 0;
+});
 let total = 0;
 
 const unifyPath = (path) => {
@@ -43,7 +45,9 @@ const getJsonFromCSV = (content) => {
     const [heading, ...lines] = content.split('\n');
     const [ignore, ...langs] = heading.split(CSV);
     const json = {};
-    langs.forEach(lang => json[lang] = {});
+    langs.forEach(lang => {
+        json[lang] = {};
+    });
 
     lines.filter(line => line.trim()).forEach(line => {
         const [key, ...values] = line.split(CSV);
@@ -64,7 +68,7 @@ const getJsonFromText = (content) => {
         if (!line.trim()) return;
         const [raw, value] = line.replaceAll('"','').split(KVP);
         const key = raw.trim();
-        if(!LANGS.includes(key)) {
+        if (!LANGS.includes(key)) {
             parts = key.split('.');
             return;
         }

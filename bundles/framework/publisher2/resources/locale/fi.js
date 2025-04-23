@@ -14,6 +14,12 @@ Oskari.registerLocalization(
             "desc": "Kartta on valmis. Julkaise kartta verkkosivulla liittämällä alla oleva html-koodi verkkosivun koodiin:",
             "copy": "Kopioi leikepöydälle"
         },
+        "snippet": {
+            "title": "HTML-koodi",
+            "desc": "Lisää alla oleva koodi html-koodiin verkkosivullasi. Kartta tulee näkyviin verkkosivullesi.",
+            "params": "Käytä karttaupotusta nykyisellä sijainnilla ja mittakaavatasolla",
+            "paramsTip": "Oletusarvoisesti karttaikkunan keskipiste on se, joka karttaikkunassa on julkaisuhetkellä."
+        },
         "edit": {
             "popup": {
                 "title": "Päivitetään upotettua karttaa…",
@@ -256,7 +262,8 @@ Oskari.registerLocalization(
             "layerlist_empty": "Avoinna olevat karttatasot eivät ole julkaistavissa. Tarkista Valitut tasot -valikosta, mitkä karttatasot ovat julkaistavissa.",
             "layerlist_denied": "Avoinna olevat karttatasot, jotka eivät ole julkaistavissa",
             "denied_tooltip": "Karttatasot eivät ole julkaistavissa upotetussa kartassa. Tiedontuottaja ei ole antanut lupaa julkaista karttatasoa muissa verkkopalveluissa tai tasoa ei voida näyttää tässä karttaprojektiossa. Tarkista karttatason julkaisuoikeudet Valitut tasot -valikosta.",
-            "myPlacesDisclaimer": "HUOM! Jos käytät karttatasoa karttajulkaisussa, karttatasosta tulee julkinen.",
+            "userDataLayerDisclaimer": "HUOM! Jos käytät karttatasoa karttajulkaisussa, karttatasosta tulee julkinen.",
+            "hasUserDataDisclaimer": "HUOM! Jos käytät omia karttatasoja karttajulkaisussa, karttatasoista tulee julkisia.",
             "noRights": "ei julkaisuoikeutta",
             "buttons": {
                 "continue": "Jatka",

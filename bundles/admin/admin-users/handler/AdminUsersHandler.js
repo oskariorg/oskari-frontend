@@ -240,7 +240,9 @@ class UIHandler extends StateHandler {
             email: '',
             password: '',
             rePassword: '',
-            roles: []
+            roles: [],
+            created: '',
+            lastLogin: ''
         };
     }
 

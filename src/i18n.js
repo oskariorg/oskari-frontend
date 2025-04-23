@@ -294,12 +294,13 @@ import IntlMessageFormat from 'intl-messageformat';
         }
         return ob;
     }
-    O.getMsg = function (key, path, values) {
+    O.getMsg = function (key, path, values, fallback) {
+        const notFound = typeof fallback !== 'undefined' ? fallback : path;
         let message;
         if (!values) {
             message = resolvePath(key, path);
             if (message === null) {
-                return path;
+                return notFound;
             }
             return message;
         }
@@ -308,7 +309,7 @@ import IntlMessageFormat from 'intl-messageformat';
         if (!formatter) {
             message = resolvePath(key, path);
             if (message === null) {
-                return path;
+                return notFound;
             }
             formatter = new IntlMessageFormat(message, oskariLang);
             intlCache[cacheKey] = formatter;

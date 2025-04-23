@@ -13,6 +13,10 @@ Oskari.registerLocalization(
             "title": "Carte embarquée enregistrée",
             "desc": "La carte embarquée a été enregistrée. Veuillez la publier sur votre site Web en copiant le code suivant dans le code html de votre site Web :"
         },
+        "snippet": {
+            "title": "Code HTML",
+            "desc": "Intégrer la carte en ajoutant à votre site internet le code HTML ci-dessous."
+        },
         "edit": {
             "popup": {
                 "title": "Ouverture de la carte embarquée…",
@@ -214,7 +218,7 @@ Oskari.registerLocalization(
             "layerlist_empty": "Il n'y a pas de couche cartographique publiable ouverte dans la fenêtre de la carte. Veuillez cocher les couches cartographiques publiables dans le menu Couches sélectionnées.",
             "layerlist_denied": "Des couches cartographiques non publiables sont ouvertes dans la fenêtre de la carte :",
             "denied_tooltip": "Ces couches cartographiques ne sont pas publiables dans des cartes embarquées. Les producteurs de données n'ont pas accordé de permission de publier. Veuillez cocher les couches cartographiques publiables dans le menu Couches sélectionnées.",
-            "myPlacesDisclaimer": "REMARQUE! Si vous utilisez cette couche cartographique dans une carte embarquée, la couche cartographique sera publiée.",
+            "userDataLayerDisclaimer": "REMARQUE! Si vous utilisez cette couche cartographique dans une carte embarquée, la couche cartographique sera publiée.",
             "buttons": {
                 "continue": "Continuer",
                 "continueAndAccept": "Accepter et continuer",
