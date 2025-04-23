@@ -1,6 +1,8 @@
 import { controllerMixin } from 'oskari-ui/util';
-import { ToolPanelHandler } from './ToolPanelHandler';
+import { ToolPanelHandler } from '../../../framework/publisher2/handler/ToolPanelHandler';
+
 const STATSGRID_LAYER_ID = 'STATS_LAYER';
+
 class UIHandler extends ToolPanelHandler {
     constructor (sandbox, tools) {
         super(sandbox, tools);
@@ -58,4 +60,4 @@ const wrapped = controllerMixin(UIHandler, [
     'setToolEnabled'
 ]);
 
-export { wrapped as StatsGridPanelHandler };
+export { wrapped as StatsgridPanelHandler };

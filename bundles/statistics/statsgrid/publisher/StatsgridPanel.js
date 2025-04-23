@@ -1,11 +1,12 @@
 import { AbstractPublisherPanel } from '../../../framework/publisher2/tools/AbstractPublisherPanel';
 import { BUNDLE_KEY } from '../constants';
-// import { StatsGridPanelHandler } from './StatsGridPanelHandler';
+import { StatsgridPanelHandler } from './StatsgridPanelHandler';
 
 export class StatsgridPanel extends AbstractPublisherPanel {
     constructor (...args) {
         super(args);
-        this.id = 'statsgrid2';
+        this.id = 'statsgrid';
+        this.handlerImpl = StatsgridPanelHandler;
     }
 
     getLabel () {
