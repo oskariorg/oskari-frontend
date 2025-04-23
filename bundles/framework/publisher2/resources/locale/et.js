@@ -22,32 +22,34 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Koosta lõimkaart",
             "titleEdit": "Uuenda lõimkaart",
-            "domain": {
-                "title": "Lõimkaardi info ja seaded",
-                "label": "Veebilehe aadrss (ilma http ja www prefikisteta)",
-                "placeholder": "Veebilehe aadress",
-                "tooltip": "Kirjuta veebilehe aadress ilma prefikisteta või alamlehe aadress. Näiteks: koduleht.ee"
-            },
-            "name": {
-                "label": "Lõikaardi nimi(kohustuslik)",
-                "placeholder": "Lõimkaardi nimi",
-                "tooltip": "Kirjuta lõimkaardi nimi."
-            },
-            "language": {
-                "label": "Keel",
-                "options": {
-                    "fi": "Soome",
-                    "sv": "Rootsi",
-                    "en": "Inglise"
+            "generalInfo": {
+                "label": "Lõimkaardi info ja seaded",
+                "domain": {
+                    "label": "Veebilehe aadrss (ilma http ja www prefikisteta)",
+                    "placeholder": "Veebilehe aadress",
+                    "tooltip": "Kirjuta veebilehe aadress ilma prefikisteta või alamlehe aadress. Näiteks: koduleht.ee"
                 },
-                "tooltip": "Määra mis keeles lõimkaart on lõplikus versioonis. Lõimkaardi keel eelvaates ei avaldu.",
-                "languageChangedDisclaimer": "Oluline! Lõimkaardi keel eelvaates ei avaldu."
+                "name": {
+                    "label": "Lõikaardi nimi(kohustuslik)",
+                    "placeholder": "Lõimkaardi nimi",
+                    "tooltip": "Kirjuta lõimkaardi nimi."
+                },
+                "language": {
+                    "label": "Keel",
+                    "options": {
+                        "fi": "Soome",
+                        "sv": "Rootsi",
+                        "en": "Inglise"
+                    },
+                    "tooltip": "Määra mis keeles lõimkaart on lõplikus versioonis. Lõimkaardi keel eelvaates ei avaldu.",
+                    "languageChangedDisclaimer": "Oluline! Lõimkaardi keel eelvaates ei avaldu."
+                }
             },
-            "size": {
+            "mapPreview": {
                 "label": "Lõimkaardi suurus",
                 "tooltip": "Määra kaardi suurus"
             },
-            "maptools": {
+            "tools": {
                 "label": "Lõimkaardi osised",
                 "tooltip": "Selekteeri lõimkaardi osised. Objekt ilmub kaardiaknasse.",
                 "ScaleBarPlugin": "Joonmõõtkava",
@@ -91,7 +93,7 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Määra põhikihiks"
                 }
             },
-            "toollayout": {
+            "toolLayout": {
                 "label": "Tööriistade asukoht",
                 "tooltip": "Määra kaarditööriistade asukoht kaardiaknas",
                 "lefthanded": "Vasakukäeline",
@@ -100,7 +102,7 @@ Oskari.registerLocalization(
                 "usereditmode": "Alusta muutmist",
                 "usereditmodeoff": "Lõpeta muutmine"
             },
-            "data": {
+            "statsgrid": {
                 "label": "Teemakaardid",
                 "tooltip": "Näita teemakaarte kaardiaknas",
                 "grid": "Näita teemakaardide andmeid tabelis",

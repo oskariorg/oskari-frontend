@@ -1,14 +1,19 @@
+import React from 'react';
 import { controllerMixin } from 'oskari-ui/util';
 import { ToolPanelHandler } from './ToolPanelHandler';
 import { LAYERLIST_ID } from '../../../mapping/mapmodule/publisher/layers/MapLayerListTool';
+import { MapLayers } from '../view/MapLayers/MapLayers';
+
 class UIHandler extends ToolPanelHandler {
-    constructor (tools, sandbox) {
+    constructor (sandbox, tools) {
         // ToolPanelHandler adds tools to state so we can reference it here
-        super(tools);
+        super(sandbox, tools);
         this.sandbox = sandbox;
-        this.updateState({
+        this.setState({
             layers: [],
-            tools: []
+            baseLayers: [],
+            tools: [],
+            layerListPluginActive: false
         });
 
         this.eventHandlers = {
@@ -75,11 +80,11 @@ class UIHandler extends ToolPanelHandler {
     }
 
     getName () {
-        return 'Oskari.mapframework.bundle.publisher2.view.PanelMapLayers';
+        return 'Publisher2.PanelMapLayersHandler';
     }
 
     init (data) {
-        const hasTools = super.init(data);
+        super.init(data);
         this.updateSelectedLayers(true);
 
         for (const p in this.eventHandlers) {
@@ -87,8 +92,10 @@ class UIHandler extends ToolPanelHandler {
                 this.sandbox.registerForEventByName(this, p);
             }
         }
+    }
 
-        return hasTools;
+    getPanelContent () {
+        return <MapLayers {...this.getState()} controller={this.getController()}/>;
     }
 
     updateSelectedLayers (silent) {
@@ -123,11 +130,12 @@ class UIHandler extends ToolPanelHandler {
     notifyTools () {
         const { tools } = this.getState();
         tools.forEach(tool => {
+            const { handler } = tool.getComponent();
             try {
-                if (typeof tool.publisherTool.onLayersChanged === 'function') {
-                    tool.publisherTool.onLayersChanged();
-                } else if (typeof tool.handler?.onLayersChanged === 'function') {
-                    tool.handler.onLayersChanged();
+                if (typeof tool.onLayersChanged === 'function') {
+                    tool.onLayersChanged();
+                } else if (typeof handler?.onLayersChanged === 'function') {
+                    handler.onLayersChanged();
                 }
             } catch (e) {
                 Oskari.log('Publisher.PanelMapLayersHandler').warn('Error notifying tools about layer changes:', e);
@@ -151,8 +159,8 @@ class UIHandler extends ToolPanelHandler {
 
     getLayerListPlugin () {
         const { tools } = this.getState();
-        const layerListTool = tools.find(tool => tool.publisherTool.getTool().id === LAYERLIST_ID);
-        if (!layerListTool || !layerListTool.publisherTool.isEnabled()) {
+        const layerListTool = tools.find(tool => tool.getTool().id === LAYERLIST_ID);
+        if (!layerListTool || !layerListTool.isEnabled()) {
             return null;
         }
         return layerListTool;
@@ -169,16 +177,7 @@ class UIHandler extends ToolPanelHandler {
     }
 
     stop () {
-        const { tools } = this.getState();
-        tools.forEach(tool => {
-            try {
-                tool.publisherTool.stop();
-            } catch (e) {
-                Oskari.log('Publisher.PanelMapLayersHandler')
-                    .error('Error stopping publisher tool:', tool.getTool().id);
-            }
-        });
-
+        super.stop();
         for (const p in this.eventHandlers) {
             if (this.eventHandlers.hasOwnProperty(p)) {
                 this.sandbox.unregisterFromEventByName(this, p);

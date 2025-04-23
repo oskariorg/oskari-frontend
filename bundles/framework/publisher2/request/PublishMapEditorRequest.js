@@ -36,5 +36,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ['Oskari.mapframework.request.Request']
+        protocol: ['Oskari.mapframework.request.Request']
     });

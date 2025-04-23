@@ -141,6 +141,9 @@ Oskari.registerLocalization(
             "PanButtons": {
                 "toolLabel": "Инструмент панорамирования"
             },
+            "GetInfoPlugin": {
+                "toolLabel": "Инструмент запроса объектов"
+            },
             "IndexMapPlugin": {
                 "toolLabel": "Номенклатура карты"
             },
@@ -157,7 +160,10 @@ Oskari.registerLocalization(
                 "toolLabel": "Панорамирование мышью"
             },
             "PublisherToolbarPlugin": {
-                "toolLabel": "Инструмент карты"
+                "toolLabel": "Инструмент карты",
+                "history": "Перейти к предыдущему или следующему виду",
+                "measureline": "Измерить расстояние",
+                "measurearea": "Измерить площадь"
             }
         }
     }

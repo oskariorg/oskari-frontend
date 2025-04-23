@@ -173,6 +173,9 @@ Oskari.registerLocalization(
                     "showArrows": "Panoreringsverktyg"
                 }
             },
+            "GetInfoPlugin": {
+                "toolLabel": "Frågverktyg för visande av objektuppgifter"
+            },
             "IndexMapPlugin": {
                 "toolLabel": "Indexkarta"
             },
@@ -197,7 +200,10 @@ Oskari.registerLocalization(
                 "toolLabel": "Flytta kartvyn med musen"
             },
             "PublisherToolbarPlugin": {
-                "toolLabel": "Kartverktyg"
+                "toolLabel": "Kartverktyg",
+                "history": "Gå bakåt eller framåt",
+                "measureline": "Mät avstånd",
+                "measurearea": "Mät område"
             }
         }
     }

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Checkbox, Tooltip } from 'oskari-ui';
 
@@ -15,41 +16,66 @@ const ToolContainer = styled('div')`
     } 
 `;
 
-export const PublisherToolsList = ({ state, controller }) => {
+export const PublisherToolsList = ({ tools, controller }) => {
+    if (!tools.length) {
+        return null;
+    }
+    const group = tools[0].getGroup();
     return (
-        <Content>
-            {state.tools.map((tool) => (
-                <ToolContainer key={tool.id} className='t_tool' data-id={tool.id} data-enabled={tool.publisherTool.isEnabled()}>
-                    <ToolCheckbox tool={tool} controller={controller} />
-                    { tool.publisherTool.isEnabled() && tool.component &&
-                        <div className="t_options extraOptions">
-                            <tool.component
-                                state={tool.handler.getState()}
-                                controller={tool.handler.getController()} />
-                        </div>}
-                </ToolContainer>
-            ))}
+        <Content className={`t_tools t_${group}`}>
+            {tools.map((tool) => {
+                const { id } = tool.getTool();
+                return (
+                    <ToolContainer key={id} className='t_tool' data-id={id} data-enabled={tool.isEnabled()}>
+                        <ToolCheckbox tool={tool} controller={controller} />
+                        <ToolExtra tool={tool} />
+                    </ToolContainer>
+                );
+            })}
         </Content>
     );
 };
+PublisherToolsList.propTypes = {
+    tools: PropTypes.array.isRequired,
+    controller: PropTypes.object.isRequired
+};
 
-const ToolCheckbox = ({ tool, controller }) => {
-    if (tool.hideCheckbox) {
+const ToolExtra = ({ tool }) => {
+    const { handler, component: Node } = tool.getComponent();
+    if (!Node || !tool.isEnabled()) {
         return null;
     }
-    const toolClass = tool.publisherTool;
-    if (toolClass.isDisabled()) {
-        return (<Tooltip title={toolClass.getTool().disabledReason}>
+    return (
+        <div className="t_options extraOptions">
+            <Node state={handler.getState()} controller={handler?.getController()} />
+        </div>
+    );
+};
+ToolExtra.propTypes = {
+    tool: PropTypes.object.isRequired
+};
+
+const ToolCheckbox = ({ tool, controller }) => {
+    const { title, hideCheckbox, disabledReason } = tool.getTool();
+    if (hideCheckbox) {
+        return null;
+    }
+    if (tool.isDisabled()) {
+        return (<Tooltip title={disabledReason}>
             <Checkbox disabled={true} >
-                {tool.title}
+                {title}
             </Checkbox>
         </Tooltip>);
     }
     return (
         <Checkbox
-            checked={toolClass.isEnabled()}
-            onChange={(e) => controller.setToolEnabled(toolClass, e.target.checked)}
+            checked={tool.isEnabled()}
+            onChange={(e) => controller.setToolEnabled(tool, e.target.checked)}
         >
-            {tool.title}
+            {title}
         </Checkbox>);
+};
+ToolCheckbox.propTypes = {
+    tool: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
 };

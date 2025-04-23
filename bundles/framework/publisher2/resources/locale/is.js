@@ -26,65 +26,38 @@ Oskari.registerLocalization(
         "BasicView": {
             "title": "Búa til ívafið kort",
             "titleEdit": "Uppfæra ívafið kort",
-            "domain": {
-                "title": "Grunnstillingar",
-                "label": "Veffang (án http og www)",
-                "placeholder": "Veffang",
-                "tooltip": "Skrifaðu veffang URL án forskeyta eða undirsíðu. T.d.: heimasida.is."
-            },
-            "name": {
-                "label": "Nafn korts (áskilið)",
-                "placeholder": "Nafn korts",
-                "tooltip": "Skrifaðu nafn korts. Vinsamlegast athugaðu tungumálið sem er á kortinu."
-            },
-            "language": {
-                "label": "Tungumál",
-                "options": {
-                    "fi": "Íslenska",
-                    "sv": "NO is TRANSLATION",
-                    "en": "Enska"
+            "generalInfo": {
+                "label": "Grunnstillingar",
+                "domain": {
+                    "label": "Veffang (án http og www)",
+                    "placeholder": "Veffang",
+                    "tooltip": "Skrifaðu veffang URL án forskeyta eða undirsíðu. T.d.: heimasida.is."
                 },
-                "tooltip": "Veldu tungumál sem á að nota á lokaútgáfu kortsins. Það hefur áhrif á notandaviðmótið og textann á kortinu. Athugið að tungumálavalið er ekki sýnilegt við forskoðun.",
-                "languageChangedDisclaimer": "Athugið að tungumálavalið er ekki sýnilegt við forskoðun."
+                "name": {
+                    "label": "Nafn korts (áskilið)",
+                    "placeholder": "Nafn korts",
+                    "tooltip": "Skrifaðu nafn korts. Vinsamlegast athugaðu tungumálið sem er á kortinu."
+                },
+                "language": {
+                    "label": "Tungumál",
+                    "options": {
+                        "fi": "Íslenska",
+                        "sv": "NO is TRANSLATION",
+                        "en": "Enska"
+                    },
+                    "tooltip": "Veldu tungumál sem á að nota á lokaútgáfu kortsins. Það hefur áhrif á notandaviðmótið og textann á kortinu. Athugið að tungumálavalið er ekki sýnilegt við forskoðun.",
+                    "languageChangedDisclaimer": "Athugið að tungumálavalið er ekki sýnilegt við forskoðun."
+                }
             },
-            "size": {
+            "mapPreview": {
                 "label": "Stærð korts",
                 "tooltip": "Velja forskoðun."
             },
-            "maptools": {
+            "tools": {
                 "label": "Tól",
-                "tooltip": "Velja tiltæk kortatól. Athugaðu staðsetningu við forskoðun korts.",
-                "FeaturedataPlugin": "Fitjugögn",
-                "GetInfoPlugin": "Fyrirspurnatól fyrir fitjur",
-                "selectDrawLayer": "Velja kortalag",
-                "LayerSelectionPlugin": "Valmynd fyrir kortalög",
-                "FeedbackServiceTool": "",
-                "toolbarToolNames": {
-                    "history_back": "Færa í fyrri sýn",
-                    "history_forward": "Færa í næstu sýn",
-                    "measureline": "Mæla fjarlægð",
-                    "measurearea": "Mæla svæði",
-                    "drawTools": "Teiknitól",
-                    "point": "Bæta við eigin stöðum",
-                    "line": "Leyfa punktafitjur",
-                    "area": "Leyfa línufitjur"
-                },
-                "layers": {
-                    "add": "Leyfa flákafitjur",
-                    "label": "Kortalög",
-                    "addselect": "Bæta teiknilögum við kortalög",
-                    "defaultLayer": "(Sjálfgefið kortalag)",
-                    "useAsDefaultLayer": "Nota sem sjálfgefið"
-                },
-                "myplaces": {
-                    "label": "Mín kortalög"
-                },
-                "layerselection": {
-                    "info": "Velja bakgrunnskortalagið. Þú getur valið sjálfgefna bakgrunnskortalagið við forskoðun korts.",
-                    "selectAsBaselayer": "Velja sem grunnlag"
-                }
+                "tooltip": "Velja tiltæk kortatól. Athugaðu staðsetningu við forskoðun korts."
             },
-            "toollayout": {
+            "toolLayout": {
                 "label": "Staðsetning tóla",
                 "tooltip": "Velja staðsetningu fyrir kortatól.",
                 "lefthanded": "Örvhentur",
@@ -100,29 +73,6 @@ Oskari.registerLocalization(
             "layout": {
                 "label": "Grafískt útlit",
                 "fields": {
-                    "colours": {
-                        "label": "Litakerfi",
-                        "placeholder": "Litakerfi",
-                        "buttonLabel": "Velja",
-                        "light_grey": "Ljósgrár",
-                        "dark_grey": "Dökkgrár",
-                        "blue": "Blár",
-                        "red": "Rauður",
-                        "green": "Grænn",
-                        "yellow": "Gulur",
-                        "custom": "Litakerfið mitt",
-                        "customLabels": {
-                            "bgLabel": "Bakgrunnskennimerki",
-                            "titleLabel": "Textakennimerki",
-                            "headerLabel": "Örnefni",
-                            "iconLabel": "Merki",
-                            "iconCloseLabel": "Dökkur",
-                            "iconCloseWhiteLabel": "Ljós"
-                        }
-                    },
-                    "fonts": {
-                        "label": "Leturgerð"
-                    },
                     "toolStyles": {
                         "label": "Tólastíll",
                         "default": "Sjálfgefinn stíll",
@@ -132,16 +82,13 @@ Oskari.registerLocalization(
                         "sharp-light": "Hyrndur (ljós)",
                         "3d-dark": "Í þrívídd (dökkur)",
                         "3d-light": "Í þrívídd (ljós)"
-                    }
+                    },
+                    "font": "Leturgerð"
                 },
-                "popup": {
-                    "title": "Velja litakerfi",
-                    "close": "Loka",
-                    "gfiDialog": {
-                        "title": "Fitjuupplýsingar",
-                        "featureName": "Forskoðun",
-                        "featureDesc": "Valið litakerfi hefur áhrif á grafískt útlit upplýsingasprettiglugga fitju- og kortalags."
-                    }
+                "gfiDialog": {
+                    "title": "Fitjuupplýsingar",
+                    "featureName": "Forskoðun",
+                    "featureDesc": "Valið litakerfi hefur áhrif á grafískt útlit upplýsingasprettiglugga fitju- og kortalags."
                 }
             },
             "sizes": {
@@ -157,10 +104,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Vista",
                 "saveNew": "Vista nýtt kort",
-                "ok": "Í lagi",
-                "replace": "Uppfæra kort",
-                "cancel": "Hætta við",
-                "add": "Bæta við kortalagi"
+                "replace": "Uppfæra kort"
             },
             "confirm": {
                 "replace": {
@@ -168,16 +112,10 @@ Oskari.registerLocalization(
                     "msg": "Uppfærslur á kortinu sjást strax. Þú þarft ekki að uppfæra html kóðann á vefsíðunni."
                 }
             },
-            "layerselection": {
+            "layers": {
                 "label": "Kortalög",
-                "info": "Veldu kortalögin sem eiga að sjást á útgefna kortinu.",
-                "tooltip": "Bakgrunnslagið er sýnt í neðsta laginu á kortinu. Ef þú velur nokkur bakgrunnskort er einungis hægt að sjá eitt þeirra í einu. Notandi getur valið bakgrunnslag í notandaviðmótinu. Vinsamlegast veldu sjálfgefið bakgrunnskort í forskoðun kortsins.",
-                "promote": "Viltu líka sýna réttmyndir á kortinu?"
+                "selectAsBaselayer": "Velja sem grunnlag"
             },
-            "preview": "Forskoðun korts",
-            "location": "Staðsetning og þysjunarstig",
-            "zoomlevel": "Þysjunarstig",
-            "help": "Hjálp",
             "error": {
                 "title": "Villa",
                 "size": "Stærð kortsins er ekki í lagi. Breiddin þarf að vera a.m.k. 30 pixlar og hæðin a.m.k. 20 pixlar. Notaðu punkt sem tugatákn.",
@@ -206,25 +144,12 @@ Oskari.registerLocalization(
             "userDataLayerDisclaimer": "Athugaðu að ef þú ert að nota þetta kortalag í ívöfnu korti verður kortalagið gefið út.",
             "buttons": {
                 "continue": "Halda áfram",
-                "continueAndAccept": "Samþykkja og halda áfram",
-                "cancel": "Hætta við",
-                "close": "Loka"
+                "continueAndAccept": "Samþykkja og halda áfram"
             },
             "tou": {
                 "notfound": "Notandaskilmálar fundust ekki",
                 "reject": "Hafna",
                 "accept": "Samþykkja"
-            }
-        },
-        "layer": {
-            "show": "Sýna",
-            "hide": "Fela",
-            "hidden": "Kortalagið er falið tímabundið",
-            "rights": {
-                "can_be_published_map_user": {
-                    "label": "Útgefanlegt",
-                    "tooltip": "Kortalagið er útgefanlegt með í vöfnum kortum. Vikuleg notkun getur verið háð takmörkunum."
-                }
             }
         },
         "layerFilter": {

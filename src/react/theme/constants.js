@@ -8,3 +8,22 @@ export const DEFAULT_COLORS = {
     SLIDER_HOVER: '#003fc3'
 };
 export const DEFAULT_FONT = 'arial';
+
+export const FONTS = [
+    {
+        label: 'Arial (sans-serif)',
+        value: 'arial'
+    },
+    {
+        label: 'Georgia (serif)',
+        value: 'georgia'
+    },
+    {
+        label: 'Fantasy (sans-serif)',
+        value: 'fantasy'
+    },
+    {
+        label: 'Verdana (sans-serif)',
+        value: 'verdana'
+    }
+];

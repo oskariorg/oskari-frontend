@@ -3,20 +3,17 @@ import { Message } from 'oskari-ui';
 import { showInfoPopup } from './view/dialog/InfoPopup';
 import { showSnippetPopup } from './view/dialog/SnippetPopup';
 import { PublisherService } from './service/PublisherService';
+import { PublisherSidebar } from './view/PublisherSidebar';
+import { hasPublishRight } from './util/util';
 
 import './Flyout';
-import './view/PublisherSidebar';
 import './tools/AbstractPluginTool';
-import '../../mapping/mapmodule/publisher/tools';
-import './service/PublisherService';
 import './event/MapPublishedEvent';
 import './event/ToolEnabledChangedEvent';
-// FIXME: remove/ColourSchemeChangedEvent isn't sent anymore after theming support
-import './event/ColourSchemeChangedEvent';
 import './event/LayerToolsEditModeEvent';
 import './request/PublishMapEditorRequest';
 import './request/PublishMapEditorRequestHandler';
-import './resources/scss/style.scss';
+import '../../mapping/mapmodule/publisher/tools';
 
 /**
  * @class Oskari.mapframework.bundle.publisher2.PublisherBundleInstance
@@ -42,6 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         conf.flyoutClazz = 'Oskari.mapframework.bundle.publisher2.Flyout';
         this.defaultConf = conf;
         this.publisher = null;
+        this.service = null;
         this.customTileRef = null;
         this.loc = Oskari.getMsg.bind(null, 'Publisher2');
     }, {
@@ -70,12 +68,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             return handler.apply(this, [event]);
         },
         init: function () {
-            const tileElem = jQuery(this.getConfiguration().tileElement);
-            if (tileElem.length && tileElem.length !== 0) {
-                this.customTileRef = this.getConfiguration().tileElement;
-                this.conf.tileClazz = null;
-                this.customElementClickHandler(tileElem);
+            const { tileElement } = this.getConfiguration();
+            if (!tileElement) {
+                return;
             }
+            const tileRef = document.querySelector(tileElement);
+            if (!tileRef) {
+                return;
+            }
+            tileRef.addEventListener('click', () => this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'toggle']));
+            // remove default tile
+            this.conf.tileClazz = null;
+            this.customTileRef = tileRef;
         },
 
         /**
@@ -103,7 +107,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     this.snippet = null;
                 };
                 this.snippet = showSnippetPopup(view, onClose);
-                // TODO: handle in fetch??
                 this.setPublishMode(false);
             }
         },
@@ -112,12 +115,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          */
         afterStart: function () {
             const sandbox = this.getSandbox();
-            this.__service = new PublisherService(sandbox);
+            this.service = new PublisherService(this);
 
             // Let's add publishable filter to layerlist if user is logged in
             if (Oskari.user().isLoggedIn()) {
                 const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-                mapLayerService.registerLayerFilter('publishable', layer => layer.hasPermission('publish'));
+                mapLayerService.registerLayerFilter('publishable', hasPublishRight);
 
                 // Add layerlist filter button
                 const layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
@@ -133,105 +136,74 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 }
             }
 
-            let openingOnAppStart = false;
             // check from url parameters if publisher should be opened to edit some specific view.
             const uuid = Oskari.util.getRequestParam('editPublished');
-            let closeInfoDialog = () => {};
             if (uuid) {
                 // Create an info popup. Opening publisher might take a while since we have to wait for the map layers to load.
-                closeInfoDialog = this._showOpeningPublisherMsg();
-                // Create edit request handler callback
-                openingOnAppStart = true;
+                const infoDialogControls = this._showOpeningPublisherMsg();
                 // Send request on app start
                 Oskari.on('app.start', () => {
                     if (Oskari.user().isLoggedIn()) {
-                        this._sendEditRequest(uuid);
+                        const cb = data => this._openPublisherOnStart(infoDialogControls, data);
+                        this.getService().fetchAppSetup(uuid, cb);
                     } else {
-                        closeInfoDialog();
+                        infoDialogControls?.close();
                         this._showOpeningPublisherErrorMsg('login');
                     }
                 });
             }
             // create and register request handler
-            const reqHandler = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
-                this._openPublisherForEditingCbFactory(closeInfoDialog, openingOnAppStart)
-            );
+            const reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler', this);
             sandbox.requestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
             this._registerForGuidedTour();
         },
         /**
-         * @private @method _openPublisherForEditingCbFactory
-         * Factory function to create a callback function for PublishMapEditorRequestHandler.
-         * Callback function waits for required layers to load and opens the publisher.
-         * @return {function} callback for closing info dialog when callback finishes
-         * @return {Boolean} openingOnAppStart (optional)
-         * @return {function} callback function for PublishMapEditorRequestHandler
+         * @private @method _openPublisherOnStart
+         * Function waits for required layers to load and opens the publisher.
+         * @param {Object} infoDialogControls
+         * @param {Object} data to edit
          */
-        _openPublisherForEditingCbFactory: function (closeInfoDialog, openingOnAppStart) {
-            const me = this;
-            let layerCheckDone = false;
-            return function (data) {
-                if (!openingOnAppStart || layerCheckDone) {
-                    // open publisher
-                    me.setPublishMode(true, data);
+        _openPublisherOnStart: function (infoDialogControls, data) {
+            // Opening on startup
+            // Check that the data contains selected layers configuration
+            const selectedLayers = data?.configuration?.mapfull?.state?.selectedLayers || [];
+            const layerIds = selectedLayers.map(l => l.id);
+
+            if (!layerIds.length) {
+                infoDialogControls?.close();
+                this._showOpeningPublisherErrorMsg();
+                return;
+            }
+            const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            const timeoutInMillis = 1000; // one second;
+            const maxTries = 30;
+            let numTries = 0;
+
+            // Interval checks if layers have been loaded.
+            const intervalId = setInterval(() => {
+                // try until we get the layers...
+                if (mapLayerService.hasLayers(layerIds)) {
+                    infoDialogControls?.close();
+                    clearInterval(intervalId);
+                    this.setPublishMode(true, data);
                     return;
                 }
-                // Opening on startup
-                // Check that the data contains selected layers configuration
-                const selectedLayers = data?.configuration?.mapfull?.state?.selectedLayers || [];
-                // Perform layer check only once when opening the publisher on startup.
-                layerCheckDone = true;
+                numTries++;
 
-                if (!selectedLayers.length) {
-                    closeInfoDialog();
-                    me._showOpeningPublisherErrorMsg();
-                    return;
+                // ...or the max try count is reached
+                if (numTries === maxTries) {
+                    clearInterval(intervalId);
+                    infoDialogControls?.close();
+                    this._showOpeningPublisherErrorMsg();
                 }
-                const mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                const timeoutInMillis = 1000; // one second;
-                const maxTries = 30;
-                let numTries = 0;
-
-                // Interval checks if layers have been loaded.
-                const intervalId = setInterval(function () {
-                    const layerIds = selectedLayers.map(function (l) { return l.id; });
-                    const layersFound = mapLayerService.hasLayers(layerIds);
-
-                    // try until we get the layers...
-                    if (layersFound) {
-                        closeInfoDialog();
-                        clearInterval(intervalId);
-                        me.setPublishMode(true, data);
-                        return;
-                    }
-                    numTries++;
-
-                    // ...or the max try count is reached
-                    if (numTries === maxTries) {
-                        clearInterval(intervalId);
-                        closeInfoDialog();
-                        me._showOpeningPublisherErrorMsg();
-                    }
-                }, timeoutInMillis);
-            };
-        },
-        /**
-         * @private @method _sendEditRequest
-         * Sends Publisher.PublishMapEditorRequest with given uuid.
-         *
-         * @param uuid {String} Uuid for the view to edit.
-         */
-        _sendEditRequest: function (uuid) {
-            const requestBuilder = Oskari.requestBuilder('Publisher.PublishMapEditorRequest');
-            this.sandbox.request(this, requestBuilder({ uuid }));
+            }, timeoutInMillis);
         },
         /**
          * @return {Oskari.mapframework.bundle.publisher2.PublisherService} service for state holding
          */
         getService: function () {
-            return this.__service;
+            return this.service;
         },
         /**
          * @return {String} reference to element-id to use instead of tile as bundle ui-element, returns null if isn't set in conf
@@ -240,43 +212,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             return this.customTileRef;
         },
         /**
-         * @method customElementClickHandler
-         * @param {jQuery} tileElement
-         */
-        customElementClickHandler: function (tileElement) {
-            const me = this;
-            tileElement.on('click', function () {
-                me.getSandbox().postRequestByName(
-                    'userinterface.UpdateExtensionRequest', [me, 'toggle']
-                );
-            });
-        },
-        /**
          * @method setPublishMode
          * Transform the map view to publisher mode if parameter is true and back to normal if false.
          * Makes note about the map layers that the user cant publish, removes them for publish mode and
          * returns them when exiting the publish mode.
          *
          * @param {Boolean} blnEnabled true to enable, false to disable/return to normal mode
-         * @param {Object} data View data that is used to prepopulate publisher (optional)
-         * @param {Layer[]} deniedLayers layers that the user can't publish (optional)
+         * @param {Object} optData View data that is used to prepopulate publisher (optional)
          */
-        setPublishMode: function (blnEnabled, data, deniedLayers) {
-            const me = this;
-            const root = jQuery(Oskari.dom.getRootEl());
-            const navigation = root.find('nav');
-            navigation.css('display', blnEnabled ? 'none' : 'block');
-            const mapContainer = Oskari.dom.getMapContainerEl();
-            const extraClasses = ['mapPublishMode', Oskari.dom.APP_EMBEDDED_CLASS];
-            if (this.getCustomTileRef()) {
-                blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
+        setPublishMode: function (blnEnabled, optData) {
+            if (blnEnabled === this.getService().getIsActive()) {
+                return;
             }
-            if (blnEnabled) {
-                if (me.publisher) return;
-                data = data || this.getDefaultData();
-                me.getService().setIsActive(true);
 
-                if (data?.configuration && Object.keys(data.configuration)?.length > 0) {
+            if (blnEnabled) {
+                const data = optData || this.getDefaultData();
+                if (data.configuration && Object.keys(data.configuration)?.length > 0) {
                     // if there exists some configuration we're calling set state, which is calling UIChangeEvent under the hood.
                     const stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
                     this.getSandbox().request(this, stateRB(data.configuration));
@@ -285,46 +236,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     const eventBuilder = Oskari.eventBuilder('UIChangeEvent');
                     this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
                 }
-
-                if (data?.uuid) {
+                if (data.uuid) {
                     this._showEditNotification();
                 }
-
-                me.getService().setNonPublisherLayers(deniedLayers || this.getNonPublisherLayers());
-                me.getService().removeLayers();
-                me.oskariLang = Oskari.getLang();
-                extraClasses.forEach(cssClass => mapContainer.classList.add(cssClass));
-
-                // hide flyout
-                me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'hide']);
-
-                me.publisher = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.publisher2.view.PublisherSidebar',
-                    me,
-                    me.getLocalization('BasicView'),
-                    data
-                );
-
-                // call set enabled before rendering the panels (avoid duplicate "normal map plugins")
-                me.publisher.setEnabled(true);
-                const publisherDiv = jQuery('<div/>');
-                root.prepend(publisherDiv);
-                me.publisher.render(publisherDiv);
+                // stop & store plugins before creating publisher handlers
+                this.getService().setPublishModeImpl(true, data);
+                this.publisher = new PublisherSidebar(this);
+                this.publisher.setPublishModeImpl(true, data);
             } else {
-                Oskari.setLang(me.oskariLang);
-                if (me.publisher) {
-                    // reset tile status
-                    me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'close']);
-                    me.publisher.setEnabled(false);
-                    me.publisher.destroy();
-                    me.publisher = null;
-                }
-                // first return all needed plugins before adding the layers back
-                extraClasses.forEach(cssClass => mapContainer.classList.remove(cssClass));
-                me.getService().setIsActive(false);
-                // return the layers that were removed for publishing.
-                me.getService().addLayers();
-                me.getFlyout().close();
+                // stop publisher handlers before resuming removed plugins
+                this.publisher?.setPublishModeImpl(false);
+                this.publisher = null;
+                this.getService().setPublishModeImpl(false);
+            }
+            this.toggleClasses(blnEnabled);
+            this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
+        },
+
+        // own function for editing classes because it looks little hacky
+        toggleClasses: function (publishEnabled) {
+            const mapClasses = ['mapPublishMode', Oskari.dom.APP_EMBEDDED_CLASS];
+            const tileClass = 'activePublish';
+
+            const mapContainer = Oskari.dom.getMapContainerEl();
+            const customTile = this.getCustomTileRef();
+
+            if (publishEnabled) {
+                mapClasses.forEach(cssClass => mapContainer.classList.add(cssClass));
+                customTile?.classList.add(tileClass);
+            } else {
+                mapClasses.forEach(cssClass => mapContainer.classList.remove(cssClass));
+                customTile?.classList.remove(tileClass);
             }
         },
         /**
@@ -356,13 +298,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             const configuration = Oskari.util.deepClone(config, state);
             return { configuration };
         },
+        getAppSetupToPublish: function (validate) {
+            const { handler } = this.publisher || {};
+            if (validate && handler?.validate().length) {
+                return null;
+            }
+            return handler?.getAppSetupToPublish() || null;
+        },
         /**
          * @method _showEditNotification
          * Shows notification that the user starts editing an existing published map
          * @private
          */
         _showEditNotification: function () {
-            showInfoPopup('edit.popup.title', 'edit.popup.msg', { fadeout: true });
+            return showInfoPopup('edit.popup.title', 'edit.popup.msg', { fadeout: true });
         },
         /**
          * @private @method _showOpeningPublisherMsg
@@ -379,22 +328,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          */
         _showOpeningPublisherErrorMsg: function (errorKey) {
             const message = 'edit.popup.published.error.' + (errorKey || 'common');
-            showInfoPopup('edit.popup.published.error.title', message, { fadeout: true });
-        },
-
-        /**
-         * @method getNonPublisherLayers
-         * Checks currently selected layers and returns a subset of the list
-         * that has the layers that can't be published. If all selected
-         * layers can be published, returns an empty list.
-         * @return
-         * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-         * list of layers that can't be published.
-         */
-        getNonPublisherLayers: function () {
-            const map = this.sandbox.getMap();
-            const service = this.getService();
-            return map.getLayers().filter(layer => !service.hasPublishRight(layer) || !map.isLayerSupported(layer));
+            return showInfoPopup('edit.popup.published.error.title', message, { fadeout: true });
         },
         /**
          * @static

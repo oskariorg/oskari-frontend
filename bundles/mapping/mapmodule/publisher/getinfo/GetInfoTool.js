@@ -26,7 +26,7 @@ class GetInfoTool extends AbstractPublisherTool {
 
         return {
             id: GETINFO_TOOL_ID,
-            title: Oskari.getMsg('Publisher2', 'BasicView.maptools.GetInfoPlugin'),
+            title: Oskari.getMsg('MapModule', 'publisherTools.GetInfoPlugin.toolLabel'),
             config
         };
     }

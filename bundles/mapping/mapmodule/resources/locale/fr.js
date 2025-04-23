@@ -146,6 +146,9 @@ Oskari.registerLocalization(
             "PanButtons": {
                 "toolLabel": "Outil pour panoramiser"
             },
+            "GetInfoPlugin": {
+                "toolLabel": "Outil d'interrogation de fonctionnalité"
+            },
             "IndexMapPlugin": {
                 "toolLabel": "Carte-index"
             },
@@ -162,7 +165,10 @@ Oskari.registerLocalization(
                 "toolLabel": "Panoramiser avec la souris"
             },
             "PublisherToolbarPlugin": {
-                "toolLabel": "Outils cartographiques"
+                "toolLabel": "Outils cartographiques",
+                "history": "Passer à la vue précédente ou suivante",
+                "measureline": "Mesurer la distance",
+                "measurearea": "Mesurer l'aire"
             }
         }
     }

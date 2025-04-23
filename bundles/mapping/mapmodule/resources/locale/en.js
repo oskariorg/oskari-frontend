@@ -178,6 +178,9 @@ Oskari.registerLocalization(
                     "showArrows": "Pan tool"
                 }
             },
+            "GetInfoPlugin": {
+                "toolLabel": "Feature query tool"
+            },
             "IndexMapPlugin": {
                 "toolLabel": "Index map",
             },
@@ -202,7 +205,10 @@ Oskari.registerLocalization(
                 "toolLabel": "Pan by mouse"
             },
             "PublisherToolbarPlugin": {
-                "toolLabel": "Map tools"
+                "toolLabel": "Map tools",
+                "history": "Move to previous or next view",
+                "measureline": "Measure distance",
+                "measurearea": "Measure area"
             }
         }
     }

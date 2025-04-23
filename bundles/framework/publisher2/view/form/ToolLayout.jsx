@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Message } from 'oskari-ui';
 import { SwapOutlined, EditOutlined, EditFilled } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -11,22 +12,30 @@ const FieldWithInfo = styled('div')`
     justify-content: space-evenly;
     align-items: center;
 `;
-export const ToolLayout = ({ isEdit, onEditMode, onSwitch }) => {
+export const ToolLayout = ({ toolLayoutEditMode, controller }) => {
+    const onEditMode = isEdit => {
+        if (isEdit) {
+            controller.editToolLayoutOn();
+        } else {
+            // remove edit mode
+            controller.editToolLayoutOff();
+        }
+    };
     return (
         <FieldWithInfo>
-            <Button className='t_swap_sides' onClick={onSwitch}><SwapOutlined /> <Message messageKey='BasicView.toollayout.swapUI' /></Button>
-            <Button className='t_custom_placement' onClick={() => onEditMode(!isEdit)} danger={isEdit}><EditButtonContent isEdit={isEdit} /></Button>
+            <Button className='t_swap_sides' onClick={() => controller.switchControlSides()} icon={<SwapOutlined />}>
+                <Message messageKey='BasicView.toolLayout.swapUI' />
+            </Button>
+            <Button className='t_custom_placement' danger={toolLayoutEditMode}
+                onClick={() => onEditMode(!toolLayoutEditMode)}
+                icon={toolLayoutEditMode ? <EditFilled /> : <EditOutlined />}>
+                <Message messageKey={`BasicView.toolLayout.${toolLayoutEditMode ? 'usereditmodeoff' : 'userlayout'}`} />
+            </Button>
         </FieldWithInfo>
     );
 };
 
-const EditButtonContent = ({isEdit}) => {
-    if (isEdit) {
-        return (<React.Fragment>
-            <EditFilled /> <Message messageKey='BasicView.toollayout.usereditmodeoff' />
-        </React.Fragment>);
-    }
-    return (<React.Fragment>
-        <EditOutlined /> <Message messageKey='BasicView.toollayout.userlayout' />
-    </React.Fragment>);
+ToolLayout.propTypes = {
+    toolLayoutEditMode: PropTypes.bool.isRequired,
+    controller: PropTypes.object.isRequired
 };

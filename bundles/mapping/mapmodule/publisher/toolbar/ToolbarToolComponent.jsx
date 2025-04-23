@@ -15,13 +15,13 @@ export const ToolbarToolComponent = ({ state, controller }) => {
     const history = (history_back || history_forward);
     return <Col>
         <Checkbox checked={history} onChange={evt => controller.historySelectionChanged(evt.target.checked)}>
-            <Message bundleKey={'Publisher2'} messageKey={'BasicView.maptools.toolbarToolNames.history'}/>
+            <Message bundleKey={'MapModule'} messageKey={'publisherTools.PublisherToolbarPlugin.history'}/>
         </Checkbox>
         <Checkbox checked={measureline} onChange={evt => controller.selectionChanged('measureline', evt.target.checked)}>
-            <Message bundleKey={'Publisher2'} messageKey={'BasicView.maptools.toolbarToolNames.measureline'}/>
+            <Message bundleKey={'MapModule'} messageKey={'publisherTools.PublisherToolbarPlugin.measureline'}/>
         </Checkbox>
         <Checkbox checked={measurearea} onChange={evt => controller.selectionChanged('measurearea', evt.target.checked)}>
-            <Message bundleKey={'Publisher2'} messageKey={'BasicView.maptools.toolbarToolNames.measurearea'}/>
+            <Message bundleKey={'MapModule'} messageKey={'publisherTools.PublisherToolbarPlugin.measurearea'}/>
         </Checkbox>
     </Col>;
 };

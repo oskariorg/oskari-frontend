@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Message } from 'oskari-ui';
 import { PrimaryButton } from 'oskari-ui/components/buttons';
+import { BUNDLE_KEY } from '../../constants';
 
 const MessageContainer = styled('div')`
     margin: 1em;
@@ -19,10 +21,13 @@ const ButtonContainer = styled('div')`
 `;
 
 export const ValidationErrorMessage = ({ errors, closeCallback }) => {
-    const listItems = errors.map((err, index) => <li key={err.field + '_' + index}>{err.error}</li>);
     return <MessageContainer>
         <ErrorList>
-            {listItems}
+            { errors.map(({ error, field, args }) => (
+                <li key={field}>
+                    <Message bundleKey={BUNDLE_KEY} messageKey={error} messageArgs={args}/>
+                </li>
+            ))}
         </ErrorList>
         <ButtonContainer>
             <PrimaryButton type='close' onClick={closeCallback}/>

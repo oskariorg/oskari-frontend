@@ -2,8 +2,8 @@ import { controllerMixin } from 'oskari-ui/util';
 import { ToolPanelHandler } from './ToolPanelHandler';
 const STATSGRID_LAYER_ID = 'STATS_LAYER';
 class UIHandler extends ToolPanelHandler {
-    constructor (tools, sandbox, toggleStatsGridPanel) {
-        super(tools);
+    constructor (sandbox, tools) {
+        super(sandbox, tools);
         this.sandbox = sandbox;
         this.eventHandlers = {
             /**
@@ -11,8 +11,8 @@ class UIHandler extends ToolPanelHandler {
              * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
              */
             AfterMapLayerAddEvent: function (event) {
-                if (!!toggleStatsGridPanel && event.getMapLayer().getId() === STATSGRID_LAYER_ID) {
-                    toggleStatsGridPanel(true);
+                if (event.getMapLayer().getId() === STATSGRID_LAYER_ID) {
+                    this.setPanelVisibility(true);
                 }
             },
 
@@ -21,26 +21,19 @@ class UIHandler extends ToolPanelHandler {
              * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
              */
             AfterMapLayerRemoveEvent: function (event) {
-                if (!!toggleStatsGridPanel && event.getMapLayer().getId() === STATSGRID_LAYER_ID) {
-                    toggleStatsGridPanel(false);
+                if (event.getMapLayer().getId() === STATSGRID_LAYER_ID) {
+                    this.setPanelVisibility(false);
                 }
             }
 
         };
     }
 
-    initTools () {
-        const hasTools = super.init(this.data, true);
-        return hasTools;
-    }
-
     init (data) {
-        this.data = data;
+        super.init(data);
         Object.getOwnPropertyNames(this.eventHandlers).forEach((event) => {
             this.sandbox.registerForEventByName(this, event);
         });
-
-        return this.initTools();
     }
 
     stop () {
@@ -57,7 +50,7 @@ class UIHandler extends ToolPanelHandler {
     }
 
     getName () {
-        return 'Oskari.mapframework.bundle.publisher2.handler.StatsGridPanelHandler';
+        return 'StatsGridPanelHandler';
     }
 }
 
