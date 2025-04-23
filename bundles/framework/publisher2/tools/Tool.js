@@ -70,26 +70,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
 
         },
         /**
-        * Get extra options.
-        * @method getExtraOptions
-        * @public
-        *
-        * @returns {Object} jQuery element
-        */
-        getExtraOptions: function () {
-            return null;
-        },
-        /**
-        * Get name.
-        * @method getName
-        * @public
-        *
-        * @returns {String} tool name
-        */
-        getName: function () {
-
-        },
-        /**
         * Is displayed.
         * @method isDisplayed
         * @public
@@ -107,8 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
         * @returns {Integer} group id
         */
         getGroup: function () {
-            var me = this;
-            return me.__group;
+            return this.__group;
         },
         /**
         * Get index
@@ -118,8 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
         * @returns {Integer} index
         */
         getIndex: function () {
-            var me = this;
-            return me.__index;
+            return this.__index;
         },
         /**
         * Get allowed locations
@@ -129,8 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
         * @returns {Object} allowed locations array
         */
         getAllowedLocations: function () {
-            var me = this;
-            return me.__allowedLocations;
+            return this.__allowedLocations;
         },
         /**
         * Get values.
@@ -140,13 +117,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
         * @returns {Object} tool value object
         */
         getValues: function () {
-            var me = this;
-            var saveState = {
-                tool: me.getTool().id,
-                show: me.state.enabled,
+            return {
+                tool: this.getTool().id,
+                show: this.state.enabled,
                 subTools: []
             };
-            return saveState;
         },
         /**
         * Validate tool.
@@ -159,5 +134,5 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
             // or tool create validation
         }
     }, {
-        'protocol': ['Oskari.mapframework.publisher.Tool']
+        protocol: ['Oskari.mapframework.publisher.Tool']
     });
