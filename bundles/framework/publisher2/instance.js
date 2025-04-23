@@ -7,7 +7,6 @@ import { PublisherSidebar } from './view/PublisherSidebar';
 import { hasPublishRight } from './util/util';
 
 import './Flyout';
-import './tools/AbstractPluginTool';
 import './event/MapPublishedEvent';
 import './event/ToolEnabledChangedEvent';
 import './event/LayerToolsEditModeEvent';
