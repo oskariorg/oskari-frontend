@@ -6,13 +6,11 @@
 */
 
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
-    function (sandbox, mapmodule, localization) {
+    function (sandbox, mapmodule) {
         // sandbox
         this.__sandbox = sandbox;
         // mapmodule
         this.__mapmodule = mapmodule;
-        // localization
-        this.__loc = localization;
         // plugin
         this.__plugin = null;
         // log
