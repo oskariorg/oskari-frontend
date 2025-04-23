@@ -72,6 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
                     sandbox.registerForEventByName(me, p);
                 }
             }
+            Oskari.app.getTheming().addListener(theme => this.popupPlugin?.setColorSchemeFromTheme(theme.map));
 
             // register plugin for map (drawing for my places)
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -123,10 +124,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
          */
             MapClickedEvent: function (e) {
             },
-            'Publisher2.ColourSchemeChangedEvent': function (evt) {
-                this._handleColourSchemeChangedEvent(evt);
-            },
-            'AfterAddMarkerEvent': function (evt) {
+            AfterAddMarkerEvent: function (evt) {
                 if (evt.getID()) {
                     this.popupPlugin.markers[evt.getID()] = {
                         data: evt.getData(),
@@ -134,7 +132,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
                     };
                 }
             },
-            'AfterRemoveMarkersEvent': function (evt) {
+            AfterRemoveMarkersEvent: function (evt) {
                 if (evt.getId() && this.popupPlugin.markers[evt.getId()]) {
                     delete this.popupPlugin.markers[evt.getId()];
                     this.popupPlugin.close(this.popupPlugin.markerPopups[evt.getId()]);
@@ -146,10 +144,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
             MapSizeChangedEvent: function (evt) {
                 this.popupPlugin._handleMapSizeChanges(evt.getWidth(), evt.getHeight());
             }
-        },
-
-        _handleColourSchemeChangedEvent: function (evt) {
-            this.popupPlugin._changeColourScheme(evt.getColourScheme());
         },
         /**
      * @method stop
