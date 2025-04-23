@@ -7,6 +7,7 @@ export class AbstractStatsPluginTool extends AbstractPublisherTool {
     constructor (...args) {
         super(...args);
         this.group = 'statsgrid';
+        this.displayFromInitData = false;
     }
 
     getTool () {
@@ -75,15 +76,17 @@ export class AbstractStatsPluginTool extends AbstractPublisherTool {
      * @method isDisplayed Is displayed.
      * @returns {Boolean} true, if stats layer is on the map or data contains statsdrid conf
      */
-    isDisplayed (data) {
+    isDisplayed () {
         if (this._isStatsActive()) {
             return true;
         }
-        return !!data?.configuration?.statsgrid?.state;
+        // there might be timing issue when editing published stats map
+        return this.displayFromInitData;
     }
 
     getStatsgridConf (initialData) {
-        const conf = initialData?.configuration?.statsgrid?.conf || {};
+        const { conf = {}, state } = initialData?.configuration?.statsgrid || {};
+        this.displayFromInitData = !!state;
         // Setup the plugin location whenever any of the stats tools parse initial config.
         // There will be "too many calls" to this but it's not too bad and
         // we want the location always set or reset no matter which tool sets it
