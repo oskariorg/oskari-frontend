@@ -260,7 +260,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
             const mapContainer = Oskari.dom.getMapContainerEl();
             const customTile = this.getCustomTileRef();
-            const navElem = Oskari.dom.getRootEl().querySelector('nav');
 
             if (publishEnabled) {
                 mapClasses.forEach(cssClass => mapContainer.classList.add(cssClass));
@@ -268,9 +267,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             } else {
                 mapClasses.forEach(cssClass => mapContainer.classList.remove(cssClass));
                 customTile?.classList.remove(tileClass);
-            }
-            if (navElem) {
-                navElem.style.display = publishEnabled ? 'none' : 'block';
             }
         },
         /**
