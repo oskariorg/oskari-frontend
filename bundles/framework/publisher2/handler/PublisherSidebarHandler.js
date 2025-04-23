@@ -13,7 +13,6 @@ import { PanelMapLayersHandler } from '../handler/PanelMapLayersHandler';
 import { ToolPanelHandler } from '../handler/ToolPanelHandler';
 import { PanelLayoutHandler } from '../handler/PanelLayoutHandler';
 import { PanelToolLayoutHandler } from '../handler/PanelToolLayoutHandler';
-import { StatsGridPanelHandler } from '../handler/StatsGridPanelHandler';
 
 export const PANEL_GENERAL_INFO_ID = 'generalInfo';
 
@@ -25,7 +24,6 @@ const PANELS = [
     { id: 'mapPreview', HandlerImpl: PanelMapPreviewHandler, tooltipArgs: CUSTOM_MAP_SIZE_LIMITS },
     { id: 'layers', HandlerImpl: PanelMapLayersHandler },
     { id: 'tools', HandlerImpl: ToolPanelHandler },
-    { id: 'statsgrid', HandlerImpl: StatsGridPanelHandler },
     { id: 'layout', HandlerImpl: PanelLayoutHandler },
     { id: 'toolLayout', HandlerImpl: PanelToolLayoutHandler },
     { id: 'rpc', HandlerImpl: ToolPanelHandler }
