@@ -1,7 +1,7 @@
 export class AbstractPublisherTool {
     constructor (sandbox, mapmodule, localization = {}) {
-        // override to change group (tool panel is created for each unique group)
-        this.group = 'maptools';
+        // override to change group
+        this.group = 'tools';
         // index defines order in which the tools are listed on the group panel
         this.index = 0;
         // '*' means any, can be restricted to 'bottom left', 'bottom right' etc

@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
         };
     }, {
         // the panel group where tool is appended
-        group: 'maptools',
+        group: 'tools',
         // tool index in group, 0 is top
         index: 999,
         // allowed locations
