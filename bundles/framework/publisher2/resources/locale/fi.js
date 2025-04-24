@@ -193,6 +193,7 @@ Oskari.registerLocalization(
                 "continueAndAccept": "Hyväksy ehdot ja jatka"
             },
             "tou": {
+                "title": "Käyttöehdot",
                 "notfound": "Käyttöehtoja ei löytynyt.",
                 "reject": "Hylkää",
                 "accept": "Hyväksy"

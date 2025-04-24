@@ -160,6 +160,7 @@ Oskari.registerLocalization(
                 "continueAndAccept": "Принять и продолжить"
             },
             "tou": {
+                "title": "Условия использования",
                 "notfound": "Условия использования не могут быть найдены.",
                 "reject": "Отклонить",
                 "accept": "Принять"

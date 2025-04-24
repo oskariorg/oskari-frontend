@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
-        this.hasAcceptedTou = null;
+        this.hasAcceptedTou = Oskari.user().isLoggedIn() ? null : false;
     }, {
         /**
          * @method getName
@@ -48,18 +48,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
             });
         },
         setAcceptTou () {
-            this.instance.getSandbox().postRequestByName('Publisher.PublishMapEditorRequest');
+            this.instance.setPublishMode(true);
             this.instance.getService().markTouAccepted(response => {
                 this.hasAcceptedTou = response;
-            });
-        },
-        showTouPopup () {
-            this.instance.getService().getTouArticle(response => {
-                const content = response || {
-                    title: this.instance.loc('BasicView.error.title'),
-                    body: this.instance.loc('StartView.tou.notfound')
-                };
-                showTouPopup(content);
             });
         },
         getUrls: function () {
@@ -72,10 +63,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
         },
         getActions: function () {
             return {
-                close: () => this.instance.getFlyout().close(),
-                continue: () => this.instance.getSandbox().postRequestByName('Publisher.PublishMapEditorRequest'),
+                close: () => this.close(),
+                continue: () => this.instance.setPublishMode(true),
                 acceptTou: () => this.setAcceptTou(),
-                showTou: () => this.showTouPopup()
+                showTou: () => this.instance.getService().getTouArticle(content => showTouPopup(content))
             };
         },
         getLayers: function () {

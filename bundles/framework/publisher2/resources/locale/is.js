@@ -147,6 +147,7 @@ Oskari.registerLocalization(
                 "continueAndAccept": "Samþykkja og halda áfram"
             },
             "tou": {
+                "title": "Notandaskilmálar",
                 "notfound": "Notandaskilmálar fundust ekki",
                 "reject": "Hafna",
                 "accept": "Samþykkja"
