@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
             });
         },
         setAcceptTou () {
-            this.instance.getSandbox().postRequestByName('Publisher.PublishMapEditorRequest');
+            this.instance.setPublishMode(true);
             this.instance.getService().markTouAccepted(response => {
                 this.hasAcceptedTou = response;
             });
@@ -72,10 +72,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
         },
         getActions: function () {
             return {
-                close: () => this.instance.getFlyout().close(),
-                continue: () => this.instance.getSandbox().postRequestByName('Publisher.PublishMapEditorRequest'),
+                close: () => this.close(),
+                continue: () => this.instance.setPublishMode(true),
                 acceptTou: () => this.setAcceptTou(),
-                showTou: () => this.showTouPopup()
+                showTou: () => this.instance.getService().getTouArticle(content => showTouPopup(content))
             };
         },
         getLayers: function () {
