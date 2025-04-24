@@ -159,6 +159,7 @@ Oskari.registerLocalization(
                 "continueAndAccept": "Accepter et continuer"
             },
             "tou": {
+                "title": "Les conditions d'utilisation",
                 "notfound": "Impossible de trouver les conditions d'utilisation.",
                 "reject": "Refuser",
                 "accept": "Accepter"

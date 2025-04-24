@@ -191,6 +191,7 @@ Oskari.registerLocalization(
                 "continueAndAccept": "Godkänn användningsvillkor och fortsätt"
             },
             "tou": {
+                "title": "Användningsvillkoren",
                 "notfound": "Användningsvillkoren kunde inte hittas",
                 "reject": "Avvisa",
                 "accept": "Acceptera"
