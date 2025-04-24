@@ -7,13 +7,14 @@ module.exports = {
         '^oskari-ui(.*)$': '<rootDir>/src/react/$1',
         '^antd(.*?)style/index.js$': '<rootDir>/tests/jest/styleMock.js',
         '\\.(css|less)$': '<rootDir>/tests/jest/styleMock.js',
-        '^d3$': '<rootDir>/node_modules/d3/dist/d3.min.js'
+        '^d3$': '<rootDir>/node_modules/d3/dist/d3.min.js',
+        '^ol-mapbox-style$': '<rootDir>/node_modules/ol-mapbox-style/src/index.js'
     },
     fakeTimers: {
         enableGlobally: true
     },
     verbose: true,
     transformIgnorePatterns: [
-        'node_modules/(?!(ol|color-parse|color-space|color-rgba|color-name|antd|rc-util|jsts|geotiff|quick-lru)).+\\.js$'
+        'node_modules/(?!(ol|color-parse|color-space|color-rgba|color-name|antd|rc-util|jsts|geotiff|quick-lru|rbush|quickselect|pbf|mapbox-to-css-font)).+\\.js$'
     ]
 };
