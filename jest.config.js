@@ -15,6 +15,9 @@ module.exports = {
     },
     verbose: true,
     transformIgnorePatterns: [
+        // If tests crash due to a failing import ("Cannot use import outside of a module" or similar message) make sure you add the failing dependencies to transformIgnorePatterns.
+        // In case of a nested transitive dependency it might not be enough to add the one that is finally producing the error but the whole import tree.
+        // e.g. when dependency A imports dependency B we might need to add both A and B to be transpiled for the tests to work.
         'node_modules/(?!(ol|color-parse|color-space|color-rgba|color-name|antd|rc-util|jsts|geotiff|quick-lru|rbush|quickselect|pbf|mapbox-to-css-font)).+\\.js$'
     ]
 };
