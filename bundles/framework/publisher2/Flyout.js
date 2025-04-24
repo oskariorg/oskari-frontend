@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
-        this.hasAcceptedTou = null;
+        this.hasAcceptedTou = Oskari.user().isLoggedIn() ? null : false;
     }, {
         /**
          * @method getName
