@@ -1,6 +1,6 @@
-export const getMVTFeaturesInExtent = (source, extent, idPropName = 'id') => {
+export const getMVTFeaturesInExtent = (layer, extent, idPropName = 'id') => {
     const featuresById = new Map();
-    const features = source.getFeaturesInExtent(extent);
+    const features = layer.getFeaturesInExtent(extent);
     // map will only hold one feature/id so we get rid of duplicates
     features.forEach((feature) => {
         const id = feature.get(idPropName);
