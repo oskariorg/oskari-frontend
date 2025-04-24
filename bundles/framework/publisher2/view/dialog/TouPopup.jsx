@@ -13,13 +13,16 @@ const Content = styled.div`
 `;
 
 export const showTouPopup = (tou) => {
-    const { title, body } = tou || {};
+    const { title, body, dummy } = tou || {};
     // no need to update
-    const content = body
+    const content = body && !dummy
         ? <div dangerouslySetInnerHTML={{ __html: body }} />
         : <Message bundleKey={BUNDLE_KEY} messageKey='StartView.tou.notfound' />;
+    const popupTitle = title && !dummy
+        ? title
+        : <Message bundleKey={BUNDLE_KEY} messageKey='StartView.tou.title' />;
     showPopup(
-        title || <Message bundleKey={BUNDLE_KEY} messageKey='StartView.tou.title' />,
+        popupTitle,
         <Content>{content}</Content>,
         () => {},
         POPUP_OPTIONS
