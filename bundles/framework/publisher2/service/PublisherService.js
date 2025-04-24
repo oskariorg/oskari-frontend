@@ -47,13 +47,11 @@ export class PublisherService {
         const definedTools = [...Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool'),
             ...Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool')
         ];
-        // deprecated getTitle requires loc object
-        const locObj = this.instance.getLocalization('BasicView');
 
         const grouping = {};
         // group tools per tool-group
         definedTools.forEach(toolClazz => {
-            const tool = Oskari.clazz.create(toolClazz, sandbox, mapmodule, locObj);
+            const tool = Oskari.clazz.create(toolClazz, sandbox, mapmodule);
             const group = tool.getGroup();
             if (!grouping[group]) {
                 grouping[group] = [];

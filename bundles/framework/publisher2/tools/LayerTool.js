@@ -6,14 +6,12 @@
 */
 
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerTool',
-    function (sandbox, mapmodule, localization) {
+    function (sandbox, mapmodule) {
         this._log = Oskari.log('publisher.LayerTool');
         // sandbox
         this.__sandbox = sandbox;
         // mapmodule
         this.__mapmodule = mapmodule;
-        // localization
-        this.__loc = localization;
         // plugin
         this.__plugin = null;
     }, {
@@ -69,5 +67,5 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerTool',
             return null;
         }
     }, {
-        'protocol': ['Oskari.mapframework.publisher.LayerTool']
+        protocol: ['Oskari.mapframework.publisher.LayerTool']
     });
