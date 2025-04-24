@@ -83,11 +83,12 @@ class PublisherSidebarUIHandler extends StateHandler {
         const collapseItems = this.panels.map(({ id, label, tooltip, handler, tooltipArgs }) => {
             // extra panels have label and optionally tooltip, check them for PANELS from localization
             const info = tooltip || this.loc(`BasicView.${id}.tooltip`, tooltipArgs, null);
+            const Component = handler.getPanelComponent();
             return {
                 key: id,
                 label: label || this.loc(`BasicView.${id}.label`),
                 extra: info ? <InfoIcon title={info} /> : null,
-                children: handler.getPanelContent()
+                children: <Component {...handler.getState()} controller={handler.getController()} />
             };
         });
         const { uuid } = data;
@@ -100,7 +101,8 @@ class PublisherSidebarUIHandler extends StateHandler {
             this.log.error(`Couldn't find handler for: ${id} to update collapse items.`);
             return;
         }
-        const children = handler.getPanelContent();
+        const Component = handler.getPanelComponent();
+        const children = <Component {...handler.getState()} controller={handler.getController()} />;
         const collapseItems = this.getState().collapseItems
             .map(item => item.key === id ? { ...item, children } : item);
         this.updateState({ collapseItems });

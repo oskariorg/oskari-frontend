@@ -1,4 +1,3 @@
-import React from 'react';
 import { PublisherToolsList } from '../view/form/PublisherToolsList';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { mergeValues } from '../util/util';
@@ -36,13 +35,11 @@ class UIHandler extends StateHandler {
         this.updateState({ tools });
     }
 
-    getPanelContent () {
+    getPanelComponent () {
+        return PublisherToolsList;
+        // don't render empty panel (panel without component is filtered from collapse)
         const { tools } = this.getState();
-        if (!tools.length) {
-            // don't render empty panel (collapse without content/children is filtered)
-            return null;
-        }
-        return <PublisherToolsList tools={tools} controller={this.getController()}/>;
+        return tools.length ? PublisherToolsList : null;
     }
 
     setToolEnabled (tool, enabled) {

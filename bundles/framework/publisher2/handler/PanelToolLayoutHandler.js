@@ -1,4 +1,3 @@
-import React from 'react';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { ToolLayout } from '../view/form/ToolLayout';
 
@@ -36,8 +35,8 @@ class UIHandler extends StateHandler {
             .forEach(eventName => this.sandbox.registerForEventByName(this, eventName));
     }
 
-    getPanelContent () {
-        return <ToolLayout {...this.getState()} controller={this.getController()}/>;
+    getPanelComponent () {
+        return ToolLayout;
     }
 
     switchControlSides () {
