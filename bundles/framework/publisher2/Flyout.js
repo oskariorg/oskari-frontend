@@ -53,15 +53,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
                 this.hasAcceptedTou = response;
             });
         },
-        showTouPopup () {
-            this.instance.getService().getTouArticle(response => {
-                const content = response || {
-                    title: this.instance.loc('BasicView.error.title'),
-                    body: this.instance.loc('StartView.tou.notfound')
-                };
-                showTouPopup(content);
-            });
-        },
         getUrls: function () {
             const { termsOfUseUrl, loginUrl, registerUrl } = this.instance.conf || {};
             return {
