@@ -3,7 +3,7 @@ import { showModal } from 'oskari-ui/components/window';
 import { ValidationErrorMessage } from '../view/dialog/ValidationErrorMessage';
 import { ReplaceConfirmDialogContent } from '../view//dialog/ReplaceConfirmDialogContent';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { InfoIcon } from 'oskari-ui/components/icons';
+
 import { mergeValues } from '../util/util';
 import { BUNDLE_KEY } from '../constants';
 
@@ -35,14 +35,11 @@ class PublisherSidebarUIHandler extends StateHandler {
         this.log = Oskari.log('PublisherSidebarUIHandler');
         this.validationErrorMessageDialog = null;
         this.replaceConfirmDialog = null;
-        this.setState({
-            uuid: null,
-            collapseItems: []
-        });
         this.sandbox = instance.getSandbox();
         this.service = instance.getService();
         this.loc = instance.loc;
         this.panels = []; // [{ id, label, tooltip, handler }]
+        this.uuid = null;
     }
 
     getSandbox () {
@@ -50,13 +47,25 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     init (data) {
-        const toolGroups = this.service.createToolGroupings();
-        const extraPanels = this.service.createExtraPanels();
+        this.uuid = data.uuid;
 
+        const toolGroups = this.service.createToolGroupings();
         const getTools = groupId => groupId === 'toolLayout' ? Object.values(toolGroups).flat() : toolGroups[groupId];
-        this.panels = [...PANELS, ...extraPanels].map(({ id, HandlerImpl, ...rest }) => {
+
+        this.panels = PANELS.map(({ id, HandlerImpl, tooltipArgs }) => {
             const handler = new HandlerImpl(this.sandbox, getTools(id));
-            return { id, handler, ...rest };
+            const label = this.loc(`BasicView.${id}.label`);
+            const tooltip = this.loc(`BasicView.${id}.tooltip`, tooltipArgs, null);
+            return { id, label, tooltip, handler };
+        });
+        const reservedGroups = PANELS.map(panel => panel.id);
+        this.service.createExtraPanels().forEach(({ id, HandlerImpl, ...rest }) => {
+            if (reservedGroups.includes(id)) {
+                this.log.warn(`Panel for "${id}" already created. Skipping`);
+                return;
+            }
+            const handler = new HandlerImpl(this.sandbox, getTools(id));
+            this.panels.push({ id, handler, ...rest });
         });
 
         /* --- deprecated ---> */
@@ -77,35 +86,19 @@ class PublisherSidebarUIHandler extends StateHandler {
 
         this.panels.forEach(({ id, handler }) => {
             handler.init(data);
-            handler.addStateListener(() => this.updateCollapseItem(id));
+            handler.addStateListener(state => this.updateState({ [id]: state }));
+            // this.updateState({ [id]: handler.getState() });
         });
-
-        const collapseItems = this.panels.map(({ id, label, tooltip, handler, tooltipArgs }) => {
-            // extra panels have label and optionally tooltip, check them for PANELS from localization
-            const info = tooltip || this.loc(`BasicView.${id}.tooltip`, tooltipArgs, null);
-            const Component = handler.getPanelComponent();
-            return {
-                key: id,
-                label: label || this.loc(`BasicView.${id}.label`),
-                extra: info ? <InfoIcon title={info} /> : null,
-                children: <Component {...handler.getState()} controller={handler.getController()} />
-            };
-        });
-        const { uuid } = data;
-        this.updateState({ collapseItems, uuid });
+        const state = this.panels.reduce((state, panel) => ({ ...state, [panel.id]: panel.handler.getState() }), {});
+        this.updateState(state);
     }
 
-    updateCollapseItem (id) {
-        const { handler } = this.panels.find(p => p.id === id) || {};
-        if (!handler) {
-            this.log.error(`Couldn't find handler for: ${id} to update collapse items.`);
-            return;
-        }
-        const Component = handler.getPanelComponent();
-        const children = <Component {...handler.getState()} controller={handler.getController()} />;
-        const collapseItems = this.getState().collapseItems
-            .map(item => item.key === id ? { ...item, children } : item);
-        this.updateState({ collapseItems });
+    getPanels () {
+        return this.panels;
+    }
+
+    isEdit () {
+        return !!this.uuid;
     }
 
     getAppSetupToPublish () {
@@ -146,6 +139,7 @@ class PublisherSidebarUIHandler extends StateHandler {
     showValidationErrorMessage (errors = []) {
         const title = this.loc('BasicView.error.title');
         const onClose = () => this.closeValidationErrorMessage();
+        // TODO: move to jsx
         const content = <ValidationErrorMessage errors={errors} closeCallback={onClose}/>;
         this.validationErrorMessageDialog = showModal(title, content, onClose);
     };
@@ -164,6 +158,7 @@ class PublisherSidebarUIHandler extends StateHandler {
      */
     showReplaceConfirm () {
         const title = this.loc('BasicView.confirm.replace.title');
+        // TODO: move to jsx
         const content = <ReplaceConfirmDialogContent
             okCallback={() => {
                 this.publishMap(false);
@@ -187,8 +182,7 @@ class PublisherSidebarUIHandler extends StateHandler {
             this.showValidationErrorMessage(errors);
             return;
         }
-        const { uuid } = this.getState();
-        if (uuid && !asNew) {
+        if (this.uuid && !asNew) {
             this.showReplaceConfirm();
             return;
         }
@@ -197,13 +191,12 @@ class PublisherSidebarUIHandler extends StateHandler {
 
     publishMap (asNew) {
         const appSetup = this.getAppSetupToPublish();
-        const { uuid } = this.getState();
         const payload = {
             publishedFrom: Oskari.app.getUuid(),
             pubdata: JSON.stringify(appSetup)
         };
-        if (uuid && !asNew) {
-            payload.uuid = uuid;
+        if (this.uuid && !asNew) {
+            payload.uuid = this.uuid;
         }
 
         fetch(Oskari.urls.getRoute('AppSetup'), {
