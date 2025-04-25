@@ -7,7 +7,8 @@ class UIHandler extends StateHandler {
         super();
         this.allAvailableTools = Array.isArray(tools) ? tools.toSorted((a, b) => a.index - b.index) : [];
         this.setState({
-            tools: []
+            tools: [],
+            visible: false
         });
     }
 
@@ -26,20 +27,16 @@ class UIHandler extends StateHandler {
         // Note that handler is for extra component. Every tool doesn't have extra + handler
         // Trigger re-render if handlers state changes
         tools.forEach(tool => tool.getComponent().handler?.addStateListener(() => this.notify()));
-        this.updateState({ tools });
+        const visible = tools.length > 0;
+        this.updateState({ tools, visible });
     }
 
     setPanelVisibility (visible) {
-        // Remove tools from state to hide panel
-        const tools = visible ? this.allAvailableTools.filter(tool => tool.isDisplayed()) : [];
-        this.updateState({ tools });
+        this.updateState({ visible });
     }
 
     getPanelComponent () {
         return PublisherToolsList;
-        // don't render empty panel (panel without component is filtered from collapse)
-        const { tools } = this.getState();
-        return tools.length ? PublisherToolsList : null;
     }
 
     setToolEnabled (tool, enabled) {
@@ -50,6 +47,7 @@ class UIHandler extends StateHandler {
 
     getValues () {
         const { tools } = this.getState();
+        // TODO: !visible return {} ??
         let values = {};
         tools.forEach(tool => {
             values = mergeValues(values, tool.getValues());
