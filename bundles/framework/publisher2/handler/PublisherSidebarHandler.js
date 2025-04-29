@@ -1,7 +1,5 @@
-import React from 'react';
-import { showModal } from 'oskari-ui/components/window';
-import { ValidationErrorMessage } from '../view/dialog/ValidationErrorMessage';
-import { ReplaceConfirmDialogContent } from '../view//dialog/ReplaceConfirmDialogContent';
+import { showValidationErrorPopup } from '../view/dialog/ValidationErrorMessage';
+import { showReplacePopup } from '../view//dialog/ReplaceConfirmDialogContent';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 import { mergeValues } from '../util/util';
@@ -137,18 +135,11 @@ class PublisherSidebarUIHandler extends StateHandler {
      *
      */
     showValidationErrorMessage (errors = []) {
-        const title = this.loc('BasicView.error.title');
-        const onClose = () => this.closeValidationErrorMessage();
-        // TODO: move to jsx
-        const content = <ValidationErrorMessage errors={errors} closeCallback={onClose}/>;
-        this.validationErrorMessageDialog = showModal(title, content, onClose);
-    };
-
-    closeValidationErrorMessage () {
-        if (this.validationErrorMessageDialog) {
-            this.validationErrorMessageDialog.close();
-        }
-        this.validationErrorMessageDialog = null;
+        const onClose = () => {
+            this.validationErrorMessageDialog?.close();
+            this.validationErrorMessageDialog = null;
+        };
+        this.validationErrorMessageDialog = showValidationErrorPopup(errors, onClose);
     }
 
     /**
@@ -157,23 +148,15 @@ class PublisherSidebarUIHandler extends StateHandler {
      *
      */
     showReplaceConfirm () {
-        const title = this.loc('BasicView.confirm.replace.title');
-        // TODO: move to jsx
-        const content = <ReplaceConfirmDialogContent
-            okCallback={() => {
-                this.publishMap(false);
-                this.closeReplaceConfirm();
-            }}
-            closeCallback={() => this.closeReplaceConfirm()}/>;
-
-        this.replaceConfirmDialog = showModal(title, content);
-    }
-
-    closeReplaceConfirm () {
-        if (this.replaceConfirmDialog) {
-            this.replaceConfirmDialog.close();
-        }
-        this.replaceConfirmDialog = null;
+        const onClose = () => {
+            this.replaceConfirmDialog?.close();
+            this.replaceConfirmDialog = null;
+        };
+        const onConfirm = () => {
+            this.publishMap(false);
+            onClose();
+        };
+        this.replaceConfirmDialog = showReplacePopup(onConfirm, onClose);
     }
 
     save (asNew) {
