@@ -17,13 +17,14 @@ const ToolContainer = styled('div')`
 `;
 
 export const PublisherToolsList = ({ tools, controller }) => {
-    if (!tools.length) {
+    const visibleTools = tools.filter(tool => tool.isDisplayed());
+    if (!visibleTools.length) {
         return null;
     }
-    const group = tools[0].getGroup();
+    const group = visibleTools[0].getGroup();
     return (
         <Content className={`t_tools t_${group}`}>
-            {tools.map((tool) => {
+            {visibleTools.map((tool) => {
                 const { id } = tool.getTool();
                 return (
                     <ToolContainer key={id} className='t_tool' data-id={id} data-enabled={tool.isEnabled()}>

@@ -17,9 +17,7 @@ class UIHandler extends StateHandler {
         this.allAvailableTools.forEach((tool) => {
             try {
                 tool.init(data);
-                if (tool.isDisplayed()) {
-                    tools.push(tool);
-                }
+                tools.push(tool);
             } catch (err) {
                 Oskari.log('ToolPanelHandler').error('Error initializing publisher tool:', tool);
             }
@@ -27,7 +25,7 @@ class UIHandler extends StateHandler {
         // Note that handler is for extra component. Every tool doesn't have extra + handler
         // Trigger re-render if handlers state changes
         tools.forEach(tool => tool.getComponent().handler?.addStateListener(() => this.notify()));
-        const visible = tools.length > 0;
+        const visible = tools.some(tool => tool.isDisplayed());
         this.updateState({ tools, visible });
     }
 
