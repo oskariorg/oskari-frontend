@@ -32,7 +32,7 @@ class PublisherSidebar {
 
         const statesById = this.handler.getState();
         const controller = this.handler.getController();
-        const isEdit = this.handler.isEdit();
+        const isEdit = !!this.instance.getService().getUuid();
         const panels = this.handler.getPanels();
         const title = <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.${isEdit ? 'titleEdit' : 'title'}`} />;
         const onClose = () => this.cancel();

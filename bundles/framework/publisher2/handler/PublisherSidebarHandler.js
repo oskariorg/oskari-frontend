@@ -37,7 +37,6 @@ class PublisherSidebarUIHandler extends StateHandler {
         this.service = instance.getService();
         this.loc = instance.loc;
         this.panels = []; // [{ id, label, tooltip, handler }]
-        this.uuid = null;
     }
 
     getSandbox () {
@@ -45,8 +44,6 @@ class PublisherSidebarUIHandler extends StateHandler {
     }
 
     init (data) {
-        this.uuid = data.uuid;
-
         const toolGroups = this.service.createToolGroupings();
         const getTools = groupId => groupId === 'toolLayout' ? Object.values(toolGroups).flat() : toolGroups[groupId];
 
@@ -93,10 +90,6 @@ class PublisherSidebarUIHandler extends StateHandler {
 
     getPanels () {
         return this.panels;
-    }
-
-    isEdit () {
-        return !!this.uuid;
     }
 
     getAppSetupToPublish () {
@@ -165,7 +158,7 @@ class PublisherSidebarUIHandler extends StateHandler {
             this.showValidationErrorMessage(errors);
             return;
         }
-        if (this.uuid && !asNew) {
+        if (this.service.getUuid() && !asNew) {
             this.showReplaceConfirm();
             return;
         }
@@ -178,8 +171,9 @@ class PublisherSidebarUIHandler extends StateHandler {
             publishedFrom: Oskari.app.getUuid(),
             pubdata: JSON.stringify(appSetup)
         };
-        if (this.uuid && !asNew) {
-            payload.uuid = this.uuid;
+        const uuid = this.service.getUuid();
+        if (uuid && !asNew) {
+            payload.uuid = uuid;
         }
 
         fetch(Oskari.urls.getRoute('AppSetup'), {
