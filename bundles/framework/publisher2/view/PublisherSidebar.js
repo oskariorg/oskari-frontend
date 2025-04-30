@@ -36,17 +36,16 @@ class PublisherSidebar {
         const panels = this.handler.getPanels();
         const title = <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.${isEdit ? 'titleEdit' : 'title'}`} />;
         const onClose = () => this.cancel();
-        // TODO: don't spread state ??
         const controls = showSidePanel(
             title,
-            <PublisherPanel {...statesById} panels={panels} isEdit={isEdit} controller={controller} onClose={ onClose } />,
+            <PublisherPanel statesById={statesById} panels={panels} isEdit={isEdit} controller={controller} onClose={ onClose } />,
             onClose,
             PANEL_OPTIONS
         );
 
         this.panelControls = {
             ...controls,
-            update: statesById => controls.update(title, <PublisherPanel {...statesById} panels={panels} isEdit={isEdit} controller={controller} onClose={ onClose } />)
+            update: statesById => controls.update(title, <PublisherPanel statesById={statesById} panels={panels} isEdit={isEdit} controller={controller} onClose={ onClose } />)
         };
     }
 

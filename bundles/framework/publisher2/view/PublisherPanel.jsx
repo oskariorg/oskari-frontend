@@ -16,7 +16,7 @@ const Actions = styled(ButtonContainer)`
     padding-right: 15px;
 `;
 
-export const PublisherPanel = ({ panels, isEdit, controller, onClose, ...statesById }) => {
+export const PublisherPanel = ({ panels, statesById, isEdit, controller, onClose }) => {
     const items = panels
         .filter(({ id }) => statesById[id]?.visible !== false)
         .map(({ id, label, tooltip, handler }) => {
@@ -51,6 +51,7 @@ export const PublisherPanel = ({ panels, isEdit, controller, onClose, ...statesB
 
 PublisherPanel.propTypes = {
     panels: PropTypes.array.isRequired,
+    statesById: PropTypes.object.isRequired,
     isEdit: PropTypes.bool.isRequired,
     controller: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired
