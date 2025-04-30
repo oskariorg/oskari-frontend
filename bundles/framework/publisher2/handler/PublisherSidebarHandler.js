@@ -81,11 +81,9 @@ class PublisherSidebarUIHandler extends StateHandler {
 
         this.panels.forEach(({ id, handler }) => {
             handler.init(data);
+            this.updateState({ [id]: handler.getState() });
             handler.addStateListener(state => this.updateState({ [id]: state }));
-            // this.updateState({ [id]: handler.getState() });
         });
-        const state = this.panels.reduce((state, panel) => ({ ...state, [panel.id]: panel.handler.getState() }), {});
-        this.updateState(state);
     }
 
     getPanels () {
