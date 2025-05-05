@@ -341,9 +341,10 @@ export class MapModule extends AbstractMapModule {
      * To get feature properties at given mouse location on screen / div element.
      * @param  {Float} x
      * @param  {Float} y
+     * @param  {Boolean} isTouch
      * @return {Array} list containing objects with props `properties` and  `layerId`
      */
-    _getFeaturesAtPixelImpl (x, y) {
+    _getFeaturesAtPixelImpl (x, y, isTouch = false) {
         const hits = [];
         const addHit = (ftr, layer) => {
             hits.push({
@@ -353,7 +354,7 @@ export class MapModule extends AbstractMapModule {
             });
         };
         const opts = {};
-        if (Oskari.util.hasTouchScreen()) {
+        if (isTouch) {
             // Hit-detection tolerance in css pixels.
             // Pixels inside the radius around the given position will be checked for features.
             // https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html#forEachFeatureAtPixel
@@ -366,7 +367,7 @@ export class MapModule extends AbstractMapModule {
                 return;
             }
             addHit(feature, layer);
-        });
+        }, opts);
         return hits;
     }
 

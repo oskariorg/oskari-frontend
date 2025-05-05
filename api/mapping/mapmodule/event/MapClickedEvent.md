@@ -71,7 +71,8 @@ Returns object including all the parameters, for example:
     lat: this._lonlat ? this._lonlat.lat : null,
     x: this._mouseX,
     y: this._mouseY,
-    ctrlKeyDown: this._ctrlKeyDown
+    ctrlKeyDown: this._ctrlKeyDown,
+    isTouch: this._isTouchEvent
 };
 </code>
 </pre>
