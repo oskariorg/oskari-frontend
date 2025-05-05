@@ -26,6 +26,9 @@ Event is used to nofify user about the map click. Event includes information abo
 <tr>
   <td> \* ctrlKeyDown </td><td> Boolean </td><td> True if Ctrl key was pressed </td><td> </td>
 </tr>
+<tr>
+  <td> \* isTouch </td><td> Boolean </td><td> True if the click was triggered by touch event </td><td> </td>
+</tr>
 </table>
 
 ## RPC
@@ -39,7 +42,8 @@ Event occurs when map is clicked.
   "lat": 6821888,
   "x": 312,
   "y": 236,
-  "ctrlKeyDown": false
+  "ctrlKeyDown": false,
+  "isTouch": false
 }
 </code>
 </pre>

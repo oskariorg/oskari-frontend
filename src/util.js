@@ -544,6 +544,9 @@ Oskari.util = (function () {
         }
         return isMobileDevice || util.isSmallScreen();
     };
+    util.hasTouchScreen = function () {
+        return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    };
     /**
      *
      * Sanitizes input and returns a string containing the sanitized content that can be injected to document and shown to user.
