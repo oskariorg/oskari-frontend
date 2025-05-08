@@ -937,9 +937,9 @@ Oskari.clazz.define(
          * @param  {Float} y
          * @return {Array} list containing objects with props `properties` and  `layerId`
          */
-        getFeaturesAtPixel (x, y) {
+        getFeaturesAtPixel (x, y, isTouch = false) {
             if (typeof this._getFeaturesAtPixelImpl === 'function') {
-                return this._getFeaturesAtPixelImpl(x, y);
+                return this._getFeaturesAtPixelImpl(x, y, isTouch);
             }
             throw new Error('Not implemented _getFeaturesAtPixelImpl function.');
         },

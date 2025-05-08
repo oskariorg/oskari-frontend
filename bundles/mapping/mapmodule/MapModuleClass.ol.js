@@ -205,13 +205,14 @@ export class MapModule extends AbstractMapModule {
                 //   clicked (since infobox was removed from that spot on the previous step) triggering a new MapClickedEvent and opening another infobox
                 return;
             }
-
-            var CtrlPressed = evt.originalEvent.ctrlKey;
-            var lonlat = {
+            // pointerType can be mouse or touch
+            const isTouchEvent = evt.originalEvent.pointerType === 'touch';
+            const CtrlPressed = evt.originalEvent.ctrlKey;
+            const lonlat = {
                 lon: evt.coordinate[0],
                 lat: evt.coordinate[1]
             };
-            var mapClickedEvent = Oskari.eventBuilder('MapClickedEvent')(lonlat, evt.pixel[0], evt.pixel[1], CtrlPressed);
+            const mapClickedEvent = Oskari.eventBuilder('MapClickedEvent')(lonlat, evt.pixel[0], evt.pixel[1], CtrlPressed, isTouchEvent);
             sandbox.notifyAll(mapClickedEvent);
         });
         map.on('dblclick', function () {
@@ -340,9 +341,10 @@ export class MapModule extends AbstractMapModule {
      * To get feature properties at given mouse location on screen / div element.
      * @param  {Float} x
      * @param  {Float} y
+     * @param  {Boolean} isTouch
      * @return {Array} list containing objects with props `properties` and  `layerId`
      */
-    _getFeaturesAtPixelImpl (x, y) {
+    _getFeaturesAtPixelImpl (x, y, isTouch = false) {
         const hits = [];
         const addHit = (ftr, layer) => {
             hits.push({
@@ -351,6 +353,13 @@ export class MapModule extends AbstractMapModule {
                 layerId: layer.get(LAYER_ID)
             });
         };
+        const opts = {};
+        if (isTouch) {
+            // Hit-detection tolerance in css pixels.
+            // Pixels inside the radius around the given position will be checked for features.
+            // https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html#forEachFeatureAtPixel
+            opts.hitTolerance = 10;
+        }
         this.getMap().forEachFeatureAtPixel([x, y], (feature, layer) => {
             // Cluster source
             if (feature && feature.get('features')) {
@@ -358,9 +367,10 @@ export class MapModule extends AbstractMapModule {
                 return;
             }
             addHit(feature, layer);
-        });
+        }, opts);
         return hits;
     }
+
     _forEachFeatureAtPixelImpl (pixel, callback) {
         this.getMap().forEachFeatureAtPixel(pixel, callback);
     }

@@ -9,7 +9,13 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
-## 3.1.0 [rem] Removed `Publisher2.ColourSchemeChangedEvent`
+## 3.1.0
+
+### [add] Added touch flag for `MapClickedEvent`
+
+Added a flag to signal if the "click" was triggered by a touch event. Can be used to adjust hit tolerance for selecting features or similar.
+
+### [rem] Removed `Publisher2.ColourSchemeChangedEvent`
 
 Not used after components have been migrated to use theming instead. Same can be achieved by listening to theme changes with:
 - `ThemeProvider` / `ThemeConsumer` in React components or

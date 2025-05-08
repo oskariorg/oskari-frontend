@@ -18,7 +18,7 @@ export class ReqEventHandler {
                 if (!me.isClickResponsive) {
                     return;
                 }
-                const hits = plugin.getMapModule().getFeaturesAtPixel(event.getMouseX(), event.getMouseY());
+                const hits = plugin.getMapModule().getFeaturesAtPixel(event.getMouseX(), event.getMouseY(), event.isTouchEvent());
                 const keepPrevious = event.getParams().ctrlKeyDown;
                 const modifySelectionOpts = {};
                 const getSelectionOptsForLayer = layer => {

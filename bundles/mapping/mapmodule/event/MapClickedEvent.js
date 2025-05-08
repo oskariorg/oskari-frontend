@@ -13,11 +13,12 @@ Oskari.clazz.define(
      * @param {Number} mouseY viewport mouse position y coordinate when click happened
      * @param {Boolean} ctrlKeyDown
      */
-    function (lonlat, mouseX, mouseY, ctrlKeyDown) {
+    function (lonlat, mouseX, mouseY, ctrlKeyDown, isTouch) {
         this._lonlat = lonlat;
         this._mouseX = mouseX;
         this._mouseY = mouseY;
-        this._ctrlKeyDown = ctrlKeyDown;
+        this._ctrlKeyDown = !!ctrlKeyDown;
+        this._isTouchEvent = !!isTouch;
     }, {
         /** @static @property __name event name */
         __name: 'MapClickedEvent',
@@ -49,6 +50,13 @@ Oskari.clazz.define(
         getMouseY: function () {
             return this._mouseY;
         },
+        /**
+         * @method isTouchEvent
+         * @return {Boolean}
+         */
+        isTouchEvent: function () {
+            return this._isTouchEvent;
+        },
 
         getParams: function () {
             return {
@@ -56,7 +64,8 @@ Oskari.clazz.define(
                 lat: this._lonlat ? this._lonlat.lat : null,
                 x: this._mouseX,
                 y: this._mouseY,
-                ctrlKeyDown: this._ctrlKeyDown
+                ctrlKeyDown: this._ctrlKeyDown,
+                isTouch: this._isTouchEvent
             };
         }
     }, {
