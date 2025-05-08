@@ -1,9 +1,7 @@
-import React from 'react';
-import { showModal } from 'oskari-ui/components/window';
-import { ValidationErrorMessage } from '../view/dialog/ValidationErrorMessage';
-import { ReplaceConfirmDialogContent } from '../view//dialog/ReplaceConfirmDialogContent';
+import { showValidationErrorPopup } from '../view/dialog/ValidationErrorMessage';
+import { showReplacePopup } from '../view//dialog/ReplaceConfirmDialogContent';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { InfoIcon } from 'oskari-ui/components/icons';
+
 import { mergeValues } from '../util/util';
 import { BUNDLE_KEY } from '../constants';
 
@@ -35,10 +33,6 @@ class PublisherSidebarUIHandler extends StateHandler {
         this.log = Oskari.log('PublisherSidebarUIHandler');
         this.validationErrorMessageDialog = null;
         this.replaceConfirmDialog = null;
-        this.setState({
-            uuid: null,
-            collapseItems: []
-        });
         this.sandbox = instance.getSandbox();
         this.service = instance.getService();
         this.loc = instance.loc;
@@ -51,12 +45,22 @@ class PublisherSidebarUIHandler extends StateHandler {
 
     init (data) {
         const toolGroups = this.service.createToolGroupings();
-        const extraPanels = this.service.createExtraPanels();
-
         const getTools = groupId => groupId === 'toolLayout' ? Object.values(toolGroups).flat() : toolGroups[groupId];
-        this.panels = [...PANELS, ...extraPanels].map(({ id, HandlerImpl, ...rest }) => {
+
+        this.panels = PANELS.map(({ id, HandlerImpl, tooltipArgs }) => {
             const handler = new HandlerImpl(this.sandbox, getTools(id));
-            return { id, handler, ...rest };
+            const label = this.loc(`BasicView.${id}.label`);
+            const tooltip = this.loc(`BasicView.${id}.tooltip`, tooltipArgs, null);
+            return { id, label, tooltip, handler };
+        });
+        const reservedGroups = PANELS.map(panel => panel.id);
+        this.service.createExtraPanels().forEach(({ id, HandlerImpl, ...rest }) => {
+            if (reservedGroups.includes(id)) {
+                this.log.warn(`Panel for "${id}" already created. Skipping`);
+                return;
+            }
+            const handler = new HandlerImpl(this.sandbox, getTools(id));
+            this.panels.push({ id, handler, ...rest });
         });
 
         /* --- deprecated ---> */
@@ -77,33 +81,13 @@ class PublisherSidebarUIHandler extends StateHandler {
 
         this.panels.forEach(({ id, handler }) => {
             handler.init(data);
-            handler.addStateListener(() => this.updateCollapseItem(id));
+            this.updateState({ [id]: handler.getState() });
+            handler.addStateListener(state => this.updateState({ [id]: state }));
         });
-
-        const collapseItems = this.panels.map(({ id, label, tooltip, handler, tooltipArgs }) => {
-            // extra panels have label and optionally tooltip, check them for PANELS from localization
-            const info = tooltip || this.loc(`BasicView.${id}.tooltip`, tooltipArgs, null);
-            return {
-                key: id,
-                label: label || this.loc(`BasicView.${id}.label`),
-                extra: info ? <InfoIcon title={info} /> : null,
-                children: handler.getPanelContent()
-            };
-        });
-        const { uuid } = data;
-        this.updateState({ collapseItems, uuid });
     }
 
-    updateCollapseItem (id) {
-        const { handler } = this.panels.find(p => p.id === id) || {};
-        if (!handler) {
-            this.log.error(`Couldn't find handler for: ${id} to update collapse items.`);
-            return;
-        }
-        const children = handler.getPanelContent();
-        const collapseItems = this.getState().collapseItems
-            .map(item => item.key === id ? { ...item, children } : item);
-        this.updateState({ collapseItems });
+    getPanels () {
+        return this.panels;
     }
 
     getAppSetupToPublish () {
@@ -142,17 +126,11 @@ class PublisherSidebarUIHandler extends StateHandler {
      *
      */
     showValidationErrorMessage (errors = []) {
-        const title = this.loc('BasicView.error.title');
-        const onClose = () => this.closeValidationErrorMessage();
-        const content = <ValidationErrorMessage errors={errors} closeCallback={onClose}/>;
-        this.validationErrorMessageDialog = showModal(title, content, onClose);
-    };
-
-    closeValidationErrorMessage () {
-        if (this.validationErrorMessageDialog) {
-            this.validationErrorMessageDialog.close();
-        }
-        this.validationErrorMessageDialog = null;
+        const onClose = () => {
+            this.validationErrorMessageDialog?.close();
+            this.validationErrorMessageDialog = null;
+        };
+        this.validationErrorMessageDialog = showValidationErrorPopup(errors, onClose);
     }
 
     /**
@@ -161,22 +139,15 @@ class PublisherSidebarUIHandler extends StateHandler {
      *
      */
     showReplaceConfirm () {
-        const title = this.loc('BasicView.confirm.replace.title');
-        const content = <ReplaceConfirmDialogContent
-            okCallback={() => {
-                this.publishMap(false);
-                this.closeReplaceConfirm();
-            }}
-            closeCallback={() => this.closeReplaceConfirm()}/>;
-
-        this.replaceConfirmDialog = showModal(title, content);
-    }
-
-    closeReplaceConfirm () {
-        if (this.replaceConfirmDialog) {
-            this.replaceConfirmDialog.close();
-        }
-        this.replaceConfirmDialog = null;
+        const onClose = () => {
+            this.replaceConfirmDialog?.close();
+            this.replaceConfirmDialog = null;
+        };
+        const onConfirm = () => {
+            this.publishMap(false);
+            onClose();
+        };
+        this.replaceConfirmDialog = showReplacePopup(onConfirm, onClose);
     }
 
     save (asNew) {
@@ -185,8 +156,7 @@ class PublisherSidebarUIHandler extends StateHandler {
             this.showValidationErrorMessage(errors);
             return;
         }
-        const { uuid } = this.getState();
-        if (uuid && !asNew) {
+        if (this.service.getUuid() && !asNew) {
             this.showReplaceConfirm();
             return;
         }
@@ -195,11 +165,11 @@ class PublisherSidebarUIHandler extends StateHandler {
 
     publishMap (asNew) {
         const appSetup = this.getAppSetupToPublish();
-        const { uuid } = this.getState();
         const payload = {
             publishedFrom: Oskari.app.getUuid(),
             pubdata: JSON.stringify(appSetup)
         };
+        const uuid = this.service.getUuid();
         if (uuid && !asNew) {
             payload.uuid = uuid;
         }

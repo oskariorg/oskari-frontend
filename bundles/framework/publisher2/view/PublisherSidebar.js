@@ -30,21 +30,22 @@ class PublisherSidebar {
             return;
         }
 
-        const state = this.handler.getState();
+        const statesById = this.handler.getState();
         const controller = this.handler.getController();
-        const title = <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.${state.uuid ? 'titleEdit' : 'title'}`} />;
+        const isEdit = !!this.instance.getService().getUuid();
+        const panels = this.handler.getPanels();
+        const title = <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.${isEdit ? 'titleEdit' : 'title'}`} />;
         const onClose = () => this.cancel();
-
         const controls = showSidePanel(
             title,
-            <PublisherPanel {...state} controller={controller} onClose={ onClose } />,
+            <PublisherPanel statesById={statesById} panels={panels} isEdit={isEdit} controller={controller} onClose={ onClose } />,
             onClose,
             PANEL_OPTIONS
         );
 
         this.panelControls = {
             ...controls,
-            update: state => controls.update(title, <PublisherPanel {...state} controller={controller} onClose={ onClose } />)
+            update: statesById => controls.update(title, <PublisherPanel statesById={statesById} panels={panels} isEdit={isEdit} controller={controller} onClose={ onClose } />)
         };
     }
 

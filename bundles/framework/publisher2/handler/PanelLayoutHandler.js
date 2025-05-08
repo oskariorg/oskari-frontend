@@ -1,4 +1,3 @@
-import React from 'react';
 import { LayoutForm } from '../view/form/LayoutForm';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { getDefaultMapTheme } from '../../..//mapping/mapmodule/util/MapThemeHelper.js';
@@ -56,6 +55,7 @@ class UIHandler extends StateHandler {
         const { map = {} } = Oskari.app.getTheming().getTheme();
         this.setState({
             mapTheme: map,
+            presets: this.getPresetOptions(),
             infoBoxPreviewVisible: false
         });
         this.eventHandlers = {
@@ -96,8 +96,8 @@ class UIHandler extends StateHandler {
         this.syncTheme();
     }
 
-    getPanelContent () {
-        return <LayoutForm {...this.getState()} presets={this.getPresetOptions()} controller={this.getController()}/>;
+    getPanelComponent () {
+        return LayoutForm;
     }
 
     getPresetOptions () {

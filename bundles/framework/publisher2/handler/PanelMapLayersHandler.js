@@ -1,4 +1,3 @@
-import React from 'react';
 import { controllerMixin } from 'oskari-ui/util';
 import { ToolPanelHandler } from './ToolPanelHandler';
 import { LAYERLIST_ID } from '../../../mapping/mapmodule/publisher/layers/MapLayerListTool';
@@ -94,8 +93,8 @@ class UIHandler extends ToolPanelHandler {
         }
     }
 
-    getPanelContent () {
-        return <MapLayers {...this.getState()} controller={this.getController()}/>;
+    getPanelComponent () {
+        return MapLayers;
     }
 
     updateSelectedLayers (silent) {

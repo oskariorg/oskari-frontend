@@ -1,4 +1,3 @@
-import React from 'react';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { MapPreviewForm } from '../view/form/MapPreviewForm';
 
@@ -54,8 +53,8 @@ class UIHandler extends StateHandler {
         this.setPreview(preview);
     }
 
-    getPanelContent () {
-        return <MapPreviewForm {...this.getState()} controller={this.getController()}/>;
+    getPanelComponent () {
+        return MapPreviewForm;
     }
 
     setPreview (preview) {

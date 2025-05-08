@@ -1,4 +1,3 @@
-import React from 'react';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { GeneralInfoForm } from '../view/form/GeneralInfoForm';
 
@@ -17,8 +16,8 @@ class UIHandler extends StateHandler {
         this.updateState({ name, domain, language });
     }
 
-    getPanelContent () {
-        return <GeneralInfoForm {...this.getState()} controller={this.getController()}/>;
+    getPanelComponent () {
+        return GeneralInfoForm;
     }
 
     getValues () {

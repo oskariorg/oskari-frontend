@@ -10,6 +10,7 @@ export class PublisherService {
         this.isActive = false;
         this.storedLayers = [];
         this.storedPlugins = [];
+        this.uuid = null;
     }
 
     getName () {
@@ -80,9 +81,11 @@ export class PublisherService {
         if (isActive) {
             this.removeLayers();
             this.removePlugins();
+            this.uuid = data?.uuid;
         } else {
             this.addStoredLayers();
             this.addStoredPlugins();
+            this.uuid = null;
         }
     }
 
@@ -93,6 +96,10 @@ export class PublisherService {
      */
     getIsActive () {
         return this.isActive;
+    }
+
+    getUuid () {
+        return this.uuid;
     }
 
     /**

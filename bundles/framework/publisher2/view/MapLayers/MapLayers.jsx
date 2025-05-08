@@ -39,7 +39,7 @@ export const MapLayers = ({ layers, baseLayers, tools, layerListPluginActive, co
     return (
         <Content className='t_layers'>
             <Card size='small' title={<Message messageKey='BasicView.layers.tools' />}>
-                <PublisherToolsList tools={tools} controller={controller} groupId='layers' />
+                <PublisherToolsList tools={tools} controller={controller} />
             </Card>
             {layerListPluginActive && (
                 <Card size='small' title={<Message messageKey='BasicView.layers.baseLayers' />}>

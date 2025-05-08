@@ -6,7 +6,7 @@ export class AbstractPublisherPanel {
         this.sandbox = sandbox;
         // override (included tools should have id as group)
         this.id = null;
-        // override to use own custom StateHandler (must implement init and getPanelContent functions)
+        // override to use own custom StateHandler (must implement init and getPanelComponent functions)
         this.handlerImpl = ToolPanelHandler;
         this.handler = null;
     }
@@ -36,7 +36,7 @@ export class AbstractPublisherPanel {
         const Handler = this.handlerImpl;
         try {
             const handler = new Handler(this.sandbox, tools);
-            if (!(handler instanceof StateHandler) || typeof handler.init !== 'function' || typeof handler.getPanelContent !== 'function') {
+            if (!(handler instanceof StateHandler) || typeof handler.init !== 'function' || typeof handler.getPanelComponent !== 'function') {
                 throw new Error('Incompatible handler');
             }
             this.handler = handler;
