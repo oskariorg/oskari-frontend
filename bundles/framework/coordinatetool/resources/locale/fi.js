@@ -106,7 +106,9 @@ Oskari.registerLocalization(
         },
         "guidedTour": {
             "title": "Koordinaatit",
-            "message": "Koordinaatit-työkalulla saat haettua karttanäkymän koordinaatteja, kohdistettua kartan tiettyihin koordinaatteihin sekä lisättyä merkintöjä."
+            "message": "Koordinaatit-työkalulla saat haettua karttanäkymän koordinaatteja, kohdistettua kartan tiettyihin koordinaatteihin sekä lisättyä merkintöjä.",
+            "openLink": "Näytä Koordinaatit",
+            "closeLink": "Piilota Koordinaatit"
         }
     }
 });

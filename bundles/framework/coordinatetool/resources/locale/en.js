@@ -106,7 +106,9 @@ Oskari.registerLocalization(
         },
         "guidedTour": {
             "title": "Coordinates",
-            "message": "With the coordinates tool you can see the current coordinates, pan to specific coordinates and add markers."
+            "message": "With the coordinates tool you can see the current coordinates, pan to specific coordinates and add markers.",
+            "openLink": "Show Coordinates",
+            "closeLink": "Hide Coordinates"
         }
     }
 });
