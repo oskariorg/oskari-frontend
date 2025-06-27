@@ -144,10 +144,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
         __guidedTourDelegateTemplate: {
             priority: 120,
             show: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', this.__name]);
+                this.plugin.handler.showPopup();
             },
             hide: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', this.__name]);
+                this.plugin.handler.showPopup();
             },
             getTitle: function () {
                 return this.getLocalization().guidedTour.title;
@@ -165,12 +165,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
                 return [
                     {
                         title: loc.openLink,
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', this.__name]),
+                        onClick: () => { 
+                            if(!this.plugin.popupOpen) {
+                                this.plugin.handler.showPopup()
+                            } 
+                        },
                         visible: false
                     },
                     {
                         title: loc.closeLink,
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', this.__name]),
+                        onClick: () => { 
+                            if(this.plugin.popupOpen) {
+                                this.plugin.handler.showPopup()
+                            } 
+                        },
                         visible: true
                     }
                 ];
