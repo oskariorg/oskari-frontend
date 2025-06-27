@@ -160,24 +160,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             },
             positionAlign: 'left',
             getLinks: function () {
-                var me = this;
                 var loc = this.getLocalization().guidedTour;
                 return [
                     {
                         title: loc.openLink,
-                        onClick: () => { 
-                            if(!this.plugin.popupOpen) {
-                                this.plugin.handler.showPopup()
-                            } 
+                        onClick: () => {
+                            if (!this.plugin.popupOpen) {
+                                this.plugin.handler.showPopup();
+                            }
                         },
                         visible: false
                     },
                     {
                         title: loc.closeLink,
-                        onClick: () => { 
-                            if(this.plugin.popupOpen) {
-                                this.plugin.handler.showPopup()
-                            } 
+                        onClick: () => {
+                            if (this.plugin.popupOpen) {
+                                this.plugin.handler.showPopup();
+                            }
                         },
                         visible: true
                     }
