@@ -113,6 +113,7 @@ Returns all the layers available on map. If layer has minimum zoom level and max
         opacity: layerOpacity,
         visible: layerVisibility,
         name : layerName,
+        description: layerDescription,
         minZoom: minZoomLevel,
         maxZoom: maxZoomLevel,
         config: layerAttributesDataBlock
