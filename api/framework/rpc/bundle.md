@@ -53,6 +53,7 @@ RPC:
 
 AbstractMapModule:
 - getAllLayers()
+- getGroupsWithLayerIds()
 - getMapBbox()
 - getMapPosition()
 - getZoomRange()
@@ -117,6 +118,27 @@ Returns all the layers available on map. If layer has minimum zoom level and max
         config: layerAttributesDataBlock
     }
 
+**getGroupsWithLayerIds()**
+
+Returns the layer groups with the layer ids in each group. Each group includes its ID and name, along with the IDs of layers
+within the group and its subgroups.
+
+    {
+        "id": groupId,
+        "name": groupName,
+        "groups": [
+            {
+                group
+            },
+            ...
+        ],
+        "layers": [
+            layerId1,
+            layerId2,
+            ...
+        ]
+    }
+
 **getMapPosition()**
 
 Returns information about map position:
@@ -157,10 +179,11 @@ Returns functions that are supported by rpc functionality. For example:
         "getSupportedRequests": true,
         "getInfo": true,
         "getAllLayers": true,
+        "getGroupsWithLayerIds": true,
         "getMapBbox": true,
         "getMapPosition": true,
         "getZoomRange": true,
-        "getPixelMeasuresInScale":true,
+        "getPixelMeasuresInScale": true,
         "resetState": true,
         "getCurrentState": true,
         "useState": true,
