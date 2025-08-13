@@ -30,7 +30,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 '       <div class="oskari-flyoutheading"></div>' +
                 '       <div class="oskari-flyout-title"><p></p></div>' +
                 '       <div class="oskari-flyouttools">' +
-                '           <div class="oskari-flyouttool-close icon-close icon-close:hover"></div>' +
+                '           <div class="oskari-flyouttool-close">' +
+                '               <div class="icon-close icon-close:hover"> </div>' +
+                '           </div>' +
                 '       </div>' +
                 '   </div>' +
                 '   <div class="oskari-flyoutcontentcontainer">' +
@@ -97,9 +99,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 } else {
                     me.options.container.append(popup);
                 }
-                popup.find('.oskari-flyouttool-close').on('click', function () {
+
+                var closeButton = popup.find('.oskari-flyouttool-close');
+                closeButton.empty().append(popup.find('.icon-close'));
+                closeButton.on('click', function () {
                     me.hide();
                 });
+
                 me._popup = popup;
                 me.bringToTop();
                 me._popup.on('mousedown', function () {
