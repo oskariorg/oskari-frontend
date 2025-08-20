@@ -24,7 +24,7 @@ Used to notify that the ``SearchRequest`` has received a reply from server side 
   <td> \* result</td><td> Object </td><td> search result</td><td> </td>
 </tr>
 <tr>
-  <td> options </td><td> Object </td><td> options sent in search request </td><td> </td>
+  <td> options </td><td> Object </td><td> options sent in search request. Has an added `geocode : true` if coordinates was used as query. </td><td> </td>
 </tr>
 </table>
 

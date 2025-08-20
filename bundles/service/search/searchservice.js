@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
         this._searchUrl = searchUrl;
         this.sandbox = sandbox;
         if (sandbox && typeof sandbox.getService === 'function') {
-            var service = sandbox.getService(this.getQName());
+            const service = sandbox.getService(this.getQName());
             if (service) {
                 // already registered
                 return service;
@@ -81,17 +81,36 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
         doSearch: function (searchString, onSuccess, onError, options = {}, channels) {
             const sb = this.sandbox || Oskari.getSandbox();
             const evtBuilder = Oskari.eventBuilder('SearchResultEvent');
+            let url = this._searchUrl;
+            const data = {
+                channels,
+                lang: Oskari.getLang(),
+                epsg: sb.getMap().getSrsName(),
+                options: JSON.stringify(options)
+            };
+            if (typeof searchString === 'object' && searchString.lon && searchString.lat) {
+                // lon=380894.62474567967&lat=6686612.370660921&maxfeatures=1&channel_ids=NLS_NEAREST_FEATURE_CHANNEL
+                url = Oskari.urls.getRoute('GetReverseGeocodingResult');
+                data.lon = searchString.lon;
+                data.lat = searchString.lat;
+                if (options.channels) {
+                    // comma-separated list as string
+                    data.channel_ids = options.channels;
+                }
+                if (options.limit) {
+                    // numeric value expected, can't request more than server is configured for, but can be used to limit results
+                    data.maxfeatures = options.limit;
+                }
+                // signal that this was a reverse geocoding search
+                options.geocode = true;
+            } else {
+                data.q = searchString;
+            }
             jQuery.ajax({
                 dataType: 'json',
                 type: 'POST',
-                url: this._searchUrl,
-                data: {
-                    'q': searchString,
-                    channels,
-                    'lang': Oskari.getLang(),
-                    'epsg': sb.getMap().getSrsName(),
-                    'options': JSON.stringify(options)
-                },
+                url,
+                data,
                 success: function (response) {
                     sb.notifyAll(evtBuilder(true, searchString, response, options));
                     if (typeof onSuccess === 'function') {
@@ -110,16 +129,16 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             if (typeof onSuccess !== 'function') {
                 return;
             }
-            var sb = this.sandbox || Oskari.getSandbox();
+            const sb = this.sandbox || Oskari.getSandbox();
             jQuery.ajax({
                 dataType: 'json',
                 type: 'POST',
                 url: this._searchUrl,
                 data: {
-                    'q': searchKey,
-                    'lang': Oskari.getLang(),
-                    'epsg': sb.getMap().getSrsName(),
-                    'autocomplete': true,
+                    q: searchKey,
+                    lang: Oskari.getLang(),
+                    epsg: sb.getMap().getSrsName(),
+                    autocomplete: true,
                     channels
                 },
                 success: function (response) {
@@ -131,5 +150,5 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ['Oskari.mapframework.service.Service', 'Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.service.Service', 'Oskari.mapframework.core.RequestHandler']
     });
