@@ -6,7 +6,7 @@ import { MandatoryIcon } from 'oskari-ui/components/icons';
 import { Messaging } from 'oskari-ui/util';
 import { CloudUploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
-const MAX_SIZE = 10; //MB
+const MAX_SIZE = 10; // MB
 const MAX_COUNT = 5;
 
 const Border = styled('div')`
@@ -59,11 +59,11 @@ const prevent = e => e.preventDefault();
 const showError = (key, args) => {
     const content = getMsg(`error.${key}`, args);
     Messaging.error({ content, duration: 5 });
-}
+};
 
-export const FileInput = ({ 
+export const FileInput = ({
     onFiles,
-    multiple=true,
+    multiple = true,
     tooltip,
     allowedTypes = [],
     maxSize = MAX_SIZE,
@@ -78,6 +78,10 @@ export const FileInput = ({
         handleInputFiles(event.dataTransfer.files);
     };
     const handleInputFiles = inputFiles => {
+        if (!inputFiles.length) {
+            // user canceled the file dialog
+            return;
+        }
         // Special case for single option to override existing file
         if (!multiple && inputFiles.length === 1) {
             const file = inputFiles[0];
@@ -136,31 +140,36 @@ export const FileInput = ({
                             onChange={e => handleInputFiles(e.target.files)}
                         />
                         <StyledUploadIcon className="t_button t_add" />
-                        { getMsg('drag',{ maxCount }) }
+                        { getMsg('drag', { maxCount }) }
                         { mandatory && <MandatoryIcon isValid={currentFiles.length > 0}/>}
                     </StyledLabel>
                 </Border>
                 <StyledFileList className="t_filelist">
-                    { currentFiles.map( ({name}) => <FileListItem name={name} onRemoveClick={onFileRemove} key={name} />) }
+                    { currentFiles.map(({ name }) => <FileListItem name={name} onRemoveClick={onFileRemove} key={name} />) }
                 </StyledFileList>
             </div>
         </Tooltip>
     );
 };
 
-const FileListItem = ({name, onRemoveClick}) => {
+const FileListItem = ({ name, onRemoveClick }) => {
     return (
         <StyledListItem className={`t_item-${name}`}>
             <StyledName>{ name }</StyledName>
-            <CloseCircleOutlined className="t_button t_remove" onClick={()=>onRemoveClick(name)}/>
+            <CloseCircleOutlined className="t_button t_remove" onClick={() => onRemoveClick(name)}/>
         </StyledListItem>
     );
+};
+FileListItem.propTypes = {
+    name: PropTypes.string,
+    onRemoveClick: PropTypes.func.isRequired
 };
 
 FileInput.propTypes = {
     onFiles: PropTypes.func.isRequired,
     multiple: PropTypes.bool,
     allowedTypes: PropTypes.array,
+    files: PropTypes.array,
     tooltip: PropTypes.string,
     maxSize: PropTypes.number,
     mandatory: PropTypes.bool
