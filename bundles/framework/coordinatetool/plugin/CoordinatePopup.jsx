@@ -8,6 +8,7 @@ import { formatDegrees, isTransformAllowed } from './helper';
 import PropTypes from 'prop-types';
 
 const BUNDLE_KEY = 'coordinatetool';
+const ENTER_KEY = 'Enter';
 
 const OPTIONS = {
     id: 'coordinates'
@@ -222,6 +223,7 @@ const PopupContent = ({ state = {}, controller, supportedProjections, showRevers
                                 value={state?.latField}
                                 onChange={(e) => controller.setLatInputValue(e.target.value)}
                                 onBlur={() => controller.useUserDefinedCoordinates()}
+                                onKeyUp={(evt) => { if (evt.key === ENTER_KEY) controller.useUserDefinedCoordinates(); }}
                                 disabled={state.showMouseCoordinates}
                                 className='t_lat'
                             />
@@ -240,6 +242,7 @@ const PopupContent = ({ state = {}, controller, supportedProjections, showRevers
                                 value={state?.lonField}
                                 onChange={(e) => controller.setLonInputValue(e.target.value)}
                                 onBlur={() => controller.useUserDefinedCoordinates()}
+                                onKeyUp={(evt) => { if (evt.key === ENTER_KEY) controller.useUserDefinedCoordinates(); }}
                                 disabled={state.showMouseCoordinates}
                                 className='t_lon'
                             />
