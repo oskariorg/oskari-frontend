@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, Select, Option, Switch, Divider, Badge } from 'oskari-ui';
-import { Draggable, DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { Draggable, DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { DragIcon } from 'oskari-ui/components/icons';
 import { IconButton } from 'oskari-ui/components/buttons';
 import { UpOutlined, DownOutlined } from '@ant-design/icons';
@@ -89,7 +89,7 @@ export const PropertiesFilter = ({ filter = {}, update, properties, labels }) =>
     const [lang, setLang] = useState('default');
     const options = ['default', ...Oskari.getSupportedLanguages()];
     const selectedProps = filter[lang] || filter.default || properties;
-    
+
     const reorder = (from, to = -1) => {
         const max = selectedProps.length - 1;
         if (from === to || from > max || to < 0 || to > max) {
@@ -129,7 +129,7 @@ export const PropertiesFilter = ({ filter = {}, update, properties, labels }) =>
                                 : <Message messageKey={`LocalizationComponent.locale.${opt}`} bundleKey='oskariui' />
                             }
                             { Array.isArray(filter[opt]) && <StyledBadge count={filter[opt].length} showZero={false} /> }
-                        </Option>)) 
+                        </Option>))
                     }
                 </Select>
                 { !!filter[lang] && <IconButton type='delete' bordered onClick={() => deleteFilter()}/> }
@@ -145,7 +145,7 @@ export const PropertiesFilter = ({ filter = {}, update, properties, labels }) =>
                             )}
                             { provided.placeholder }
                         </Content>
-                    )}    
+                    )}
                 </Droppable>
             </DragDropContext>
             { filteredProps.length > 0 && <Divider/> }
