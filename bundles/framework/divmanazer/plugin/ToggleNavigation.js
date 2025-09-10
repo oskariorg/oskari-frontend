@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { MenuOutlined } from '@ant-design/icons';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.userinterface.plugin.ToggleNavigationPlugin
@@ -27,6 +27,7 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
         me._templates = {
             plugin: jQuery('<div class="mapplugin togglenavigation"></div>')
         };
+        me._reactRoot = null;
     },
     {
         /**
@@ -56,6 +57,12 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
         redrawUI: function (mapInMobileMode, forced) {
             this.refresh();
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
         /**
          * @public @method refresh
          */
@@ -69,9 +76,9 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
             this._active = isToggled;
 
             // Fixes button staying active or hovered after click
-            ReactDOM.unmountComponentAtNode(el[0]);
+            this.getReactRoot(el[0]).unmount();
 
-            ReactDOM.render(
+            this.getReactRoot(el[0]).render(
                 <MapModuleButton
                     className='t_navigationtoggle'
                     visible={this.isVisible()}
@@ -84,10 +91,7 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
                     }}
                     position={this.getLocation()}
                     isNav={true}
-                />
-                ,
-                el[0]
-            );
+                />);
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());

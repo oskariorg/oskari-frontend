@@ -1,4 +1,3 @@
-import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import React from 'react';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
@@ -83,11 +82,13 @@ const createTmpContainer = (detached = false) => {
  */
 const createRemoveFn = (element, onClose, parentEl = document.body) => {
     let alreadyRemoved = false;
+    const root = createRoot(element);
     const removeFn = () => {
         if (alreadyRemoved) {
             return;
         }
-        unmountComponentAtNode(element);
+        root.unmount();
+
         parentEl.removeChild(element);
         alreadyRemoved = true;
         if (typeof onClose === 'function') {
@@ -140,13 +141,14 @@ export const showPopup = (title, content, onClose, options = {}) => {
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
     const opts = { ...DEFAULT_POPUP_OPTIONS, ...options };
+    const root = createRoot(element);
     const render = (title, content) => {
-        ReactDOM.render(
+        root.render(
             <ThemeProvider value={options.theme}>
                 <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} options={opts}>
                     {content}
                 </Popup>
-            </ThemeProvider>, element);
+            </ThemeProvider>);
     };
     render(title, content);
     return {
@@ -186,13 +188,14 @@ export const showModal = (title, content, onClose, options = {}) => {
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
     const opts = { ...options };
+    const root = createRoot(element);
     const render = (content) => {
-        ReactDOM.render(
+        root.render(
             <ThemeProvider value={options.theme}>
                 <Modal title={title} options={opts}>
                     {content}
                 </Modal>
-            </ThemeProvider>, element);
+            </ThemeProvider>);
     };
     render(content);
     return {
@@ -235,13 +238,14 @@ export const showMovableContainer = (content, onClose, options = {}) => {
         isDraggable: true,
         ...options
     };
+    const root = createRoot(element);
     const render = (content) => {
-        ReactDOM.render(
+        root.render(
             <ThemeProvider value={options.theme}>
                 <MovableContainer onClose={removeWindow} bringToTop={bringToTop} options={opts}>
                     {content}
                 </MovableContainer>
-            </ThemeProvider>, element);
+            </ThemeProvider>);
     };
     render(content);
     return {
@@ -279,13 +283,14 @@ export const showFlyout = (title, content, onClose, options = {}) => {
     const key = REGISTER.registerWindow(options.id, TYPE.FLYOUT, createRemoveFn(element, onClose));
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
+    const root = createRoot(element);
     const render = (title, content) => {
-        ReactDOM.render(
+        root.render(
             <ThemeProvider>
                 <Flyout title={title} onClose={removeWindow} bringToTop={bringToTop} options={options}>
                     {content}
                 </Flyout>
-            </ThemeProvider>, element);
+            </ThemeProvider>);
     };
     render(title, content);
     return {
@@ -317,17 +322,17 @@ export const showSidePanel = (title, content, onClose, options = {}) => {
         }
     };
     root.prepend(element);
+    const reactRoot = createRoot(element);
     const render = (title, content) => {
         if (nav) {
             nav.style.display = 'none';
         }
-        ReactDOM.render(
+        reactRoot.render(
             <ThemeProvider>
                 <SidePanel title={title} onClose={removeWindow} options={options}>
                     {content}
                 </SidePanel>
-            </ThemeProvider>,
-            element
+            </ThemeProvider>
         );
     };
     render(title, content);
@@ -352,13 +357,14 @@ export const showBanner = (content, onClose, options = {}) => {
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
 
+    const root = createRoot(element);
     const render = (content) => {
-        ReactDOM.render(
+        root.render(
             <ThemeProvider>
                 <Banner onClose={removeWindow} options={options}>
                     {content}
                 </Banner>
-            </ThemeProvider>, element);
+            </ThemeProvider>);
     };
     render(content);
     return {

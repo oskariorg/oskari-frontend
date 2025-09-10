@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
 import { AdminUsersHandler } from './handler/AdminUsersHandler';
 import { AdminUsersFlyout } from './view/AdminUsersFlyout';
+import { createRoot } from 'react-dom/client';
 /**
  * @class Oskari.mapframework.bundle.admin-users.Flyout
  *
@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         this.sandbox = instance.getSandbox();
         this.container = null;
         this.handler = null;
+        this._reactRoot = null;
     }, {
         /**
          * @method getName
@@ -68,13 +69,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         createUI: function () {
             this.renderContent();
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
         renderContent: function () {
             const handler = this.getHandler();
-            ReactDOM.render(
+            this.getReactRoot(this.container[0]).render(
                 <LocaleProvider value={{ bundleKey: 'AdminUsers' }}>
                     <AdminUsersFlyout state={handler.getState()} controller={handler.getController()} isExternal={this.instance?.conf?.isExternal} />
-                </LocaleProvider>,
-                this.container[0]
+                </LocaleProvider>
             );
         },
         getHandler: function () {
