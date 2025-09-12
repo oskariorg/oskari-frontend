@@ -37,7 +37,7 @@
     "@babel/preset-env": "7.26.9",
     "@babel/preset-react": "7.26.3",
     "@babel/runtime-corejs3": "7.27.0",
-    "@cesium/engine": "10.1.0",
+    "@cesium/engine": "20.0.1",
     "@open-wc/webpack-import-meta-loader": "^0.4.7",
     "@testing-library/jest-dom": "5.7.0",
     "@testing-library/react": "12.1.5",
