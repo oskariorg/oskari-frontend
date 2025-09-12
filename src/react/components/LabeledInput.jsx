@@ -55,11 +55,7 @@ export const LabeledInput = ({
 
 LabeledInput.propTypes = {
     // label MUST be string IF minimal=true as it's placed on the field placeholder
-    label: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ]).isRequired,
+    label: PropTypes.any.isRequired,
     // boolean to have simple String.isEmpty() validation, component for controlling isValid-check for more complex validation
     mandatory: PropTypes.oneOfType([
         PropTypes.node,
