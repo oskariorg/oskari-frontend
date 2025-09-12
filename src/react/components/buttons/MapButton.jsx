@@ -122,6 +122,6 @@ export const MapButton = ({ title, iconActive, position, ...rest }) => {
 
 MapButton.propTypes = {
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    icon: PropTypes.node.isRequired,
+    icon: PropTypes.any.isRequired,
     onClick: PropTypes.func
 };

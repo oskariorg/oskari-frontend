@@ -22,7 +22,7 @@ export const Dropdown = ({ children, items, placement, click = true }) => {
 };
 
 Dropdown.propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.any.isRequired,
     items: PropTypes.arrayOf(
         PropTypes.shape({
             title: PropTypes.string.isRequired,
