@@ -71,8 +71,6 @@
     "jodit-react": "4.1.2",
     "jquery": "3.7.1",
     "jsts": "2.2.0",
-    "less": "3.9.0",
-    "less-loader": "5.0.0",
     "merge": "2.1.1",
     "mini-css-extract-plugin": "1.6.2",
     "mobile-detect": "1.4.5",
