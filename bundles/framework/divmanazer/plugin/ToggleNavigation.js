@@ -76,7 +76,9 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
             this._active = isToggled;
 
             // Fixes button staying active or hovered after click
-            this.getReactRoot(el[0]).unmount();
+            const reactRoot = this.getReactRoot(el[0]);
+            reactRoot.unmount();
+            this._reactRoot = null;
 
             this.getReactRoot(el[0]).render(
                 <MapModuleButton
