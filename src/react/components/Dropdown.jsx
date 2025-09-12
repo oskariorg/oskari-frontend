@@ -15,7 +15,7 @@ export const Dropdown = ({ children, items, placement, click = true }) => {
         />
     );
     return (
-        <AntDropdown dropdownRender={() => menu} placement={placement} trigger={click ? ['click'] : ['hover']}>
+        <AntDropdown popupRender={() => menu} placement={placement} trigger={click ? ['click'] : ['hover']}>
             {children}
         </AntDropdown>
     );
