@@ -9,7 +9,7 @@ export const MapLegendList = ({ legendList }) => {
         return (
             <Fragment>
                 { title }
-                <MetadataIcon metadataId={uuid} layerId={layerId} style={{ margin: '0 0 0 10px' }} stopEvent={true}/>
+                <MetadataIcon metadataId={uuid} layerId={layerId} style={{ margin: '0 0 0 10px' }}/>
             </Fragment>
         );
     };

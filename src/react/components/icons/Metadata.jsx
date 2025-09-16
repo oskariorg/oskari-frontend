@@ -21,7 +21,7 @@ const StyledMetadataIcon = styled(InfoCircleOutlined)`
  * @param {Object} style Additional styles
  * @returns
  */
-export const Metadata = ThemeConsumer(({ theme = {}, metadataId, layerId, size = 16, style, stopEvent = false }) => {
+export const Metadata = ThemeConsumer(({ theme = {}, metadataId, layerId, size = 16, style }) => {
     if (!metadataId || !Oskari.getSandbox().hasHandler('catalogue.ShowMetadataRequest')) return null;
 
     const helper = getNavigationTheme(theme);
@@ -40,9 +40,7 @@ export const Metadata = ThemeConsumer(({ theme = {}, metadataId, layerId, size =
             style={{ fontSize: `${size}px`, ...style }}
             onClick={(evt) => {
                 onClick();
-                if (stopEvent) {
-                    evt.stopPropagation();
-                }
+                evt.stopPropagation();
             }}
             $hoverColor={hover}
             $bgColor={bgColor}
@@ -53,6 +51,5 @@ export const Metadata = ThemeConsumer(({ theme = {}, metadataId, layerId, size =
 Metadata.propTypes = {
     metadataId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     size: PropTypes.number,
-    style: PropTypes.object,
-    stopEvent: PropTypes.bool
+    style: PropTypes.object
 };
