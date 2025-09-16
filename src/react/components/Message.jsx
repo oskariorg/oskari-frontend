@@ -79,7 +79,7 @@ Message.propTypes = {
     getMessage: PropTypes.func,
     children: PropTypes.any,
     LabelComponent: PropTypes.elementType,
-    fallback: PropTypes.node,
+    fallback: PropTypes.any,
     allowHTML: PropTypes.bool,
     allowTextEllipsis: PropTypes.bool
 };

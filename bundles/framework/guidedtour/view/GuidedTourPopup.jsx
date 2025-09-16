@@ -40,7 +40,7 @@ const getTitle = (title, state) => {
 const GuidedTourContent = ({ content, links, step, steps, controller, onClose }) => {
     const [dontShowAgain, setDontShowAgain] = useState(false);
     const [contentLinks, setContentLinks] = useState([]);
-    
+
     useEffect(() => {
         setContentLinks(links);
     }, [links])
@@ -121,7 +121,7 @@ export const showGuidedTourPopup = (title, popupContent, links, state, controlle
 
 showGuidedTourPopup.propTypes = {
     title: PropTypes.string.isRequired,
-    popupContent: PropTypes.node.isRequired,
+    popupContent: PropTypes.any.isRequired,
     links: PropTypes.array,
     state: PropTypes.object.isRequired,
     controller: PropTypes.object.isRequired

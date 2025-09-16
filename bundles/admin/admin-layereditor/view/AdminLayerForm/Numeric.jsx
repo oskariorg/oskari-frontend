@@ -85,11 +85,11 @@ export const Numeric = ({
 Numeric.propTypes = {
     value: PropTypes.any,
     messageKey: PropTypes.string,
-    info: PropTypes.node,
+    info: PropTypes.any,
     suffix: PropTypes.string,
     prefix: PropTypes.string,
     allowNegative: PropTypes.bool,
     allowZero: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
-    children: PropTypes.node
+    children: PropTypes.any
 };

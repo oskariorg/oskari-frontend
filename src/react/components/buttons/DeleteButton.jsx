@@ -64,7 +64,7 @@ export const DeleteButton = ({
 };
 DeleteButton.propTypes = {
     onConfirm: PropTypes.func.isRequired,
-    title: PropTypes.node,
+    title: PropTypes.any,
     tooltip: PropTypes.any,
     disabled: PropTypes.bool,
     type: PropTypes.oneOf(['icon', 'button', 'label']).isRequired
