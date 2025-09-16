@@ -4,8 +4,8 @@ import { showPopup } from 'oskari-ui/components/window';
 import { LocaleProvider } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
 import styled from 'styled-components';
-import { LegendSelect } from './components/LegendSelect';
-import { Legend } from './components/Legend';
+import { LegendSelect } from './LegendSelect';
+import { LegendImage } from './LegendImage';
 
 const BUNDLE_KEY = 'maplegend';
 
@@ -23,10 +23,8 @@ const Margin = styled('div')`
 const MapLegendPopup = ({ legends, getLegendImage }) => {
     const [selected, setSelected] = useState(legends.length > 0 ? legends[0].id : null);
     const [legend, setLegend] = useState(legends.length > 0 ? getLegendImage(legends[0].id) : null);
-    const [hasError, setError] = useState(false);
     const onChange = (value) => {
         setSelected(value);
-        setError(false);
         setLegend(getLegendImage(value));
     };
     return (
@@ -37,7 +35,7 @@ const MapLegendPopup = ({ legends, getLegendImage }) => {
                     selected={selected}
                     onChange={onChange} />
                 <Margin />
-                <Legend url={legend} hasError={hasError} setError={setError}/>
+                <LegendImage url={legend} />
             </Content>
         </LocaleProvider>
     );
@@ -53,6 +51,6 @@ export const showMapLegendPopup = (legends, getLegendImage, onClose) => {
     const options = {
         id: BUNDLE_KEY,
         theme: mapModule.getMapTheme()
-    }
+    };
     return showPopup(<Message bundleKey={BUNDLE_KEY} messageKey='title' />, <MapLegendPopup legends={legends} getLegendImage={(id) => getLegendImage(id)}/>, onClose, options);
 };

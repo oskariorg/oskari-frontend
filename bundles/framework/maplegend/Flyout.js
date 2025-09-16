@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Message } from 'oskari-ui';
-import { LocaleProvider } from 'oskari-ui/util';
-import { MapLegendList } from './MapLegendList';
-import { ThemeProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
+import { MapLegendList } from './components/MapLegendList';
 
 /**
  * @class Oskari.mapframework.bundle.maplegend.Flyout
