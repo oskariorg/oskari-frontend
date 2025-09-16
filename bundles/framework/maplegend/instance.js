@@ -119,10 +119,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
                 this.refreshUI();
             },
             MapLayerEvent: function (event) {
-                if (event.getOperation() === 'update') {
-                    this.refreshUI();
-                    return;
-                }
+                // do refresh ui in any case so we get the metadata - icon in case it was missing
+                this.refreshUI();
 
                 if (event.getOperation() !== 'add') {
                     // only handle add layer

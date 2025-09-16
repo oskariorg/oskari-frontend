@@ -38,7 +38,10 @@ export const Metadata = ThemeConsumer(({ theme = {}, metadataId, layerId, size =
         <StyledMetadataIcon
             className='t_icon t_metadata'
             style={{ fontSize: `${size}px`, ...style }}
-            onClick={onClick}
+            onClick={(evt) => {
+                onClick();
+                evt.stopPropagation();
+            }}
             $hoverColor={hover}
             $bgColor={bgColor}
         />
