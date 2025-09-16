@@ -51,7 +51,8 @@ const setRootEl = (id) => {
         if (!rootEl.style.height) {
             // rendering directly to body and no height set
             // -> set CSS to follow expected styling/assume full screen app
-            rootEl.style.height = '100vh';
+            // svh = small viewport, to prevent scroll behavior
+            rootEl.style.height = '100svh';
         }
     }
     // use styles from .oskari-root-el for body like display: flex

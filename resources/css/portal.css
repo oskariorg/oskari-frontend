@@ -51,7 +51,7 @@ body {
 body.oskari-root-el {
   margin: 0;
   padding: 0;
-  height: 100vh;
+  height: 100svh;
   width: 100%;
 }
 
