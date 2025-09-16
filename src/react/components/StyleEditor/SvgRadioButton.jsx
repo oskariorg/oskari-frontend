@@ -4,7 +4,7 @@ import { Radio } from 'antd';
 import styled from 'styled-components';
 
 const RadioIcon = styled(Radio.Button)`
-    height: 34px;    
+    height: 34px;
     margin: 0 7px 10px 0;
     padding: 0;
     width: 34px;
@@ -57,10 +57,7 @@ SvgRadioButton.propTypes = {
             data: PropTypes.string,
             content: PropTypes.node,
             src: PropTypes.string,
-            name: PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.number
-            ])
+            name: PropTypes.any
         })
     )
 };

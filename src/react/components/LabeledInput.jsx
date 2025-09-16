@@ -57,10 +57,7 @@ LabeledInput.propTypes = {
     // label MUST be string IF minimal=true as it's placed on the field placeholder
     label: PropTypes.any.isRequired,
     // boolean to have simple String.isEmpty() validation, component for controlling isValid-check for more complex validation
-    mandatory: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.bool
-    ]),
+    mandatory: PropTypes.any,
     // true to show label as placeholder inside the field instead of on top of the field
     minimal: PropTypes.bool
 };

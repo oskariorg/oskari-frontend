@@ -147,7 +147,7 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
 
 Flyout.propTypes = {
     children: PropTypes.any,
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    title: PropTypes.any,
     onClose: PropTypes.func.isRequired,
     bringToTop: PropTypes.func,
     options: PropTypes.object

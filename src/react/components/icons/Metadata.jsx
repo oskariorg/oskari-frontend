@@ -46,7 +46,7 @@ export const Metadata = ThemeConsumer(({ theme = {}, metadataId, layerId, size =
 });
 
 Metadata.propTypes = {
-    metadataId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    metadataId: PropTypes.any,
     size: PropTypes.number,
     style: PropTypes.object
 };

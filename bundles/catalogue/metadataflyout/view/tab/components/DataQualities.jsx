@@ -36,7 +36,7 @@ const Field = ({ value, labelKey }) => {
     return <StyledField><Message messageKey={`flyout.quality.${labelKey}`}>: {value}</Message></StyledField>;
 };
 Field.propTypes = {
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
+    value: PropTypes.any,
     labelKey: PropTypes.string.isRequired
 };
 
