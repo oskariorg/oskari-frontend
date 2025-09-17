@@ -99,8 +99,8 @@ const BABEL_LOADER_RULE = {
     }
 };
 
-const getModuleRules = (isProd = false, antThemeFile) => {
-    const styleFileRules = getStyleFileRules(isProd, antThemeFile);
+const getModuleRules = (isProd = false) => {
+    const styleFileRules = getStyleFileRules(isProd);
     const rules = [
         /*
         webpack-import-meta-loader fixes this error for building Cesium:

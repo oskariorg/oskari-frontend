@@ -51,7 +51,9 @@ body {
 body.oskari-root-el {
   margin: 0;
   padding: 0;
+  /* Uses vh if svh is not recognized */
   height: 100vh;
+  height: 100svh;
   width: 100%;
 }
 
@@ -183,14 +185,12 @@ h1.front-title a:hover {
 h2 {
   font-size: 24px;
   line-height: 28.8px;
-  font-weight: lighter;
   padding-bottom: 15px;
 }
 
 h3 {
   font-size: 18px;
   line-height: 21.6px;
-  font-weight: lighter;
   padding-bottom: 15px;
 }
 h3.inverted {

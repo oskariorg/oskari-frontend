@@ -21,7 +21,7 @@ const cesiumTarget = 'cesium';
 module.exports = (env, argv) => {
     const isProd = argv.mode === 'production';
 
-    const { version, pathParam, publicPathPrefix, theme } = parseParams(env);
+    const { version, pathParam, publicPathPrefix } = parseParams(env);
     // assumes applications are directories under pathParam
     const appsetupPaths = getDirectories(path.resolve(pathParam));
 
@@ -52,8 +52,6 @@ module.exports = (env, argv) => {
         CESIUM_BASE_URL: JSON.stringify(`${publicPathPrefix}Oskari/dist/${version}/${cesiumTarget}`)
     }));
 
-    const themeFile = theme ? path.resolve(theme) : path.join(__dirname, 'src/react/ant-theme.less');
-
     // Common config for both prod & dev
     const config = {
         node: {
@@ -75,7 +73,7 @@ module.exports = (env, argv) => {
             sourcePrefix: ''
         },
         module: {
-            rules: OskariConfig.getModuleRules(isProd, themeFile)
+            rules: OskariConfig.getModuleRules(isProd)
         },
         plugins,
         resolveLoader: OskariConfig.RESOLVE_LOADER,
