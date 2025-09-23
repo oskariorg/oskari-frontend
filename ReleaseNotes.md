@@ -1,5 +1,51 @@
 # Release Notes
 
+## 3.1.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/55?closed=1
+
+### RPC
+
+- New function for RPC `getGroupsWithLayerIds()` that returns the group-structure for layers that is used on the geoportal layer listing. This enables reusing the groups information that geoportal applications have and recreating a layer grouping structure on an RPC-based application.
+
+- `SearchRequest` can now be used to get reverse geocoding results by sending and object with coordinates instead of the query text. Requires search channel on the server that supports reverse geocoding queries.
+
+### Publisher / published maps
+
+- Refactored code in publisher functionality:
+    - https://github.com/oskariorg/oskari-frontend/pull/2853
+    - https://github.com/oskariorg/oskari-frontend/pull/2847
+    - https://github.com/oskariorg/oskari-frontend/pull/2850
+    - https://github.com/oskariorg/oskari-frontend/pull/2851
+    - https://github.com/oskariorg/oskari-frontend/pull/2826
+- Added a way to inject panels into publisher UI from other bundles: https://github.com/oskariorg/oskari-frontend/pull/2852
+- Removed unused `Publisher2.ColourSchemeChangedEvent`
+- When getting the HTML snippet from My data, user can adjust the center coordinates and zoom level for the snippet without opening the publisher functionality (https://github.com/oskariorg/oskari-frontend/pull/2830)
+
+### Mobile use
+
+- The height of the oskari-root-el that is used to cover the whole page has been changed from 100vh to 100svh that should make the geoportal easier to use on mobile and as the full screen page no longer has any scrolling behavior itself.
+- Added hitTolerance to feature clicks for touch events (https://github.com/oskariorg/oskari-frontend/pull/2854) so map features are easier to hit on touch screens
+- Close icons on flyouts now have larger hitboxes and are easier to "click" on touch screens
+
+### Other fixes and additions
+
+- Map legends now always show a link to the legend when there is some kind of URL to be used as legend. This allows linking for example a PDF-file as the legend even if we can't show it as part of the UI. This affects both geoportal and embedded maps (https://github.com/oskariorg/oskari-frontend/pull/2870)
+- Admin can now see the users created/updated timestamps when editing user details.
+- GetFeatureInfo/Infobox popup now uses theming instead of `Publisher2.ColourSchemeChangedEvent` and listens to theme changes.
+- Cleaned up references to LESS styling.
+- Component FileInput now has better error handling when user cancels the dialog
+- Clicking the metadata icon on geoportal map legends panels no longer toggle the panel itself (https://github.com/oskariorg/oskari-frontend/pull/2863)
+- Coordinate tool now does it's thing when pressing enter on the coordinate input instead of requiring the user to move focus away from the field
+- Fixes for content on the guided tour
+- Updated dependencies:
+    - cesium/engine 10.1.0 -> 20.0.1
+    - ol 9.2.4 -> 10.6.0
+    - ol-mapbox-style 12.3.5 -> 13.1.0
+    - olcs 2.20 -> 2.22.1
+    - Removed less and less-loader
+
 ## 3.0.1
 
 For a full list of changes see:
