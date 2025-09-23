@@ -32,9 +32,9 @@ Add specs to `SpecRunner.html`.
 
 ## Running the tests
 
-The `tests` folder must be deployed to some file server running locally so that it can be accessed using localhost. For example, if you use the Jetty package of Oskari, you can copy the `tests` folder under `/oskari-server/sample-application/dist`.
+The `tests` folder must be deployed to some file server running locally so that it can be accessed using localhost. For example, if you use the Tomcat package of Oskari, you can copy the `tests` folder under `sample-application/dist`.
 
-SpecRunner.html runs the defined specs. Open it from a server (for example [http://localhost:8080/Oskari/tests/rpc/SpecRunner.html](http://localhost:8080/Oskari/tests/rpc/SpecRunner.html)).
+SpecRunner.html runs the defined specs. Open it from a server (for example [http://localhost:8080/Oskari/dist/tests/rpc/SpecRunner.html](http://localhost:8080/Oskari/dist/tests/rpc/SpecRunner.html)).
 
 ### All tests
 
