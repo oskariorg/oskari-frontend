@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
 import { QuestionOutlined } from '@ant-design/icons';
-import { showMapLegendPopup } from './MapLegendPopup';
+import { showMapLegendPopup } from '../components/MapLegendPopup';
 
 Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
     function (config) {
