@@ -42,9 +42,6 @@ Oskari.clazz.define("Oskari.wfsvector.WfsVectorBundle", function () {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapwfs2/domain/WfsLayerModelBuilder.js"
                 }, {
-                    "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapwfs2/resources/scss/style.scss"
-                }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapwfs2/plugin/WfsVectorLayerPlugin.ol.js"
                 }
