@@ -21,6 +21,10 @@ Not used after components have been migrated to use theming instead. Same can be
 - `ThemeProvider` / `ThemeConsumer` in React components or
 - `const removeListenerFn = Oskari.app.getTheming().addListener(myListener)` for other uses.
 
+### [rem] Removed `WFSPropertiesEvent`
+
+Event has not been used for a while, nothing in oskari-frontend sends it and nothing listens to it so it's an easy removal.
+
 ## 3.0.1
 
 ### [mod] [rpc] Colors in `InfoBox.ShowInfoBoxRequest`
