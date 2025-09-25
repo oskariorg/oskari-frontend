@@ -10,10 +10,11 @@ const COVERAGE_FEATURE_STYLE = {
 };
 const LOCALIZATION_BUNDLE_ID = 'MapModule';
 const COVERAGE_TOOL_PLUGIN_NAME = 'CoverageToolPlugin';
+const COVERAGE_TOOL_TOOL_NAME = 'coverageTool';
 export class CoverageHelper {
     addCoverageTool (layer) {
         const coverageTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-        coverageTool.setName('coverageTool');
+        coverageTool.setName(COVERAGE_TOOL_TOOL_NAME);
         coverageTool.setTitle(Oskari.getMsg(LOCALIZATION_BUNDLE_ID, 'layerCoverageTool.name'));
         coverageTool.setCallback(() => this.showLayerCoverage(layer));
         layer.addTool(coverageTool);
@@ -39,8 +40,8 @@ export class CoverageHelper {
         Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, COVERAGE_LAYER_ID]);
         if (unregisterPlugin) {
             const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-            if (this.pluginAlreadyRegistered(mapModule, COVERAGE_TOOL_PLUGIN_NAME)) {
-                const plugin = mapModule.getPluginInstances()[COVERAGE_TOOL_PLUGIN_NAME];
+            const plugin = mapModule.getPluginInstances()[COVERAGE_TOOL_PLUGIN_NAME];
+            if (plugin) {
                 mapModule.unregisterPlugin(plugin);
             }
         }
@@ -48,6 +49,10 @@ export class CoverageHelper {
 
     showLayerCoverage (layer) {
         this.clearLayerCoverage();
+        const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+        if (!this.pluginAlreadyRegistered(mapModule, COVERAGE_TOOL_PLUGIN_NAME)) {
+            this.initCoverageToolPlugin();
+        }
         const opts = {
             centerTo: true,
             clearPrevious: true,
@@ -60,6 +65,10 @@ export class CoverageHelper {
     showMetadataCoverage (geometry, displayedMetadataCoverageId) {
         const attributes = { displayedMetadataCoverageId };
         this.clearLayerCoverage();
+        const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+        if (!this.pluginAlreadyRegistered(mapModule, COVERAGE_TOOL_PLUGIN_NAME)) {
+            this.initCoverageToolPlugin();
+        }
         const opts = {
             centerTo: true,
             clearPrevious: true,
