@@ -1,5 +1,5 @@
 import './service/MyFeaturesService';
-import './request/ShowMyFeaturesDialogRequestHandler';
+import './request/ShowLayerDialogRequestHandler';
 import { MyFeaturesTab } from './MyFeaturesTab';
 import { MyFeaturesHandler } from './handler/MyFeaturesHandler';
 import { TOOL, BUNDLE_NAME } from './constants';
@@ -29,9 +29,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInsta
             this.handler = new MyFeaturesHandler(this);
             this.addTab();
             this.requestHandlers = {
-                showMyFeaturesDialogRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myfeatures.request.ShowMyFeaturesDialogRequestHandler', this)
+                showLayerDialogRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myfeatures.request.ShowLayerDialogRequestHandler', this)
             };
-            Oskari.getSandbox().requestHandler('MyFeatures.ShowMyFeaturesDialogRequest', this.requestHandlers.showMyFeaturesDialogRequestHandler);
+            Oskari.getSandbox().requestHandler('MyFeatures.ShowLayerDialogRequest', this.requestHandlers.showLayerDialogRequestHandler);
         }
         this.registerTool();
     },

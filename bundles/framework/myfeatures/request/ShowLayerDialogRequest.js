@@ -1,11 +1,11 @@
 /**
- * @class Oskari.mapframework.bundle.myfeatures.request.ShowMyFeatureDialogRequest
+ * @class Oskari.mapframework.bundle.myfeatures.request.ShowLayerDialogRequest
  * Requests tab to be added
  *
  * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.request.ShowMyFeatureDialogRequest',
+Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.request.ShowLayerDialogRequest',
     /**
      * @method create called automatically on construction
      * @static
@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.request.ShowMyFeature
         this._id = id;
     }, {
         /** @static @property __name request name */
-        __name: 'MyFeatures.ShowMyFeatureDialogRequest',
+        __name: 'MyFeatures.ShowLayerDialogRequest',
         /**
          * @method getName
          * @return {String} request name

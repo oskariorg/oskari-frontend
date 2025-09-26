@@ -1,8 +1,8 @@
-import './ShowMyFeaturesDialogRequest';
+import './ShowLayerDialogRequest';
 /**
- * @class Oskari.mapframework.bundle.myfeatures.request.ShowMyFeaturesDialogRequestHandler
+ * @class Oskari.mapframework.bundle.myfeatures.request.ShowLayerDialogRequestHandler
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.request.ShowMyFeaturesDialogRequestHandler',
+Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.request.ShowLayerDialogRequestHandler',
 /**
  * @method create called automatically on construction
  * @static
@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.request.ShowMyFeature
      * @method handleRequest
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
-     * @param {Oskari.mapframework.bundle.myfeatures.request.ShowMyFeaturesDialogRequestHandler} request
+     * @param {Oskari.mapframework.bundle.myfeatures.request.ShowLayerDialogRequest} request
      *      request to handle
      */
         handleRequest: function (core, request) {
