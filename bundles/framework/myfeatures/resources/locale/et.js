@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "et",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Andmete import",
         "desc": "",

@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "sv",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Eget dataset",
         "tool": {

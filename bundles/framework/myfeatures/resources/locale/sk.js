@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "sk",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Import Datasetu",
         "desc": "",

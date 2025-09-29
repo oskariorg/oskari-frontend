@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "sl",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Uvoz nabora podatkov",
         "desc": "Lahko uvoziš lasten nabor podatkov v shp-, gpx- in mif/mid formatu v zip datoteki ali v kmz formatu (stisnjen kml).",

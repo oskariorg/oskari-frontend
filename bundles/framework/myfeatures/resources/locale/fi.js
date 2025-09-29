@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "fi",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Omat aineistot",
         "tool": {

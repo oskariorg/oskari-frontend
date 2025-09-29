@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "nb",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Import av datasett",
         "desc": "Du kan importere dine egne datasett i shp-, gpx- eller mif/mid filformat, i en zipfil eller i kmz filformat (zipped kml).",

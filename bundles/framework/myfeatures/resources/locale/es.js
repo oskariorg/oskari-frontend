@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "es",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Importación de conjuntos de datos",
         "desc": "Usted puede importar sus propios datos en formato shp-, gpx- o formatos mif/mid en un formato de fichero zip o en kmz file format (zipped kml).",

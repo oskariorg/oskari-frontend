@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "de",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Datensatz importieren",
         "desc": "Eigene Datensätze können in den Formaten shp, gpx oder mif/mid in eine ZIP-Datei oder KMZ-Datei (zipped kml) importiert werden.",

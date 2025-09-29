@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "nl",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Dataset Import",
         "desc": "U kunt uw eigen gegevens importeren in een shp-, gpx- of mif/mid-bestandsformaat in een zip-bestand of KMZ-bestand formaat (gezipt kml).",

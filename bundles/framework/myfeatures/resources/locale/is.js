@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "is",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Flytja inn gagnasett",
         "tool": {

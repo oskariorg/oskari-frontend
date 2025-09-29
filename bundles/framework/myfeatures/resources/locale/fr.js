@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "fr",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Importation de jeux de données",
         "tool": {

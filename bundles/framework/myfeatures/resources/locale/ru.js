@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "ru",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Собственные наборы данных",
         "tool": {

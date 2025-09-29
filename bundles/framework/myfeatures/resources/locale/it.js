@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "it",
-    "key": "MyFeatures",
+    "key": "myfeatures",
     "value": {
         "title": "Importa il dataset",
         "desc": "È possibile importare i propri dataset in formato shp-, GPX- o MIF/ MID file zip o in formato KMZ (kml compresso).",

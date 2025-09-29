@@ -2,7 +2,7 @@ import './service/MyFeaturesService';
 import './request/ShowLayerDialogRequestHandler';
 import { MyFeaturesTab } from './MyFeaturesTab';
 import { MyFeaturesHandler } from './handler/MyFeaturesHandler';
-import { TOOL, BUNDLE_NAME } from './constants';
+import { TOOL, BUNDLE_KEY } from './constants';
 
 /**
  * @class Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInstance
@@ -11,9 +11,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInsta
     this.importService = undefined;
     this.mapLayerService = null;
     this.tab = undefined;
-    this.loc = Oskari.getMsg.bind(null, BUNDLE_NAME);
+    this.loc = Oskari.getMsg.bind(null, BUNDLE_KEY);
 }, {
-    __name: BUNDLE_NAME,
+    __name: BUNDLE_KEY,
 
     /**
      * Registers itself to the sandbox, creates the tab and the service

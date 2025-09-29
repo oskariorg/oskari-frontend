@@ -1,4 +1,4 @@
-export const BUNDLE_NAME = 'MyFeatures';
+export const BUNDLE_KEY = 'myfeatures';
 export const LAYER_TYPE = 'userlayer';
 export const MAX_SIZE = 10;
 
