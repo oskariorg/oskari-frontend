@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { AdminLayerForm, AdminLayerFormHandler } from './AdminLayerForm';
 import { LayerWizard } from './LayerWizard';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
+import { createRoot } from 'react-dom/client';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -22,22 +22,35 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.on('hide', () => {
             this.cleanUp();
         });
+        this._reactRoot = null;
     }
+
+    getReactRoot (element) {
+        if (!this._reactRoot) {
+            this._reactRoot = createRoot(element);
+        }
+        return this._reactRoot;
+    }
+
     setElement (el) {
         this.element = el;
     }
+
     getElement () {
         return this.element;
     }
+
     setLocale (loc) {
         this.loc = loc;
     }
+
     createUi () {
         this.setElement(jQuery('<div></div>'));
         this.addClass('admin-layereditor-flyout');
         this.setContent(this.getElement());
         this.update();
     }
+
     setLayer (layer) {
         if (!layer) {
             this.uiHandler.resetForm();
@@ -45,22 +58,26 @@ export class LayerEditorFlyout extends ExtraFlyout {
             this.uiHandler.fetchLayer(layer.getId());
         }
     }
+
     setDataProviders (dataProviders) {
         this.dataProviders = dataProviders;
         this.update();
     }
+
     setMapLayerGroups (mapLayerGroups) {
         this.mapLayerGroups = mapLayerGroups;
         this.uiHandler.setMapLayerGroups(mapLayerGroups);
         this.update();
     }
+
     update () {
         const el = this.getElement();
         if (!el) {
             return;
         }
-        ReactDOM.render(this.getEditorUI(), el.get(0));
+        this.getReactRoot(el.get(0)).render(this.getEditorUI());
     }
+
     getEditorUI () {
         const {
             layer,
@@ -120,7 +137,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
         if (!el) {
             return;
         }
-        ReactDOM.unmountComponentAtNode(el.get(0));
+        this.getReactRoot(el.get(0)).unmount();
         this.uiHandler.resetMap();
     }
 }

@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 import olInteractionDragRotate from 'ol/interaction/DragRotate';
 import { unByKey } from 'ol/Observable';
 import styled from 'styled-components';
 import { NorthIcon } from 'oskari-ui/components/icons';
+import { createRoot } from 'react-dom/client';
 
 const StyledIcon = styled.div.attrs(({ degrees }) => ({
     style: {
@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         this._dragRotate = null;
         this._removeListenerKey = null;
         this._name = 'MapRotatorPlugin';
+        this._reactRoot = null;
     }, {
         handleEvents: function () {
             if (this._dragRotate) {
@@ -92,13 +93,19 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         refresh: function () {
             this._renderButton();
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
         _renderButton: function (degrees = this.getDegrees()) {
             let el = this.getElement();
             if (!el) {
                 return;
             }
 
-            ReactDOM.render(
+            this.getReactRoot(el[0]).render(
                 <MapModuleButton
                     className='t_maprotator'
                     visible={this.hasUI()}
@@ -107,8 +114,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                     onClick={() => this.setRotation(0)}
                     iconActive={degrees !== 0}
                     position={this.getLocation()}
-                />,
-                el[0]
+                />
             );
         },
         /**

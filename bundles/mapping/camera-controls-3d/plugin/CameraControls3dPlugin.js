@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
 import { CameraControls3d, CameraControls3dHandler } from '../view';
+import { createRoot } from 'react-dom/client';
 
 const className = 'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin';
 const shortName = 'CameraControls3dPlugin';
@@ -18,6 +18,7 @@ Oskari.clazz.define(className,
         // plugin index 25. Insert after panbuttons.
         this._index = 25;
         this.handler = new CameraControls3dHandler(state => this._render(state));
+        this._reactRoot = null;
     }, {
         getName: function () {
             return shortName;
@@ -44,7 +45,7 @@ Oskari.clazz.define(className,
             if (!this.getElement()) {
                 return;
             }
-            ReactDOM.unmountComponentAtNode(this.getElement().get(0));
+            this.getReactRoot(this.getElement().get(0)).unmount();
             this.getElement().detach();
             this._element = undefined;
         },
@@ -53,6 +54,12 @@ Oskari.clazz.define(className,
         },
         refresh: function () {
             this._render();
+        },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
         },
         _render (state = this.handler.getState()) {
             let el = this.getElement();
@@ -71,7 +78,7 @@ Oskari.clazz.define(className,
                     />
                 </LocaleProvider>
             );
-            ReactDOM.render(ui, el[0]);
+            this.getReactRoot(el[0]).render(ui);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

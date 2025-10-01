@@ -36,9 +36,6 @@ export const OpacitySlider = ({ value, onChange }) => {
 };
 
 OpacitySlider.propTypes = {
-    value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ]).isRequired,
+    value: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired
 };

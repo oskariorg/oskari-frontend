@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Footer } from './Footer/';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
 import { Message, Tooltip } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from 'oskari-ui/components/icons';

@@ -73,7 +73,7 @@ TimeSeriesRangeControl.propTypes = {
     start: PropTypes.number.isRequired,
     end: PropTypes.number.isRequired,
     mode: PropTypes.oneOf(['year', 'range']).isRequired,
-    value: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]).isRequired,
+    value: PropTypes.any.isRequired,
     dataYears: PropTypes.arrayOf(PropTypes.number).isRequired,
     isMobile: PropTypes.bool.isRequired,
     error: PropTypes.bool,

@@ -33,10 +33,7 @@ export const Badge = ThemeConsumer(({
 });
 
 Badge.propTypes = {
-    count: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ]),
+    count: PropTypes.any,
     color: PropTypes.string,
     showZero: PropTypes.bool,
     overflowCount: PropTypes.number

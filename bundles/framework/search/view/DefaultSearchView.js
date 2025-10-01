@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { SearchInput } from './SearchInput';
 import { SearchHandler } from './SearchHandler';
 import { SearchResultInfo } from './SearchResultInfo';
@@ -7,6 +6,7 @@ import { SearchResultTable } from './SearchResultTable';
 import { Message } from 'oskari-ui';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import styled from 'styled-components';
+import { createRoot } from 'react-dom/client';
 
 const Description = styled('div')`
     margin-bottom: 8px;
@@ -42,7 +42,14 @@ Oskari.clazz.define(
         const instanceConf = instance.conf || {};
         this.handler = new SearchHandler(!!instanceConf.autocomplete, this.searchservice, this.sandbox, () => { this.__refresh(); });
         this.loc = Oskari.getMsg.bind(null, this.instance.getName());
+        this._reactRoot = null;
     }, {
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
         __refresh: function () {
             const el = this.getContainer();
             const {
@@ -54,8 +61,8 @@ Oskari.clazz.define(
             const controller = this.handler.getController();
             const searchPerformed = result && Array.isArray(result.locations);
 
-            ReactDOM.render(
-                (<LocaleProvider value={{ bundleKey: 'Search' }}>
+            this.getReactRoot(el[0]).render(
+                <LocaleProvider value={{ bundleKey: 'Search' }}>
                     <ThemeProvider>
                         <SearchContainer>
                             <Message messageKey="searchDescription" LabelComponent={Description}/>
@@ -72,8 +79,7 @@ Oskari.clazz.define(
                                 onResultClick={(result) => this._resultClicked(result)} />
                         </SearchContainer>
                     </ThemeProvider>
-                </LocaleProvider>)
-                , el[0]);
+                </LocaleProvider>);
         },
         /**
          * @method createUi
