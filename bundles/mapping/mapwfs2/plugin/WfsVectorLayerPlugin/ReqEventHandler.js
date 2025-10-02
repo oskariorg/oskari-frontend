@@ -55,40 +55,6 @@ export class ReqEventHandler {
                     }
                 }
             },
-            WFSSetFilter: (event) => {
-                const service = getSelectionService();
-                if (!service) {
-                    return;
-                }
-                const keepPrevious = Oskari.ctrlKeyDown();
-                const featureCollection = event.getGeoJson();
-                const filterFeature = featureCollection.features[0];
-                if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
-                    return;
-                }
-                let targetLayers;
-                if (event.selectFromAllLayers()) {
-                    targetLayers = plugin.getAllLayerIds();
-                } else {
-                    const layerId = plugin.WFSLayerService.getTopWFSLayer();
-                    targetLayers = layerId ? [layerId] : [];
-                }
-                const featuresResult = plugin.getFeatures({
-                    geometry: filterFeature.geometry
-                }, {
-                    layers: targetLayers
-                });
-                Object.keys(featuresResult).forEach(layerId => {
-                    const layerFeatures = featuresResult[layerId].features || [];
-                    const selectedFeatureIds = layerFeatures.map(getFeatureId);
-
-                    if (keepPrevious) {
-                        selectedFeatureIds.forEach(id => service.addSelectedFeature(layerId, id));
-                    } else {
-                        service.setSelectedFeatureIds(layerId, selectedFeatureIds);
-                    }
-                });
-            },
             WFSSetPropertyFilter: event => {
                 if (!event.getFilters() || event.getFilters().filters.length === 0) {
                     return;

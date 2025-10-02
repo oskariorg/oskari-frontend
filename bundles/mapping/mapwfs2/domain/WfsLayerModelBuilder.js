@@ -38,12 +38,10 @@ Oskari.clazz.define(
             });
         },
         _addUserStyleTool: function (layer) {
-            const locOwnStyle = this.localization['own-style'];
             const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             toolOwnStyle.setName('ownStyle');
-            toolOwnStyle.setTitle(locOwnStyle);
+            toolOwnStyle.setTitle('');
             toolOwnStyle.setIconCls('show-own-style-tool');
-            toolOwnStyle.setTooltip(locOwnStyle);
             toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [{ layerId: layer.getId() }]));
             layer.addTool(toolOwnStyle);
         },
