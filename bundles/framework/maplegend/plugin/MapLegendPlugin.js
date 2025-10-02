@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
 import { QuestionOutlined } from '@ant-design/icons';
 import { showMapLegendPopup } from '../components/MapLegendPopup';
+import { createRoot } from 'react-dom/client';
 
 Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
     function (config) {
@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         this._defaultLocation = 'top right';
         this._index = 90;
         this._popupControls = null;
+        this._reactRoot = null;
     }, {
         resetUI: function () {
             if (this.isOpen()) {
@@ -37,6 +38,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             this._popupControls = null;
             this.refresh();
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
 
         refresh: function () {
             const el = this.getElement();
@@ -45,7 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             }
 
             const title = Oskari.getMsg('maplegend', 'tooltip');
-            ReactDOM.render(
+            this.getReactRoot(el[0]).render(
                 <MapModuleButton
                     className='t_maplegend'
                     title={title}
@@ -53,8 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     onClick={() => this.togglePopup()}
                     iconActive={this.isOpen()}
                     position={this.getLocation()}
-                />,
-                el[0]
+                />
             );
         },
 

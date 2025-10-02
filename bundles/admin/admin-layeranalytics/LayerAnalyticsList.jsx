@@ -63,7 +63,7 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
                 ) : (
                     <TextInput
                         ref={searchInput}
-                        value={selectedKeys[0]}   
+                        value={selectedKeys[0]}
                         onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                         onPressEnter={() => confirm({ closeDropdown: true })}
                         allowClear
@@ -99,10 +99,12 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
             .toString()
             .toLowerCase()
             .includes((value).toLowerCase()),
-        onFilterDropdownOpenChange: (visible) => {
-          if (visible && dataIndex !== 'dataProducer') {
-            setTimeout(() => searchInput.current?.select(), 100);
-          }
+        filterDropdownProps: {
+            onOpenChange: (visible) => {
+              if (visible && dataIndex !== 'dataProducer') {
+                setTimeout(() => searchInput.current?.select(), 100);
+              }
+            }
         },
         render: (text) => text
     });

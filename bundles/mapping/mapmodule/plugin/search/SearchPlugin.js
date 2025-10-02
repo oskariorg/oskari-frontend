@@ -1,9 +1,9 @@
 import '../../../../service/search/searchservice';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { SearchHandler } from './SearchHandler';
 import { SearchBar } from './components/SearchBar';
 import { ThemeProvider } from 'oskari-ui/util';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.SearchPlugin
@@ -26,6 +26,7 @@ Oskari.clazz.define(
         me._defaultLocation = 'top left';
         me._index = 0;
         me._name = 'SearchPlugin';
+        me._reactRoot = null;
     }, {
 
         /**
@@ -46,6 +47,12 @@ Oskari.clazz.define(
         _createControlElement: function () {
             return this.template.clone();
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
 
         refresh: function () {
             let el = this.getElement();
@@ -58,15 +65,14 @@ Oskari.clazz.define(
                 this.handler.addStateListener(() => this.refresh());
             }
 
-            ReactDOM.render(
+            this.getReactRoot(el[0]).render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <SearchBar
                         state={this.handler.getState()}
                         controller={this.handler.getController()}
                         placeholder={this.fieldPlaceHolder}
                     />
-                </ThemeProvider>,
-                el[0]
+                </ThemeProvider>
             );
         },
 

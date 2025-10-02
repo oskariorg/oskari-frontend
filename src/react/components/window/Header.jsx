@@ -64,7 +64,7 @@ export const Header = ThemeConsumer(({ title, isDraggable = false, onClose, them
 });
 
 Header.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.any]),
+    title: PropTypes.any,
     isDraggable: PropTypes.bool,
     tools: PropTypes.arrayOf(PropTypes.element),
     onClose: PropTypes.func

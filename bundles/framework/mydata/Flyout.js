@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { AccountTab } from './view/Account/AccountTab';
 import { Tabs } from 'antd';
 import { MyDataHandler } from './handler/MyDataHandler';
@@ -10,6 +9,7 @@ import { MyViewsHandler } from './handler/MyViewsHandler';
 import { PublishedMapsTab } from './view/PublishedMaps/PublishedMapsTab';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import './service/MyDataService';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.mapframework.bundle.mydata.Flyout
@@ -30,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
 
         this.uiHandler = new MyDataHandler(() => this.update());
         this.myDataService = null;
+        this._reactRoot = null;
     }, {
         /**
          * @method getName
@@ -139,7 +140,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
         setState: function (state) {
             this.state = state;
         },
-
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
         update: function () {
             const flyout = jQuery(this.container);
 
@@ -147,8 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
                 tabs,
                 activeTab
             } = this.uiHandler.getState();
-
-            ReactDOM.render(
+            this.getReactRoot(flyout[0]).render(
                 <LocaleProvider value={{ bundleKey: 'MyData' }}>
                     <ThemeProvider>
                         <FlyoutContent loginStatus={this.getLoginStatus()}>
@@ -171,8 +176,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
                         </FlyoutContent>
                     </ThemeProvider>
                 </LocaleProvider>
-                ,
-                flyout[0]
             );
         },
 

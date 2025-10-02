@@ -15,14 +15,14 @@ export const Dropdown = ({ children, items, placement, click = true }) => {
         />
     );
     return (
-        <AntDropdown dropdownRender={() => menu} placement={placement} trigger={click ? ['click'] : ['hover']}>
+        <AntDropdown popupRender={() => menu} placement={placement} trigger={click ? ['click'] : ['hover']}>
             {children}
         </AntDropdown>
     );
 };
 
 Dropdown.propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.any.isRequired,
     items: PropTypes.arrayOf(
         PropTypes.shape({
             title: PropTypes.string.isRequired,

@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import { StateHandler, controllerMixin, ThemeProvider } from 'oskari-ui/util';
 import { showAlertPopup } from '../view/AlertPopup';
 import { LayerSwipe, SPLITTER_WIDTH } from '../view/LayerSwipe';
 import { getRenderPixel } from 'ol/render';
 import { unByKey } from 'ol/Observable';
+import { createRoot } from 'react-dom/client';
 
 const Alerts = {
     NO_RASTER: 'noRaster',
@@ -28,6 +28,7 @@ class UIHandler extends StateHandler {
         this.element = null;
         this.eventListenerKeys = [];
         this.addStateListener(() => this.render());
+        this._reactRoot = null;
     };
 
     getMapSize () {
@@ -106,7 +107,8 @@ class UIHandler extends StateHandler {
             }
             this.initTopmostLayer();
         } else if (!active && this.element) {
-            unmountComponentAtNode(this.element);
+            const elem = createRoot(this.element);
+            elem.unmount();
             root.removeChild(this.element);
             this.element = null;
             layerId = null;
@@ -125,14 +127,21 @@ class UIHandler extends StateHandler {
         this.updateState({ noUI });
     }
 
+    getReactRoot (element) {
+        if (!this._reactRoot) {
+            this._reactRoot = createRoot(element);
+        }
+        return this._reactRoot;
+    }
+
     render () {
         if (!this.element) {
             return;
         }
-        ReactDOM.render(
+        this.getReactRoot(this.element).render(
             <ThemeProvider>
                 <LayerSwipe { ...this.getState() } controller={this.getController()} isMobile={!Oskari.util.mouseExists()}/>
-            </ThemeProvider>, this.element);
+            </ThemeProvider>);
     }
 
     resetPosition () {

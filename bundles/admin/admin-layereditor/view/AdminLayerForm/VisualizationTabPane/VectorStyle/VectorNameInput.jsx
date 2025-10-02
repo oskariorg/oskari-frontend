@@ -30,6 +30,6 @@ VectorNameInput.propTypes = {
     onChange: PropTypes.func.isRequired,
     isValid: PropTypes.bool.isRequired,
     styleName: PropTypes.string,
-    nameFieldHeader: PropTypes.node,
-    validationErrorMessage: PropTypes.node
+    nameFieldHeader: PropTypes.any,
+    validationErrorMessage: PropTypes.any
 };

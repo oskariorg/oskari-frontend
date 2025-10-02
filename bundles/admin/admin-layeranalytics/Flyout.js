@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { LayerAnalyticsList } from './LayerAnalyticsList';
 import { LayerAnalyticsDetails } from './LayerAnalyticsDetails';
+import { createRoot } from 'react-dom/client';
 
 Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
 
@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
         this.container = null;
         this.flyout = null;
         this.selectedLayerId = null;
+        this._reactRoot = null;
     }, {
         __name: 'Oskari.framework.bundle.admin-layeranalytics.Flyout',
         getName () {
@@ -37,8 +38,16 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
 
             this.updateUI();
         },
+
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
+
         updateUI () {
-            ReactDOM.render(
+            this.getReactRoot(this.container).render(
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                     { !this.selectedLayerId
                         ? <ThemeProvider>
@@ -57,8 +66,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
                             removeAnalyticsCallback={ (id, dataId) => this.instance.removeAnalyticsData(id, dataId) }
                         />
                     }
-                </LocaleProvider>,
-                this.container
+                </LocaleProvider>
             );
         },
         openLayerEditor (id) {

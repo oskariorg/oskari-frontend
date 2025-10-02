@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { AimOutlined } from '@ant-design/icons';
 import { MapModuleButton } from '../../MapModuleButton';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.MyLocationPlugin
@@ -36,6 +36,7 @@ Oskari.clazz.define(
         this._timeouts = 0; // timeouts for single location request
         this._tracking = false;
         this._trackingOptions = null;
+        this._reactRoot = null;
     }, {
         /**
          * @private @method _createControlElement
@@ -70,6 +71,12 @@ Oskari.clazz.define(
             this._setWaiting(false);
             this._setTracking(false);
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
         /**
          * @public @method refresh
          */
@@ -78,7 +85,7 @@ Oskari.clazz.define(
             if (!el) {
                 return;
             }
-            ReactDOM.render(
+            this.getReactRoot(el[0]).render(
                 <MapModuleButton
                     visible={this.isEnabled()}
                     className='t_mylocation'
@@ -87,8 +94,6 @@ Oskari.clazz.define(
                     onClick={() => this._setupRequest()}
                     position={this.getLocation()}
                 />
-                ,
-                el[0]
             );
         },
 

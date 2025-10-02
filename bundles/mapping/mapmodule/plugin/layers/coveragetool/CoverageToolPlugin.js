@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { DeleteOutlined } from '@ant-design/icons';
 import { COVERAGE_LAYER_ID, CoverageHelper } from './CoverageHelper';
 import { ThemeProvider } from 'oskari-ui/util';
 import { MapModuleButton } from '../../../MapModuleButton';
+import { createRoot } from 'react-dom/client';
 const FEATURE_EVENT_ADD = 'add';
 const FEATURE_EVENT_REMOVE = 'remove';
 const LOCALIZATION_BUNDLE_ID = 'MapModule';
@@ -22,6 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
         };
         this._visible = false;
         this.coverageHelper = new CoverageHelper();
+        this._reactRoot = null;
     }, {
         /** @static @property __name module name */
         __name: 'CoverageToolPlugin',
@@ -43,6 +44,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
             this.renderButton();
             this.addToPluginContainer(this.getElement());
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
         renderButton: function () {
             const el = this.getElement();
             if (!el) {
@@ -51,11 +58,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
 
             // clear all content from element so the tooltip gets cleared as well
             if (!this.isVisible()) {
-                ReactDOM.render(null, el[0]);
+                this.getReactRoot(el[0]).render(null);
                 return;
             }
 
-            ReactDOM.render(
+            this.getReactRoot(el[0]).render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <MapModuleButton
                         className='t_coveragetoolbutton'
@@ -66,8 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
                         iconActive={!!this.popupOpen}
                         position={this.getLocation()}
                     />
-                </ThemeProvider>,
-                el[0]
+                </ThemeProvider>
             );
         },
         setVisible: function (visible) {

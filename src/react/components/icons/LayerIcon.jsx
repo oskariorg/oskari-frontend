@@ -148,6 +148,6 @@ export const LayerIcon = ({ type, hasTimeseries = false, additionalTooltip, ...r
 
 LayerIcon.propTypes = {
     type: PropTypes.string.isRequired,
-    additionalTooltip: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    additionalTooltip: PropTypes.any,
     hasTimeseries: PropTypes.bool
 };
