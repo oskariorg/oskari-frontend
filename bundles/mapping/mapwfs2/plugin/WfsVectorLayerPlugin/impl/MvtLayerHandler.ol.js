@@ -18,7 +18,6 @@ export class MvtLayerHandler extends AbstractLayerHandler {
     constructor (layerPlugin) {
         super(layerPlugin);
         this._log = Oskari.log('WfsMvtLayerPlugin');
-        this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
         const config = layerPlugin.getConfig();
         if (!config) {
             return;
