@@ -12,6 +12,7 @@ export class WFSLayer extends AbstractVectorLayer {
         this._layerType = 'WFS';
         this._properties = [];
     }
+
     /* Overriding methods */
     hasFeatureData () {
         return true;
@@ -33,6 +34,7 @@ export class WFSLayer extends AbstractVectorLayer {
         super.handleDescribeLayer(info);
         this._properties = info.properties || [];
     }
+
     getGeometryType (raw) {
         if (raw) {
             return this._properties.find(p => p.type === 'geometry')?.rawType;
@@ -123,25 +125,6 @@ export class WFSLayer extends AbstractVectorLayer {
             types[prop.name] = prop.type;
             return types;
         }, {});
-    }
-
-    /**
-     * @method setWpsLayerParams
-     * @deprecated
-     * @param {json} wpsLayerParams
-     */
-    setWpsLayerParams () {
-        Oskari.log('WFSLayer').deprecated('setWpsLayerParams');
-    }
-
-    /**
-     * @method getWpsLayerParams
-     * @deprecated
-     * @return {json} wpsLayerParams
-     */
-    getWpsLayerParams () {
-        const { commonId, noDataValue } = this._controlData;
-        return { commonId, noDataValue };
     }
 }
 
