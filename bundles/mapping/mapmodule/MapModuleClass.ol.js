@@ -29,19 +29,6 @@ import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
 import './AbstractMapModule';
 import './plugin/BasicMapModulePlugin';
 
-import './resources/scss/getinfo.scss';
-import './resources/scss/logoplugin.scss';
-import './resources/scss/datasource.scss';
-import './resources/scss/indexmap.ol.scss';
-import './resources/scss/scalebar.ol.scss';
-import './resources/scss/fullscreen.scss';
-import './resources/scss/layersselection.scss';
-import './resources/scss/backgroundlayerselection.scss';
-import './resources/scss/vectorlayer.scss';
-import './resources/scss/mapmodule.ol.scss';
-import './resources/scss/attribution.ol.scss';
-import './resources/scss/attribution.cs.scss';
-
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
 const LAYER_Z_INDEX = {
     normal: 0, // When undefined, a zIndex of 0 is assumed

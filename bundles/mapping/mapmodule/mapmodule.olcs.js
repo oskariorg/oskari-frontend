@@ -19,18 +19,6 @@ import './event/TimeChangedEvent';
 import './plugin/layers/LayersPlugin.olcs';
 
 import 'olcs/css/olcs.css';
-import './resources/scss/getinfo.scss';
-import './resources/scss/logoplugin.scss';
-import './resources/scss/datasource.scss';
-import './resources/scss/indexmap.ol.scss';
-import './resources/scss/scalebar.ol.scss';
-import './resources/scss/fullscreen.scss';
-import './resources/scss/layersselection.scss';
-import './resources/scss/backgroundlayerselection.scss';
-import './resources/scss/vectorlayer.scss';
-import './resources/scss/mapmodule.ol.scss';
-import './resources/scss/attribution.ol.scss';
-import './resources/scss/attribution.cs.scss';
 
 dayjs.extend(customParseFormat);
 // OL-cesium expects to find this global
