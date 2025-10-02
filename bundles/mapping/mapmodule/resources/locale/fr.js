@@ -121,6 +121,12 @@ Oskari.registerLocalization(
                     "confirmReset": "Souhaitez-vous revenir à l’étendue précédente?"
                 }
             },
+            "WfsVectorLayerPlugin": {
+                "layerFilter": {
+                    "tooltip": "Afficher uniquement les couches vectorielles",
+                    "featuredata": "Couches vectorielles"
+                }
+            }
         },
         "layerUnsupported": {
             "common": "La couche de carte ne peut pas être affichée.",

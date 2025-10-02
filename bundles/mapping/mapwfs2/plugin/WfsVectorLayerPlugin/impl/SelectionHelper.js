@@ -22,9 +22,11 @@ export class SelectionHelper {
         // layerId: { fid: olFeature }
         this._styledFeatures = {};
     }
+
     getMapModule () {
         return this._layerPlugin.getMapModule();
     }
+
     updateSelection (oskariLayer, featureIds = []) {
         const layerId = oskariLayer.getId();
         const currentSelection = this._getStyledFeaturesByLayer(layerId);
@@ -39,6 +41,7 @@ export class SelectionHelper {
         const style = this.getMapModule().getStyleForLayer(oskariLayer, SELECTED_STYLE);
         newSelection.forEach(feature => this._setStyleForFeature(layerId, feature, style));
     }
+
     // recalculate styles for currently selected features on layer
     updateSelectionStyles (oskariLayer) {
         const layerId = oskariLayer.getId();
@@ -46,6 +49,7 @@ export class SelectionHelper {
         const styledFeatures = this._getStyledFeaturesByLayer(layerId);
         Object.keys(styledFeatures).forEach(fid => this._setStyleForFeature(layerId, styledFeatures[fid], style));
     }
+
     getFeaturesByIds (layerId, featureIds) {
         const olLayers = this.getMapModule().getOLMapLayers(layerId);
         if (!olLayers || !olLayers.length || typeof olLayers[0].getSource !== 'function') {
@@ -56,6 +60,7 @@ export class SelectionHelper {
             .map(fid => source.getFeatureById(fid))
             .filter(f => !!f); // remove null values if feature isn't found
     }
+
     _saveFeatureRef (layerId, olFeature) {
         let features = this._styledFeatures[layerId];
         if (!features) {
@@ -64,13 +69,16 @@ export class SelectionHelper {
         }
         features[olFeature.get(WFS_ID_KEY)] = olFeature;
     }
+
     _getStyledFeaturesByLayer (layerId) {
         return this._styledFeatures[layerId] || {};
     }
+
     _setStyleForFeature (layerId, olFeature, style) {
         olFeature.setStyle(style);
         this._saveFeatureRef(layerId, olFeature);
     }
+
     _removeStyleFromFeature (layerId, featureId) {
         const styledFeatures = this._getStyledFeaturesByLayer(layerId);
         const feature = styledFeatures[featureId];
