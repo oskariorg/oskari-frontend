@@ -17,25 +17,6 @@ Oskari.clazz.define("Oskari.wfsvector.WfsVectorBundle", function () {
         "protocol": ["Oskari.bundle.Bundle"],
         "source": {
             "scripts": [
-                {
-                    "type" : "text/javascript",
-                    "src" : "../../../../bundles/mapping/mapwfs2/event/WFSStatusChangedEvent.js"
-                }, {
-                    "type" : "text/javascript",
-                    "src" : "../../../../bundles/mapping/mapwfs2/request/ActivateHighlightRequest.js"
-                }, {
-                    "type" : "text/javascript",
-                    "src" : "../../../../bundles/mapping/mapwfs2/request/ActivateHighlightRequestHandler.js"
-                }, {
-                    "type" : "text/javascript",
-                    "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeaturesSelectedEvent.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapwfs2/domain/WFSLayer.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapwfs2/domain/WfsLayerModelBuilder.js"
-                }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapwfs2/plugin/WfsVectorLayerPlugin.ol.js"
                 }
