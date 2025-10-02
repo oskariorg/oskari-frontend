@@ -106,24 +106,5 @@ Oskari.clazz.define(
          */
         getSelectedWFSLayerIds: function () {
             return this.selectedWFSLayerIds;
-        },
-
-        /**
-         * @method getTopWFSLayer
-         *
-         * @return {Number} me.topWFSLayer; Id of the top WFS layer
-         */
-        getTopWFSLayer: function () {
-            var me = this,
-                layers = me.sandbox.findAllSelectedMapLayers(),
-                topWFSLayer;
-
-            for (var i = 0; i < layers.length; i++) {
-                var layer = layers[i];
-                if (layer.hasFeatureData()) {
-                    topWFSLayer = layer._id;
-                }
-            }
-            return topWFSLayer;
         }
     });
