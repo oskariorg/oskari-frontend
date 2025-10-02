@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.request.ActivateHighlightRequest
- * Requests a WFS highlight enabled or disabled
+ * Requests a WFS plugin reacts to map clicks (detecting feature clicks) or not
  *
  * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.

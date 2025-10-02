@@ -91,8 +91,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
          */
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
-            this._layers = [];
-            this._baseLayers = [];
         },
         /**
          * @method _createEventHandlers
@@ -114,6 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
                 },
                 UIChangeEvent: function (event) {
                     this.coverageHelper.clearLayerCoverage(true);
+                    this.stopPlugin(Oskari.getSandbox());
                 }
             };
         }

@@ -2389,12 +2389,17 @@ Oskari.clazz.define(
                     });
                 }
 
-                function _getFirstAncestorGroup (layerHierarchy, childGroup) {
-                    if (childGroup.parentId === -1) {
-                        return childGroup;
-                    }
-                    const parentGroup = layerHierarchy.find(group => group.id === childGroup.parentID);
-                    return _getFirstAncestorGroup(layerHierarchy, parentGroup);
+                function _removeGroupsWithNoLayers (groupArray) {
+                    return groupArray
+                        .map(group => ({
+                            ...group,
+                            groups: _removeGroupsWithNoLayers(group.groups)
+                        }))
+                        .filter(group => {
+                            const hasLayers = group.layers.some(layer => layerIds.includes(layer.id));
+                            const hasSubGroupWithLayers = group.groups.length > 0;
+                            return hasLayers || hasSubGroupWithLayers;
+                        });
                 }
 
                 function _getStrippedGroup (group, layerIds) {
@@ -2412,22 +2417,12 @@ Oskari.clazz.define(
                 }
 
                 function _parseLayerGroups (layerHierarchy) {
-                    const groupsFlat =
-                        layerHierarchy.filter(group => group.layers.some(layer => layerIds.includes(layer.id)));
-                    const groupsHierarchy = [];
-
-                    groupsFlat.forEach(function (group) {
-                        const firstAncestor = _getFirstAncestorGroup(layerHierarchy, group);
-                        if (!groupsHierarchy.some(group => group.id === firstAncestor.id)) {
-                            groupsHierarchy.push(firstAncestor);
-                        }
-                    });
-                    groupsHierarchy.sort((a, b) => a.orderNumber - b.orderNumber);
+                    const groupsNoEmpty = _removeGroupsWithNoLayers(layerHierarchy);
+                    groupsNoEmpty.sort((a, b) => a.orderNumber - b.orderNumber);
                     const groupsHierarchyStrip = [];
-                    groupsHierarchy.forEach(function (group) {
+                    groupsNoEmpty.forEach(function (group) {
                         groupsHierarchyStrip.push(_getStrippedGroup(group, layerIds));
                     });
-
                     return groupsHierarchyStrip;
                 }
 

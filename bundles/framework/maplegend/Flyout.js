@@ -1,8 +1,7 @@
 import React from 'react';
 import { Message } from 'oskari-ui';
-import { LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { MapLegendList } from './MapLegendList';
-import { ThemeProvider } from 'oskari-ui/util';
 import { createRoot } from 'react-dom/client';
 
 /**
