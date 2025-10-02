@@ -3,13 +3,13 @@ import { MvtLayerHandler } from './WfsVectorLayerPlugin/impl/MvtLayerHandler.ol'
 import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
 import { DEFAULT_STYLES, styleGenerator } from './WfsVectorLayerPlugin/util/style';
 
-import '../domain/WFSLayer';
-import '../domain/WfsLayerModelBuilder';
-import '../request/ActivateHighlightRequest';
-import '../event/WFSFeaturesSelectedEvent';
-import '../event/WFSStatusChangedEvent';
+import './WFSLayer';
+import './WfsLayerModelBuilder';
+import '../../request/ActivateHighlightRequest';
+import '../../event/WFSFeaturesSelectedEvent';
+import '../../event/WFSStatusChangedEvent';
 
-import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
+import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../domain/constants';
 const AbstractVectorLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractVectorLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
@@ -18,7 +18,7 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
     constructor (config) {
         super(config);
         this._config = config;
-        this.__name = 'WfsVectorLayerPlugin';
+        this._name = 'WfsVectorLayerPlugin';
         this._clazz = 'Oskari.wfs.WfsVectorLayerPlugin';
         this.renderMode = config.renderMode || RENDER_MODE_VECTOR;
         this.oskariStyleSupport = true;
@@ -102,7 +102,7 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
 
         const layerClass = 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';
         this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), layerClass, composingModel);
-        this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
+        this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox, (path) => this.getMsg(path)));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
         this.vectorFeatureService.registerDefaultStyles(this.layertype, DEFAULT_STYLES);
         this.getMapModule().registerDefaultFeatureStyle(this.layertype, DEFAULT_STYLES.style);
@@ -371,7 +371,6 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         });
     }
 };
-
 Oskari.clazz.defineES('Oskari.wfsvector.WfsVectorLayerPlugin', WfsVectorLayerPlugin,
     {
         /**

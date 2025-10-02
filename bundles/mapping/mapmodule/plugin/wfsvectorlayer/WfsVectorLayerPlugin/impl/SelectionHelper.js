@@ -1,4 +1,4 @@
-import { WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
+import { WFS_ID_KEY } from '../../../../domain/constants';
 
 /**
  * Share style for selected features

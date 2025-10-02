@@ -1,7 +1,7 @@
 import { Cluster as olCluster } from 'ol/source';
-import { filterFeaturesByAttribute, filterFeaturesByGeometry } from '../../../../mapmodule/util/vectorfeatures/filter';
-import { getFeatureAsGeojson } from '../../../../mapmodule/util/vectorfeatures/jsonHelper';
-import { getZoomLevelHelper } from '../../../../mapmodule/util/scale';
+import { filterFeaturesByAttribute, filterFeaturesByGeometry } from '../../../../util/vectorfeatures/filter';
+import { getFeatureAsGeojson } from '../../../../util/vectorfeatures/jsonHelper';
+import { getZoomLevelHelper } from '../../../../util/scale';
 import { SelectionHelper } from './SelectionHelper';
 
 const LOADING_STATUS_VALUE = {

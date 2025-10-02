@@ -5,8 +5,8 @@
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',
 
-    function (sandbox) {
-        this.localization = Oskari.getLocalization('MapWfs2');
+    function (sandbox, getMsg) {
+        this.getMsg = getMsg;
         this.sandbox = sandbox;
         this.service = null;
         this._pendingUserStyleTools = [];
@@ -17,25 +17,28 @@ Oskari.clazz.define(
          * @method  @public _registerForLayerFiltering
          */
         _registerForLayerFiltering: function () {
-            var me = this;
-            Oskari.on('app.start', function (details) {
-                if (me.sandbox.hasHandler('ShowUserStylesRequest')) {
-                    me._pendingUserStyleTools.forEach(l => me._addUserStyleTool(l));
+            Oskari.on('app.start', (details) => {
+                const sb = this.sandbox;
+                if (this._hasSupportForUserStyles(sb)) {
+                    this._pendingUserStyleTools.forEach(l => this._addUserStyleTool(l));
                 }
-                me._pendingUserStyleTools = [];
-                var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+                this._pendingUserStyleTools = [];
+                const layerlistService = sb.getService('Oskari.mapframework.service.LayerlistService');
 
                 if (!layerlistService) {
                     return;
                 }
 
-                layerlistService.registerLayerlistFilterButton(me.localization.layerFilter.featuredata,
-                    me.localization.layerFilter.tooltip, {
+                layerlistService.registerLayerlistFilterButton(this.getMsg('layerFilter.featuredata'),
+                    this.getMsg('layerFilter.tooltip'), {
                         active: 'layer-stats',
                         deactive: 'layer-stats-disabled'
                     },
                     'featuredata');
             });
+        },
+        _hasSupportForUserStyles: function (sandbox) {
+            return sandbox.hasHandler('ShowUserStylesRequest');
         },
         _addUserStyleTool: function (layer) {
             const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
@@ -55,7 +58,7 @@ Oskari.clazz.define(
             if (isNaN(layer.getId())) {
                 return;
             }
-            if (this.sandbox.hasHandler('ShowUserStylesRequest')) {
+            if (this._hasSupportForUserStyles(this.sandbox)) {
                 this._addUserStyleTool(layer);
             } else {
                 this._pendingUserStyleTools.push(layer);

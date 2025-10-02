@@ -5,8 +5,8 @@ import olSourceTileDebug from 'ol/source/TileDebug';
 import olFormatMVT from 'ol/format/MVT';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olSourceVectorTile from 'ol/source/VectorTile';
-import { getMVTFeaturesInExtent } from '../../../../mapmodule/util/vectorfeatures/mvtHelper';
-import { WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
+import { getMVTFeaturesInExtent } from '../../../../util/vectorfeatures/mvtHelper';
+import { WFS_ID_KEY } from '../../../../domain/constants';
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
 import { RequestCounter } from './RequestCounter';
 

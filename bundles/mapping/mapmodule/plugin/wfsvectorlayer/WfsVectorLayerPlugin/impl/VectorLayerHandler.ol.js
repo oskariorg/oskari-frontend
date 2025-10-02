@@ -11,7 +11,7 @@ import { RequestCounter } from './RequestCounter';
 import olPoint from 'ol/geom/Point';
 import olMultiPoint from 'ol/geom/MultiPoint';
 
-import { LAYER_CLUSTER, WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
+import { LAYER_CLUSTER, WFS_ID_KEY } from '../../../../domain/constants';
 
 const MAP_MOVE_THROTTLE_MS = 2000;
 const OPACITY_THROTTLE_MS = 1500;
