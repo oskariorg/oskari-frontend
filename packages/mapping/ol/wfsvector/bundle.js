@@ -48,14 +48,6 @@ Oskari.clazz.define("Oskari.wfsvector.WfsVectorBundle", function () {
                 "type" : "text/javascript",
                 "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/en.js"
             }, {
-                "lang" : "es",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/es.js"
-            }, {
-                "lang" : "et",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/et.js"
-            }, {
                 "lang" : "fi",
                 "type" : "text/javascript",
                 "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/fi.js"
@@ -64,45 +56,9 @@ Oskari.clazz.define("Oskari.wfsvector.WfsVectorBundle", function () {
                 "type" : "text/javascript",
                 "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/fr.js"
             }, {
-                "lang" : "is",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/is.js"
-            }, {
-                "lang" : "it",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/it.js"
-            }, {
                 "lang" : "sv",
                 "type" : "text/javascript",
                 "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sv.js"
-            }, {
-                "lang" : "nb",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/nb.js"
-            }, {
-                "lang" : "nl",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/nl.js"
-            }, {
-                "lang" : "nn",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/nn.js"
-            }, {
-                "lang" : "sl",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sl.js"
-            }, {
-                "lang" : "sk",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sk.js"
-            }, {
-                "lang" : "de",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/de.js"
-            }, {
-                "lang" : "cs",
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/cs.js"
             }, {
                 "lang" : "ru",
                 "type" : "text/javascript",
