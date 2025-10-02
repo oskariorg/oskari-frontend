@@ -35,6 +35,18 @@ PropTypes are not functioning with the new React version like before. As they ar
  It's easiest to replace most current non-working PropTypes values with type `any`.
  We are considering adding TypeScript support to address this: https://github.com/oskariorg/oskari-documentation/issues/124
 
+#### Migrated bundles
+
+These bundles have been migrated from under `packages` to `bundles` and/or to the new bundle-loader syntax introduced in Oskari 3.0. Applications will need to modify the `main.js` files accordingly:
+
+```diff
+- import 'oskari-loader!oskari-frontend/packages/mapping/ol/mapmodule/bundle.js';
++ import 'oskari-bundle!oskari-frontend/bundles/mapping/mapmodule/map2d_ol';
+```
+
+- packages/mapping/ol/mapmodule/bundle.js -> bundles/mapping/mapmodule/map2d_ol
+- packages/mapping/olcs/mapmodule/bundle.js -> bundles/mapping/mapmodule/map3d_olcs
+
 ## 3.1.0
 
 For a full list of changes see:
