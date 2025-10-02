@@ -2,7 +2,7 @@ import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olFeature from 'ol/Feature';
 import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
-import { processFeatureProperties } from '../../../mapwfs2/plugin/WfsVectorLayerPlugin/util/props';
+import { processFeatureProperties } from '../../plugin/wfsvectorlayer/WfsVectorLayerPlugin/util/props';
 
 const featureFormatter = new olFormatGeoJSON();
 /**
