@@ -56,28 +56,6 @@ export class WFSLayer extends AbstractVectorLayer {
     }
 
     /**
-     * @method getFields
-     * @deprecated
-     * @return {String[]} fields
-     */
-    getFields () {
-        Oskari.log('WFSLayer').deprecated('getFields()');
-        const selection = this.getPropertySelection();
-        return selection.length ? ['__fid', ...selection] : [];
-    }
-
-    /**
-     * @method getLocales
-     * @deprecated
-     * @return {String[]} locales
-     */
-    getLocales () {
-        Oskari.log('WFSLayer').deprecated('getLocales()');
-        const labels = this.getProperties().map(prop => prop.label || prop.name);
-        return labels.length ? ['ID', ...labels] : [];
-    }
-
-    /**
      * Returns an formatter object for given field name.
      * The object can have type and params like:
      * {
