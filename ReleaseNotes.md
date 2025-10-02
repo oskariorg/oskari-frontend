@@ -1,5 +1,40 @@
 # Release Notes
 
+## 3.2.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/57?closed=1
+
+### React version updated 16 -> 18
+
+The new version requires some modifications to current code for any app specific bundles.
+See React migration guide for details: https://react.dev/blog/2022/03/08/react-18-upgrade-guide
+
+Examples for changes needed on oskari-frontend can be found on https://github.com/oskariorg/oskari-frontend/pull/2869
+
+For most bundles can be migrated with these steps:
+
+Replace: `import ReactDOM from 'react-dom';`
+With `import { createRoot } from 'react-dom/client';`
+
+Add a helper for maintaining root element reference:
+```javascript
+getReactRoot (element) {
+    if (!this._reactRoot) {
+        this._reactRoot = createRoot(element);
+    }
+    return this._reactRoot;
+},
+```
+
+Replace: `ReactDOM.render(<jsx/>, element)`
+With: `this.getReactRoot(template[0]).render(<jsx/>)`
+
+PropTypes are not functioning with the new React version like before. As they are being removed from React:
+ https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-apisv 
+ It's easiest to replace most current non-working PropTypes values with type `any`.
+ We are considering adding TypeScript support to address this: https://github.com/oskariorg/oskari-documentation/issues/124
+
 ## 3.1.0
 
 For a full list of changes see:
