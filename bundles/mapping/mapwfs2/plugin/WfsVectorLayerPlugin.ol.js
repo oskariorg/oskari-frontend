@@ -6,7 +6,6 @@ import { DEFAULT_STYLES, styleGenerator } from './WfsVectorLayerPlugin/util/styl
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
 const AbstractVectorLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractVectorLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
-const WFSLayerService = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 
 export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
@@ -77,7 +76,6 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
             this.renderMode = RENDER_MODE_VECTOR;
         }
         this.reqEventHandler = new ReqEventHandler(sandbox);
-        this.WFSLayerService = new WFSLayerService(sandbox);
         this.vectorFeatureService = sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
         this.mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
@@ -102,7 +100,6 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         this.vectorFeatureService.registerLayerType(this.layertype, this);
         this.vectorFeatureService.registerDefaultStyles(this.layertype, DEFAULT_STYLES);
         this.getMapModule().registerDefaultFeatureStyle(this.layertype, DEFAULT_STYLES.style);
-        sandbox.registerService(this.WFSLayerService);
     }
 
     _createPluginEventHandlers () {
