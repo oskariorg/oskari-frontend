@@ -3,9 +3,6 @@ import styled from 'styled-components';
 
 // Wrap to styled so components can be referred in component styling.
 const Select = styled(AntSelect)`
-    .ant-select-selector {
-        width: auto !important;
-    }
 `;
 Select.displayName = 'OskariUISelect';
 
