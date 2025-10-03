@@ -29,9 +29,9 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     createEventHandlers () {
         const handlers = super.createEventHandlers();
         if (this.plugin.getMapModule().getSupports3D()) {
-            handlers['AfterChangeMapLayerOpacityEvent'] = Oskari.util.throttle(event =>
+            handlers.AfterChangeMapLayerOpacityEvent = Oskari.util.throttle(event =>
                 this._updateLayerStyle(event.getMapLayer()), OPACITY_THROTTLE_MS);
-            handlers['AfterMapMoveEvent'] = Oskari.util.throttle(() =>
+            handlers.AfterMapMoveEvent = Oskari.util.throttle(() =>
                 this._loadFeaturesForAllLayers(), MAP_MOVE_THROTTLE_MS);
         }
         return handlers;
@@ -120,8 +120,8 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         const source = new olSourceVector({
             format: new olFormatGeoJSON(),
             url: Oskari.urls.getRoute('GetWFSFeatures'),
-            projection: projection,
-            strategy: strategy
+            projection,
+            strategy
         });
         source.setLoader(this._getFeatureLoader(layer, source));
         return source;

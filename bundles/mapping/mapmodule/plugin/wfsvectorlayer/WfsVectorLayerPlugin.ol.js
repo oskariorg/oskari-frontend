@@ -122,9 +122,7 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         eventKeys.forEach(eventName => {
             handlers[eventName] = event => {
                 [vectorHandlers, mvtHandlers, commonHandlers].forEach(handlerModule => {
-                    if (handlerModule.hasOwnProperty(eventName)) {
-                        handlerModule[eventName](event);
-                    }
+                    handlerModule[eventName](event);
                 });
             };
         });
@@ -229,6 +227,7 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         });
         return result;
     }
+
     /**
      * @method addMapLayerToMap Adds wfs layer to map
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
@@ -346,7 +345,7 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
     }
 
     notify (eventName, ...args) {
-        var builder = Oskari.eventBuilder(eventName);
+        const builder = Oskari.eventBuilder(eventName);
         if (!builder) {
             return;
         }

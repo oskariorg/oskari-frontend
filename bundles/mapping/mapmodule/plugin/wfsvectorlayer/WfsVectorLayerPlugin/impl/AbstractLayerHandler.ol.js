@@ -66,6 +66,7 @@ export class AbstractLayerHandler {
     refreshLayer (layer) {
         this._log.debug('TODO: refreshLayer() not implemented on LayerHandler');
     }
+
     getFeaturesWithFilter (layerId, geojson = {}) {
         const features = this._getFeaturesInViewport(layerId);
         if (!features.length) {
