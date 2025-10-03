@@ -1,7 +1,7 @@
 import { Cluster as olCluster } from 'ol/source';
-import { filterFeaturesByAttribute, filterFeaturesByGeometry } from '../../../../mapmodule/util/vectorfeatures/filter';
-import { getFeatureAsGeojson } from '../../../../mapmodule/util/vectorfeatures/jsonHelper';
-import { getZoomLevelHelper } from '../../../../mapmodule/util/scale';
+import { filterFeaturesByAttribute, filterFeaturesByGeometry } from '../../../../util/vectorfeatures/filter';
+import { getFeatureAsGeojson } from '../../../../util/vectorfeatures/jsonHelper';
+import { getZoomLevelHelper } from '../../../../util/scale';
 import { SelectionHelper } from './SelectionHelper';
 
 const LOADING_STATUS_VALUE = {
@@ -66,6 +66,7 @@ export class AbstractLayerHandler {
     refreshLayer (layer) {
         this._log.debug('TODO: refreshLayer() not implemented on LayerHandler');
     }
+
     getFeaturesWithFilter (layerId, geojson = {}) {
         const features = this._getFeaturesInViewport(layerId);
         if (!features.length) {

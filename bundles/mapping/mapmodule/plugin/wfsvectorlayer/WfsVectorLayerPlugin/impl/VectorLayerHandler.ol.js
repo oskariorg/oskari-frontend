@@ -11,7 +11,7 @@ import { RequestCounter } from './RequestCounter';
 import olPoint from 'ol/geom/Point';
 import olMultiPoint from 'ol/geom/MultiPoint';
 
-import { LAYER_CLUSTER, WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
+import { LAYER_CLUSTER, WFS_ID_KEY } from '../../../../domain/constants';
 
 const MAP_MOVE_THROTTLE_MS = 2000;
 const OPACITY_THROTTLE_MS = 1500;
@@ -29,9 +29,9 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     createEventHandlers () {
         const handlers = super.createEventHandlers();
         if (this.plugin.getMapModule().getSupports3D()) {
-            handlers['AfterChangeMapLayerOpacityEvent'] = Oskari.util.throttle(event =>
+            handlers.AfterChangeMapLayerOpacityEvent = Oskari.util.throttle(event =>
                 this._updateLayerStyle(event.getMapLayer()), OPACITY_THROTTLE_MS);
-            handlers['AfterMapMoveEvent'] = Oskari.util.throttle(() =>
+            handlers.AfterMapMoveEvent = Oskari.util.throttle(() =>
                 this._loadFeaturesForAllLayers(), MAP_MOVE_THROTTLE_MS);
         }
         return handlers;
@@ -120,8 +120,8 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         const source = new olSourceVector({
             format: new olFormatGeoJSON(),
             url: Oskari.urls.getRoute('GetWFSFeatures'),
-            projection: projection,
-            strategy: strategy
+            projection,
+            strategy
         });
         source.setLoader(this._getFeatureLoader(layer, source));
         return source;

@@ -50,7 +50,7 @@ export class UserDataLayerModelBuilder {
 
         if (editRequest) {
             // Add edit layer tool
-            const toolName = Oskari.getMsg('MapWfs2', 'editLayer');
+            const toolName = Oskari.getMsg('MapModule', 'plugin.WfsVectorLayerPlugin.editLayer');
             const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             toolOwnStyle.setName('editStyle');
             toolOwnStyle.setIconCls('show-own-style-tool');

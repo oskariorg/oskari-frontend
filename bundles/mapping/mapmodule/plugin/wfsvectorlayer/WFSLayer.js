@@ -1,4 +1,4 @@
-import { AbstractVectorLayer } from '../../mapmodule/domain/AbstractVectorLayer';
+import { AbstractVectorLayer } from '../../domain/AbstractVectorLayer';
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer
  *

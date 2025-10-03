@@ -132,6 +132,13 @@ Oskari.registerLocalization(
                     "text": "3D-tasot",
                     "tooltip": "Näytä vain 3D-aineistot"
                 }
+            },
+            "WfsVectorLayerPlugin": {
+                "editLayer": "Muokkaa tasoa",
+                "layerFilter": {
+                    "tooltip": "Näytä vain vektoritasot",
+                    "featuredata": "Vektoritasot"
+                }
             }
         },
         "layerVisibility": {

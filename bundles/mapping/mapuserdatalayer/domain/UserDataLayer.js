@@ -1,4 +1,4 @@
-import { WFSLayer } from '../../mapwfs2/domain/WFSLayer';
+import { WFSLayer } from '../../mapmodule/plugin/wfsvectorlayer/WFSLayer';
 import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
 import { DESCRIBE_LAYER } from '../../mapmodule/domain/constants';
 
