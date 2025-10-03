@@ -1,6 +1,6 @@
 import '../GetInfoPlugin';
 import './GetFeatureInfoFormatter';
-import { processFeatureProperties } from '../../../../mapwfs2/plugin/WfsVectorLayerPlugin/util/props';
+import { processFeatureProperties } from '../../wfsvectorlayer/WfsVectorLayerPlugin/util/props';
 
 const plugin = Oskari.clazz.create('Oskari.mapframework.mapmodule.GetInfoPlugin');
 // simple mock

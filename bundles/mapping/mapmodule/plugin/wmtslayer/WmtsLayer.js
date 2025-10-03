@@ -11,5 +11,5 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer', function () {
         return true;
     }
 }, {
-    'extend': ['Oskari.mapframework.domain.AbstractLayer']
+    extend: ['Oskari.mapframework.domain.AbstractLayer']
 });

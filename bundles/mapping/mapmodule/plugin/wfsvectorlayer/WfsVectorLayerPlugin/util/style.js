@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import { getStyleFunction, useStyleFunction, wrapClusterStyleFunction, geometryTypeToStyleType } from '../../../../mapmodule/oskariStyle/generator.ol';
+import { getStyleFunction, useStyleFunction, wrapClusterStyleFunction, geometryTypeToStyleType } from '../../../../oskariStyle/generator.ol';
 
 const defaults = {
     style: {

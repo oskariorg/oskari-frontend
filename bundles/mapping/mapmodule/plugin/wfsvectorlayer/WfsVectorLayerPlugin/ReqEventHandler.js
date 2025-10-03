@@ -1,6 +1,6 @@
 import { processFeatureProperties } from './util/props';
-import { WFS_ID_KEY, WFS_FTR_ID_KEY } from '../../../mapmodule/domain/constants';
-import { getFilterAlternativesAsArray, filterFeaturesByAttribute } from '../../../mapmodule/util/vectorfeatures/filter';
+import { WFS_ID_KEY, WFS_FTR_ID_KEY } from '../../../domain/constants';
+import { getFilterAlternativesAsArray, filterFeaturesByAttribute } from '../../../util/vectorfeatures/filter';
 
 const getFeatureId = (feature) => feature.id || feature.properties[WFS_ID_KEY] || feature.properties[WFS_FTR_ID_KEY];
 export class ReqEventHandler {

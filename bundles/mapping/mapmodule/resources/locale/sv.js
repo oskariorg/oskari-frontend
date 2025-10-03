@@ -127,6 +127,13 @@ Oskari.registerLocalization(
                     "text": "3D kartlager",
                     "tooltip": "Visa endast 3D-datamängder"
                 }
+            },
+            "WfsVectorLayerPlugin": {
+                "editLayer": "Editera kartlager",
+                "layerFilter": {
+                    "tooltip": "Visa endast kartlager med vektorgrafik",
+                    "featuredata": "Vektorlager"
+                }
             }
         },
         "layerVisibility": {
