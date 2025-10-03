@@ -1,7 +1,8 @@
-import olLayerTile from 'ol/layer/Tile';
-import olSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
+import OlLayerTile from 'ol/layer/Tile';
+import OlSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
+import './WmtsLayer';
 import { formatCapabilitiesForOpenLayers } from './CapabilitiesHelper';
-import { getZoomLevelHelper } from '../../mapmodule/util/scale';
+import { getZoomLevelHelper } from '../../util/scale';
 import { Messaging } from 'oskari-ui/util';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -116,8 +117,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             // On OL 6.4.3 it's always false from optionsFromCapabilities()
             // On 6.6.1 it appears to be correct and this line could be removed
             options.wrapX = !!config.wrapX;
-            const wmtsLayer = new olLayerTile({
-                source: new olSourceWMTS(options),
+            const wmtsLayer = new OlLayerTile({
+                source: new OlSourceWMTS(options),
                 opacity: layer.getOpacity() / 100.0,
                 transparent: true,
                 visible: layer.isVisibleOnMap()
@@ -131,8 +132,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          *
          */
         _registerLayerEvents: function (layer, oskariLayer) {
-            var me = this;
-            var source = layer.getSource();
+            const me = this;
+            const source = layer.getSource();
 
             source.on('tileloadstart', function () {
                 me.getMapModule().loadingState(oskariLayer.getId(), true);

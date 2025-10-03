@@ -49,13 +49,21 @@ These bundles have been migrated from under `packages` to `bundles` and/or to th
 
 #### Bundles combined
 
-Support for different kinds of mapmodule plugins have been historically required an import on applications main.js, but since most instances have them enabled anyways the most common ones have been included in map module itself. These include:
-- wfsvector (or mapwfs2, it's been around long enough to have multiple names)
+Support for different kinds of mapmodule plugins have been historically required an import on applications `main.js`, but since most instances have them enabled anyways the most common ones have been included in map module itself. These include:
+- `wfsvector` (or `mapwfs2`, it's been around long enough to have multiple names)
+- `mapwmts`
+
+The plugins they register are now started by default even if not referenced in the `mapfull.conf.plugins` array:
+- `Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin`
+- `Oskari.wfsvector.WfsVectorLayerPlugin`
+
+If you need to pass some configuration for these plugins, you will need to do it by including them on the `mapfull.conf.plugins` array like before. Otherwise references can be removed from the database.
 
 You can remove imports from your applications `main.js` to these (the imports will fail since bundle.js files have been removed from packages-folder, but they are automatically included now).
 
 ```diff
 - import 'oskari-loader!oskari-frontend/packages/mapping/ol/wfsvector/bundle.js';
+- import 'oskari-loader!oskari-frontend/packages/mapping/ol/mapwmts/bundle.js';
 ```
 
 ## 3.1.0
