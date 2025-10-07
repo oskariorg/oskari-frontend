@@ -81,7 +81,7 @@ export const PermissionRow = (props) => {
 };
 
 PermissionRow.propTypes = {
-    text: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+    text: PropTypes.any,
     checkboxes: PropTypes.array.isRequired,
     isHeaderRow: PropTypes.bool.isRequired
 };

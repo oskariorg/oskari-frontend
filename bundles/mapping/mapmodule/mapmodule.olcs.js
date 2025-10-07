@@ -15,9 +15,11 @@ import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID, VECTOR_STYLE } from './domain/constants';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-// import 'ol-cesium/css/olcs.css';
-import 'olcs/css/olcs.css';
 import './event/TimeChangedEvent';
+import './plugin/layers/LayersPlugin.olcs';
+
+import 'olcs/css/olcs.css';
+
 dayjs.extend(customParseFormat);
 // OL-cesium expects to find this global
 window.Cesium = Cesium;

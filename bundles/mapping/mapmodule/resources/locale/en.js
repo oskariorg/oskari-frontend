@@ -132,6 +132,13 @@ Oskari.registerLocalization(
                     "text": "3D layers",
                     "tooltip": "Show only 3D-datasets"
                 }
+            },
+            "WfsVectorLayerPlugin": {
+                "editLayer": "Edit map layer",
+                "layerFilter": {
+                    "tooltip": "Show only vector layers",
+                    "featuredata": "Vector layers"
+                }
             }
         },
         "layerVisibility": {

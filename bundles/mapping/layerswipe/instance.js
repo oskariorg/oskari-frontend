@@ -1,3 +1,5 @@
+import './plugin/LayerSwipePlugin';
+import './publisher/SwipeTool';
 import { SwipeHandler } from './handler/SwipeHandler';
 
 Oskari.clazz.define(

@@ -5,9 +5,6 @@ Ways of selecting features:
 - clicking feature row in object data table/grid
 2) Through filter by property values
 - filter icon on object data table/grid (WFSSetPropertyFilter?)
-3) Using geometry to select features
-- featuredata2 selection tool (WFSSetFilter)
- -> this could be changed so that features that fit the geometry are detected outside this service and selection is made with ids
 */
 
 /**

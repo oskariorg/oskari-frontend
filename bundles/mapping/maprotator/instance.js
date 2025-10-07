@@ -1,3 +1,7 @@
+import './plugin/MapRotatorPlugin';
+import './publisher/MapRotator';
+import './event/map.rotated';
+import './request/rotate.map';
 /*
 Oskari.app.playBundle(
 {

@@ -27,10 +27,7 @@ const Labelled = ({ messageKey, children }) =>
 
 Labelled.propTypes = {
     messageKey: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.element),
-        PropTypes.element
-    ]).isRequired
+    children: PropTypes.any.isRequired
 };
 
 const wrapped = LocaleConsumer(Labelled);

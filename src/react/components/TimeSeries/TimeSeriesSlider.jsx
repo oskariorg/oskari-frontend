@@ -285,25 +285,11 @@ export const TimeSeriesSlider = ThemeConsumer(({
 TimeSeriesSlider.propTypes = {
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
-    dataPoints: PropTypes.arrayOf(
-        PropTypes.oneOfType(
-            [PropTypes.number, PropTypes.string]
-        )
-    ),
+    dataPoints: PropTypes.any,
     onChange: PropTypes.func.isRequired,
     width: PropTypes.number,
-    markers: PropTypes.arrayOf(
-        PropTypes.oneOfType(
-            [PropTypes.number, PropTypes.string]
-        )
-    ),
+    markers: PropTypes.any,
     type: PropTypes.oneOf([sliderTypes.YEAR, sliderTypes.DATE]),
     range: PropTypes.bool,
-    value: PropTypes.oneOfType(
-        [
-            PropTypes.number,
-            PropTypes.string,
-            PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
-        ]
-    )
+    value: PropTypes.any
 };

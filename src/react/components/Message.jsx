@@ -77,9 +77,9 @@ Message.propTypes = {
     defaultMsg: PropTypes.string,
     messageArgs: PropTypes.object,
     getMessage: PropTypes.func,
-    children: PropTypes.node,
+    children: PropTypes.any,
     LabelComponent: PropTypes.elementType,
-    fallback: PropTypes.node,
+    fallback: PropTypes.any,
     allowHTML: PropTypes.bool,
     allowTextEllipsis: PropTypes.bool
 };

@@ -37,7 +37,11 @@ https://stackoverflow.com/questions/61450739/understanding-warning-function-comp
 export const Tooltip = ({children, ...restOfProps}) => {
     return (
         <AntTooltip
-            overlayStyle={{ pointerEvents: 'none' }}
+            styles={{
+                root: {
+                    pointerEvents: 'none'
+                }
+            }}
             {...restOfProps}
         >
             <TooltipStyle />

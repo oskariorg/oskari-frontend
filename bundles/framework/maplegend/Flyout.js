@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Message } from 'oskari-ui';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
-import { MapLegendList } from './components/MapLegendList';
+import { MapLegendList } from './MapLegendList';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.mapframework.bundle.maplegend.Flyout
@@ -27,6 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         this.container = null;
         this.state = null;
         this._legendImagesNotLoaded = {};
+        this._reactRoot = null;
     }, {
         /**
          * @method getName
@@ -105,6 +106,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             event.stopPropagation();
             this.instance.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{ layerId: layerId }]);
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
         /**
          * @method _populateLayerList
          * @private
@@ -132,7 +139,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                     };
                 }).reverse();
 
-            ReactDOM.render(
+            this.getReactRoot(this.container).render(
                 <ThemeProvider>
                     <LocaleProvider value={{ bundleKey: 'maplegend' }}>
                         { legends.length === 0
@@ -140,8 +147,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                             : <MapLegendList legendList={ legends } />
                         }
                     </LocaleProvider>
-                </ThemeProvider>,
-                this.container
+                </ThemeProvider>
             );
         }
     }, {

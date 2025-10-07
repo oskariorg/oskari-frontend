@@ -34,7 +34,7 @@ const getButton = (type, disabled) => {
     }
 };
 
-export const DeleteButton = ({ 
+export const DeleteButton = ({
     onConfirm,
     type,
     title = <Message messageKey='messages.confirmDelete' bundleKey='oskariui'/>,
@@ -64,8 +64,8 @@ export const DeleteButton = ({
 };
 DeleteButton.propTypes = {
     onConfirm: PropTypes.func.isRequired,
-    title: PropTypes.node,
-    tooltip: PropTypes.node,
+    title: PropTypes.any,
+    tooltip: PropTypes.any,
     disabled: PropTypes.bool,
     type: PropTypes.oneOf(['icon', 'button', 'label']).isRequired
 };

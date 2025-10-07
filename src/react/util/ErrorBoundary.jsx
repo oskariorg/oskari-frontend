@@ -74,5 +74,5 @@ ErrorBoundary.propTypes = {
     // custom component for rendering an error message
     errorComponent: PropTypes.elementType,
     // children are rendered when there is no error
-    children: PropTypes.node
+    children: PropTypes.any
 };

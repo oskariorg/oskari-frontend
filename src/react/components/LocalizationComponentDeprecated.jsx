@@ -190,8 +190,5 @@ LocalizationComponent.propTypes = {
     collapse: PropTypes.bool,
     single: PropTypes.bool,
     defaultOpen: PropTypes.bool,
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ])
+    children: PropTypes.any
 };

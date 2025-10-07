@@ -3,6 +3,8 @@ import { showStylesPopup } from './view';
 import { UserStylesTab } from './view/UserStylesTab';
 import { UserStyleHandler } from './handler/UserStyleHandler';
 import { BUNDLE_KEY } from './constants';
+import './request/ShowUserStylesRequest';
+import './request/ShowUserStylesRequestHandler';
 /**
  * @class Oskari.mapframework.userstyle.UserStyleBundleInstance
  */

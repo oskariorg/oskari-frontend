@@ -38,9 +38,11 @@ import './plugin/markers/MarkersPlugin.ol';
 // layer plugins
 import { AbstractVectorLayerPlugin } from './plugin/AbstractVectorLayerPlugin';
 import './plugin/wmslayer/WmsLayerPlugin.ol';
+import './plugin/wmtslayer/WmtsLayerPlugin.ol';
 import './plugin/vectorlayer/VectorLayerPlugin.ol';
 import './plugin/vectortilelayer/VectorTileLayerPlugin';
 import './plugin/bingmapslayer/BingMapsLayerPlugin';
+import './plugin/wfsvectorlayer/WfsVectorLayerPlugin.ol';
 
 import './event/MapClickedEvent';
 import './event/MapMoveStartEvent';

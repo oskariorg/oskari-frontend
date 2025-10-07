@@ -1,4 +1,5 @@
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
+import './plugin/layers/LayersPlugin.ol';
 
 /**
  * @class Oskari.mapframework.ui.module.common.MapModule

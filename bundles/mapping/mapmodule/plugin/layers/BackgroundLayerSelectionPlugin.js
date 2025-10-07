@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { BackgroundLayerSelection } from './BackgroundLayerSelection';
 import { ThemeProvider } from 'oskari-ui/util';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayerSelectionPlugin
@@ -28,6 +28,7 @@ Oskari.clazz.define(
         this._baseLayerIds = this._config?.baseLayers?.map(id => typeof id === 'number' ? id.toString() : id);
         this._baseLayerOptions = [];
         this._template = jQuery('<div class="backgroundLayerSelectionPlugin oskariui mapplugin"/>');
+        this._reactRoot = null;
     }, {
         /** @static @property __name module name */
         __name: 'BackgroundLayerSelectionPlugin',
@@ -161,6 +162,12 @@ Oskari.clazz.define(
             // - add to bottom
             sb.postRequestByName('AddMapLayerRequest', [newId, { toPosition: 0 }]);
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
 
         /**
          * @private @method  _createLayerSelectionElements
@@ -173,7 +180,7 @@ Oskari.clazz.define(
             if (!element) {
                 return;
             }
-            ReactDOM.render(
+            this.getReactRoot(element[0]).render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <BackgroundLayerSelection
                         isMobile={Oskari.util.isMobile()}
@@ -181,8 +188,7 @@ Oskari.clazz.define(
                         selectedId={this._getSelectedId()}
                         mapWidth={this.getSandbox().getMap().getWidth()}
                     />
-                </ThemeProvider>,
-                element[0]
+                </ThemeProvider>
             );
         },
 

@@ -42,7 +42,7 @@ export const Info = ThemeConsumer(({ theme = {}, children, title, size = 16, sty
 });
 
 Info.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+    title: PropTypes.any,
     size: PropTypes.number,
     style: PropTypes.object,
     space: PropTypes.bool

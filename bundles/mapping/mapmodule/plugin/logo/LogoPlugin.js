@@ -1,9 +1,9 @@
 import './DataProviderInfoService';
 import './logo.service';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Links } from './Links';
 import { showDataProviderPopup } from './DataProviderPopup';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.LogoPlugin
@@ -23,6 +23,7 @@ Oskari.clazz.define(
         this._index = 1;
         this._name = 'LogoPlugin';
         this._popupControls = null;
+        this._reactRoot = null;
     }, {
         constLayerGroupId: 'layers',
         templates: {
@@ -262,6 +263,12 @@ Oskari.clazz.define(
             const groups = this._service.getNonEmptyGroups();
             this.openDataProvidersPopup(groups);
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
 
         /**
          * @method updateLabels
@@ -277,11 +284,10 @@ Oskari.clazz.define(
             }
             var labels = this._extendService.getLabels();
 
-            ReactDOM.render(
+            this.getReactRoot(template[0]).render(
                 <Links
                     links={labels}
-                />,
-                template[0]
+                />
             );
         }
     }, {

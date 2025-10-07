@@ -1,11 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../MapModuleButton';
 import { ToolbarButtonItem } from 'oskari-ui/components/buttons';
 import { BackwardIcon, ForwardIcon, MeasureAreaIcon, MeasureLineIcon } from 'oskari-ui/components/icons';
 import { MenuOutlined } from '@ant-design/icons';
 import './request/ToolContainerRequest';
 import './request/ToolContainerRequestHandler';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin
@@ -25,6 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         me._index = 2;
         me._name = 'PublisherToolbarPlugin';
         me._toolButtons = conf.buttons || [];
+        me._reactRoot = null;
     }, {
         // templates for tools-mapplugin
         templates: {
@@ -105,6 +106,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             this.addToPluginContainer(me._element);
             this.refresh();
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
 
         refresh: function () {
             let el = this.getElement();
@@ -112,7 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 return;
             }
 
-            ReactDOM.render(
+            this.getReactRoot(el[0]).render(
                 <MapModuleButton
                     className='t_publishertoolbar'
                     icon={<MenuOutlined />}
@@ -121,8 +128,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     position={this.getLocation()}
                 >
                     {this.renderToolbarItems()}
-                </MapModuleButton>,
-                el[0]
+                </MapModuleButton>
             );
         },
 

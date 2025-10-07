@@ -10,5 +10,5 @@ export const LoadingIndicator = ({ loading, children }) => {
 };
 LoadingIndicator.propTypes = {
     loading: PropTypes.bool,
-    children: PropTypes.node
+    children: PropTypes.any
 };

@@ -11,8 +11,8 @@ export const ListItem = ({ children, ...other }) => (
 );
 
 List.propTypes = {
-    header: PropTypes.node,
-    footer: PropTypes.node,
+    header: PropTypes.any,
+    footer: PropTypes.any,
     dataSource: PropTypes.array,
     bordered: PropTypes.bool,
     renderItem: PropTypes.func

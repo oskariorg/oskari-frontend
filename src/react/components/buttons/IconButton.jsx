@@ -176,8 +176,8 @@ export const IconButton = ({
 
 IconButton.propTypes = {
     type: PropTypes.oneOf(['add', 'edit', 'accept', 'reject', 'info', 'next', 'previous', 'delete']),
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    icon: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+    title: PropTypes.any,
+    icon: PropTypes.any,
     onClick: PropTypes.func,
     onConfirm: PropTypes.func,
     confirm: PropTypes.object,

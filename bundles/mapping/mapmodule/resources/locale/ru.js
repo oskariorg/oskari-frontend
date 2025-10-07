@@ -115,6 +115,12 @@ Oskari.registerLocalization(
             },
             "MyLocationPlugin": {
                 "tooltip": "Центровать карту относительно вашего местоположения"
+            },
+            "WfsVectorLayerPlugin": {
+                "layerFilter": {
+                    "tooltip": "Показывать только векторные слои",
+                    "featuredata": "Векторные слои"
+                }
             }
         },
         "layerUnsupported": {

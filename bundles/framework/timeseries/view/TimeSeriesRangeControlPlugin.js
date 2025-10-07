@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { TimeSeriesRangeControl } from './TimeSeriesRange/TimeSeriesRangeControl';
 import { TimeSeriesRangeControlHandler } from './TimeSeriesRange/TimeSeriesRangeControlHandler';
+import { createRoot } from 'react-dom/client';
 
 const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin');
 /**
@@ -25,11 +25,13 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
 
         this.stateHandler = new TimeSeriesRangeControlHandler(delegate, () => this.updateUI());
         this._updateCurrentViewportBbox();
+        this._reactRoot = null;
     }
 
     hasUI () {
         return true;
     }
+
     isShouldStopForPublisher () {
         // prevent publisher to stop this plugin and start it again when leaving the publisher
         return false;
@@ -68,12 +70,19 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         return this._name;
     }
 
+    getReactRoot (element) {
+        if (!this._reactRoot) {
+            this._reactRoot = createRoot(element);
+        }
+        return this._reactRoot;
+    }
+
     updateUI () {
         const mountElement = this.getReactMountElement();
         if (!mountElement) {
             return;
         }
-        ReactDOM.render(
+        this.getReactRoot(mountElement).render(
             <LocaleProvider value={{ bundleKey: 'timeseries' }}>
                 <ThemeProvider value={this.mapModule.getMapTheme()}>
                     <TimeSeriesRangeControl
@@ -82,8 +91,7 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
                         isMobile={this._isMobile}
                     />
                 </ThemeProvider>
-            </LocaleProvider>,
-            mountElement
+            </LocaleProvider>
         );
     }
 

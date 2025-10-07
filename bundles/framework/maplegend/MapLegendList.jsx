@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'oskari-ui';
-import { LegendImage } from './LegendImage';
+import { LegendImage } from './components/LegendImage';
 import { MetadataIcon } from 'oskari-ui/components/icons';
 
 export const MapLegendList = ({ legendList }) => {

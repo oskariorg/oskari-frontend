@@ -219,8 +219,5 @@ LocalizationComponent.propTypes = {
     LabelComponent: PropTypes.elementType,
     collapse: PropTypes.bool,
     defaultOpen: PropTypes.bool,
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ])
+    children: PropTypes.any
 };

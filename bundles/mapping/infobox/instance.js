@@ -1,3 +1,13 @@
+import './plugin/openlayerspopup/OpenlayersPopupPlugin.ol';
+import './request/ShowInfoBoxRequest';
+import './request/ShowInfoBoxRequestHandler';
+import './request/HideInfoBoxRequest';
+import './request/HideInfoBoxRequestHandler';
+import './request/RefreshInfoBoxRequest';
+import './request/RefreshInfoBoxRequestHandler';
+import './event/InfoBoxEvent';
+import './event/InfoboxActionEvent';
+
 /**
  * @class Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance
  *

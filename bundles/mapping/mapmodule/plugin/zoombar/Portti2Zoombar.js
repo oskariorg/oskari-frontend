@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { ZoomSlider } from './ZoomSlider';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar
@@ -33,6 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._index = 30;
         this._name = 'Portti2Zoombar';
         this._suppressEvents = false;
+        this._reactRoot = null;
     }, {
         /**
          * @private @method _createControlElement
@@ -43,6 +44,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          */
         _createControlElement: function () {
             return jQuery('<div class="oskariui mapplugin pzbDiv zoombar"></div>');
+        },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
         },
 
         /**
@@ -55,14 +62,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 return;
             }
 
-            ReactDOM.render(
+            this.getReactRoot(el[0]).render(
                 <ZoomSlider
                     changeZoom={(value) => this.getMapModule().setZoomLevel(value)}
                     zoom={this.getMapModule().getMapZoom()}
                     maxZoom={this.getMapModule().getMaxZoomLevel()}
                     isMobile={Oskari.util.isMobile()}
-                />,
-                el[0]
+                />
             );
         },
 

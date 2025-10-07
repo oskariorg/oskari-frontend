@@ -2,12 +2,12 @@ import { MetadataStateHandler } from './MetadataStateHandler';
 import { Messaging, LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { MetadataSearchContainer } from './view/MetadataSearchContainer';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { COVERAGE_LAYER_ID } from '../../mapping/mapmodule/plugin/layers/coveragetool/CoverageHelper';
 import './publisher/MetadataSearchTool';
 import './request/MetadataSearchRequest';
 import './request/MetadataSearchRequestHandler';
 import './event/MetadataSearchResultEvent';
+import { createRoot } from 'react-dom/client';
 /**
  * @class Oskari.mapframework.bundle.metadatasearch.MetadataSearchBundleInstance
  *
@@ -52,6 +52,7 @@ Oskari.clazz.define(
         this.handler.addStateListener(() => {
             this.renderSearch();
         });
+        this._reactRoot = null;
     }, {
         /**
          * @static
@@ -366,13 +367,19 @@ Oskari.clazz.define(
             }
         },
 
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
         renderSearch: function () {
-            ReactDOM.render(
+            this.getReactRoot(this.contentElement).render(
                 <LocaleProvider value={{ bundleKey: METADATA_BUNDLE_LOCALIZATION_ID }}>
                     <ThemeProvider>
                         <MetadataSearchContainer state={this.handler.getState()} controller={this.handler.getController()} />
                     </ThemeProvider>
-                </LocaleProvider>, this.contentElement);
+                </LocaleProvider>);
         },
 
         /* ----------- Tile and Flyout ------------- */

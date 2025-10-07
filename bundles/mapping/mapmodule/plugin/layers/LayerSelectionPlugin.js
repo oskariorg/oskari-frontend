@@ -1,8 +1,8 @@
 import React from 'react';
 import { showLayerSelectionPopup } from './LayerSelectionPopup';
 import { MapModuleButton } from '../../MapModuleButton';
-import ReactDOM from 'react-dom';
 import { LayersIcon } from 'oskari-ui/components/icons';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
@@ -31,6 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._showMetadata = !!this.getConfig().showMetadata;
         me._layers = [];
         me._baseLayers = [];
+        me._reactRoot = null;
     }, {
         _toggleToolState: function () {
             if (this.popupControls) {
@@ -351,6 +352,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             this.refresh();
             this.addToPluginContainer(this._element);
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
 
         refresh: function () {
             let el = this.getElement();
@@ -358,7 +365,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
 
-            ReactDOM.render(
+            this.getReactRoot(el[0]).render(
                 <MapModuleButton
                     className='t_layerselect'
                     icon={<LayersIcon />}
@@ -366,8 +373,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     onClick={(e) => this._togglePopup()}
                     iconActive={this.popupControls ? true : false}
                     position={this.getLocation()}
-                />,
-                el[0]
+                />
             );
         },
 

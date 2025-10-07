@@ -41,11 +41,11 @@ Oskari.clazz.define(
             this.unregister();
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
+        extend: ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]

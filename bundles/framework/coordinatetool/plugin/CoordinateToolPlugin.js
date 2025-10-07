@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
 import { CoordinatePluginHandler } from './CoordinatePluginHandler';
 import { TextIcon } from 'oskari-ui/components/icons';
+import { createRoot } from 'react-dom/client';
 
 /**
  * @class Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin
@@ -27,6 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>')
         };
+        me._reactRoot = null;
     }, {
         resetUI: function () {
             if (this.handler && this.popupOpen) {
@@ -64,6 +65,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         hasUI: function () {
             return !this._config.noUI;
         },
+        getReactRoot (element) {
+            if (!this._reactRoot) {
+                this._reactRoot = createRoot(element);
+            }
+            return this._reactRoot;
+        },
         /**
          * @method @public refresh
          */
@@ -82,7 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 });
             }
 
-            ReactDOM.render(
+            this.getReactRoot(el[0]).render(
                 <MapModuleButton
                     className='t_coordinatetool'
                     visible={this.hasUI()}
@@ -91,9 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     onClick={() => this.handler.getController().showPopup()}
                     iconActive={!!this.popupOpen}
                     position={this.getLocation()}
-                />,
-                el[0]
-            );
+                />);
         },
 
         /**

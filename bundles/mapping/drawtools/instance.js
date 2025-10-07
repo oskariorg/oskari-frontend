@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      */
         handleRequest: function (core, request) {
             if (request.getName() === 'DrawTools.StartDrawingRequest') {
-                var shapeType = request.getShape();
+                const shapeType = request.getShape();
                 if (!this.isValidShapeType(shapeType)) {
                     Oskari.log(this.getName()).error('Illegal shape type for StartDrawingRequest: ' + shapeType + '. Must be one of: ' + this.__validShapeTypes.join(', ') + '.');
                     return;

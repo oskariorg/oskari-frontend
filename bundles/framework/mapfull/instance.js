@@ -113,7 +113,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             this.sandbox = sandbox;
 
             // create services & enhancements
-            var services = this._createServices(conf);
+            const services = this._createServices(conf);
             services.forEach(function (service) {
                 sandbox.registerService(service);
             });

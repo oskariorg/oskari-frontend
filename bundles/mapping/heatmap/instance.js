@@ -1,3 +1,8 @@
+import './domain/HeatmapLayer';
+import './plugin/AbstractHeatmapPlugin';
+import './plugin/HeatmapLayerPlugin.ol';
+import './HeatmapDialog';
+
 /**
  * This bundle attaches heatmap tool for layers
  *

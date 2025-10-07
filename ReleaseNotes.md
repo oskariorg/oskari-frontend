@@ -1,5 +1,87 @@
 # Release Notes
 
+## 3.2.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/57?closed=1
+
+### React version updated 16 -> 18
+
+The new version requires some modifications to current code for any app specific bundles.
+See React migration guide for details: https://react.dev/blog/2022/03/08/react-18-upgrade-guide
+
+Examples for changes needed on oskari-frontend can be found on https://github.com/oskariorg/oskari-frontend/pull/2869
+
+For most bundles can be migrated with these steps:
+
+Replace: `import ReactDOM from 'react-dom';`
+With `import { createRoot } from 'react-dom/client';`
+
+Add a helper for maintaining root element reference:
+```javascript
+getReactRoot (element) {
+    if (!this._reactRoot) {
+        this._reactRoot = createRoot(element);
+    }
+    return this._reactRoot;
+},
+```
+
+Replace: `ReactDOM.render(<jsx/>, element)`
+With: `this.getReactRoot(template[0]).render(<jsx/>)`
+
+PropTypes are not functioning with the new React version like before. As they are being removed from React:
+ https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-apisv 
+ It's easiest to replace most current non-working PropTypes values with type `any`.
+ We are considering adding TypeScript support to address this: https://github.com/oskariorg/oskari-documentation/issues/124
+
+### Migrated bundles
+
+These bundles have been migrated from under `packages` to `bundles` and/or to the new bundle-loader syntax introduced in Oskari 3.0. Applications will need to modify the `main.js` files accordingly:
+
+```diff
+- import 'oskari-loader!oskari-frontend/packages/mapping/ol/mapmodule/bundle.js';
++ import 'oskari-bundle!oskari-frontend/bundles/mapping/mapmodule/map2d_ol';
+```
+
+- packages/mapping/ol/mapmodule/bundle.js -> bundles/mapping/mapmodule/map2d_ol
+- packages/mapping/ol/drawtools/bundle.js -> bundles/mapping/drawtools
+- packages/mapping/ol/infobox/bundle.js -> bundles/mapping/infobox
+- packages/mapping/ol/heatmap/bundle.js -> bundles/mapping/heatmap
+- packages/mapping/ol/layerswipe/bundle.js -> bundles/mapping/layerswipe
+- packages/mapping/ol/maprotator/bundle.js -> bundles/mapping/maprotator
+- packages/mapping/ol/toolbar/bundle.js -> bundles/mapping/toolbar
+- packages/mapping/ol/userstyle/bundle.js -> bundles/mapping/userstyle
+- packages/mapping/ol/mapmyplaces/bundle.js -> bundles/mapping/mapmyplaces
+- packages/mapping/ol/mapuserlayers/bundle.js -> bundles/framework/myplacesimport/mapuserlayers
+- packages/mapping/ol/maparcgis/bundle.js -> bundles/mapping/maparcgis
+- packages/framework/bundle/rpc/bundle.js -> bundles/framework/rpc
+- packages/mapping/olcs/mapmodule/bundle.js -> bundles/mapping/mapmodule/map3d_olcs
+- packages/mapping/olcs/map3dtiles/bundle.js -> bundles/mapping/tiles3d
+
+
+#### Bundles combined
+
+Support for different kinds of mapmodule plugins have been historically required an import on applications `main.js`, but since most instances have them enabled anyways the most common ones have been included in map module itself. These include:
+- `wfsvector` (or `mapwfs2`, it's been around long enough to have multiple names)
+- `mapwmts`
+
+The plugins they register are now started by default even if not referenced in the `mapfull.conf.plugins` array:
+- `Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin`
+- `Oskari.wfsvector.WfsVectorLayerPlugin`
+- `Oskari.mapframework.mapmodule.VectorLayerPlugin`
+- `Oskari.mapframework.mapmodule.WmsLayerPlugin`
+- `Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin`
+
+If you need to pass some configuration for these plugins, you will need to do it by including them on the `mapfull.conf.plugins` array like before. Otherwise references can be removed from the database.
+
+You can remove imports from your applications `main.js` to these (the imports will fail since bundle.js files have been removed from packages-folder, but they are automatically included now).
+
+```diff
+- import 'oskari-loader!oskari-frontend/packages/mapping/ol/wfsvector/bundle.js';
+- import 'oskari-loader!oskari-frontend/packages/mapping/ol/mapwmts/bundle.js';
+```
+
 ## 3.1.0
 
 For a full list of changes see:
