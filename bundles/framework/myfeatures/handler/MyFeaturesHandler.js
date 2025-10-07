@@ -1,6 +1,6 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showLayerForm } from '../view/LayerForm';
-import { MAX_SIZE, ERRORS } from '../constants';
+import { BUNDLE_KEY, MAX_SIZE, ERRORS } from '../constants';
 
 class MyFeaturesHandler extends StateHandler {
     constructor (instance) {
@@ -12,7 +12,7 @@ class MyFeaturesHandler extends StateHandler {
             loading: false
         });
         this.popupControls = null;
-        this.loc = Oskari.getMsg.bind(null, 'MyFeatures');
+        this.loc = Oskari.getMsg.bind(null, BUNDLE_KEY);
         this.eventHandlers = this.createEventHandlers();
         this.layerMetaType = 'USERLAYER';
         this.refreshLayersList();
