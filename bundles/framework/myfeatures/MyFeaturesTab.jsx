@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MyFeaturesList } from './MyFeaturesList';
 import { LocaleProvider } from 'oskari-ui/util';
-
-const BUNDLE_KEY = 'MyFeatures';
+import { BUNDLE_KEY } from './constants';
 
 export const MyFeaturesTab = ({ controller, state }) => {
     return (

@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
             method: 'POST',
             body: formData,
             headers: {
-                'Accept': 'application/json'
+                Accept: 'application/json'
             }
         }).then(response => {
             if (!response.ok && response.status !== 400) {
@@ -143,10 +143,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
      * @method getMyFeatures
      */
     getMyFeatures: function () {
-        fetch(Oskari.urls.getRoute('GetMyFeatures', { srs: this.srs }), {
+        fetch(Oskari.urls.getRoute('MyFeaturesLayer', { srs: this.srs }), {
             method: 'GET',
             headers: {
-                'Accept': 'application/json'
+                Accept: 'application/json'
             }
         }).then(response => {
             if (!response.ok) {
