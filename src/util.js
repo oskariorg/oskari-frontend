@@ -898,12 +898,12 @@ Oskari.util = (function () {
             minute: '2-digit'
         };
         const localeDate = dateTime.toLocaleDateString(locales, date);
-        const localeTime = dateTime.toLocaleTimeString(locales, {...defaults, ...time});
+        const localeTime = dateTime.toLocaleTimeString(locales, { ...defaults, ...time });
         return `${localeDate} ${localeTime}`;
     };
 
     util.mouseExists = () => {
-        if (window.matchMedia("(pointer: fine)").matches) {
+        if (window.matchMedia('(pointer: fine)').matches) {
             // Has a mouse-like device
             return true;
         }
