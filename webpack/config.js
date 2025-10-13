@@ -115,14 +115,15 @@ const getModuleRules = (isProd = false) => {
         ...styleFileRules,
         {
             test: /\.(ttf|png|jpg|gif|svg)$/,
-            use: [
-                {
-                    loader: 'file-loader',
-                    options: {
-                        outputPath: 'assets/'
-                    }
-                }
-            ]
+            type: 'asset/resource',
+            generator: {
+                filename: 'assets/[name].[ext]'
+            }
+        },
+        {
+            test: /\.m?js$/,
+            include: /node_modules[\\/]olcs[\\/]/,
+            resolve: { fullySpecified: false } // exception to allow import ../core instead of ../core.js from olcs
         }
     ];
     return rules;
@@ -135,6 +136,9 @@ const RESOLVE = {
     symlinks: false,
     alias: {
         'oskari-ui': path.resolve(__dirname, '../src/react')
+    },
+    fallback: {
+        fs: false
     }
 };
 const RESOLVE_LOADER = {

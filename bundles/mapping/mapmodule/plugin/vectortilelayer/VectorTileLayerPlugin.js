@@ -7,6 +7,7 @@ import TileGrid from 'ol/tilegrid/TileGrid';
 import { createDefaultStyle } from 'ol/style/Style';
 
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
+// eslint-disable-next-line import/no-unresolved
 import { stylefunction as mapboxStyleFunction } from 'ol-mapbox-style';
 import { LAYER_ID, LAYER_TYPE, FEATURE_QUERY_ERRORS, VECTOR_STYLE } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';

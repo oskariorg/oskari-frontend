@@ -114,5 +114,13 @@ module.exports = {
             }
         },
         'react': { version: 'detect' }
-    }
+    },
+    overrides: [
+        {
+            files: ['**/*.js'],
+            rules: {
+                'import/no-unresolved': ['error', { 'ignore': ['^olcs\\/css\\/olcs\\.css$'] }]
+            }
+        }
+    ]
 };

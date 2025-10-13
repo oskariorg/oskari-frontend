@@ -1,7 +1,7 @@
 const path = require('path');
 const { IgnorePlugin } = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const LocalizationPlugin = require('./localizationPlugin.js');
+const LocalizationPlugin = require('./localizationPluginFor5.js');
 const WebpackBar = require('webpackbar');
 const { existsSync } = require('fs');
 
@@ -9,12 +9,15 @@ module.exports = function generateEntries (appsetupPaths, isProd, context) {
     const entries = {};
     const plugins = [
         new WebpackBar(),
-        new IgnorePlugin(/^\.\/locale$/, /moment$/),
-        new CopyWebpackPlugin(
-            [
-                { from: 'resources', to: 'resources', context }
+        new IgnorePlugin({
+            resourceRegExp: /^\.\/locale$/,
+            contextRegExp: /moment$/
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: path.resolve(context + '/resources'), to: 'resources' }
             ]
-        )
+        })
     ];
 
     appsetupPaths.forEach(appDir => {
@@ -33,18 +36,18 @@ module.exports = function generateEntries (appsetupPaths, isProd, context) {
         const appName = path.basename(appDir);
         const copyDef = [
             { from: appDir, to: appName },
-            { from: 'resources/icons.css', to: appName, context },
-            { from: 'resources/icons.png', to: appName, context }
+            { from: path.resolve(context + '/resources/icons.css'), to: appName },
+            { from: path.resolve(context + '/resources/icons.png'), to: appName }
         ];
         if (!isProd) {
-            copyDef.push({ from: 'webpack/empty.js', to: path.join(appName, 'oskari.min.css'), context }); // empty CSS to keep browser happy in dev mode
+            copyDef.push({ from: path.resolve(context + '/webpack/empty.js'), to: path.join(appName, 'oskari.min.css') }); // empty CSS to keep browser happy in dev mode
         }
         entries[appName] = [
             path.resolve(context, './webpack/polyfill.js'),
             path.resolve(context, './webpack/oskari-core.js'),
             targetPath
         ];
-        plugins.push(new CopyWebpackPlugin(copyDef));
+        plugins.push(new CopyWebpackPlugin({ patterns: copyDef }));
         plugins.push(new LocalizationPlugin(appName));
     });
 

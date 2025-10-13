@@ -31,7 +31,7 @@ Replace: `ReactDOM.render(<jsx/>, element)`
 With: `this.getReactRoot(template[0]).render(<jsx/>)`
 
 PropTypes are not functioning with the new React version like before. As they are being removed from React:
- https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-apisv 
+ https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-apisv
  It's easiest to replace most current non-working PropTypes values with type `any`.
  We are considering adding TypeScript support to address this: https://github.com/oskariorg/oskari-documentation/issues/124
 
@@ -172,7 +172,7 @@ Oskari.bundle('hello-world', () => new MyBundleInstance());
 The publisher bundle now uses React.js for rendering most of the UI. This means that any publisher tools _other bundles_ want to show on the publisher UI now need to be React-based. What such publisher tool controls doesn't matter as much, but the tool implementation requires React-based code.
 
 Example publisher tool migrations from 2.14.0:
-- coordinatetool-bundle:  https://github.com/oskariorg/oskari-frontend/pull/2728 
+- coordinatetool-bundle:  https://github.com/oskariorg/oskari-frontend/pull/2728
 - time and camera controls for 3D-map: https://github.com/oskariorg/oskari-frontend/pull/2741
 
 An issue with layers being loaded asynchronously was fixed (affecting the map legend tool):
@@ -180,7 +180,7 @@ An issue with layers being loaded asynchronously was fixed (affecting the map le
 
 Thematic maps panel is now toggled on the publisher UI if statistical data layer is added/removed while using the publisher.
 
-### Changes for bundle registrations 
+### Changes for bundle registrations
 
 The packages folder that Oskari-frontend uses and it's connection to the bundles folder has raised quite a few questions during the years. With this release we have started moving the "bundle definition" files (`bundle.js`) from under `packages` folder to be next to the actual implementation files under `bundles` (as `index.js` files). In the progress we have also simplified the format (_removing roughly 95+% of the content/all of the boilerplate of these_).
 
@@ -377,7 +377,7 @@ Added a [guide](UpdatingDependencies.md) for dependency updates that can be used
 - webpack-dev-server 3.8.0 -> 4.15.2
 - expose-loader 0.7.5 -> 1.0.3 (see changes in https://github.com/oskariorg/oskari-frontend/pull/1751 if used on apps directly)
 - loader-utils -> removed as unnecessary
-- babel 7.23.5 -> 7.25.2 
+- babel 7.23.5 -> 7.25.2
 - jest 27.0.6 -> 29.7.0 (required new dependency jest-environment-jsdom)
 - other less interesting dependencies, see package.json for details
 - storybook -> removed for now as updating it is a bigger task and it had a lot of old dependencies that flagged a lot of false positives on scans. The stories.js files are still on the codebase with hopes to restore this and make it more visible part of Oskari development in the future.
@@ -429,7 +429,7 @@ https://github.com/oskariorg/oskari-frontend/milestone/45?closed=1
 
 ### Other improvements for end-users
 
-- Swipe tool for comparing layers side by side can now be published as part of an embedded map. Options are to add the tool, auto-activate it on startup (this can also be activated with a URL-parameter) and hide the UI (the end-user can't switch the tool off). 
+- Swipe tool for comparing layers side by side can now be published as part of an embedded map. Options are to add the tool, auto-activate it on startup (this can also be activated with a URL-parameter) and hide the UI (the end-user can't switch the tool off).
 - Link tool includes the URL-parameter for activating the swipe tool when opening the link if the swipe tool was active when a link was generated.
 - The swipe tool now uses the accent color from theme for the splitter color instead of always being the default yellow color.
 - My data user details now shows account creation date and last login date.
@@ -622,7 +622,7 @@ The metadata search will create its own "tile"/menu item on the main menu if the
 
 ### Initial mobile support changes for geoportal
 
-The frontend now uses 650px as breaking point on both width and height for transforming to "mobile mode". 
+The frontend now uses 650px as breaking point on both width and height for transforming to "mobile mode".
 The element size that is tracked is the root element of Oskari.
 Previously the measurements were 500px x 400px and the monitored element was the map element.
 
@@ -680,7 +680,7 @@ Overall they work much better out of the box with the publisher functionalities 
 Changes to map plugin interface/API:
 - Documentation: https://oskari.org/documentation/features/map/mapplugin
 - Added new functions like:
-    - `resetUI()` (to clean up any popups/menus for major UI changes) 
+    - `resetUI()` (to clean up any popups/menus for major UI changes)
     - `refresh()` called when the UI needs to be updated (replaces changeToolStyle(), redrawUI() and several other similar functions for cleaner developer experience)
      - More details in https://github.com/oskariorg/oskari-frontend/pull/2200
 - Removed old toolstyle references from plugins and mapmodule (using theme instead)
@@ -721,7 +721,7 @@ The `AbstractLayer` baseclass now has more developer friendly functions:
 - Added/improved components:
     - `MovableContainer` (oskari-ui/window) acts like popups, but don't have the header part of popups. Can be used to add a draggable object on the screen. Used for example on the legend for statistical data.
     - `Sidebar` for publisher, printout etc functionalities
-    - Flyout now has a new option `resizable` to make it resizable by user and 
+    - Flyout now has a new option `resizable` to make it resizable by user and
     - New (themed) `Header` component that is used for Popup and Sidebar
     - `IconButton` component includes the common icons used on buttons with tooltips, confirmation dialogs etc.
     - `CopyField` and `CopyButton` for system clipboard handling
@@ -832,7 +832,7 @@ Also documentation about customization for some common cases can be found in:
 ### Build scripts
 
 Parameters can now be passed on command line in another way (https://github.com/oskariorg/oskari-frontend/pull/2064)
-Both of these work with version 2.10: 
+Both of these work with version 2.10:
 ```
 npm run build -- --env.appdef=applications
 npm run build --appdef=applications
@@ -861,7 +861,7 @@ Build script now allows generating builds to non-default domain with parameter: 
 - Metadata search (`metadatacatalogue`) bundle can now function without the `search` bundle being present in the application. It now creates its own tile/menu item if it can't inject itself into the normal search UI.
 - Library updates:
     - OpenLayers 7.1.0 -> 7.2.2
-    - moment.js 2.29.1 -> 2.29.4 
+    - moment.js 2.29.1 -> 2.29.4
 
 
 ## 2.9.1
@@ -893,7 +893,7 @@ The limits can be set with `StartDrawingRequest` options:
         area: `number in m2 limiting area size`,
         length: `number in meters limiting line length`
     }
-} 
+}
 ```
 
 Enabled modifying a geometry with a limited shape for `Circle`, `Box` and `Square`. Previously modifying a polygon shape was always done in a way that resulted in losing the original shape (new points could be added and individual points could be moved to skew the geometry). The previous method for editing is still available when using the shape `Polygon` to be used for editing.
@@ -1121,7 +1121,7 @@ Others changes/fixes:
 
 Progress for jQuery to React migration:
 - Import userlayers form
-- My data 
+- My data
     - Embedded maps listing
     - Saved views listing
     - Account information
@@ -1487,7 +1487,7 @@ The 2.0 release is mainly for upgrading server-side components but we want to ke
 - Bumped node-sass and lodash versions
 - Fixed an issue with infobox title height when an empty tag was provided as title
 - Fixed an issue with infobox when opened to 0,0 coordinates (coordinates are required as numbers now)
-- Fixed an issue with scales (optional field enabled with configuration) in printout 
+- Fixed an issue with scales (optional field enabled with configuration) in printout
 - Fixed an issue with user generated statistical data import from clipboard
 - Fixed an issue with measurement tools on embedded map
 - Fixed a visual issue with 3D-timecontrol plugin
@@ -1502,7 +1502,7 @@ https://github.com/oskariorg/oskari-frontend/milestone/24?closed=1
 
 - Possible validation errors are now shown collectively when trying to use the save button instead of the button just being disabled
 - Scale limit handling fixed and UI for limits made clearer
-- Added "single tile" toggle in the admin-layereditor UI for WMS-layers 
+- Added "single tile" toggle in the admin-layereditor UI for WMS-layers
 - Render mode/collection type selection fixed
 
 ### Print functionality
@@ -1694,7 +1694,7 @@ https://github.com/oskariorg/oskari-frontend/milestone/18?closed=1
 - Toolbar now works better with light background
 - Improvements for user indicators on statistical maps
 - Refactored DefaultExtension bundles to use ExtraFlyout instead of DefaultFlyout so flyouts are handled similarly between functionalities.
-- Index map now shows the first visible WMS/WMTS layer by default instead of the first layer (that might be a vector layer without any features). 
+- Index map now shows the first visible WMS/WMTS layer by default instead of the first layer (that might be a vector layer without any features).
 - Printing uses the same logic for preview image (showing the visible layer)
 - Layers with time series now include currently shown time on prints
 - Drawtools (like measurements etc) now use smaller snap tolerance on desktop to make it harder to accidentally stop measurement by clicking near the previous point
@@ -1740,7 +1740,7 @@ import 'oskari-loader!oskari-frontend/packages/mapping/ol3/wfsvector/bundle.js';
 Initial React-based UI changes (work in progress still):
 - Thematic map legend has been rewritten and is now implemented with React components
 - Added "Storybook" to improve developer experience on component development (https://storybook.js.org). Run "npm run storybook" to see how it looks.
-- Added utils for React-based development to src/react (also has an alias "oskari-ui" for Webpack/imports) 
+- Added utils for React-based development to src/react (also has an alias "oskari-ui" for Webpack/imports)
 - Initial React based UI-components added but still need work as they have some global styling that affect rest of the UI
 - Added styled-components library to dependencies (current plan is to move away from SCSS start migrating towards styles-components)
 - New implementation for React-based maplayer admin has been added to bundles/admin/admin-layereditor (the new UI components are under this bundle for now and the functionality is not finished yet)
