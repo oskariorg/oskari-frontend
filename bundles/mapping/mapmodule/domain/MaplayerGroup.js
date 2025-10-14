@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
             this.children = filteredChildren;
         },
         setChildren: function (json) {
-            var me = this;
+            const me = this;
             me.children = [];
             if (json.layers) {
                 json.layers.forEach(function (l) {

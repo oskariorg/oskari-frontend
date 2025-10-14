@@ -132,7 +132,7 @@ export const LayerIcon = ({ type, hasTimeseries = false, additionalTooltip, ...r
         return <DataLayerIcon {...rest} />;
     };
 
-    let tooltipTitle = (<Message messageKey={ `layerTooltipTitle.${type}`  } bundleKey='oskariui' />);
+    let tooltipTitle = (<Message messageKey={ `layerTooltipTitle.${type}` } bundleKey='oskariui' />);
     if (additionalTooltip) {
         tooltipTitle = (<Fragment>
             { tooltipTitle }. { additionalTooltip }
