@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
             }
             return response.json();
         }).then(json => {
-            this._addLayersToService(json.userlayers);
+            this._addLayersToService(json);
         }).catch(error => {
             // this._showError('tab.error.load');
             this.log.error(error);
@@ -259,6 +259,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
      * Adds one layer to the map layer service
      * and calls the cb with the added layer model if provided.
      *
+  {
+    "id": "myf_ed327b2c-c716-4354-8e4b-250fb9b45253",
+    "type": "myf",
+    "name": "oulu",
+    "subtitle": "",
+    "created": 1760352855.75934,
+    "updated": 1760352855.75934,
+    "featureCount": 120,
+    "options": {
+
+    },
+    "attributes": {
+
+    }
+  },
      * @method addLayerToService
      * @param {JSON} layerJson
      * @param {Boolean} skip add maplayer even in map-layer-service
