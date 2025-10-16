@@ -81,7 +81,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Jeux de données personnels",
-            "inspire": "Jeux de données personnels"
+            "group": "Jeux de données personnels"
         }
     }
 });

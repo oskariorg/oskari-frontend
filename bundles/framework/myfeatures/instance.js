@@ -1,6 +1,5 @@
 import './service/MyFeaturesService';
 import './request/ShowLayerDialogRequestHandler';
-import './domain/MyFeaturesLayer';
 import { MyFeaturesTab } from './MyFeaturesTab';
 import { MyFeaturesHandler } from './handler/MyFeaturesHandler';
 import { TOOL, BUNDLE_KEY } from './constants';
@@ -32,19 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInsta
                 showLayerDialogRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myfeatures.request.ShowLayerDialogRequestHandler', this)
             };
             Oskari.getSandbox().requestHandler('MyFeatures.ShowLayerDialogRequest', this.requestHandlers.showLayerDialogRequestHandler);
-            // register handling through wfsvectorplugin
-            const type = 'myf';
-            const options = {
-                type,
-                editRequest: 'MyFeatures.ShowLayerDialogRequest',
-                ...this.loc('layer')
-            };
-            this.getMapLayerService()?.registerLayerForUserDataModelBuilder(options);
-            // Let wfs plugin handle this layertype
-            const mapModule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
-            const wfsPlugin = mapModule?.getLayerPlugins('wfs');
-            wfsPlugin?.registerLayerType(type, 'Oskari.mapframework.MyFeaturesLayer');
-            // load layers _after_ registering the type
+
             this.getService().getMyFeatures();
         }
         this.registerTool();

@@ -93,7 +93,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Egna dataset",
-            "inspire": "Egna dataset"
+            "group": "Egna dataset"
         }
     }
 });

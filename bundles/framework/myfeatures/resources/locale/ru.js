@@ -81,7 +81,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Личный набор данных",
-            "inspire": "Личный набор данных"
+            "group": "Личный набор данных"
         }
     }
 });

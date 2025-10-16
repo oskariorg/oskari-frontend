@@ -1,5 +1,6 @@
 import { Messaging } from 'oskari-ui/util';
 import { ERRORS } from '../constants';
+import { handleMyFeaturesLayers } from './layerHandling';
 /**
  * @class Oskari.mapframework.bundle.myfeatures.MyFeaturesService
  */
@@ -8,6 +9,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
     this.srs = instance.getSandbox().getMap().getSrsName();
     this.log = Oskari.log('MyFeaturesService');
     Oskari.makeObservable(this);
+    const { group, dataProviderId } = handleMyFeaturesLayers(
+        instance.getSandbox(),
+        instance.getMapLayerService(),
+        instance.loc);
+    this._group = group;
+    this._dataProviderId = dataProviderId;
 }, {
     __name: 'MyFeatures.MyFeaturesService',
     __qname: 'Oskari.mapframework.bundle.myfeatures.MyFeaturesService',
@@ -65,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
                 this._handleErrorResponse(info, errorCb);
                 return;
             }
-            this._showSuccess('flyout.success', { count: json.featuresCount });
+            this._showSuccess('flyout.success', { count: json?.layer?.featureCount });
             this._handleImportedLayer(json);
             successCb();
         }).catch(error => {
@@ -214,7 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
             sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
         }
     },
-    _handleImportedLayer: function (layerJson) {
+    _handleImportedLayer: function (importResponse) {
         const cb = (mapLayer) => {
             const sandbox = this.instance.getSandbox();
             const layerId = mapLayer.getId();
@@ -226,11 +233,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
             // sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, true]);
             this.notifyUpdate();
         };
-        const { warning } = layerJson;
+        const { warning } = importResponse;
         if (warning) {
             this._showWarning(warning);
         }
-        this.addLayerToService(layerJson, false, cb);
+        this.addLayerToService(importResponse.layer, false, cb);
     },
     /**
      * Adds the layers to the map layer service.
@@ -282,7 +289,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
     addLayerToService: function (layerJson, skipEvent, cb) {
         const mapLayerService = this.instance.getMapLayerService();
         // Create the layer model
-        const mapLayer = mapLayerService.createMapLayer(layerJson);
+        const mapLayer = mapLayerService.createMapLayer({
+            ...layerJson,
+            groups: [this._group],
+            dataproviderId: this._dataProviderId
+        });
         // mark that this has been added by this bundle.
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.
         // This is used to filter out other users shared layers when listing layers on the My Data functionality.

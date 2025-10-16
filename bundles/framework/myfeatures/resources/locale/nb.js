@@ -67,7 +67,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Egne datasett",
-            "inspire": "Egne datasett"
+            "group": "Egne datasett"
         }
     }
 });

@@ -19,7 +19,7 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
             defaultSortOrder: 'ascend',
             render: (title, item) => {
                 return (
-                    <a onClick={() => controller.openLayer(item.key)}>{title}</a>
+                    <a onClick={() => controller.addLayerToMap(item.key)}>{title}</a>
                 );
             }
         },
@@ -55,12 +55,12 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
                             className='t_edit'
                             title={<Message messageKey='tab.grid.edit' />}
                             icon={<EditOutlined style={EDIT_ICON_STYLE} />}
-                            onClick={() => controller.editMyFeatures(item.key)}
+                            onClick={() => controller.editLayer(item.key)}
                         />
                         <DeleteButton
                             type='icon'
                             title={<Message messageKey='tab.confirmDeleteMsg' messageArgs={{ name: item.name }} />}
-                            onConfirm={() => controller.deleteMyFeature(item.key)}
+                            onConfirm={() => controller.deleteLayer(item.key)}
                         />
                     </ToolsContainer>
                 );
@@ -74,7 +74,8 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
             dataSource={data.map(item => ({
                 key: item.getId(),
                 created: item.getCreated(),
-                ...item.getLocaleValues()
+                name: item.getName(),
+                desc: item.getDescription()
             }))}
             pagination={false}
             loading={loading}

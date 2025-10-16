@@ -92,7 +92,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Omat aineistot",
-            "inspire": "Omat aineistot"
+            "group": "Omat aineistot"
         }
     }
 });

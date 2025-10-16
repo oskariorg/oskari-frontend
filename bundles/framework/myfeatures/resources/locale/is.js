@@ -51,7 +51,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Eigin gagnasett",
-            "inspire": "Eigin gagnasett"
+            "group": "Eigin gagnasett"
         }
     }
 });
