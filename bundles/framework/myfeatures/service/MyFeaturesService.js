@@ -172,15 +172,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
         return layerId.substring(tokenIndex);
     },
     /**
-     * @method _deleteMyFeature
-     * Request backend to delete user layer. On success removes the layer
+     * @method deleteLayer
+     * Request backend to delete the myfeatures layer. On success removes the layer
      * from map and layerservice. On failure displays a notification.
-     * @param layer layer userlayer data to be destroyed
+     * @param layerId id of the layer to be destroyed
      */
-    deleteMyFeatures: function (layerId) {
-        const id = this.getActualId(layerId);
-        fetch(Oskari.urls.getRoute('DeleteMyFeature', { id }), {
-            method: 'POST'
+    deleteLayer: function (layerId) {
+        fetch(Oskari.urls.getRoute('MyFeaturesLayer', { id: layerId }), {
+            method: 'DELETE'
         }).then(response => {
             if (!response.ok) {
                 throw Error(response.statusText);

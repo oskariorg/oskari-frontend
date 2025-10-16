@@ -70,7 +70,7 @@ class MyFeaturesHandler extends StateHandler {
         return isNaN(confMax) ? MAX_SIZE : parseInt(confMax);
     }
 
-    openLayer (id) {
+    addLayerToMap (id) {
         const addMLrequestBuilder = Oskari.requestBuilder('AddMapLayerRequest');
         const addMlRequest = addMLrequestBuilder(id, {
             zoomContent: true
@@ -104,7 +104,7 @@ class MyFeaturesHandler extends StateHandler {
         this.updateState({
             loading: true
         });
-        this.instance.getService().deleteMyFeature(id);
+        this.instance.getService().deleteLayer(id);
     }
 
     createEventHandlers () {
@@ -133,7 +133,7 @@ class MyFeaturesHandler extends StateHandler {
 const wrapped = controllerMixin(MyFeaturesHandler, [
     'editLayer',
     'deleteLayer',
-    'openLayer'
+    'addLayerToMap'
 ]);
 
 export { wrapped as MyFeaturesHandler };
