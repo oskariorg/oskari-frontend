@@ -25,13 +25,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInsta
         if (Oskari.user().isLoggedIn()) {
             // logged in user, create UI
             this.createService();
-            this.getService().getMyFeatures();
             this.handler = new MyFeaturesHandler(this);
             this.addTab();
             this.requestHandlers = {
                 showLayerDialogRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myfeatures.request.ShowLayerDialogRequestHandler', this)
             };
             Oskari.getSandbox().requestHandler('MyFeatures.ShowLayerDialogRequest', this.requestHandlers.showLayerDialogRequestHandler);
+
+            this.getService().getMyFeatures();
         }
         this.registerTool();
     },

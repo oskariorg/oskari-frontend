@@ -93,7 +93,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Own datasets",
-            "inspire": "Own datasets"
+            "group": "Own datasets"
         }
     }
 });

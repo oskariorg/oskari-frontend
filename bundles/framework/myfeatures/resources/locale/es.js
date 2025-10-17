@@ -67,7 +67,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Conjuntos de datos propios",
-            "inspire": "Conjuntos de datos propios"
+            "group": "Conjuntos de datos propios"
         }
     }
 });

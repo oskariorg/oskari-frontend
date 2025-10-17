@@ -67,7 +67,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Eigener Datensatz",
-            "inspire": "Eigener Datensatz"
+            "group": "Eigener Datensatz"
         }
     }
 });

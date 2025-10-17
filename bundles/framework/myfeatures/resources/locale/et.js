@@ -67,7 +67,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Minu andmestikud",
-            "inspire": "Minu andmestikud"
+            "group": "Minu andmestikud"
         }
     }
 });

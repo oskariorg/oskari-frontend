@@ -1,10 +1,10 @@
 export const BUNDLE_KEY = 'myfeatures';
-export const LAYER_TYPE = 'userlayer';
+export const LAYER_TYPE = 'myf';
 export const MAX_SIZE = 10;
 
 export const TOOL = {
     NAME: 'import2',
-    GROUP: 'myplaces',
+    GROUP: 'myfeatures',
     ICON: 'upload-material'
 };
 

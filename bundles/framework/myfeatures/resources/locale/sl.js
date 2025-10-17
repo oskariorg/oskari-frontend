@@ -67,7 +67,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Lasten nabor podatkov",
-            "inspire": "Lasten nabor podatkov"
+            "group": "Lasten nabor podatkov"
         }
     }
 });

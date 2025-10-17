@@ -1,6 +1,6 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showLayerForm } from '../view/LayerForm';
-import { BUNDLE_KEY, MAX_SIZE, ERRORS } from '../constants';
+import { BUNDLE_KEY, MAX_SIZE, ERRORS, LAYER_TYPE } from '../constants';
 
 class MyFeaturesHandler extends StateHandler {
     constructor (instance) {
@@ -14,7 +14,6 @@ class MyFeaturesHandler extends StateHandler {
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, BUNDLE_KEY);
         this.eventHandlers = this.createEventHandlers();
-        this.layerMetaType = 'USERLAYER';
         this.refreshLayersList();
     };
 
@@ -71,7 +70,7 @@ class MyFeaturesHandler extends StateHandler {
         return isNaN(confMax) ? MAX_SIZE : parseInt(confMax);
     }
 
-    openLayer (id) {
+    addLayerToMap (id) {
         const addMLrequestBuilder = Oskari.requestBuilder('AddMapLayerRequest');
         const addMlRequest = addMLrequestBuilder(id, {
             zoomContent: true
@@ -83,14 +82,15 @@ class MyFeaturesHandler extends StateHandler {
         this.updateState({
             loading: true
         });
-        const layers = this.instance.getMapLayerService().getAllLayersByMetaType(this.layerMetaType);
+        const layers = this.instance.getMapLayerService()
+            .getAllLayers().filter(layer => layer.isLayerOfType(LAYER_TYPE));
         this.updateState({
             data: layers,
             loading: false
         });
     }
 
-    editMyFeature (id) {
+    editLayer (id) {
         const layer = this.instance.getMapLayerService().findMapLayer(id);
         const values = {
             locale: layer.getLocale(),
@@ -100,11 +100,11 @@ class MyFeaturesHandler extends StateHandler {
         this.showLayerDialog(values);
     }
 
-    deleteMyFeature (id) {
+    deleteLayer (id) {
         this.updateState({
             loading: true
         });
-        this.instance.getService().deleteMyFeature(id);
+        this.instance.getService().deleteLayer(id);
     }
 
     createEventHandlers () {
@@ -131,9 +131,9 @@ class MyFeaturesHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(MyFeaturesHandler, [
-    'editMyFeature',
-    'deleteMyFeature',
-    'openLayer'
+    'editLayer',
+    'deleteLayer',
+    'addLayerToMap'
 ]);
 
 export { wrapped as MyFeaturesHandler };

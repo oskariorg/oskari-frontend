@@ -67,7 +67,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "Vlastné datasety",
-            "inspire": "Vlastné datasety"
+            "group": "Vlastné datasety"
         }
     }
 });

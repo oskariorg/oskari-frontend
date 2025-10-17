@@ -67,7 +67,7 @@ Oskari.registerLocalization(
         },
         "layer": {
             "organization": "I miei datasets",
-            "inspire": "I miei datasets"
+            "group": "I miei datasets"
         }
     }
 });

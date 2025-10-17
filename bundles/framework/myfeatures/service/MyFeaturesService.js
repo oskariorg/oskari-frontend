@@ -1,5 +1,6 @@
 import { Messaging } from 'oskari-ui/util';
 import { ERRORS } from '../constants';
+import { handleMyFeaturesLayers } from './layerHandling';
 /**
  * @class Oskari.mapframework.bundle.myfeatures.MyFeaturesService
  */
@@ -8,6 +9,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
     this.srs = instance.getSandbox().getMap().getSrsName();
     this.log = Oskari.log('MyFeaturesService');
     Oskari.makeObservable(this);
+    const { group, dataProviderId } = handleMyFeaturesLayers(
+        instance.getSandbox(),
+        instance.getMapLayerService(),
+        instance.loc);
+    this._group = group;
+    this._dataProviderId = dataProviderId;
 }, {
     __name: 'MyFeatures.MyFeaturesService',
     __qname: 'Oskari.mapframework.bundle.myfeatures.MyFeaturesService',
@@ -65,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
                 this._handleErrorResponse(info, errorCb);
                 return;
             }
-            this._showSuccess('flyout.success', { count: json.featuresCount });
+            this._showSuccess('flyout.success', { count: json?.layer?.featureCount });
             this._handleImportedLayer(json);
             successCb();
         }).catch(error => {
@@ -154,7 +161,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
             }
             return response.json();
         }).then(json => {
-            this._addLayersToService(json.userlayers);
+            this._addLayersToService(json);
         }).catch(error => {
             // this._showError('tab.error.load');
             this.log.error(error);
@@ -165,15 +172,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
         return layerId.substring(tokenIndex);
     },
     /**
-     * @method _deleteMyFeature
-     * Request backend to delete user layer. On success removes the layer
+     * @method deleteLayer
+     * Request backend to delete the myfeatures layer. On success removes the layer
      * from map and layerservice. On failure displays a notification.
-     * @param layer layer userlayer data to be destroyed
+     * @param layerId id of the layer to be destroyed
      */
-    deleteMyFeatures: function (layerId) {
-        const id = this.getActualId(layerId);
-        fetch(Oskari.urls.getRoute('DeleteMyFeature', { id }), {
-            method: 'POST'
+    deleteLayer: function (layerId) {
+        fetch(Oskari.urls.getRoute('MyFeaturesLayer', { id: layerId }), {
+            method: 'DELETE'
         }).then(response => {
             if (!response.ok) {
                 throw Error(response.statusText);
@@ -214,7 +220,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
             sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
         }
     },
-    _handleImportedLayer: function (layerJson) {
+    _handleImportedLayer: function (importResponse) {
         const cb = (mapLayer) => {
             const sandbox = this.instance.getSandbox();
             const layerId = mapLayer.getId();
@@ -226,11 +232,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
             // sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, true]);
             this.notifyUpdate();
         };
-        const { warning } = layerJson;
+        const { warning } = importResponse;
         if (warning) {
             this._showWarning(warning);
         }
-        this.addLayerToService(layerJson, false, cb);
+        this.addLayerToService(importResponse.layer, false, cb);
     },
     /**
      * Adds the layers to the map layer service.
@@ -259,6 +265,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
      * Adds one layer to the map layer service
      * and calls the cb with the added layer model if provided.
      *
+  {
+    "id": "myf_ed327b2c-c716-4354-8e4b-250fb9b45253",
+    "type": "myf",
+    "name": "oulu",
+    "subtitle": "",
+    "created": 1760352855.75934,
+    "updated": 1760352855.75934,
+    "featureCount": 120,
+    "options": {
+
+    },
+    "attributes": {
+
+    }
+  },
      * @method addLayerToService
      * @param {JSON} layerJson
      * @param {Boolean} skip add maplayer even in map-layer-service
@@ -267,7 +288,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
     addLayerToService: function (layerJson, skipEvent, cb) {
         const mapLayerService = this.instance.getMapLayerService();
         // Create the layer model
-        const mapLayer = mapLayerService.createMapLayer(layerJson);
+        const mapLayer = mapLayerService.createMapLayer({
+            ...layerJson,
+            groups: [this._group],
+            dataproviderId: this._dataProviderId
+        });
         // mark that this has been added by this bundle.
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.
         // This is used to filter out other users shared layers when listing layers on the My Data functionality.
