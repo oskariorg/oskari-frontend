@@ -28,7 +28,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>')
         };
-        me._reactRoot = null;
     }, {
         resetUI: function () {
             if (this.handler && this.popupOpen) {

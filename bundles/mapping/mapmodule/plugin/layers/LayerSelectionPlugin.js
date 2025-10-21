@@ -32,7 +32,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._showMetadata = !!this.getConfig().showMetadata;
         me._layers = [];
         me._baseLayers = [];
-        me._reactRoot = null;
     }, {
         _toggleToolState: function () {
             if (this.popupControls) {

@@ -27,7 +27,6 @@ Oskari.clazz.define(
         me._defaultLocation = 'top left';
         me._index = 0;
         me._name = 'SearchPlugin';
-        me._reactRoot = null;
     }, {
 
         /**

@@ -28,7 +28,6 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
         me._templates = {
             plugin: jQuery('<div class="mapplugin togglenavigation"></div>')
         };
-        me._reactRoot = null;
     },
     {
         /**

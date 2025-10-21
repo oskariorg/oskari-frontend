@@ -35,7 +35,6 @@ Oskari.clazz.define(
         me._name = 'IndexMapPlugin';
         me._indexMap = null;
         me._baseLayerId = null;
-        me._reactRoot = null;
     },
     {
         _startPluginImpl: function () {

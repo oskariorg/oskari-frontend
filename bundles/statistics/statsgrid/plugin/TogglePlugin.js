@@ -8,7 +8,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (handle
     this._defaultLocation = 'bottom right';
     this._name = 'statsgrid.TogglePlugin';
     this.handler = handler;
-    this._reactRoot = null;
 }, {
     refresh: function (state = this.handler.getState()) {
         let el = this.getElement();
