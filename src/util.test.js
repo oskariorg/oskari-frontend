@@ -126,7 +126,7 @@ describe('hexToRgb function', () => {
 
     test('throws TypeError when parameter is not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.hexToRgb()).toThrowError(TypeError);
+        expect(() => Oskari.util.hexToRgb()).toThrow(TypeError);
     });
 
 });
@@ -150,12 +150,12 @@ describe('rgbToHex function', () => {
 
     test('throws TypeError when invalid parameter is provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.rgbToHex('invalid')).toThrowError(TypeError);
+        expect(() => Oskari.util.rgbToHex('invalid')).toThrow(TypeError);
     });
 
     test('throws TypeError when parameter is not provided', () => {
         expect.assertions(1)
-        expect(() => Oskari.util.rgbToHex()).toThrowError(TypeError);
+        expect(() => Oskari.util.rgbToHex()).toThrow(TypeError);
     });
 
 });
@@ -406,7 +406,7 @@ describe('alterBrightness function', () => {
 
     test('throws TypeError when parameters are not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.alterBrightness()).toThrowError(TypeError);
+        expect(() => Oskari.util.alterBrightness()).toThrow(TypeError);
     });
 });
 
@@ -430,7 +430,7 @@ describe('keyExists function', () => {
 
     test('throws TypeError when parameters are not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.keyExists()).toThrowError(TypeError);
+        expect(() => Oskari.util.keyExists()).toThrow(TypeError);
     });
 });
 
@@ -538,7 +538,7 @@ describe('getColorBrightness function', () => {
 
     test('throws TypeError when parameters are not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.getColorBrightness()).toThrowError(TypeError);
+        expect(() => Oskari.util.getColorBrightness()).toThrow(TypeError);
     });
 });
 
@@ -566,7 +566,7 @@ describe('isDarkColor function', () => {
 
     test('throws TypeError when parameters are not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.isDarkColor()).toThrowError(TypeError);
+        expect(() => Oskari.util.isDarkColor()).toThrow(TypeError);
     });
 });
 
@@ -594,7 +594,7 @@ describe('isLightColor  function', () => {
 
     test('throws TypeError when parameters are not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.isLightColor()).toThrowError(TypeError);
+        expect(() => Oskari.util.isLightColor()).toThrow(TypeError);
     });
 });
 
@@ -618,7 +618,7 @@ describe('coordinateMetricToDegrees function', () => {
 
     test('throws TypeError when parameters are not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.coordinateMetricToDegrees()).toThrowError(TypeError);
+        expect(() => Oskari.util.coordinateMetricToDegrees()).toThrow(TypeError);
     });
 
 });
@@ -643,7 +643,7 @@ describe('coordinateDegreesToMetric  function', () => {
 
     test('throws TypeError when parameters are not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.coordinateDegreesToMetric()).toThrowError(TypeError);
+        expect(() => Oskari.util.coordinateDegreesToMetric()).toThrow(TypeError);
     });
 
 });
@@ -677,7 +677,7 @@ describe('coordinateIsDegrees function', () => {
 
     test('throws TypeError when parameters are not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.coordinateIsDegrees()).toThrowError(TypeError);
+        expect(() => Oskari.util.coordinateIsDegrees()).toThrow(TypeError);
     });
 
 });
@@ -902,16 +902,16 @@ describe('stringLike function', () => {
 
     test('throws TypeError when pattern parameter is not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.stringLike('testing')).toThrowError(TypeError);
+        expect(() => Oskari.util.stringLike('testing')).toThrow(TypeError);
     });
 
     test('throws TypeError when value parameter is not provided', () => {
         expect.assertions(1);
-        expect(() => Oskari.util.stringLike(null, 'testing')).toThrowError(TypeError);
+        expect(() => Oskari.util.stringLike(null, 'testing')).toThrow(TypeError);
     });
 
     test('throws TypeError when parameters are not provided', () => {
-        expect(() => Oskari.util.stringLike()).toThrowError(TypeError);
+        expect(() => Oskari.util.stringLike()).toThrow(TypeError);
     });
 });
 
@@ -980,11 +980,11 @@ describe('getErrorTextFromAjaxFailureObjects function', () => {
     });
 
     test('throws TypeError when parameters are not provided', () => {
-        expect(() => Oskari.util.getErrorTextFromAjaxFailureObjects()).toThrowError(TypeError);
+        expect(() => Oskari.util.getErrorTextFromAjaxFailureObjects()).toThrow(TypeError);
     });
 
     test('throws TypeError when exception is not provided', () => {
-        expect(() => Oskari.util.getErrorTextFromAjaxFailureObjects(mockjqHR,null)).toThrowError(TypeError);
+        expect(() => Oskari.util.getErrorTextFromAjaxFailureObjects(mockjqHR,null)).toThrow(TypeError);
     });
 
 });

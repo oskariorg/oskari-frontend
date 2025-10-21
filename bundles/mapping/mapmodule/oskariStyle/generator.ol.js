@@ -29,7 +29,7 @@ const getFeatureStyle = (layer, extendedDef = {}) => {
     return merge(defaultDef, style.getFeatureStyle(), extendedDef);
 };
 
-export const useStyleFunction = layer => {
+export const shouldUseStyleFunction = layer => {
     const current = layer.getCurrentStyle();
     const styleType = geometryTypeToStyleType(layer.getGeometryType());
     const hasPropertyLabel = Oskari.util.keyExists(current.getFeatureStyle(), 'text.labelProperty');
@@ -71,7 +71,7 @@ export const geometryTypeToStyleType = type => {
 export const getOlStyleForLayer = (mapmodule, layer, extendedDef) => {
     const featureStyle = getFeatureStyle(layer, extendedDef);
     const applyOpacity = mapmodule.getSupports3D();
-    if (!applyOpacity && !useStyleFunction(layer)) {
+    if (!applyOpacity && !shouldUseStyleFunction(layer)) {
         const styleType = geometryTypeToStyleType(layer.getGeometryType());
         return mapmodule.getStyle(featureStyle, styleType);
     }

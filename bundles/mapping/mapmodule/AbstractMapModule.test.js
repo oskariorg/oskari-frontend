@@ -4,9 +4,8 @@ import './AbstractMapModule';
 import './service/map.state';
 import { getSortedPlugins } from './util/PluginHelper';
 import jQuery from 'jquery';
-
 const Oskari = window.Oskari;
-global.jQuery = jQuery;
+globalThis.jQuery = jQuery;
 
 const mapModule = Oskari.clazz.create('Oskari.mapping.mapmodule.AbstractMapModule', 'Test');
 const dummyPlugin = {

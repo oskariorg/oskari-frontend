@@ -138,6 +138,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
             return;
         }
         this.getReactRoot(el.get(0)).unmount();
+        this._reactRoot = null;
         this.uiHandler.resetMap();
     }
 }

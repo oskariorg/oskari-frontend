@@ -36,8 +36,8 @@ module.exports = function generateEntries (appsetupPaths, isProd, context) {
         const appName = path.basename(appDir);
         const copyDef = [
             { from: appDir, to: appName },
-            { from: path.resolve(context + '/resources/icons.css'), to: appName },
-            { from: path.resolve(context + '/resources/icons.png'), to: appName }
+            { from: path.resolve(context + '/resources/icons.css'), to: appName, force: true },
+            { from: path.resolve(context + '/resources/icons.png'), to: appName, force: true }
         ];
         if (!isProd) {
             copyDef.push({ from: path.resolve(context + '/webpack/empty.js'), to: path.join(appName, 'oskari.min.css') }); // empty CSS to keep browser happy in dev mode

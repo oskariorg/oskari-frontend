@@ -107,8 +107,11 @@ class UIHandler extends StateHandler {
             }
             this.initTopmostLayer();
         } else if (!active && this.element) {
-            const elem = createRoot(this.element);
-            elem.unmount();
+            if (this._reactRoot) {
+                this._reactRoot.unmount();
+                this._reactRoot = null;
+            }
+
             root.removeChild(this.element);
             this.element = null;
             layerId = null;

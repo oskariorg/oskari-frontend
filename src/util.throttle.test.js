@@ -17,7 +17,7 @@ describe('throttle function executes given function ', () => {
         const throttledFunction = Oskari.util.throttle(mockFunction, wait);
 
         throttledFunction();
-        expect(mockFunction).toBeCalled();
+        expect(mockFunction).toHaveBeenCalled();
         expect(mockFunction).toHaveBeenCalledTimes(1);
         throttledFunction();
         expect(mockFunction).toHaveBeenCalledTimes(1);

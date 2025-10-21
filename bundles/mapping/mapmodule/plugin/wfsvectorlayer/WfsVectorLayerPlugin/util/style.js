@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import { getStyleFunction, useStyleFunction, wrapClusterStyleFunction, geometryTypeToStyleType } from '../../../../oskariStyle/generator.ol';
+import { getStyleFunction, shouldUseStyleFunction, wrapClusterStyleFunction, geometryTypeToStyleType } from '../../../../oskariStyle/generator.ol';
 
 const defaults = {
     style: {
@@ -36,7 +36,7 @@ const isClusteredLayer = (mapmodule, layer) => {
 };
 
 const defaultStyleGenerator = (mapmodule, layer) => {
-    return useStyleFunction(layer) ? getDefaultStyleFunction(mapmodule, layer) : getTypedStyle(mapmodule, layer);
+    return shouldUseStyleFunction(layer) ? getDefaultStyleFunction(mapmodule, layer) : getTypedStyle(mapmodule, layer);
 };
 
 const defaultTypedStyles = {}; // cached default ol styles for point, line and area

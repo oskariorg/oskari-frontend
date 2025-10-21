@@ -305,7 +305,7 @@ class UIHandler extends StateHandler {
     setMarker () {
         this.centerMap();
         const data = this.state.xy || this.getMapXY();
-        const displayData = { lonlat: { lon: this.state.lonField, lat: this.state.latField } } || this.getMapXY();
+        const displayData = (this.state?.lonField && this.state?.latField) ? { lonlat: { lon: this.state.lonField, lat: this.state.latField } } : this.getMapXY();
         const lat = displayData?.lonlat?.lat || data?.lonlat?.lat;
         const lon = displayData?.lonlat?.lon || data?.lonlat?.lon;
         try {
