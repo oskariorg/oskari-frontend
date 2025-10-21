@@ -1,14 +1,9 @@
 import { WFSLayer } from '../../../mapping/mapmodule/plugin/wfsvectorlayer/WFSLayer';
-// import { VectorStyle } from '../../../mapping/mapmodule/domain/VectorStyle';
-// import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
-
-// import { UserDataLayer } from '../../../mapping/mapuserdatalayer/domain/UserDataLayer';
 /**
  * @class Oskari.mapframework.MyFeaturesLayer
  *
  * MapLayer of type MyFeaturesLayer
  */
-
 export class MyFeaturesLayer extends WFSLayer {
     constructor () {
         super(...arguments);
