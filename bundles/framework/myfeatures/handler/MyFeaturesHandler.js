@@ -3,9 +3,10 @@ import { showLayerForm } from '../view/LayerForm';
 import { BUNDLE_KEY, MAX_SIZE, ERRORS, LAYER_TYPE } from '../constants';
 
 class MyFeaturesHandler extends StateHandler {
-    constructor (instance) {
+    constructor (instance, myFeaturesLayerService) {
         super();
         this.instance = instance;
+        this.myFeaturesLayerService = myFeaturesLayerService;
         this.sandbox = Oskari.getSandbox();
         this.setState({
             data: [],
@@ -80,7 +81,7 @@ class MyFeaturesHandler extends StateHandler {
             loading: true
         });
         try {
-            const result = await this.instance.getService().importFile(file, locale, style, sourceSrs);
+            const result = await this.myFeaturesLayerService.importFile(file, locale, style, sourceSrs);
             this.addLayerToMap(result.id);
 
             Messaging.success({
@@ -111,7 +112,7 @@ class MyFeaturesHandler extends StateHandler {
             }
             // pass args for localization even them aren't needed for requested errorKey
             const args = {
-                maxSize: this.instance.handler.getMaxSize(),
+                maxSize: this.getMaxSize(),
                 extensions: extensions.join(',')
             };
             // Only unknown srs is handled differently, use cause for callback
@@ -135,7 +136,7 @@ class MyFeaturesHandler extends StateHandler {
             loading: true
         });
         try {
-            const layerJson = await this.instance.getService().getLayerForEdit(id);
+            const layerJson = await this.myFeaturesLayerService.getLayerForEdit(id);
             const values = {
                 id,
                 locale: {
@@ -164,7 +165,7 @@ class MyFeaturesHandler extends StateHandler {
         });
 
         try {
-            await this.instance.getService().updateLayer(id, values);
+            await this.myFeaturesLayerService.updateLayer(id, values);
             Messaging.success({
                 content: this.loc('tab.notification.editedMsg'),
                 duration: 10
@@ -191,7 +192,7 @@ class MyFeaturesHandler extends StateHandler {
             loading: true
         });
         try {
-            const success = await this.instance.getService().deleteLayer(id);
+            const success = await this.myFeaturesLayerService.deleteLayer(id);
             if (success) {
                 Messaging.success({
                     content: this.loc('tab.notification.deletedMsg'),

@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.request.ShowLayerDial
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Object} id User layer id
+     * @param {Object} id myfeatures layer id
      */
     function (id) {
         this._id = id;
@@ -35,5 +35,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.request.ShowLayerDial
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ['Oskari.mapframework.request.Request']
+        protocol: ['Oskari.mapframework.request.Request']
     });

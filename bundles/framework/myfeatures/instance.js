@@ -1,60 +1,70 @@
+import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
 import { Messaging } from 'oskari-ui/util';
-import './request/ShowLayerDialogRequestHandler';
 import { MyFeaturesTab } from './MyFeaturesTab';
 import { MyFeaturesHandler } from './handler/MyFeaturesHandler';
 import { TOOL, BUNDLE_KEY } from './constants';
 import { MyFeaturesService } from './service/MyFeaturesService';
+import './request/ShowLayerDialogRequest';
 
-/**
- * @class Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInstance
- */
-Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInstance', function () {
-    this.importService = undefined;
-    this.mapLayerService = null;
-    this.tab = undefined;
-    this.loc = Oskari.getMsg.bind(null, BUNDLE_KEY);
-}, {
-    __name: BUNDLE_KEY,
+const loadLayers = async (service, getMsg) => {
+    try {
+        const layerCount = await service.loadLayers();
+        Oskari.log('MyFeatures').debug(`Got ${layerCount} layers for myfeatures`);
+    } catch (err) {
+        const content = getMsg('tab.error.load');
+        Messaging.error({ content, duration: 10 });
+        Oskari.log('MyFeatures').error(err);
+    }
+};
 
-    /**
-     * Registers itself to the sandbox, creates the tab and the service
-     * and adds the flyout.
-     *
-     * @method start
-     */
-    _startImpl: function () {
-        if (Oskari.user().isLoggedIn()) {
-            // logged in user, create UI
-            this.createService();
-            this.handler = new MyFeaturesHandler(this);
+export class MyFeatureBundleInstance extends BasicBundleInstance {
+    start (sandbox) {
+        // registers to sandbox and saves the sandbox for getSandbox()
+        super.start(sandbox);
+        this.loc = Oskari.getMsg.bind(null, BUNDLE_KEY);
+        const loggedIn = Oskari.user().isLoggedIn();
+        if (loggedIn) {
+            this.importService = new MyFeaturesService(sandbox, this.getMapLayerService(), this.loc);
+            this.handler = new MyFeaturesHandler(this, this.importService);
             this.addTab();
-            this.requestHandlers = {
-                showLayerDialogRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myfeatures.request.ShowLayerDialogRequestHandler', this)
-            };
-            Oskari.getSandbox().requestHandler('MyFeatures.ShowLayerDialogRequest', this.requestHandlers.showLayerDialogRequestHandler);
-            const loadLayers = async () => {
-                try {
-                    const layerCount = await this.getService().loadLayers();
-                    Oskari.log('MyFeatures').debug(`Got ${layerCount} layers for myfeatures`);
-                } catch (err) {
-                    const content = this.loc('tab.error.load');
-                    Messaging.error({ content, duration: 10 });
-                    Oskari.log('MyFeatures').error(err);
+            this.addRequestHandler('MyFeatures.ShowLayerDialogRequest', (req) => {
+                const id = req.getId();
+                if (id) {
+                    this.handler.editLayer(id);
+                } else {
+                    this.handler.showLayerDialog();
                 }
-            };
-            loadLayers();
+            });
+            // need to wrap to a function because async
+            loadLayers(this.importService, this.loc);
         }
-        this.registerTool();
-    },
-    /**
-     * Requests the tool to be added to the toolbar.
-     *
-     * @method registerTool
-     */
-    registerTool: function () {
+        this.registerTool(loggedIn);
+    }
+
+    getMapLayerService () {
+        if (!this.mapLayerService) {
+            this.mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        }
+        return this.mapLayerService;
+    }
+
+    addTab (appStarted) {
+        const sandbox = this.getSandbox();
+        const myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+
+        if (myDataService) {
+            myDataService.addTab('myfeatures', this.loc('tab.title'), MyFeaturesTab, this.handler);
+        } else if (!appStarted) {
+            // Wait for the application to load all bundles and try again
+            Oskari.on('app.start', () => {
+                this.addTab(true);
+            });
+        }
+    }
+
+    registerTool (loggedIn = false) {
         const sandbox = this.getSandbox();
         const reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
-        const loggedIn = Oskari.user().isLoggedIn();
         const toolBtn = {
             iconCls: TOOL.ICON,
             disabled: !loggedIn,
@@ -70,70 +80,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInsta
         if (reqBuilder) {
             sandbox.request(this, reqBuilder(TOOL.NAME, TOOL.GROUP, toolBtn));
         }
-    },
-    getSandbox: function () {
-        if (!this.sandbox) {
-            this.sandbox = Oskari.getSandbox(this.conf.sandbox);
-        }
-        return this.sandbox;
-    },
-    getMapLayerService: function () {
-        if (!this.mapLayerService) {
-            this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        }
-        return this.mapLayerService;
-    },
-    showLayerDialog: function (id) {
-        const layer = this.getMapLayerService().findMapLayer(id);
-        if (layer) {
-            this.handler.showLayerDialog({
-                id,
-                locale: layer.getLocale(),
-                style: layer.getCurrentStyle().getFeatureStyle()
-            });
-        }
-    },
-    /**
-     * Creates the import service and registers it to the sandbox.
-     *
-     * @method createService
-     * @return {Oskari.mapframework.bundle.myfeatures.MyFeaturesService}
-     */
-    createService: function () {
-        const sandbox = this.getSandbox();
-        const importService = new MyFeaturesService(sandbox, this.getMapLayerService(), this.loc);
-        // we don't really need to provide the service for anyone else
-        // sandbox.registerService(importService);
-        this.importService = importService;
-    },
-    /**
-     * Returns the import service.
-     *
-     * @method getService
-     * @return {Oskari.mapframework.bundle.myfeatures.MyFeaturesService}
-     */
-    getService: function () {
-        return this.importService;
-    },
-    /**
-     * Creates the user layers tab and adds it to the mydata bundle.
-     *
-     * @method addTab
-     */
-    addTab: function (appStarted) {
-        const sandbox = Oskari.getSandbox();
-        const myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
-
-        if (myDataService) {
-            myDataService.addTab('myfeatures', this.loc('tab.title'), MyFeaturesTab, this.handler);
-        } else if (!appStarted) {
-            // Wait for the application to load all bundles and try again
-            Oskari.on('app.start', () => {
-                this.addTab(true);
-            });
-        }
     }
-}, {
-    extend: ['Oskari.BasicBundle'],
-    protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
-});
+};
