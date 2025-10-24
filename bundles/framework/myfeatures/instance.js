@@ -101,12 +101,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInsta
      */
     createService: function () {
         const sandbox = this.getSandbox();
-        const importService = new MyFeaturesService(this);
-        /*Oskari.clazz.create(
-            'Oskari.mapframework.bundle.myfeatures.MyFeaturesService',
-            this
-        );*/
-        sandbox.registerService(importService);
+        const importService = new MyFeaturesService(sandbox, this.getMapLayerService(), this.loc);
+        // we don't really need to provide the service for anyone else
+        // sandbox.registerService(importService);
         this.importService = importService;
     },
     /**

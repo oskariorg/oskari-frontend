@@ -2,16 +2,16 @@ import { handleMyFeaturesLayers } from './layerHandling';
 import { MyFeaturesImportError } from './MyFeaturesImportError';
 
 export class MyFeaturesService {
-    constructor (instance) {
-        this.instance = instance;
-        this.sandbox = instance.getSandbox();
+    constructor (sandbox, mapLayerService, getMsg) {
+        this.mapLayerService = mapLayerService;
+        this.sandbox = sandbox;
         this.srs = this.sandbox.getMap().getSrsName();
         this.log = Oskari.log('MyFeaturesService');
         Oskari.makeObservable(this);
         const { group, dataProviderId } = handleMyFeaturesLayers(
-            instance.getSandbox(),
-            instance.getMapLayerService(),
-            instance.loc);
+            sandbox,
+            mapLayerService,
+            getMsg);
         this._group = group;
         this._dataProviderId = dataProviderId;
     }
@@ -50,7 +50,7 @@ export class MyFeaturesService {
     }
 
     addLayerToService (layerJson, skipEvent) {
-        const mapLayerService = this.instance.getMapLayerService();
+        const mapLayerService = this.mapLayerService;
         // Create the layer model
         const mapLayer = mapLayerService.createMapLayer({
             ...layerJson,
@@ -177,7 +177,7 @@ export class MyFeaturesService {
 
     updateLayerInMapLayerService (updatedLayer) {
         const { id } = updatedLayer;
-        const layer = this.instance.getMapLayerService().findMapLayer(id);
+        const layer = this.mapLayerService.findMapLayer(id);
         if (!layer) {
             this.log.error('Could not find layer for update with id:' + id);
             return;
@@ -201,7 +201,7 @@ export class MyFeaturesService {
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
-            this.instance.getMapLayerService().removeLayer(layerId);
+            this.mapLayerService.removeLayer(layerId);
             this.sandbox.postRequestByName('RemoveMapLayerRequest', [layerId]);
             // this.notifyUpdate();
             return true;
