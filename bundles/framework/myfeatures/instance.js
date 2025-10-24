@@ -1,8 +1,9 @@
-import './service/MyFeaturesService';
+import { Messaging } from 'oskari-ui/util';
 import './request/ShowLayerDialogRequestHandler';
 import { MyFeaturesTab } from './MyFeaturesTab';
 import { MyFeaturesHandler } from './handler/MyFeaturesHandler';
 import { TOOL, BUNDLE_KEY } from './constants';
+import { MyFeaturesService } from './service/MyFeaturesService';
 
 /**
  * @class Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInstance
@@ -31,8 +32,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInsta
                 showLayerDialogRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myfeatures.request.ShowLayerDialogRequestHandler', this)
             };
             Oskari.getSandbox().requestHandler('MyFeatures.ShowLayerDialogRequest', this.requestHandlers.showLayerDialogRequestHandler);
-
-            this.getService().getMyFeatures();
+            const loadLayers = async () => {
+                try {
+                    const layerCount = await this.getService().loadLayers();
+                    Oskari.log('MyFeatures').debug(`Got ${layerCount} layers for myfeatures`);
+                } catch (err) {
+                    const content = this.loc('tab.error.load');
+                    Messaging.error({ content, duration: 10 });
+                    Oskari.log('MyFeatures').error(err);
+                }
+            };
+            loadLayers();
         }
         this.registerTool();
     },
@@ -91,12 +101,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInsta
      */
     createService: function () {
         const sandbox = this.getSandbox();
-        const importService = Oskari.clazz.create(
+        const importService = new MyFeaturesService(this);
+        /*Oskari.clazz.create(
             'Oskari.mapframework.bundle.myfeatures.MyFeaturesService',
             this
-        );
+        );*/
         sandbox.registerService(importService);
-        importService.init();
         this.importService = importService;
     },
     /**

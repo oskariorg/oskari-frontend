@@ -1,291 +1,55 @@
-import { Messaging } from 'oskari-ui/util';
-import { ERRORS } from '../constants';
 import { handleMyFeaturesLayers } from './layerHandling';
-/**
- * @class Oskari.mapframework.bundle.myfeatures.MyFeaturesService
- */
-Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', function (instance) {
-    this.instance = instance;
-    this.srs = instance.getSandbox().getMap().getSrsName();
-    this.log = Oskari.log('MyFeaturesService');
-    Oskari.makeObservable(this);
-    const { group, dataProviderId } = handleMyFeaturesLayers(
-        instance.getSandbox(),
-        instance.getMapLayerService(),
-        instance.loc);
-    this._group = group;
-    this._dataProviderId = dataProviderId;
-}, {
-    __name: 'MyFeatures.MyFeaturesService',
-    __qname: 'Oskari.mapframework.bundle.myfeatures.MyFeaturesService',
-    getQName: function () {
-        return this.__qname;
-    },
-    getName: function () {
-        return this.__name;
-    },
-    /**
-     * Initializes the service (does nothing atm).
-     *
-     * @method init
-     */
-    init: function () {},
-    /**
-     * Returns the url used to send the file data to.
-     *
-     * @method getFileImportUrl
-     * @return {String}
-     */
-    getFileImportUrl: function (sourceSrs) {
-        const params = {
-            srs: this.srs
-        };
-        if (sourceSrs) {
-            params.sourceEpsg = `EPSG:${sourceSrs}`;
-        }
-        return Oskari.urls.getRoute('ImportMyFeatures', params);
-    },
+import { MyFeaturesImportError } from './MyFeaturesImportError';
 
-    submitMyFeatures: function (values, successCb, errorCb) {
-        const { sourceSrs, locale, style, file } = values;
-        const formData = new FormData();
-        formData.append('locale', JSON.stringify(locale));
-        formData.append('style', JSON.stringify(style));
-        formData.append('file', file);
+export class MyFeaturesService {
+    constructor (instance) {
+        this.instance = instance;
+        this.sandbox = instance.getSandbox();
+        this.srs = this.sandbox.getMap().getSrsName();
+        this.log = Oskari.log('MyFeaturesService');
+        Oskari.makeObservable(this);
+        const { group, dataProviderId } = handleMyFeaturesLayers(
+            instance.getSandbox(),
+            instance.getMapLayerService(),
+            instance.loc);
+        this._group = group;
+        this._dataProviderId = dataProviderId;
+    }
 
-        fetch(this.getFileImportUrl(sourceSrs), {
-            method: 'POST',
-            body: formData,
-            headers: {
-                Accept: 'application/json'
-            }
-        }).then(response => {
-            if (!response.ok && response.status !== 400) {
-                // if bad request try to dig error code from json
-                throw Error(response.statusText);
-            }
-            return response.json();
-        }).then(json => {
-            const { error, info } = json;
-            if (error) {
-                this.log.error(error);
-                this._handleErrorResponse(info, errorCb);
-                return;
-            }
-            this._showSuccess('flyout.success', { count: json?.layer?.featureCount });
-            this._handleImportedLayer(json);
-            successCb();
-        }).catch(error => {
-            this.log.error(error);
-            this._showError('flyout.error.generic');
-            errorCb();
-        });
-    },
+    getQName () {
+        return 'Oskari.mapframework.bundle.myfeatures.MyFeaturesService';
+    }
 
-    updateMyFeatures: function (layerId, values, successCb, errorCb) {
-        const id = this.getActualId(layerId);
-        fetch(Oskari.urls.getRoute('EditMyFeature', { id, srs: this.srs }), {
-            method: 'POST',
-            body: JSON.stringify(values),
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        }).then(response => {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-            return response.json();
-        }).then(json => {
-            this.updateLayer(json);
-            this._showSuccess('tab.notification.editedMsg');
-            successCb();
-        }).catch(error => {
-            this.log.error(error);
-            this._showError('tab.error.editMsg');
-            errorCb();
-        });
-    },
-    _handleErrorResponse: function (info, errorCb) {
-        const { error, extensions = [], cause, parser } = info || {};
-        let errorKey = error || ERRORS.GENERIC;
-        // Parser error has cause which is used for localized message
-        if (error === ERRORS.PARSER) {
-            if (cause === ERRORS.NO_SRS) {
-                errorKey = parser === 'shp' ? 'shpNoSrs' : 'noSrs';
-            } else if (cause === ERRORS.FORMAT) {
-                errorKey = cause;
-            }
-        }
-        // pass args for localization even them aren't needed for requested errorKey
-        const args = {
-            maxSize: this.instance.handler.getMaxSize(),
-            extensions: extensions.join(',')
-        };
-        this._showError(`flyout.error.${errorKey}`, args);
-        // Only unknown srs is handled differently, use cause for callback
-        errorCb(cause);
-    },
-    _showError: function (locKey, args) {
-        const content = this.instance.loc(locKey, args);
-        Messaging.error({ content, duration: 10 });
-    },
+    getName () {
+        return 'MyFeatures.MyFeaturesService';
+    }
 
-    _showSuccess: function (locKey, args) {
-        const content = this.instance.loc(locKey, args);
-        Messaging.success({ content, duration: 10 });
-    },
-    _showWarning: function (warning = {}) {
-        const { featuresSkipped } = warning;
-        if (!featuresSkipped) {
-            return;
-        }
-        const content = this.instance.loc('flyout.warning.features_skipped', { count: featuresSkipped });
-        Messaging.warn({ content, duration: 10 });
-    },
-    /**
-     * Retrieves the user layers
-     * from the backend and adds them to the map layer service.
-     *
-     * @method getMyFeatures
-     */
-    getMyFeatures: function () {
-        fetch(Oskari.urls.getRoute('MyFeaturesLayer', { srs: this.srs }), {
+    async loadLayers () {
+        return fetch(Oskari.urls.getRoute('MyFeaturesLayer' /*, { srs: this.srs } */), {
             method: 'GET',
             headers: {
                 Accept: 'application/json'
             }
         }).then(response => {
             if (!response.ok) {
-                throw Error(response.statusText);
+                throw new Error(response.statusText);
             }
             return response.json();
-        }).then(json => {
-            this._addLayersToService(json);
-        }).catch(error => {
-            // this._showError('tab.error.load');
-            this.log.error(error);
-        });
-    },
-    getActualId: function (layerId) {
-        const tokenIndex = layerId.lastIndexOf('_') + 1;
-        return layerId.substring(tokenIndex);
-    },
-    /**
-     * @method deleteLayer
-     * Request backend to delete the myfeatures layer. On success removes the layer
-     * from map and layerservice. On failure displays a notification.
-     * @param layerId id of the layer to be destroyed
-     */
-    deleteLayer: function (layerId) {
-        fetch(Oskari.urls.getRoute('MyFeaturesLayer', { id: layerId }), {
-            method: 'DELETE'
-        }).then(response => {
-            if (!response.ok) {
-                throw Error(response.statusText);
+        }).then(layers => {
+            layers.forEach((layerJson) => {
+                this.addLayerToService(layerJson, true);
+            });
+            const layerCount = layers.length;
+            if (layerCount > 0) {
+                const event = Oskari.eventBuilder('MapLayerEvent')(layerCount > 1 ? null : layers[0].id, 'add'); // null as id triggers mass update
+                this.sandbox.notifyAll(event);
+                // this.notifyUpdate(); // do we need to notify this??
             }
-            this._showSuccess('tab.notification.deletedMsg');
-            this._removeLayerFromService(layerId);
-        }).catch(error => {
-            this._showError('tab.error.deleteMsg');
-            this.log.error(error);
+            return layerCount;
         });
-    },
-
-    notifyUpdate: function () {
-        this.trigger('update');
-    },
-    /**
-     * Update userlayer name, source and description
-     *
-     * @method updateLayer
-     * @param {String} id
-     * @param {Object} updatedLayer
-     */
-    updateLayer: function (updatedLayer) {
-        const { id } = updatedLayer;
-        const layer = this.instance.getMapLayerService().findMapLayer(id);
-        if (!layer) {
-            this.log.error('Could not find layer for update with id:' + id);
-            return;
-        }
-        layer.handleUpdatedLayer(updatedLayer);
-        const sandbox = this.instance.getSandbox();
-        const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
-        sandbox.notifyAll(evt);
-        this.notifyUpdate();
-        if (sandbox.isLayerAlreadySelected(id)) {
-            // update layer on map
-            sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
-            sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
-        }
-    },
-    _handleImportedLayer: function (importResponse) {
-        const cb = (mapLayer) => {
-            const sandbox = this.instance.getSandbox();
-            const layerId = mapLayer.getId();
-            // Request the layer to be added to the map.
-            sandbox.postRequestByName('AddMapLayerRequest', [layerId, {
-                zoomContent: true
-            }]);
-            // Request to move and zoom map to layer's content
-            // sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, true]);
-            this.notifyUpdate();
-        };
-        const { warning } = importResponse;
-        if (warning) {
-            this._showWarning(warning);
-        }
-        this.addLayerToService(importResponse.layer, false, cb);
-    },
-    /**
-     * Adds the layers to the map layer service.
-     *
-     * @method _addLayersToService
-     * @private
-     * @param {JSON[]} layers
-     * @param {Function} cb
-     */
-    _addLayersToService: function (layers = []) {
-        layers.forEach((layerJson) => {
-            this.addLayerToService(layerJson, true);
-        });
-        if (layers.length > 0) {
-            const event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // null as id triggers mass update
-            this.instance.getSandbox().notifyAll(event);
-            this.notifyUpdate();
-        }
-    },
-    _removeLayerFromService: function (layerId) {
-        this.instance.getMapLayerService().removeLayer(layerId);
-        this.instance.getSandbox().postRequestByName('RemoveMapLayerRequest', [layerId]);
-        this.notifyUpdate();
-    },
-    /**
-     * Adds one layer to the map layer service
-     * and calls the cb with the added layer model if provided.
-     *
-  {
-    "id": "myf_ed327b2c-c716-4354-8e4b-250fb9b45253",
-    "type": "myf",
-    "name": "oulu",
-    "subtitle": "",
-    "created": 1760352855.75934,
-    "updated": 1760352855.75934,
-    "featureCount": 120,
-    "options": {
-
-    },
-    "attributes": {
-
     }
-  },
-     * @method addLayerToService
-     * @param {JSON} layerJson
-     * @param {Boolean} skip add maplayer even in map-layer-service
-     * @param {Function} cb (optional)
-     */
-    addLayerToService: function (layerJson, skipEvent, cb) {
+
+    addLayerToService (layerJson, skipEvent) {
         const mapLayerService = this.instance.getMapLayerService();
         // Create the layer model
         const mapLayer = mapLayerService.createMapLayer({
@@ -299,11 +63,148 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myfeatures.MyFeaturesService', f
         mapLayer.markAsInternalDownloadSource();
         // Add the layer to the map layer service
         mapLayerService.addLayer(mapLayer, skipEvent);
-        if (typeof cb === 'function') {
-            cb(mapLayer);
-        }
         return mapLayer;
     }
-}, {
-    protocol: ['Oskari.mapframework.service.Service']
-});
+
+    async importFile (file, locale, style, sourceSrs) {
+        //const { sourceSrs, locale, style, file } = values;
+        const formData = new FormData();
+        formData.append('locale', JSON.stringify(locale));
+        formData.append('style', JSON.stringify(style));
+        formData.append('file', file);
+
+        const params = {
+            srs: this.srs
+        };
+        if (sourceSrs) {
+            params.sourceEpsg = `EPSG:${sourceSrs}`;
+        }
+        const url =  Oskari.urls.getRoute('ImportMyFeatures', params);
+        return fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                Accept: 'application/json'
+            }
+        }).then(response => {
+            // NOTE!! http 400 is used for special error handling
+            if (!response.ok && response.status !== 400) {
+                // if bad request try to dig error code from json
+                throw new Error(response.statusText);
+            }
+            return response.json();
+        }).then(json => {
+            const { error, info, warning, layer } = json;
+            if (error) {
+                // server responds with 400 and stuff like this when
+                //   we can handle show some nicer message than generic one
+                /*
+                {
+                    "error": "sourceCRS must be known!",
+                    "info": {
+                        "parser": "shp",
+                        "cause": "unknown_projection",
+                        "files": [
+                            "shape_no_prj/uusitaso.shx",
+                            "shape_no_prj/uusitaso.dbf",
+                            "shape_no_prj/uusitaso.shp"
+                        ],
+                        "error": "parser_error"
+                    }
+                }
+                */
+                throw new MyFeaturesImportError(error, undefined, {
+                    error,
+                    info
+                });
+
+                /*{
+                    error: 'sourceCRS must be known!',
+                    info: {
+                        parser: 'shp',
+                        cause: 'unknown_projection',
+                        files: [
+                            'shape_no_prj/uusitaso.shx',
+                            'shape_no_prj/uusitaso.dbf',
+                            'shape_no_prj/uusitaso.shp'
+                        ],
+                        error: 'parser_error'
+                    }
+                });*/
+            }
+            const maplayer = this.addLayerToService(json.layer);
+            // this.notifyUpdate();
+            return {
+                id: maplayer.getId(),
+                featureCount: layer?.featureCount,
+                warning
+            };
+        });
+    }
+
+    async getLayerForEdit (id) {
+        return await fetch(Oskari.urls.getRoute('MyFeaturesLayer', { id }), {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            return response.json();
+        });
+    }
+
+    async updateLayer (layerId, values) {
+        return fetch(Oskari.urls.getRoute('MyFeaturesLayer', { id: layerId }), {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            return response.json();
+        }).then(json => {
+            this.updateLayerInMapLayerService(json);
+            return true;
+        });
+    }
+
+    updateLayerInMapLayerService (updatedLayer) {
+        const { id } = updatedLayer;
+        const layer = this.instance.getMapLayerService().findMapLayer(id);
+        if (!layer) {
+            this.log.error('Could not find layer for update with id:' + id);
+            return;
+        }
+        layer.handleUpdatedLayer(updatedLayer);
+        const sandbox = this.sandbox;
+        const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
+        sandbox.notifyAll(evt);
+        // this.notifyUpdate();
+        if (sandbox.isLayerAlreadySelected(id)) {
+            // update layer on map
+            sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
+            sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
+        }
+    }
+
+    async deleteLayer (layerId) {
+        return fetch(Oskari.urls.getRoute('MyFeaturesLayer', { id: layerId }), {
+            method: 'DELETE'
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            this.instance.getMapLayerService().removeLayer(layerId);
+            this.sandbox.postRequestByName('RemoveMapLayerRequest', [layerId]);
+            // this.notifyUpdate();
+            return true;
+        });
+    }
+};
