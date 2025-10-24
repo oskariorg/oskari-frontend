@@ -2,7 +2,7 @@ import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
 import { Messaging } from 'oskari-ui/util';
 import { MyFeaturesTab } from './MyFeaturesTab';
 import { MyFeaturesHandler } from './handler/MyFeaturesHandler';
-import { TOOL, BUNDLE_KEY } from './constants';
+import { TOOL } from './constants';
 import { MyFeaturesService } from './service/MyFeaturesService';
 import './request/ShowLayerDialogRequest';
 
@@ -21,10 +21,11 @@ export class MyFeatureBundleInstance extends BasicBundleInstance {
     start (sandbox) {
         // registers to sandbox and saves the sandbox for getSandbox()
         super.start(sandbox);
-        this.loc = Oskari.getMsg.bind(null, BUNDLE_KEY);
         const loggedIn = Oskari.user().isLoggedIn();
         if (loggedIn) {
-            this.importService = new MyFeaturesService(sandbox, this.getMapLayerService(), this.loc);
+            this.importService = new MyFeaturesService(sandbox,
+                this.getMapLayerService(),
+                (key, args) => this.loc(key, args));
             this.handler = new MyFeaturesHandler(this, this.importService);
             this.addTab();
             this.addRequestHandler('MyFeatures.ShowLayerDialogRequest', (req) => {
