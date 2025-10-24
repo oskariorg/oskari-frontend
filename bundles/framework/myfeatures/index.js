@@ -1,4 +1,4 @@
-import './instance';
+import { MyFeatureBundleInstance } from './instance';
 
 // register create function for bundleid
-Oskari.bundle('myfeatures', () => Oskari.clazz.create('Oskari.mapframework.bundle.myfeatures.MyFeaturesBundleInstance'));
+Oskari.bundle('myfeatures', () => new MyFeatureBundleInstance());
