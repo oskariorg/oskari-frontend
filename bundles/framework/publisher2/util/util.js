@@ -7,7 +7,7 @@
  */
 export const hasPublishRight = layer => layer.hasPermission('publish');
 
-export const isPublishable = layer => hasPublishRight(layer) && !layer.getVisibilityInfo().unsuported;
+export const isPublishable = layer => hasPublishRight(layer) && !layer.getVisibilityInfo().unsupported;
 
 export const isEmpty = (value) => {
     if (value === null) {
