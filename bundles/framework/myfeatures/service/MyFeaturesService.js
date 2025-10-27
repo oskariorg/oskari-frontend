@@ -52,11 +52,15 @@ export class MyFeaturesService {
 
     addLayerToService (layerJson, skipEvent) {
         const mapLayerService = this.mapLayerService;
+
         // Create the layer model
         const mapLayer = mapLayerService.createMapLayer({
             ...layerJson,
             groups: [this._group],
-            dataproviderId: this._dataProviderId
+            dataproviderId: this._dataProviderId,
+            permissions: {
+                publish: true
+            }
         });
         // mark that this has been added by this bundle.
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.
