@@ -3,7 +3,8 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { COVERAGE_LAYER_ID, CoverageHelper } from './CoverageHelper';
 import { ThemeProvider } from 'oskari-ui/util';
 import { MapModuleButton } from '../../../MapModuleButton';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 const FEATURE_EVENT_ADD = 'add';
 const FEATURE_EVENT_REMOVE = 'remove';
 const LOCALIZATION_BUNDLE_ID = 'MapModule';
@@ -22,7 +23,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
         };
         this._visible = false;
         this.coverageHelper = new CoverageHelper();
-        this._reactRoot = null;
     }, {
         /** @static @property __name module name */
         __name: 'CoverageToolPlugin',
@@ -44,12 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
             this.renderButton();
             this.addToPluginContainer(this.getElement());
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         renderButton: function () {
             const el = this.getElement();
             if (!el) {
@@ -58,11 +52,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.CoverageToolPlu
 
             // clear all content from element so the tooltip gets cleared as well
             if (!this.isVisible()) {
-                this.getReactRoot(el[0]).render(null);
+                getReactRoot(el[0]).render(null);
                 return;
             }
 
-            this.getReactRoot(el[0]).render(
+            getReactRoot(el[0]).render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <MapModuleButton
                         className='t_coveragetoolbutton'

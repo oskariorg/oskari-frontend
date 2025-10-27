@@ -2,7 +2,7 @@ import React from 'react';
 import { AdminLayerForm, AdminLayerFormHandler } from './AdminLayerForm';
 import { LayerWizard } from './LayerWizard';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -22,14 +22,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.on('hide', () => {
             this.cleanUp();
         });
-        this._reactRoot = null;
-    }
-
-    getReactRoot (element) {
-        if (!this._reactRoot) {
-            this._reactRoot = createRoot(element);
-        }
-        return this._reactRoot;
     }
 
     setElement (el) {
@@ -75,7 +67,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
         if (!el) {
             return;
         }
-        this.getReactRoot(el.get(0)).render(this.getEditorUI());
+        getReactRoot(el.get(0)).render(this.getEditorUI());
     }
 
     getEditorUI () {
@@ -137,8 +129,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
         if (!el) {
             return;
         }
-        this.getReactRoot(el.get(0)).unmount();
-        this._reactRoot = null;
+        getReactRoot(el.get(0)).unmount();
         this.uiHandler.resetMap();
     }
 }

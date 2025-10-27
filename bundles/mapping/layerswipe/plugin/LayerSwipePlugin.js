@@ -1,7 +1,8 @@
 import React from 'react';
 import { SwipeIcon } from '../resources/icons/Swipe';
 import { MapModuleButton } from '../../mapmodule/MapModuleButton';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
@@ -23,7 +24,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
         this._name = 'LayerSwipePlugin';
         this.handler = null;
         this.template = jQuery('<div class="mapplugin layerswipe"></div>');
-        this._reactRoot = null;
     }, {
         _startPluginImpl: function () {
             this.addToPluginContainer(this._createControlElement());
@@ -61,13 +61,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
             return this.template.clone();
         },
 
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
-
         refresh: function () {
             const el = this.getElement();
             const handler = this.getHandler();
@@ -76,7 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerswipe.plugin.LayerSwipePlug
             }
             const { active, noUI } = handler.getState();
             const controller = handler.getController();
-            this.getReactRoot(el[0]).render(
+            getReactRoot(el[0]).render(
                 <MapModuleButton
                     className='t_layerswipe'
                     highlight='stroke'

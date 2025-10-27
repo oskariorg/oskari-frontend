@@ -7,7 +7,8 @@ import olLayerVectorTile from 'ol/layer/VectorTile';
 import React from 'react';
 import { MapModuleButton } from '../../MapModuleButton';
 import { getNavigationTheme } from 'oskari-ui/theme';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin
@@ -137,12 +138,6 @@ Oskari.clazz.define(
                 this._removeIndexMap();
             }
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         refresh: function () {
             let el = this.getElement();
             if (!el) {
@@ -157,7 +152,7 @@ Oskari.clazz.define(
                 styleName = 'bg-light';
             }
 
-            this.getReactRoot(el[0]).render(
+            getReactRoot(el[0]).render(
                 <div className={`indexmapToggle ${styleName}`}>
                     <MapModuleButton
                         className='t_indexmap'

@@ -5,7 +5,7 @@ import { Spin } from 'oskari-ui';
 import { showTouPopup } from './view/dialog/TouPopup';
 import { UserDataLayer } from '../../mapping/mapuserdatalayer/domain/UserDataLayer';
 import { hasPublishRight } from './util/util';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
 
 /**
  * @class Oskari.mapframework.bundle.publisher2.Flyout
@@ -25,7 +25,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
         this.instance = instance;
         this.container = null;
         this.hasAcceptedTou = Oskari.user().isLoggedIn() ? null : false;
-        this._reactRoot = null;
     }, {
         /**
          * @method getName
@@ -96,12 +95,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
             });
             return { layers, deniedLayers };
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         /**
          * @method lazyRender
          * Called when flyout is opened (by divmanazer)
@@ -126,7 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
                     </ThemeProvider>
                 </LocaleProvider>
             );
-            this.getReactRoot(this.container).render(content);
+            getReactRoot(this.container).render(content);
         }
     }, {
         /**

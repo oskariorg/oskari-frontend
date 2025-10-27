@@ -1,7 +1,8 @@
 import React from 'react';
 import { ZoomOutOutlined } from '@ant-design/icons';
 import { MapModuleButton } from '../../MapModuleButton';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomReset
@@ -31,7 +32,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
         };
         // store to keep reference to function to allow removing
         this.handler = () => this.reposition();
-        this._reactRoot = null;
     },
     {
         /**
@@ -100,12 +100,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
                 window.visualViewport.removeEventListener('scroll', this.handler);
             }
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         /**
          * @public @method refresh
          */
@@ -115,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetP
                 return;
             }
 
-            this.getReactRoot(el[0]).render(
+            getReactRoot(el[0]).render(
                 <MapModuleButton
                     className='t_pinchzoom_reset'
                     visible={this.isVisible()}

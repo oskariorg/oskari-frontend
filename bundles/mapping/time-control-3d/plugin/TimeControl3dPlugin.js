@@ -3,7 +3,8 @@ import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 import { getPopupOptions } from '../../mapmodule/plugin/pluginPopupHelper';
 import { TimeControl3dHandler, showTimeControl3dContainer } from '../view';
 import { ControlIcon } from '../view/icons';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin');
 /**
@@ -21,7 +22,6 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         this._index = 90;
         this._popupControls = null;
         this._mountPoint = jQuery('<div class="mapplugin time-control-3d"/>');
-        this._reactRoot = null;
     }
 
     getName () {
@@ -80,19 +80,12 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         }
     }
 
-    getReactRoot (element) {
-        if (!this._reactRoot) {
-            this._reactRoot = createRoot(element);
-        }
-        return this._reactRoot;
-    }
-
     refresh () {
         const el = this.getElement();
         if (!el) {
             return;
         }
-        this.getReactRoot(el.get(0)).render(
+        getReactRoot(el.get(0)).render(
             <MapModuleButton
                 className='t_timecontrol'
                 title={this.loc('tooltip')}

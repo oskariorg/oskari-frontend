@@ -2,7 +2,8 @@ import React from 'react';
 import { PanButton } from './PanButton';
 import { showResetPopup } from '../../MapResetPopup';
 import { ThemeProvider } from 'oskari-ui/util/contexts';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PanButtons
@@ -27,7 +28,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         this._panPxs = 100;
         this.showArrows = !!this.getConfig().showArrows;
         this.resetPopup = null;
-        this._reactRoot = null;
     }, {
         /**
          * @private @method _createControlElement
@@ -65,19 +65,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             const pxY = this._panPxs * y;
             this.getMapModule().panMapByPixels(pxX, pxY, true);
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         refresh: function () {
             let el = this.getElement();
             if (!el) {
                 return;
             }
 
-            this.getReactRoot(el[0]).render(
+            getReactRoot(el[0]).render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <PanButton
                         resetClicked={() => this._resetClicked()}
