@@ -1,5 +1,6 @@
 import { handleMyFeaturesLayers, parseLayerData } from './layerHandling';
 import { MyFeaturesImportError } from './MyFeaturesImportError';
+import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
 
 export class MyFeaturesService {
     constructor (sandbox, mapLayerService, getMsg) {
@@ -191,10 +192,10 @@ export class MyFeaturesService {
             name: localeForLang?.name,
             subtitle: localeForLang?.desc
         });
-        // for some reason, modelbuilders are not called in mapLayerService.updateLayer)=
+        // for some reason, modelbuilders are not called in mapLayerService.updateLayer()
         parseLayerData(layer, updatedLayer);
-        // layer.handleUpdatedLayer(updatedLayer);
-        // this.notifyUpdate();
+        // force mapmodule to reload a style when the layer is added/refreshed on the map
+        layer.setDescribeLayerStatus(DESCRIBE_LAYER.UNDEFINED);
         if (this.sandbox.isLayerAlreadySelected(id)) {
             // update layer on map
             // TODO: shouldn't this be part of the maplayerService.updateLayer() impl?

@@ -2250,12 +2250,15 @@ Oskari.clazz.define(
                 return;
             }
             const layerPlugins = this.getLayerPlugins();
-            Object.values(layerPlugins).forEach((plugin) => {
-                // true if either plugin doesn't have the function or says the layer is supported.
-                const isSupported = typeof plugin.isLayerSupported === 'function' && plugin.isLayerSupported(layer);
-                if (isSupported && typeof plugin.updateLayerParams === 'function') {
-                    plugin.updateLayerParams(layer, forced, params);
-                }
+            // we can always reload since it returns immediately if the layer is already loaded
+            this.requestHandlers.mapLayerHandler.reloadDescribeInfo(layer, () => {
+                Object.values(layerPlugins).forEach((plugin) => {
+                    // true if either plugin doesn't have the function or says the layer is supported.
+                    const isSupported = typeof plugin.isLayerSupported === 'function' && plugin.isLayerSupported(layer);
+                    if (isSupported && typeof plugin.updateLayerParams === 'function') {
+                        plugin.updateLayerParams(layer, forced, params);
+                    }
+                });
             });
         },
         /**

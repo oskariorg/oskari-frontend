@@ -118,6 +118,17 @@ Oskari.clazz.define('map.layer.handler',
                 nextLayer = this.layerQueue[0];
             }
         },
+        /**
+         * In case we need to call this externally (like when layer is changed)
+         */
+        reloadDescribeInfo: function (layer, done) {
+            const doneNotCalled = this._loadLayerInfo(layer, {}, done);
+            if (doneNotCalled) {
+                // loading has been triggered by some other thing
+                // we can go ahead with done() and the layer will probably update twice
+                done();
+            }
+        },
 
         _loadLayerInfo: function (layer, opts, done) {
             if (typeof layer.getDescribeLayerStatus !== 'function') {
@@ -132,14 +143,15 @@ Oskari.clazz.define('map.layer.handler',
                 done();
                 return;
             }
-            if (status === DESCRIBE_LAYER.LOADED || isNaN(layerId)) {
+            if (status === DESCRIBE_LAYER.LOADED || (isNaN(layerId) && !layerId.startsWith('myf'))) {
                 // only layers that have numeric ids can have reasonable response for DescribeLayer
                 // already processed, we can proceed with adding the layer to map
+                // exception to this is the new myfeatures layers (id startswith "myf_") that get the style etc from describe layer
                 done();
                 return;
             }
             if (status === DESCRIBE_LAYER.PENDING) {
-                return;
+                return true;
             }
             layer.setDescribeLayerStatus(DESCRIBE_LAYER.PENDING);
             this.layerService.getDescribeLayer(layer, opts, info => {
