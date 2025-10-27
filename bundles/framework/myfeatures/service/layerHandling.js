@@ -22,9 +22,7 @@ export const handleMyFeaturesLayers = (sandbox, mapLayerService, getMsg) => {
     };
     mapLayerService.addDataProvider(provider);
     mapLayerService.registerLayerModelBuilder(LAYER_TYPE, {
-        parseLayerData: (layer, mapLayerJson) => {
-            layer.setFeatureCount(mapLayerJson.featureCount);
-        }
+        parseLayerData
     });
 
     // negative value for group id means that admin isn't presented with tools for it (-1 is reserved for default group)
@@ -42,4 +40,8 @@ export const handleMyFeaturesLayers = (sandbox, mapLayerService, getMsg) => {
         group,
         dataProviderId
     };
+};
+
+export const parseLayerData = (layer, mapLayerJson) => {
+    layer.setFeatureCount(mapLayerJson.featureCount);
 };
