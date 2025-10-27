@@ -88,10 +88,7 @@ const createRemoveFn = (element, onClose, parentEl = document.body ) => {
             return;
         }
 
-        if (element._reactRoot) {
-            element._reactRoot.unmount();
-            delete element._reactRoot;
-        }
+        unmountReactRoot(element);
         parentEl.removeChild(element);
         alreadyRemoved = true;
         if (typeof onClose === 'function') {
@@ -448,4 +445,18 @@ export function getReactRoot(element) {
         element._reactRoot = createRoot(element);
     }
     return element._reactRoot;
+}
+
+/**
+ *
+ * @param {*} element DOM element that holds the reference to a created react root
+ * @returns
+ */
+export function unmountReactRoot(element) {
+    if (!element?._reactRoot) {
+        return;
+    }
+
+    element._reactRoot.unmount();
+    delete element._reactRoot;
 }

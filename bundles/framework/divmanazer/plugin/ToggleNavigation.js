@@ -1,8 +1,7 @@
 import React from 'react';
 import { MenuOutlined } from '@ant-design/icons';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
-import { getReactRoot } from 'oskari-ui/components/window';
-
+import { getReactRoot, unmountReactRoot } from 'oskari-ui/components/window';
 
 /**
  * @class Oskari.userinterface.plugin.ToggleNavigationPlugin
@@ -70,8 +69,7 @@ Oskari.clazz.define('Oskari.userinterface.plugin.ToggleNavigationPlugin',
             this._active = isToggled;
 
             // Fixes button staying active or hovered after click
-            const reactRoot = getReactRoot(el[0]);
-            reactRoot.unmount();
+            unmountReactRoot(el[0]);
 
             getReactRoot(el[0]).render(
                 <MapModuleButton

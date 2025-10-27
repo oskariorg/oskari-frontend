@@ -2,7 +2,7 @@ import React from 'react';
 import { AdminLayerForm, AdminLayerFormHandler } from './AdminLayerForm';
 import { LayerWizard } from './LayerWizard';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
-import { getReactRoot } from 'oskari-ui/components/window';
+import { getReactRoot, unmountReactRoot } from 'oskari-ui/components/window';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -129,7 +129,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
         if (!el) {
             return;
         }
-        getReactRoot(el.get(0)).unmount();
+        unmountReactRoot(el[0]);
         this.uiHandler.resetMap();
     }
 }

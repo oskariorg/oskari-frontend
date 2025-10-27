@@ -1,7 +1,7 @@
 import React from 'react';
 import { LocaleProvider } from 'oskari-ui/util';
 import { CameraControls3d, CameraControls3dHandler } from '../view';
-import { getReactRoot } from 'oskari-ui/components/window';
+import { getReactRoot, unmountReactRoot } from 'oskari-ui/components/window';
 
 const className = 'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin';
 const shortName = 'CameraControls3dPlugin';
@@ -44,7 +44,7 @@ Oskari.clazz.define(className,
             if (!this.getElement()) {
                 return;
             }
-            getReactRoot(this.getElement().get(0)).unmount();
+            unmountReactRoot(this.getElement().get(0));
             this.getElement().detach();
             this._element = undefined;
         },

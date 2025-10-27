@@ -4,7 +4,7 @@ import { showAlertPopup } from '../view/AlertPopup';
 import { LayerSwipe, SPLITTER_WIDTH } from '../view/LayerSwipe';
 import { getRenderPixel } from 'ol/render';
 import { unByKey } from 'ol/Observable';
-import { getReactRoot } from 'oskari-ui/components/window';
+import { getReactRoot, unmountReactRoot } from 'oskari-ui/components/window';
 
 const Alerts = {
     NO_RASTER: 'noRaster',
@@ -106,8 +106,7 @@ class UIHandler extends StateHandler {
             }
             this.initTopmostLayer();
         } else if (!active && this.element) {
-            const elem = getReactRoot(this.element);
-            elem.unmount();
+            unmountReactRoot(this.element);
             root.removeChild(this.element);
             this.element = null;
             layerId = null;
