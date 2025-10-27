@@ -1,4 +1,4 @@
-import { handleMyFeaturesLayers } from './layerHandling';
+import { handleMyFeaturesLayers, parseLayerData } from './layerHandling';
 import { MyFeaturesImportError } from './MyFeaturesImportError';
 
 export class MyFeaturesService {
@@ -157,9 +157,13 @@ export class MyFeaturesService {
     }
 
     async updateLayer (layerId, values) {
-        return fetch(Oskari.urls.getRoute('MyFeaturesLayer', { id: layerId }), {
-            method: 'POST',
-            body: JSON.stringify(values),
+        return fetch(Oskari.urls.getRoute('MyFeaturesLayer'), {
+            method: 'PUT',
+            // id is required as part of payload
+            body: JSON.stringify({
+                ...values,
+                id: layerId
+            }),
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -182,15 +186,20 @@ export class MyFeaturesService {
             this.log.error('Could not find layer for update with id:' + id);
             return;
         }
-        layer.handleUpdatedLayer(updatedLayer);
-        const sandbox = this.sandbox;
-        const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
-        sandbox.notifyAll(evt);
+        const localeForLang = Oskari.getLocalized(updatedLayer?.locale);
+        this.mapLayerService.updateLayer(id, {
+            name: localeForLang?.name,
+            subtitle: localeForLang?.desc
+        });
+        // for some reason, modelbuilders are not called in mapLayerService.updateLayer)=
+        parseLayerData(layer, updatedLayer);
+        // layer.handleUpdatedLayer(updatedLayer);
         // this.notifyUpdate();
-        if (sandbox.isLayerAlreadySelected(id)) {
+        if (this.sandbox.isLayerAlreadySelected(id)) {
             // update layer on map
-            sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
-            sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
+            // TODO: shouldn't this be part of the maplayerService.updateLayer() impl?
+            this.sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
+            this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
         }
     }
 
