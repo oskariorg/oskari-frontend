@@ -46,7 +46,7 @@
     "@zip.js/zip.js": "2.8.7",
     "antd": "5.27.5",
     "async": "3.2.6",
-    "babel-loader": "8.4.1",
+    "babel-loader": "10.0.0",
     "babel-plugin-styled-components": "2.1.4",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
     "copy-webpack-plugin": "13.0.1",
