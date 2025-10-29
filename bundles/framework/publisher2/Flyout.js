@@ -4,6 +4,7 @@ import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { Spin } from 'oskari-ui';
 import { showTouPopup } from './view/dialog/TouPopup';
 import { UserDataLayer } from '../../mapping/mapuserdatalayer/domain/UserDataLayer';
+import { MyFeaturesLayer } from '../myfeatures/domain/MyFeaturesLayer';
 import { hasPublishRight } from './util/util';
 import { getReactRoot } from 'oskari-ui/components/window';
 
@@ -87,7 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.Flyout',
 
                 if (reasons.length) {
                     deniedLayers.push({ name, info: reasons.join() });
-                } else if (layer instanceof UserDataLayer) {
+                } else if (layer instanceof UserDataLayer || layer instanceof MyFeaturesLayer) {
                     layers.push({ name, info: userData, userDataLayer: true });
                 } else {
                     layers.push({ name });

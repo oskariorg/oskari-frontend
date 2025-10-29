@@ -2156,10 +2156,22 @@ Oskari.clazz.define(
             const isBaseMap = false;
             const layerPlugins = this.getLayerPlugins();
 
-            const supportedByPlugins = Object.values(layerPlugins)
+            let supportedByPlugins = Object.values(layerPlugins)
                 .filter(plugin => plugin.isLayerSupported && plugin.isLayerSupported(layer));
-            if (supportedByPlugins.length !== 1) {
-                // TODO: should we handle somehow if 0 or > 1 plugins
+
+            if (!supportedByPlugins.length) {
+                this.warn(`Tried adding a layer that doesn't have a supporting plugin. Layer was not added to map`, layer.getLayerType());
+                return;
+            }
+            if (supportedByPlugins.length > 1) {
+                if (supportedByPlugins.every(plugin => plugin === supportedByPlugins[0])) {
+                    // one plugin is registered to handle multiple types of layers
+                    // for example wfsvector handles both wfslayer and myf types
+                    // just call addMapLayerToMap once
+                    supportedByPlugins = [supportedByPlugins[0]];
+                } else {
+                    this.warn('Layer is handled by multiple plugins. Layer will be added to map multiple times.');
+                }
             }
             supportedByPlugins.forEach(plugin => plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap));
         },
@@ -2238,12 +2250,15 @@ Oskari.clazz.define(
                 return;
             }
             const layerPlugins = this.getLayerPlugins();
-            Object.values(layerPlugins).forEach((plugin) => {
-                // true if either plugin doesn't have the function or says the layer is supported.
-                const isSupported = typeof plugin.isLayerSupported === 'function' && plugin.isLayerSupported(layer);
-                if (isSupported && typeof plugin.updateLayerParams === 'function') {
-                    plugin.updateLayerParams(layer, forced, params);
-                }
+            // we can always reload since it returns immediately if the layer is already loaded
+            this.requestHandlers.mapLayerHandler.reloadDescribeInfo(layer, () => {
+                Object.values(layerPlugins).forEach((plugin) => {
+                    // true if either plugin doesn't have the function or says the layer is supported.
+                    const isSupported = typeof plugin.isLayerSupported === 'function' && plugin.isLayerSupported(layer);
+                    if (isSupported && typeof plugin.updateLayerParams === 'function') {
+                        plugin.updateLayerParams(layer, forced, params);
+                    }
+                });
             });
         },
         /**
