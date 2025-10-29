@@ -136,7 +136,8 @@ class UIHandler extends StateHandler {
     addNewFromSameService () {
         // initialize state for adding a new layer from the same OGC service (service having capabilities)
         const state = this.getState();
-        const layer = { ...state.layer };
+        // nullify default style. We want a copy, not the old style
+        const layer = { ...state.layer, style: null };
 
         // add newly added layer to "existing layers" so it's shown as existing
         const capabilities = state.capabilities || {};
