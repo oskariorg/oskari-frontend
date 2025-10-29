@@ -1,6 +1,6 @@
 import React from 'react';
 import { ThematicControls } from './ThematicControls';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (handler) {
     this._clazz = 'Oskari.statistics.statsgrid.TogglePlugin';
@@ -8,15 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (handle
     this._defaultLocation = 'bottom right';
     this._name = 'statsgrid.TogglePlugin';
     this.handler = handler;
-    this._reactRoot = null;
 }, {
-    getReactRoot (element) {
-        if (!this._reactRoot) {
-            this._reactRoot = createRoot(element);
-        }
-        return this._reactRoot;
-    },
-
     refresh: function (state = this.handler.getState()) {
         let el = this.getElement();
         if (!el) {
@@ -24,7 +16,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (handle
             this.addToPluginContainer(el);
         }
         const { toggle } = this.handler.getController();
-        this.getReactRoot(el[0]).render(
+        getReactRoot(el[0]).render(
             <ThematicControls
                 mapButtons={state.mapButtons}
                 active={state.activeMapButtons}

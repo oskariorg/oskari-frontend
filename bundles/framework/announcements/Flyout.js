@@ -1,7 +1,8 @@
 import React from 'react';
 import { FlyoutContent } from './view/';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 /**
  * @class Oskari.framework.bundle.announcements.Flyout
@@ -21,7 +22,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
         this.sandbox = instance.getSandbox();
         this.announcementsHandler = null;
         this.container = null;
-        this._reactRoot = null;
     }, {
         /**
          * @method setEl
@@ -52,12 +52,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
             this.announcementsHandler = handler;
             this.announcementsHandler.addStateListener((state) => this.render(state));
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         /**
          * @method render
          * Renders React content
@@ -77,7 +71,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
                     </ThemeProvider>
                 </LocaleProvider>
             );
-            this.getReactRoot(this.container).render(content);
+            getReactRoot(this.container).render(content);
         }
     }, {
         extend: ['Oskari.userinterface.extension.DefaultFlyout']

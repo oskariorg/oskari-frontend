@@ -2,7 +2,8 @@ import React from 'react';
 import { Message } from 'oskari-ui';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { MapLegendList } from './components/MapLegendList';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 /**
  * @class Oskari.mapframework.bundle.maplegend.Flyout
@@ -27,7 +28,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         this.container = null;
         this.state = null;
         this._legendImagesNotLoaded = {};
-        this._reactRoot = null;
     }, {
         /**
          * @method getName
@@ -106,12 +106,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             event.stopPropagation();
             this.instance.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{ layerId: layerId }]);
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         /**
          * @method _populateLayerList
          * @private
@@ -139,7 +133,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                     };
                 }).reverse();
 
-            this.getReactRoot(this.container).render(
+            getReactRoot(this.container).render(
                 <ThemeProvider>
                     <LocaleProvider value={{ bundleKey: 'maplegend' }}>
                         { legends.length === 0

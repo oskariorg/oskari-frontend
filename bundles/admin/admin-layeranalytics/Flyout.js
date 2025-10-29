@@ -2,7 +2,7 @@ import React from 'react';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { LayerAnalyticsList } from './LayerAnalyticsList';
 import { LayerAnalyticsDetails } from './LayerAnalyticsDetails';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
 
 Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
 
@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
         this.container = null;
         this.flyout = null;
         this.selectedLayerId = null;
-        this._reactRoot = null;
     }, {
         __name: 'Oskari.framework.bundle.admin-layeranalytics.Flyout',
         getName () {
@@ -38,16 +37,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
 
             this.updateUI();
         },
-
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
-
         updateUI () {
-            this.getReactRoot(this.container).render(
+            getReactRoot(this.container).render(
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                     { !this.selectedLayerId
                         ? <ThemeProvider>

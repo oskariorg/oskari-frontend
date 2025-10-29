@@ -3,7 +3,8 @@ import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
 import { MapModuleButton } from '../../MapModuleButton';
 
 import './request/ToggleFullScreenControlRequest';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin
@@ -28,7 +29,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
         me._templates = {
             plugin: jQuery('<div class="mapplugin fullscreen"></div>')
         };
-        this._reactRoot = null;
     },
     {
         /**
@@ -60,12 +60,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
         redrawUI: function (mapInMobileMode, forced) {
             this.refresh();
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         /**
          * @public @method refresh
          */
@@ -81,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
             }
 
             const isFullscreen = !!this.state.fullscreen;
-            this.getReactRoot(el[0]).render(
+            getReactRoot(el[0]).render(
                 <MapModuleButton
                     className='t_fullscreen'
                     visible={this.isVisible()}

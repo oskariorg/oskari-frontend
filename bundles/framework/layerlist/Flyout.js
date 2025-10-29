@@ -2,7 +2,8 @@ import React from 'react';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS, TABS_SELECTED_LAYERS } from './view/LayerViewTabs/';
 import { LAYER_GROUP_TOGGLE_LIMIT, LAYER_GROUP_TOGGLE_DEFAULTS, BACKEND_STATUS_AVAILABLE } from './constants';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 /**
  * @class Oskari.mapframework.bundle.layerlist.Flyout
@@ -34,7 +35,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         this.tabsHandler = new LayerViewTabsHandler(this.instance);
         this.tabsHandler.getLayerListHandler().loadLayers();
         this.tabsHandler.addStateListener(() => this.render());
-        this._reactRoot = null;
     }, {
 
         /**
@@ -110,13 +110,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             const activeTab = showSelectedLayers ? TABS_SELECTED_LAYERS : TABS_ALL_LAYERS;
             this.tabsHandler.setTab(activeTab);
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
-
         /**
          * @method render
          * Renders React content
@@ -135,7 +128,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
                     </ThemeProvider>
                 </LocaleProvider>
             );
-            this.getReactRoot(this.container).render(content);
+            getReactRoot(this.container).render(content);
         }
     }, {
 

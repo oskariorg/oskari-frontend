@@ -7,7 +7,8 @@ import './publisher/MetadataSearchTool';
 import './request/MetadataSearchRequest';
 import './request/MetadataSearchRequestHandler';
 import './event/MetadataSearchResultEvent';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 /**
  * @class Oskari.mapframework.bundle.metadatasearch.MetadataSearchBundleInstance
  *
@@ -52,7 +53,6 @@ Oskari.clazz.define(
         this.handler.addStateListener(() => {
             this.renderSearch();
         });
-        this._reactRoot = null;
     }, {
         /**
          * @static
@@ -366,15 +366,8 @@ Oskari.clazz.define(
                 this.__addTileAndFlyout();
             }
         },
-
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         renderSearch: function () {
-            this.getReactRoot(this.contentElement).render(
+            getReactRoot(this.contentElement).render(
                 <LocaleProvider value={{ bundleKey: METADATA_BUNDLE_LOCALIZATION_ID }}>
                     <ThemeProvider>
                         <MetadataSearchContainer state={this.handler.getState()} controller={this.handler.getController()} />

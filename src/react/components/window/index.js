@@ -88,10 +88,7 @@ const createRemoveFn = (element, onClose, parentEl = document.body ) => {
             return;
         }
 
-        if (element._reactRoot) {
-            element._reactRoot.unmount();
-            delete element._reactRoot;
-        }
+        unmountReactRoot(element);
         parentEl.removeChild(element);
         alreadyRemoved = true;
         if (typeof onClose === 'function') {
@@ -140,18 +137,17 @@ export const showPopup = (title, content, onClose, options = {}) => {
     validate(options, TYPE.POPUP);
 
     const element = createTmpContainer();
-    const reactRoot  = createRoot(element);
-    element._reactRoot = reactRoot;
+    const reactRoot  = getReactRoot(element);
     const key = REGISTER.registerWindow(options.id, TYPE.POPUP, createRemoveFn(element, onClose));
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
     const opts = { ...DEFAULT_POPUP_OPTIONS, ...options };
     const render = (title, content) => {
-        if (!element._reactRoot) {
+        if (!reactRoot) {
             return;
         }
 
-        element._reactRoot.render(
+        reactRoot.render(
             <ThemeProvider value={options.theme}>
                 <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} options={opts}>
                     {content}
@@ -192,18 +188,17 @@ export const showModal = (title, content, onClose, options = {}) => {
     validate(options, TYPE.MODAL);
 
     const element = createTmpContainer();
-    const reactRoot  = createRoot(element);
-    element._reactRoot = reactRoot;
+    const reactRoot  = getReactRoot(element);
     const key = REGISTER.registerWindow(options.id, TYPE.MODAL, createRemoveFn(element, onClose));
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
     const opts = { ...options };
     const render = (content) => {
-        if (!element._reactRoot) {
+        if (!reactRoot) {
             return;
         }
 
-        element._reactRoot.render(
+        reactRoot.render(
             <ThemeProvider value={options.theme}>
                 <Modal title={title} options={opts}>
                     {content}
@@ -244,8 +239,7 @@ export const showMovableContainer = (content, onClose, options = {}) => {
     validate(options, TYPE.CONTAINER);
 
     const element = createTmpContainer();
-    const reactRoot  = createRoot(element);
-    element._reactRoot = reactRoot;
+    const reactRoot  = getReactRoot(element);
     const key = REGISTER.registerWindow(options.id, TYPE.CONTAINER, createRemoveFn(element, onClose));
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
@@ -254,11 +248,11 @@ export const showMovableContainer = (content, onClose, options = {}) => {
         ...options
     };
     const render = (content) => {
-        if (!element._reactRoot) {
+        if (!reactRoot) {
             return;
         }
 
-        element._reactRoot.render(
+        reactRoot.render(
             <ThemeProvider value={options.theme}>
                 <MovableContainer onClose={removeWindow} bringToTop={bringToTop} options={opts}>
                     {content}
@@ -298,17 +292,16 @@ export const showMovableContainer = (content, onClose, options = {}) => {
 export const showFlyout = (title, content, onClose, options = {}) => {
     validate(options, TYPE.FLYOUT);
     const element = createTmpContainer();
-    const reactRoot  = createRoot(element);
-    element._reactRoot = reactRoot;
+    const reactRoot  = getReactRoot(element);
     const key = REGISTER.registerWindow(options.id, TYPE.MODAL, createRemoveFn(element, onClose));
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
     const render = (title, content) => {
-        if (!element._reactRoot) {
+        if (!reactRoot) {
             return;
         }
 
-        element._reactRoot.render(
+        reactRoot.render(
             <ThemeProvider>
                 <Flyout title={title} onClose={removeWindow} bringToTop={bringToTop} options={options}>
                     {content}
@@ -337,8 +330,7 @@ export const showSidePanel = (title, content, onClose, options = {}) => {
         }
     });
 
-    const reactRoot  = createRoot(element);
-    element._reactRoot = reactRoot;
+    const reactRoot  = getReactRoot(element);
     const key = REGISTER.registerWindow(options.id, TYPE.SIDE_PANEL, createRemoveFn(element, onClose, root));
     const removeWindow = () => {
         REGISTER.clear(key);
@@ -351,11 +343,11 @@ export const showSidePanel = (title, content, onClose, options = {}) => {
         if (nav) {
             nav.style.display = 'none';
         }
-        if (!element._reactRoot) {
+        if (!reactRoot) {
             return;
         }
 
-        element._reactRoot.render(
+        reactRoot.render(
             <ThemeProvider>
                 <SidePanel title={title} onClose={removeWindow} options={options}>
                     {content}
@@ -382,17 +374,16 @@ export const showBanner = (content, onClose, options = {}) => {
     validate(options, TYPE.BANNER);
     const element = createTmpContainer();
     const reactRoot  = createRoot(element);
-    element._reactRoot = reactRoot;
     const key = REGISTER.registerWindow(options.id, TYPE.BANNER, createRemoveFn(element, onClose));
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
 
     const render = (content) => {
-        if (!element._reactRoot) {
+        if (!reactRoot) {
             return;
         }
 
-        element._reactRoot.render(
+        reactRoot.render(
             <ThemeProvider>
                 <Banner onClose={removeWindow} options={options}>
                     {content}
@@ -442,3 +433,30 @@ export const getNavigationDimensions = () => {
         placement
     };
 };
+
+/**
+ *
+ * @param {*} element DOM element to create the react root into
+ * @returns root element for rendering react content
+ *
+ */
+export function getReactRoot(element) {
+    if (!element._reactRoot) {
+        element._reactRoot = createRoot(element);
+    }
+    return element._reactRoot;
+}
+
+/**
+ *
+ * @param {*} element DOM element that holds the reference to a created react root
+ * @returns
+ */
+export function unmountReactRoot(element) {
+    if (!element?._reactRoot) {
+        return;
+    }
+
+    element._reactRoot.unmount();
+    delete element._reactRoot;
+}

@@ -32,7 +32,7 @@ import { Controller } from './Controller';
  *     render () {
  *         const state = this.loadingHandler.getState();
  *         const controller = this.loadingHandler.getController();
- *         this.getReactRoot(document).render(<LoadingButton loading={state.loading} controller={controller} />);
+ *         getReactRoot(document).render(<LoadingButton loading={state.loading} controller={controller} />);
  *     }
  * }
  */

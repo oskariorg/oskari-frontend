@@ -6,7 +6,7 @@ import { SearchResultTable } from './SearchResultTable';
 import { Message } from 'oskari-ui';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import styled from 'styled-components';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
 
 const Description = styled('div')`
     margin-bottom: 8px;
@@ -42,14 +42,7 @@ Oskari.clazz.define(
         const instanceConf = instance.conf || {};
         this.handler = new SearchHandler(!!instanceConf.autocomplete, this.searchservice, this.sandbox, () => { this.__refresh(); });
         this.loc = Oskari.getMsg.bind(null, this.instance.getName());
-        this._reactRoot = null;
     }, {
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         __refresh: function () {
             const el = this.getContainer();
             const {
@@ -61,7 +54,7 @@ Oskari.clazz.define(
             const controller = this.handler.getController();
             const searchPerformed = result && Array.isArray(result.locations);
 
-            this.getReactRoot(el[0]).render(
+            getReactRoot(el[0]).render(
                 <LocaleProvider value={{ bundleKey: 'Search' }}>
                     <ThemeProvider>
                         <SearchContainer>

@@ -2,7 +2,7 @@ import React from 'react';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { LayerRightsHandler } from './handler/layerRightsHandler';
 import { LayerRights } from './view/LayerRights';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
 
 /**
  * @class Oskari.admin.bundle.admin-layerrights.Flyout
@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
     function (instance) {
         this.instance = instance;
         this.handler = null;
-        this._reactRoot = null;
     }, {
         /**
          * @method getName
@@ -85,18 +84,12 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
                 this.handler.reset(true);
             }
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         /**
          * @method renderContent
          * Renders flyout content
          */
         renderContent: function () {
-            this.getReactRoot(this.container[0]).render(
+            getReactRoot(this.container[0]).render(
                 <LocaleProvider value={{ bundleKey: 'admin-permissions' }}>
                     <ThemeProvider>
                         <LayerRights

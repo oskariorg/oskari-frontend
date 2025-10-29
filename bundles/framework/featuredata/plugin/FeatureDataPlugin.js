@@ -6,7 +6,8 @@ import { FEATUREDATA_WFS_STATUS } from '../view/FeatureDataContainer';
 import { MapModuleTextButton } from '../../../mapping/mapmodule/MapModuleTextButton';
 // FeaturedataPlugin extends BasicMapModulePlugin
 import '../../../mapping/mapmodule/plugin/BasicMapModulePlugin';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 /**
  * @class Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin
@@ -26,7 +27,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
         me._index = 100;
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
-        me._reactRoot = null;
     }, {
         _startPluginImpl: function () {
             this.setElement(this._createControlElement());
@@ -74,12 +74,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
             }
             this.handler.updateStateAfterMapEvent();
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
         renderButton: function (loading = false) {
             const el = this.getElement();
             if (!el) {
@@ -96,7 +90,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
             } else if (position.includes('left')) {
                 marginLeft = '10';
             }
-            this.getReactRoot(el[0]).render(
+            getReactRoot(el[0]).render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <MapModuleTextButton
                         visible={layers?.length > 0}

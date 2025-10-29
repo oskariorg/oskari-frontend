@@ -5,7 +5,8 @@ import { BackwardIcon, ForwardIcon, MeasureAreaIcon, MeasureLineIcon } from 'osk
 import { MenuOutlined } from '@ant-design/icons';
 import './request/ToolContainerRequest';
 import './request/ToolContainerRequestHandler';
-import { createRoot } from 'react-dom/client';
+import { getReactRoot } from 'oskari-ui/components/window';
+
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin
@@ -25,7 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         me._index = 2;
         me._name = 'PublisherToolbarPlugin';
         me._toolButtons = conf.buttons || [];
-        me._reactRoot = null;
     }, {
         // templates for tools-mapplugin
         templates: {
@@ -106,20 +106,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             this.addToPluginContainer(me._element);
             this.refresh();
         },
-        getReactRoot (element) {
-            if (!this._reactRoot) {
-                this._reactRoot = createRoot(element);
-            }
-            return this._reactRoot;
-        },
-
         refresh: function () {
             let el = this.getElement();
             if (!el) {
                 return;
             }
 
-            this.getReactRoot(el[0]).render(
+            getReactRoot(el[0]).render(
                 <MapModuleButton
                     className='t_publishertoolbar'
                     icon={<MenuOutlined />}
