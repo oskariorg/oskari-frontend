@@ -73,7 +73,7 @@ export const VectorStyleSelect = ({ layer, controller, editStyle, editOptional }
                 return (
                     <StyledItem>
                         <Tooltip title={ <Message messageKey='styles.vector.selectDefault' /> }>
-                            <Radio.Choice onClick={ () => controller.setStyle(style.id) } checked={ style.id === selectedStyle }>{ style.name || style.id }</Radio.Choice>
+                            <Radio.Choice disabled={status === 'NEW'} onClick={ () => controller.setStyle(style.id) } checked={ style.id === selectedStyle }>{ style.name || style.id } - { style.id } - { status }</Radio.Choice>
                         </Tooltip>
 
                         <StyledText>
