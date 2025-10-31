@@ -87,7 +87,7 @@
     "sass": "1.77.8",
     "sass-loader": "12.1.0",
     "script-loader": "0.7.2",
-    "style-loader": "3.2.1",
+    "style-loader": "4.0.0",
     "styled-components": "5.3.3",
     "terser-webpack-plugin": "5.3.14",
     "webpack": "5.102.1",
