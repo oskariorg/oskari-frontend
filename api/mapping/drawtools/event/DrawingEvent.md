@@ -42,7 +42,6 @@ Unfinished event is sent every time that sketch changes.
     "buffer": 0, // requested buffer
     "bufferedGeoJson": {...}, // contains buffered features if buffer is requested
     "length": 264071.08700662444, // The sum of all line lengths in meters
-    "lengthNauticalMiles": 142.58698002517519399 // The sum of all line lengths in nautical miles IF option 'measurementFormat' is set to nauticalMiles
     "showMeasureOnMap": true,
     "shape": "Polygon" // requested shape
   },

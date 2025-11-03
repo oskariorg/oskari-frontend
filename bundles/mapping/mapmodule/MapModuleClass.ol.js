@@ -516,6 +516,22 @@ export class MapModule extends AbstractMapModule {
     }
 
     /**
+     * Format a number to fixed precision and replace the decimal point
+     * with decimal separator.
+     *
+     * @param {number} value - numeric value to format
+     * @param {number} precision - number of fraction digits
+     * @returns {string} formatted number string
+     */
+    formatNumberWithDecimalSeparator(value, precision) {
+        if (typeof value !== 'number' || typeof precision !== 'number') {
+            return '';
+        }
+        return value.toFixed(precision).replace('.', Oskari.getDecimalSeparator());
+    }
+
+
+    /**
      * Formats the measurement to ui.
      * Returns a string with the measurement and
      * an appropriate unit (m/km or m²/ha/km² or M (m/km))
@@ -526,59 +542,52 @@ export class MapModule extends AbstractMapModule {
      * @param  {number} measurement
      * @param  {String} drawMode
      * @param  {Number} fixedDigits (optional)
-     * @param  {String} format (optional) - e.g. 'nauticalMiles'
      * @return {String}
      */
-    formatMeasurementResult (measurement, drawMode, fixedDigits, format) {
-        if (typeof measurement !== 'number') {
-            return;
+    formatMeasurementResult(measurement, drawMode, fixedDigits) {
+        if (typeof measurement !== 'number' || !Number.isFinite(measurement)) {
+            return '';
         }
         const METERS_PER_NAUTICAL_MILE = 1852;
         const zoomedForAccuracy = this.getResolution() < 1;
-
-        // helper to format number with decimal separator and chosen digits
-        const fmt = (value, digits) => value.toFixed(digits).replace('.', Oskari.getDecimalSeparator());
-
-        // default format for line (m / km)
-        const defaultLineFormat = (measurement, fixedDigits) => {
-            if (measurement >= 1000) {
-                const result = measurement / 1000;
-                const decimals = 3;
-                const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-                return fmt(result, digits) + ' km';
-            }
-            const decimals = zoomedForAccuracy ? 1 : 0;
-            const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-            return fmt(measurement, digits) + ' m';
-        };
 
         if (drawMode === 'area') {
             if (measurement >= 1000000) {
                 const result = measurement / 1000000;
                 const decimals = 3;
                 const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-                return fmt(result, digits) + ' km²';
+                return this.formatNumberWithDecimalSeparator(result, digits) + ' km²';
             } else if (measurement < 10000) {
                 const decimals = zoomedForAccuracy ? 1 : 0;
                 const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-                return fmt(measurement, digits) + ' m²';
+                return this.formatNumberWithDecimalSeparator(measurement, digits) + ' m²';
             }
             const result = measurement / 10000;
             const decimals = 2;
             const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-            return fmt(result, digits) + ' ha';
-        } else if (drawMode === 'line') {
-            // support nautical miles format: "X M (Y km)" or "X M (Z m)"
-            if (format === 'nauticalMiles') {
+            return this.formatNumberWithDecimalSeparator(result, digits) + ' ha';
+        }
+
+        if (drawMode === 'line' || drawMode === 'nauticalMiles') {
+            if (drawMode === 'nauticalMiles') {
                 const nauticalMiles = measurement / METERS_PER_NAUTICAL_MILE;
                 const mainDecimals = 2;
                 const mainDigits = fixedDigits !== undefined ? fixedDigits : mainDecimals;
-                const mainStr = fmt(nauticalMiles, mainDigits) + ' M';
-                const fallback = defaultLineFormat(measurement); // meters/kilometers in parentheses
+                const mainStr = this.formatNumberWithDecimalSeparator(nauticalMiles, mainDigits) + ' M'; // change 'M' to 'nmi' if you prefer
+                const fallback = this.formatMeasurementResult(measurement, 'line', fixedDigits);
                 return `${mainStr} (${fallback})`;
             }
-            // default (m / km) behaviour
-            return defaultLineFormat(measurement, fixedDigits);
+
+            // Default line behaviour (m / km)
+            if (measurement >= 1000) {
+                const result = measurement / 1000;
+                const decimals = 3;
+                const digits = fixedDigits !== undefined ? fixedDigits : decimals;
+                return this.formatNumberWithDecimalSeparator(result, digits) + ' km';
+            }
+            const decimals = zoomedForAccuracy ? 1 : 0;
+            const digits = fixedDigits !== undefined ? fixedDigits : decimals;
+            return this.formatNumberWithDecimalSeparator(measurement, digits) + ' m';
         }
         return '';
     }

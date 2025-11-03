@@ -89,7 +89,7 @@ Parameters for options-object:
     </td>
 </tr>
 <tr>
-  <td> measurementFormat </td><td> String </td><td>Optional format for displaying a line length on map and in DrawingEvent return data eg. "nauticalMiles" .</td><td> null</td>
+  <td> measurementFormat </td><td> String </td><td>Optional format for displaying a measurement tooltip on map. The values are by default formatted with metric units, but this can be used to request showing the tooltip with eg. "nauticalMiles" .</td><td> null</td>
 </tr>
 </table>
 
@@ -107,9 +107,6 @@ Limits are used for validating finished geometry. If geometry is invalid, user w
 </tr>
 <tr>
   <td>length</td><td>Number</td><td>Maximum length for valid line in meters.</td><td>infinite</td>
-</tr>
-<tr>
-  <td>lengthNauticalMiles</td><td>Number</td><td>Maximum length for valid line in nautical miles (only with option "measurementFormat").</td><td>infinite</td>
 </tr>
 </table>
 
