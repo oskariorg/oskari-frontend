@@ -29,6 +29,8 @@ Oskari.clazz
                  *        the id of the font for the popup (optional, uses the default font if not passed)
                  * @param {Object} mobileBreakpoints
                  *        The size of the screen in pixels to start using mobile mode. {width: 'mobileModeWidth', height: 'mobileModeHeight'}
+                 * @param {Object} keepOnScreen
+                 *        Whether to force panning the map so the infobox is fully visible. True by default.
          *
          * contentData format example:
          * [{

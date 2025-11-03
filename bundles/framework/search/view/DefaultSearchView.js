@@ -151,7 +151,8 @@ Oskari.clazz.define(
             const content = [contentItem];
 
             const options = {
-                hidePrevious: true
+                hidePrevious: true,
+                keepOnScreen: false
             };
 
             const rN = 'InfoBox.ShowInfoBoxRequest';
