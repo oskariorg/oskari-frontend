@@ -516,22 +516,6 @@ export class MapModule extends AbstractMapModule {
     }
 
     /**
-     * Format a number to fixed precision and replace the decimal point
-     * with decimal separator.
-     *
-     * @param {number} value - numeric value to format
-     * @param {number} precision - number of fraction digits
-     * @returns {string} formatted number string
-     */
-    formatNumberWithDecimalSeparator(value, precision) {
-        if (typeof value !== 'number' || typeof precision !== 'number') {
-            return '';
-        }
-        return value.toFixed(precision).replace('.', Oskari.getDecimalSeparator());
-    }
-
-
-    /**
      * Formats the measurement to ui.
      * Returns a string with the measurement and
      * an appropriate unit (m/km or m²/ha/km² or M (m/km))
@@ -556,16 +540,16 @@ export class MapModule extends AbstractMapModule {
                 const result = measurement / 1000000;
                 const decimals = 3;
                 const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-                return this.formatNumberWithDecimalSeparator(result, digits) + ' km²';
+                return Oskari.util.formatNumberWithDecimalSeparator(result, digits) + ' km²';
             } else if (measurement < 10000) {
                 const decimals = zoomedForAccuracy ? 1 : 0;
                 const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-                return this.formatNumberWithDecimalSeparator(measurement, digits) + ' m²';
+                return Oskari.util.formatNumberWithDecimalSeparator(measurement, digits) + ' m²';
             }
             const result = measurement / 10000;
             const decimals = 2;
             const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-            return this.formatNumberWithDecimalSeparator(result, digits) + ' ha';
+            return Oskari.util.formatNumberWithDecimalSeparator(result, digits) + ' ha';
         }
 
         if (drawMode === 'line' || drawMode === 'nauticalMiles') {
@@ -573,7 +557,7 @@ export class MapModule extends AbstractMapModule {
                 const nauticalMiles = measurement / METERS_PER_NAUTICAL_MILE;
                 const mainDecimals = 2;
                 const mainDigits = fixedDigits !== undefined ? fixedDigits : mainDecimals;
-                const mainStr = this.formatNumberWithDecimalSeparator(nauticalMiles, mainDigits) + ' M'; // change 'M' to 'nmi' if you prefer
+                const mainStr = Oskari.util.formatNumberWithDecimalSeparator(nauticalMiles, mainDigits) + ' M'; // change 'M' to 'nmi' if you prefer
                 const fallback = this.formatMeasurementResult(measurement, 'line', fixedDigits);
                 return `${mainStr} (${fallback})`;
             }
@@ -583,11 +567,11 @@ export class MapModule extends AbstractMapModule {
                 const result = measurement / 1000;
                 const decimals = 3;
                 const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-                return this.formatNumberWithDecimalSeparator(result, digits) + ' km';
+                return Oskari.util.formatNumberWithDecimalSeparator(result, digits) + ' km';
             }
             const decimals = zoomedForAccuracy ? 1 : 0;
             const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-            return this.formatNumberWithDecimalSeparator(measurement, digits) + ' m';
+            return Oskari.util.formatNumberWithDecimalSeparator(measurement, digits) + ' m';
         }
         return '';
     }

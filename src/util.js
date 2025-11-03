@@ -403,6 +403,21 @@ Oskari.util = (function () {
     };
 
     /**
+    * Format a number to fixed precision and replace the decimal point
+    * with decimal separator.
+    *
+    * @param {number} value - numeric value to format
+    * @param {number} precision - number of fraction digits
+    * @returns {string} formatted number string
+    */
+    util.formatNumberWithDecimalSeparator = function (value, precision) {
+        if (typeof value !== 'number' || typeof precision !== 'number') {
+            return '';
+        }
+        return value.toFixed(precision).replace('.', Oskari.getDecimalSeparator());
+    };
+
+    /**
      * Natural array sort
      * @method  naturalSort
      * @param  {String|Integer|Double} valueA     sorted value a
