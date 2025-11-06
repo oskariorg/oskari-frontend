@@ -26,5 +26,7 @@ export const TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS = {
 // * searchText.length >= MIN_CHAR_COUNT -> always use MIN delay
 export const TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS_MOBILE = {
     MIN_CHAR_COUNT: 5,
-    MIN: 1000
+    MAX_CHAR_COUNT: null,
+    MIN: 1000,
+    MAX: null
 };
