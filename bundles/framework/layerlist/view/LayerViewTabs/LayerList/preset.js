@@ -19,3 +19,14 @@ export const TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS = {
     MAX: 1600,
     MIN: 200
 };
+
+// Config for mobile use.
+// In mobile mode:
+// * searchText.length < MIN_CHAR_COUNT -> initiate search with enter
+// * searchText.length >= MIN_CHAR_COUNT -> always use MIN delay
+export const TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS_MOBILE = {
+    MIN_CHAR_COUNT: 5,
+    MAX_CHAR_COUNT: null,
+    MIN: 1000,
+    MAX: null
+};

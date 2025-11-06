@@ -16,7 +16,8 @@ const Search = React.forwardRef(({ searchText, getMessage, controller }, ref) =>
         allowClear
         placeholder={getMessage('filter.search.placeholder')}
         prefix={<SearchOutlined />}
-        onChange={event => controller.setSearchText(event.currentTarget.value)}/>;
+        onChange={event => controller.setSearchText(event.currentTarget.value)}
+        onKeyUp={(event) => { if (event.key === 'Enter') { controller.setForceSearch(event.currentTarget.value); }}}/>
 });
 Search.displayName = 'Search';
 Search.propTypes = {

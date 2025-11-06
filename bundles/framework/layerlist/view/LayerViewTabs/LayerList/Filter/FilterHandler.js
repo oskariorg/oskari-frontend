@@ -20,7 +20,7 @@ class ViewHandler extends StateHandler {
         const throttledUpdate = Oskari.util.throttle(
             this.refreshActiveFilters.bind(this), 1000, { leading: false });
         this.eventHandlers = {
-            'MapLayerEvent': event => {
+            MapLayerEvent: event => {
                 if (['add', 'remove'].includes(event.getOperation())) {
                     // heavy op -> throttle
                     throttledUpdate();
@@ -36,6 +36,7 @@ class ViewHandler extends StateHandler {
     getName () {
         return 'LayerList.FilterHandler';
     }
+
     /**
     * @method onEvent
     * @param {Oskari.mapframework.event.Event} event a Oskari event object
@@ -67,6 +68,13 @@ class ViewHandler extends StateHandler {
         this.updateState({ searchText: searchText });
     }
 
+    setForceSearch (searchText) {
+        this.updateState({
+            searchText: searchText,
+            forceSearch: true
+        });
+    }
+
     getFiltersProvidingResults (filters) {
         const layerService = this.mapLayerService;
         return filters.filter(filter => filter.id === FILTER_ALL_LAYERS || layerService.filterHasLayers(filter.id));
@@ -83,5 +91,6 @@ class ViewHandler extends StateHandler {
 
 export const FilterHandler = controllerMixin(ViewHandler, [
     'setActiveFilterId',
-    'setSearchText'
+    'setSearchText',
+    'setForceSearch'
 ]);
