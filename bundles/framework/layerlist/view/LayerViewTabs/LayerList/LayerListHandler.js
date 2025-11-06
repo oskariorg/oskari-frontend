@@ -3,7 +3,7 @@ import { FilterHandler } from './Filter/';
 import { LayerCollapseHandler } from './LayerCollapse/';
 import { GroupingOption } from '../../../model/GroupingOption';
 import { Scale } from '../../../model/Scale';
-import { GROUPING_PRESET, TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS } from './preset';
+import { GROUPING_PRESET, TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS, TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS_MOBILE } from './preset';
 
 const UI_UPDATE_TIMEOUT = 100;
 const HEAVY_UI_UPDATE_TIMEOUT = 600;
@@ -15,7 +15,8 @@ class ViewHandler extends StateHandler {
         this.sandbox = instance.getSandbox();
         this.locale = instance.getLocalization();
 
-        const { MIN_CHAR_COUNT, MAX_CHAR_COUNT, MIN, MAX } = TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS;
+        const isMobile = Oskari.util.isMobile();
+        const { MIN_CHAR_COUNT, MAX_CHAR_COUNT, MIN, MAX } = isMobile ? TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS_MOBILE : TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS;
         this.typingTimeoutScale = new Scale({
             min: MIN_CHAR_COUNT,
             max: MAX_CHAR_COUNT,
@@ -89,6 +90,7 @@ class ViewHandler extends StateHandler {
         const updateLayerFilters = () => {
             previousState = handler.getState();
             const { activeFilterId, searchText } = previousState;
+            previousState.forceSearch = false;
 
             this.updateState({ updating: true });
             setTimeout(() => this.getCollapseHandler().setFilter(activeFilterId, searchText), UI_UPDATE_TIMEOUT);
@@ -96,26 +98,39 @@ class ViewHandler extends StateHandler {
 
         let typingTimeout = null;
         handler.addStateListener(filterState => {
-            const { searchText } = filterState;
+            const { searchText, forceSearch } = filterState;
             const searchTextChanged = previousState && previousState.searchText !== searchText;
 
             const immediateStateChange = {
                 filter: {
                     state: filterState,
                     controller: this.state.filter.controller
-                }
+                },
+                forceSearch: false
             };
-            if (!searchTextChanged) {
+
+            // when enter is hit in search field forceSearch is set -> search right away.
+            if (!searchTextChanged || forceSearch) {
                 updateLayerFilters();
                 this.updateState(immediateStateChange);
                 return;
             }
-            if (typingTimeout && typingTimeout.isPending()) {
+
+            if (typingTimeout?.isPending()) {
                 typingTimeout.cancel();
             }
 
             const textLength = searchText ? searchText.length : 0;
-            typingTimeout = new Timeout(updateLayerFilters, this.typingTimeoutScale.getValue(textLength));
+
+            const isMobile = Oskari.util.isMobile();
+            if (isMobile) {
+                // On mobile, prevent automatic search on a very short searchPhrase
+                if (textLength >= TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS_MOBILE.MIN_CHAR_COUNT) {
+                    typingTimeout = new Timeout(updateLayerFilters, TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS_MOBILE.MIN);
+                }
+            } else {
+                typingTimeout = new Timeout(updateLayerFilters, this.typingTimeoutScale.getValue(textLength));
+            }
 
             this.updateState(immediateStateChange);
         });
