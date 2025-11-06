@@ -7,6 +7,7 @@ export const automagicPlugins = [
     'Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     'Oskari.wfsvector.WfsVectorLayerPlugin',
     // wfsvector does have minZoomLevel, origin coordinates array, resolutions array and tileSize as config
+    // which are NOT populated by server if the plugin is not part of the config in database
     'Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
     'Oskari.mapframework.mapmodule.BingMapsLayerPlugin',
     'Oskari.mapframework.bundle.mapmodule.plugin.PinchZoomResetPlugin',
