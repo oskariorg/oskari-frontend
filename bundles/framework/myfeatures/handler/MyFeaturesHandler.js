@@ -7,7 +7,7 @@ class MyFeaturesHandler extends StateHandler {
         super();
         this.instance = instance;
         this.myFeaturesLayerService = myFeaturesLayerService;
-        this.sandbox = Oskari.getSandbox();
+        this.sandbox = instance.getSandbox();
         this.setState({
             data: [],
             loading: false

@@ -2160,7 +2160,10 @@ Oskari.clazz.define(
                 .filter(plugin => plugin.isLayerSupported && plugin.isLayerSupported(layer));
 
             if (!supportedByPlugins.length) {
-                this.warn(`Tried adding a layer that doesn't have a supporting plugin. Layer was not added to map`, layer.getLayerType());
+                // ignore recognized case of customized vector layers as they might not be registered to MapLayerService
+                if (!layer.isLayerOfType('VECTOR')) {
+                    this.log.warn(`Tried adding a layer that doesn't have a supporting plugin. Layer was not added to map by mapmodule`, layer.getLayerType());
+                }
                 return;
             }
             if (supportedByPlugins.length > 1) {
@@ -2170,7 +2173,7 @@ Oskari.clazz.define(
                     // just call addMapLayerToMap once
                     supportedByPlugins = [supportedByPlugins[0]];
                 } else {
-                    this.warn('Layer is handled by multiple plugins. Layer will be added to map multiple times.');
+                    this.log.warn('Layer is handled by multiple plugins. Layer will be added to map multiple times.');
                 }
             }
             supportedByPlugins.forEach(plugin => plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap));

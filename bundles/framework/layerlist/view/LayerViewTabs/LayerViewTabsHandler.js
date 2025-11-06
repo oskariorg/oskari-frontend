@@ -47,6 +47,7 @@ class ViewHandler extends StateHandler {
         });
         return handler;
     }
+
     getLayerListHandler () {
         return this.layerListHandler;
     }
@@ -66,6 +67,7 @@ class ViewHandler extends StateHandler {
     getName () {
         return 'LayerViewTabsHandler';
     }
+
     /**
     * @method onEvent
     * @param {Oskari.mapframework.event.Event} event a Oskari event object
