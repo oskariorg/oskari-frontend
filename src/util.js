@@ -407,14 +407,29 @@ Oskari.util = (function () {
     * with decimal separator.
     *
     * @param {number} value - numeric value to format
-    * @param {number} precision - number of fraction digits
+    * @param {number} [precision] - optional number of fraction digits
     * @returns {string} formatted number string
     */
     util.formatNumberWithDecimalSeparator = function (value, precision) {
-        if (typeof value !== 'number' || typeof precision !== 'number') {
+        if (typeof value !== 'number' || !Number.isFinite(value)) {
             return '';
         }
-        return value.toFixed(precision).replace('.', Oskari.getDecimalSeparator());
+
+        const decimalSeparator = Oskari.getDecimalSeparator();
+
+        // If precision is omitted, return the default string representation
+        if (precision === undefined || precision === null) {
+            return String(value).replace('.', decimalSeparator);
+        }
+
+        // Validate and coerce precision to a non-negative integer
+        if (typeof precision !== 'number' || !Number.isFinite(precision) || precision < 0) {
+            precision = 0;
+        } else {
+            precision = Math.floor(precision);
+        }
+
+        return value.toFixed(precision).replace('.', decimalSeparator);
     };
 
     /**
