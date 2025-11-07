@@ -526,9 +526,10 @@ export class MapModule extends AbstractMapModule {
      * @param  {number} measurement
      * @param  {String} drawMode
      * @param  {Number} fixedDigits (optional)
+     * @param  {String} formatterId (optional) - e.g. 'nauticalMiles'
      * @return {String}
      */
-    formatMeasurementResult(measurement, drawMode, fixedDigits) {
+    formatMeasurementResult(measurement, drawMode, fixedDigits, formatterId) {
         if (typeof measurement !== 'number' || !Number.isFinite(measurement)) {
             return '';
         }
@@ -552,12 +553,12 @@ export class MapModule extends AbstractMapModule {
             return Oskari.util.formatNumberWithDecimalSeparator(result, digits) + ' ha';
         }
 
-        if (drawMode === 'line' || drawMode === 'nauticalMiles') {
-            if (drawMode === 'nauticalMiles') {
+        if (drawMode === 'line') {
+            if (formatterId === 'nauticalMiles') {
                 const nauticalMiles = measurement / METERS_PER_NAUTICAL_MILE;
                 const mainDecimals = 2;
                 const mainDigits = fixedDigits !== undefined ? fixedDigits : mainDecimals;
-                const mainStr = Oskari.util.formatNumberWithDecimalSeparator(nauticalMiles, mainDigits) + ' M'; // change 'M' to 'nmi' if you prefer
+                const mainStr = Oskari.util.formatNumberWithDecimalSeparator(nauticalMiles, mainDigits) + ' M';
                 const fallback = this.formatMeasurementResult(measurement, 'line', fixedDigits);
                 return `${mainStr} (${fallback})`;
             }

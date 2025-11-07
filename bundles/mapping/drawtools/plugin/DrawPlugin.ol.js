@@ -192,8 +192,7 @@ Oskari.clazz.define(
                 options.limits.areaTooltip = `${warn} ${tip}`;
             }
             if (limits.length) {
-                const drawMode = options.measurementFormat === 'nauticalMiles' ? 'nauticalMiles' : 'line';
-                const formatted = this.getMapModule().formatMeasurementResult(limits.length, drawMode, 0);
+                const formatted = this.getMapModule().formatMeasurementResult(limits.length, 'line', 0, options.measurementFormat);
                 const warn = this.loc(INVALID_REASONS.LINE_LENGTH, { length: formatted });
                 const tip = this.loc(`${locPath}.line`);
                 options.limits.lengthTooltip = `${warn} ${tip}`;
@@ -779,7 +778,7 @@ Oskari.clazz.define(
             const mapmodule = this.getMapModule();
             const geom = feature.getGeometry();
             const showMeasureOnMap = this.getOpts('showMeasureOnMap');
-            const format = this.getOpts('measurementFormat'); // e.g. 'nauticalMiles'
+            const formatterId = this.getOpts('measurementFormat'); // e.g. 'nauticalMiles'
 
             if (geom instanceof olGeom.Polygon) {
                 const area = mapmodule.getGeomArea(geom);
@@ -790,8 +789,7 @@ Oskari.clazz.define(
             }
             if (geom instanceof olGeom.LineString) {
                 const length = mapmodule.getGeomLength(geom);
-                const drawMode = format === 'nauticalMiles' ? 'nauticalMiles' : 'line';
-                const tooltip = showMeasureOnMap ? mapmodule.formatMeasurementResult(length, drawMode, undefined) : '';
+                const tooltip = showMeasureOnMap ? mapmodule.formatMeasurementResult(length, 'line', undefined, formatterId) : '';
 
                 const props = { length, tooltip };
                 feature.setProperties(props, true);
