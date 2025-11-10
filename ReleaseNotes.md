@@ -76,6 +76,10 @@ You can remove imports from your applications `main.js` to these (the imports wi
 - import 'oskari-loader!oskari-frontend/packages/mapping/ol/mapwmts/bundle.js';
 ```
 
+### Preview of upcoming bundle: myfeatures
+
+The release includes a new bundle `myfeatures` that can be used in place of the `userlayer`-functionality (`myplacesimport`). It's not production ready yet, but it's available for testing. This is the functionality that will replace myplaces and userlayer functionalities in the future with migrations from those data types to `myfaetures` are on the roadmap for future development. The functionality from user perspective is the same as `userlayer` today, but the internal code has been rewritten on both frontend and server.
+
 ### Other changes
 
 Layer listing with the free keyword filter is now more usable on mobile devices. The filtering isn't automatically triggered until 5 characters has been added which makes it much more usable with less powerful devices. The filter can be manually executed with fewer characters by pressing enter on the virtual keyboard.
@@ -92,7 +96,7 @@ Reverted back from `cesium/engine` to `Cesium` (including the unused widgets) si
 
 Fixed an issue where the button to remove layer coverage polygon from map was duplicated: https://github.com/oskariorg/oskari-frontend/pull/2875
 
-ESLint config changed to flat config. Requires manual migration of apps.
+ESLint config changed to flat config. Requires manual migration of apps like this: https://github.com/oskariorg/sample-application/pull/52
 
 Library updates:
 - `@ant-design/icons` 5.5.1 -> 5.6.1
@@ -108,7 +112,7 @@ Library updates:
 - `@testing-library/react` 12.1.5 -> 16.3.0 (and related dependencies)
 - `ol` 10.6.0 -> 10.6.1
 - `uglifyjs-webpack-plugin` replaced with `terser-webpack-plugin`
-- `webpack` 4.47.0 -> 5.102.1 (and related loaders/devserver)
+- `webpack` 4.47.0 -> 5.102.1 (and related loaders/dev-server)
 
 ## 3.1.0
 
