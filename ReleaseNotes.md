@@ -63,7 +63,6 @@ Support for different kinds of mapmodule plugins have been historically required
 
 The plugins they register are now started by default even if not referenced in the `mapfull.conf.plugins` array:
 - `Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin`
-- `Oskari.wfsvector.WfsVectorLayerPlugin`
 - `Oskari.mapframework.mapmodule.VectorLayerPlugin`
 - `Oskari.mapframework.mapmodule.WmsLayerPlugin`
 - `Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin`
