@@ -76,6 +76,40 @@ You can remove imports from your applications `main.js` to these (the imports wi
 - import 'oskari-loader!oskari-frontend/packages/mapping/ol/mapwmts/bundle.js';
 ```
 
+### Other changes
+
+Layer listing with the free keyword filter is now more usable on mobile devices. The filtering isn't automatically triggered until 5 characters has been added which makes it much more usable with less powerful devices. The filter can be manually executed with fewer characters by pressing enter on the virtual keyboard.
+
+Clicking a search result no longer tries to keep the infobox on screen. It still moves the map to where the clicked result is but there's a hard-to-reproduce issue with panning the map to show the whole infobox while the map is panning to show the search result. There's not much difference to the user usually, but trying to do both can lead to the map showing a totally wrong location occasionally so it's best to just have the map move once per search result. When useing `InfoBox.ShowInfoBoxRequest` to show an infobox on coordinates that are currently NOT in the viewport, we advice passing `{ keepOnScreen: false }` in the options to prevent this from happening.
+
+Added `Oskari.util.formatNumberWithDecimalSeparator(value, optionalPrecision)` for formatting numbers with precision. Similar to Number.toFixed() or Intl.NumberFormat(), but returns empty string instead of `NaN` for showing numbers on the UI.
+
+Added a parameter for `mapmodule.formatMeasurementResult()` that allows selecting a formatter for measurement. See https://github.com/oskariorg/oskari-frontend/pull/2910 for details. Added a formatter for nautical miles as an example. The options in `StartDrawingRequest` can be used to select formatter.
+
+Fixed an issue regarding adding several vector layers from the same service. The defaults style for the layer was copied from the previous layer that resulted in weird situations with vector layer styles: https://github.com/oskariorg/oskari-documentation/issues/117
+
+Reverted back from `cesium/engine` to `Cesium` (including the unused widgets) since `olcs` references `Cesium` and npm decides to install it anyway since it doesn't recognize `cesium/engine` being an alternative for `Cesium`.
+
+Fixed an issue where the button to remove layer coverage polygon from map was duplicated: https://github.com/oskariorg/oskari-frontend/pull/2875
+
+ESLint config changed to flat config. Requires manual migration of apps.
+
+Library updates:
+- `@ant-design/icons` 5.5.1 -> 5.6.1
+- `@babel/core` 7.26.0 -> 7.28.4 (and related plugins)
+- `@cesium/engine` 20.0.1 replaced with `cesium` 1.135.0
+- `antd` 5.21.6 -> 5.27.5
+- `babel-loader` 8.4.1 -> 10.0.0
+- `corejs` 3.38.1 -> 3.46.0
+- `react-beautiful-dnd` replaced with `@hello-pangea/dnd`
+- `eslint` 8.57.0 -> 9.37.0 (and related plugins)
+- `jest` 29.7.0 -> 30.2.0 (and related dependencies)
+- `react` 16.14.0 -> 18.3.1 (tested 19.x, needs more work)
+- `@testing-library/react` 12.1.5 -> 16.3.0 (and related dependencies)
+- `ol` 10.6.0 -> 10.6.1
+- `uglifyjs-webpack-plugin` replaced with `terser-webpack-plugin`
+- `webpack` 4.47.0 -> 5.102.1 (and related loaders/devserver)
+
 ## 3.1.0
 
 For a full list of changes see:
