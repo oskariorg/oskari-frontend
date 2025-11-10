@@ -403,6 +403,36 @@ Oskari.util = (function () {
     };
 
     /**
+    * Format a number to fixed precision and replace the decimal point
+    * with decimal separator.
+    *
+    * @param {number} value - numeric value to format
+    * @param {number} [precision] - optional number of fraction digits
+    * @returns {string} formatted number string
+    */
+    util.formatNumberWithDecimalSeparator = function (value, precision) {
+        if (typeof value !== 'number' || !Number.isFinite(value)) {
+            return '';
+        }
+
+        const decimalSeparator = Oskari.getDecimalSeparator();
+
+        // If precision is omitted, return the default string representation
+        if (precision === undefined || precision === null) {
+            return String(value).replace('.', decimalSeparator);
+        }
+
+        // Validate and coerce precision to a non-negative integer
+        if (typeof precision !== 'number' || !Number.isFinite(precision) || precision < 0) {
+            precision = 0;
+        } else {
+            precision = Math.floor(precision);
+        }
+
+        return value.toFixed(precision).replace('.', decimalSeparator);
+    };
+
+    /**
      * Natural array sort
      * @method  naturalSort
      * @param  {String|Integer|Double} valueA     sorted value a

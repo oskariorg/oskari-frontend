@@ -71,7 +71,7 @@ Returns name of the event
 ### getId()
 Returns id of the drawing
 
-### getGeoJson)
+### getGeoJson()
 Returns geojson of the drawing
 
 ### getData()

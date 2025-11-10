@@ -192,7 +192,7 @@ Oskari.clazz.define(
                 options.limits.areaTooltip = `${warn} ${tip}`;
             }
             if (limits.length) {
-                const formatted = this.getMapModule().formatMeasurementResult(limits.length, 'line', 0);
+                const formatted = this.getMapModule().formatMeasurementResult(limits.length, 'line', 0, options.measurementFormat);
                 const warn = this.loc(INVALID_REASONS.LINE_LENGTH, { length: formatted });
                 const tip = this.loc(`${locPath}.line`);
                 options.limits.lengthTooltip = `${warn} ${tip}`;
@@ -485,6 +485,7 @@ Oskari.clazz.define(
 
             const data = { buffer, shape, showMeasureOnMap, bufferedGeoJson };
 
+            // aggregated area and length in base units (m, m²)
             let sumArea = 0;
             let sumLength = 0;
             features.forEach(f => {
@@ -571,7 +572,6 @@ Oskari.clazz.define(
             if (buffer) {
                 properties.buffer = buffer;
             }
-            // override
             json.properties = properties;
             return json;
         },
@@ -777,18 +777,22 @@ Oskari.clazz.define(
         updateMeasurements: function (feature) {
             const mapmodule = this.getMapModule();
             const geom = feature.getGeometry();
-            const format = this.getOpts('showMeasureOnMap');
+            const showMeasureOnMap = this.getOpts('showMeasureOnMap');
+            const formatterId = this.getOpts('measurementFormat'); // e.g. 'nauticalMiles'
+
             if (geom instanceof olGeom.Polygon) {
                 const area = mapmodule.getGeomArea(geom);
                 const length = mapmodule.getGeomLength(geom);
-                const tooltip = format ? mapmodule.formatMeasurementResult(area, 'area') : '';
+                const tooltip = showMeasureOnMap ? mapmodule.formatMeasurementResult(area, 'area') : '';
                 feature.setProperties({ area, length, tooltip }, true);
                 return;
             }
             if (geom instanceof olGeom.LineString) {
                 const length = mapmodule.getGeomLength(geom);
-                const tooltip = format ? mapmodule.formatMeasurementResult(length, 'line') : '';
-                feature.setProperties({ length, tooltip }, true);
+                const tooltip = showMeasureOnMap ? mapmodule.formatMeasurementResult(length, 'line', undefined, formatterId) : '';
+
+                const props = { length, tooltip };
+                feature.setProperties(props, true);
             }
         },
         updateTooltip: function (feature) {

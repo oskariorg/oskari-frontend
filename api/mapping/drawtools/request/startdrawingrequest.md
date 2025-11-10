@@ -88,6 +88,9 @@ Parameters for options-object:
         }
     </td>
 </tr>
+<tr>
+  <td> measurementFormat </td><td> String </td><td>Optional format for displaying a measurement tooltip on map. The values are by default formatted with metric units, but this can be used to request showing the tooltip with eg. "nauticalMiles" .</td><td> null</td>
+</tr>
 </table>
 
 Limits are used for validating finished geometry. If geometry is invalid, user will see warning text. Parameters for limits-object:

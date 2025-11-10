@@ -518,60 +518,63 @@ export class MapModule extends AbstractMapModule {
     /**
      * Formats the measurement to ui.
      * Returns a string with the measurement and
-     * an appropriate unit (m/km or m²/ha/km²)
+     * an appropriate unit (m/km or m²/ha/km² or M (m/km))
      * or an empty string for point.
-     *
+     * 
      * @public @method formatMeasurementResult
-     *
+     * 
      * @param  {number} measurement
      * @param  {String} drawMode
      * @param  {Number} fixedDigits (optional)
+     * @param  {String} formatterId (optional) - e.g. 'nauticalMiles'
      * @return {String}
-     *
      */
-    formatMeasurementResult (measurement, drawMode, fixedDigits) {
-        if (typeof measurement !== 'number') {
-            return;
+    formatMeasurementResult(measurement, drawMode, fixedDigits, formatterId) {
+        if (typeof measurement !== 'number' || !Number.isFinite(measurement)) {
+            return '';
         }
-        let result;
-        let unit;
-        let decimals;
+        const METERS_PER_NAUTICAL_MILE = 1852;
         const zoomedForAccuracy = this.getResolution() < 1;
 
         if (drawMode === 'area') {
-            // 1 000 000 m² === 1 km²
             if (measurement >= 1000000) {
-                result = measurement / 1000000; // (Math.round(measurement) / 1000000);
-                decimals = 3;
-                unit = 'km²';
+                const result = measurement / 1000000;
+                const decimals = 3;
+                const digits = fixedDigits !== undefined ? fixedDigits : decimals;
+                return Oskari.util.formatNumberWithDecimalSeparator(result, digits) + ' km²';
             } else if (measurement < 10000) {
-                result = measurement;// (Math.round(100 * measurement) / 100);
-                decimals = zoomedForAccuracy ? 1 : 0;
-                unit = 'm²';
-            } else {
-                result = measurement / 10000; // (Math.round(100 * measurement) / 100);
-                decimals = 2;
-                unit = 'ha';
+                const decimals = zoomedForAccuracy ? 1 : 0;
+                const digits = fixedDigits !== undefined ? fixedDigits : decimals;
+                return Oskari.util.formatNumberWithDecimalSeparator(measurement, digits) + ' m²';
             }
-        } else if (drawMode === 'line') {
-            // 1 000 m === 1 km
-            if (measurement >= 1000) {
-                result = measurement / 1000; // (Math.round(measurement) / 1000);
-                decimals = 3;
-                unit = 'km';
-            } else {
-                result = measurement; // (Math.round(100 * measurement) / 100);
-                decimals = zoomedForAccuracy ? 1 : 0;
-                unit = 'm';
-            }
-        } else {
-            return '';
+            const result = measurement / 10000;
+            const decimals = 2;
+            const digits = fixedDigits !== undefined ? fixedDigits : decimals;
+            return Oskari.util.formatNumberWithDecimalSeparator(result, digits) + ' ha';
         }
-        const digits = fixedDigits !== undefined ? fixedDigits : decimals;
-        return result.toFixed(digits).replace(
-            '.',
-            Oskari.getDecimalSeparator()
-        ) + ' ' + unit;
+
+        if (drawMode === 'line') {
+            if (formatterId === 'nauticalMiles') {
+                const nauticalMiles = measurement / METERS_PER_NAUTICAL_MILE;
+                const mainDecimals = 2;
+                const mainDigits = fixedDigits !== undefined ? fixedDigits : mainDecimals;
+                const mainStr = Oskari.util.formatNumberWithDecimalSeparator(nauticalMiles, mainDigits) + ' M';
+                const fallback = this.formatMeasurementResult(measurement, 'line', fixedDigits);
+                return `${mainStr} (${fallback})`;
+            }
+
+            // Default line behaviour (m / km)
+            if (measurement >= 1000) {
+                const result = measurement / 1000;
+                const decimals = 3;
+                const digits = fixedDigits !== undefined ? fixedDigits : decimals;
+                return Oskari.util.formatNumberWithDecimalSeparator(result, digits) + ' km';
+            }
+            const decimals = zoomedForAccuracy ? 1 : 0;
+            const digits = fixedDigits !== undefined ? fixedDigits : decimals;
+            return Oskari.util.formatNumberWithDecimalSeparator(measurement, digits) + ' m';
+        }
+        return '';
     }
 
     /**
