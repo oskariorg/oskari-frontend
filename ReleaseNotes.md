@@ -15,20 +15,15 @@ Examples for changes needed on oskari-frontend can be found on https://github.co
 For most bundles can be migrated with these steps:
 
 Replace: `import ReactDOM from 'react-dom';`
-With `import { createRoot } from 'react-dom/client';`
-
-Add a helper for maintaining root element reference:
-```javascript
-getReactRoot (element) {
-    if (!this._reactRoot) {
-        this._reactRoot = createRoot(element);
-    }
-    return this._reactRoot;
-},
-```
+With `import { getReactRoot } from 'oskari-ui/components/window';`
 
 Replace: `ReactDOM.render(<jsx/>, element)`
-With: `this.getReactRoot(template[0]).render(<jsx/>)`
+With: `getReactRoot(element).render(<jsx/>)`
+
+If you need to unmount the React-component:
+
+Add import `import { unmountReactRoot } from 'oskari-ui/components/window';`
+Call `unmountReactRoot(element);` instead of `ReactDOM.unmountComponentAtNode(element);`
 
 PropTypes are not functioning with the new React version like before. As they are being removed from React:
  https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-apisv
@@ -73,7 +68,7 @@ The plugins they register are now started by default even if not referenced in t
 - `Oskari.mapframework.mapmodule.WmsLayerPlugin`
 - `Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin`
 
-If you need to pass some configuration for these plugins, you will need to do it by including them on the `mapfull.conf.plugins` array like before. Otherwise references can be removed from the database.
+If you need to pass some configuration for these plugins, you will need to do it by including them on the `mapfull.conf.plugins` array like before. Otherwise references can be removed from the database. 
 
 You can remove imports from your applications `main.js` to these (the imports will fail since bundle.js files have been removed from packages-folder, but they are automatically included now).
 
