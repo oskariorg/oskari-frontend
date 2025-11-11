@@ -78,13 +78,17 @@ You can remove imports from your applications `main.js` to these (the imports wi
 
 ### Preview of upcoming bundle: myfeatures
 
-The release includes a new bundle `myfeatures` that can be used in place of the `userlayer`-functionality (`myplacesimport`). It's not production ready yet, but it's available for testing. This is the functionality that will replace myplaces and userlayer functionalities in the future with migrations from those data types to `myfaetures` are on the roadmap for future development. The functionality from user perspective is the same as `userlayer` today, but the internal code has been rewritten on both frontend and server.
+The release includes a new bundle `myfeatures` that can be used in place of the `userlayer`-functionality (`myplacesimport`). It's not production ready yet, but it's available for testing. This is the functionality that will replace myplaces and userlayer functionalities in the future with migrations from those data types to `myfeatures` are on the roadmap for future development. The functionality from user perspective is the same as `userlayer` today, but the internal code has been rewritten on both frontend and server.
+
+Most changes for frontend has been combined to https://github.com/oskariorg/oskari-frontend/pull/2891, but they also depend on changes done to for example mapmodule and the functionality is still under development and subject to change.
 
 ### Other changes
 
 Layer listing with the free keyword filter is now more usable on mobile devices. The filtering isn't automatically triggered until 5 characters has been added which makes it much more usable with less powerful devices. The filter can be manually executed with fewer characters by pressing enter on the virtual keyboard.
 
 Clicking a search result no longer tries to keep the infobox on screen. It still moves the map to where the clicked result is but there's a hard-to-reproduce issue with panning the map to show the whole infobox while the map is panning to show the search result. There's not much difference to the user usually, but trying to do both can lead to the map showing a totally wrong location occasionally so it's best to just have the map move once per search result. When useing `InfoBox.ShowInfoBoxRequest` to show an infobox on coordinates that are currently NOT in the viewport, we advice passing `{ keepOnScreen: false }` in the options to prevent this from happening.
+
+The `metadataflyout` now combines accessRestrictions and otherRestrictions from metadata under a single Restrictions listing.
 
 Added `Oskari.util.formatNumberWithDecimalSeparator(value, optionalPrecision)` for formatting numbers with precision. Similar to Number.toFixed() or Intl.NumberFormat(), but returns empty string instead of `NaN` for showing numbers on the UI.
 
