@@ -49,6 +49,7 @@ Oskari.registerLocalization({
                 "abstractTextData": "Abstract text (data)",
                 "abstractTextService": "Abstract text (service)",
                 "accessConstraints": "Access constraints",
+                "constraints": "Constraints",
                 "date": "Date",
                 "classifications": "Classifications",
                 "descriptiveKeywords": "Keywords",
