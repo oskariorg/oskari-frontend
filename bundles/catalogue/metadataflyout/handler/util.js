@@ -127,29 +127,38 @@ export const linkifyParagraph = value => {
 };
 
 export const mapResponseForRender = response => {
-    const mapIdentification = ide => ({
-        abstractText: prettifyParagraph(ide.abstractText),
-        accessConstraints: getCodes(ide.accessConstraints, 'gmd:MD_RestrictionCode'),
-        browseGraphics: ide.browseGraphics,
-        citation: {
-            ...ide.citation,
-            date: getCitationDate(ide.citation),
-            resourceIdentifiers: ide.citation.resourceIdentifiers?.map(ind => `${ind.codeSpace}.${ind.code}`)
-        },
-        classifications: getCodes(ide.classifications, 'gmd:MD_ClassificationCode'),
-        descriptiveKeywords: prettifyList(ide.descriptiveKeywords),
-        languages: ide.languages?.map(getLocalizedLanguage),
-        operatesOn: ide.operatesOn,
-        otherConstraints: prettifyList(ide.otherConstraints),
-        responsibleParties: ide.responsibleParties,
-        serviceType: getTypedString(ide.serviceType, ide.serviceTypeVersion),
-        spatialRepresentationTypes: getCodes(ide.spatialRepresentationTypes, 'gmd:MD_SpatialRepresentationTypeCode'),
-        spatialResolutions: ide.spatialResolutions?.map(res => `1:${res}`),
-        temporalExtents: getRangeList(ide.temporalExtents),
-        topicCategories: getCodes(ide.topicCategories, 'gmd:MD_TopicCategoryCode'),
-        type: ide.type,
-        useLimitations: prettifyList(ide.useLimitations)
-    });
+    const mapIdentification = ide => {
+        // combine constraints (remove "other" if otherConstraints has values)
+        let accessConstraints = ide.accessConstraints || [];
+        const otherConstraints = ide.otherConstraints || [];
+        if (accessConstraints.includes('otherRestrictions') && otherConstraints.length) {
+            accessConstraints = accessConstraints.filter(item => item !== 'otherRestrictions');
+        }
+        return {
+            abstractText: prettifyParagraph(ide.abstractText),
+            constraints: [
+                ...getCodes(accessConstraints, 'gmd:MD_RestrictionCode'),
+                ...prettifyList(otherConstraints)],
+            browseGraphics: ide.browseGraphics,
+            citation: {
+                ...ide.citation,
+                date: getCitationDate(ide.citation),
+                resourceIdentifiers: ide.citation.resourceIdentifiers?.map(ind => `${ind.codeSpace}.${ind.code}`)
+            },
+            classifications: getCodes(ide.classifications, 'gmd:MD_ClassificationCode'),
+            descriptiveKeywords: prettifyList(ide.descriptiveKeywords),
+            languages: ide.languages?.map(getLocalizedLanguage),
+            operatesOn: ide.operatesOn,
+            responsibleParties: ide.responsibleParties,
+            serviceType: getTypedString(ide.serviceType, ide.serviceTypeVersion),
+            spatialRepresentationTypes: getCodes(ide.spatialRepresentationTypes, 'gmd:MD_SpatialRepresentationTypeCode'),
+            spatialResolutions: ide.spatialResolutions?.map(res => `1:${res}`),
+            temporalExtents: getRangeList(ide.temporalExtents),
+            topicCategories: getCodes(ide.topicCategories, 'gmd:MD_TopicCategoryCode'),
+            type: ide.type,
+            useLimitations: prettifyList(ide.useLimitations)
+        };
+    };
 
     const {
         identifications = [],

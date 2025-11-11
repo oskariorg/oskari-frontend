@@ -49,6 +49,7 @@ Oskari.registerLocalization({
                 "abstractTextData": "Sammanfattning text (data)",
                 "abstractTextService": "Sammanfattning text (tjänst)",
                 "accessConstraints": "Åtkomstrestriktioner",
+                "constraints": "Restriktioner",
                 "date": "Datum",
                 "classifications": "Klassificeringar",
                 "descriptiveKeywords": "Nyckelord",
