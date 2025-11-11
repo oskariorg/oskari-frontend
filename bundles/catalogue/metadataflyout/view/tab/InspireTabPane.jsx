@@ -23,8 +23,7 @@ export const InspireTabPane = ({ metadata, identification, showFullGraphics, con
             <LabeledItem dataKey='serviceType' source={identification} />
             <LabeledItem dataKey='descriptiveKeywords' source={identification} renderList/>
             <DataQualities content={metadata.dataQualities} />
-            <LabeledItem dataKey='accessConstraints' source={identification} renderList/>
-            <LabeledItem dataKey='otherConstraints' source={identification}/>
+            <LabeledItem dataKey='constraints' source={identification} renderList/>
             <LabeledItem dataKey='classifications' source={identification} renderList/>
             <LabeledItem dataKey='useLimitations' source={identification}/>
         </Content>

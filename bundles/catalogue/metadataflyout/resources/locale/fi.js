@@ -49,6 +49,7 @@ Oskari.registerLocalization({
                 "abstractTextData": "Aineiston tiivistelmä",
                 "abstractTextService": "Palvelun tiivistelmä",
                 "accessConstraints": "Saantirajoitteet",
+                "constraints": "Rajoitteet",
                 "date": "Päivämäärä",
                 "classifications": "Turvaluokittelu",
                 "descriptiveKeywords": "Avainsanat",
