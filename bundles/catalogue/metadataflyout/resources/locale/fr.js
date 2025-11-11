@@ -50,6 +50,7 @@ Oskari.registerLocalization(
                 "abstractTextData": "Texte de résumé (données)",
                 "abstractTextService": "Texte de résumé (service)",
                 "accessConstraints": "Restrictions d’accès",
+                "constraints": "Restrictions",
                 "date": "Date",
                 "classifications": "Classifications",
                 "descriptiveKeywords": "Mots-clef",
