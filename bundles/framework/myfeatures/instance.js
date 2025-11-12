@@ -23,9 +23,10 @@ export class MyFeatureBundleInstance extends BasicBundleInstance {
         super.start(sandbox);
         const loggedIn = Oskari.user().isLoggedIn();
         if (loggedIn) {
+            const getMsg = (key, args) => this.loc(key, args);
             this.importService = new MyFeaturesService(sandbox,
                 this.getMapLayerService(),
-                (key, args) => this.loc(key, args));
+                getMsg);
             this.handler = new MyFeaturesHandler(this, this.importService);
             this.addTab();
             this.addRequestHandler('MyFeatures.ShowLayerDialogRequest', (req) => {
@@ -37,7 +38,7 @@ export class MyFeatureBundleInstance extends BasicBundleInstance {
                 }
             });
             // need to wrap to a function because async
-            loadLayers(this.importService, this.loc);
+            loadLayers(this.importService, getMsg);
         }
         this.registerTool(loggedIn);
     }
