@@ -6,11 +6,6 @@ const Select = styled(AntSelect)`
 `;
 Select.displayName = 'OskariUISelect';
 
-const Option = styled(AntSelect.Option)``;
-Option.displayName = 'OskariUIOption';
-Option.__OskariTestSelector = '.ant-select-item';
-
 export {
-    Select,
-    Option
+    Select
 };
