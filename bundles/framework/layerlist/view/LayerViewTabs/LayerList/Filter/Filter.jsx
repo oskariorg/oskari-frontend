@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Select, Option, Tooltip } from 'oskari-ui';
-import { Controller, LocaleConsumer } from 'oskari-ui/util';
+import { Select, Tooltip } from 'oskari-ui';
+import { Controller, LocaleConsumer, ThemeProvider, ThemeConsumer } from 'oskari-ui/util';
 import { Labelled } from '../Labelled';
 import styled from 'styled-components';
-import { ThemeProvider, ThemeConsumer } from 'oskari-ui/util';
 import { DEFAULT_COLORS } from 'oskari-ui/theme/constants';
 
 const StyledSelect = styled(Select)`
@@ -15,6 +14,7 @@ const StyledSelect = styled(Select)`
 
 const ThemedFilter = ThemeConsumer(({ theme = {}, filters, activeFilterId, controller }) => {
     const highlightColor = theme?.color?.accent || DEFAULT_COLORS.accent;
+    const options = filters.map(({ id, text, tooltip }) => ({ value: id, label: <Tooltip title={tooltip}>{text}</Tooltip>})); //
     return (
         <Labelled messageKey='filter.title'>
             <StyledSelect
@@ -22,15 +22,8 @@ const ThemedFilter = ThemeConsumer(({ theme = {}, filters, activeFilterId, contr
                 value={activeFilterId}
                 className="t_filter"
                 $highlightColor={highlightColor}
-            >
-                {
-                    filters.map(({ id, text, tooltip }) => (
-                        <Option key={id} value={id} >
-                            <Tooltip title={tooltip}>{text}</Tooltip>
-                        </Option>
-                    ))
-                }
-            </StyledSelect>
+                options={options}
+            />
         </Labelled>
     );
 });
