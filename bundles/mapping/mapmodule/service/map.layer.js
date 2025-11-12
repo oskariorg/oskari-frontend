@@ -235,24 +235,26 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Boolean} suppressEvent (optional)
          *            true to not send event (should only be used on test cases to avoid unnecessary events)
          */
-        removeLayer: function (layerId, suppressEvent) {
-            var layer = this.findMapLayer(layerId);
-            var parentLayer = null;
-            var sandbox = this.getSandbox();
+        removeLayer: function (layerId, suppressEvent, _dontRemoveFromMap) {
+            const layer = this.findMapLayer(layerId);
+            const sandbox = this.getSandbox();
+            let parentLayer = null;
 
             if (!layer) {
                 // not found in layers OR sublayers!
                 // TODO: should we notify somehow?
                 return;
             }
-            // remove the layer from map state (selected layers)
-            sandbox.getMap().removeLayer(layerId);
+            if (_dontRemoveFromMap !== true) {
+                // remove the layer from map state (selected layers)
+                sandbox.getMap().removeLayer(layerId);
+            }
 
             // remove layer from groups (needs to be done when the layer can still be found by id)
             layer.getGroups().forEach(group => this.removeLayerFromGroup(group.id, layerId, true));
 
             // default to all layers
-            var layerList = this._loadedLayersList;
+            let layerList = this._loadedLayersList;
             if (layer.getParentId() !== -1) {
                 // referenced layer is a sublayer
                 parentLayer = this.findMapLayer(layer.getParentId());
@@ -262,7 +264,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // work on sublayers instead
                 layerList = parentLayer.getSubLayers();
             }
-            var indexToRemove = layerList.findIndex(function (item) {
+            const indexToRemove = layerList.findIndex(function (item) {
                 return item.getId() + '' === layerId + '';
             });
             if (indexToRemove !== -1) {
@@ -275,7 +277,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             this._newestLayers = null;
 
             if (layer && suppressEvent !== true) {
-                var mapLayerEvent = Oskari.eventBuilder('MapLayerEvent');
+                const mapLayerEvent = Oskari.eventBuilder('MapLayerEvent');
 
                 // notify components of layer removal
                 if (parentLayer) {
@@ -288,6 +290,19 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     sandbox.notifyAll(mapLayerEvent(layer.getId(), 'remove'));
                 }
             }
+        },
+
+        /**
+         * Used to switch myfeatures-layers presented as wfslayers from mapfull.config to actual myfeatures-layers loaded by myfeatures bundle.
+         * The type changes from wfslayer to myfeatures so updateLayer doesn't really work. They are both wfslayers so the same plugin handles them on map.
+         * @param {String|Number} layerId id for layer to replace
+         * @param {Oskari.mapframework.domain.AbstractLayer} newLayer layer to use in place of the old one
+         */
+        replaceLayer: function(layerId, newLayer) {
+            this.removeLayer(layerId, true, true);
+            this.addLayer(newLayer, true);
+            const mapLayerEvent = Oskari.eventBuilder('MapLayerEvent');
+            this.getSandbox().notifyAll(mapLayerEvent(layerId, 'update'));
         },
 
         /**
