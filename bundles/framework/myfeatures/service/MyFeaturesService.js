@@ -53,6 +53,7 @@ export class MyFeaturesService {
     addLayerToService (layerJson, skipEvent) {
         const mapLayerService = this.mapLayerService;
 
+        const prePopulated = !!mapLayerService.findMapLayer(layerJson.id);
         // Create the layer model
         const mapLayer = mapLayerService.createMapLayer({
             ...layerJson,
@@ -62,12 +63,29 @@ export class MyFeaturesService {
                 publish: true
             }
         });
+
+        // add edit tool for selected layers
+        const toolName = Oskari.getMsg('MapModule', 'plugin.WfsVectorLayerPlugin.editLayer');
+        const editLayerTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+        // oskari-frontend/bundles/framework/layerlist/view/LayerViewTabs/SelectedLayers/LayerBox/Footer/StyleSettings.jsx
+        // has special handling for "editStyle" that we can change to "editLayer" or similar when we userlayers are migrated to myfeatures
+        editLayerTool.setName('editStyle');
+        editLayerTool.setTooltip(toolName);
+        editLayerTool.setTitle(toolName);
+        editLayerTool.setCallback(() => this.sandbox.postRequestByName('myfeatures.ShowLayerDialogRequest', [mapLayer.getId()]));
+        mapLayer.addTool(editLayerTool);
         // mark that this has been added by this bundle.
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.
         // This is used to filter out other users shared layers when listing layers on the My Data functionality.
         mapLayer.markAsInternalDownloadSource();
         // Add the layer to the map layer service
-        mapLayerService.addLayer(mapLayer, skipEvent);
+        if (prePopulated) {
+            // might happen if we get the layer as part of mapfull.config due to myfeatures bundle not being in database for the appsetup/started hackishly
+            // replace silently and hope for the best.
+            mapLayerService.replaceLayer(layerJson.id, mapLayer);
+        } else {
+            mapLayerService.addLayer(mapLayer, prePopulated || skipEvent);
+        }
         return mapLayer;
     }
 

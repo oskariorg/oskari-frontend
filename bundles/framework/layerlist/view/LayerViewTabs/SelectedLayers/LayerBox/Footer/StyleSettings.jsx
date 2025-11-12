@@ -35,7 +35,7 @@ export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
 
     /**
      * ownStyle = wfs layers (added in WfsLayerModelBuilder)
-     * editStyle = myplaces & userlayers (added in MyPlacesLayerModelBuilder)
+     * editStyle = myplaces & userlayers (added in MyPlacesLayerModelBuilder) alse myfeatures (added in MyFeaturesService)
      */
     const ownStyle = layer.getTool('ownStyle');
     const editStyle = layer.getTool('editStyle');
