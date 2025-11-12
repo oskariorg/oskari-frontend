@@ -12,6 +12,7 @@ const resolveConfig = require('./webpack/config.js').RESOLVE;
 module.exports = defineConfig([
     js.configs.recommended,
     {
+        files: ['**/*.{js,jsx,mjs,cjs}'],
         languageOptions: {
             globals: {
                 ...globals.browser,
@@ -91,6 +92,7 @@ module.exports = defineConfig([
             }],
             'no-fallthrough': 'off',
             'import/no-default-export': 'error',
+            'import/named': 'error',
             'quote-props': ['warn', 'consistent-as-needed'],
             'lines-between-class-members': ['warn', 'always'],
 
@@ -204,7 +206,6 @@ module.exports = defineConfig([
         'typings/**/*',
         'tools/**/*',
         'tests/**/*',
-        'src/**/*',
         'resources/**/*',
         'packages/**/*',
         'node_modules/**/*',
@@ -215,5 +216,4 @@ module.exports = defineConfig([
         'api/**/*',
         'bundles/**/locale/*.js',
         '**/*.min.js'
-    ])
-]);
+    ])]);
