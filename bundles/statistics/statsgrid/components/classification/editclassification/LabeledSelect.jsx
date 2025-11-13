@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Select, Option, Message } from 'oskari-ui';
+import { Select, Message } from 'oskari-ui';
 
 const Margin = styled.div`
     padding-top: 5px;
@@ -16,6 +16,7 @@ export const LabeledSelect = ({
     handleChange,
     ...rest
 }) => {
+
     return (
         <Fragment>
             <Message messageKey={`classify.labels.${name}`}/>
@@ -24,14 +25,9 @@ export const LabeledSelect = ({
                     className={`t_option-${name}`}
                     onChange={value => handleChange(name, value)}
                     size='small'
+                    options={options}
                     {...rest}
-                >
-                    {options.map(({ label, ...rest }, i) => (
-                        <Option key={`option-${i}`} {...rest}>
-                            {label}
-                        </Option>
-                    ))}
-                </Select>
+                />
             </Margin>
         </Fragment>
     );
