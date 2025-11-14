@@ -1,5 +1,5 @@
 import React from 'react';
-import { LabeledInput, Select, Option, Message, Label } from 'oskari-ui';
+import { LabeledInput, Select, Message, Label } from 'oskari-ui';
 import styled from 'styled-components';
 import { InfoIcon } from 'oskari-ui/components/icons';
 import PropTypes from 'prop-types';
@@ -48,13 +48,10 @@ export const GeneralInfoForm = ({ name, domain, language, controller }) => {
                     value={language}
                     onChange={(lang) => controller.onChange('language', lang)}
                     popupMatchSelectWidth={false}
-                >
-                    {languages.map(lang => (
-                        <Option value={lang} key={lang}>
-                            <Message messageKey={`BasicView.generalInfo.language.options.${lang}`} />
-                        </Option>
-                    ))}
-                </Select>
+                    options={languages.map(lang => ({ 'value': lang,
+                        'label': <Message messageKey={`BasicView.generalInfo.language.options.${lang}`} />,
+                        'data-value': lang }))}
+                />
                 <InfoIcon title={<Message messageKey='BasicView.generalInfo.language.tooltip'/> }/>
             </FieldWithInfo>
         </div>
