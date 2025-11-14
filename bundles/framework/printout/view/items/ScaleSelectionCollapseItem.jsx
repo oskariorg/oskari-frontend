@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { PanelHeader } from './PanelHeader';
 import { BUNDLE_KEY, RadioGroup } from '../PrintoutPanel';
 import { SCALE_OPTIONS } from '../../constants';
-import { Message, Radio, Select, Option } from 'oskari-ui';
+import { Message, Radio, Select } from 'oskari-ui';
 
 const ScaleSelectionPanelContent = ({ state, controller, scaleOptions }) => {
     return <RadioGroup value={state.scaleType}
@@ -17,13 +17,11 @@ const ScaleSelectionPanelContent = ({ state, controller, scaleOptions }) => {
             <Select
                 value={state.scale}
                 onChange={(val) => controller.updateField('scale', val)}
-            >
-                {scaleOptions?.map(option => (
-                    <Option value={option} key={option}>
-                        {`1:${option}`}
-                    </Option>
-                ))}
-            </Select>
+                options={scaleOptions?.map(option => ({'value': option,
+                    'label': <Message messageKey={`1:${option}`} />,
+                    'data-value': option})
+                )}
+            />
         )}
     </RadioGroup>;
 };
