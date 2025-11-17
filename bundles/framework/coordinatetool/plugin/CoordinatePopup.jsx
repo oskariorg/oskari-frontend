@@ -1,6 +1,6 @@
 import React from 'react';
 import { showPopup } from 'oskari-ui/components/window';
-import { Message, Button, TextInput, Checkbox, Select, Option, Spin } from 'oskari-ui';
+import { Message, Button, TextInput, Checkbox, Select, Spin } from 'oskari-ui';
 import { Content, CoordinateFields, CoordinateField, DegreeContainer, CoordinateLabel, SelectField, EmergencyInfoContainer, SelectLabel, ReverseGeoCodes, Approximation } from './styled';
 import { ButtonContainer } from 'oskari-ui/components/buttons';
 import { LocaleProvider } from 'oskari-ui/util';
@@ -38,13 +38,12 @@ const ProjectionChanger = ({ projection, onChange, supportedProjections = [] }) 
             <Select
                 value={projection}
                 onChange={onChange}
-            >
-                {supportedProjections.map(option => (
-                    <Option key={option} value={option}>
-                        <Message messageKey={`display.coordinatesTransform.projections.${option}`} />
-                    </Option>
-                )) }
-            </Select>
+                options= {supportedProjections.map(option => ({
+                    'value': option,
+                    'data-value': option,
+                    'label': <Message messageKey={`display.coordinatesTransform.projections.${option}` }/>
+                }))}
+            />
         </SelectField>
     );
 };
