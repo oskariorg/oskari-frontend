@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Tooltip, LabeledInput, UrlInput, Select, Button, Option } from 'oskari-ui';
+import { Message, Tooltip, LabeledInput, UrlInput, Select, Button } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { PlusCircleOutlined } from '@ant-design/icons';
@@ -27,7 +27,7 @@ const Styled = styled.div`
 `;
 const StyledSelect = styled(Select)`
     margin-right: 10px;
-    flex-grow: 1; 
+    flex-grow: 1;
 `;
 
 const getLabel = key => Oskari.getMsg(LOCALE_KEY, `placeform.fields.${key}`);
@@ -39,14 +39,14 @@ const LayerSelect = ({ selected, categories, onChange }) => (
             <Message messageKey='placeform.category.choose' />
         </Label>
         <Styled>
-            <StyledSelect value={selected} onChange={onChange}>
-                {categories.map(category => {
+            <StyledSelect
+                value={selected}
+                onChange={onChange}
+                options={categories.map(category => {
                     const { categoryId, name } = category;
-                    return (
-                        <Option key={categoryId} value={categoryId}>{name}</Option>
-                    );
+                    return { 'value': categoryId, 'data-value': categoryId, 'label': name };
                 })}
-            </StyledSelect>
+            />
             <Tooltip title={<Message messageKey='placeform.category.newLayer' />}>
                 <Button className='t_add-category' onClick={openLayerDialog}>
                     <PlusCircleOutlined/>

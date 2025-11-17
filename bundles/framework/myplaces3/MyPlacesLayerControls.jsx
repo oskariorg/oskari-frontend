@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message } from 'oskari-ui';
 import styled from 'styled-components';
-import { Select, Button, Popover, Option } from 'oskari-ui';
+import { Message, Select, Button, Popover } from 'oskari-ui';
 import { SecondaryButton, ButtonContainer, DeleteButton, IconButton } from 'oskari-ui/components/buttons';
 import { PlusCircleOutlined, ExportOutlined } from '@ant-design/icons';
 import { green } from '@ant-design/colors';
@@ -63,11 +62,14 @@ const DeletePlaces = ({
             <br/>
             <Message messageKey='tab.deleteWithMove.move' messageArgs={{ count }}/>
             <MarginLeft/>
-            <Select value={moveToId} onChange={setMoveToId}>
-                {options.map(category => (
-                    <Option key={category.categoryId} value={category.categoryId}>{category.name}</Option>
-                ))}
-            </Select>
+            <Select
+                value={moveToId}
+                onChange={setMoveToId}
+                options={options.map(category => {
+                    const { categoryId, name } = category;
+                    return { 'value': categoryId, 'data-value': categoryId, 'label': name };
+                })}
+            />
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={() => setVisible(false)}/>
                 <Button className='t_delete_all' onClick={() => onConfirm(false)}>
@@ -111,11 +113,14 @@ export const MyPlacesLayerControls = (props) => {
         <React.Fragment>
             <StyledControls>
                 <label><b><Message messageKey='tab.categoryTitle' /></b></label>
-                <StyledSelect loading={loading} value={selectedCategoryId} onChange={controller.selectCategory}>
-                    {categories.map(category => (
-                        <Option key={category.categoryId} value={category.categoryId}>{category.name}</Option>
-                    ))}
-                </StyledSelect>
+                <StyledSelect
+                    loading={loading}
+                    value={selectedCategoryId}
+                    onChange={controller.selectCategory}
+                    options={categories.map(category =>
+                        ({ 'value': category.categoryId, 'data-value': category.categoryId, 'label': category.name })
+                    )}
+                />
                 <StyledActions className='t_layer'>
                     <IconButton
                         bordered={true}
