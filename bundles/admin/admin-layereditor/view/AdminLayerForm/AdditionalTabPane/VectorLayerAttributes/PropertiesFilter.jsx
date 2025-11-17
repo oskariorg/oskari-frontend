@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Select, Option, Switch, Divider, Badge } from 'oskari-ui';
+import { Message, Select, Switch, Divider, Badge } from 'oskari-ui';
 import { Draggable, DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { DragIcon } from 'oskari-ui/components/icons';
 import { IconButton } from 'oskari-ui/components/buttons';
@@ -111,6 +111,13 @@ export const PropertiesFilter = ({ filter = {}, update, properties, labels }) =>
         delete updated[lang];
         update(updated);
     };
+
+    const getLabel = (option) => {
+        let label = option === 'default' ? <Message messageKey='attributes.filter.default'/> : <Message messageKey={`LocalizationComponent.locale.${option}`} bundleKey='oskariui'/>;
+        label += Array.isArray(filter[option]) && <StyledBadge count={filter[option].length} showZero={false} />;
+        return label;
+    };
+
     // TODO: Droppable: unsupported nested scroll container detected.
     const showFromDefault = !filter[lang] && !!filter.default;
     const filteredProps = properties.filter(p => !selectedProps.includes(p));
@@ -121,17 +128,13 @@ export const PropertiesFilter = ({ filter = {}, update, properties, labels }) =>
             <SelectRow>
                 <Select
                     value={lang}
-                    onChange={setLang}>
-                    { options.map(opt => (
-                        <Option key={opt} value={opt}>
-                            { opt === 'default'
-                                ? <Message messageKey='attributes.filter.default'/>
-                                : <Message messageKey={`LocalizationComponent.locale.${opt}`} bundleKey='oskariui' />
-                            }
-                            { Array.isArray(filter[opt]) && <StyledBadge count={filter[opt].length} showZero={false} /> }
-                        </Option>))
-                    }
-                </Select>
+                    onChange={setLang}
+                    options= { options.map(opt => ({
+                        'value': opt,
+                        'data-value': opt,
+                        'label': getLabel(opt)
+                    }))}
+                />
                 { !!filter[lang] && <IconButton type='delete' bordered onClick={() => deleteFilter()}/> }
             </SelectRow>
             { showFromDefault && <Italic><Message messageKey='attributes.filter.fromDefault'/></Italic> }

@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Select, Option, Button, Badge } from 'oskari-ui';
+import { Message, Select, Button, Badge } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
 import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
 import { InfoIcon } from 'oskari-ui/components/icons';
@@ -23,7 +23,7 @@ const Buttons = styled.div`
 const clean = obj => {
     for (const key in obj) {
         const val = obj[key];
-        if(typeof val === "object" && !Array.isArray(val) && val !== null) {
+        if(typeof val === 'object' && !Array.isArray(val) && val !== null) {
             if (!Object.keys(val).length) {
                 delete obj[key];
             } else {
@@ -118,13 +118,13 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
             <StyledFormField>
                 <Select
                     value={getGeometryType(layer)}
-                    onChange={onGeometryTypeChange}>
-                    { GEOMETRY_TYPES.map(type => (
-                        <Option key={type} value={type}>
-                            <Message messageKey={`attributes.geometryType.${type}`} />
-                        </Option>
-                    )) }
-                </Select>
+                    onChange={onGeometryTypeChange}
+                    options={ GEOMETRY_TYPES.map(type => ({
+                        'value': type,
+                        'data-value': type,
+                        'label': <Message messageKey={`attributes.geometryType.${type}`} />
+                    }))}
+                />
             </StyledFormField>
             <Message messageKey='attributes.properties'/>
             <Border>

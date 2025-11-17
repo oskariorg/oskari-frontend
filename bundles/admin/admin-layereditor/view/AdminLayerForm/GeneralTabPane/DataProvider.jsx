@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Select, Option } from 'oskari-ui';
+import { Message, Select } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
 import { MandatoryIcon } from '../Mandatory';
@@ -13,11 +13,15 @@ export const DataProvider = ({ layer, dataProviders, controller }) => (
                 showSearch
                 optionFilterProp='children'
                 value={layer.dataProviderId}
-                onChange={value => controller.setDataProviderId(value)}>
-                { dataProviders.map(dataProvider =>
-                    <Option value={dataProvider.id} key={dataProvider.id}>{dataProvider.name}</Option>
-                )}
-            </Select>
+                onChange={value => controller.setDataProviderId(value)}
+                options={dataProviders.map(dataProvider => (
+                    {
+                        'value': dataProvider.id,
+                        'data-value': dataProvider.id,
+                        'label': dataProvider.name
+                    }
+                ))}
+            />
         </StyledFormField>
     </Fragment>
 );

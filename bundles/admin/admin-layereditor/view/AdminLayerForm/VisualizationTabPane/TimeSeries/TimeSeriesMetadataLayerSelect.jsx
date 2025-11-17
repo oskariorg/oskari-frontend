@@ -1,4 +1,4 @@
-import { Message, Option, Select } from 'oskari-ui';
+import { Message, Select } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
@@ -25,13 +25,12 @@ export const TimeSeriesMetadataLayerSelect = ({ layer, controller }) => {
                     filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     value={metadata.layer}
                     onChange={(value) => controller.setTimeSeriesMetadataLayer(value)}
-                >
-                    {metadataOptions.map((option) => (
-                        <Option key={option.value} value={option.value}>
-                            {option.name}
-                        </Option>
-                    ))}
-                </Select>
+                    options={metadataOptions.map((option) => ({
+                        'value': option.value,
+                        'data-value': option.value,
+                        'label': option.name
+                    }))}
+                />
             </StyledFormField>
         </Fragment>
     );
