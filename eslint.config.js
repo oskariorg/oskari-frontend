@@ -152,6 +152,7 @@ module.exports = defineConfig([
                 exports: 'never',
                 functions: 'never'
             }]
+
         },
         settings: {
             'import/resolver': {
@@ -169,6 +170,29 @@ module.exports = defineConfig([
                 version: 'detect'
             }
         }
+    },
+    {
+        // overrides just for jsx
+        files: ['**/*.jsx'],
+        rules: {
+            // toggle these off or to warn for a while since there's just too much of these to fix in one shot at our jsx's
+            'react/prop-types': 'warn',
+            'react/jsx-no-target-blank': 'warn',
+            'no-empty-pattern': 'warn',
+            'no-unused-vars': 'warn',
+            'indent': 'warn',
+            'object-curly-newline': 'warn',
+            'react-hooks/rules-of-hooks': 'warn',
+            'react-hooks/purity': 'warn',
+            'react-hooks/set-state-in-effect': 'warn',
+            'react-hooks/use-memo':'warn',
+            'react-hooks/immutability': 'warn',
+            'comma-dangle': 'warn',
+            'quotes': 'warn',
+            'semi': 'warn'
+
+        }
+
     },
     {
         files: ['**/*.js'],
@@ -203,6 +227,7 @@ module.exports = defineConfig([
         }
     },
     globalIgnores([
+        'src/**/*.js',
         'typings/**/*',
         'tools/**/*',
         'tests/**/*',
