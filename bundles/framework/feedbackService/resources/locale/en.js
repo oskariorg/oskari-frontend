@@ -11,7 +11,7 @@ Oskari.registerLocalization(
                 "keyPlaceholder": "e.g. e1301b1ded935fabc5eaa6a2ce975e6",
                 "apiExtensions": "Extensions (optional)",
                 "extensionsPlaceholder": "e.g. citysdk,media,geometry",
-                "label": "Feedback (Open311) service"
+                "label": "Provide feedback via interface (Open311)"
             }
         }
     }

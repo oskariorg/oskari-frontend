@@ -7,11 +7,11 @@ Oskari.registerLocalization(
             "title": "Map publishing"
         },
         "flyout": {
-            "title": "Create Embedded Map"
+            "title": "Publish a map to your website"
         },
         "published": {
-            "title": "Embedded Map Saved",
-            "desc": "The embedded map has been saved. Publish it on your website by copying this code to the html code on your website:",
+            "title": "The embedded map is ready for publishing",
+            "desc": "Publish the map by embedding the HTML code below on your website:",
             "copy": "Copy to the clipboard"
         },
         "snippet": {
@@ -35,7 +35,7 @@ Oskari.registerLocalization(
             }
         },
         "BasicView": {
-            "title": "Create Embedded Map",
+            "title": "Map publishing",
             "titleEdit": "Update Embedded Map",
             "transfer": {
                 "label": "Transfer configuration",
@@ -44,7 +44,7 @@ Oskari.registerLocalization(
             "generalInfo": {
                 "label": "Basic settings",
                 "domain": {
-                    "label": "Restrict embedding only to the following web address:",
+                    "label": "Allow publication only at the following web address:",
                     "placeholder": "Allowed domain",
                     "tooltip": "Type a website URL-address without prefixes or a subpage address. For example: homepage.com.",
                     "inputWarning": "Verify typed web address"
@@ -55,7 +55,7 @@ Oskari.registerLocalization(
                     "tooltip": "Type a map name. Please note the language used on the map."
                 },
                 "language": {
-                    "label": "Language",
+                    "label": "Language of user interface",
                     "options": {
                         "fi": "Finnish",
                         "sv": "Swedish",
@@ -79,8 +79,7 @@ Oskari.registerLocalization(
                 "tooltip": "Select a placement for map tools.",
                 "swapUI": "Swap sides",
                 "userlayout": "Custom placement",
-                "usereditmode": "Start editing",
-                "usereditmodeoff": "Finish editing"
+                "usereditmodeoff": "Save placement"
             },
             "statsgrid": {
                 "label": "Thematic maps",
@@ -102,31 +101,31 @@ Oskari.registerLocalization(
                         "3d-dark": "Three-dimensional (dark)",
                         "3d-light": "Three-dimensional (light)"
                     },
-                    "font": "Font style",
+                    "font": "Font",
                     "popupHeaderColor": "Title background color",
-                    "popupHeaderTextColor": "Title color",
-                    "infoboxHeaderColor": "Identifier background",
-                    "infoboxHeaderTextColor": "Identifier text",
+                    "popupHeaderTextColor": "Title font color",
+                    "infoboxHeaderColor": "Title background color",
+                    "infoboxHeaderTextColor": "Title font color",
                     "infoboxPreview": "Preview",
                     "buttonBackgroundColor": "Background color",
                     "buttonTextColor": "Icon color",
                     "buttonAccentColor": "Icon effect color",
                     "buttonRounding": "Button rounding",
                     "effect": "Effect",
-                    "3d": "3D",
-                    "presets": "Style presets"
+                    "3d": "Three-dimensional",
+                    "presets": "Preset styles"
                 },
                 "gfiDialog": {
-                    "title": "Feature Info",
+                    "title": "Feature data",
                     "featureName": "Preview",
-                    "featureDesc": "The selected color scheme affects a graphic layout of feature and map layer popup info windows."
+                    "featureDesc": "The selected layout options affects a graphic layout of feature and map layer popup info windows."
                 }
             },
             "sizes": {
                 "small": "Small",
                 "medium": "Medium",
                 "large": "Large",
-                "fill": "Scalable / Responsive",
+                "fill": "Responsive",
                 "custom": "Custom size",
                 "width": "width",
                 "height": "height",
@@ -149,18 +148,18 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "label": "Map layers",
-                "tools": "Additional tools",
-                "selectAsBaselayer": "Select as baselayer",
-                "otherLayers": "Other maps",
+                "tools": "Tools",
+                "selectAsBaselayer": "Select as background map",
+                "otherLayers": "Selected map layers",
                 "selectLayers": "Select map layers",
-                "layersDisplay": "Layer presentation",
+                "layersDisplay": "Edit map layers",
                 "baseLayers": "Background maps",
-                "noBaseLayers": "No selected background maps",
+                "noBaseLayers": "No background maps selected",
                 "noLayers": "No selected map layers"
             },
             "error": {
                 "title": "Error",
-                "size": "The map size is invalid. The width should be from {minWidth} to {maxWidth} pixels and the height from {minHeight} to {maxHeight} pixels.",
+                "size": "The map size is invalid. The width must be {minWidth} - {maxWidth} pixels and height {minHeight} - {maxHeight} pixels.",
                 "domain": "The website is required. Please type an address and try again.",
                 "domainStart": "The website is invalid. Please type an address without http or www prefixes and try again.",
                 "name": "The map name is required. Please type a name and try again.",
@@ -174,13 +173,13 @@ Oskari.registerLocalization(
             "noUI": "Hide user interface (Use RPC interface)"
         },
         "NotLoggedView": {
-            "text": "Welcome to publish embedded map on your website. Please log in or register first.",
+            "text": "Create an embeddable map and publish it on your own website. Please log in or register first.",
             "signup": "Log in",
             "register": "Register"
         },
         "StartView": {
-            "text": "Welcome to publish embedded map on your website.",
-            "touLink": "Show Terms of Use",
+            "text": "Create an embeddable map and publish it on your own website.",
+            "touLink": "Terms of use for map publishing",
             "layerlist_title": "Publishable map layers open in map window:",
             "layerlist_empty": "No publishable map layers are open in the map window. Please check publishable map layers in the Selected Layers menu.",
             "layerlist_denied": "Unpublishable map layers open in map window:",
