@@ -73,7 +73,7 @@ Oskari.registerLocalization({
             "remove": "Remove from search results"
         },
         "tool": {
-            "label": "Enable programmatic use of metadata search",
+            "label": "Allow programmatic metadata retrieval",
         }
 
     }
