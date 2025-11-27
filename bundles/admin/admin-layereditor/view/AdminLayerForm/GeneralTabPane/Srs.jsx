@@ -85,9 +85,8 @@ export const Srs = ({ layer, propertyFields, controller }) => {
                     value={forced}
                     onChange={forcedSRS => controller.setForcedSRS(forcedSRS)}
                     options={systemProjections.map(cur => ({
-                        'value': cur,
-                        'data-value': cur,
-                        'label': cur
+                        value: cur,
+                        label: cur
                     }))}
                 />
             </StyledFormField>

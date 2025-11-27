@@ -26,9 +26,8 @@ export const TimeSeriesMetadataLayerSelect = ({ layer, controller }) => {
                     value={metadata.layer}
                     onChange={(value) => controller.setTimeSeriesMetadataLayer(value)}
                     options={metadataOptions.map((option) => ({
-                        'value': option.value,
-                        'data-value': option.value,
-                        'label': option.name
+                        value: option.value,
+                        label: option.name
                     }))}
                 />
             </StyledFormField>

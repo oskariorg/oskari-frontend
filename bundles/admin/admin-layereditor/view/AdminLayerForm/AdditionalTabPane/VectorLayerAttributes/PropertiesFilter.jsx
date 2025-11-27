@@ -130,9 +130,8 @@ export const PropertiesFilter = ({ filter = {}, update, properties, labels }) =>
                     value={lang}
                     onChange={setLang}
                     options= { options.map(opt => ({
-                        'value': opt,
-                        'data-value': opt,
-                        'label': getLabel(opt)
+                        value: opt,
+                        label: getLabel(opt)
                     }))}
                 />
                 { !!filter[lang] && <IconButton type='delete' bordered onClick={() => deleteFilter()}/> }

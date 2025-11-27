@@ -17,9 +17,11 @@ const ScaleSelectionPanelContent = ({ state, controller, scaleOptions }) => {
             <Select
                 value={state.scale}
                 onChange={(val) => controller.updateField('scale', val)}
-                options={scaleOptions?.map(option => ({'value': option,
-                    'label': <Message messageKey={`1:${option}`} />,
-                    'data-value': option})
+                options={scaleOptions?.map(option => (
+                    {
+                        value: option,
+                        label: <Message messageKey={`1:${option}`} />
+                    })
                 )}
             />
         )}

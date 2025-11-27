@@ -44,7 +44,7 @@ const LayerSelect = ({ selected, categories, onChange }) => (
                 onChange={onChange}
                 options={categories.map(category => {
                     const { categoryId, name } = category;
-                    return { 'value': categoryId, 'data-value': categoryId, 'label': name };
+                    return { value: categoryId, label: name };
                 })}
             />
             <Tooltip title={<Message messageKey='placeform.category.newLayer' />}>

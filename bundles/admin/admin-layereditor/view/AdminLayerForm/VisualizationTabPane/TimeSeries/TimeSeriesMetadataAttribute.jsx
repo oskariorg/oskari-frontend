@@ -22,9 +22,8 @@ export const TimeSeriesMetadataAttribute = ({ layer, disabled, controller }) => 
                     onChange={(value) => controller.setTimeSeriesMetadataAttribute(value)}
                     options={Object.entries(layerAttributes).map(([identifier, label]) => (
                         {
-                            'value': identifier,
-                            'data-value': identifier,
-                            'label': label
+                            value: identifier,
+                            label: label
                         }
                     ))}
                 />

@@ -20,7 +20,7 @@ export const SelectedTime = ({ layer, controller }) => {
                     allowClear
                     value={value}
                     onChange={value => controller.setSelectedTime(value)}
-                    options = { capabilities.times.map(time => ({'value': time, 'data-value': time, 'label': time})) }
+                    options = { capabilities.times.map(time => ({value: time, label: time})) }
                 />
             </StyledFormField>
         </Fragment>

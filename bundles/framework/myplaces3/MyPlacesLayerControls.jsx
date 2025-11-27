@@ -67,7 +67,7 @@ const DeletePlaces = ({
                 onChange={setMoveToId}
                 options={options.map(category => {
                     const { categoryId, name } = category;
-                    return { 'value': categoryId, 'data-value': categoryId, 'label': name };
+                    return { value: categoryId, label: name };
                 })}
             />
             <ButtonContainer>
@@ -118,7 +118,7 @@ export const MyPlacesLayerControls = (props) => {
                     value={selectedCategoryId}
                     onChange={controller.selectCategory}
                     options={categories.map(category =>
-                        ({ 'value': category.categoryId, 'data-value': category.categoryId, 'label': category.name })
+                        ({ value: category.categoryId, label: category.name })
                     )}
                 />
                 <StyledActions className='t_layer'>

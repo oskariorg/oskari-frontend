@@ -19,7 +19,7 @@ export const StyleSelect = ({ layer, selectStyle }) => {
         return null;
     }
     const currentStyle = layer.getCurrentStyle() ? layer.getCurrentStyle().getName() : null;
-    const options = styles.map(style => ({'value': style.getName(), 'label': style.getName(), 'data-value': style.getName()}));
+    const options = styles.map(style => ({value: style.getName(), label: style.getName()}));
 
     return (<StyleSelection>
         <Label><Message messageKey='plugin.LayerSelectionPlugin.style' /></Label>

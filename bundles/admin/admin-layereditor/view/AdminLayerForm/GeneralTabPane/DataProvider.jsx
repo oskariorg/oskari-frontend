@@ -16,9 +16,8 @@ export const DataProvider = ({ layer, dataProviders, controller }) => (
                 onChange={value => controller.setDataProviderId(value)}
                 options={dataProviders.map(dataProvider => (
                     {
-                        'value': dataProvider.id,
-                        'data-value': dataProvider.id,
-                        'label': dataProvider.name
+                        value: dataProvider.id,
+                        label: dataProvider.name
                     }
                 ))}
             />

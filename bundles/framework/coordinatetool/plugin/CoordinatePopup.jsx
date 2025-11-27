@@ -39,9 +39,8 @@ const ProjectionChanger = ({ projection, onChange, supportedProjections = [] }) 
                 value={projection}
                 onChange={onChange}
                 options= {supportedProjections.map(option => ({
-                    'value': option,
-                    'data-value': option,
-                    'label': <Message messageKey={`display.coordinatesTransform.projections.${option}` }/>
+                    value: option,
+                    label: <Message messageKey={`display.coordinatesTransform.projections.${option}` }/>
                 }))}
             />
         </SelectField>

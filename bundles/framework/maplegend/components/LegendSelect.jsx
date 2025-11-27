@@ -30,7 +30,7 @@ export const LegendSelect = ({ legends, selected, onChange }) => {
                 onChange={onChange}
                 className="t_legends"
                 options={
-                    legends.map(l => ({ 'value': l.id, 'data-value': l.id, 'label': l.title }))
+                    legends.map(l => ({ value: l.id, label: l.title }))
                 }
             />
         </SelectContainer>

@@ -57,9 +57,8 @@ const RasterStyleSelect = ({ selected, styles, defaultName, setSelected, control
                 onChange={setSelected}
                 options={styles.map(style => (
                     {
-                        'value': style.name,
-                        'data-value': style.name,
-                        'label': getStyleLabel(style)
+                        value: style.name,
+                        label: getStyleLabel(style)
                     }
                 ))}
             />

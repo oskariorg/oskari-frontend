@@ -58,9 +58,8 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
                             options= {analyticsData
                                 .filter((value, index) => analyticsData.findIndex(val => value.dataProducer === val.dataProducer) === index)
                                 .map((data, index) => ({
-                                    'value': data.dataProducer,
-                                    'data-value': data.dataProducer,
-                                    'label': data.dataProducer
+                                    value: data.dataProducer,
+                                    label: data.dataProducer
                                 }))}
                         />
                     ) : (

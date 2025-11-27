@@ -48,9 +48,11 @@ export const GeneralInfoForm = ({ name, domain, language, controller }) => {
                     value={language}
                     onChange={(lang) => controller.onChange('language', lang)}
                     popupMatchSelectWidth={false}
-                    options={languages.map(lang => ({ 'value': lang,
-                        'label': <Message messageKey={`BasicView.generalInfo.language.options.${lang}`} />,
-                        'data-value': lang }))}
+                    options={languages.map(lang => (
+                        {
+                            value: lang,
+                            label: <Message messageKey={`BasicView.generalInfo.language.options.${lang}`} />
+                        }))}
                 />
                 <InfoIcon title={<Message messageKey='BasicView.generalInfo.language.tooltip'/> }/>
             </FieldWithInfo>

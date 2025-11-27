@@ -21,7 +21,7 @@ export const GfiType = ({ layer, controller }) => {
                     value={value}
                     onChange={value => controller.setGfiType(value)}
                     options={ options.map(option => ({
-                        'value': option, 'data-value': option, 'label': option
+                        value: option, label: option
                     })) }
                 />
             </StyledFormField>

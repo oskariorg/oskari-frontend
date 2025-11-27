@@ -120,9 +120,8 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                     value={getGeometryType(layer)}
                     onChange={onGeometryTypeChange}
                     options={ GEOMETRY_TYPES.map(type => ({
-                        'value': type,
-                        'data-value': type,
-                        'label': <Message messageKey={`attributes.geometryType.${type}`} />
+                        value: type,
+                        label: <Message messageKey={`attributes.geometryType.${type}`} />
                     }))}
                 />
             </StyledFormField>

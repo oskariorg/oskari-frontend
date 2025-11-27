@@ -24,7 +24,7 @@ const handleOwnStyleClick = ownStyleCallback => {
     }
 };
 
-const getOption = (style) => ({'value': style.getName(), 'label': style.getTitle(), 'data-value': style.getName() });
+const getOption = (style) => ({ value: style.getName(), label: style.getTitle() });
 
 export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
     const styles = layer.getStyles();
