@@ -44,7 +44,7 @@ Oskari.registerLocalization(
             "generalInfo": {
                 "label": "Julkaisutiedot",
                 "domain": {
-                    "label": "Salli julkaisu vain seuraavassa verkko-osoitteessa:",
+                    "label": "Salli julkaisu vain seuraavassa verkko-osoitteessa",
                     "placeholder": "Sivuston osoite",
                     "tooltip": "Anna verkkosivuston osoite eli domain-nimi ilman http-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com.",
                     "inputWarning": "Tarkista syötetty verkko-osoite"
@@ -179,7 +179,7 @@ Oskari.registerLocalization(
         },
         "StartView": {
             "text": "Luo upotettava kartta ja julkaise se omalla verkkosivullasi.",
-            "touLink": "Användarvillkor för kartpublicering",
+            "touLink": "Karttajulkaisun käyttöehdot",
             "layerlist_title": "Avoinna olevat karttatasot, jotka ovat julkaistavissa",
             "layerlist_empty": "Avoinna olevat karttatasot eivät ole julkaistavissa. Tarkista Valitut tasot -valikosta, mitkä karttatasot ovat julkaistavissa.",
             "layerlist_denied": "Avoinna olevat karttatasot, jotka eivät ole julkaistavissa",

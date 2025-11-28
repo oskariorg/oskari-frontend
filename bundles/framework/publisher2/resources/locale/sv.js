@@ -44,7 +44,7 @@ Oskari.registerLocalization(
             "generalInfo": {
                 "label": "Webbplats",
                 "domain": {
-                    "label": "Tillåt publicering endast på följande webbadress:",
+                    "label": "Tillåt publicering endast på följande webbadress",
                     "placeholder": "Webbplats adress",
                     "tooltip": "Skriv namnet på webbplatsens hemsida dvs. domainnamn utan prefixerna http och www samt utan undersida. Exempel: minhemsida.com",
                     "inputWarning": "Kontrollera nätverksadressen du angav"
@@ -177,7 +177,7 @@ Oskari.registerLocalization(
         },
         "StartView": {
             "text": "Skapa en inbäddningsbar karta och publicera den på din webbplats.",
-            "touLink": "Visa användningsvillkoren till kartpublicering",
+            "touLink": "Användarvillkor för kartpublicering",
             "layerlist_title": "Valda kartlager som kan inbäddas",
             "layerlist_empty": "Valda kartlager kan inte publiceras i en inbäddad karta. Kontrollera rätten att publicera i menyn \"Valda Kartlager\" innan du börjar skapa kartan.",
             "layerlist_denied": "Kartlagret kan inte publiceras i en inbäddad karta.",

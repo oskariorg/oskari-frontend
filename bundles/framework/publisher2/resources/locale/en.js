@@ -44,7 +44,7 @@ Oskari.registerLocalization(
             "generalInfo": {
                 "label": "Basic settings",
                 "domain": {
-                    "label": "Allow publication only at the following web address:",
+                    "label": "Allow publication only at the following web address",
                     "placeholder": "Allowed domain",
                     "tooltip": "Type a website URL-address without prefixes or a subpage address. For example: homepage.com.",
                     "inputWarning": "Verify typed web address"
