@@ -10,9 +10,13 @@ import { confirmEdit } from './EditConfirmation';
  * @class Oskari.bundles.framework.myfeatures-content-editor.view.SideContentEditor
  */
 Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.view.SideContentEditor',
-    function (sandbox, layerId, onExit) {
+    function (sandbox, layerId, options) {
         this.sandbox = sandbox;
-        this.onExit = onExit;
+        const { onExit, saveFeatureCallback, deleteFeatureCallback } = options;
+        this.onExit = onExit || (() => {});
+        this.saveFeatureCallback = saveFeatureCallback || (() => {});
+        this.deleteFeatureCallback = deleteFeatureCallback || (() => {});
+
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
         this.loc = Oskari.getMsg.bind(null, 'ContentEditor');
@@ -99,8 +103,8 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.view.Sid
                         loading={this.loading}
                         layer={this.getCurrentLayer()}
                         feature={this.getCurrentFeature()}
-                        onSave={(feature) => this._saveFeature(feature)}
-                        onDelete={(featureId) => this._deleteFeature(featureId)}
+                        onSave={(feature) => this.saveFeatureCallback(this.getCurrentLayer().layerId, feature)}
+                        onDelete={(featureId) => this.deleteFeatureCallback(this.getCurrentLayer().layerId, featureId)}
                         onClose={this.onExit}
                         onCancel={() => this._stopEditing()}
                         startNewFeature={() => this._startNewFeature()}

@@ -67,7 +67,8 @@ Oskari.registerLocalization(
                 "remove": "Ta bort",
                 "removeButton": "Ta bort",
                 "actions": "Handlingar",
-                "createDate": "Skapad"
+                "createDate": "Skapad",
+                "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {

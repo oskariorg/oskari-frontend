@@ -141,11 +141,16 @@ export class MyFeaturesContentEditorBundleInstance extends BasicBundleInstance {
         return this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
     }
 
-    showContentEditor (layerId) {
+    /**
+     * method showContentEditor
+     * @param {String} layerId
+     * @param {Object} options
+     */
+    showContentEditor (layerId, options) {
         // trigger an event letting other bundles know we require the whole UI
         const eventBuilder = Oskari.eventBuilder('UIChangeEvent');
         this.getSandbox().notifyAll(eventBuilder(this.mediator.bundleId));
-        this.setEditorMode(true, layerId);
+        this.setEditorMode(true, layerId, options);
     }
 
     /**
@@ -153,8 +158,9 @@ export class MyFeaturesContentEditorBundleInstance extends BasicBundleInstance {
      *
      * @param {Boolean} blnEnabled true to enable, false to disable/return to normal mode
      * @param {string} layerId
+     * @param {string} options Object containing callbacks for save, delete, exit etc.
      */
-    setEditorMode (blnEnabled, layerId) {
+    setEditorMode (blnEnabled, layerId, options = {}) {
         const mapElement = document.getElementById('contentMap');
         const sandbox = this.getSandbox();
         const additionalClass = 'mapContentEditorMode';
@@ -162,11 +168,12 @@ export class MyFeaturesContentEditorBundleInstance extends BasicBundleInstance {
             mapElement.classList.add(additionalClass); //addClass('mapContentEditorMode');
             const myRoot = document.createElement('div');
             mapElement.appendChild(myRoot);
+            options.onExit = options?.onExit ? options.onExit : () => this.setEditorMode(false);
             this.sideContentEditor = Oskari.clazz.create(
                 'Oskari.bundles.framework.myfeatures-content-editor.view.SideContentEditor',
                 sandbox,
                 layerId,
-                () => this.setEditorMode(false)
+                options
             );
             this.sideContentEditor.render(myRoot);
         } else {

@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.request.
          *      request to handle
          */
         handleRequest: function (core, request) {
-            this.instance.showContentEditor(request.getLayerId());
+            this.instance.showContentEditor(request.getLayerId(), request.getOptions());
         }
     }, {
         /**

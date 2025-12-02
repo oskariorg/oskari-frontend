@@ -15,6 +15,7 @@ class MyFeaturesHandler extends StateHandler {
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, BUNDLE_KEY);
         this.eventHandlers = this.createEventHandlers();
+
         this.refreshLayersList();
     };
 
@@ -212,6 +213,26 @@ class MyFeaturesHandler extends StateHandler {
         }
     }
 
+    async saveFeature(layerId, feature) {
+        console.log('savefeature tbd ', layerId, feature);
+    }
+
+    async deleteFeature(layerId, feature) {
+        console.log('tbd delete ', layerId, feature);
+    }
+
+    /**
+     * Opens the content editor panel for a given myfeatures' layer.
+     * TODO: This is a temp / quick and dirty solution only. We should have the contenteditor add a tool for the layer and the said tool
+     * should open content editor for the layer so we don't have a coupling between content editor <> myfeatures. But for development's sake going with this for now.
+     */
+    showContentEditor (layerId) {
+        this.sandbox.postRequestByName('ContentEditor.ShowContentEditorRequest', [layerId, {
+            saveFeatureCallback: this.saveFeature,
+            deleteFeatureCallback: this.deleteFeature
+        }]);
+    }
+
     createEventHandlers () {
         const handlers = {
             MapLayerEvent: (event) => {
@@ -238,7 +259,8 @@ class MyFeaturesHandler extends StateHandler {
 const wrapped = controllerMixin(MyFeaturesHandler, [
     'editLayer',
     'deleteLayer',
-    'addLayerToMap'
+    'addLayerToMap',
+    'showContentEditor'
 ]);
 
 export { wrapped as MyFeaturesHandler };

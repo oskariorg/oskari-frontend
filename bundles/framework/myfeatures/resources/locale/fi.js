@@ -66,7 +66,8 @@ Oskari.registerLocalization(
                 "remove": "Poista",
                 "removeButton": "Poista",
                 "actions": "Toiminnot",
-                "createDate": "Luontiaika"
+                "createDate": "Luontiaika",
+                "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
             "buttons": {

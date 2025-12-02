@@ -7,9 +7,16 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.request.
      * @static
      *
      * @param {string} layerId
+     * @param {Object} options
+     * ** saveFeatureCallback: function
+     * ** deleteFeatureCallback: function
+     * ** etc.
+     *
      */
-    function (layerId) {
+    function (layerId, options) {
         this._layerId = layerId;
+        this._options = options || null;
+
     }, {
         /** @static @property __name request name */
         __name: 'ContentEditor.ShowContentEditorRequest',
@@ -20,16 +27,25 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.request.
         getName: function () {
             return this.__name;
         },
+
         /**
-         * @method getEditMap
+         * @method getLayerId
          */
         getLayerId: function () {
             return this._layerId;
+        },
+
+        /**
+         * @method getLayerId
+         */
+        getOptions: function () {
+            return this._options;
         }
+
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ['Oskari.mapframework.request.Request']
+        protocol: ['Oskari.mapframework.request.Request']
     });

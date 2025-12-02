@@ -67,7 +67,8 @@ Oskari.registerLocalization(
                 "remove": "Delete",
                 "removeButton": "Delete",
                 "actions": "Actions",
-                "createDate": "Created"
+                "createDate": "Created",
+                "contentEditor": "Content editor"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset \"{name}\"?",
             "buttons": {
