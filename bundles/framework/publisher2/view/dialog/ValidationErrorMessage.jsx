@@ -24,14 +24,16 @@ const ButtonContainer = styled('div')`
     display: flex;
     justify-content: center;
 `;
-
+// Use li as label component to make bullet match the message on multi-row messages
+const ListItem = styled.li``;
 const ValidationErrorMessage = ({ errors, closeCallback }) => {
     return <MessageContainer>
         <ErrorList>
             { errors.map(({ error, field, args }) => (
-                <li key={field}>
-                    <Message bundleKey={BUNDLE_KEY} messageKey={error} messageArgs={args}/>
-                </li>
+                <Message key={field} LabelComponent={ ListItem }
+                    bundleKey={BUNDLE_KEY}
+                    messageKey={error}
+                    messageArgs={args} />
             ))}
         </ErrorList>
         <ButtonContainer>

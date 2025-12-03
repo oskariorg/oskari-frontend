@@ -41,8 +41,7 @@ Oskari.registerLocalization(
                         "sv": "Švédčina",
                         "en": "Angličtina"
                     },
-                    "tooltip": "Vyberte jazyk, ktorý sa použije na koncovej mape. Bude to mať vplyv na používateľské rozhranie a text na mape. Poznámka! Výber jazyka nie je viditeľný v náhľade.",
-                    "languageChangedDisclaimer": "Poznámka! Výber jazyka nie je viditeľný v náhľade."
+                    "tooltip": "Vyberte jazyk, ktorý sa použije na koncovej mape. Bude to mať vplyv na používateľské rozhranie a text na mape. Poznámka! Výber jazyka nie je viditeľný v náhľade."
                 }
             },
             "mapPreview": {
