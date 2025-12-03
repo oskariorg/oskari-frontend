@@ -55,7 +55,7 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
                             className='t_edit'
                             title={<Message messageKey='tab.grid.contentEditor' />}
                             icon={<CompassOutlined style={EDIT_ICON_STYLE} />}
-                            onClick={() => controller.showContentEditor(item.key)}
+                            onClick={() => controller.showFeatureEditorDialog(item.key)}
                         />
                         <IconButton
                             className='t_edit'

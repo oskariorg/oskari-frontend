@@ -1,6 +1,7 @@
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showLayerForm } from '../view/LayerForm';
 import { BUNDLE_KEY, MAX_SIZE, ERRORS, LAYER_TYPE } from '../constants';
+import { showFeatureEditorFlyout } from '../view/FeatureEditorFlyout/FeatureEditorFlyout';
 
 class MyFeaturesHandler extends StateHandler {
     constructor (instance, myFeaturesLayerService) {
@@ -49,6 +50,26 @@ class MyFeaturesHandler extends StateHandler {
         const update = values => this.updateLayer(id, values);
         const onOk = isImport ? save : update;
         this.popupControls = showLayerForm(values, conf, onOk, () => this.popupCleanup());
+    }
+
+    /**
+     * Opens the flyout to edit the features of the given layer
+     */
+    showFeatureEditorDialog (layerId) {
+
+        if (this.featureEditorControls) {
+            this.closeFeatureEditorFlyout();
+        }
+
+        this.featureEditorControls = showFeatureEditorFlyout(layerId, this);
+    }
+
+    closeFeatureEditorFlyout () {
+        if (this.featureEditorControls) {
+            this.featureEditorControls.close();
+        }
+        this.featureEditorControls = null;
+
     }
 
     getMaxSize () {
@@ -221,18 +242,6 @@ class MyFeaturesHandler extends StateHandler {
         console.log('tbd delete ', layerId, feature);
     }
 
-    /**
-     * Opens the content editor panel for a given myfeatures' layer.
-     * TODO: This is a temp / quick and dirty solution only. We should have the contenteditor add a tool for the layer and the said tool
-     * should open content editor for the layer so we don't have a coupling between content editor <> myfeatures. But for development's sake going with this for now.
-     */
-    showContentEditor (layerId) {
-        this.sandbox.postRequestByName('ContentEditor.ShowContentEditorRequest', [layerId, {
-            saveFeatureCallback: this.saveFeature,
-            deleteFeatureCallback: this.deleteFeature
-        }]);
-    }
-
     createEventHandlers () {
         const handlers = {
             MapLayerEvent: (event) => {
@@ -260,7 +269,7 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'editLayer',
     'deleteLayer',
     'addLayerToMap',
-    'showContentEditor'
+    'showFeatureEditorDialog'
 ]);
 
 export { wrapped as MyFeaturesHandler };
