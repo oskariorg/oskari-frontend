@@ -44,7 +44,7 @@ Oskari.registerLocalization(
             "generalInfo": {
                 "label": "Julkaisutiedot",
                 "domain": {
-                    "label": "Salli julkaisu vain seuraavassa verkko-osoitteessa",
+                    "label": "Salli julkaisu vain verkko-osoitteessa",
                     "placeholder": "Sivuston osoite",
                     "tooltip": "Anna verkkosivuston osoite eli domain-nimi ilman http-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com.",
                     "inputWarning": "Tarkista syötetty verkko-osoite"
@@ -52,7 +52,7 @@ Oskari.registerLocalization(
                 "name": {
                     "label": "Kartan nimi (pakollinen)",
                     "placeholder": "Kartan nimi",
-                    "tooltip": "Anna kartalle nimi. Ota huomioon kartalla käytössä oleva kieli."
+                    "tooltip": "Anna kartalle kuvaava nimi."
                 },
                 "language": {
                     "label": "Käyttöliittymän kieli",
@@ -61,13 +61,12 @@ Oskari.registerLocalization(
                         "sv": "ruotsi",
                         "en": "englanti"
                     },
-                    "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja kartalla näkyviin teksteihin. Huom! Kielivalinnat eivät näy esikatselukartalla.",
-                    "languageChangedDisclaimer": "Huom! Kielivalinnat eivät näy esikatselukartalla."
+                    "tooltip": "Valitse käyttöliittymän teksteissä käytettävä kieli. Huom! Kielivalinnat eivät näy esikatselukartalla."
                 }
             },
             "mapPreview": {
                 "label": "Kartan koko",
-                "tooltip": "Valitse kartan koko. Suositus on käyttää skaalautuvaa vaihtoehtoa \"Tilan täyttävä\". Muussa tapauksessa leveyden on oltava välillä {minWidth} ja {maxWidth} pikseliä ja korkeuden {minHeight} ja {maxHeight} pikseliä."
+                "tooltip": ""
             },
             "tools": {
                 "label": "Työkalut",
@@ -79,7 +78,7 @@ Oskari.registerLocalization(
                 "tooltip": "Valitse, miten työkalut asetellaan kartalle.",
                 "swapUI": "Vaihda puolet",
                 "userlayout": "Oma asettelu",
-                "usereditmodeoff": "Tallenna asettelu"
+                "usereditmodeoff": "Lukitse asettelu"
             },
             "statsgrid": {
                 "label": "Teemakartat",
@@ -118,14 +117,14 @@ Oskari.registerLocalization(
                 "gfiDialog": {
                     "title": "Kohdetiedot",
                     "featureName": "Esikatselu",
-                    "featureDesc": "Ulkoasuvalinnat vaikuttavat kohdetietojen ja karttatasovalikon ulkoasuun."
+                    "featureDesc": "Ulkoasuvalinnat vaikuttavat kohdetietojen ulkoasuun."
                 }
             },
             "sizes": {
                 "small": "Pieni",
                 "medium": "Keskikokoinen",
                 "large": "Suuri",
-                "fill": "Tilan täyttävä",
+                "fill": "Tilan täyttävä (suositus)",
                 "custom": "Määritä oma koko",
                 "width": "leveys",
                 "height": "korkeus",
@@ -161,7 +160,7 @@ Oskari.registerLocalization(
                 "title": "Virhe",
                 "size": "Kartan koko on virheellinen. Leveyden on oltava {minWidth} - {maxWidth} pikseliä ja korkeuden {minHeight} - {maxHeight} pikseliä.",
                 "domain": "Verkkosivuston osoite on pakollinen tieto. Anna sivuston osoite ja yritä uudelleen.",
-                "domainStart": "Verkkosivuston osoite on väärässä muodossa. Anna osoite ilman http-etuliitteitä ja yritä uudelleen.",
+                "domainStart": "Verkkosivuston osoite on väärässä muodossa. Anna osoite ilman http-etuliitettä.",
                 "name": "Kartan nimi on pakollinen tieto.",
                 "nohelp": "Ohjetta ei löytynyt.",
                 "saveFailed": "Kartan tallennus epäonnistui.",

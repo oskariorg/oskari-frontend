@@ -44,7 +44,7 @@ Oskari.registerLocalization(
             "generalInfo": {
                 "label": "Webbplats",
                 "domain": {
-                    "label": "Tillåt publicering endast på följande webbadress",
+                    "label": "Tillåt publicering endast på webbadress",
                     "placeholder": "Webbplats adress",
                     "tooltip": "Skriv namnet på webbplatsens hemsida dvs. domainnamn utan prefixerna http och www samt utan undersida. Exempel: minhemsida.com",
                     "inputWarning": "Kontrollera nätverksadressen du angav"
@@ -61,13 +61,12 @@ Oskari.registerLocalization(
                         "sv": "Svenska",
                         "en": "Engelska"
                     },
-                    "tooltip": "Välj ett språk på kartan. Språket användas på användargänsnitt och text på kartan. Obs! Valt språk visas inte på förhandsvisningskartan.",
-                    "languageChangedDisclaimer": "Obs! Valt språk visas inte på förhandsvisningskartan."
+                    "tooltip": "Välj ett språk på användargänsnitt. Obs! Valt språk visas inte på förhandsvisningskartan."
                 }
             },
             "mapPreview": {
                 "label": "Kartans storlek",
-                "tooltip": "Välj kartans storlek. Vi rekommenderar den skalbara funktionen \"Skalbar / Fyll utrymmet\". Annars skall bredden vara minst {minWidth} och högst {maxWidth} pixel, och bredden mellan {minHeight} och {maxHeight} pixel."
+                "tooltip": ""
             },
             "tools": {
                 "label": "Verktyg",
@@ -118,14 +117,14 @@ Oskari.registerLocalization(
                 "gfiDialog": {
                     "title": "Objektinformation",
                     "featureName": "Förhandsgranskning",
-                    "featureDesc": "Utseendeval påverkar objektinformationens och kartlagermenyns utseende."
+                    "featureDesc": "Utseendeval påverkar objektinformationens utseende."
                 }
             },
             "sizes": {
                 "small": "Liten",
                 "medium": "Medelstor",
                 "large": "Stor",
-                "fill": "Fyller utrymmet",
+                "fill": "Fyller utrymmet (rekommenderat)",
                 "custom": "Ange egen storlek",
                 "width": "bredd",
                 "height": "höjd",

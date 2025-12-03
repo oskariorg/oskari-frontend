@@ -44,7 +44,7 @@ Oskari.registerLocalization(
             "generalInfo": {
                 "label": "Basic settings",
                 "domain": {
-                    "label": "Allow publication only at the following web address",
+                    "label": "Allow publication only at the web address",
                     "placeholder": "Allowed domain",
                     "tooltip": "Type a website URL-address without prefixes or a subpage address. For example: homepage.com.",
                     "inputWarning": "Verify typed web address"
@@ -61,13 +61,12 @@ Oskari.registerLocalization(
                         "sv": "Swedish",
                         "en": "English"
                     },
-                    "tooltip": "Select a language to be used on the final map. It affects the user interface and text on the map. Note! The language selection is not visible on the preview.",
-                    "languageChangedDisclaimer": "Note! The language selection is not visible on the preview."
+                    "tooltip": "Select a language to be used on the user interface. Note! The language selection is not visible on the preview."
                 }
             },
             "mapPreview": {
                 "label": "Map Size",
-                "tooltip": "Determine the size of the map. The recommendation is to use the option \"Scalable/ Responsive\". Otherwise, the width should be from {minWidth} to {maxWidth} pixels and the height from {minHeight} to {maxHeight} pixels."
+                "tooltip": ""
             },
             "tools": {
                 "label": "Tools",
@@ -79,7 +78,7 @@ Oskari.registerLocalization(
                 "tooltip": "Select a placement for map tools.",
                 "swapUI": "Swap sides",
                 "userlayout": "Custom placement",
-                "usereditmodeoff": "Save placement"
+                "usereditmodeoff": "Finish placement"
             },
             "statsgrid": {
                 "label": "Thematic maps",
@@ -118,14 +117,14 @@ Oskari.registerLocalization(
                 "gfiDialog": {
                     "title": "Feature data",
                     "featureName": "Preview",
-                    "featureDesc": "The selected layout options affects a graphic layout of feature and map layer popup info windows."
+                    "featureDesc": "The selected layout options affect the graphic layout of feature data popup windows."
                 }
             },
             "sizes": {
                 "small": "Small",
                 "medium": "Medium",
                 "large": "Large",
-                "fill": "Responsive",
+                "fill": "Responsive (recommended)",
                 "custom": "Custom size",
                 "width": "width",
                 "height": "height",
@@ -160,9 +159,9 @@ Oskari.registerLocalization(
             "error": {
                 "title": "Error",
                 "size": "The map size is invalid. The width must be {minWidth} - {maxWidth} pixels and height {minHeight} - {maxHeight} pixels.",
-                "domain": "The website is required. Please type an address and try again.",
-                "domainStart": "The website is invalid. Please type an address without http or www prefixes and try again.",
-                "name": "The map name is required. Please type a name and try again.",
+                "domain": "The website is required.",
+                "domainStart": "The website is invalid. Please type an address without http prefix and try again.",
+                "name": "The map name is required.",
                 "nohelp": "The user guide is not available.",
                 "saveFailed": "The embedded map could not be saved.",
                 "nameIllegalCharacters": "The map name contains illegal characters (e.g. html-tags). Please correct the name and try again.",

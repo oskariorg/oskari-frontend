@@ -57,8 +57,7 @@ Oskari.registerLocalization(
                         "sv": "Suédois",
                         "en": "Anglais"
                     },
-                    "tooltip": "Sélectionner une langue à utiliser dans la carte finale. Elle a une incidence sur l'interface utilisateur et le texte de la carte. Remarque! Le choix de la langue n'est pas visible dans la prévisualisation.",
-                    "languageChangedDisclaimer": "Remarque! Le choix de la langue n'est pas visible dans la prévisualisation."
+                    "tooltip": "Sélectionner une langue à utiliser dans la carte finale. Elle a une incidence sur l'interface utilisateur et le texte de la carte. Remarque! Le choix de la langue n'est pas visible dans la prévisualisation."
                 }
             },
             "mapPreview": {
