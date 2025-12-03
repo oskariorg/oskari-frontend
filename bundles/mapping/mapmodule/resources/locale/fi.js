@@ -175,7 +175,7 @@ Oskari.registerLocalization(
                 },
                 "titles": {
                     "mode": "Päivitystiheys",
-                    "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
+                    "mobileOnly": "Vain mobiililaitteissa",
                     "centerMapAutomatically": "Automaattisesti, kun kartta avataan"
                 }
             },

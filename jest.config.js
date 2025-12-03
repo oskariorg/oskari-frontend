@@ -30,6 +30,7 @@ As an example if you see something like this as an error:
 
 You need to add the module (path after node_modules) to the list below (here it's 'earcut')
          */
-        'node_modules/(?!(ol|color-parse|color-space|color-rgba|color-name|antd|earcut|rc-util|jsts|geotiff|quick-lru|rbush|quickselect|pbf|mapbox-to-css-font)).+\\.js$'
+        // oskari-frontend is included to make sharing jest.config possible when oskari-frontend is a dependency of the app being tested (for example pti-frontend)
+        'node_modules/(?!(oskari-frontend|ol|color-parse|color-space|color-rgba|color-name|antd|earcut|rc-util|jsts|geotiff|quick-lru|rbush|quickselect|pbf|mapbox-to-css-font)).+\\.js$'
     ]
 };
