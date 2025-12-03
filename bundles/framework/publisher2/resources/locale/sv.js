@@ -89,7 +89,7 @@ Oskari.registerLocalization(
                 "title": {
                     "popup": "Popup-fönster",
                     "buttons": "Knappar",
-                    "infobox": "Frågverktyg av objektuppgifter"
+                    "infobox": "Frågeverktyg för objektsuppgifter"
                 },
                 "fields": {
                     "toolStyles": {
