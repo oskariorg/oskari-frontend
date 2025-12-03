@@ -112,7 +112,7 @@ Oskari.registerLocalization(
                     "buttonAccentColor": "Ikonernas effektfärg",
                     "buttonRounding": "Knapparnas avrundning",
                     "effect": "Effekt",
-                    "3d": "Tredimensionell",
+                    "3d": "3D",
                     "presets": "Färdiga stilar"
                 },
                 "gfiDialog": {

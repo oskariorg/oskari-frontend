@@ -98,8 +98,8 @@ Oskari.registerLocalization(
                         "rounded-light": "Rounded (light)",
                         "sharp-dark": "Angular (dark)",
                         "sharp-light": "Angular (light)",
-                        "3d-dark": "Three-dimensional (dark)",
-                        "3d-light": "Three-dimensional (light)"
+                        "3d-dark": "3D (dark)",
+                        "3d-light": "3D (light)"
                     },
                     "font": "Font",
                     "popupHeaderColor": "Title background color",
@@ -112,7 +112,7 @@ Oskari.registerLocalization(
                     "buttonAccentColor": "Icon effect color",
                     "buttonRounding": "Button rounding",
                     "effect": "Effect",
-                    "3d": "Three-dimensional",
+                    "3d": "3D",
                     "presets": "Preset styles"
                 },
                 "gfiDialog": {

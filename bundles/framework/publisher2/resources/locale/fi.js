@@ -36,7 +36,7 @@ Oskari.registerLocalization(
         },
         "BasicView": {
             "title": "Karttajulkaisu",
-            "titleEdit": "Muokkaa karttaa",
+            "titleEdit": "Muokkaa julkaistua karttaa",
             "transfer": {
                 "label": "Siirrä konfiguraatio",
                 "PublishTransfer": "Salli siirto"
@@ -112,7 +112,7 @@ Oskari.registerLocalization(
                     "buttonAccentColor": "Ikonien tehosteväri",
                     "buttonRounding": "Painikkeiden pyöristys",
                     "effect": "Efekti",
-                    "3d": "Kolmiulotteinen",
+                    "3d": "3D",
                     "presets": "Valmiit tyylit"
                 },
                 "gfiDialog": {
