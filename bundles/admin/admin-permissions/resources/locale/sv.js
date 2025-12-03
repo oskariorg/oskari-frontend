@@ -3,13 +3,13 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "admin-permissions",
     "value": {
-        "title": "Rätter för kartlager",
+        "title": "Rättigheter för kartlager",
         "desc": "",
         "tile": {
-            "title": "Rätter för kartlager"
+            "title": "Rättigheter för kartlager"
         },
         "flyout": {
-            "title": "Rätter för kartlager",
+            "title": "Rättigheter för kartlager",
             "instruction": "Börja med att välja en roll",
             "unsavedChangesConfirm": "Du kommer att förlora dina osparade ändringar, vill du fortsätta?",
             "name": "Kartlager"
