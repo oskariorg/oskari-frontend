@@ -69,7 +69,6 @@ class MyFeaturesHandler extends StateHandler {
             this.featureEditorControls.close();
         }
         this.featureEditorControls = null;
-
     }
 
     getMaxSize () {
@@ -269,7 +268,8 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'editLayer',
     'deleteLayer',
     'addLayerToMap',
-    'showFeatureEditorDialog'
+    'showFeatureEditorDialog',
+    'closeFeatureEditorFlyout'
 ]);
 
 export { wrapped as MyFeaturesHandler };

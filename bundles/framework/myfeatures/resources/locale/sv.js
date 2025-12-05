@@ -92,6 +92,9 @@ Oskari.registerLocalization(
                 "styleName": "Namnge kartlagret och försök sedan på nytt."
             }
         },
+        "featureEditor": {
+            "title": "Feature editor"
+        },
         "layer": {
             "organization": "Egna dataset",
             "group": "Egna dataset"

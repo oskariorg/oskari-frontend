@@ -92,6 +92,9 @@ Oskari.registerLocalization(
                 "styleName": "Give the map layer a name and try again."
             }
         },
+        "featureEditor": {
+            "title": "Feature editor"
+        },
         "layer": {
             "organization": "Own datasets",
             "group": "Own datasets"

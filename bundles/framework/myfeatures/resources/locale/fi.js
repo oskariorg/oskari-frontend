@@ -91,6 +91,9 @@ Oskari.registerLocalization(
                 "styleName": "Anna karttatasolle nimi ja yritä sitten uudelleen."
             }
         },
+        "featureEditor": {
+            "title": "Sisältöeditori"
+        },
         "layer": {
             "organization": "Omat aineistot",
             "group": "Omat aineistot"
