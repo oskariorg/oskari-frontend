@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Message, Confirm } from 'oskari-ui';
 import { LocaleProvider, LocaleConsumer } from 'oskari-ui/util';
 import { FeaturePanel } from './FeaturePanel';
@@ -59,15 +59,19 @@ const Header = LocaleConsumer(({ getMessage, onClose, confirmExit }) => {
 });
 
 
-export const ContentEditorPanel = ({ layerId, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature}) => {
+export const ContentEditorPanel = ({ layerId, loading = false, onSave, onDelete, onClose, onCancel}) => {
 
+    const helperRef = useRef(null);
+    const startNewFeature = () => {
+        helperRef.current.startNewFeature();
+    };
     const [handlerState, setHandlerState] = useState(null);
     useEffect(() => {
-        const panelHandler = new ContentEditorPanelHandler(layerId);
-        panelHandler.addStateListener((newState) => {
+        helperRef.current = new ContentEditorPanelHandler(layerId);
+        helperRef.current.addStateListener((newState) => {
             setHandlerState(newState);
         });
-        panelHandler.init(layerId);
+        helperRef.current.init(layerId);
     }, []);
 
     if (!handlerState) {

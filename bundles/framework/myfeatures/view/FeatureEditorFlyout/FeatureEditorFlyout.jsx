@@ -19,7 +19,6 @@ const FeatureEditorContainer = ({ layerId, controller }) => {
             onCancel = {() => {
                 controller.closeFeatureEditorFlyout();
             }}
-            startNewFeature = {() => {}}
         />
     </>;
 };

@@ -115,6 +115,13 @@ export class ContentEditorPanelHandler extends StateHandler {
         this.getSandbox().postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layerId, isVisible]);
     }
 
+    startNewFeature () {
+        this.editFeature({
+            type: 'Feature',
+            properties: {}
+        });
+    }
+
     editFeature (geojson, confirmed) {
         //if (this._feature.)
         //confirmEdit(() => this._update());
