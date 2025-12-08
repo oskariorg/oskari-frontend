@@ -1,5 +1,33 @@
 # Release Notes
 
+## 3.3.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/58?closed=1
+
+### oskari-ui components
+
+Due to AntD deprecations we have removed the `<Option>` component (used with `<Select>`) from `oskari-ui`. Instead of using:
+
+```javascript
+import { Select, Option } from 'oskari-ui';
+...
+return <Select><Option/></Select>
+```
+Use this instead:
+
+```javascript
+import { Select} from 'oskari-ui';
+...
+const options = [{
+   'value': 'actual value',
+   'label': 'label to show for users',
+}];
+return <Select options={ options } />
+```
+The options will also have a `data-value` attribute attached to make it easier to detect correct elements for automated testing.
+See https://github.com/oskariorg/oskari-frontend/pull/2925 for details.
+
 ## 3.2.1
 
 For a full list of changes see:
