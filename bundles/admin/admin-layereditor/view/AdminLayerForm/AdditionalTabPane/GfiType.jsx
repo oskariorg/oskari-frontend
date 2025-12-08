@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Select, Option } from 'oskari-ui';
+import { Message, Select } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { InfoIcon } from 'oskari-ui/components/icons';
 import { StyledFormField } from '../styled';
@@ -20,13 +20,10 @@ export const GfiType = ({ layer, controller }) => {
                 <Select
                     value={value}
                     onChange={value => controller.setGfiType(value)}
-                >
-                    { options.map(option => (
-                        <Option key={option} value={option}>
-                            {option}
-                        </Option>
-                    )) }
-                </Select>
+                    options={ options.map(option => ({
+                        value: option, label: option
+                    })) }
+                />
             </StyledFormField>
         </Fragment>
     );

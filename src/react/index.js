@@ -1,6 +1,5 @@
 // https://ant.design/docs/react/migration-v5 => If you need to reset some basic styles, please import antd/dist/reset.css
 import 'antd/dist/reset.css';
-
 export { Alert } from './components/Alert';
 export { Badge } from './components/Badge';
 export { Button, ThemedButton } from './components/Button';
@@ -17,7 +16,7 @@ export { Opacity } from './components/Opacity';
 export { Popover } from './components/Popover';
 export { Radio } from './components/Radio';
 export { SearchInput } from './components/SearchInput';
-export { Select, Option } from './components/Select';
+export { Select } from './components/Select';
 export { Slider, ThemedSlider } from './components/Slider';
 export { Space } from './components/Space';
 export { Spin } from './components/Spin';

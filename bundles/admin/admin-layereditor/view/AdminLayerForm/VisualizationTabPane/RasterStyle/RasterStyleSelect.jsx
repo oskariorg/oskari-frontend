@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Option } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { IconButton } from 'oskari-ui/components/buttons';
 import { DefaultStyle, StyleField, StyleSelect, StyledFormField } from '../styled';
@@ -55,13 +55,13 @@ const RasterStyleSelect = ({ selected, styles, defaultName, setSelected, control
             <StyleSelect
                 value={selected}
                 onChange={setSelected}
-            >
-                { styles.map(style => (
-                    <Option key={style.name} value={style.name}>
-                        {getStyleLabel(style)}
-                    </Option>
-                )) }
-            </StyleSelect>
+                options={styles.map(style => (
+                    {
+                        value: style.name,
+                        label: getStyleLabel(style)
+                    }
+                ))}
+            />
             <DefaultStyle
                 checked={isDefaultStyle(selected)}
                 onClick={evt => onDefaultStyleChange(selected, evt.target.checked)}

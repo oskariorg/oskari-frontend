@@ -1,8 +1,8 @@
 import React from 'react';
 import { Input } from 'antd';
 import PropTypes from 'prop-types';
-import { Select, Option } from './Select';
-import { Collapse, Panel } from './Collapse';
+import { Select } from './Select';
+import { Collapse } from './Collapse';
 import { TextInput } from './TextInput';
 
 const protocols = ['https', 'http'];
@@ -22,6 +22,7 @@ export class UrlInput extends React.Component {
             };
         }
     }
+
     setProtocol (protocol) {
         if (!this.props.onChange) {
             return;
@@ -37,6 +38,7 @@ export class UrlInput extends React.Component {
             };
         });
     }
+
     onChange (event) {
         if (!this.props.onChange) {
             return;
@@ -97,24 +99,24 @@ export class UrlInput extends React.Component {
 
     render () {
         const { credentials = {}, urlCleanupFunction = null, ...other } = this.props;
+        const options = protocols.map((title) => ({ value: title, label: title + '://' })); //
         const protocolSelect = (
             <Select
                 value={this.state.protocol}
                 style={{ width: 90 }}
-                onSelect={(value) => this.setProtocol(value)} >
-                {protocols.map((title) => (
-                    <Option key={title} value={title}>{title}://</Option>
-                ))}
-            </Select>
+                onSelect={(value) => this.setProtocol(value)}
+                options={options}
+            />
         );
         const processedProps = {
             ...other,
+            urlCleanupFunction,
             value: undefined,
             onChange: this.onChange.bind(this),
             onBlur: this.onBlur.bind(this)
         };
 
-        let collapseProps = {}
+        const collapseProps = {};
 
         if (credentials.defaultOpen) {
             // Panel with this key is open as default

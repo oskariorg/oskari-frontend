@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Select, Option, Message, Tag } from 'oskari-ui';
+import { Select, Message, Tag } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
 import { InfoIcon } from 'oskari-ui/components/icons';
@@ -80,9 +80,15 @@ export const Srs = ({ layer, propertyFields, controller }) => {
             <Message messageKey='forcedSRS' />
             <InfoIcon title={<Message messageKey='forcedSRSInfo' />} />
             <StyledFormField>
-                <Select mode='tags' value={forced} onChange={forcedSRS => controller.setForcedSRS(forcedSRS)}>
-                    { systemProjections.map(cur => <Option key={cur}>{cur}</Option>) }
-                </Select>
+                <Select
+                    mode='tags'
+                    value={forced}
+                    onChange={forcedSRS => controller.setForcedSRS(forcedSRS)}
+                    options={systemProjections.map(cur => ({
+                        value: cur,
+                        label: cur
+                    }))}
+                />
             </StyledFormField>
         </Fragment>
     );

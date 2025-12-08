@@ -1,16 +1,28 @@
+import React from 'react';
 import { Select as AntSelect } from 'antd';
 import styled from 'styled-components';
 
 // Wrap to styled so components can be referred in component styling.
-const Select = styled(AntSelect)`
+
+const SelectWrapper = (props) => {
+
+    const { options } = props;
+    const newOptions = options.map((option) => ({
+        ...option,
+        'data-value': option['data-value'] ? option['data-value'] : option.value
+    }));
+
+    return <AntSelect
+        {...props}
+        options = { newOptions }
+    />;
+
+}
+
+const Select = styled(SelectWrapper)`
 `;
 Select.displayName = 'OskariUISelect';
 
-const Option = styled(AntSelect.Option)``;
-Option.displayName = 'OskariUIOption';
-Option.__OskariTestSelector = '.ant-select-item';
-
 export {
-    Select,
-    Option
+    Select
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Select, Option, Label } from 'oskari-ui';
+import { Message, Select, Label } from 'oskari-ui';
 
 const StyleSelection = styled('div')`
 display: flex;
@@ -18,16 +18,17 @@ export const StyleSelect = ({ layer, selectStyle }) => {
     if (!styles.length) {
         return null;
     }
-    let currentStyle = layer.getCurrentStyle() ? layer.getCurrentStyle().getName() : null;
+    const currentStyle = layer.getCurrentStyle() ? layer.getCurrentStyle().getName() : null;
+    const options = styles.map(style => ({value: style.getName(), label: style.getName()}));
+
     return (<StyleSelection>
         <Label><Message messageKey='plugin.LayerSelectionPlugin.style' /></Label>
-        <StyledSelect value={currentStyle} onChange={(s) => selectStyle(layer.getId(), s)} className="t_style">
-            {styles.map(style => (
-                <Option key={style.getName()} value={style.getName()}>
-                    {style.getTitle()}
-                </Option>
-            ))}
-        </StyledSelect>
+        <StyledSelect
+            value={currentStyle}
+            onChange={(s) => selectStyle(layer.getId(), s)}
+            className="t_style"
+            options={options}
+        />
     </StyleSelection>);
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Select, Option } from 'oskari-ui';
+import { Message, Select } from 'oskari-ui';
 
 const SelectContainer = styled('div')`
     display: flex;
@@ -25,15 +25,14 @@ export const LegendSelect = ({ legends, selected, onChange }) => {
     return (
         <SelectContainer>
             <Message messageKey='infotext' />
-            <Select value={selected} onChange={onChange} className="t_legends">
-                {
-                    legends.map(l =>
-                        <Option key={l.id} value={l.id}>
-                            {l.title}
-                        </Option>
-                    )
+            <Select
+                value={selected}
+                onChange={onChange}
+                className="t_legends"
+                options={
+                    legends.map(l => ({ value: l.id, label: l.title }))
                 }
-            </Select>
+            />
         </SelectContainer>
     );
 };

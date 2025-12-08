@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Select, Option, InputGroup, Button, Message } from 'oskari-ui';
+import { Select, InputGroup, Button, Message } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { THEME_COLOR } from '..';
 import { EditOutlined } from '@ant-design/icons';
@@ -24,11 +24,7 @@ const handleOwnStyleClick = ownStyleCallback => {
     }
 };
 
-const getOption = (style) => (
-    <Option key={style.getName()} value={style.getName()}>
-        {style.getTitle()}
-    </Option>
-);
+const getOption = (style) => ({ value: style.getName(), label: style.getTitle() });
 
 export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
     const styles = layer.getStyles();
@@ -61,14 +57,8 @@ export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
                                 disabled={styles.length < 2}
                                 onChange={onChange}
                                 popupMatchSelectWidth={false}
-                            >
-                                { styles.length < 2 &&
-                                    getOption(currentStyle)
-                                }
-                                { styles.length >= 2 &&
-                                    styles.map(getOption)
-                                }
-                            </StyledSelect>
+                                options={styles.length < 2 ? [getOption(currentStyle)] : styles.map(getOption)}
+                            />
                         )}
                         { styleTool &&
                             <Button style={{ paddingLeft: '5px', paddingRight: '5px' }}

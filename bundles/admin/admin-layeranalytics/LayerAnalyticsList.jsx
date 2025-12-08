@@ -1,7 +1,7 @@
 import React, { Fragment, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
-import { Message, Space, Spin, Tooltip, TextInput, Select, Option, Button } from 'oskari-ui';
+import { Message, Space, Spin, Tooltip, TextInput, Select, Button } from 'oskari-ui';
 import { DeleteButton, SecondaryButton, IconButton } from 'oskari-ui/components/buttons';
 import { SearchOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -44,66 +44,68 @@ export const LayerAnalyticsList = ThemeConsumer(({ theme, analyticsData, isLoadi
 
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-          <FilterContainer onKeyDown={(e) => e.stopPropagation()}>
-            <FilterFields>
-                {dataIndex === 'dataProducer' ? (
-                    <StyledSelect
-                        showSearch
-                        ref={selectInput}
-                        value={selectedKeys[0]}
-                        onChange={(value) => {
-                            setSelectedKeys(value ? [value] : []);
-                            confirm({ closeDropdown: true })
+            <FilterContainer onKeyDown={(e) => e.stopPropagation()}>
+                <FilterFields>
+                    {dataIndex === 'dataProducer' ? (
+                        <StyledSelect
+                            showSearch
+                            ref={selectInput}
+                            value={selectedKeys[0]}
+                            onChange={(value) => {
+                                setSelectedKeys(value ? [value] : []);
+                                confirm({ closeDropdown: true })
+                            }}
+                            options= {analyticsData
+                                .filter((value, index) => analyticsData.findIndex(val => value.dataProducer === val.dataProducer) === index)
+                                .map((data, index) => ({
+                                    value: data.dataProducer,
+                                    label: data.dataProducer
+                                }))}
+                        />
+                    ) : (
+                        <TextInput
+                            ref={searchInput}
+                            value={selectedKeys[0]}
+                            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                            onPressEnter={() => confirm({ closeDropdown: true })}
+                            allowClear
+                        />
+                    )}
+                </FilterFields>
+                <Space>
+                    {dataIndex !== 'dataProducer' && (
+                        <Button
+                            type="primary"
+                            onClick={() => confirm({ closeDropdown: true })}
+                            size="small"
+                        >
+                            <Message messageKey='flyout.filter' />
+                        </Button>
+                    )}
+                    <SecondaryButton
+                        type="clear"
+                        onClick={() => {
+                            clearFilters();
+                            confirm({ closeDropdown: true });
                         }}
-                    >
-                        {analyticsData.filter((value, index) => analyticsData.findIndex(val => value.dataProducer === val.dataProducer) === index).map((data, index) => (
-                            <Option key={index} value={data.dataProducer}>{data.dataProducer}</Option>
-                        ))}
-                    </StyledSelect>
-                ) : (
-                    <TextInput
-                        ref={searchInput}
-                        value={selectedKeys[0]}
-                        onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                        onPressEnter={() => confirm({ closeDropdown: true })}
-                        allowClear
-                    />
-                )}
-            </FilterFields>
-            <Space>
-                {dataIndex !== 'dataProducer' && (
-                    <Button
-                        type="primary"
-                        onClick={() => confirm({ closeDropdown: true })}
                         size="small"
-                    >
-                        <Message messageKey='flyout.filter' />
-                    </Button>
-                )}
-                <SecondaryButton
-                    type="clear"
-                    onClick={() => {
-                        clearFilters();
-                        confirm({ closeDropdown: true });
-                    }}
-                    size="small"
-                />
-            </Space>
-          </FilterContainer>
+                    />
+                </Space>
+            </FilterContainer>
         ),
         filterIcon: (filtered) => (
-          <SearchIcon $filtered={filtered} $theme={theme} />
+            <SearchIcon $filtered={filtered} $theme={theme} />
         ),
         onFilter: (value, record) =>
-          record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes((value).toLowerCase()),
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes((value).toLowerCase()),
         filterDropdownProps: {
             onOpenChange: (visible) => {
-              if (visible && dataIndex !== 'dataProducer') {
-                setTimeout(() => searchInput.current?.select(), 100);
-              }
+                if (visible && dataIndex !== 'dataProducer') {
+                    setTimeout(() => searchInput.current?.select(), 100);
+                }
             }
         },
         render: (text) => text
