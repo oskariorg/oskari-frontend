@@ -1,5 +1,12 @@
 # Release Notes
 
+## 3.2.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/59?closed=1
+
+- Only fixes to localizations.
+
 ## 3.2.0
 
 For a full list of changes see:
