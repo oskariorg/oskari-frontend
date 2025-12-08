@@ -92,7 +92,12 @@ Oskari.registerLocalization(
             }
         },
         "featureEditor": {
-            "title": "Sisältöeditori"
+            "title": "Sisältöeditori",
+            "featureUpdate": {
+                "header": "Kohde päivitetty",
+                "success": "Kohteen päivittäminen onnistui",
+                "error": "Kohteen päivittäminen epäonnistui"
+            }
         },
         "layer": {
             "organization": "Omat aineistot",

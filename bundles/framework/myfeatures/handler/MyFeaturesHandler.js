@@ -20,6 +20,10 @@ class MyFeaturesHandler extends StateHandler {
         this.refreshLayersList();
     };
 
+    getSandbox() {
+        return this.sandbox;
+    }
+
     popupCleanup () {
         if (this.popupControls) this.popupControls.close();
         this.popupControls = null;
@@ -233,8 +237,50 @@ class MyFeaturesHandler extends StateHandler {
         }
     }
 
-    async saveFeature(layerId, feature) {
-        console.log('savefeature tbd ', layerId, feature);
+    async saveFeature(layer, feature) {
+        // this is stoopid. fid should probably be a part of the feature. Or a modifiable prop?
+        const fid = feature?.properties?.fid || null;
+        delete feature.properties.fid;
+        // myf_ - prefixed version for finding the layer on map
+        const layerId = layer?.id;
+        // strip myf_ from the beginning of layerId for saving
+        const currentLayerUUID = layer?.id?.substring(4, layer.id.length) || null;
+        if (!currentLayerUUID) {
+            return;
+        }
+
+        const newMyFeature = {
+            layerId: currentLayerUUID,
+            fid: fid,
+            id: feature.id,
+            geometry: feature.geometry,
+            properties: feature.properties
+        };
+        const isNew = typeof feature.id === 'undefined';
+        const url = Oskari.urls.getRoute('MyFeaturesFeature', {
+            layerId: currentLayerUUID,
+            crs: this.getSandbox().getMap().getSrsName()
+        });
+        fetch(url, {
+            method: isNew ? 'POST': 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newMyFeature)
+        }).then(response => {
+            if (!response.ok) {
+                return Promise.reject(Error('Save failed'));
+            }
+            return response.json();
+        }).then(() => {
+            // TODO: close editor or somehow notify panel of success and keep editing? Closing editor for now
+            this.closeFeatureEditorFlyout();
+            setTimeout(() => {
+                this.getSandbox().postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true]);
+                Messaging.success(this.loc('featureEditor.featureUpdate.success'));
+            }, 500);
+            return;
+        }).catch(() => Messaging.error(this.loc('featureEditor.featureUpdate.error')));
     }
 
     async deleteFeature(layerId, feature) {

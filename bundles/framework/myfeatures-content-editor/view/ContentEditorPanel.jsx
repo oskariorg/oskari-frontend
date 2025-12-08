@@ -59,7 +59,7 @@ const Header = LocaleConsumer(({ getMessage, onClose, confirmExit }) => {
 });
 
 
-export const ContentEditorPanel = ({ layerId, feature = {}, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature}) => {
+export const ContentEditorPanel = ({ layerId, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature}) => {
 
     const [handlerState, setHandlerState] = useState(null);
     useEffect(() => {
@@ -74,16 +74,16 @@ export const ContentEditorPanel = ({ layerId, feature = {}, loading = false, onS
         return null;
     }
 
-    const { currentLayer } = handlerState;
+    const { currentLayer, feature } = handlerState;
     return <EditorPanel
         layer = { currentLayer }
         feature = { feature }
-        loading = {false}
-        onSave = { onSave}
-        onDelete = {onDelete}
-        onClose = {onClose}
-        onCancel = {onCancel}
-        startNewFeature = {startNewFeature}
+        loading = {false }
+        onSave = { (featureToSave) => onSave(currentLayer, featureToSave) }
+        onDelete = { (featureToDelete) => onDelete(handlerState?.currentLayer, featureToDelete) }
+        onClose = { onClose }
+        onCancel = { onCancel }
+        startNewFeature = { startNewFeature }
     />;
 };
 
@@ -108,7 +108,7 @@ const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDele
                         <FeaturePanel
                             layer={layer}
                             onCancel={onCancel}
-                            onSave={onSave}
+                            onSave={(feature) => onSave(feature)}
                             onDelete={onDelete}
                             feature={feature} />
                     }

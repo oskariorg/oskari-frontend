@@ -93,7 +93,11 @@ Oskari.registerLocalization(
             }
         },
         "featureEditor": {
-            "title": "Feature editor"
+            "title": "Feature editor",
+            "featureUpdate": {
+                "success": "Feature properties updated successfully",
+                "error": "Error occured during feature properties update"
+            },
         },
         "layer": {
             "organization": "Own datasets",

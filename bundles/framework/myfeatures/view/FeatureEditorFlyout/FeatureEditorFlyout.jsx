@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { showFlyout } from 'oskari-ui/components/window';
 import { ContentEditorPanel } from '../../../myfeatures-content-editor/view/ContentEditorPanel';
@@ -7,9 +8,10 @@ const FeatureEditorContainer = ({ layerId, controller }) => {
     return <>
         <ContentEditorPanel
             layerId = { layerId }
-            feature = { null }
             loading = {false}
-            onSave = {() => {}}
+            onSave = {(layer, feature) => {
+                controller.saveFeature(layer, feature);
+            }}
             onDelete = {() => {}}
             onClose = {() => {
                 controller.closeFeatureEditorFlyout();
