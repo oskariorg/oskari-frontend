@@ -84,7 +84,7 @@ export const ContentEditorPanel = ({ layerId, loading = false, onSave, onDelete,
         feature = { feature }
         loading = {false }
         onSave = { (featureToSave) => onSave(currentLayer, featureToSave) }
-        onDelete = { (featureToDelete) => onDelete(handlerState?.currentLayer, featureToDelete) }
+        onDelete = { (featureIdToDelete) => onDelete(currentLayer, featureIdToDelete) }
         onClose = { onClose }
         onCancel = { onCancel }
         startNewFeature = { startNewFeature }

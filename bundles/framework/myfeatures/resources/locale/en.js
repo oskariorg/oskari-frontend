@@ -98,6 +98,10 @@ Oskari.registerLocalization(
                 "success": "Feature properties updated successfully",
                 "error": "Error occured during feature properties update"
             },
+            "featureDelete": {
+                "success": "Feature deleted successfully",
+                "error": "Error occured during feature delete"
+            }
         },
         "layer": {
             "organization": "Own datasets",

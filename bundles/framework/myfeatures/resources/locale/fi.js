@@ -97,6 +97,10 @@ Oskari.registerLocalization(
                 "header": "Kohde päivitetty",
                 "success": "Kohteen päivittäminen onnistui",
                 "error": "Kohteen päivittäminen epäonnistui"
+            },
+            "featureDelete": {
+                "success": "Kohteen poisto onnistui",
+                "error": "Kohteen poistossa tapahtui virhe"
             }
         },
         "layer": {

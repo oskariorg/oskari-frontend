@@ -237,20 +237,29 @@ class MyFeaturesHandler extends StateHandler {
         }
     }
 
+    // strip myf_ from the beginning of layerId for db
+    getLayerUUID(layer) {
+        if (!layer?.id?.length > 4) {
+            return null;
+        }
+
+        return layer?.id?.substring(4, layer.id.length) || null;
+    }
+
     async saveFeature(layer, feature) {
-        // this is stoopid. fid should probably be a part of the feature. Or a modifiable prop?
         const fid = feature?.properties?.fid || null;
         delete feature.properties.fid;
-        // myf_ - prefixed version for finding the layer on map
-        const layerId = layer?.id;
-        // strip myf_ from the beginning of layerId for saving
-        const currentLayerUUID = layer?.id?.substring(4, layer.id.length) || null;
-        if (!currentLayerUUID) {
+
+        // keep prefix -> use in app.
+        const layerId = layer?.id || null;
+        // without prefix -> use wioth db
+        const layerUUID = this.getLayerUUID(layer);
+        if (!layerUUID) {
             return;
         }
 
         const newMyFeature = {
-            layerId: currentLayerUUID,
+            layerId: layerUUID,
             fid: fid,
             id: feature.id,
             geometry: feature.geometry,
@@ -258,7 +267,7 @@ class MyFeaturesHandler extends StateHandler {
         };
         const isNew = typeof feature.id === 'undefined';
         const url = Oskari.urls.getRoute('MyFeaturesFeature', {
-            layerId: currentLayerUUID,
+            layerId: layerUUID,
             crs: this.getSandbox().getMap().getSrsName()
         });
         fetch(url, {
@@ -283,8 +292,38 @@ class MyFeaturesHandler extends StateHandler {
         }).catch(() => Messaging.error(this.loc('featureEditor.featureUpdate.error')));
     }
 
-    async deleteFeature(layerId, feature) {
-        console.log('tbd delete ', layerId, feature);
+    async deleteFeature(layer, featureId) {
+        // keep prefix -> use in app.
+        const layerId = layer?.id || null;
+        const layerUUID = this.getLayerUUID(layer);
+        if (!layerUUID) {
+            return;
+        }
+        const url = Oskari.urls.getRoute('MyFeaturesFeature', {
+            layerId: layerUUID,
+            id: featureId,
+            crs: this.sandbox.getMap().getSrsName()
+        });
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                return Promise.reject(Error('Delete failed'));
+            }
+
+            // TODO: should deletefeature maybe return something useful?
+            return;
+        }).then(() => {
+            this.closeFeatureEditorFlyout();
+            setTimeout(() => {
+                this.getSandbox().postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true]);
+                Messaging.success(this.loc('featureEditor.featureDelete.success'));
+            }, 500);
+            return;
+        }).catch((exception) => Messaging.error(this.loc('featureEditor.featureDelete.error') + exception));
     }
 
     createEventHandlers () {
