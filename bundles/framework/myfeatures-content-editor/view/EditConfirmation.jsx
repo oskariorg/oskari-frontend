@@ -1,6 +1,6 @@
 import React from 'react';
 import { notification } from 'antd';
-import { Button } from 'oskari-ui';
+import { Button, Message } from 'oskari-ui';
 
 export const confirmEdit = (getMessage, onConfirm) => {
     const key = `open${Date.now()}`;
@@ -10,11 +10,11 @@ export const confirmEdit = (getMessage, onConfirm) => {
             onConfirm(true);
             notification.destroy(key);
         }}>
-        {getMessage('ContentEditorView.buttons.yes')}
+        {<Message bundleKey={'ContentEditor'} messageKey={'ContentEditorView.buttons.yes'}/>}
     </Button>);
     notification.open({
-        message: getMessage('ContentEditorView.editConfirm.title'),
-        description: getMessage('ContentEditorView.editConfirm.msg'),
+        message: <Message bundleKey={'ContentEditor'} messageKey={'ContentEditorView.editConfirm.title'}/>,
+        description: <Message bundleKey={'ContentEditor'} messageKey={'ContentEditorView.editConfirm.msg'}/>,
         btn: confirmBtn,
         key
     });
