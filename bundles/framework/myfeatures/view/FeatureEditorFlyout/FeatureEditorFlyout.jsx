@@ -13,7 +13,7 @@ const FeatureEditorContainer = ({ layerId, controller }) => {
                 controller.saveFeature(layer, feature);
             }}
             onDelete = {(layer, featureId) => {
-                controller.deleteFeature(layer, featureId)
+                controller.deleteFeature(layer, featureId);
             }}
             onClose = {() => {
                 controller.closeFeatureEditorFlyout();

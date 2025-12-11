@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Message, Confirm } from 'oskari-ui';
 import { LocaleProvider, LocaleConsumer } from 'oskari-ui/util';
 import { FeaturePanel } from './FeaturePanel';
@@ -32,40 +32,11 @@ const StyledPanel = styled('div')`
         height: calc(100% - 46px);
     }
 `;
-const FloatingIcon = styled('div')`
-    float: right;
-`;
-
-const Header = LocaleConsumer(({ getMessage, onClose, confirmExit }) => {
-    const iconProps = {};
-    if (!confirmExit) {
-        iconProps.onClick = onClose;
-    }
-    // TODO: we should ditch this header and add confirm to the flyouts header close-box. How?
-    return (
-        <div className="header">
-            <FloatingIcon>
-                <Confirm
-                    disabled={!confirmExit}
-                    title={<Message messageKey='ContentEditorView.exitConfirm'/>}
-                    onConfirm={onClose}
-                    okText={<Message messageKey='ContentEditorView.buttons.yes'/>}
-                    cancelText={<Message messageKey='ContentEditorView.buttons.no'/>}>
-                    <CloseCircleFilled {...iconProps}/>
-                </Confirm>
-            </FloatingIcon>
-            <h3><Message messageKey="ContentEditorView.title" /></h3>
-        </div>);
-});
-
 
 export const ContentEditorPanel = ({ layerId, loading = false, onSave, onDelete, onClose, onCancel}) => {
-
     const helperRef = useRef(null);
-    const startNewFeature = () => {
-        helperRef.current.startNewFeature();
-    };
     const [handlerState, setHandlerState] = useState(null);
+    const { currentLayer = null, feature = null } = handlerState || {};
     useEffect(() => {
         helperRef.current = new ContentEditorPanelHandler(layerId);
         helperRef.current.addStateListener((newState) => {
@@ -74,19 +45,48 @@ export const ContentEditorPanel = ({ layerId, loading = false, onSave, onDelete,
         helperRef.current.init(layerId);
     }, []);
 
+    const startNewFeature = useCallback(() => {
+        helperRef.current.startNewFeature();
+    }, []);
+
+    const closeCallbackWrapper = useCallback(() => {
+        helperRef.current.destroy();
+        onClose();
+    }, [onClose]);
+
+    const cancelCallbackWrapper = useCallback(() => {
+        helperRef.current.destroy();
+        onCancel();
+    }, [onCancel]);
+
+    const saveCallbackWrapper = useCallback((featureToSave) => {
+        if (!currentLayer) {
+            return;
+        };
+        helperRef.current.destroy();
+        onSave(currentLayer, featureToSave);
+    }, [currentLayer, onSave]);
+
+    const deleteCallbackWrapper = useCallback((featureIdToDelete) => {
+        if (!currentLayer) {
+            return;
+        };
+        helperRef.current.destroy();
+        onDelete(currentLayer, featureIdToDelete);
+    }, [currentLayer, onDelete]);
+
     if (!handlerState) {
         return null;
     }
 
-    const { currentLayer, feature } = handlerState;
     return <EditorPanel
         layer = { currentLayer }
         feature = { feature }
-        loading = {false }
-        onSave = { (featureToSave) => onSave(currentLayer, featureToSave) }
-        onDelete = { (featureIdToDelete) => onDelete(currentLayer, featureIdToDelete) }
-        onClose = { onClose }
-        onCancel = { onCancel }
+        loading = { false }
+        onSave = { saveCallbackWrapper }
+        onDelete = { deleteCallbackWrapper }
+        onClose = { closeCallbackWrapper }
+        onCancel = { cancelCallbackWrapper }
         startNewFeature = { startNewFeature }
     />;
 };
@@ -112,7 +112,7 @@ const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDele
                         <FeaturePanel
                             layer={layer}
                             onCancel={onCancel}
-                            onSave={(feature) => onSave(feature)}
+                            onSave={onSave}
                             onDelete={onDelete}
                             feature={feature} />
                     }

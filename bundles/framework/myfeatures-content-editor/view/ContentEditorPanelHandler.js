@@ -1,8 +1,6 @@
-//import React from 'react';
 import { StateHandler } from 'oskari-ui/util';
 import { Helper } from './Helper';
-// import { SidePanel } from './SidePanel';
-//import { DrawingHelper } from './DrawingHelper';
+import { DrawingHelper } from './DrawingHelper';
 import { confirmEdit } from './EditConfirmation';
 
 
@@ -67,6 +65,28 @@ export class ContentEditorPanelHandler extends StateHandler {
     }
 
     /**
+     * Destroys/removes this view from the screen.
+     * @method @public destroy
+     */
+    destroy () {
+        Object.keys(this.eventHandlers).forEach(eventName => {
+            this.getSandbox().unregisterFromEventByName(this, eventName);
+        });
+
+        this.stateListeners = [];
+        this.updateState({
+            currentLayer: null,
+            feature: null
+        });
+        DrawingHelper.stopDrawing();
+        // Restore layers hidden when the editor was started
+        this._tempHiddenLayers.forEach((layer) => this.changeLayerVisibility(layer.getId(), true));
+        this._tempHiddenLayers = null;
+
+        this.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [true, this.getName()]);
+    }
+
+    /**
      * @method @public getName
      * @return {String} the name for the component
      */
@@ -123,8 +143,6 @@ export class ContentEditorPanelHandler extends StateHandler {
     }
 
     editFeature (geojson, confirmed) {
-        //if (this._feature.)
-        //confirmEdit(() => this._update());
         if (typeof geojson === 'undefined') {
             // reset feature we were editing
             this.updateState({
