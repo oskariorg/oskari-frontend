@@ -38,17 +38,17 @@ const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate }) => 
     const hasChanged = !isNew && originalValue !== value;
     let labelForOriginal = originalValue;
     if (!labelForOriginal) {
-        labelForOriginal = (<Message messageKey="ContentEditorView.missingValue" />)
+        labelForOriginal = (<Message messageKey="FeatureEditorView.missingValue" />)
     }
-    const noteForOriginal = (<Message messageKey="ContentEditorView.originalValue">: {labelForOriginal}</Message>);
+    const noteForOriginal = (<Message messageKey="FeatureEditorView.originalValue">: {labelForOriginal}</Message>);
     return (
         <StyledFormField key={name}>
             { getFieldForType(name, type, value, onUpdate) }
             { hasChanged && <StyledContainer>
-                <Message messageKey="ContentEditorView.modified" LabelComponent={StyledModIndicator} />
+                <Message messageKey="FeatureEditorView.modified" LabelComponent={StyledModIndicator} />
                 <Tooltip title={noteForOriginal}>
                     <Button type="link" onClick={() => onUpdate(name, originalValue)}>
-                        <Message messageKey="ContentEditorView.restoreOriginal" />
+                        <Message messageKey="FeatureEditorView.restoreOriginal" />
                     </Button>
                 </Tooltip>
             </StyledContainer> }

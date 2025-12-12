@@ -63,24 +63,24 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
         return (
             <React.Fragment>
                 <StyledSpace>
-                    <Message messageKey="ContentEditorView.geometrylist.empty" />
+                    <Message messageKey="FeatureEditorView.geometrylist.empty" />
                 </StyledSpace>
                 { !isRecognized &&
-                    <StyledAlert message={<Message messageKey="ContentEditorView.geometrylist.notRecognized" messageArgs={{type}}/>} /> }
+                    <StyledAlert message={<Message messageKey="FeatureEditorView.geometrylist.notRecognized" messageArgs={{type}}/>} /> }
                 <Space>
                     { (!isRecognized || isPoint) &&
                         <Button onClick={() => startDrawing('Point')}>
-                            <Message messageKey="ContentEditorView.tools.point" />
+                            <Message messageKey="FeatureEditorView.tools.point" />
                         </Button>
                     }
                     { (!isRecognized || isLine) &&
                         <Button onClick={() => startDrawing('LineString')}>
-                            <Message messageKey="ContentEditorView.tools.line" />
+                            <Message messageKey="FeatureEditorView.tools.line" />
                         </Button>
                     }
                     { (!isRecognized || isPolygon) &&
                         <Button onClick={() => startDrawing('Polygon')}>
-                            <Message messageKey="ContentEditorView.tools.area" />
+                            <Message messageKey="FeatureEditorView.tools.area" />
                         </Button>
                     }
                 </Space>
@@ -103,16 +103,16 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
         return (
             <StyledSpace>
                 <StyledContainer>
-                    <Message messageKey="ContentEditorView.geometrylist.title" />
+                    <Message messageKey="FeatureEditorView.geometrylist.title" />
                     <EditButton onClick={() => startDrawing(feature.geometry?.type || type)}>
-                        <Message messageKey="ContentEditorView.tools.geometryEdit" />
+                        <Message messageKey="FeatureEditorView.tools.geometryEdit" />
                     </EditButton>
                 </StyledContainer>
                 <br />
                 {geometryChanged && <StyledContainer>
-                    <Message messageKey="ContentEditorView.modified" LabelComponent={StyledModIndicator}  />
+                    <Message messageKey="FeatureEditorView.modified" LabelComponent={StyledModIndicator}  />
                     <Button type="link" onClick={() => updateFeatureGeometry(feature, original.geometry)}>
-                        <Message messageKey="ContentEditorView.restoreOriginal" />
+                        <Message messageKey="FeatureEditorView.restoreOriginal" />
                     </Button>
                 </StyledContainer>}
             </StyledSpace>);
@@ -131,14 +131,14 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
         <div>
             <StyledSpace direction="vertical">
                 <StyledContainer>
-                    <Message messageKey="ContentEditorView.geometrylist.title" />
+                    <Message messageKey="FeatureEditorView.geometrylist.title" />
                     <Button onClick={() => startDrawing(type)}>
-                        <Message messageKey="ContentEditorView.tools.geometryEdit" />
+                        <Message messageKey="FeatureEditorView.tools.geometryEdit" />
                     </Button>
                 </StyledContainer>
                 { isMulti && <StyledList>
                     {feature.geometry.coordinates.map((feat, index) => {
-                        return (<GeometryRow 
+                        return (<GeometryRow
                             feature={feature}
                             index={index}
                             type={type}
@@ -147,9 +147,9 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
                     })}
                 </StyledList> }
                 {geometryChanged && <StyledContainer>
-                    <Message messageKey="ContentEditorView.modified" LabelComponent={StyledModIndicator} />
+                    <Message messageKey="FeatureEditorView.modified" LabelComponent={StyledModIndicator} />
                     <Button type="link" onClick={() => updateFeatureGeometry(feature, original.geometry)}>
-                        <Message messageKey="ContentEditorView.restoreOriginal" />
+                        <Message messageKey="FeatureEditorView.restoreOriginal" />
                     </Button>
                 </StyledContainer>}
             </StyledSpace>
@@ -157,7 +157,7 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
     </React.Fragment>);
 };
 
-const LAYER_NAME = 'ContentEditorPreview';
+const LAYER_NAME = 'FeatureEditorPreview';
 const initLayerOnMap = () => {
     Oskari.getSandbox().postRequestByName('VectorLayerRequest', [{
         "layerId": LAYER_NAME,
@@ -193,14 +193,14 @@ const wrapToCollection = (feature) => {
 }
 
 const addToMap = (geojson) => {
-    Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', 
+    Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest',
     [geojson, {
         layerId: LAYER_NAME,
         'clearPrevious': true
     }]);
 }
 const removeFromMap = () => {
-    Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', 
+    Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest',
     [null, null, LAYER_NAME]);
     //['test_property', 1, LAYER_NAME]);
 }
@@ -232,11 +232,11 @@ const GeometryRow = ({feature, type, index, onRemove}) => {
         <StyledListItem
             onMouseEnter={() => onMouseEnter(feature, index)}
             onMouseLeave={() => onMouseOut(feature, index)}>
-            <Message messageKey={ "ContentEditorView.geometrylist." + simpleType }> {index + 1}</Message>
+            <Message messageKey={ "FeatureEditorView.geometrylist." + simpleType }> {index + 1}</Message>
             <Button disabled={onlyGeometry}
                 type="dashed" danger
                 onClick={() => onRemove(feature, index)}>
-                    <Message messageKey="ContentEditorView.buttons.delete" />
+                    <Message messageKey="FeatureEditorView.buttons.delete" />
             </Button>
         </StyledListItem>);
 };

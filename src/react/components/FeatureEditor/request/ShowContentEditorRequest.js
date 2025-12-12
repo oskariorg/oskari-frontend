@@ -1,7 +1,7 @@
 /**
- * @class Oskari.bundles.framework.myfeatures-content-editor.request.ShowContentEditorRequest
+ * @class Oskari.bundles.framework.myfeatures-content-editor.request.ShowFeatureEditorRequest
  */
-Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.request.ShowContentEditorRequest',
+Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.request.ShowFeatureEditorRequest',
     /**
      * @method create called automatically on construction
      * @static
@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.request.
 
     }, {
         /** @static @property __name request name */
-        __name: 'ContentEditor.ShowContentEditorRequest',
+        __name: 'FeatureEditor.ShowFeatureEditorRequest',
         /**
          * @method getName
          * @return {String} request name

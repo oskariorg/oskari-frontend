@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Message, Confirm } from 'oskari-ui';
-import { LocaleProvider, LocaleConsumer } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { FeaturePanel } from './FeaturePanel';
 import { ErrorPanel } from './ErrorPanel';
 import { InfoPanel } from './InfoPanel';
-import { CloseCircleFilled } from '@ant-design/icons';
 
 import styled from 'styled-components';
-import { ContentEditorPanelHandler } from './ContentEditorPanelHandler';
+import { FeatureEditorPanelHandler } from './FeatureEditorPanelHandler';
 
 const StyledPanel = styled('div')`
     background: #FFF;
@@ -33,12 +31,12 @@ const StyledPanel = styled('div')`
     }
 `;
 
-export const ContentEditorPanel = ({ layerId, loading = false, onSave, onDelete, onClose, onCancel}) => {
+export const FeatureEditorPanel = ({ layerId, loading = false, onSave, onDelete, onClose, onCancel}) => {
     const helperRef = useRef(null);
     const [handlerState, setHandlerState] = useState(null);
     const { currentLayer = null, feature = null } = handlerState || {};
     useEffect(() => {
-        helperRef.current = new ContentEditorPanelHandler(layerId);
+        helperRef.current = new FeatureEditorPanelHandler(layerId);
         helperRef.current.addStateListener((newState) => {
             setHandlerState(newState);
         });
@@ -96,7 +94,7 @@ const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDele
     const hasFeature = hasLayer && feature?.type === 'Feature';
     const showHelpText = hasLayer && !hasFeature;
     return (
-        <LocaleProvider value={{ bundleKey: 'ContentEditor' }}>
+        <LocaleProvider value={{ bundleKey: 'oskariui' }}>
             <StyledPanel className="content-editor">
                 <div className="content">
                     { !hasLayer &&

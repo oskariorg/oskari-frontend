@@ -1,11 +1,11 @@
 Oskari.registerLocalization(
 {
     "lang": "fi",
-    "key": "MyFeaturesContentEditor",
+    "key": "MyFeaturesFeatureEditor",
     "value": {
         "title": "Sisältöeditori",
         "desc": "",
-        "ContentEditorView": {
+        "FeatureEditorView": {
             "title": "Sisältöeditori",
             "info": {
                 "layerLabel": "Muokataan tasoa",

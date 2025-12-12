@@ -15,18 +15,18 @@ const StyledCard = styled(Card)`
 export const InfoPanel = ({ layer = {}, startNewFeature, onClose}) => {
     return (
         <React.Fragment>
-            <Message messageKey="ContentEditorView.info.layerLabel" />:
+            <Message messageKey="FeatureEditorView.info.layerLabel" />:
             <Space direction="vertical">
                 <StyledCard title={layer.name}>
-                    <Message messageKey="ContentEditorView.info.featureModifyInfo" LabelComponent={Paragraph}/>
+                    <Message messageKey="FeatureEditorView.info.featureModifyInfo" LabelComponent={Paragraph}/>
                 </StyledCard>
-                
+
                 <Space>
                     <Button onClick={onClose}>
-                        <Message messageKey="ContentEditorView.buttons.close" />
+                        <Message messageKey="FeatureEditorView.buttons.close" />
                     </Button>
                     <Button onClick={startNewFeature}  type="primary">
-                        <Message messageKey="ContentEditorView.buttons.addFeature" />
+                        <Message messageKey="FeatureEditorView.buttons.addFeature" />
                     </Button>
                 </Space>
             </Space>

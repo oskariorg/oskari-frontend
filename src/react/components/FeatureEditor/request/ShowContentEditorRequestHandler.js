@@ -1,11 +1,11 @@
 /**
- * @class Oskari.bundles.framework.myfeatures-content-editor.request.ShowContentEditorRequestHandler
+ * @class Oskari.bundles.framework.myfeatures-content-editor.request.ShowFeatureEditorRequestHandler
  */
-Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.request.ShowContentEditorRequestHandler',
+Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.request.ShowFeatureEditorRequestHandler',
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.bundles.framework.myfeatures-content-editor.ContentEditorBundleInstance} instance
+     * @param {Oskari.bundles.framework.myfeatures-content-editor.FeatureEditorBundleInstance} instance
      *          reference to instance
      */
     function (instance) {
@@ -17,11 +17,11 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.request.
          * @param {Oskari.mapframework.core.Core} core
          *      reference to the application core (reference sandbox core.getSandbox())
          *      request to handle
-         * @param {Oskari.bundles.framework.myfeatures-content-editor.request.ShowContentEditorRequest} request
+         * @param {Oskari.bundles.framework.myfeatures-content-editor.request.ShowFeatureEditorRequest} request
          *      request to handle
          */
         handleRequest: function (core, request) {
-            this.instance.showContentEditor(request.getLayerId(), request.getOptions());
+            this.instance.showFeatureEditor(request.getLayerId(), request.getOptions());
         }
     }, {
         /**

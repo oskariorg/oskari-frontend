@@ -1,12 +1,12 @@
 Oskari.registerLocalization(
 {
     "lang": "en",
-    "key": "ContentEditor",
+    "key": "FeatureEditor",
     "value": {
-        "title": "Content editor",
+        "title": "Feature editor",
         "desc": "",
-        "ContentEditorView": {
-            "title": "Content editor",
+        "FeatureEditorView": {
+            "title": "Feature editor",
             "info": {
                 "layerLabel": "Modifying layer",
                 "featureModifyInfo": "Choose a feature to modify by clicking it on the map.",

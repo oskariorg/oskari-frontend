@@ -4,7 +4,7 @@ import { DrawingHelper } from './DrawingHelper';
 import { confirmEdit } from './EditConfirmation';
 
 
-export class ContentEditorPanelHandler extends StateHandler {
+export class FeatureEditorPanelHandler extends StateHandler {
 
     constructor() {
         super();

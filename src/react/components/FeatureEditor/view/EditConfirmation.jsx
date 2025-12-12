@@ -10,11 +10,11 @@ export const confirmEdit = (getMessage, onConfirm) => {
             onConfirm(true);
             notification.destroy(key);
         }}>
-        {<Message bundleKey={'ContentEditor'} messageKey={'ContentEditorView.buttons.yes'}/>}
+        {<Message bundleKey={'FeatureEditor'} messageKey={'FeatureEditorView.buttons.yes'}/>}
     </Button>);
     notification.open({
-        message: <Message bundleKey={'ContentEditor'} messageKey={'ContentEditorView.editConfirm.title'}/>,
-        description: <Message bundleKey={'ContentEditor'} messageKey={'ContentEditorView.editConfirm.msg'}/>,
+        message: <Message bundleKey={'FeatureEditor'} messageKey={'FeatureEditorView.editConfirm.title'}/>,
+        description: <Message bundleKey={'FeatureEditor'} messageKey={'FeatureEditorView.editConfirm.msg'}/>,
         btn: confirmBtn,
         key
     });

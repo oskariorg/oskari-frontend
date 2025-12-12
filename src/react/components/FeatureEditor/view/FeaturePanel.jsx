@@ -51,7 +51,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
         DrawingHelper.startDrawing(type, isMulti, currentFeature.geometry, updateGeometry);
         setDrawingMode(true);
     };
-    let title = <Message messageKey="ContentEditorView.newTitle" />;
+    let title = <Message messageKey="FeatureEditorView.newTitle" />;
     if (!isNew) {
         title = `${currentFeature.id}`;
     }
@@ -67,9 +67,9 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
 
                     { isDrawing &&
                         <React.Fragment>
-                            <Message messageKey="ContentEditorView.geometrylist.editing" />
+                            <Message messageKey="FeatureEditorView.geometrylist.editing" />
                             <Button type="primary" onClick={() => stopDrawing()}>
-                                <Message messageKey="ContentEditorView.tools.finishSketch" />
+                                <Message messageKey="FeatureEditorView.tools.finishSketch" />
                             </Button>
                         </React.Fragment>
                     }
@@ -88,11 +88,11 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
             </Card>
             <Space>
                 <Button onClick={cancelCb}>
-                    <Message messageKey="ContentEditorView.buttons.cancel" />
+                    <Message messageKey="FeatureEditorView.buttons.cancel" />
                 </Button>
                 {!isNew && <DeleteButton disabled={!canSave} onDelete={() => onDelete(currentFeature.id)} />}
                 <Button disabled={!canSave} type="primary" onClick={saveCb}>
-                    <Message messageKey="ContentEditorView.buttons.save" />
+                    <Message messageKey="FeatureEditorView.buttons.save" />
                 </Button>
             </Space>
         </StyledSpace>
@@ -102,12 +102,12 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
 const DeleteButton = LocaleConsumer(({ getMessage, onDelete, disabled }) => {
     return (
         <Confirm
-            title={getMessage('ContentEditorView.deleteFeature.text')}
+            title={getMessage('FeatureEditorView.deleteFeature.text')}
             onConfirm={onDelete}
-            okText={getMessage('ContentEditorView.buttons.yes')}
-            cancelText={getMessage('ContentEditorView.buttons.no')}>
+            okText={getMessage('FeatureEditorView.buttons.yes')}
+            cancelText={getMessage('FeatureEditorView.buttons.no')}>
             <Button type="danger" disabled={disabled}>
-                <Message messageKey="ContentEditorView.buttons.deleteFeature" />
+                <Message messageKey="FeatureEditorView.buttons.deleteFeature" />
             </Button>
         </Confirm>);
 });

@@ -1,5 +1,5 @@
 
-const DRAW_OPERATION_ID = 'ContentEditor';
+const DRAW_OPERATION_ID = 'FeatureEditor';
 const EVENT_NAME = 'DrawingEvent'
 
 let drawListener = null;

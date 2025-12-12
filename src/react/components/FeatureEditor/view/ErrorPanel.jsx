@@ -4,9 +4,9 @@ import { Message, Spin } from 'oskari-ui';
 
 export const ErrorPanel = ({ loading = false }) => {
     if (loading) {
-        return (<Spin><Message messageKey="ContentEditorView.info.loading"/></Spin>);
+        return (<Spin><Message messageKey="FeatureEditorView.info.loading"/></Spin>);
     }
-    return (<Message messageKey="ContentEditorView.info.problem"/>);
+    return (<Message messageKey="FeatureEditorView.info.problem"/>);
 };
 
 ErrorPanel.propTypes = {

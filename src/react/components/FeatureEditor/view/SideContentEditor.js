@@ -7,9 +7,9 @@ import { DrawingHelper } from './DrawingHelper';
 import { confirmEdit } from './EditConfirmation';
 
 /**
- * @class Oskari.bundles.framework.myfeatures-content-editor.view.SideContentEditor
+ * @class Oskari.bundles.framework.myfeatures-content-editor.view.SideFeatureEditor
  */
-Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.view.SideContentEditor',
+Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.view.SideFeatureEditor',
     function (sandbox, layerId, options) {
         this.sandbox = sandbox;
         const { onExit, saveFeatureCallback, deleteFeatureCallback } = options;
@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.view.Sid
 
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
-        this.loc = Oskari.getMsg.bind(null, 'ContentEditor');
+        this.loc = Oskari.getMsg.bind(null, 'FeatureEditor');
         Oskari.makeObservable(this);
         this.loading = false;
         this.on('loading', (newValue) => {
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.view.Sid
         this._setCurrentLayer(layerId);
 
     }, {
-        __name: 'ContentEditor',
+        __name: 'FeatureEditor',
         /**
          * @method @public getName
          * @return {String} the name for the component
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.view.Sid
                 return;
             }
             root.render(
-                <LocaleProvider value={{ bundleKey: 'ContentEditor' }}>
+                <LocaleProvider value={{ bundleKey: 'FeatureEditor' }}>
                     <SidePanel
                         loading={this.loading}
                         layer={this.getCurrentLayer()}
@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.view.Sid
                 id: layerId,
                 name: mapLayer.getName(Oskari.getDefaultLanguage())
             };
-            // Oskari.getSandbox().postRequestByName('ContentEditor.ShowContentEditorRequest', [2662])
+            // Oskari.getSandbox().postRequestByName('FeatureEditor.ShowFeatureEditorRequest', [2662])
             this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
             this._hideOtherVectorLayers(layerId);
             this.trigger('loading', true);
@@ -174,10 +174,10 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.view.Sid
                 this._stopEditing();
                 setTimeout(() => {
                     this.sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [this.getCurrentLayer().id, true]);
-                    Messaging.success(this.loc('ContentEditorView.featureUpdate.success'));
+                    Messaging.success(this.loc('FeatureEditorView.featureUpdate.success'));
                 }, 500);
                 return;
-            }).catch(() => Messaging.error(this.loc('ContentEditorView.featureUpdate.error')));
+            }).catch(() => Messaging.error(this.loc('FeatureEditorView.featureUpdate.error')));
         },
 
         _deleteFeature: function (featureId) {
@@ -200,9 +200,9 @@ Oskari.clazz.define('Oskari.bundles.framework.myfeatures-content-editor.view.Sid
                 this._stopEditing();
                 setTimeout(() => {
                     this.sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [this.getCurrentLayer().id, true]);
-                    Messaging.success(this.loc('ContentEditorView.featureDelete.success'));
+                    Messaging.success(this.loc('FeatureEditorView.featureDelete.success'));
                 }, 500);
-            }).catch(() => Messaging.error(this.loc('ContentEditorView.featureDelete.error')));
+            }).catch(() => Messaging.error(this.loc('FeatureEditorView.featureDelete.error')));
         },
 
         /**
