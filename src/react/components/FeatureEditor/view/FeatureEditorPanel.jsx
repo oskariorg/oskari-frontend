@@ -41,37 +41,16 @@ export const FeatureEditorPanel = ({ layerId, loading = false, onSave, onDelete,
             setHandlerState(newState);
         });
         helperRef.current.init(layerId);
+
+        // clean up
+        return () => {
+            helperRef.current.destroy();
+        }
     }, []);
 
     const startNewFeature = useCallback(() => {
         helperRef.current.startNewFeature();
     }, []);
-
-    const closeCallbackWrapper = useCallback(() => {
-        helperRef.current.destroy();
-        onClose();
-    }, [onClose]);
-
-    const cancelCallbackWrapper = useCallback(() => {
-        helperRef.current.destroy();
-        onCancel();
-    }, [onCancel]);
-
-    const saveCallbackWrapper = useCallback((featureToSave) => {
-        if (!currentLayer) {
-            return;
-        };
-        helperRef.current.destroy();
-        onSave(currentLayer, featureToSave);
-    }, [currentLayer, onSave]);
-
-    const deleteCallbackWrapper = useCallback((featureIdToDelete) => {
-        if (!currentLayer) {
-            return;
-        };
-        helperRef.current.destroy();
-        onDelete(currentLayer, featureIdToDelete);
-    }, [currentLayer, onDelete]);
 
     if (!handlerState) {
         return null;
@@ -81,10 +60,10 @@ export const FeatureEditorPanel = ({ layerId, loading = false, onSave, onDelete,
         layer = { currentLayer }
         feature = { feature }
         loading = { false }
-        onSave = { saveCallbackWrapper }
-        onDelete = { deleteCallbackWrapper }
-        onClose = { closeCallbackWrapper }
-        onCancel = { cancelCallbackWrapper }
+        onSave = { (featureToSave) => onSave(currentLayer, featureToSave) }
+        onDelete = { (featureIdToDelete) => onDelete(currentLayer, featureIdToDelete) }
+        onClose = { onClose }
+        onCancel = { onCancel }
         startNewFeature = { startNewFeature }
     />;
 };
