@@ -168,21 +168,21 @@ Oskari.registerLocalization(
         "publisherTools": {
             "ScaleBarPlugin": "Scale bar",
             "MyLocationPlugin": {
-                "toolLabel": "Center to location",
+                "toolLabel": "Center on user's location",
                 "modes": {
-                    "single": "Single",
-                    "continuous": "Continuous"
+                    "single": "Once",
+                    "continuous": "Continuously"
                 },
                 "titles": {
-                    "mode": "Mode",
-                    "mobileOnly": "Enable functionality only for mobile devices",
-                    "centerMapAutomatically": "Center map on user location at startup"
+                    "mode": "Update frequency",
+                    "mobileOnly": "Only on mobile devices",
+                    "centerMapAutomatically": "Automatically when map opens"
                 }
             },
             "PanButtons": {
                 "toolLabel": "Move to the original map view",
                 "titles": {
-                    "showArrows": "Pan tool"
+                    "showArrows": "Move map with arrow keys"
                 }
             },
             "GetInfoPlugin": {
@@ -199,23 +199,23 @@ Oskari.registerLocalization(
             },
             "LayerSelection": {
                 "toolLabel": "Map layers menu",
-                "selectAsBaselayer": "Select as baselayer",
-                "allowStyleChange": "Allow presentation style change",
+                "selectAsBaselayer": "Select as background map",
+                "allowStyleChange": "Allow selection of presentation style",
                 "showMetadata": "Show metadata links",
                 "noMultipleStyles": "Only single presentation style available on the selected map layers.",
                 "noMetadata": "No metadata links availabe on the selected map layers"
             },
             "SearchPlugin": {
-                "toolLabel": "Place search"
+                "toolLabel": "Address and placename search"
             },
             "ControlsPlugin": {
-                "toolLabel": "Pan by mouse"
+                "toolLabel": "Move map by dragging with mouse"
             },
             "PublisherToolbarPlugin": {
                 "toolLabel": "Map tools",
                 "history": "Move to previous or next view",
-                "measureline": "Measure distance",
-                "measurearea": "Measure area"
+                "measureline": "Distance measurement",
+                "measurearea": "Area measurement"
             }
         }
     }

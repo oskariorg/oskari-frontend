@@ -41,8 +41,7 @@ Oskari.registerLocalization(
                         "sv": "Rootsi",
                         "en": "Inglise"
                     },
-                    "tooltip": "Määra mis keeles lõimkaart on lõplikus versioonis. Lõimkaardi keel eelvaates ei avaldu.",
-                    "languageChangedDisclaimer": "Oluline! Lõimkaardi keel eelvaates ei avaldu."
+                    "tooltip": "Määra mis keeles lõimkaart on lõplikus versioonis. Lõimkaardi keel eelvaates ei avaldu."
                 }
             },
             "mapPreview": {

@@ -1,5 +1,40 @@
 # Release Notes
 
+## 3.3.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/58?closed=1
+
+### oskari-ui components
+
+Due to AntD deprecations we have removed the `<Option>` component (used with `<Select>`) from `oskari-ui`. Instead of using:
+
+```javascript
+import { Select, Option } from 'oskari-ui';
+...
+return <Select><Option/></Select>
+```
+Use this instead:
+
+```javascript
+import { Select} from 'oskari-ui';
+...
+const options = [{
+   'value': 'actual value',
+   'label': 'label to show for users',
+}];
+return <Select options={ options } />
+```
+The options will also have a `data-value` attribute attached to make it easier to detect correct elements for automated testing.
+See https://github.com/oskariorg/oskari-frontend/pull/2925 for details.
+
+## 3.2.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/59?closed=1
+
+- Only fixes to localizations.
+
 ## 3.2.0
 
 For a full list of changes see:
@@ -15,20 +50,15 @@ Examples for changes needed on oskari-frontend can be found on https://github.co
 For most bundles can be migrated with these steps:
 
 Replace: `import ReactDOM from 'react-dom';`
-With `import { createRoot } from 'react-dom/client';`
-
-Add a helper for maintaining root element reference:
-```javascript
-getReactRoot (element) {
-    if (!this._reactRoot) {
-        this._reactRoot = createRoot(element);
-    }
-    return this._reactRoot;
-},
-```
+With `import { getReactRoot } from 'oskari-ui/components/window';`
 
 Replace: `ReactDOM.render(<jsx/>, element)`
-With: `this.getReactRoot(template[0]).render(<jsx/>)`
+With: `getReactRoot(element).render(<jsx/>)`
+
+If you need to unmount the React-component:
+
+Add import `import { unmountReactRoot } from 'oskari-ui/components/window';`
+Call `unmountReactRoot(element);` instead of `ReactDOM.unmountComponentAtNode(element);`
 
 PropTypes are not functioning with the new React version like before. As they are being removed from React:
  https://react.dev/blog/2024/04/25/react-19-upgrade-guide#removed-deprecated-react-apisv
@@ -68,12 +98,11 @@ Support for different kinds of mapmodule plugins have been historically required
 
 The plugins they register are now started by default even if not referenced in the `mapfull.conf.plugins` array:
 - `Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin`
-- `Oskari.wfsvector.WfsVectorLayerPlugin`
 - `Oskari.mapframework.mapmodule.VectorLayerPlugin`
 - `Oskari.mapframework.mapmodule.WmsLayerPlugin`
 - `Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin`
 
-If you need to pass some configuration for these plugins, you will need to do it by including them on the `mapfull.conf.plugins` array like before. Otherwise references can be removed from the database.
+If you need to pass some configuration for these plugins, you will need to do it by including them on the `mapfull.conf.plugins` array like before. Otherwise references can be removed from the database. 
 
 You can remove imports from your applications `main.js` to these (the imports will fail since bundle.js files have been removed from packages-folder, but they are automatically included now).
 
@@ -81,6 +110,48 @@ You can remove imports from your applications `main.js` to these (the imports wi
 - import 'oskari-loader!oskari-frontend/packages/mapping/ol/wfsvector/bundle.js';
 - import 'oskari-loader!oskari-frontend/packages/mapping/ol/mapwmts/bundle.js';
 ```
+
+### Preview of upcoming bundle: myfeatures
+
+The release includes a new bundle `myfeatures` that can be used in place of the `userlayer`-functionality (`myplacesimport`). It's not production ready yet, but it's available for testing. This is the functionality that will replace myplaces and userlayer functionalities in the future with migrations from those data types to `myfeatures` are on the roadmap for future development. The functionality from user perspective is the same as `userlayer` today, but the internal code has been rewritten on both frontend and server.
+
+Most changes for frontend has been combined to https://github.com/oskariorg/oskari-frontend/pull/2891, but they also depend on changes done to for example mapmodule and the functionality is still under development and subject to change.
+
+### Other changes
+
+Layer listing with the free keyword filter is now more usable on mobile devices. The filtering isn't automatically triggered until 5 characters has been added which makes it much more usable with less powerful devices. The filter can be manually executed with fewer characters by pressing enter on the virtual keyboard.
+
+Clicking a search result no longer tries to keep the infobox on screen. It still moves the map to where the clicked result is but there's a hard-to-reproduce issue with panning the map to show the whole infobox while the map is panning to show the search result. There's not much difference to the user usually, but trying to do both can lead to the map showing a totally wrong location occasionally so it's best to just have the map move once per search result. When useing `InfoBox.ShowInfoBoxRequest` to show an infobox on coordinates that are currently NOT in the viewport, we advice passing `{ keepOnScreen: false }` in the options to prevent this from happening.
+
+The `metadataflyout` now combines accessRestrictions and otherRestrictions from metadata under a single Restrictions listing.
+
+Added `Oskari.util.formatNumberWithDecimalSeparator(value, optionalPrecision)` for formatting numbers with precision. Similar to Number.toFixed() or Intl.NumberFormat(), but returns empty string instead of `NaN` for showing numbers on the UI.
+
+Added a parameter for `mapmodule.formatMeasurementResult()` that allows selecting a formatter for measurement. See https://github.com/oskariorg/oskari-frontend/pull/2910 for details. Added a formatter for nautical miles as an example. The options in `StartDrawingRequest` can be used to select formatter.
+
+Fixed an issue regarding adding several vector layers from the same service. The defaults style for the layer was copied from the previous layer that resulted in weird situations with vector layer styles: https://github.com/oskariorg/oskari-documentation/issues/117
+
+Reverted back from `cesium/engine` to `Cesium` (including the unused widgets) since `olcs` references `Cesium` and npm decides to install it anyway since it doesn't recognize `cesium/engine` being an alternative for `Cesium`.
+
+Fixed an issue where the button to remove layer coverage polygon from map was duplicated: https://github.com/oskariorg/oskari-frontend/pull/2875
+
+ESLint config changed to flat config. Requires manual migration of apps like this: https://github.com/oskariorg/sample-application/pull/52
+
+Library updates:
+- `@ant-design/icons` 5.5.1 -> 5.6.1
+- `@babel/core` 7.26.0 -> 7.28.4 (and related plugins)
+- `@cesium/engine` 20.0.1 replaced with `cesium` 1.135.0
+- `antd` 5.21.6 -> 5.27.5
+- `babel-loader` 8.4.1 -> 10.0.0
+- `corejs` 3.38.1 -> 3.46.0
+- `react-beautiful-dnd` replaced with `@hello-pangea/dnd`
+- `eslint` 8.57.0 -> 9.37.0 (and related plugins)
+- `jest` 29.7.0 -> 30.2.0 (and related dependencies)
+- `react` 16.14.0 -> 18.3.1 (tested 19.x, needs more work)
+- `@testing-library/react` 12.1.5 -> 16.3.0 (and related dependencies)
+- `ol` 10.6.0 -> 10.6.1
+- `uglifyjs-webpack-plugin` replaced with `terser-webpack-plugin`
+- `webpack` 4.47.0 -> 5.102.1 (and related loaders/dev-server)
 
 ## 3.1.0
 

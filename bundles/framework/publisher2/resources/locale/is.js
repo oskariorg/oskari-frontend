@@ -45,8 +45,7 @@ Oskari.registerLocalization(
                         "sv": "NO is TRANSLATION",
                         "en": "Enska"
                     },
-                    "tooltip": "Veldu tungumál sem á að nota á lokaútgáfu kortsins. Það hefur áhrif á notandaviðmótið og textann á kortinu. Athugið að tungumálavalið er ekki sýnilegt við forskoðun.",
-                    "languageChangedDisclaimer": "Athugið að tungumálavalið er ekki sýnilegt við forskoðun."
+                    "tooltip": "Veldu tungumál sem á að nota á lokaútgáfu kortsins. Það hefur áhrif á notandaviðmótið og textann á kortinu. Athugið að tungumálavalið er ekki sýnilegt við forskoðun."
                 }
             },
             "mapPreview": {

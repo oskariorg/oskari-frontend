@@ -7,11 +7,11 @@ Oskari.registerLocalization(
             "title": "Kartpublicering"
         },
         "flyout": {
-            "title": "Kartpublicering"
+            "title": "Publicera en karta på din webbplats"
         },
         "published": {
-            "title": "Kartan har skapats för att kunna bäddas in",
-            "desc": "Karta har skapats. Bädda in kartan genom att lägga till HTML-koden nedan till din webbplats och du har kartan på din webbplats:",
+            "title": "Den inbäddade kartan är klar för publicering",
+            "desc": "Publicera kartan genom att infoga HTML-koden nedan på din webbplats:",
             "copy": "Kopiera till klippbordet"
         },
         "snippet": {
@@ -35,7 +35,7 @@ Oskari.registerLocalization(
             }
         },
         "BasicView": {
-            "title": "Skapa publicerad karta",
+            "title": "Kartpublicering",
             "titleEdit": "Redigera den inbäddade karta",
             "transfer": {
                 "label": "Överföra konfigurationen",
@@ -44,30 +44,29 @@ Oskari.registerLocalization(
             "generalInfo": {
                 "label": "Webbplats",
                 "domain": {
-                    "label": "Begränsa inbäddning endast till följande webbadress:",
+                    "label": "Tillåt publicering endast på webbadress",
                     "placeholder": "Webbplats adress",
                     "tooltip": "Skriv namnet på webbplatsens hemsida dvs. domainnamn utan prefixerna http och www samt utan undersida. Exempel: minhemsida.com",
                     "inputWarning": "Kontrollera nätverksadressen du angav"
                 },
                 "name": {
-                    "label": "Kartans namn",
+                    "label": "Kartans namn (obligatorisk)",
                     "placeholder": "Obligatorisk uppgift",
                     "tooltip": "Ge namn åt kartan. Välj språket med hänsyn till webbsidans språk."
                 },
                 "language": {
-                    "label": "Språk",
+                    "label": "Språk för användargränssnitt",
                     "options": {
                         "fi": "Finska",
                         "sv": "Svenska",
                         "en": "Engelska"
                     },
-                    "tooltip": "Välj ett språk på kartan. Språket användas på användargänsnitt och text på kartan. Obs! Valt språk visas inte på förhandsvisningskartan.",
-                    "languageChangedDisclaimer": "Obs! Valt språk visas inte på förhandsvisningskartan."
+                    "tooltip": "Välj ett språk på användargänsnitt. Obs! Valt språk visas inte på förhandsvisningskartan."
                 }
             },
             "mapPreview": {
-                "label": "Kartstorlek",
-                "tooltip": "Välj kartans storlek. Vi rekommenderar den skalbara funktionen \"Skalbar / Fyll utrymmet\". Annars skall bredden vara minst {minWidth} och högst {maxWidth} pixel, och bredden mellan {minHeight} och {maxHeight} pixel."
+                "label": "Kartans storlek",
+                "tooltip": ""
             },
             "tools": {
                 "label": "Verktyg",
@@ -75,12 +74,11 @@ Oskari.registerLocalization(
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
             },
             "toolLayout": {
-                "label": "Verktygsplacering",
+                "label": "Placering av verktyg",
                 "tooltip": "Välj placering för det verktyg som ska visas på kartan.",
                 "swapUI": "Byt sida",
-                "userlayout": "Anpassad layout",
-                "usereditmode": "Starta redigering",
-                "usereditmodeoff": "Sluta redigering"
+                "userlayout": "Egen placering",
+                "usereditmodeoff": "Spara placering"
             },
             "statsgrid": {
                 "label": "Statistik",
@@ -89,9 +87,9 @@ Oskari.registerLocalization(
             "layout": {
                 "label": "Grafisk layout",
                 "title": {
-                    "popup": "Popupfönster",
+                    "popup": "Popup-fönster",
                     "buttons": "Knappar",
-                    "infobox": "Frågverktyg av objektuppgifter"
+                    "infobox": "Frågeverktyg för objektsuppgifter"
                 },
                 "fields": {
                     "toolStyles": {
@@ -102,32 +100,32 @@ Oskari.registerLocalization(
                         "3d-dark": "3D (mörk)",
                         "3d-light": "3D (ljus)"
                     },
-                    "font": "Välj font",
-                    "popupHeaderColor": "Rubrikens bakgrundsfärg",
-                    "popupHeaderTextColor": "Rubrikens färg",
-                    "infoboxHeaderColor": "Etikettens bakgrundsfärg",
-                    "infoboxHeaderTextColor": "Etikettext",
-                    "infoboxPreview": "Esikatselu",
+                    "font": "Font",
+                    "popupHeaderColor": "Titelns bakgrundsfärg",
+                    "popupHeaderTextColor": "Titelns fontfärg",
+                    "infoboxHeaderColor": "Titelns bakgrundsfärg",
+                    "infoboxHeaderTextColor": "Titelns fontfärg",
+                    "infoboxPreview": "Förhandsgranskning",
                     "buttonBackgroundColor": "Bakgrundsfärg",
                     "buttonTextColor": "Ikonernas färg",
                     "buttonAccentColor": "Ikonernas effektfärg",
                     "buttonRounding": "Knapparnas avrundning",
                     "effect": "Effekt",
                     "3d": "3D",
-                    "presets": "Färdiga stilkonfigurationer"
+                    "presets": "Färdiga stilar"
                 },
                 "gfiDialog": {
-                    "title": "Funktionsinfo",
+                    "title": "Objektinformation",
                     "featureName": "Förhandsgranskning",
-                    "featureDesc": "Färgschemat påverkar bara färgen på popup-fönstret för faktarutan för kartobjektet och kartlagret."
+                    "featureDesc": "Utseendeval påverkar objektinformationens utseende."
                 }
             },
             "sizes": {
                 "small": "Liten",
                 "medium": "Medelstor",
                 "large": "Stor",
-                "fill": "Skalbar / Fyll utrymmet",
-                "custom": "Anpassad storlek",
+                "fill": "Fyller utrymmet (rekommenderat)",
+                "custom": "Ange egen storlek",
                 "width": "bredd",
                 "height": "höjd",
                 "separator": "x"
@@ -149,21 +147,21 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "label": "Kartlager",
-                "tools": "Ytterligare verktyg",
+                "tools": "Verktyg",
                 "selectAsBaselayer": "Välj bakgrundskartlager",
-                "otherLayers": "Andra kartlager",
+                "otherLayers": "Valda kartlager",
                 "selectLayers": "Välj kartlager",
-                "layersDisplay": "Kartlagrens visualisering",
+                "layersDisplay": "Redigera kartlager",
                 "baseLayers": "Bakgrundskartor",
                 "noBaseLayers": "Inga bakgrundskartor valda",
                 "noLayers": "Inga kartlager valda"
             },
             "error": {
                 "title": "Fel!",
-                "size": "Fel i storleksdefinitionerna. Skall bredden vara minst {minWidth} och högst {maxWidth} pixel, och bredden mellan {minHeight} och {maxHeight} pixel.",
+                "size": "Kartans storlek är ogiltig. Bredden måste vara {minWidth} - {maxWidth} pixlar och höjden {minHeight} - {maxHeight} pixlar.",
                 "domain": "Webbplatsen är en nödvändig uppgift.",
-                "domainStart": "Skriv webbplatsens adress utan prefixerna http och www",
-                "name": "Kartans namn krävs",
+                "domainStart": "Skriv webbplatsens adress utan prefixerna http",
+                "name": "Kartans namn är en obligatorisk uppgift.",
                 "nohelp": "Användarhandledning är inte tillgänglig.",
                 "saveFailed": "Inbäddandet av kartan misslyckades. Försök på nytt senare. Fixa kart namn",
                 "nameIllegalCharacters": "Namnet på kartan innehåller otillåtna tecken (exempel html-tags). ",
@@ -177,8 +175,8 @@ Oskari.registerLocalization(
             "register": "Registrera dig"
         },
         "StartView": {
-            "text": "Skapa kartvy som du kan inbädda på din egen webbplats.",
-            "touLink": "Visa användningsvillkoren till kartpublicering",
+            "text": "Skapa en inbäddningsbar karta och publicera den på din webbplats.",
+            "touLink": "Användarvillkor för kartpublicering",
             "layerlist_title": "Valda kartlager som kan inbäddas",
             "layerlist_empty": "Valda kartlager kan inte publiceras i en inbäddad karta. Kontrollera rätten att publicera i menyn \"Valda Kartlager\" innan du börjar skapa kartan.",
             "layerlist_denied": "Kartlagret kan inte publiceras i en inbäddad karta.",

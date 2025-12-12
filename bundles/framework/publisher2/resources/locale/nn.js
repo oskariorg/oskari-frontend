@@ -41,8 +41,7 @@ Oskari.registerLocalization(
                         "sv": "Svensk",
                         "en": "Engelsk"
                     },
-                    "tooltip": "Vel eit språk til det ferdige kartet. Gjeld både brukargrensesnitt og tekst på kartet. NB! Vald språk er ikkje synleg i førehandsvisninga.",
-                    "languageChangedDisclaimer": "NB! Vald språk er ikkje synleg i førehandsvisninga."
+                    "tooltip": "Vel eit språk til det ferdige kartet. Gjeld både brukargrensesnitt og tekst på kartet. NB! Vald språk er ikkje synleg i førehandsvisninga."
                 }
             },
             "mapPreview": {

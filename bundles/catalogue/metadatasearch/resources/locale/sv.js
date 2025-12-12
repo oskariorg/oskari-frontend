@@ -73,7 +73,7 @@ Oskari.registerLocalization({
             "remove": "Bort från sökresultaten"
         },
         "tool": {
-            "label": "Möjliggör användning av metadatasökningar programmatiskt",
+            "label": "Tillåt programmatisk hämtning av metadata",
         }
     }
 });

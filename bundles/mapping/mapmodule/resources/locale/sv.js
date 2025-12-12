@@ -163,15 +163,15 @@ Oskari.registerLocalization(
         "publisherTools": {
             "ScaleBarPlugin": "Skalstock",
             "MyLocationPlugin": {
-                "toolLabel": "Centrera kartan på användarens position",
+                "toolLabel": "Centrera till användarens position",
                 "modes": {
-                    "single": "Enskild",
-                    "continuous": "Fortsatt"
+                    "single": "En gång",
+                    "continuous": "Kontinuerligt"
                 },
                 "titles": {
-                    "mode": "Funktion",
-                    "mobileOnly": "Tillåt funktionen endast för mobilapparater",
-                    "centerMapAutomatically": "Centrera kartan till användarens plats vid start"
+                    "mode": "Uppdateringsfrekvens",
+                    "mobileOnly": "Endast på mobila enheter",
+                    "centerMapAutomatically": "Automatiskt när kartan öppnas"
                 }
             },
             "PanButtons": {
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
                 "toolLabel": "Skalans glidreglage"
             },
             "CrosshairTool": {
-                "toolLabel": "Visa kartans mittpunkt"
+                "toolLabel": "Visa mittpunkt på kartan"
             },
             "LayerSelection": {
                 "toolLabel": "Kartlagermeny",
@@ -204,13 +204,13 @@ Oskari.registerLocalization(
                 "toolLabel": "Adress- och ortnamnssökning"
             },
             "ControlsPlugin": {
-                "toolLabel": "Flytta kartvyn med musen"
+                "toolLabel": "Flytta kartan genom att dra med musen"
             },
             "PublisherToolbarPlugin": {
                 "toolLabel": "Kartverktyg",
-                "history": "Gå bakåt eller framåt",
+                "history": "Navigera till föregående och nästa vy",
                 "measureline": "Mät avstånd",
-                "measurearea": "Mät område"
+                "measurearea": "Mät areal"
             }
         }
     }

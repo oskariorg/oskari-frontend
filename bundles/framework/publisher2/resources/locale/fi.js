@@ -7,11 +7,11 @@ Oskari.registerLocalization(
             "title": "Karttajulkaisu"
         },
         "flyout": {
-            "title": "Karttajulkaisu"
+            "title": "Julkaise kartta verkkosivuille"
         },
         "published": {
-            "title": "Upotettu kartta on valmis",
-            "desc": "Kartta on valmis. Julkaise kartta verkkosivulla liittämällä alla oleva html-koodi verkkosivun koodiin:",
+            "title": "Upotettava kartta on valmis julkaistavaksi",
+            "desc": "Julkaise kartta liittämällä alla oleva HTML-koodi verkkosivuillesi:",
             "copy": "Kopioi leikepöydälle"
         },
         "snippet": {
@@ -35,8 +35,8 @@ Oskari.registerLocalization(
             }
         },
         "BasicView": {
-            "title": "Julkaise kartta",
-            "titleEdit": "Muokkaa karttaa",
+            "title": "Karttajulkaisu",
+            "titleEdit": "Muokkaa julkaistua karttaa",
             "transfer": {
                 "label": "Siirrä konfiguraatio",
                 "PublishTransfer": "Salli siirto"
@@ -44,33 +44,32 @@ Oskari.registerLocalization(
             "generalInfo": {
                 "label": "Julkaisutiedot",
                 "domain": {
-                    "label": "Rajoita kartan upotus vain seuraavaan verkko-osoitteeseen:",
+                    "label": "Salli julkaisu vain verkko-osoitteessa",
                     "placeholder": "Sivuston osoite",
-                    "tooltip": "Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com.",
+                    "tooltip": "Anna verkkosivuston osoite eli domain-nimi ilman http-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com.",
                     "inputWarning": "Tarkista syötetty verkko-osoite"
                 },
                 "name": {
-                    "label": "Kartan nimi (pakollinen tieto)",
+                    "label": "Kartan nimi (pakollinen)",
                     "placeholder": "Kartan nimi",
-                    "tooltip": "Anna kartalle nimi. Ota huomioon kartalla käytössä oleva kieli."
+                    "tooltip": "Anna kartalle kuvaava nimi."
                 },
                 "language": {
-                    "label": "Kieli",
+                    "label": "Käyttöliittymän kieli",
                     "options": {
                         "fi": "suomi",
                         "sv": "ruotsi",
                         "en": "englanti"
                     },
-                    "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja kartalla näkyviin teksteihin. Huom! Kielivalinnat eivät näy esikatselukartalla.",
-                    "languageChangedDisclaimer": "Huom! Kielivalinnat eivät näy esikatselukartalla."
+                    "tooltip": "Valitse käyttöliittymän teksteissä käytettävä kieli. Huom! Kielivalinnat eivät näy esikatselukartalla."
                 }
             },
             "mapPreview": {
                 "label": "Kartan koko",
-                "tooltip": "Valitse kartan koko. Suositus on käyttää skaalautuvaa vaihtoehtoa \"Skaalautuva / tilan täyttävä\". Muussa tapauksessa leveyden on oltava välillä {minWidth} ja {maxWidth} pikseliä ja korkeuden {minHeight} ja {maxHeight} pikseliä."
+                "tooltip": ""
             },
             "tools": {
-                "label": "Kartalla näytettävät työkalut",
+                "label": "Työkalut",
                 "additional": "Lisätyökalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta."
             },
@@ -79,8 +78,7 @@ Oskari.registerLocalization(
                 "tooltip": "Valitse, miten työkalut asetellaan kartalle.",
                 "swapUI": "Vaihda puolet",
                 "userlayout": "Oma asettelu",
-                "usereditmode": "Muokkaa asettelua",
-                "usereditmodeoff": "Lopeta muokkaus"
+                "usereditmodeoff": "Lukitse asettelu"
             },
             "statsgrid": {
                 "label": "Teemakartat",
@@ -99,14 +97,14 @@ Oskari.registerLocalization(
                         "rounded-light": "Pyöristetty (vaalea)",
                         "sharp-dark": "Kulmikas (tumma)",
                         "sharp-light": "Kulmikas (vaalea)",
-                        "3d-dark": "Kolmiulotteinen (tumma)",
-                        "3d-light": "Kolmiulotteinen (vaalea)"
+                        "3d-dark": "3D (tumma)",
+                        "3d-light": "3D (vaalea)"
                     },
-                    "font": "Valitse fontti",
+                    "font": "Fontti",
                     "popupHeaderColor": "Otsikon taustaväri",
                     "popupHeaderTextColor": "Otsikon väri",
-                    "infoboxHeaderColor": "Otsikon tausta",
-                    "infoboxHeaderTextColor": "Otsikon teksti",
+                    "infoboxHeaderColor": "Otsikon taustaväri",
+                    "infoboxHeaderTextColor": "Otsikon fontin väri",
                     "infoboxPreview": "Esikatselu",
                     "buttonBackgroundColor": "Taustaväri",
                     "buttonTextColor": "Ikonien väri",
@@ -114,19 +112,19 @@ Oskari.registerLocalization(
                     "buttonRounding": "Painikkeiden pyöristys",
                     "effect": "Efekti",
                     "3d": "3D",
-                    "presets": "Valmiit tyylimääritykset"
+                    "presets": "Valmiit tyylit"
                 },
                 "gfiDialog": {
-                    "title": "Kohteen tiedot",
+                    "title": "Kohdetiedot",
                     "featureName": "Esikatselu",
-                    "featureDesc": "Värimaailma vaikuttaa kohdetietojen, omien kohteiden tietojen ja karttatasolaatikon väreihin."
+                    "featureDesc": "Ulkoasuvalinnat vaikuttavat kohdetietojen ulkoasuun."
                 }
             },
             "sizes": {
                 "small": "Pieni",
                 "medium": "Keskikokoinen",
                 "large": "Suuri",
-                "fill": "Tilan täyttävä",
+                "fill": "Tilan täyttävä (suositus)",
                 "custom": "Määritä oma koko",
                 "width": "leveys",
                 "height": "korkeus",
@@ -149,21 +147,21 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "label": "Karttatasot",
-                "tools": "Lisätyökalut",
+                "tools": "Työkalut",
                 "selectAsBaselayer": "Valitse taustakartaksi",
-                "otherLayers": "Muut kartat",
+                "otherLayers": "Valitut karttatasot",
                 "selectLayers": "Valitse tasot",
-                "layersDisplay": "Tasojen esitystapa",
+                "layersDisplay": "Muokkaa tasoja",
                 "baseLayers": "Taustakartat",
                 "noBaseLayers": "Ei valittuja taustakarttoja",
                 "noLayers": "Ei valittuja karttatasoja"
             },
             "error": {
                 "title": "Virhe",
-                "size": "Kartan koko on virheellinen. Leveyden on oltava välillä {minWidth} ja {maxWidth} pikseliä ja korkeuden {minHeight} ja {maxHeight} pikseliä.",
+                "size": "Kartan koko on virheellinen. Leveyden on oltava {minWidth} - {maxWidth} pikseliä ja korkeuden {minHeight} - {maxHeight} pikseliä.",
                 "domain": "Verkkosivuston osoite on pakollinen tieto. Anna sivuston osoite ja yritä uudelleen.",
-                "domainStart": "Verkkosivuston osoite on väärässä muodossa. Anna osoite ilman http- tai www-etuliitteitä ja yritä uudelleen.",
-                "name": "Kartan nimi on pakollinen tieto. Anna kartalle nimi ja yritä uudelleen.",
+                "domainStart": "Verkkosivuston osoite on väärässä muodossa. Anna osoite ilman http-etuliitettä.",
+                "name": "Kartan nimi on pakollinen tieto.",
                 "nohelp": "Ohjetta ei löytynyt.",
                 "saveFailed": "Kartan tallennus epäonnistui.",
                 "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä (esim. html-tagit). Poista kielletyt merkit ja yritä uudelleen.",
@@ -174,13 +172,13 @@ Oskari.registerLocalization(
             "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
         },
         "NotLoggedView": {
-            "text": "\"Julkaise kartta\" -toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla. Upotetussa kartassa näkyy valitsemasi karttanäkymä ja työkalut. Kartan julkaisu vaatii kirjautumisen palveluun.",
+            "text": "Luo upotettava kartta ja julkaise se omalla verkkosivullasi. Upotetussa kartassa näkyy valitsemasi karttanäkymä ja työkalut. Kartan julkaisu vaatii kirjautumisen palveluun.",
             "signup": "Kirjaudu sisään",
             "register": "Rekisteröidy"
         },
         "StartView": {
-            "text": "Tervetuloa karttajulkaisuun. Toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla.",
-            "touLink": "Näytä karttajulkaisun käyttöehdot",
+            "text": "Luo upotettava kartta ja julkaise se omalla verkkosivullasi.",
+            "touLink": "Karttajulkaisun käyttöehdot",
             "layerlist_title": "Avoinna olevat karttatasot, jotka ovat julkaistavissa",
             "layerlist_empty": "Avoinna olevat karttatasot eivät ole julkaistavissa. Tarkista Valitut tasot -valikosta, mitkä karttatasot ovat julkaistavissa.",
             "layerlist_denied": "Avoinna olevat karttatasot, jotka eivät ole julkaistavissa",

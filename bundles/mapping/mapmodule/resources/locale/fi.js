@@ -170,13 +170,13 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "toolLabel": "Käyttäjän sijaintiin keskittäminen",
                 "modes": {
-                    "single": "Yksittäinen",
-                    "continuous": "Jatkuva"
+                    "single": "Kerran",
+                    "continuous": "Jatkuvasti"
                 },
                 "titles": {
-                    "mode": "Toiminto",
-                    "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
-                    "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
+                    "mode": "Päivitystiheys",
+                    "mobileOnly": "Vain mobiililaitteissa",
+                    "centerMapAutomatically": "Automaattisesti, kun kartta avataan"
                 }
             },
             "PanButtons": {
@@ -195,7 +195,7 @@ Oskari.registerLocalization(
                 "toolLabel": "Mittakaavasäädin"
             },
             "CrosshairTool": {
-                "toolLabel": "Näytä kartan keskipiste"
+                "toolLabel": "Keskipisteen näyttäminen kartalla"
             },
             "LayerSelection": {
                 "toolLabel": "Karttatasovalikko",
@@ -214,7 +214,7 @@ Oskari.registerLocalization(
             "PublisherToolbarPlugin": {
                 "toolLabel": "Karttatyökalut",
                 "history": "Siirtyminen edelliseen ja seuraavaan näkymään",
-                "measureline": "Matkan mittaus",
+                "measureline": "Etäisyyden mittaus",
                 "measurearea": "Pinta-alan mittaus"
             }
 
