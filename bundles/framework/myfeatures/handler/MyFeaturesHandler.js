@@ -301,8 +301,7 @@ class MyFeaturesHandler extends StateHandler {
         }
         const url = Oskari.urls.getRoute('MyFeaturesFeature', {
             layerId: layerUUID,
-            id: featureId,
-            crs: this.sandbox.getMap().getSrsName()
+            id: featureId
         });
         fetch(url, {
             method: 'DELETE',
