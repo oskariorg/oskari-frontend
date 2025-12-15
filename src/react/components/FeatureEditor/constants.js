@@ -1,1 +1,0 @@
-export const MYFEATURES_FeatureEditor_BUNDLE_NAME = 'MyFeaturesFeatureEditor';

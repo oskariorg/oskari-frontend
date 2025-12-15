@@ -1,1 +1,1 @@
-export { FeatureEditorPanel } from './view/FeatureEditorPanel';
+export { FeatureEditorPanel } from './FeatureEditorPanel';
