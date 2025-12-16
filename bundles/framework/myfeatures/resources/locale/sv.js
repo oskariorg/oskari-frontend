@@ -67,7 +67,8 @@ Oskari.registerLocalization(
                 "remove": "Ta bort",
                 "removeButton": "Ta bort",
                 "actions": "Handlingar",
-                "createDate": "Skapad"
+                "createDate": "Skapad",
+                "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
@@ -89,6 +90,17 @@ Oskari.registerLocalization(
                 "editMsg": "Uppdateringen av datasetet misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
                 "getStyle": "Sökningen av den stil som definierats för datasetet misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
                 "styleName": "Namnge kartlagret och försök sedan på nytt."
+            }
+        },
+        "featureEditor": {
+            "title": "Feature editor",
+            "featureUpdate": {
+                "success": "Feature properties updated successfully",
+                "error": "Error occured during feature properties update"
+            },
+            "featureDelete": {
+                "success": "Feature deleted successfully",
+                "error": "Error occured during feature delete"
             }
         },
         "layer": {

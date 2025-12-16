@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { EditOutlined } from '@ant-design/icons';
+import { CompassOutlined, EditOutlined } from '@ant-design/icons';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
 
 const EDIT_ICON_STYLE = {
@@ -51,6 +51,12 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
+                        <IconButton
+                            className='t_edit'
+                            title={<Message messageKey='tab.grid.contentEditor' />}
+                            icon={<CompassOutlined style={EDIT_ICON_STYLE} />}
+                            onClick={() => controller.showFeatureEditorDialog(item.key)}
+                        />
                         <IconButton
                             className='t_edit'
                             title={<Message messageKey='tab.grid.edit' />}

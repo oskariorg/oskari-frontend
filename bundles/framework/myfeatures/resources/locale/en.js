@@ -67,7 +67,8 @@ Oskari.registerLocalization(
                 "remove": "Delete",
                 "removeButton": "Delete",
                 "actions": "Actions",
-                "createDate": "Created"
+                "createDate": "Created",
+                "contentEditor": "Content editor"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset \"{name}\"?",
             "buttons": {
@@ -89,6 +90,17 @@ Oskari.registerLocalization(
                 "editMsg": "Updating the dataset failed due to an error in the system. Please try again later.",
                 "getStyle": "The style defined for the dataset was not found. Default values are shown on the form. Change the style definitions before saving the changes.",
                 "styleName": "Give the map layer a name and try again."
+            }
+        },
+        "featureEditor": {
+            "title": "Feature editor",
+            "featureUpdate": {
+                "success": "Feature properties updated successfully",
+                "error": "Error occured during feature properties update"
+            },
+            "featureDelete": {
+                "success": "Feature deleted successfully",
+                "error": "Error occured during feature delete"
             }
         },
         "layer": {

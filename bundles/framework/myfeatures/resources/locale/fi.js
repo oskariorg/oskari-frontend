@@ -66,7 +66,8 @@ Oskari.registerLocalization(
                 "remove": "Poista",
                 "removeButton": "Poista",
                 "actions": "Toiminnot",
-                "createDate": "Luontiaika"
+                "createDate": "Luontiaika",
+                "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
             "buttons": {
@@ -88,6 +89,18 @@ Oskari.registerLocalization(
                 "editMsg": "Aineiston päivitys epäonnistui järjestelmässä tapahtuneen virheen vuoksi. Yritä myöhemmin uudelleen.",
                 "getStyle": "Aineistolle määritettyä tyyliä ei onnistuttu hakemaan. Lomakkeella näytetään oletusarvot. Vaihda tyylimäärittelyn arvot ennen muutosten tallennusta.",
                 "styleName": "Anna karttatasolle nimi ja yritä sitten uudelleen."
+            }
+        },
+        "featureEditor": {
+            "title": "Sisältöeditori",
+            "featureUpdate": {
+                "header": "Kohde päivitetty",
+                "success": "Kohteen päivittäminen onnistui",
+                "error": "Kohteen päivittäminen epäonnistui"
+            },
+            "featureDelete": {
+                "success": "Kohteen poisto onnistui",
+                "error": "Kohteen poistossa tapahtui virhe"
             }
         },
         "layer": {
