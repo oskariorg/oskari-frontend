@@ -237,29 +237,14 @@ class MyFeaturesHandler extends StateHandler {
         }
     }
 
-    // strip myf_ from the beginning of layerId for db
-    getLayerUUID(layer) {
-        if (!layer?.id?.length > 4) {
-            return null;
-        }
-
-        return layer?.id?.substring(4, layer.id.length) || null;
-    }
-
     async saveFeature(layer, feature) {
         const fid = feature?.properties?.fid || null;
         delete feature.properties.fid;
 
         // keep prefix -> use in app.
         const layerId = layer?.id || null;
-        // without prefix -> use wioth db
-        const layerUUID = this.getLayerUUID(layer);
-        if (!layerUUID) {
-            return;
-        }
-
         const newMyFeature = {
-            layerId: layerUUID,
+            layerId: layerId,
             fid: fid,
             id: feature.id,
             geometry: feature.geometry,
@@ -267,7 +252,7 @@ class MyFeaturesHandler extends StateHandler {
         };
         const isNew = typeof feature.id === 'undefined';
         const url = Oskari.urls.getRoute('MyFeaturesFeature', {
-            layerId: layerUUID,
+            layerId: layerId,
             crs: this.getSandbox().getMap().getSrsName()
         });
         fetch(url, {
@@ -295,12 +280,8 @@ class MyFeaturesHandler extends StateHandler {
     async deleteFeature(layer, featureId) {
         // keep prefix -> use in app.
         const layerId = layer?.id || null;
-        const layerUUID = this.getLayerUUID(layer);
-        if (!layerUUID) {
-            return;
-        }
         const url = Oskari.urls.getRoute('MyFeaturesFeature', {
-            layerId: layerUUID,
+            layerId: layerId,
             id: featureId
         });
         fetch(url, {
