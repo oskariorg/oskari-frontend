@@ -20,3 +20,5 @@ export const ERRORS = {
     NO_SRS: 'unknown_projection',
     FORMAT: 'format_failure'
 };
+
+export const FEATURE_EDITOR_TOOLNAME = 'FeatureEditor';
