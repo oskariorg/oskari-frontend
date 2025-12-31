@@ -11,6 +11,7 @@ import './request/SwipeStatusRequest';
 import './request/SwipeStatusRequestHandler';
 
 import { getGfiContent, getGfiResponseType, hasGfiData } from './GfiHelper';
+import { FEATURE_EDITOR_TOOLNAME } from '../../../../framework/myfeatures/constants';
 
 const GFI_TYPE_APPLICATION_JSON = 'application/json';
 /**
@@ -519,11 +520,14 @@ Oskari.clazz.define(
 
             this._sendDataForMapLocationEvent(data);
 
-            if (fragments?.length) {
-                contentData.html = this._renderFragments(fragments);
-                contentData.layerId = fragments[0].layerId;
+            fragments?.forEach((fragment) => {
+                const layerId = fragment.layerId;
+                contentData.html = this._renderFragments([fragment]);
+                contentData.layerId = layerId;
+                contentData.featureId = data?.featureId || null;
+                this.addFeatureEditorTool(contentData);
                 content.push(contentData);
-            }
+            });
             const { colourScheme, font, noUI } = this._config || {};
 
             // GFIPlugin.config.noUI: true means the infobox for GFI content shouldn't be shown
@@ -541,6 +545,23 @@ Oskari.clazz.define(
             });
         },
 
+        /**
+         * Adds feature editor tool where feature editing is allowed for a layer
+         * @param {Object} contentData
+         */
+        addFeatureEditorTool: function(contentData) {
+            const layer = this.getSandbox().findMapLayerFromAllAvailable(contentData?.layerId);
+            const hasFeatureEditorTool = layer.getFeatureTool(FEATURE_EDITOR_TOOLNAME);
+            if (hasFeatureEditorTool) {
+                contentData.actions = [{
+                    // TODO: name is used as the key in a hash and as the label of the button? Ungreat.
+                    name: 'featureEditor',
+                    action: () => {
+                        console.log('TODO: open feature editor for layer ', contentData.layerId, ' and feature ' , contentData.featureId);
+                    }
+                }];
+            }
+        },
         /**
          * Closes the infobox with GFI data
          *
