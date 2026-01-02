@@ -58,14 +58,16 @@ class MyFeaturesHandler extends StateHandler {
 
     /**
      * Opens the flyout to edit the features of the given layer
+     * @param {String} layerId layer id
+     * @param { int } featureId feature technical id
      */
-    showFeatureEditorDialog (layerId) {
+    showFeatureEditorDialog (layerId, featureId) {
 
         if (this.featureEditorControls) {
             this.closeFeatureEditorFlyout();
         }
 
-        this.featureEditorControls = showFeatureEditorFlyout(layerId, this);
+        this.featureEditorControls = showFeatureEditorFlyout(layerId, featureId, this);
     }
 
     closeFeatureEditorFlyout () {

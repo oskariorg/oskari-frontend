@@ -5,6 +5,7 @@ import { MyFeaturesHandler } from './handler/MyFeaturesHandler';
 import { TOOL } from './constants';
 import { MyFeaturesService } from './service/MyFeaturesService';
 import './request/ShowLayerDialogRequest';
+import './request/ShowFeatureEditorRequest';
 
 const loadLayers = async (service, getMsg) => {
     try {
@@ -36,6 +37,10 @@ export class MyFeatureBundleInstance extends BasicBundleInstance {
                 } else {
                     this.handler.showLayerDialog();
                 }
+            });
+
+            this.addRequestHandler('ShowFeatureEditorRequest', (req) => {
+                this.handler.showFeatureEditorDialog(req.getLayerId(), req.getFeatureId());
             });
             // need to wrap to a function because async
             loadLayers(this.importService, getMsg);

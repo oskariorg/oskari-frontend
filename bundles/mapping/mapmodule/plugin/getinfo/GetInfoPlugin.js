@@ -557,7 +557,9 @@ Oskari.clazz.define(
                     // TODO: name is used as the key in a hash and as the label of the button? Ungreat.
                     name: 'featureEditor',
                     action: () => {
-                        console.log('TODO: open feature editor for layer ', contentData.layerId, ' and feature ' , contentData.featureId);
+                        const { layerId, featureId } = contentData;
+                        const sandbox = this.getSandbox();
+                        sandbox.postRequestByName('ShowFeatureEditorRequest', [layerId, featureId]);
                     }
                 }];
             }

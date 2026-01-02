@@ -31,7 +31,7 @@ const StyledPanel = styled('div')`
     }
 `;
 
-export const FeatureEditorPanel = ({ layerId, loading = false, onSave, onDelete, onClose, onCancel}) => {
+export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave, onDelete, onClose, onCancel}) => {
     const helperRef = useRef(null);
     const [handlerState, setHandlerState] = useState(null);
     const { currentLayer = null, feature = null } = handlerState || {};
