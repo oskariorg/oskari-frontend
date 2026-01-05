@@ -555,7 +555,7 @@ Oskari.clazz.define(
             if (hasFeatureEditorTool) {
                 contentData.actions = [{
                     // TODO: name is used as the key in a hash and as the label of the button? Ungreat.
-                    name: 'featureEditor',
+                    name: Oskari.getMsg('myfeatures', 'featureEditor.title'),
                     action: () => {
                         const { layerId, featureId } = contentData;
                         const sandbox = this.getSandbox();
