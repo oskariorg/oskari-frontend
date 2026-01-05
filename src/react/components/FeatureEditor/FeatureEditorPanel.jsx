@@ -36,11 +36,11 @@ export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave
     const [handlerState, setHandlerState] = useState(null);
     const { currentLayer = null, feature = null } = handlerState || {};
     useEffect(() => {
-        helperRef.current = new FeatureEditorPanelHandler(layerId);
+        helperRef.current = new FeatureEditorPanelHandler();
         helperRef.current.addStateListener((newState) => {
             setHandlerState(newState);
         });
-        helperRef.current.init(layerId);
+        helperRef.current.init(layerId, featureId);
 
         // clean up
         return () => {
