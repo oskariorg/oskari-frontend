@@ -10,7 +10,8 @@ export class FeatureEditorPanelHandler extends StateHandler {
         super();
         this.state = {
             currentLayer: null,
-            feature: null
+            feature: null,
+            loading: false
         };
 
         this.name = 'FeatureEditor';
@@ -53,6 +54,9 @@ export class FeatureEditorPanelHandler extends StateHandler {
     }
 
     init(layerId, featureId) {
+        if (!layerId) {
+            return;
+        }
         Object.keys(this.eventHandlers).forEach(eventName => {
             this.getSandbox().registerForEventByName(this, eventName);
         });
@@ -67,7 +71,7 @@ export class FeatureEditorPanelHandler extends StateHandler {
             }
             return;
         }).catch(() => {
-            // this.trigger('loading', false);
+            this.setLoading(false);
         });
     }
 
@@ -131,6 +135,13 @@ export class FeatureEditorPanelHandler extends StateHandler {
         return this.getState().feature;
     }
 
+    setLoading(loading) {
+        this.updateState({ loading });
+    }
+
+    getLoading() {
+        return this.getState().loading;
+    }
     /**
      * Temporarily hides layers from map that the user isn't editing
      * @method hideOtherVectorLayers

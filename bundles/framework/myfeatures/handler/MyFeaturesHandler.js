@@ -34,8 +34,8 @@ class MyFeaturesHandler extends StateHandler {
     }
 
     showLayerDialog (values) {
-        const { id } = values;
-        const isImport = !id;
+        const { id, isNew } = values;
+        const isImport = !id && !isNew;
         if (this.popupControls) {
             // already opened
             if (this.popupControls.id === id) {
@@ -50,9 +50,10 @@ class MyFeaturesHandler extends StateHandler {
             unzippedMaxSize: this.getMaxSize() * 15,
             isImport
         };
+        const newCallback = (values) => this.createLayer(values);
         const save = values => this.importFile(values);
         const update = values => this.updateLayer(id, values);
-        const onOk = isImport ? save : update;
+        const onOk = isNew ? newCallback : isImport ? save : update;
         this.popupControls = showLayerForm(values, conf, onOk, () => this.popupCleanup());
     }
 
@@ -214,6 +215,35 @@ class MyFeaturesHandler extends StateHandler {
         }
     }
 
+    async createLayer(values) {
+        this.updateState({
+            loading: true
+        });
+
+        try {
+            await this.myFeaturesLayerService.createLayer(values);
+            Messaging.success({
+                content: this.loc('tab.notification.createdMsg'),
+                duration: 10
+            });
+            this.popupCleanup();
+        } catch (err) {
+            Messaging.error({
+                content: this.loc('tab.error.createMsg'),
+                duration: 10
+            });
+            if (this.popupControls) {
+                this.popupControls.update(err || ERRORS.GENERIC, values);
+            }
+
+        } finally {
+            this.updateState({
+                loading: false
+            });
+        }
+
+    }
+
     async deleteLayer (id) {
         this.updateState({
             loading: true
@@ -335,6 +365,7 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'editLayer',
     'deleteLayer',
     'addLayerToMap',
+    'showLayerDialog',
     'showFeatureEditorDialog',
     'closeFeatureEditorFlyout'
 ]);

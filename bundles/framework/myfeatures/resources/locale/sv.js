@@ -81,13 +81,15 @@ Oskari.registerLocalization(
             "notification": {
                 "deletedTitle": "Ta bort dataset",
                 "deletedMsg": "Datasetet har tagits bort",
-                "editedMsg": "Datasetet har uppdaterats"
+                "editedMsg": "Datasetet har uppdaterats",
+                "createdMsg": "The dataset has been created"
             },
             "error": {
                 "title": "Fel!",
                 "generic": "Systemfel. Försök på nytt senare.",
                 "deleteMsg": "Systemfel. Försök på nytt senare.",
                 "editMsg": "Uppdateringen av datasetet misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
+                "createMsg": "Creating the dataset failed due to an error in the system. Please try again later.",
                 "getStyle": "Sökningen av den stil som definierats för datasetet misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
                 "styleName": "Namnge kartlagret och försök sedan på nytt."
             }
@@ -101,6 +103,9 @@ Oskari.registerLocalization(
             "featureDelete": {
                 "success": "Feature deleted successfully",
                 "error": "Error occured during feature delete"
+            },
+            "featureLayer": {
+                "new": "New feature layer"
             }
         },
         "layer": {

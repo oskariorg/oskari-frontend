@@ -81,13 +81,15 @@ Oskari.registerLocalization(
             "notification": {
                 "deletedTitle": "Dataset Delete",
                 "deletedMsg": "The dataset has been deleted.",
-                "editedMsg": "The dataset has been updated."
+                "editedMsg": "The dataset has been updated.",
+                "createdMsg": "The dataset has been created"
             },
             "error": {
                 "title": "Error",
                 "generic": "A system error occurred.",
                 "deleteMsg": "Deleting the dataset failed due to an error in the system. Please try again later.",
                 "editMsg": "Updating the dataset failed due to an error in the system. Please try again later.",
+                "createMsg": "Creating the dataset failed due to an error in the system. Please try again later.",
                 "getStyle": "The style defined for the dataset was not found. Default values are shown on the form. Change the style definitions before saving the changes.",
                 "styleName": "Give the map layer a name and try again."
             }
@@ -101,6 +103,9 @@ Oskari.registerLocalization(
             "featureDelete": {
                 "success": "Feature deleted successfully",
                 "error": "Error occured during feature delete"
+            },
+            "featureLayer": {
+                "new": "New feature layer"
             }
         },
         "layer": {
