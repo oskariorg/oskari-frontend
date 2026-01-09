@@ -21,4 +21,4 @@ export const ERRORS = {
     FORMAT: 'format_failure'
 };
 
-export const FEATURE_EDITOR_TOOLNAME = 'FeatureEditor';
+export const FEATURE_EDITOR_TOOLNAME = 'myfeatures.FeatureEditor';
