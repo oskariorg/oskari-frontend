@@ -79,6 +79,11 @@ export class MyFeaturesService {
 
         const featureEditorTool =  Oskari.clazz.create('Oskari.mapframework.domain.Tool');
         featureEditorTool.setName(FEATURE_EDITOR_TOOLNAME);
+        featureEditorTool.setTitle(Oskari.getMsg('myfeatures', 'featureEditor.title'));
+
+        featureEditorTool.setCallback((layerId, featureId) => {
+            this.sandbox.postRequestByName('ShowFeatureEditorRequest', [layerId, featureId]);
+        });
         mapLayer.addFeatureTool(featureEditorTool);
 
         // mark that this has been added by this bundle.

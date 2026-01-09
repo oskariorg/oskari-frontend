@@ -11,7 +11,6 @@ import './request/SwipeStatusRequest';
 import './request/SwipeStatusRequestHandler';
 
 import { getGfiContent, getGfiResponseType, hasGfiData } from './GfiHelper';
-import { FEATURE_EDITOR_TOOLNAME } from '../../../../framework/myfeatures/constants';
 
 const GFI_TYPE_APPLICATION_JSON = 'application/json';
 /**
@@ -525,7 +524,7 @@ Oskari.clazz.define(
                 contentData.html = this._renderFragments([fragment]);
                 contentData.layerId = layerId;
                 contentData.featureId = data?.featureId || null;
-                this.addFeatureEditorTool(contentData);
+                this.addFeatureTools(contentData);
                 content.push(contentData);
             });
             const { colourScheme, font, noUI } = this._config || {};
@@ -552,10 +551,10 @@ Oskari.clazz.define(
         addFeatureTools: function(contentData) {
             const layer = this.getSandbox().findMapLayerFromAllAvailable(contentData?.layerId);
             const { layerId, featureId } = contentData;
-             contentData.actions = layer.getFeatureTools().map(tool => {
+            contentData.actions = layer?.getFeatureTools()?.map(tool => {
                 return {
                     name: tool.getTitle(),
-                    action: tool.callback(layerId, featureId)
+                    action: () => { tool.getCallback()(layerId, featureId); }
                 };
             });
         },
