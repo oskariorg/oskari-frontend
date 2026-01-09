@@ -549,20 +549,15 @@ Oskari.clazz.define(
          * Adds feature editor tool where feature editing is allowed for a layer
          * @param {Object} contentData
          */
-        addFeatureEditorTool: function(contentData) {
+        addFeatureTools: function(contentData) {
             const layer = this.getSandbox().findMapLayerFromAllAvailable(contentData?.layerId);
-            const hasFeatureEditorTool = layer.getFeatureTool(FEATURE_EDITOR_TOOLNAME);
-            if (hasFeatureEditorTool) {
-                contentData.actions = [{
-                    // TODO: name is used as the key in a hash and as the label of the button? Ungreat.
-                    name: Oskari.getMsg('myfeatures', 'featureEditor.title'),
-                    action: () => {
-                        const { layerId, featureId } = contentData;
-                        const sandbox = this.getSandbox();
-                        sandbox.postRequestByName('ShowFeatureEditorRequest', [layerId, featureId]);
-                    }
-                }];
-            }
+            const { layerId, featureId } = contentData;
+             contentData.actions = layer.getFeatureTools().map(tool => {
+                return {
+                    name: tool.getTitle(),
+                    action: tool.callback(layerId, featureId)
+                };
+            });
         },
         /**
          * Closes the infobox with GFI data
