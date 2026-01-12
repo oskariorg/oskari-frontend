@@ -8,6 +8,12 @@ export const TOOL = {
     ICON: 'upload-material'
 };
 
+export const ADD_FEATURE_TOOL = {
+    NAME: 'addfeatures',
+    GROUP: 'myfeatures',
+    ICON: 'myplaces-draw-point'
+};
+
 export const FILE_INPUT_PROPS = {
     multiple: false,
     allowedTypes: ['application/zip', 'application/octet-stream', 'application/x-zip-compressed', 'multipart/x-zip'],
