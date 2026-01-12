@@ -92,6 +92,7 @@ const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDele
                             onCancel={onCancel}
                             onSave={onSave}
                             onDelete={onDelete}
+                            startNewFeature={startNewFeature}
                             feature={feature} />
                     }
                 </div>

@@ -10,7 +10,7 @@ import { Helper } from './Helper';
 import { DrawingHelper } from './DrawingHelper';
 import { StyledSpace } from './styled';
 
-export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDelete}) => {
+export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDelete, startNewFeature}) => {
     const type = Helper.detectGeometryType(layer.geometryType);
     const isMulti = type.includes('Multi');
     const [isDrawing, setDrawingMode] = useState(false);
@@ -29,6 +29,10 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
         stopDrawing();
         onSave(currentFeature);
     };
+    const startNewCb = () => {
+        stopDrawing();
+        startNewFeature();
+    }
     const onPropsChange = (updated) => {
         setCurrentFeature({
             ...currentFeature,
@@ -87,6 +91,9 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                 </StyledSpace>
             </Card>
             <Space>
+                <Button onClick={startNewCb}>
+                    <Message messageKey="FeatureEditorView.buttons.addFeature" />
+                </Button>
                 <Button onClick={cancelCb}>
                     <Message messageKey="FeatureEditorView.buttons.cancel" />
                 </Button>
