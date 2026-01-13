@@ -14,7 +14,8 @@ Oskari.registerLocalization(
             "success": "The dataset has been imported with {count, plural, one {# feature} other {# features}}. You can now find it in the \"My data\" menu.",
             "tabs": {
                 "general": "General",
-                "visualization": "Visualization"
+                "visualization": "Visualization",
+                "layerFields": "Layer fields"
             },
             "layer": {
                 "name": "Map layer name",
@@ -105,7 +106,19 @@ Oskari.registerLocalization(
                 "error": "Error occured during feature delete"
             },
             "featureLayer": {
-                "new": "New feature layer"
+                "new": "New feature layer",
+                "addFeature": "Add feature",
+                "fieldName": "Name",
+                "fieldType": "Type"
+            },
+            "types": {
+                "String": "String",
+                "Boolean": "Boolean",
+                "Integer": "Integer",
+                "Double": "Double",
+                "Date": "Date",
+                "Timestamp": "Timestamp",
+                "UUID": "UUID"
             }
         },
         "layer": {

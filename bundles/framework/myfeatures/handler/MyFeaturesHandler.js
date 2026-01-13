@@ -54,7 +54,8 @@ class MyFeaturesHandler extends StateHandler {
         const save = values => this.importFile(values);
         const update = values => this.updateLayer(id, values);
         const onOk = isNew ? newCallback : isImport ? save : update;
-        this.popupControls = showLayerForm(values, conf, onOk, () => this.popupCleanup());
+        const addNewFeature = () => { this.popupCleanup(); this.showFeatureEditorDialog(id); };
+        this.popupControls = showLayerForm(values, conf, onOk, () => this.popupCleanup(), addNewFeature);
     }
 
     /**
@@ -270,14 +271,9 @@ class MyFeaturesHandler extends StateHandler {
     }
 
     async saveFeature(layer, feature) {
-        const fid = feature?.properties?.fid || null;
-        delete feature.properties.fid;
-
-        // keep prefix -> use in app.
         const layerId = layer?.id || null;
         const newMyFeature = {
             layerId: layerId,
-            fid: fid,
             id: feature.id,
             geometry: feature.geometry,
             properties: feature.properties

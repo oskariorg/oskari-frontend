@@ -14,7 +14,8 @@ Oskari.registerLocalization(
             "success": "Aineistosta tuotiin {count, plural, one {# kohde} other {# kohdetta}} onnistuneesti. Voit tarkastella aineistoa Omat tiedot -valikon Omat aineistot -välilehden kautta.",
             "tabs" : {
                 "general": "Yleiset",
-                "visualization": "Visualisointi"
+                "visualization": "Visualisointi",
+                "layerFields": "Kentät"
             },
             "layer": {
                 "name": "Karttatason nimi",
@@ -105,7 +106,19 @@ Oskari.registerLocalization(
                 "error": "Kohteen poistossa tapahtui virhe"
             },
             "featureLayer": {
-                "new": "Uusi aineisto"
+                "new": "Uusi aineisto",
+                "addFeature": "Lisää kohde",
+                "fieldName": "Nimi",
+                "fieldType": "Tyyppi"
+            },
+            "types": {
+                "String": "Merkkijono",
+                "Boolean": "Boolean",
+                "Integer": "Kokonaisluku",
+                "Double": "Desimaaliluku",
+                "Date": "Päivämäärä",
+                "Timestamp": "Aikaleima",
+                "UUID": "UUID"
             }
         },
         "layer": {

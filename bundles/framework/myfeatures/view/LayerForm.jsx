@@ -16,11 +16,11 @@ const getTitle = (config, isNew) => {
     return <Message messageKey={key} bundleKey={BUNDLE_KEY} />;
 };
 
-export const showLayerForm = (values, config, onOk, onClose) => {
+export const showLayerForm = (values, config, onOk, onClose, addFeature) => {
     const { id, isNew } = values;
     const content = (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <LayerFormContent values={values} config={config} onOk={onOk} onCancel={onClose}/>
+            <LayerFormContent values={values} config={config} onOk={onOk} onCancel={onClose} addFeature={addFeature}/>
         </LocaleProvider>
     );
 
@@ -31,7 +31,7 @@ export const showLayerForm = (values, config, onOk, onClose) => {
         update: (error, prevValues) => {
             controls.update(getTitle(config),
                 (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                    <LayerFormContent values={prevValues} config={config} onOk={onOk} onCancel={onClose} error={error}/>
+                    <LayerFormContent values={prevValues} config={config} onOk={onOk} onCancel={onClose} error={error} addFeature={addFeature}/>
                 </LocaleProvider>));
         }
     };

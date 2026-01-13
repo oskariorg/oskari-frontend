@@ -215,10 +215,6 @@ export class MyFeaturesService {
     }
 
     async createLayer (values) {
-        values.layerFields = [{
-            name: 'temp',
-            type: 'String'
-        }];
         return fetch(Oskari.urls.getRoute('MyFeaturesLayer'), {
             method: 'POST',
             body: JSON.stringify({

@@ -6,7 +6,6 @@ import { InfoPanel } from './InfoPanel';
 
 import styled from 'styled-components';
 import { FeatureEditorPanelHandler } from './FeatureEditorPanelHandler';
-import { LayerFormContent } from '../../../../bundles/framework/myfeatures/view/LayerForm';
 
 const StyledPanel = styled('div')`
     background: #FFF;
@@ -32,7 +31,7 @@ const StyledPanel = styled('div')`
     }
 `;
 
-export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave, onDelete, onClose, onCancel, isNewLayer}) => {
+export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave, onDelete, onClose, onCancel}) => {
     const helperRef = useRef(null);
     const [handlerState, setHandlerState] = useState(null);
     const { currentLayer = null, feature = null } = handlerState || {};
@@ -58,7 +57,6 @@ export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave
     }
 
     return <EditorPanel
-        isNewLayer = { isNewLayer }
         layer = { currentLayer }
         feature = { feature }
         loading = { false }
@@ -70,7 +68,7 @@ export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave
     />;
 };
 
-const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature, isNewLayer}) => {
+const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature}) => {
 
     const hasLayer = !!layer?.geometryType;
     const hasFeature = hasLayer && feature?.type === 'Feature';
@@ -79,7 +77,6 @@ const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDele
         <LocaleProvider value={{ bundleKey: 'oskariui' }}>
             <StyledPanel className="content-editor">
                 <div className="content">
-                    { isNewLayer && <LayerFormContent/>}
                     { !hasLayer &&
                         <ErrorPanel loading={true} />
                     }

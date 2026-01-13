@@ -1,8 +1,8 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Tabs, Message, Tooltip, Spin } from 'oskari-ui';
-import { GeneralTab, VisualizationTab } from './';
+import { Tabs, Message, Tooltip, Spin, Button } from 'oskari-ui';
+import { GeneralTab, LayerFieldsTab, VisualizationTab } from './';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { ERRORS } from '../../constants';
 import { MandatoryIcon } from 'oskari-ui/components/icons';
@@ -35,21 +35,23 @@ const getGeneralTabTitle = isValid => (
     </Fragment>
 );
 
-export const LayerFormContent = ({ values, config, onOk, onCancel, error }) => {
+export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFeature }) => {
     const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = Oskari.custom.generateBlankStyle(), locale = {} } = values || {};
-    const [state, setState] = useState({ style, locale, loading: false, tab: 'general', file: values?.file });
+    const [state, setState] = useState({ style, locale, loading: false, tab: 'general', file: values?.file, layerFields: values?.layerFields });
 
     const showSrs = isImport && error === ERRORS.NO_SRS;
 
     const updateStyle = (style) => setState({ ...state, style });
+    const updateLayerFields = (layerFields) => setState({ ...state, layerFields });
     const setTab = (tab) => setState({ ...state, tab });
     const updateState = (newState) => setState({ ...state, ...newState });
     const onOkClick = () => {
         const values = {
             style: state.style,
             locale: state.locale,
-            file: state.file
+            file: state.file,
+            layerFields: state.layerFields
         };
         if (showSrs) {
             // add sourceSrs only if field is visible
@@ -105,10 +107,18 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error }) => {
                         key: 'visualization',
                         label: <Message messageKey='flyout.tabs.visualization'/>,
                         children: <Tab><VisualizationTab updateStyle={updateStyle} style={state.style} /></Tab>
+                    },
+                    {
+                        key: 'layerFields',
+                        label: <Message messageKey='flyout.tabs.layerFields'/>,
+                        children: <Tab><LayerFieldsTab layerFields={state.layerFields} updateLayerFields={updateLayerFields}/></Tab>
                     }
                 ]}
             />
             <ButtonContainer>
+                <Button onClick={() => addFeature()}>
+                    <Message messageKey='featureEditor.featureLayer.addFeature'/>
+                </Button>
                 <SecondaryButton type='cancel' onClick={() => onCancel()}/>
                 <Tooltip key="okButtonTooltip" title={ getValidationMessage(validationKeys) }>
                     <PrimaryButton disabled={!isValid} type={okBtnType} onClick={onOkClick}/>
