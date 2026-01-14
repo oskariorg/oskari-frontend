@@ -26,7 +26,8 @@ Oskari.registerLocalization(
             "validations": {
                 "name": "The map layer name is missing",
                 "file":  "A file is missing",
-                "epsg": "EPSG code has to be number"
+                "epsg": "EPSG code has to be number",
+                "layerFields": "At least one attribute field is required for layer"
             },
             "error":{
                 "title": "The dataset could not be imported.",
@@ -72,6 +73,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Content editor"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset \"{name}\"?",
+            "confirmDeleteFieldMsg": "Do you want to delete the field  \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "save": "Save",

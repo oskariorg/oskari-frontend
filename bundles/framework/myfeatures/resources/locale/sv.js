@@ -26,7 +26,9 @@ Oskari.registerLocalization(
             },
             "validations": {
                 "name": "Namnet på kartlagret saknas",
-                "file": "Filen har inte valts"
+                "file": "Filen har inte valts",
+                "epsg": "EPSG code has to be number",
+                "layerFields": "At least one attribute field is required for layer"
             },
             "error":{
                 "title": "Importerningen av datamängden misslyckades.",
@@ -72,6 +74,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
+            "confirmDeleteFieldMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "save": "Spara",

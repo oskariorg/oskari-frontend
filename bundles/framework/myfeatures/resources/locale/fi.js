@@ -26,7 +26,8 @@ Oskari.registerLocalization(
             "validations": {
                 "name": "Karttatasolle pitää antaa nimi",
                 "file": "Valitse aineiston sisältävä tiedosto",
-                "epsg": "EPSG-koodi pitää antaa numerona"
+                "epsg": "EPSG-koodi pitää antaa numerona",
+                "layerFields": "Tasolle pitää olla määritelty vähintään yksi tietokenttä"
             },
             "error":{
                 "title": "Aineiston tuonti epäonnistui",
@@ -71,6 +72,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
+            "confirmDeleteFieldMsg": "Haluatko poistaa kentän \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "save": "Tallenna",

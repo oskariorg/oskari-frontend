@@ -25,9 +25,9 @@ const getValidationMessage = keys => {
         </ul>
     );
 };
-const getGeneralTabTitle = isValid => (
+const getTabTitle = (isValid, messageKey) => (
     <Fragment>
-        <Message messageKey='flyout.tabs.general'/>
+        <Message messageKey={messageKey}/>
         <MandatoryIcon isValid={isValid} style={{
             verticalAlign: '-0.25em',
             paddingLeft: '0.5em'
@@ -38,7 +38,7 @@ const getGeneralTabTitle = isValid => (
 export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFeature }) => {
     const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = Oskari.custom.generateBlankStyle(), locale = {} } = values || {};
-    const [state, setState] = useState({ style, locale, loading: false, tab: 'general', file: values?.file, layerFields: values?.layerFields });
+    const [state, setState] = useState({ id: values?.id, style, locale, loading: false, tab: 'general', file: values?.file, layerFields: values?.layerFields });
 
     const showSrs = isImport && error === ERRORS.NO_SRS;
 
@@ -70,6 +70,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
     if (!hasMandatoryName) {
         validationKeys.push('name');
     };
+
     if (showSrs && state.sourceSrs) {
         const { sourceSrs: srs } = state;
         // check that existing value is valid
@@ -77,6 +78,11 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
             validationKeys.push('epsg');
         }
     }
+
+    if (!state?.layerFields?.length) {
+        validationKeys.push('layerFields');
+    }
+
     const isValid = validationKeys.length === 0;
     const Component = (
         <Content>
@@ -86,7 +92,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
                 items={[
                     {
                         key: 'general',
-                        label: getGeneralTabTitle(isValid),
+                        label: getTabTitle(isValid, 'flyout.tabs.general'),
                         children: (
                             <Tab>
                                 <GeneralTab
@@ -110,13 +116,13 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
                     },
                     {
                         key: 'layerFields',
-                        label: <Message messageKey='flyout.tabs.layerFields'/>,
-                        children: <Tab><LayerFieldsTab layerFields={state.layerFields} updateLayerFields={updateLayerFields}/></Tab>
+                        label: getTabTitle(!!state?.layerFields?.length, 'flyout.tabs.layerFields'),
+                        children: <Tab><LayerFieldsTab id={state.id} layerFields={state.layerFields} updateLayerFields={updateLayerFields}/></Tab>
                     }
                 ]}
             />
             <ButtonContainer>
-                <Button onClick={() => addFeature()}>
+                <Button onClick={() => addFeature()} disabled = {!state.id}>
                     <Message messageKey='featureEditor.featureLayer.addFeature'/>
                 </Button>
                 <SecondaryButton type='cancel' onClick={() => onCancel()}/>
