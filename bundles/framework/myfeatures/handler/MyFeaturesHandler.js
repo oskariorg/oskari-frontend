@@ -173,7 +173,8 @@ class MyFeaturesHandler extends StateHandler {
                 },
                 style: {
                     ...layerJson?.options?.styles?.default?.featureStyle
-                }
+                },
+                layerFields: layerJson?.layerFields
             };
             this.showLayerDialog(values);
         } catch (err) {
