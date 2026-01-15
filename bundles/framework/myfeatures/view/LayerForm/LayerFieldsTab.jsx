@@ -88,7 +88,6 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], updateLayerFields 
             <AddFieldContainerColumn>
                 <InputLabel><Message messageKey='featureEditor.featureLayer.fieldType'/></InputLabel>
                 <StyledSelect
-                    title={<Message messageKey='featureEditor.featureLayer.fieldType'/>}
                     options={ options }
                     value={type}
                     onChange={(value) => setType(value)}
