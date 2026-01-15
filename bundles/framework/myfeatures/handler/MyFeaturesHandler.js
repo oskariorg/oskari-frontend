@@ -51,11 +51,23 @@ class MyFeaturesHandler extends StateHandler {
             isImport
         };
         const newCallback = (values) => this.createLayer(values);
-        const save = values => this.importFile(values);
-        const update = values => this.updateLayer(id, values);
-        const onOk = isNew ? newCallback : isImport ? save : update;
+        const saveCallback = values => this.importFile(values);
+        const updateCallback = values => this.updateLayer(id, values);
+
+        const getOkCallback = () => {
+            if (isNew) {
+                return newCallback;
+            };
+
+            if (isImport) {
+                return saveCallback;
+            }
+
+            return updateCallback;
+        };
+
         const addNewFeature = () => { this.popupCleanup(); this.showFeatureEditorDialog(id); };
-        this.popupControls = showLayerForm(values, conf, onOk, () => this.popupCleanup(), addNewFeature);
+        this.popupControls = showLayerForm(values, conf, getOkCallback(), () => this.popupCleanup(), addNewFeature);
     }
 
     /**
