@@ -36,6 +36,7 @@ const getTabTitle = (isValid, messageKey) => (
 );
 
 export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFeature }) => {
+    // TODO: refactor this thing as it's getting way overly complicated
     const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = Oskari.custom.generateBlankStyle(), locale = {} } = values || {};
     const [state, setState] = useState({ id: values?.id, style, locale, loading: false, tab: 'general', file: values?.file, layerFields: values?.layerFields });
@@ -79,47 +80,52 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
         }
     }
 
-    if (!state?.layerFields?.length) {
+    if (!state?.layerFields?.length && !isImport) {
         validationKeys.push('layerFields');
     }
 
     const isValid = validationKeys.length === 0;
+    const tabItems = [
+        {
+            key: 'general',
+            label: getTabTitle(isValid, 'flyout.tabs.general'),
+            children: (
+                <Tab>
+                    <GeneralTab
+                        languages = {languages}
+                        locale = {state.locale}
+                        file = {state.file}
+                        sourceSrs = {state.sourceSrs}
+                        isImport = {isImport}
+                        maxSize = {maxSize}
+                        unzippedMaxSize = {unzippedMaxSize}
+                        showSrs = {showSrs}
+                        updateState = {updateState}
+                    />
+                </Tab>
+            )
+        },
+        {
+            key: 'visualization',
+            label: <Message messageKey='flyout.tabs.visualization'/>,
+            children: <Tab><VisualizationTab updateStyle={updateStyle} style={state.style} /></Tab>
+        }
+    ];
+
+    if (!isImport) {
+        tabItems.push({
+            key: 'layerFields',
+            label: getTabTitle(!!state?.layerFields?.length, 'flyout.tabs.layerFields'),
+            children: <Tab><LayerFieldsTab id={state.id} layerFields={state.layerFields} updateLayerFields={updateLayerFields}/></Tab>
+        });
+    };
+
     const Component = (
         <Content>
             <Tabs
                 activeKey={state.tab}
                 onChange={tabKey => setTab(tabKey)}
-                items={[
-                    {
-                        key: 'general',
-                        label: getTabTitle(isValid, 'flyout.tabs.general'),
-                        children: (
-                            <Tab>
-                                <GeneralTab
-                                    languages = {languages}
-                                    locale = {state.locale}
-                                    file = {state.file}
-                                    sourceSrs = {state.sourceSrs}
-                                    isImport = {isImport}
-                                    maxSize = {maxSize}
-                                    unzippedMaxSize = {unzippedMaxSize}
-                                    showSrs = {showSrs}
-                                    updateState = {updateState}
-                                />
-                            </Tab>
-                        )
-                    },
-                    {
-                        key: 'visualization',
-                        label: <Message messageKey='flyout.tabs.visualization'/>,
-                        children: <Tab><VisualizationTab updateStyle={updateStyle} style={state.style} /></Tab>
-                    },
-                    {
-                        key: 'layerFields',
-                        label: getTabTitle(!!state?.layerFields?.length, 'flyout.tabs.layerFields'),
-                        children: <Tab><LayerFieldsTab id={state.id} layerFields={state.layerFields} updateLayerFields={updateLayerFields}/></Tab>
-                    }
-                ]}
+                items={tabItems}
             />
             <ButtonContainer>
                 <Button onClick={() => addFeature()} disabled = {!state.id}>
