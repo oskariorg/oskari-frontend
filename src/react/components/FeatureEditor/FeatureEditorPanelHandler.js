@@ -15,6 +15,7 @@ export class FeatureEditorPanelHandler extends StateHandler {
 
         this.name = 'FeatureEditor';
         this.sandbox = Oskari.getSandbox();
+        this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this.mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.eventHandlers = {
             FeatureEvent: function (event) {
@@ -51,13 +52,19 @@ export class FeatureEditorPanelHandler extends StateHandler {
         return handler.apply(this, [event]);
     }
 
-    init(layerId) {
+    init(layerId, featureId) {
         Object.keys(this.eventHandlers).forEach(eventName => {
             this.getSandbox().registerForEventByName(this, eventName);
         });
         Helper.describeLayer(layerId).then(metadata => {
             this.getSandbox().postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [false, this.getName()]);
             this.setCurrentLayer(layerId, metadata.geometryType, metadata.types);
+            if (featureId) {
+                const featuresMap = this.mapModule.getVectorFeatures(null, { layers: [layerId] });
+                const features = featuresMap[layerId] ? featuresMap[layerId].features : null;
+                const feature = features?.filter((feature) => feature.id === featureId)?.[0] ?? null;
+                this.setFeature(feature)
+            }
             return;
         }).catch(() => {
             // this.trigger('loading', false);
@@ -108,8 +115,15 @@ export class FeatureEditorPanelHandler extends StateHandler {
             fieldTypes: types,
             name: mapLayer.getName(Oskari.getDefaultLanguage())
         };
+
         this.updateState({
             currentLayer: newState
+        },);
+    }
+
+    setFeature(feature) {
+        this.updateState({
+            feature
         });
     }
 

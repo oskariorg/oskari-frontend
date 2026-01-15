@@ -1,1 +1,1 @@
-export { FeatureEditorPanel } from './FeatureEditorPanel';
+export { FeatureEditorPanel } from './FeatureEditorPanel.jsx';

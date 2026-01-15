@@ -4,10 +4,11 @@ import { showFlyout } from 'oskari-ui/components/window';
 import { FeatureEditorPanel } from 'oskari-ui/components/FeatureEditor';
 import { Message } from 'oskari-ui';
 import { BUNDLE_KEY } from '../../constants';
-const FeatureEditorContainer = ({ layerId, controller }) => {
+const FeatureEditorContainer = ({ layerId, featureId, controller }) => {
     return <>
         <FeatureEditorPanel
             layerId = { layerId }
+            featureId = { featureId }
             loading = {false}
             onSave = {(layer, feature) => {
                 controller.saveFeature(layer, feature);
@@ -25,15 +26,19 @@ const FeatureEditorContainer = ({ layerId, controller }) => {
     </>;
 };
 
-export const showFeatureEditorFlyout = (layerId, controller) => {
-    const content = <FeatureEditorContainer layerId = { layerId } controller = { controller }/>;
+export const showFeatureEditorFlyout = (layerId, featureId, controller) => {
+    const content = <FeatureEditorContainer
+        layerId = { layerId }
+        featureId = { featureId }
+        controller = { controller }
+    />;
     const title = <Message bundleKey={BUNDLE_KEY} messageKey={'featureEditor.title'}/>;
     const controls = showFlyout(title, content, () => { controller.closeFeatureEditorFlyout(); });
 
     return {
         ...controls,
-        update: (layerId, controller) => {
-            controls.update(title, <FeatureEditorContainer layerId = { layerId } controller = { controller }/>);
+        update: (layerId, featureId, controller) => {
+            controls.update(title, <FeatureEditorContainer layerId = { layerId } featureId = { featureId } controller = { controller }/>);
         }
     };
 };

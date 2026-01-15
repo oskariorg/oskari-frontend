@@ -95,6 +95,9 @@ Oskari.clazz.define(
         // Tools array for layer specific functions
         me._tools = [];
 
+        // Tools array for a layer's feature specific functions
+        me._featureTools = [];
+
         /* link to metadata service */
         me._metadataIdentifier = null;
 
@@ -763,6 +766,45 @@ Oskari.clazz.define(
         getTool: function (toolName) {
             return this.getTools().find(function (tool) {
                 return tool.getName() === toolName;
+            });
+        },
+        /**
+         * @method getFeatureTools
+         * @return {Oskari.mapframework.domain.Tool[]}
+         * Get layer feature tools
+         */
+        getFeatureTools: function () {
+            return this._featureTools || [];
+        },
+        /**
+         * @method setFeatureTools
+         * @params {Oskari.mapframework.domain.Tool[]}
+         * Set layer feature tools
+         */
+        setFeatureTools: function (featureTools) {
+            this._featureTools = featureTools;
+        },
+        /**
+         * @method addFeatureTool
+         * @params {Oskari.mapframework.domain.Tool}
+         * adds layer feature tool to featuretools
+         */
+        addFeatureTool: function (featureTool) {
+            if (!featureTool || this.getTool(featureTool.getName())) {
+                // check for duplicates and invalid param
+                return;
+            }
+            this._featureTools.push(featureTool);
+        },
+
+        /**
+         * @method getFeatureTool
+         * @return {Oskari.mapframework.domain.Tool}
+         * get layer feature tool by name
+         */
+        getFeatureTool: function (toolName) {
+            return this.getFeatureTools().find(function (featureTool) {
+                return featureTool.getName() === toolName;
             });
         },
         /**

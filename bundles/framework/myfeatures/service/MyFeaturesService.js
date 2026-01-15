@@ -1,6 +1,7 @@
 import { handleMyFeaturesLayers, parseLayerData } from './layerHandling';
 import { MyFeaturesImportError } from './MyFeaturesImportError';
 import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
+import { FEATURE_EDITOR_TOOLNAME } from '../constants';
 
 export class MyFeaturesService {
     constructor (sandbox, mapLayerService, getMsg) {
@@ -74,6 +75,17 @@ export class MyFeaturesService {
         editLayerTool.setTitle(toolName);
         editLayerTool.setCallback(() => this.sandbox.postRequestByName('myfeatures.ShowLayerDialogRequest', [mapLayer.getId()]));
         mapLayer.addTool(editLayerTool);
+
+
+        const featureEditorTool =  Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+        featureEditorTool.setName(FEATURE_EDITOR_TOOLNAME);
+        featureEditorTool.setTitle(Oskari.getMsg('myfeatures', 'featureEditor.title'));
+
+        featureEditorTool.setCallback((layerId, featureId) => {
+            this.sandbox.postRequestByName('ShowFeatureEditorRequest', [layerId, featureId]);
+        });
+        mapLayer.addFeatureTool(featureEditorTool);
+
         // mark that this has been added by this bundle.
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.
         // This is used to filter out other users shared layers when listing layers on the My Data functionality.

@@ -519,11 +519,14 @@ Oskari.clazz.define(
 
             this._sendDataForMapLocationEvent(data);
 
-            if (fragments?.length) {
-                contentData.html = this._renderFragments(fragments);
-                contentData.layerId = fragments[0].layerId;
+            fragments?.forEach((fragment) => {
+                const layerId = fragment.layerId;
+                contentData.html = this._renderFragments([fragment]);
+                contentData.layerId = layerId;
+                contentData.featureId = data?.featureId || null;
+                this.addFeatureTools(contentData);
                 content.push(contentData);
-            }
+            });
             const { colourScheme, font, noUI } = this._config || {};
 
             // GFIPlugin.config.noUI: true means the infobox for GFI content shouldn't be shown
@@ -541,6 +544,20 @@ Oskari.clazz.define(
             });
         },
 
+        /**
+         * Adds feature editor tool where feature editing is allowed for a layer
+         * @param {Object} contentData
+         */
+        addFeatureTools: function(contentData) {
+            const layer = this.getSandbox().findMapLayerFromAllAvailable(contentData?.layerId);
+            const { layerId, featureId } = contentData;
+            contentData.actions = layer?.getFeatureTools()?.map(tool => {
+                return {
+                    name: tool.getTitle(),
+                    action: () => { tool.getCallback()(layerId, featureId); }
+                };
+            });
+        },
         /**
          * Closes the infobox with GFI data
          *
