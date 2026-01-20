@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LocaleProvider } from 'oskari-ui/util';
 import { FeaturePanel } from './FeaturePanel';
 import { ErrorPanel } from './ErrorPanel';
-import { InfoPanel } from './InfoPanel';
 
 import styled from 'styled-components';
 import { FeatureEditorPanelHandler } from './FeatureEditorPanelHandler';
+import { LayerSelectionPanel } from './LayerSelectionPanel';
 
 const StyledPanel = styled('div')`
     background: #FFF;
@@ -14,8 +14,7 @@ const StyledPanel = styled('div')`
     left: 0;
     /* sidebar has 3, we want to open it on top of this */
     z-index: 2;
-    width: 382px;
-
+    width: 20vw;
     div.header {
         background-color: #FDF8D9;
         padding: 5px 10px;
@@ -52,9 +51,9 @@ export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave
         helperRef.current.startNewFeature();
     }, []);
 
-    if (!handlerState) {
-        return null;
-    }
+    const setCurrentLayer = useCallback((layerId) => {
+        helperRef.current.doDescribeLayer(layerId);
+    });
 
     return <EditorPanel
         layer = { currentLayer }
@@ -65,33 +64,36 @@ export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave
         onClose = { onClose }
         onCancel = { onCancel }
         startNewFeature = { startNewFeature }
+        setCurrentLayer={setCurrentLayer}
     />;
 };
 
-const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature}) => {
-
+const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature, setCurrentLayer}) => {
     const hasLayer = !!layer?.geometryType;
-    const hasFeature = hasLayer && feature?.type === 'Feature';
-    const showHelpText = hasLayer && !hasFeature;
+    if (hasLayer && !feature) {
+        feature = {
+            type: 'Feature',
+            properties: {}
+        };
+    }
     return (
         <LocaleProvider value={{ bundleKey: 'oskariui' }}>
             <StyledPanel className="content-editor">
                 <div className="content">
+                    {
+                        loading && <ErrorPanel loading={loading} />
+
+                    }
                     { !hasLayer &&
-                        <ErrorPanel loading={true} />
+                        <LayerSelectionPanel setCurrentLayer={setCurrentLayer}/>
                     }
-                    { showHelpText &&
-                        <InfoPanel
-                            layer={layer}
-                            onClose={onClose}
-                            startNewFeature={startNewFeature} />
-                    }
-                    { hasFeature &&
+                    { hasLayer &&
                         <FeaturePanel
                             layer={layer}
                             onCancel={onCancel}
                             onSave={onSave}
                             onDelete={onDelete}
+                            startNewFeature={startNewFeature}
                             feature={feature} />
                     }
                 </div>

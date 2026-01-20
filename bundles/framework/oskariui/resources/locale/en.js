@@ -174,7 +174,8 @@ Oskari.registerLocalization({
                 "loading": "Loading layer metadata...",
                 "problem": "Insufficient metadata for layer!"
             },
-            "newTitle": "New features",
+            "newTitle": "New feature",
+            "setCurrentLayerTitle": "Select map layer",
             "geometrylist": {
                 "title": "Geometry",
                 "empty": "Draw a geometry on the map",
@@ -208,7 +209,8 @@ Oskari.registerLocalization({
                 "editMultipleFeatures": "Edit multiple features",
                 "deleteFeature": "Delete feature",
                 "yes": "Yes",
-                "no": "No"
+                "no": "No",
+                "setCurrentLayer": "Select layer"
             },
             "tools": {
                 "point": "Add point geometry",

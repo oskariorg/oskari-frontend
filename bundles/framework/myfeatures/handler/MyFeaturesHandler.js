@@ -1,6 +1,6 @@
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showLayerForm } from '../view/LayerForm';
-import { BUNDLE_KEY, MAX_SIZE, ERRORS, LAYER_TYPE } from '../constants';
+import { BUNDLE_KEY, MAX_SIZE, ERRORS, MY_FEATURES_LAYER_TYPE } from '../constants';
 import { showFeatureEditorFlyout } from '../view/FeatureEditorFlyout/FeatureEditorFlyout';
 
 class MyFeaturesHandler extends StateHandler {
@@ -70,7 +70,6 @@ class MyFeaturesHandler extends StateHandler {
      * @param { int } featureId feature technical id
      */
     showFeatureEditorDialog (layerId, featureId) {
-
         if (this.featureEditorControls) {
             this.closeFeatureEditorFlyout();
         }
@@ -103,7 +102,7 @@ class MyFeaturesHandler extends StateHandler {
             loading: true
         });
         const layers = this.instance.getMapLayerService()
-            .getAllLayers().filter(layer => layer.isLayerOfType(LAYER_TYPE));
+            .getAllLayers().filter(layer => layer.isLayerOfType(MY_FEATURES_LAYER_TYPE));
         this.updateState({
             data: layers,
             loading: false
