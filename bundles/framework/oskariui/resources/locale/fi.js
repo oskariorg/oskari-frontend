@@ -175,6 +175,7 @@ Oskari.registerLocalization({
                 "problem": "Tason tiedot puuttuvat!"
             },
             "newTitle": "Uusi kohde",
+            "setCurrentLayerTitle": "Valitse karttataso",
             "geometrylist": {
                 "title": "Geometria",
                 "empty": "Merkitse geometria kartalle",
@@ -207,7 +208,8 @@ Oskari.registerLocalization({
                 "editMultipleFeatures": "Muokkaa useita kohteita",
                 "deleteFeature": "Poista kohde",
                 "yes": "Kyllä",
-                "no": "Ei"
+                "no": "Ei",
+                "setCurrentLayer": "Valitse taso"
             },
             "tools": {
                 "point": "Lisää piste",

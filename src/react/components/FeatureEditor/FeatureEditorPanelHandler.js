@@ -60,6 +60,11 @@ export class FeatureEditorPanelHandler extends StateHandler {
         Object.keys(this.eventHandlers).forEach(eventName => {
             this.getSandbox().registerForEventByName(this, eventName);
         });
+
+        this.doDescribeLayer(layerId, featureId);
+    }
+
+    doDescribeLayer(layerId, featureId) {
         Helper.describeLayer(layerId).then(metadata => {
             this.getSandbox().postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [false, this.getName()]);
             this.setCurrentLayer(layerId, metadata.geometryType, metadata.types);
@@ -74,7 +79,6 @@ export class FeatureEditorPanelHandler extends StateHandler {
             this.setLoading(false);
         });
     }
-
     /**
      * Destroys/removes this view from the screen.
      * @method @public destroy

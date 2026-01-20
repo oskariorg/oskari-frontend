@@ -91,7 +91,7 @@ export class MyFeatureBundleInstance extends BasicBundleInstance {
             tooltip: Oskari.getMsg(BUNDLE_KEY, 'featureEditor.addFeatureTool'),
             callback: () => {
                 if (loggedIn) {
-                    this.handler.showFeatureEditorDialog({});
+                    this.handler.showFeatureEditorDialog();
                 }
             }
         };

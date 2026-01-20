@@ -91,9 +91,10 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                 </StyledSpace>
             </Card>
             <Space>
-                <Button onClick={startNewCb}>
+                {!isNew && <Button onClick={startNewCb}>
                     <Message messageKey="FeatureEditorView.buttons.addFeature" />
                 </Button>
+                }
                 <Button onClick={cancelCb}>
                     <Message messageKey="FeatureEditorView.buttons.cancel" />
                 </Button>

@@ -1,5 +1,5 @@
 export const BUNDLE_KEY = 'myfeatures';
-export const LAYER_TYPE = 'myf';
+export const MY_FEATURES_LAYER_TYPE = 'myf';
 export const MAX_SIZE = 10;
 
 export const TOOL = {
