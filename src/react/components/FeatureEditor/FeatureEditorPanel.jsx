@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LocaleProvider } from 'oskari-ui/util';
 import { FeaturePanel } from './FeaturePanel';
 import { ErrorPanel } from './ErrorPanel';
-import { InfoPanel } from './InfoPanel';
 
 import styled from 'styled-components';
 import { FeatureEditorPanelHandler } from './FeatureEditorPanelHandler';

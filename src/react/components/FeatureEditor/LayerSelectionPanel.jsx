@@ -35,7 +35,7 @@ export const LayerSelectionPanel = ({ setCurrentLayer }) => {
 
     return <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
         <Row>
-            <h3><Message messageKey='FeatureEditorView.setCurrentLayerTitle'/></h3>
+            <b><Message messageKey='FeatureEditorView.setCurrentLayerTitle'/></b>
         </Row>
         <Row>
             <StyledSelect options={options} value={selectedLayer} onChange={(value) => {
