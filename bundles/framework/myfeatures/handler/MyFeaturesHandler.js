@@ -34,8 +34,8 @@ class MyFeaturesHandler extends StateHandler {
     }
 
     showLayerDialog (values) {
-        const { id } = values;
-        const isImport = !id;
+        const { id, isNew } = values;
+        const isImport = !id && !isNew;
         if (this.popupControls) {
             // already opened
             if (this.popupControls.id === id) {
@@ -50,10 +50,18 @@ class MyFeaturesHandler extends StateHandler {
             unzippedMaxSize: this.getMaxSize() * 15,
             isImport
         };
-        const save = values => this.importFile(values);
-        const update = values => this.updateLayer(id, values);
-        const onOk = isImport ? save : update;
-        this.popupControls = showLayerForm(values, conf, onOk, () => this.popupCleanup());
+        const getOkCallback = () => {
+            if (isNew) {
+                return (values) => this.createLayer(values);
+            };
+            if (isImport) {
+                return (values) => this.importFile(values);
+            }
+            return (values) => this.updateLayer(id, values);
+        };
+
+        const addNewFeature = () => { this.popupCleanup(); this.showFeatureEditorDialog(id); };
+        this.popupControls = showLayerForm(values, conf, getOkCallback(), () => this.popupCleanup(), addNewFeature);
     }
 
     /**
@@ -171,7 +179,8 @@ class MyFeaturesHandler extends StateHandler {
                 },
                 style: {
                     ...layerJson?.options?.styles?.default?.featureStyle
-                }
+                },
+                layerFields: layerJson?.layerFields
             };
             this.showLayerDialog(values);
         } catch (err) {
@@ -214,6 +223,35 @@ class MyFeaturesHandler extends StateHandler {
         }
     }
 
+    async createLayer(values) {
+        this.updateState({
+            loading: true
+        });
+
+        try {
+            await this.myFeaturesLayerService.createLayer(values);
+            Messaging.success({
+                content: this.loc('tab.notification.createdMsg'),
+                duration: 10
+            });
+            this.popupCleanup();
+        } catch (err) {
+            Messaging.error({
+                content: this.loc('tab.error.createMsg'),
+                duration: 10
+            });
+            if (this.popupControls) {
+                this.popupControls.update(err || ERRORS.GENERIC, values);
+            }
+
+        } finally {
+            this.updateState({
+                loading: false
+            });
+        }
+
+    }
+
     async deleteLayer (id) {
         this.updateState({
             loading: true
@@ -240,14 +278,9 @@ class MyFeaturesHandler extends StateHandler {
     }
 
     async saveFeature(layer, feature) {
-        const fid = feature?.properties?.fid || null;
-        delete feature.properties.fid;
-
-        // keep prefix -> use in app.
         const layerId = layer?.id || null;
         const newMyFeature = {
             layerId: layerId,
-            fid: fid,
             id: feature.id,
             geometry: feature.geometry,
             properties: feature.properties
@@ -335,6 +368,7 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'editLayer',
     'deleteLayer',
     'addLayerToMap',
+    'showLayerDialog',
     'showFeatureEditorDialog',
     'closeFeatureEditorFlyout'
 ]);

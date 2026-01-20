@@ -10,26 +10,28 @@ const POPUP_OPTIONS = {
     id: BUNDLE_KEY
 };
 
-const getTitle = config => {
-    const key = config.isImport ? 'flyout.title' : 'tab.editLayer';
+const getTitle = (config, isNew) => {
+    // new, import or edit
+    const key = isNew ? 'featureEditor.featureLayer.new' : config.isImport ? 'flyout.title' : 'tab.editLayer';
     return <Message messageKey={key} bundleKey={BUNDLE_KEY} />;
 };
 
-export const showLayerForm = (values, config, onOk, onClose) => {
-    const { id } = values;
+export const showLayerForm = (values, config, onOk, onClose, addFeature) => {
+    const { id, isNew } = values;
     const content = (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            <LayerFormContent values={values} config={config} onOk={onOk} onCancel={onClose}/>
+            <LayerFormContent values={values} config={config} onOk={onOk} onCancel={onClose} addFeature={addFeature}/>
         </LocaleProvider>
     );
-    const controls = showPopup(getTitle(config), content, onClose, POPUP_OPTIONS);
+
+    const controls = showPopup(getTitle(config, isNew), content, onClose, POPUP_OPTIONS);
     return {
         id,
         ...controls,
         update: (error, prevValues) => {
             controls.update(getTitle(config),
                 (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                    <LayerFormContent values={prevValues} config={config} onOk={onOk} onCancel={onClose} error={error}/>
+                    <LayerFormContent values={prevValues} config={config} onOk={onOk} onCancel={onClose} error={error} addFeature={addFeature}/>
                 </LocaleProvider>));
         }
     };

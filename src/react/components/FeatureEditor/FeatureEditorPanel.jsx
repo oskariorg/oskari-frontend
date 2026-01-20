@@ -69,7 +69,8 @@ export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave
 };
 
 const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature}) => {
-    const hasLayer = !!layer.geometryType;
+
+    const hasLayer = !!layer?.geometryType;
     const hasFeature = hasLayer && feature?.type === 'Feature';
     const showHelpText = hasLayer && !hasFeature;
     return (
@@ -77,7 +78,7 @@ const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDele
             <StyledPanel className="content-editor">
                 <div className="content">
                     { !hasLayer &&
-                        <ErrorPanel loading={loading} />
+                        <ErrorPanel loading={true} />
                     }
                     { showHelpText &&
                         <InfoPanel

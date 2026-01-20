@@ -214,6 +214,27 @@ export class MyFeaturesService {
         });
     }
 
+    async createLayer (values) {
+        return fetch(Oskari.urls.getRoute('MyFeaturesLayer'), {
+            method: 'POST',
+            body: JSON.stringify({
+                ...values
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            return response.json();
+        }).then(json => {
+            this.updateLayerInMapLayerService(json);
+            return true;
+        });
+    }
+
     updateLayerInMapLayerService (updatedLayer) {
         const { id } = updatedLayer;
         const layer = this.mapLayerService.findMapLayer(id);

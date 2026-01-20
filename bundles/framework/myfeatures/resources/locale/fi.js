@@ -14,7 +14,8 @@ Oskari.registerLocalization(
             "success": "Aineistosta tuotiin {count, plural, one {# kohde} other {# kohdetta}} onnistuneesti. Voit tarkastella aineistoa Omat tiedot -valikon Omat aineistot -välilehden kautta.",
             "tabs" : {
                 "general": "Yleiset",
-                "visualization": "Visualisointi"
+                "visualization": "Visualisointi",
+                "layerFields": "Kentät"
             },
             "layer": {
                 "name": "Karttatason nimi",
@@ -25,7 +26,8 @@ Oskari.registerLocalization(
             "validations": {
                 "name": "Karttatasolle pitää antaa nimi",
                 "file": "Valitse aineiston sisältävä tiedosto",
-                "epsg": "EPSG-koodi pitää antaa numerona"
+                "epsg": "EPSG-koodi pitää antaa numerona",
+                "layerFields": "Tasolle pitää olla määritelty vähintään yksi tietokenttä"
             },
             "error":{
                 "title": "Aineiston tuonti epäonnistui",
@@ -70,6 +72,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
+            "confirmDeleteFieldMsg": "Haluatko poistaa kentän \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "save": "Tallenna",
@@ -80,13 +83,15 @@ Oskari.registerLocalization(
             "notification": {
                 "deletedTitle": "Poista aineisto",
                 "deletedMsg": "Aineisto on poistettu.",
-                "editedMsg": "Aineisto on päivitetty."
+                "editedMsg": "Aineisto on päivitetty.",
+                "createdMsg": "Aineisto on luotu."
             },
             "error": {
                 "title": "Virhe",
                 "generic": "Aineiston lataus epäonnistui järjestelmässä tapahtuneen virheen vuoksi.",
                 "deleteMsg": "Aineiston poistaminen epäonnistui järjestelmässä tapahtuneen virheen vuoksi.",
                 "editMsg": "Aineiston päivitys epäonnistui järjestelmässä tapahtuneen virheen vuoksi. Yritä myöhemmin uudelleen.",
+                "createMsg": "Aineiston luominen epäonnistui järjestelmässä tapahtuneen virheen vuoksi. Yritä myöhemmin uudelleen.",
                 "getStyle": "Aineistolle määritettyä tyyliä ei onnistuttu hakemaan. Lomakkeella näytetään oletusarvot. Vaihda tyylimäärittelyn arvot ennen muutosten tallennusta.",
                 "styleName": "Anna karttatasolle nimi ja yritä sitten uudelleen."
             }
@@ -101,6 +106,21 @@ Oskari.registerLocalization(
             "featureDelete": {
                 "success": "Kohteen poisto onnistui",
                 "error": "Kohteen poistossa tapahtui virhe"
+            },
+            "featureLayer": {
+                "new": "Uusi aineisto",
+                "addFeature": "Lisää kohde",
+                "fieldName": "Nimi",
+                "fieldType": "Tyyppi"
+            },
+            "types": {
+                "String": "Merkkijono",
+                "Boolean": "Boolean",
+                "Integer": "Kokonaisluku",
+                "Double": "Desimaaliluku",
+                "Date": "Päivämäärä",
+                "Timestamp": "Aikaleima",
+                "UUID": "UUID"
             }
         },
         "layer": {
