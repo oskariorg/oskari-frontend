@@ -50,20 +50,14 @@ class MyFeaturesHandler extends StateHandler {
             unzippedMaxSize: this.getMaxSize() * 15,
             isImport
         };
-        const newCallback = (values) => this.createLayer(values);
-        const saveCallback = values => this.importFile(values);
-        const updateCallback = values => this.updateLayer(id, values);
-
         const getOkCallback = () => {
             if (isNew) {
-                return newCallback;
+                return (values) => this.createLayer(values);
             };
-
             if (isImport) {
-                return saveCallback;
+                return (values) => this.importFile(values);
             }
-
-            return updateCallback;
+            return (values) => this.updateLayer(id, values);
         };
 
         const addNewFeature = () => { this.popupCleanup(); this.showFeatureEditorDialog(id); };
