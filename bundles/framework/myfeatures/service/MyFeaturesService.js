@@ -230,7 +230,12 @@ export class MyFeaturesService {
             }
             return response.json();
         }).then(json => {
-            this.updateLayerInMapLayerService(json);
+            const localeForLang = Oskari.getLocalized(json?.locale);
+            this.addLayerToService({
+                ...json,
+                name: localeForLang?.name || '',
+                subtitle: localeForLang?.desc || ''
+            });
             return true;
         });
     }
