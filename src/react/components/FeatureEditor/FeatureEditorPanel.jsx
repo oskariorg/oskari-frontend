@@ -63,7 +63,7 @@ export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading =
     }, []);
 
     const setCurrentLayer = useCallback((layerId) => {
-        helperRef.current.doDescribeLayer(layerId);
+        helperRef.current.init(layerId, null);
     });
 
     return <EditorPanel

@@ -57,28 +57,29 @@ export class FeatureEditorPanelHandler extends StateHandler {
         if (!layerId) {
             return;
         }
+
+        // unregister eventHandlers just in case this is a re-init
+        Object.keys(this.eventHandlers).forEach(eventName => {
+            this.getSandbox().unregisterFromEventByName(this, eventName);
+        });
+
+        // register again
         Object.keys(this.eventHandlers).forEach(eventName => {
             this.getSandbox().registerForEventByName(this, eventName);
         });
 
-        this.doDescribeLayer(layerId, featureId);
-    }
-
-    doDescribeLayer(layerId, featureId) {
         Helper.describeLayer(layerId).then(metadata => {
             this.getSandbox().postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [false, this.getName()]);
             this.setCurrentLayer(layerId, metadata.geometryType, metadata.types);
             if (featureId) {
-                const featuresMap = this.mapModule.getVectorFeatures(null, { layers: [layerId] });
-                const features = featuresMap[layerId] ? featuresMap[layerId].features : null;
-                const feature = features?.filter((feature) => feature.id === featureId)?.[0] ?? null;
-                this.setFeature(feature)
+                this.updateCurrentFeature(layerId, featureId)
             }
             return;
         }).catch(() => {
             this.setLoading(false);
         });
     }
+
     /**
      * Destroys/removes this view from the screen.
      * @method @public destroy
@@ -200,7 +201,7 @@ export class FeatureEditorPanelHandler extends StateHandler {
             return;
         }
 
-        if (!confirmed && this.getFeature() && this.getFeature().id !== geojson.id) {
+        if (!confirmed && this.getFeature()?.id !== geojson.id) {
             confirmEdit(this.loc, () => this.editFeature(geojson, true));
         } else {
             // remove _oid (internal normalized id by Oskari) from properties
