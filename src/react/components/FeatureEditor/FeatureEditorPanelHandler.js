@@ -129,6 +129,26 @@ export class FeatureEditorPanelHandler extends StateHandler {
         },);
     }
 
+    /**
+     * update current feature to state. Fetch from map by given featureid
+     * @param {*} featureId the id we received for the feature we're modifying
+     * @param {*} layerId sanity checking the layerid remained the same
+     */
+    updateCurrentFeature(layerId, featureId) {
+        // TODO: check if it is anyhow possible for the layerid to be something different besides currentlayer
+        const { currentLayer } = this.getState();
+        if (!currentLayer || currentLayer.id !== layerId) {
+            return;
+        }
+
+        if (featureId) {
+            const featuresMap = this.mapModule.getVectorFeatures(null, { layers: [layerId] });
+            const features = featuresMap[layerId] ? featuresMap[layerId].features : null;
+            const feature = features?.filter((feature) => feature.id === featureId)?.[0] ?? null;
+            this.setFeature(feature)
+        }
+    }
+
     setFeature(feature) {
         this.updateState({
             feature
