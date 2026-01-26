@@ -23,7 +23,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
     };
     
     const cancelCb = () => {
-        stopDrawing();
+        stopDrawing(true);
         onCancel();
     };
 
@@ -33,7 +33,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
     };
     
     const startNewCb = () => {
-        stopDrawing();
+        stopDrawing(true);
         startNewFeature();
     };
 
