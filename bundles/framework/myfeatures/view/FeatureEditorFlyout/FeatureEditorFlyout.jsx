@@ -5,7 +5,6 @@ import { FeatureEditorPanel } from 'oskari-ui/components/FeatureEditor';
 import { Message } from 'oskari-ui';
 import { BUNDLE_KEY } from '../../constants';
 const FeatureEditorContainer = ({ layerId, featureId, savedFeature, controller }) => {
-    console.log('FeatureEditorContainer update ', featureId);
     return <>
         <FeatureEditorPanel
             layerId = { layerId }
