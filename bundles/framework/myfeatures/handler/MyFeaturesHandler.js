@@ -300,9 +300,11 @@ class MyFeaturesHandler extends StateHandler {
                 return Promise.reject(Error('Save failed'));
             }
             return response.json();
-        }).then(() => {
-            // TODO: close editor or somehow notify panel of success and keep editing? Closing editor for now
-            this.closeFeatureEditorFlyout();
+        }).then((savedFeature) => {
+            // we need to provide the full feature instead of feature id because we don't really have a convenient way of 
+            // knowing our maplayerupdaterequest was succesful and the feature can now be found on the layer.
+            // Elsewhere we always use featureId
+            this.featureEditorControls.update(layerId, null, this, savedFeature);
             setTimeout(() => {
                 this.getSandbox().postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true]);
                 Messaging.success(this.loc('featureEditor.featureUpdate.success'));

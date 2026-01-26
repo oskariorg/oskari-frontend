@@ -30,7 +30,7 @@ const StyledPanel = styled('div')`
     }
 `;
 
-export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave, onDelete, onClose, onCancel}) => {
+export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading = false, onSave, onDelete, onClose, onCancel}) => {
     const helperRef = useRef(null);
     const [handlerState, setHandlerState] = useState(null);
     const { currentLayer = null, feature = null } = handlerState || {};
@@ -47,12 +47,23 @@ export const FeatureEditorPanel = ({ layerId, featureId, loading = false, onSave
         }
     }, []);
 
+    useEffect(() => {
+        // savedFeature provided when saving and we can't rely it can be found from the map already.
+        if (layerId && savedFeature) {
+            helperRef.current.setFeature(savedFeature);
+            return;
+        }
+        if (layerId && featureId) {
+            helperRef.current.updateCurrentFeature(layerId, featureId);
+        }
+    }, [layerId, featureId, savedFeature]);
+
     const startNewFeature = useCallback(() => {
         helperRef.current.startNewFeature();
     }, []);
 
     const setCurrentLayer = useCallback((layerId) => {
-        helperRef.current.doDescribeLayer(layerId);
+        helperRef.current.init(layerId, null);
     });
 
     return <EditorPanel

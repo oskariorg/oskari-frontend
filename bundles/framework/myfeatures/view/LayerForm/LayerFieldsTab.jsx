@@ -53,7 +53,8 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], updateLayerFields 
     const deleteField = (name) => {
         const newLayerFields = layerFields.filter(field => field.name !== name);
         updateLayerFields(newLayerFields);
-    }
+    };
+
     const columnSettings = [
         {
             align: 'left',
@@ -79,6 +80,14 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], updateLayerFields 
             }
         }
     ];
+    // add key for use with table
+    const rows = layerFields.map((field) => {
+        return {
+            ...field,
+            key: field.name + '_' + field.type
+        };
+    });
+    
     return <>
         {!id && <AddFieldContainer>
             <AddFieldContainerColumn>
@@ -99,7 +108,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], updateLayerFields 
         </AddFieldContainer>}
         <Table
             columns={columnSettings}
-            dataSource={layerFields}
+            dataSource={rows}
             pagination={false}
             loading={false}
         />
@@ -107,6 +116,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], updateLayerFields 
 };
 
 LayerFieldsTab.propTypes = {
+    id: PropTypes.string,
     layerFields: PropTypes.array,
     updateLayerFields: PropTypes.func
 };
