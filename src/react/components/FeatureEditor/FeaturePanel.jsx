@@ -8,7 +8,7 @@ import { GeometryPanel } from './GeometryPanel';
 import { GeoJSONPanel } from './GeoJSONPanel';
 import { Helper } from './Helper';
 import { DrawingHelper } from './DrawingHelper';
-import { StyledSpace } from './styled';
+import { StyledSpace, Row } from './styled';
 
 export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDelete, startNewFeature}) => {
     const type = Helper.detectGeometryType(layer.geometryType);
@@ -17,34 +17,40 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
     const [currentFeature, setCurrentFeature] = useState(feature);
     // TODO: if feature === currentFeature differs -> there have been edits made
     const isNew = !currentFeature.id;
-    const stopDrawing = () => {
+    const stopDrawing = (clearPrevious = false) => {
         setDrawingMode(false);
-        DrawingHelper.stopDrawing();
+        DrawingHelper.stopDrawing(clearPrevious);
     };
+    
     const cancelCb = () => {
         stopDrawing();
         onCancel();
     };
+
     const saveCb = () => {
-        stopDrawing();
+        stopDrawing(true);
         onSave(currentFeature);
     };
+    
     const startNewCb = () => {
         stopDrawing();
         startNewFeature();
-    }
+    };
+
     const onPropsChange = (updated) => {
         setCurrentFeature({
             ...currentFeature,
             properties: updated.properties
         });
-    }
+    };
+
     useEffect(() => {
         // workaround for state issue when changing target feature
         if (currentFeature.id !== feature.id) {
             setCurrentFeature(feature);
         }
     });
+
     const updateGeometry = (updatedFeature) => {
         setCurrentFeature({
             ...currentFeature,
@@ -55,6 +61,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
         DrawingHelper.startDrawing(type, isMulti, currentFeature.geometry, updateGeometry);
         setDrawingMode(true);
     };
+
     let title = <Message messageKey="FeatureEditorView.newTitle" />;
     if (!isNew) {
         title = `${currentFeature.id}`;
@@ -72,9 +79,18 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                     { isDrawing &&
                         <React.Fragment>
                             <Message messageKey="FeatureEditorView.geometrylist.editing" />
-                            <Button type="primary" onClick={() => stopDrawing()}>
-                                <Message messageKey="FeatureEditorView.tools.finishSketch" />
-                            </Button>
+                            <Row>
+                                <Button type="primary" onClick={() => stopDrawing(false)}>
+                                    <Message messageKey="FeatureEditorView.tools.finishSketch" />
+                                </Button>
+                                <Button type="default" onClick={() => { 
+                                    // reset geometry with the original feature and clear drawing.
+                                    updateGeometry(feature); 
+                                    stopDrawing(true); 
+                                }}>
+                                    <Message messageKey="FeatureEditorView.restoreOriginal" />
+                                </Button>
+                            </Row>
                         </React.Fragment>
                     }
                     { !isDrawing &&
@@ -83,6 +99,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                             feature={currentFeature}
                             original={feature}
                             startDrawing={startDrawing}
+                            stopDrawing={stopDrawing}
                             updateGeometry={updateGeometry} />
                     }
                     { !isDrawing &&

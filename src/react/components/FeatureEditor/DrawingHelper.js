@@ -20,13 +20,19 @@ const fakeModule = {
 };
 
 const startDrawing = (type, isMulti = false, currentGeometry, listener) => {
+
+    const sandbox = Oskari.getSandbox();
+
+    // clear old drawing in case there might a previous sketch on the map
+    sandbox.postRequestByName('DrawTools.StopDrawingRequest',
+        [DRAW_OPERATION_ID, true, true]);
+
     const drawParams = {
         allowMultipleDrawing: true,
         showMeasureOnMap: true,
         geojson: currentGeometry,
         allowMultipleDrawing: isMulti ? 'multiGeom' : 'single'
     };
-    const sandbox = Oskari.getSandbox();
     sandbox.postRequestByName('DrawTools.StartDrawingRequest',
         [DRAW_OPERATION_ID, type.replace('Multi', ''), drawParams]);
 
@@ -34,10 +40,11 @@ const startDrawing = (type, isMulti = false, currentGeometry, listener) => {
     sandbox.registerForEventByName(fakeModule, EVENT_NAME);
 
 };
-const stopDrawing = () => {
+const stopDrawing = (clearPrevious = false) => {
     const sandbox = Oskari.getSandbox();
+    // should keep sketch until feature is saved.
     sandbox.postRequestByName('DrawTools.StopDrawingRequest',
-        [DRAW_OPERATION_ID, true, true]);
+        [DRAW_OPERATION_ID, clearPrevious, true]);
     sandbox.unregisterFromEventByName(fakeModule, EVENT_NAME);
     drawListener = null;
 };
