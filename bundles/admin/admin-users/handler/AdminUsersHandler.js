@@ -82,7 +82,7 @@ class UIHandler extends StateHandler {
             }), {
                 method: 'GET',
                 headers: {
-                    'Accept': 'application/json'
+                    Accept: 'application/json'
                 }
             });
             if (!response.ok) {
@@ -109,7 +109,7 @@ class UIHandler extends StateHandler {
             const response = await fetch(Oskari.urls.getRoute('ManageRoles'), {
                 method: 'GET',
                 headers: {
-                    'Accept': 'application/json'
+                    Accept: 'application/json'
                 }
             });
             if (!response.ok) {
@@ -150,7 +150,7 @@ class UIHandler extends StateHandler {
             }), {
                 method: 'GET',
                 headers: {
-                    'Accept': 'application/json'
+                    Accept: 'application/json'
                 }
             });
             if (!response.ok) {
@@ -253,13 +253,13 @@ class UIHandler extends StateHandler {
             return;
         }
         // eslint-disable-next-line no-unused-vars
-        const { errors: ignore, passwordErrors, password, rePassword, ...fields } = this.state.userFormState;
+        const { errors: ignore, passwordErrors, password, rePassword, created, lastLogin, ...fieldsForValidation } = this.state.userFormState;
 
-        Object.keys(fields).forEach(key => {
-            const field = fields[key];
+        Object.keys(fieldsForValidation).forEach(fieldName => {
+            const fieldValue = fieldsForValidation[fieldName];
             // String or Array (roles)
-            if (!field || field.length === 0) {
-                errors.push(key);
+            if (!fieldValue || fieldValue.length === 0) {
+                errors.push(fieldName);
             }
         });
 
