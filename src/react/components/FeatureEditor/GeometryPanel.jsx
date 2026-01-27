@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Alert, Message, Button, Space } from 'oskari-ui';
-import { StyledSpace, StyledContainer, StyledModIndicator } from './styled';
+import { StyledSpace, StyledContainer, StyledModIndicator, Row, Column } from './styled';
 import styled from 'styled-components';
 
 export const StyledList = styled('ul')`
@@ -13,9 +13,6 @@ const StyledAlert = styled(Alert)`
     margin-bottom: 5px;
 `;
 
-const EditButton = styled(Button)`
-    margin-left: 10px;
-`;
 export const StyledListItem = styled('li')`
     padding: 5px;
     border: 1px solid gray;
@@ -48,7 +45,7 @@ const geometryMatch = (current = {}, original = {}) => {
     return currentList.every(item => originalList.includes(item));
 }
 
-export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDrawing, updateGeometry}) => {
+export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDrawing, stopDrawing, updateGeometry}) => {
     const isMulti = type.includes('Multi');
     const isGeomBtnShown = (btnType) => type.includes(btnType);
     const isPoint = isGeomBtnShown('Point');
@@ -103,18 +100,28 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
         return (
             <StyledSpace>
                 <StyledContainer>
-                    <Message messageKey="FeatureEditorView.geometrylist.title" />
-                    <EditButton onClick={() => startDrawing(feature.geometry?.type || type)}>
-                        <Message messageKey="FeatureEditorView.tools.geometryEdit" />
-                    </EditButton>
+                    <Column>
+                        <Row>
+                            <Message messageKey="FeatureEditorView.geometrylist.title" />
+                            { geometryChanged && <Message messageKey="FeatureEditorView.modified" LabelComponent={StyledModIndicator}  /> }
+                        </Row>
+                        <Row>
+                            <Button onClick={() => startDrawing(feature.geometry?.type || type)}>
+                                <Message messageKey="FeatureEditorView.tools.geometryEdit" />
+                            </Button>
+
+                            { geometryChanged && <Button type="default" onClick={() => { 
+                                updateFeatureGeometry(feature, original.geometry);
+                                stopDrawing(true);
+                            }}>
+                                <Message messageKey="FeatureEditorView.restoreOriginal" />
+                            </Button> 
+                            }
+
+                        </Row>
+                    </Column>
                 </StyledContainer>
                 <br />
-                {geometryChanged && <StyledContainer>
-                    <Message messageKey="FeatureEditorView.modified" LabelComponent={StyledModIndicator}  />
-                    <Button type="link" onClick={() => updateFeatureGeometry(feature, original.geometry)}>
-                        <Message messageKey="FeatureEditorView.restoreOriginal" />
-                    </Button>
-                </StyledContainer>}
             </StyledSpace>);
     }
 
@@ -148,7 +155,10 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
                 </StyledList> }
                 {geometryChanged && <StyledContainer>
                     <Message messageKey="FeatureEditorView.modified" LabelComponent={StyledModIndicator} />
-                    <Button type="link" onClick={() => updateFeatureGeometry(feature, original.geometry)}>
+                    <Button type="default" onClick={() => {
+                        updateFeatureGeometry(feature, original.geometry);
+                        stopDrawing(true);
+                    }}>
                         <Message messageKey="FeatureEditorView.restoreOriginal" />
                     </Button>
                 </StyledContainer>}

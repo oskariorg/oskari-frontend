@@ -15,3 +15,15 @@ export const StyledContainer = styled('div')`
 export const StyledModIndicator = styled('span')`
     color: orange;
 `;
+
+export const Column = styled('div')`
+    display: flex;
+    flex-direction: column;
+    gap: 1em;  zdx
+`;
+
+export const Row = styled('div')`
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+`;
