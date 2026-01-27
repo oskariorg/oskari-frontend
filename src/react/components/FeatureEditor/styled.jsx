@@ -8,7 +8,7 @@ export const StyledSpace = styled(Space)`
 
 export const StyledContainer = styled('div')`
     display: inline-flex;
-    justify-content: space-between;       
+    justify-content: space-between;
     width: 100%;
     align-items: center;
 `;
