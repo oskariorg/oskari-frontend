@@ -24,8 +24,7 @@ const startDrawing = (type, isMulti = false, currentGeometry, listener) => {
     const sandbox = Oskari.getSandbox();
 
     // clear old drawing in case there might a previous sketch on the map
-    sandbox.postRequestByName('DrawTools.StopDrawingRequest',
-        [DRAW_OPERATION_ID, true, true]);
+    stopDrawing(true);
 
     const drawParams = {
         allowMultipleDrawing: true,
