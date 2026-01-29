@@ -28,3 +28,7 @@ export const EFFECT = {
     LIGHTEN_NORMAL: `${LIGHTEN} ${NORMAL}`,
     LIGHTEN_MAJOR: `${LIGHTEN} ${MAJOR}`
 };
+
+export const ALLOWED_JSON_KEY_CHARS = new Set(
+  'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'
+);

@@ -4,6 +4,8 @@ import { Select, Message, TextInput } from 'oskari-ui';
 import { Table } from 'oskari-ui/components/Table';
 import { PrimaryButton, DeleteButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
+import { MandatoryIcon } from 'oskari-ui/components/icons';
+
 const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
 
 const options = types.map((typename) => {
@@ -29,24 +31,59 @@ const AddFieldContainer = styled('div')`
 const AddFieldContainerColumn = styled('div')`
     display: flex;
     flex-direction: column;
+    margin-bottom: 0.5em;
 `;
 
 const AddFieldContainerColumnFlexBottom = styled(AddFieldContainerColumn)`
     justify-content: flex-end;
 `;
 
-const InputLabel = styled('div')`
-    font-weight: bold;
+const Error = styled('div')`
+    color: red;
+    font-style: italic;
 `;
 
+const validate = (name, layerFields) => {
+    if (!name?.length) {
+        return null;
+    }
+    // field with 'name' already exists?
+    const fieldAlreadyExists = layerFields?.map(item => item.name).includes(name);
+    if (fieldAlreadyExists) {
+        return {
+            fieldAlreadyExists
+        };
+    }
+
+    const isValidJSONKey = Oskari.util.isValidJSONKey(name);
+    if (!isValidJSONKey) {
+        return {
+            isValidJSONKey
+        };
+    };
+
+    return null;
+};
+
+const getErrorMessage = (error) => {
+    const allKeys = Object.keys(error);
+    if (allKeys?.length) {
+        return <Message bundleKey='myfeatures' messageKey={`featureEditor.featureLayer.errors.${allKeys[0]}`}/>;
+    }
+
+    return null;
+}
 export const LayerFieldsTab = ({ id = null, layerFields = [], updateLayerFields }) => {
 
     const [name, setName] = useState(null);
     const [type, setType] = useState(null);
+    const [error, setError] = useState(null);
+    
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
-        setName('');
-        setType('');
+        setName(null);
+        setType(null);
+        setError(null);
         updateLayerFields(newLayerFields);
     };
 
@@ -87,15 +124,15 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], updateLayerFields 
             key: field.name + '_' + field.type
         };
     });
-    
+
     return <>
         {!id && <AddFieldContainer>
             <AddFieldContainerColumn>
-                <InputLabel><Message messageKey='featureEditor.featureLayer.fieldName'/></InputLabel>
-                <TextInput value={name} onChange={(e) => setName(e.target.value)}/>
+                <Message messageKey='featureEditor.featureLayer.fieldName'/>
+                <TextInput value={name} onChange={(e) => { setName(e.target.value); setError(validate(e.target.value, layerFields)); }}/>
             </AddFieldContainerColumn>
             <AddFieldContainerColumn>
-                <InputLabel><Message messageKey='featureEditor.featureLayer.fieldType'/></InputLabel>
+                <Message messageKey='featureEditor.featureLayer.fieldType'/>
                 <StyledSelect
                     options={ options }
                     value={type}
@@ -103,9 +140,10 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], updateLayerFields 
                 />
             </AddFieldContainerColumn>
             <AddFieldContainerColumnFlexBottom>
-                <PrimaryButton type='add' onClick={setLayerFields} disabled={!(type && name)}/>
+                <PrimaryButton type='add' onClick={setLayerFields} disabled={!!error || !(name && type)}/>
             </AddFieldContainerColumnFlexBottom>
         </AddFieldContainer>}
+        { error && <Error>{getErrorMessage(error)}</Error> }
         <Table
             columns={columnSettings}
             dataSource={rows}

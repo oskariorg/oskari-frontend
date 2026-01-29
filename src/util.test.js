@@ -1040,6 +1040,35 @@ describe('isValidDomain function', () => {
     });
 });
 
+describe('isValidJSONKey function', () => {
+    test('allowed characters', () => {
+        expect(Oskari.util.isValidJSONKey('foo')).toBe(true);
+        expect(Oskari.util.isValidJSONKey('Foo123')).toBe(true);
+        expect(Oskari.util.isValidJSONKey('foo_bar')).toBe(true);
+        expect(Oskari.util.isValidJSONKey('foo-bar')).toBe(true);
+    });
+
+    test('invalid input', () => {
+        expect(Oskari.util.isValidJSONKey('')).toBe(false);
+        expect(Oskari.util.isValidJSONKey(null)).toBe(false);
+        expect(Oskari.util.isValidJSONKey(undefined)).toBe(false);
+        expect(Oskari.util.isValidJSONKey(123)).toBe(false);
+    });
+
+    test('white space and special characters', () => {
+        expect(Oskari.util.isValidJSONKey('foo bar')).toBe(false);
+        expect(Oskari.util.isValidJSONKey('foo.bar')).toBe(false);
+        expect(Oskari.util.isValidJSONKey('foo@bar')).toBe(false);
+        expect(Oskari.util.isValidJSONKey('foo%bar$')).toBe(false);
+    });
+
+    test('scandic letters', () => {
+        expect(Oskari.util.isValidJSONKey('äöå')).toBe(false);
+        expect(Oskari.util.isValidJSONKey('ÄÖÅ')).toBe(false);
+        expect(Oskari.util.isValidJSONKey('')).toBe(false);
+    });
+});
+
 describe('deepClone function', () => {
     const obj = {foo: {bar : 1}};
 

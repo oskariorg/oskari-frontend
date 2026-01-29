@@ -113,7 +113,11 @@ Oskari.registerLocalization(
                 "new": "New feature layer",
                 "addFeature": "Add feature",
                 "fieldName": "Name",
-                "fieldType": "Type"
+                "fieldType": "Type",
+                "errors": {
+                    "fieldAlreadyExists": "Field already exists",
+                    "isValidJSONKey": "Illegal characters."
+                }
             },
             "types": {
                 "String": "String",

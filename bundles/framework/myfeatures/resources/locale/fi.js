@@ -112,7 +112,11 @@ Oskari.registerLocalization(
                 "new": "Uusi aineisto",
                 "addFeature": "Lisää kohde",
                 "fieldName": "Nimi",
-                "fieldType": "Tyyppi"
+                "fieldType": "Tyyppi",
+                "errors": {
+                    "fieldAlreadyExists": "Kenttä on jo olemassa",
+                    "isValidJSONKey": "Kentän nimi sisältää kiellettyjä merkkejä."
+                }
             },
             "types": {
                 "String": "Merkkijono",
