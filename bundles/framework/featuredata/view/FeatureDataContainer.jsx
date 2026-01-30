@@ -9,6 +9,9 @@ import { TabTitle } from './TabStatusIndicator';
 import { FilterVisibleColumns } from './FilterVisibleColumns';
 import { ExportButton } from './ExportData';
 import { CompressedView } from './CompressedView';
+import { FEATURE_EDITOR_TOOLNAME } from '../../myfeatures/constants';
+import { IconButton } from 'oskari-ui/components/buttons';
+import { EditOutlined } from '@ant-design/icons';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
 export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
@@ -89,11 +92,11 @@ const SelectionRowGroup = styled('div')`
     margin: auto 0;
 `;
 
-const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, controller) => {
+const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, layer, controller) => {
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
     };
-    const columnSettings = createColumnSettings(selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings);
+    const columnSettings = createColumnSettings(selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, layer);
     const dataSource = createDatasourceFromFeatures(features);
     const featureTable = <FeatureDataTable>
         <SelectionsContainer>
@@ -141,9 +144,25 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     return featureTable;
 };
 
-const createColumnSettings = (selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings) => {
+const createFeatureToolsColumn = (layer) => {
+    const featureEditorTool = layer?.getFeatureTool(FEATURE_EDITOR_TOOLNAME);
+    return {
+        align: 'left',
+        title: 'Tools',
+        render: (item) => {
+            return <IconButton
+                title={featureEditorTool.getTitle()}
+                icon={<EditOutlined />}
+                onClick={() => featureEditorTool.getCallback()(layer.getId(), item.key)}
+            />;
+
+        }
+    }
+};
+
+const createColumnSettings = (selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, layer) => {
     const { allColumns, visibleColumns, activeLayerPropertyLabels } = visibleColumnsSettings;
-    return allColumns
+    const retVal = allColumns
         .filter(key => visibleColumns.includes(key))
         .map(key => {
             return {
@@ -171,6 +190,13 @@ const createColumnSettings = (selectedFeatureIds, showSelectedFirst, showCompres
                 ellipsis: true
             };
         });
+
+    if (layer?.getFeatureTool(FEATURE_EDITOR_TOOLNAME)) {
+        retVal.push(createFeatureToolsColumn(layer));
+    }
+
+    return retVal;
+
 };
 
 const createDatasourceFromFeatures = (features) => {
@@ -194,7 +220,7 @@ const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSele
                 openSelectByPropertiesPopup={controller.openSelectByPropertiesPopup}
             />,
             children: layer.getId() === layerId
-                ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, controller)
+                ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, layer, controller)
                 : null
         };
     }) || [];
@@ -230,6 +256,7 @@ export const FeatureDataContainer = ({ state, controller }) => {
         loadingStatus,
         visibleColumnsSettings,
         controller);
+
     return (
         <ContainerDiv isMobile={Oskari.util.isMobile()}>
             <Tabs
