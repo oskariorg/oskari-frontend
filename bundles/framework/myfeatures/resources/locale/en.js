@@ -57,7 +57,7 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Datasets",
+            "title": "Datasets (Beta)",
             "editLayer": "Edit map layer",
             "deleteLayer": "Delete map layer",
             "grid": {

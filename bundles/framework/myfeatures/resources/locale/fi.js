@@ -56,7 +56,7 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Aineistot",
+            "title": "Aineistot (Beta)",
             "editLayer": "Muokkaa karttatasoa",
             "deleteLayer": "Poista karttataso",
             "grid": {
