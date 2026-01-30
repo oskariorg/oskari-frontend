@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-import { DELTA, EFFECT, DEFAULT_DELTA } from './constants';
+import { DELTA, EFFECT, DEFAULT_DELTA, ALLOWED_JSON_KEY_CHARS } from './constants';
 const MobileDetect = require('mobile-detect');
 
 /*
@@ -587,6 +587,7 @@ Oskari.util = (function () {
         return DOMPurify.sanitize(content, { ADD_ATTR: ['target'] });
     };
 
+
     const validCoordinates = function (point) {
         if (!point && typeof point !== 'object' && isNaN(point.length) && point.length !== 2) {
             return false;
@@ -875,6 +876,26 @@ Oskari.util = (function () {
         const re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
         return re.test(domain);
     };
+
+    /**
+     * Function to validate json key
+     * @param {String} value
+     */
+    util.isValidJSONKey = function(value) {
+        if (typeof value !== 'string' || value.length === 0) {
+            return false;
+        };
+
+        for (const ch of value) {
+            if (!ALLOWED_JSON_KEY_CHARS.has(ch)) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+
     /**
     * Function to copy text to clipboard
     *

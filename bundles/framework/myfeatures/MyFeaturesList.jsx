@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { EditOutlined } from '@ant-design/icons';
+import { CompassOutlined, EditOutlined } from '@ant-design/icons';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
+import { FEATURE_EDITOR_TOOLNAME } from './constants';
 
 const EDIT_ICON_STYLE = {
     fontSize: '16px'
@@ -75,7 +76,8 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
                 key: item.getId(),
                 created: item.getCreated(),
                 name: item.getName(),
-                desc: item.getDescription()
+                desc: item.getDescription(),
+                hasFeatureEditorTool: !!item.getFeatureTool(FEATURE_EDITOR_TOOLNAME)
             }))}
             pagination={false}
             loading={loading}

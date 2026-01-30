@@ -1,6 +1,7 @@
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showLayerForm } from '../view/LayerForm';
-import { BUNDLE_KEY, MAX_SIZE, ERRORS, LAYER_TYPE } from '../constants';
+import { BUNDLE_KEY, MAX_SIZE, ERRORS, MY_FEATURES_LAYER_TYPE } from '../constants';
+import { showFeatureEditorFlyout } from '../view/FeatureEditorFlyout/FeatureEditorFlyout';
 
 class MyFeaturesHandler extends StateHandler {
     constructor (instance, myFeaturesLayerService) {
@@ -15,8 +16,13 @@ class MyFeaturesHandler extends StateHandler {
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, BUNDLE_KEY);
         this.eventHandlers = this.createEventHandlers();
+
         this.refreshLayersList();
     };
+
+    getSandbox() {
+        return this.sandbox;
+    }
 
     popupCleanup () {
         if (this.popupControls) this.popupControls.close();
@@ -28,8 +34,8 @@ class MyFeaturesHandler extends StateHandler {
     }
 
     showLayerDialog (values) {
-        const { id } = values;
-        const isImport = !id;
+        const { id, isNew } = values;
+        const isImport = !id && !isNew;
         if (this.popupControls) {
             // already opened
             if (this.popupControls.id === id) {
@@ -44,10 +50,38 @@ class MyFeaturesHandler extends StateHandler {
             unzippedMaxSize: this.getMaxSize() * 15,
             isImport
         };
-        const save = values => this.importFile(values);
-        const update = values => this.updateLayer(id, values);
-        const onOk = isImport ? save : update;
-        this.popupControls = showLayerForm(values, conf, onOk, () => this.popupCleanup());
+        const getOkCallback = () => {
+            if (isNew) {
+                return (values) => this.createLayer(values);
+            };
+            if (isImport) {
+                return (values) => this.importFile(values);
+            }
+            return (values) => this.updateLayer(id, values);
+        };
+
+        const addNewFeature = () => { this.popupCleanup(); this.showFeatureEditorDialog(id); };
+        this.popupControls = showLayerForm(values, conf, getOkCallback(), () => this.popupCleanup(), addNewFeature);
+    }
+
+    /**
+     * Opens the flyout to edit the features of the given layer
+     * @param {String} layerId layer id
+     * @param { int } featureId feature technical id
+     */
+    showFeatureEditorDialog (layerId, featureId) {
+        if (this.featureEditorControls) {
+            this.closeFeatureEditorFlyout();
+        }
+
+        this.featureEditorControls = showFeatureEditorFlyout(layerId, featureId, this);
+    }
+
+    closeFeatureEditorFlyout () {
+        if (this.featureEditorControls) {
+            this.featureEditorControls.close();
+        }
+        this.featureEditorControls = null;
     }
 
     getMaxSize () {
@@ -68,7 +102,7 @@ class MyFeaturesHandler extends StateHandler {
             loading: true
         });
         const layers = this.instance.getMapLayerService()
-            .getAllLayers().filter(layer => layer.isLayerOfType(LAYER_TYPE));
+            .getAllLayers().filter(layer => layer.isLayerOfType(MY_FEATURES_LAYER_TYPE));
         this.updateState({
             data: layers,
             loading: false
@@ -144,7 +178,8 @@ class MyFeaturesHandler extends StateHandler {
                 },
                 style: {
                     ...layerJson?.options?.styles?.default?.featureStyle
-                }
+                },
+                layerFields: layerJson?.layerFields
             };
             this.showLayerDialog(values);
         } catch (err) {
@@ -187,6 +222,35 @@ class MyFeaturesHandler extends StateHandler {
         }
     }
 
+    async createLayer(values) {
+        this.updateState({
+            loading: true
+        });
+
+        try {
+            await this.myFeaturesLayerService.createLayer(values);
+            Messaging.success({
+                content: this.loc('tab.notification.createdMsg'),
+                duration: 10
+            });
+            this.popupCleanup();
+        } catch (err) {
+            Messaging.error({
+                content: this.loc('tab.error.createMsg'),
+                duration: 10
+            });
+            if (this.popupControls) {
+                this.popupControls.update(err || ERRORS.GENERIC, values);
+            }
+
+        } finally {
+            this.updateState({
+                loading: false
+            });
+        }
+
+    }
+
     async deleteLayer (id) {
         this.updateState({
             loading: true
@@ -210,6 +274,72 @@ class MyFeaturesHandler extends StateHandler {
                 loading: false
             });
         }
+    }
+
+    async saveFeature(layer, feature) {
+        const layerId = layer?.id || null;
+        const newMyFeature = {
+            layerId: layerId,
+            id: feature.id,
+            geometry: feature.geometry,
+            properties: feature.properties
+        };
+        const isNew = typeof feature.id === 'undefined';
+        const url = Oskari.urls.getRoute('MyFeaturesFeature', {
+            layerId: layerId,
+            crs: this.getSandbox().getMap().getSrsName()
+        });
+        fetch(url, {
+            method: isNew ? 'POST': 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newMyFeature)
+        }).then(response => {
+            if (!response.ok) {
+                return Promise.reject(Error('Save failed'));
+            }
+            return response.json();
+        }).then((savedFeature) => {
+            // we need to provide the full feature instead of feature id because we don't really have a convenient way of 
+            // knowing our maplayerupdaterequest was succesful and the feature can now be found on the layer.
+            // Elsewhere we always use featureId
+            this.featureEditorControls.update(layerId, null, this, savedFeature);
+            setTimeout(() => {
+                this.getSandbox().postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true]);
+                Messaging.success(this.loc('featureEditor.featureUpdate.success'));
+            }, 500);
+            return;
+        }).catch(() => Messaging.error(this.loc('featureEditor.featureUpdate.error')));
+    }
+
+    async deleteFeature(layer, featureId) {
+        // keep prefix -> use in app.
+        const layerId = layer?.id || null;
+        const url = Oskari.urls.getRoute('MyFeaturesFeature', {
+            layerId: layerId,
+            id: featureId
+        });
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                return Promise.reject(Error('Delete failed'));
+            }
+
+            // TODO: should deletefeature maybe return something useful?
+            return;
+        }).then(() => {
+            this.closeFeatureEditorFlyout();
+            setTimeout(() => {
+                this.getSandbox().postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true]);
+                Messaging.success(this.loc('featureEditor.featureDelete.success'));
+            }, 500);
+            return;
+        }).catch((exception) => Messaging.error(this.loc('featureEditor.featureDelete.error') + exception));
     }
 
     createEventHandlers () {
@@ -238,7 +368,10 @@ class MyFeaturesHandler extends StateHandler {
 const wrapped = controllerMixin(MyFeaturesHandler, [
     'editLayer',
     'deleteLayer',
-    'addLayerToMap'
+    'addLayerToMap',
+    'showLayerDialog',
+    'showFeatureEditorDialog',
+    'closeFeatureEditorFlyout'
 ]);
 
 export { wrapped as MyFeaturesHandler };

@@ -1,5 +1,5 @@
 import { MyFeaturesLayer } from '../domain/MyFeaturesLayer';
-import { LAYER_TYPE } from '../constants';
+import { MY_FEATURES_LAYER_TYPE } from '../constants';
 
 export const handleMyFeaturesLayers = (sandbox, mapLayerService, getMsg) => {
     if (!mapLayerService) {
@@ -21,7 +21,7 @@ export const handleMyFeaturesLayers = (sandbox, mapLayerService, getMsg) => {
         name: getMsg('layer.organization')
     };
     mapLayerService.addDataProvider(provider);
-    mapLayerService.registerLayerModelBuilder(LAYER_TYPE, {
+    mapLayerService.registerLayerModelBuilder(MY_FEATURES_LAYER_TYPE, {
         parseLayerData
     });
 
@@ -35,7 +35,7 @@ export const handleMyFeaturesLayers = (sandbox, mapLayerService, getMsg) => {
     // Let wfs plugin handle this layertype
     const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
     const wfsPlugin = mapModule?.getLayerPlugins('wfs');
-    wfsPlugin?.registerLayerType(LAYER_TYPE, MyFeaturesLayer);
+    wfsPlugin?.registerLayerType(MY_FEATURES_LAYER_TYPE, MyFeaturesLayer);
     return {
         group,
         dataProviderId

@@ -2,9 +2,10 @@ import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
 import { Messaging } from 'oskari-ui/util';
 import { MyFeaturesTab } from './MyFeaturesTab';
 import { MyFeaturesHandler } from './handler/MyFeaturesHandler';
-import { TOOL } from './constants';
+import { ADD_FEATURE_TOOL, BUNDLE_KEY, TOOL } from './constants';
 import { MyFeaturesService } from './service/MyFeaturesService';
 import './request/ShowLayerDialogRequest';
+import './request/ShowFeatureEditorRequest';
 
 const loadLayers = async (service, getMsg) => {
     try {
@@ -36,6 +37,10 @@ export class MyFeatureBundleInstance extends BasicBundleInstance {
                 } else {
                     this.handler.showLayerDialog();
                 }
+            });
+
+            this.addRequestHandler('ShowFeatureEditorRequest', (req) => {
+                this.handler.showFeatureEditorDialog(req.getLayerId(), req.getFeatureId());
             });
             // need to wrap to a function because async
             loadLayers(this.importService, getMsg);
@@ -79,8 +84,21 @@ export class MyFeatureBundleInstance extends BasicBundleInstance {
                 this.handler.showLayerDialog({});
             }
         };
+
+        const addFeatureToolBtn = {
+            iconCls: ADD_FEATURE_TOOL.ICON,
+            disabled: !loggedIn,
+            tooltip: Oskari.getMsg(BUNDLE_KEY, 'featureEditor.addFeatureTool'),
+            callback: () => {
+                if (loggedIn) {
+                    this.handler.showFeatureEditorDialog();
+                }
+            }
+        };
+
         if (reqBuilder) {
             sandbox.request(this, reqBuilder(TOOL.NAME, TOOL.GROUP, toolBtn));
+            sandbox.request(this, reqBuilder(ADD_FEATURE_TOOL.NAME, ADD_FEATURE_TOOL.GROUP, addFeatureToolBtn));
         }
     }
 };

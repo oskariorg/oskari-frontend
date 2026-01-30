@@ -1,11 +1,17 @@
 export const BUNDLE_KEY = 'myfeatures';
-export const LAYER_TYPE = 'myf';
+export const MY_FEATURES_LAYER_TYPE = 'myf';
 export const MAX_SIZE = 10;
 
 export const TOOL = {
     NAME: 'import2',
     GROUP: 'myfeatures',
     ICON: 'upload-material'
+};
+
+export const ADD_FEATURE_TOOL = {
+    NAME: 'addfeatures',
+    GROUP: 'myfeatures',
+    ICON: 'myplaces-draw-point'
 };
 
 export const FILE_INPUT_PROPS = {
@@ -20,3 +26,5 @@ export const ERRORS = {
     NO_SRS: 'unknown_projection',
     FORMAT: 'format_failure'
 };
+
+export const FEATURE_EDITOR_TOOLNAME = 'myfeatures.FeatureEditor';

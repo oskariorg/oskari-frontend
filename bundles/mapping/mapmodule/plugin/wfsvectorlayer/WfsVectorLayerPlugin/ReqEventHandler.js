@@ -30,6 +30,7 @@ export class ReqEventHandler {
                     return selectionOpts;
                 };
                 hits.forEach(({ featureProperties, layerId, feature }) => {
+
                     const layer = getSelectedLayer(layerId);
                     if (!layer || !plugin.isLayerSupported(layer)) {
                         return;
@@ -37,10 +38,12 @@ export class ReqEventHandler {
                     if (keepPrevious) {
                         getSelectionOptsForLayer(layer).features.push(feature);
                     } else {
+                        const properties = processFeatureProperties(featureProperties, true);
                         plugin.notify('GetInfoResultEvent', {
                             layerId,
-                            features: [processFeatureProperties(featureProperties, true)],
-                            lonlat: event.getLonLat()
+                            features: [properties],
+                            lonlat: event.getLonLat(),
+                            featureId: feature.getId()
                         });
                     }
                 });

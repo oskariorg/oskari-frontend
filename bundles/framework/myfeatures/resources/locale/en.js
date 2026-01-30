@@ -14,7 +14,8 @@ Oskari.registerLocalization(
             "success": "The dataset has been imported with {count, plural, one {# feature} other {# features}}. You can now find it in the \"My data\" menu.",
             "tabs": {
                 "general": "General",
-                "visualization": "Visualization"
+                "visualization": "Visualization",
+                "layerFields": "Layer fields"
             },
             "layer": {
                 "name": "Map layer name",
@@ -25,7 +26,8 @@ Oskari.registerLocalization(
             "validations": {
                 "name": "The map layer name is missing",
                 "file":  "A file is missing",
-                "epsg": "EPSG code has to be number"
+                "epsg": "EPSG code has to be number",
+                "layerFields": "At least one attribute field is required for layer"
             },
             "error":{
                 "title": "The dataset could not be imported.",
@@ -67,9 +69,11 @@ Oskari.registerLocalization(
                 "remove": "Delete",
                 "removeButton": "Delete",
                 "actions": "Actions",
-                "createDate": "Created"
+                "createDate": "Created",
+                "contentEditor": "Content editor"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset \"{name}\"?",
+            "confirmDeleteFieldMsg": "Do you want to delete the field  \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "save": "Save",
@@ -80,15 +84,48 @@ Oskari.registerLocalization(
             "notification": {
                 "deletedTitle": "Dataset Delete",
                 "deletedMsg": "The dataset has been deleted.",
-                "editedMsg": "The dataset has been updated."
+                "editedMsg": "The dataset has been updated.",
+                "createdMsg": "The dataset has been created"
             },
             "error": {
                 "title": "Error",
                 "generic": "A system error occurred.",
                 "deleteMsg": "Deleting the dataset failed due to an error in the system. Please try again later.",
                 "editMsg": "Updating the dataset failed due to an error in the system. Please try again later.",
+                "createMsg": "Creating the dataset failed due to an error in the system. Please try again later.",
                 "getStyle": "The style defined for the dataset was not found. Default values are shown on the form. Change the style definitions before saving the changes.",
                 "styleName": "Give the map layer a name and try again."
+            }
+        },
+        "featureEditor": {
+            "title": "Feature editor",
+            "addFeatureTool": "Add feature",
+            "featureUpdate": {
+                "success": "Feature properties updated successfully",
+                "error": "Error occured during feature properties update"
+            },
+            "featureDelete": {
+                "success": "Feature deleted successfully",
+                "error": "Error occured during feature delete"
+            },
+            "featureLayer": {
+                "new": "New feature layer",
+                "addFeature": "Add feature",
+                "fieldName": "Name",
+                "fieldType": "Type",
+                "errors": {
+                    "fieldAlreadyExists": "Field already exists",
+                    "isValidJSONKey": "Field contains illegal characters."
+                }
+            },
+            "types": {
+                "String": "String",
+                "Boolean": "Boolean",
+                "Integer": "Integer",
+                "Double": "Double",
+                "Date": "Date",
+                "Timestamp": "Timestamp",
+                "UUID": "UUID"
             }
         },
         "layer": {

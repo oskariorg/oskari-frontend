@@ -15,7 +15,8 @@ Oskari.registerLocalization(
             "success": "Dataset importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\".",
             "tabs": {
                 "general" : "Allmän",
-                "visualization": "Visualisering"
+                "visualization": "Visualisering",
+                "layerFields": "Layer fields"
             },
             "layer": {
                 "name": "Namnge kartlagret",
@@ -25,7 +26,9 @@ Oskari.registerLocalization(
             },
             "validations": {
                 "name": "Namnet på kartlagret saknas",
-                "file": "Filen har inte valts"
+                "file": "Filen har inte valts",
+                "epsg": "EPSG code has to be number",
+                "layerFields": "At least one attribute field is required for layer"
             },
             "error":{
                 "title": "Importerningen av datamängden misslyckades.",
@@ -67,9 +70,11 @@ Oskari.registerLocalization(
                 "remove": "Ta bort",
                 "removeButton": "Ta bort",
                 "actions": "Handlingar",
-                "createDate": "Skapad"
+                "createDate": "Skapad",
+                "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
+            "confirmDeleteFieldMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "save": "Spara",
@@ -80,15 +85,48 @@ Oskari.registerLocalization(
             "notification": {
                 "deletedTitle": "Ta bort dataset",
                 "deletedMsg": "Datasetet har tagits bort",
-                "editedMsg": "Datasetet har uppdaterats"
+                "editedMsg": "Datasetet har uppdaterats",
+                "createdMsg": "The dataset has been created"
             },
             "error": {
                 "title": "Fel!",
                 "generic": "Systemfel. Försök på nytt senare.",
                 "deleteMsg": "Systemfel. Försök på nytt senare.",
                 "editMsg": "Uppdateringen av datasetet misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
+                "createMsg": "Creating the dataset failed due to an error in the system. Please try again later.",
                 "getStyle": "Sökningen av den stil som definierats för datasetet misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
                 "styleName": "Namnge kartlagret och försök sedan på nytt."
+            }
+        },
+        "featureEditor": {
+            "title": "Feature editor",
+            "addFeatureTool": "Add feature",
+            "featureUpdate": {
+                "success": "Feature properties updated successfully",
+                "error": "Error occured during feature properties update"
+            },
+            "featureDelete": {
+                "success": "Feature deleted successfully",
+                "error": "Error occured during feature delete"
+            },
+            "featureLayer": {
+                "new": "New feature layer",
+                "addFeature": "Add feature",
+                "fieldName": "Name",
+                "fieldType": "Type",
+                "errors": {
+                    "fieldAlreadyExists": "Field already exists",
+                    "isValidJSONKey": "Illegal characters."
+                }
+            },
+            "types": {
+                "String": "String",
+                "Boolean": "Boolean",
+                "Integer": "Integer",
+                "Double": "Double",
+                "Date": "Date",
+                "Timestamp": "Timestamp",
+                "UUID": "UUID"
             }
         },
         "layer": {
