@@ -207,7 +207,7 @@ const createColumnSettings = (selectedFeatureIds, showSelectedFirst, showCompres
             };
         });
 
-    if (layer?.getFeatureTool(FEATURE_EDITOR_TOOLNAME)) {
+    if (layer?.getFeatureTools()?.length) {
         retVal.push(createFeatureToolsColumn(layer));
     }
 
