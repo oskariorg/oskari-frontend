@@ -11,7 +11,6 @@ import { ExportButton } from './ExportData';
 import { CompressedView } from './CompressedView';
 import { FEATURE_EDITOR_TOOLNAME } from '../../myfeatures/constants';
 import { IconButton } from 'oskari-ui/components/buttons';
-import { EditOutlined } from '@ant-design/icons';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
 export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
@@ -145,17 +144,34 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
 };
 
 const createFeatureToolsColumn = (layer) => {
-    const featureEditorTool = layer?.getFeatureTool(FEATURE_EDITOR_TOOLNAME);
+
+    const featureTools = layer?.getFeatureTools() || null;
+    if (!featureTools) {
+        return;
+    };
+
     return {
         align: 'left',
         title: <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey='table.featureTools.title' />,
         render: (item) => {
-            return <IconButton
-                title={featureEditorTool.getTitle()}
-                icon={<EditOutlined />}
-                onClick={() => featureEditorTool.getCallback()(layer.getId(), item.key)}
-            />;
+            return <>
+                { featureTools.map((tool) => {
+                    if (tool.getIconComponent()) {
+                        return <IconButton
+                            key={item.key + tool.getTitle()}
+                            title={tool.getTitle()}
+                            icon={tool.getIconComponent()}
+                            onClick={() => tool.getCallback()(layer.getId(), item.key)}
+                        />;
+                    }
 
+                    return <span
+                        key={item.key + tool.getTitle()}
+                        onClick={() => {tool.getCallback()(layer.getId(), item.key)}}>
+                        {tool.getTitle()}
+                    </span>;
+                })}
+            </>;
         }
     };
 };
