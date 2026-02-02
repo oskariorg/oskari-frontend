@@ -299,17 +299,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Oskari.mapframework.domain.AbstractLayer} newLayer layer to use in place of the old one
          */
         replaceLayer: function(layerId, newLayer) {
-            const shouldAddToSelectedMapLayers = !!this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-            this.removeLayer(layerId, true, false);
-            this.addLayer(newLayer, false);
-
+            this.removeLayer(layerId, true, true);
+            this.addLayer(newLayer, true);
             const mapLayerEvent = Oskari.eventBuilder('MapLayerEvent');
             this.getSandbox().notifyAll(mapLayerEvent(layerId, 'update'));
 
-            if (shouldAddToSelectedMapLayers) {
-                this.getSandbox().postRequestByName('AddMapLayerRequest', [layerId]);
+            const map = this.getSandbox().getMap();
+            if (map.isLayerSelected(layerId)) {
+                map.mergeLayer(layerId, newLayer);
             }
-
         },
 
         /**
