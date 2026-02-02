@@ -14,6 +14,11 @@ Oskari.registerLocalization(
             "visibleColumns": {
                 "propertiesSelected": "vald"
             },
+            "table": {
+                "featureTools": {
+                    "title": "Tools"
+                }
+            },
             "selectByPropertiesPopup": {
                 "title":"Välj objekt från kartlager:",
                 "valueInputPlaceholder": "Värde",

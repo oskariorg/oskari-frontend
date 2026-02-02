@@ -148,7 +148,7 @@ const createFeatureToolsColumn = (layer) => {
     const featureEditorTool = layer?.getFeatureTool(FEATURE_EDITOR_TOOLNAME);
     return {
         align: 'left',
-        title: 'Tools',
+        title: <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey='table.featureTools.title' />,
         render: (item) => {
             return <IconButton
                 title={featureEditorTool.getTitle()}
@@ -157,7 +157,7 @@ const createFeatureToolsColumn = (layer) => {
             />;
 
         }
-    }
+    };
 };
 
 const createColumnSettings = (selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, layer) => {
