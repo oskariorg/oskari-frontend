@@ -36,8 +36,8 @@ Oskari.registerLocalization(
                 "title": "Exportera data",
                 "openButtonLabel": "Exportera data",
                 "exportButtonLabel": "Exportera",
-                "exportFailed": "Exporting the data failed.",
-                "datasetTooLargeForExcel": "Dataset is too large for generating an excel file. Limit the number of features or choose csv as format.",
+                "exportFailed": "Exporten av datamaterialet misslyckades.",
+                "datasetTooLargeForExcel": "Datamaterialet är för stort för att generera en Excel-fil. Begränsa antalet objektuppgifter eller välj CSV som filformat.",
                 "fileFormat": {
                     "title": "Filformat",
                     "excel": "Excel",
