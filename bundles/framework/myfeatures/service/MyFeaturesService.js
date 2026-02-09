@@ -17,7 +17,14 @@ export class MyFeaturesService {
         this.sandbox = sandbox;
         this.srs = this.sandbox.getMap().getSrsName();
         this.log = Oskari.log('MyFeaturesService');
-        this.deleteFeatureCallback = deleteFeatureCallback;
+        this.deleteFeatureCallback = (layerId, featureId) => {
+            if (this.confirmDeleteController) {
+                this.confirmDeleteController.close();
+                this.sandbox.postRequestByName('InfoBox.HideInfoBoxRequest');
+            }
+            deleteFeatureCallback(layerId, featureId);
+        };
+
         this.confirmDeleteController = null;
 
         Oskari.makeObservable(this);
@@ -106,7 +113,6 @@ export class MyFeaturesService {
         featureRemoveTool.setCallback((layerId, featureId) => {
             this.confirmDeleteController = confirmDelete(() => {
                 this.deleteFeatureCallback(layerId, featureId);
-                this.confirmDeleteController.close();
             },
             () => this.confirmDeleteController.close());
         });
