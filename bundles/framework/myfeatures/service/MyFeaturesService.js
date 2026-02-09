@@ -4,7 +4,13 @@ import { MyFeaturesImportError } from './MyFeaturesImportError';
 import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
 import { DELETE_FEATURE_TOOLNAME, FEATURE_EDITOR_TOOLNAME } from '../constants';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { confirmDelete } from '../view/ConfirmDelete';
+import { TYPE_COLORS } from 'oskari-ui/components/buttons/IconButton';
+import styled from 'styled-components';
 
+const StyledDeleteOutlined = styled(DeleteOutlined)`
+    color: ${TYPE_COLORS.delete}
+`;
 export class MyFeaturesService {
     constructor (sandbox, mapLayerService, getMsg, deleteFeatureCallback) {
         this.mapLayerService = mapLayerService;
@@ -12,6 +18,8 @@ export class MyFeaturesService {
         this.srs = this.sandbox.getMap().getSrsName();
         this.log = Oskari.log('MyFeaturesService');
         this.deleteFeatureCallback = deleteFeatureCallback;
+        this.confirmDeleteController = null;
+
         Oskari.makeObservable(this);
         const { group, dataProviderId } = handleMyFeaturesLayers(
             sandbox,
@@ -93,9 +101,16 @@ export class MyFeaturesService {
         const featureRemoveTool =  Oskari.clazz.create('Oskari.mapframework.domain.Tool');
         featureRemoveTool.setName(DELETE_FEATURE_TOOLNAME);
         featureRemoveTool.setTitle(Oskari.getMsg('myfeatures', 'featureEditor.deleteFeatureTool'));
-        featureRemoveTool.setIconComponent(<DeleteOutlined/>);
-        featureRemoveTool.setTypes(['delete']);
-        featureRemoveTool.setCallback(this.deleteFeatureCallback);
+        featureRemoveTool.setIconComponent(<StyledDeleteOutlined/>);
+        featureRemoveTool.setTypes([]);
+        featureRemoveTool.setCallback((layerId, featureId) => {
+            this.confirmDeleteController = confirmDelete(() => {
+                this.deleteFeatureCallback(layerId, featureId);
+                this.confirmDeleteController.close();
+            },
+            () => this.confirmDeleteController.close());
+        });
+
         mapLayer.addFeatureTool(featureRemoveTool);
 
         // mark that this has been added by this bundle.

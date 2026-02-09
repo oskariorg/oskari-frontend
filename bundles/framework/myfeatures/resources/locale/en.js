@@ -101,6 +101,7 @@ Oskari.registerLocalization(
             "title": "Feature editor",
             "addFeatureTool": "Add feature",
             "deleteFeatureTool": "Delete feature",
+            "confirmDelete": "Do you want to delete the feature?",
             "featureUpdate": {
                 "success": "Feature properties updated successfully",
                 "error": "Error occured during feature properties update"

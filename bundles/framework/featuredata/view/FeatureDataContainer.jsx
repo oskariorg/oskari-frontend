@@ -161,12 +161,6 @@ const createFeatureToolsColumn = (layer) => {
             return <FlexRow>
                 { featureTools.map((tool) => {
                     if (tool.getIconComponent()) {
-                        if (tool.getTypes().includes('delete')) {
-                            return <DeleteButton
-                                key={item.key + tool.getTitle()}
-                                type='icon'
-                                onConfirm={() => tool.getCallback()(layer.getId(), item.key)} />;
-                        }
                         return <IconButton
                             key={item.key + tool.getTitle()}
                             title={tool.getTitle()}
