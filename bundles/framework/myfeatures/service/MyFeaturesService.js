@@ -4,12 +4,7 @@ import { MyFeaturesImportError } from './MyFeaturesImportError';
 import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
 import { DELETE_FEATURE_TOOLNAME, FEATURE_EDITOR_TOOLNAME } from '../constants';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
-import { TYPE_COLORS } from 'oskari-ui/components/buttons/IconButton';
 
-const StyledDeleteOutlined = styled(DeleteOutlined)`
-    color: ${TYPE_COLORS.delete}
-`;
 export class MyFeaturesService {
     constructor (sandbox, mapLayerService, getMsg, deleteFeatureCallback) {
         this.mapLayerService = mapLayerService;
@@ -98,8 +93,8 @@ export class MyFeaturesService {
         const featureRemoveTool =  Oskari.clazz.create('Oskari.mapframework.domain.Tool');
         featureRemoveTool.setName(DELETE_FEATURE_TOOLNAME);
         featureRemoveTool.setTitle(Oskari.getMsg('myfeatures', 'featureEditor.deleteFeatureTool'));
-        featureRemoveTool.setIconComponent(<StyledDeleteOutlined/>);
-        featureRemoveTool.setTypes([]);
+        featureRemoveTool.setIconComponent(<DeleteOutlined/>);
+        featureRemoveTool.setTypes(['delete']);
         featureRemoveTool.setCallback(this.deleteFeatureCallback);
         mapLayer.addFeatureTool(featureRemoveTool);
 

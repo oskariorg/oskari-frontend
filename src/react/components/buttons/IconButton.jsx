@@ -15,7 +15,7 @@ const COLORS = {
     hover: '#ffd400'
 };
 
-export const TYPE_COLORS = {
+const TYPE_COLORS = {
     accept: COLORS.green,
     reject: COLORS.red,
     delete: COLORS.red,

@@ -9,8 +9,7 @@ import { TabTitle } from './TabStatusIndicator';
 import { FilterVisibleColumns } from './FilterVisibleColumns';
 import { ExportButton } from './ExportData';
 import { CompressedView } from './CompressedView';
-import { FEATURE_EDITOR_TOOLNAME } from '../../myfeatures/constants';
-import { IconButton } from 'oskari-ui/components/buttons';
+import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
 export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
@@ -162,6 +161,12 @@ const createFeatureToolsColumn = (layer) => {
             return <FlexRow>
                 { featureTools.map((tool) => {
                     if (tool.getIconComponent()) {
+                        if (tool.getTypes().includes('delete')) {
+                            return <DeleteButton
+                                key={item.key + tool.getTitle()}
+                                type='icon'
+                                onConfirm={() => tool.getCallback()(layer.getId(), item.key)} />;
+                        }
                         return <IconButton
                             key={item.key + tool.getTitle()}
                             title={tool.getTitle()}
