@@ -28,3 +28,4 @@ export const ERRORS = {
 };
 
 export const FEATURE_EDITOR_TOOLNAME = 'myfeatures.FeatureEditor';
+export const DELETE_FEATURE_TOOLNAME = 'myfeatures.deleteFeature';

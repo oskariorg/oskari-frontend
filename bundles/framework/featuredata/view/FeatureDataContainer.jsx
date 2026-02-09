@@ -91,6 +91,11 @@ const SelectionRowGroup = styled('div')`
     margin: auto 0;
 `;
 
+const FlexRow = styled('div')`
+    display: flex;
+    flex-direction: row;
+`;
+
 const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, layer, controller) => {
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
@@ -154,7 +159,7 @@ const createFeatureToolsColumn = (layer) => {
         align: 'left',
         title: <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey='table.featureTools.title' />,
         render: (item) => {
-            return <>
+            return <FlexRow>
                 { featureTools.map((tool) => {
                     if (tool.getIconComponent()) {
                         return <IconButton
@@ -171,7 +176,7 @@ const createFeatureToolsColumn = (layer) => {
                         {tool.getTitle()}
                     </span>;
                 })}
-            </>;
+            </FlexRow>;
         }
     };
 };

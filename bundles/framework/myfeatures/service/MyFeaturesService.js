@@ -2,15 +2,21 @@ import React from 'react';
 import { handleMyFeaturesLayers, parseLayerData } from './layerHandling';
 import { MyFeaturesImportError } from './MyFeaturesImportError';
 import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
-import { FEATURE_EDITOR_TOOLNAME } from '../constants';
-import { EditOutlined } from '@ant-design/icons';
+import { DELETE_FEATURE_TOOLNAME, FEATURE_EDITOR_TOOLNAME } from '../constants';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
+import { TYPE_COLORS } from 'oskari-ui/components/buttons/IconButton';
 
+const StyledDeleteOutlined = styled(DeleteOutlined)`
+    color: ${TYPE_COLORS.delete}
+`;
 export class MyFeaturesService {
-    constructor (sandbox, mapLayerService, getMsg) {
+    constructor (sandbox, mapLayerService, getMsg, deleteFeatureCallback) {
         this.mapLayerService = mapLayerService;
         this.sandbox = sandbox;
         this.srs = this.sandbox.getMap().getSrsName();
         this.log = Oskari.log('MyFeaturesService');
+        this.deleteFeatureCallback = deleteFeatureCallback;
         Oskari.makeObservable(this);
         const { group, dataProviderId } = handleMyFeaturesLayers(
             sandbox,
@@ -88,6 +94,14 @@ export class MyFeaturesService {
             this.sandbox.postRequestByName('ShowFeatureEditorRequest', [layerId, featureId]);
         });
         mapLayer.addFeatureTool(featureEditorTool);
+
+        const featureRemoveTool =  Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+        featureRemoveTool.setName(DELETE_FEATURE_TOOLNAME);
+        featureRemoveTool.setTitle(Oskari.getMsg('myfeatures', 'featureEditor.deleteFeatureTool'));
+        featureRemoveTool.setIconComponent(<StyledDeleteOutlined/>);
+        featureRemoveTool.setTypes([]);
+        featureRemoveTool.setCallback(this.deleteFeatureCallback);
+        mapLayer.addFeatureTool(featureRemoveTool);
 
         // mark that this has been added by this bundle.
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.

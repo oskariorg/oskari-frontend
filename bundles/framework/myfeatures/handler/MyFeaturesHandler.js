@@ -301,7 +301,7 @@ class MyFeaturesHandler extends StateHandler {
             }
             return response.json();
         }).then((savedFeature) => {
-            // we need to provide the full feature instead of feature id because we don't really have a convenient way of 
+            // we need to provide the full feature instead of feature id because we don't really have a convenient way of
             // knowing our maplayerupdaterequest was succesful and the feature can now be found on the layer.
             // Elsewhere we always use featureId
             this.featureEditorControls.update(layerId, null, this, savedFeature);
@@ -313,9 +313,7 @@ class MyFeaturesHandler extends StateHandler {
         }).catch(() => Messaging.error(this.loc('featureEditor.featureUpdate.error')));
     }
 
-    async deleteFeature(layer, featureId) {
-        // keep prefix -> use in app.
-        const layerId = layer?.id || null;
+    async deleteFeature(layerId, featureId) {
         const url = Oskari.urls.getRoute('MyFeaturesFeature', {
             layerId: layerId,
             id: featureId

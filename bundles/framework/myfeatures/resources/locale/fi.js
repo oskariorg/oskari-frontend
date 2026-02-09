@@ -99,6 +99,7 @@ Oskari.registerLocalization(
         "featureEditor": {
             "title": "Sisältöeditori",
             "addFeatureTool": "Lisää kohde",
+            "deleteFeatureTool": "Poista kohde",
             "featureUpdate": {
                 "header": "Kohde päivitetty",
                 "success": "Kohteen päivittäminen onnistui",
