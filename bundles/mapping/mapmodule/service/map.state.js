@@ -415,6 +415,21 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
             this._sandbox.notifyAll(evt);
             return true;
         },
+        /**
+         * Merge myfeatures layer with the wfs - layer we got with myfeatures - layer.
+         * @param {*} id
+         * @param {*} newLayer
+         */
+        mergeLayer: function(id, newLayer) {
+            const index = this.getLayerIndex(id);
+            if (index > -1) {
+                const wfs = _selectedLayers[index];
+                wfs._featureTools = [].concat(newLayer._featureTools);
+                wfs._layerType = newLayer._layerType;
+                _selectedLayers[index] = wfs;
+            }
+
+        },
         moveLayer: function (id, newIndex, triggeredBy) {
             var list = this.getLayers();
             var oldIndex = this.getLayerIndex(id);

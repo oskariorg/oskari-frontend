@@ -303,6 +303,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             this.addLayer(newLayer, true);
             const mapLayerEvent = Oskari.eventBuilder('MapLayerEvent');
             this.getSandbox().notifyAll(mapLayerEvent(layerId, 'update'));
+
+            const map = this.getSandbox().getMap();
+            if (map.isLayerSelected(layerId)) {
+                map.mergeLayer(layerId, newLayer);
+            }
         },
 
         /**

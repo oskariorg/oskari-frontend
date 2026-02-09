@@ -14,6 +14,11 @@ Oskari.registerLocalization(
             "visibleColumns": {
                 "propertiesSelected": "selected"
             },
+            "table": {
+                "featureTools": {
+                    "title": "Tools"
+                }
+            },
             "selectByPropertiesPopup": {
                 "title":"Select features from layer:",
                 "valueInputPlaceholder": "Value",

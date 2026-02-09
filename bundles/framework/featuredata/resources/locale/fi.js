@@ -14,6 +14,11 @@ Oskari.registerLocalization(
             "visibleColumns": {
                 "propertiesSelected": "valittu"
             },
+            "table": {
+                "featureTools": {
+                    "title": "Työkalut"
+                }
+            },
             "selectByPropertiesPopup": {
                 "title":"Valitse kohteita tasolta:",
                 "valueInputPlaceholder": "Arvo",

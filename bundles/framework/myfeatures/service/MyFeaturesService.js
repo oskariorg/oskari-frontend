@@ -1,7 +1,9 @@
+import React from 'react';
 import { handleMyFeaturesLayers, parseLayerData } from './layerHandling';
 import { MyFeaturesImportError } from './MyFeaturesImportError';
 import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
 import { FEATURE_EDITOR_TOOLNAME } from '../constants';
+import { EditOutlined } from '@ant-design/icons';
 
 export class MyFeaturesService {
     constructor (sandbox, mapLayerService, getMsg) {
@@ -80,7 +82,8 @@ export class MyFeaturesService {
         const featureEditorTool =  Oskari.clazz.create('Oskari.mapframework.domain.Tool');
         featureEditorTool.setName(FEATURE_EDITOR_TOOLNAME);
         featureEditorTool.setTitle(Oskari.getMsg('myfeatures', 'featureEditor.title'));
-
+        featureEditorTool.setIconComponent(<EditOutlined/>);
+        featureEditorTool.setTypes([]);
         featureEditorTool.setCallback((layerId, featureId) => {
             this.sandbox.postRequestByName('ShowFeatureEditorRequest', [layerId, featureId]);
         });
