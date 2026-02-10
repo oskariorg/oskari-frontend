@@ -9,7 +9,7 @@ import { TabTitle } from './TabStatusIndicator';
 import { FilterVisibleColumns } from './FilterVisibleColumns';
 import { ExportButton } from './ExportData';
 import { CompressedView } from './CompressedView';
-import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
+import { IconButton} from 'oskari-ui/components/buttons';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
 export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
