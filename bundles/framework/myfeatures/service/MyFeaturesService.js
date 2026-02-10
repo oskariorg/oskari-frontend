@@ -2,15 +2,32 @@ import React from 'react';
 import { handleMyFeaturesLayers, parseLayerData } from './layerHandling';
 import { MyFeaturesImportError } from './MyFeaturesImportError';
 import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
-import { FEATURE_EDITOR_TOOLNAME } from '../constants';
-import { EditOutlined } from '@ant-design/icons';
+import { DELETE_FEATURE_TOOLNAME, FEATURE_EDITOR_TOOLNAME } from '../constants';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { confirmDelete } from '../view/ConfirmDelete';
+import { TYPE_COLORS } from 'oskari-ui/components/buttons/IconButton';
+import styled from 'styled-components';
 
+const StyledDeleteOutlined = styled(DeleteOutlined)`
+    color: ${TYPE_COLORS.delete}
+`;
 export class MyFeaturesService {
-    constructor (sandbox, mapLayerService, getMsg) {
+    constructor (sandbox, mapLayerService, getMsg, deleteFeatureCallback) {
         this.mapLayerService = mapLayerService;
         this.sandbox = sandbox;
         this.srs = this.sandbox.getMap().getSrsName();
         this.log = Oskari.log('MyFeaturesService');
+        this.deleteFeatureCallback = (layerId, featureId) => {
+            // TODO: as soon as we refactor infobox into react we gotta get rid of this modal-type confirmation and use oskari DeleteButton instead (that'll come bundled with a confirmation)
+            if (this.confirmDeleteController) {
+                this.confirmDeleteController.close();
+                this.sandbox.postRequestByName('InfoBox.HideInfoBoxRequest');
+            }
+            deleteFeatureCallback(layerId, featureId);
+        };
+
+        this.confirmDeleteController = null;
+
         Oskari.makeObservable(this);
         const { group, dataProviderId } = handleMyFeaturesLayers(
             sandbox,
@@ -88,6 +105,20 @@ export class MyFeaturesService {
             this.sandbox.postRequestByName('ShowFeatureEditorRequest', [layerId, featureId]);
         });
         mapLayer.addFeatureTool(featureEditorTool);
+
+        const featureRemoveTool =  Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+        featureRemoveTool.setName(DELETE_FEATURE_TOOLNAME);
+        featureRemoveTool.setTitle(Oskari.getMsg('myfeatures', 'featureEditor.deleteFeatureTool'));
+        featureRemoveTool.setIconComponent(<StyledDeleteOutlined/>);
+        featureRemoveTool.setTypes([]);
+        featureRemoveTool.setCallback((layerId, featureId) => {
+            this.confirmDeleteController = confirmDelete(() => {
+                this.deleteFeatureCallback(layerId, featureId);
+            },
+            () => this.confirmDeleteController.close());
+        });
+
+        mapLayer.addFeatureTool(featureRemoveTool);
 
         // mark that this has been added by this bundle.
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.

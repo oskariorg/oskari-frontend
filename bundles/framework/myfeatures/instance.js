@@ -27,7 +27,9 @@ export class MyFeatureBundleInstance extends BasicBundleInstance {
             const getMsg = (key, args) => this.loc(key, args);
             this.importService = new MyFeaturesService(sandbox,
                 this.getMapLayerService(),
-                getMsg);
+                getMsg,
+                (layerId, featureId) => this.handler.deleteFeature(layerId, featureId)
+            );
             this.handler = new MyFeaturesHandler(this, this.importService);
             this.addTab();
             this.addRequestHandler('MyFeatures.ShowLayerDialogRequest', (req) => {

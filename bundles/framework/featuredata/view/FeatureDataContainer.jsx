@@ -9,8 +9,7 @@ import { TabTitle } from './TabStatusIndicator';
 import { FilterVisibleColumns } from './FilterVisibleColumns';
 import { ExportButton } from './ExportData';
 import { CompressedView } from './CompressedView';
-import { FEATURE_EDITOR_TOOLNAME } from '../../myfeatures/constants';
-import { IconButton } from 'oskari-ui/components/buttons';
+import { IconButton} from 'oskari-ui/components/buttons';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
 export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
@@ -91,6 +90,11 @@ const SelectionRowGroup = styled('div')`
     margin: auto 0;
 `;
 
+const FlexRow = styled('div')`
+    display: flex;
+    flex-direction: row;
+`;
+
 const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, layer, controller) => {
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
@@ -154,7 +158,7 @@ const createFeatureToolsColumn = (layer) => {
         align: 'left',
         title: <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey='table.featureTools.title' />,
         render: (item) => {
-            return <>
+            return <FlexRow>
                 { featureTools.map((tool) => {
                     if (tool.getIconComponent()) {
                         return <IconButton
@@ -171,7 +175,7 @@ const createFeatureToolsColumn = (layer) => {
                         {tool.getTitle()}
                     </span>;
                 })}
-            </>;
+            </FlexRow>;
         }
     };
 };
