@@ -18,6 +18,7 @@ export class MyFeaturesService {
         this.srs = this.sandbox.getMap().getSrsName();
         this.log = Oskari.log('MyFeaturesService');
         this.deleteFeatureCallback = (layerId, featureId) => {
+            // TODO: as soon as we refactor infobox into react we gotta get rid of this modal-type confirmation and use oskari DeleteButton instead (that'll come bundled with a confirmation)
             if (this.confirmDeleteController) {
                 this.confirmDeleteController.close();
                 this.sandbox.postRequestByName('InfoBox.HideInfoBoxRequest');
