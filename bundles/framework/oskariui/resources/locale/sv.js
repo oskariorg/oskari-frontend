@@ -144,7 +144,7 @@ Oskari.registerLocalization({
             n: "N",
             e: "E",
             p: "N",
-            i: "E", 
+            i: "E",
             crs: {
               'EPSG:3067': "ETRS89-TM35FIN koordinater",
               'EPSG:3575': "North Pole LAEA Europe koordinater",
@@ -165,6 +165,64 @@ Oskari.registerLocalization({
             'myplaces': 'Mitt kartlager',
             'analysislayer': 'Min analys',
             'tiles3d': '3D kartlager'
+        },
+        "VectorLayerPresentation": {
+            "attributes": {
+                "label": "Attribut",
+                "properties": "Användning object attribut",
+                "presentation": "Presentationsmetod",
+                "presentationTooltip": "Presentationsmetoden påverkar GetFeatureInfo förfrågan och objektuppgifter tabell.",
+                "showAll": "Visa alla attribut",
+                "idProperty": "Använd funktionsegenskap som identifierare",
+                "idPropertyTooltip": "Tjänsten bör returnera unik identifierare för objekt. Be först tjänsteleverantören att använda unika identifierare. Fungerar endast för typen 'Stora objekt' (GeoJSON).",
+                "geometryType": {
+                    "label": "Typ av geometri",
+                    "sourceAttributes": "Källa: kartlagrets attribut",
+                    "sourceCapabilities": "Källa: kartlagrets capabilities",
+                    "unknown":"Okänd",
+                    "point": "Punkten",
+                    "line": "Linje",
+                    "area":"Området",
+                    "collection":"All"
+                },
+                "featureFilter": {
+                    "title": "Filtrera begärda objekt baserat på attribut",
+                    "button": "Filtrering av objekt"
+                },
+                "filter": {
+                    "title": "Visning av attribut",
+                    "lang": "Välj attribut som visas och ordning",
+                    "default": "för standardfilter",
+                    "fromDefault": "Inget filter har lagts till för det valda språket. Standardfiltret används för det valda språket. Redigera alternativen för att skapa ditt eget filter för språket.",
+                    "button": "Välj attribut"
+                },
+                "locale": {
+                    "title": "Märkningar för attribut",
+                    "button": "Märkning"
+                },
+                "format": {
+                    "title": "Formatera värden för attribut",
+                    "button": "Formatering",
+                    "type": {
+                        "label": "Typ",
+                        "typeFormats": "Värde typ",
+                        "textFormats": "Textformatering",
+                        "link": "Länk",
+                        "image": "Bild",
+                        "number": "Nummer",
+                        "phone": "Telefonnummer"
+                    },
+                    "options": {
+                        "noLabel": "Visa endast värde",
+                        "skipEmpty": "Skippa tomt värde"
+                    },
+                    "params": {
+                        "link": "Visa som länk",
+                        "fullUrl": "Visa hela URL",
+                        "label": "Etikett för länk"
+                    }
+                }
+            }
         }
     }
 });

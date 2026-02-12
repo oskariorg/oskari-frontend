@@ -266,6 +266,64 @@ Oskari.registerLocalization({
             "messages": {
                 "cannot_save_all_features": "Kaikkia kohteita ei saatu tallennettua"
             }
+        },
+        "VectorLayerPresentation": {
+            "attributes": {
+                "label": "Attribuutit",
+                "properties": "Kohteiden ominaisuuksien käyttö",
+                "presentation": "Esitystapa",
+                "presentationTooltip": "Esitystapa vaikuttaa kohdetietojen kyselyyn ja kohdetietotaulukkoon.",
+                "showAll": "Näytä kaikki ominaisuustiedot",
+                "idProperty": "Käytä ominaisuustietoa kohteiden yksilöimiseen",
+                "idPropertyTooltip": "Rajapinnan tulee palauttaa yksilöivä tunniste kohteille. Pyydä ensisijaisesti palveluntarjoajaa ottamaan käyttöön yksilöivät tunnisteet. Toimii vain 'Suuria kohteita' tyypille (GeoJSON).",
+                "geometryType": {
+                    "label": "Geometriatyyppi",
+                    "sourceAttributes": "Lähde: tason attribuutit",
+                    "sourceCapabilities": "Lähde: tason Capabilities-tiedot",
+                    "unknown":"Ei tiedossa",
+                    "point": "Piste",
+                    "line": "Viiva",
+                    "area":"Alue",
+                    "collection":"Kaikki"
+                },
+                "featureFilter": {
+                    "title": "Suodata rajapinnasta haettavia kohteita ominaisuuksien mukaan",
+                    "button": "Kohteiden suodatus"
+                },
+                "filter": {
+                    "title": "Kohteiden ominaisuuksien näyttäminen",
+                    "lang": "Valitse tason kohteille näytettävät ominaisuudet ja niiden järjestys",
+                    "default": "oletussuodattimelle",
+                    "fromDefault": "Valitulle kielelle ei ole lisätty suodatinta. Valitulla kielellä käytetään oletussuodatinta. Muokkaa valintoja luodaksesi kielelle oman suodattimen.",
+                    "button": "Valitse kentät"
+                },
+                "locale": {
+                    "title": "Nimet käyttöliittymässä ominaisuuksille",
+                    "button": "Nimeäminen"
+                },
+                "format": {
+                    "title": "Kohteiden ominaisuuksien arvojen muotoilu",
+                    "button": "Muotoilu",
+                    "type": {
+                        "label": "Tyyppi",
+                        "typeFormats": "Arvon tyyppi",
+                        "textFormats": "Tekstin muotoilu",
+                        "link": "Linkki",
+                        "image": "Kuva",
+                        "number": "Numero",
+                        "phone": "Puhelinnumero"
+                    },
+                    "options": {
+                        "noLabel": "Näytä vain arvo",
+                        "skipEmpty": "Älä näytä tyhjää"
+                    },
+                    "params": {
+                        "link": "Näytä linkkinä",
+                        "fullUrl": "Näytä koko osoite",
+                        "label": "Linkin label"
+                    }
+                }
+            }
         }
     }
 });

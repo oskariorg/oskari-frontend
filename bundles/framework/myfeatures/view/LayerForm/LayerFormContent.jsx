@@ -39,12 +39,13 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
     // TODO: refactor this thing as it's getting way overly complicated
     const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = Oskari.custom.generateBlankStyle(), locale = {} } = values || {};
-    const [state, setState] = useState({ id: values?.id, style, locale, loading: false, tab: 'general', file: values?.file, layerFields: values?.layerFields });
+    const [state, setState] = useState({ id: values?.id, style, locale, loading: false, tab: 'general', file: values?.file, layerFields: values?.layerFields, attributes: values?.attributes });
 
     const showSrs = isImport && error === ERRORS.NO_SRS;
 
     const updateStyle = (style) => setState({ ...state, style });
     const updateLayerFields = (layerFields) => setState({ ...state, layerFields });
+    const updateAttributes = (attributes) => setState({ ...state, attributes });
     const setTab = (tab) => setState({ ...state, tab });
     const updateState = (newState) => setState({ ...state, ...newState });
     const onOkClick = () => {
@@ -52,7 +53,8 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
             style: state.style,
             locale: state.locale,
             file: state.file,
-            layerFields: state.layerFields
+            layerFields: state.layerFields,
+            attributes: state.attributes
         };
         if (showSrs) {
             // add sourceSrs only if field is visible
@@ -116,7 +118,13 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
         tabItems.push({
             key: 'layerFields',
             label: getTabTitle(!!state?.layerFields?.length, 'flyout.tabs.layerFields'),
-            children: <Tab><LayerFieldsTab id={state.id} layerFields={state.layerFields} updateLayerFields={updateLayerFields}/></Tab>
+            children: <Tab><LayerFieldsTab
+                id={state.id}
+                layerFields={state.layerFields}
+                attributes={state.attributes}
+                updateLayerFields={updateLayerFields}
+                updateAttributes={updateAttributes}/>
+            </Tab>
         });
     };
 

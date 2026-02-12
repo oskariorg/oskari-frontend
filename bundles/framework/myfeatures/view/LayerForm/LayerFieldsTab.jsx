@@ -4,7 +4,7 @@ import { Select, Message, TextInput } from 'oskari-ui';
 import { Table } from 'oskari-ui/components/Table';
 import { PrimaryButton, DeleteButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
-import { MandatoryIcon } from 'oskari-ui/components/icons';
+import { VectorLayerPresentation } from 'oskari-ui/components/VectorLayerPresentation';
 
 const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
 
@@ -72,24 +72,47 @@ const getErrorMessage = (error) => {
     }
 
     return null;
-}
-export const LayerFieldsTab = ({ id = null, layerFields = [], updateLayerFields }) => {
+};
 
+const getLayer = (layerId, layerFields, attributes) => {
+    const mapLayer = Oskari.getSandbox().findMapLayerFromAllAvailable(layerId);
+    const layer = {
+        attributes: attributes || {},
+        capabilities: {
+            featureProperties: layerFields?.map(item => item)
+        }
+    };
+
+    return layer;
+};
+
+export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { data: {}}, updateLayerFields, updateAttributes }) => {
     const [name, setName] = useState(null);
     const [type, setType] = useState(null);
     const [error, setError] = useState(null);
-    
+    const [currentLayer, setCurrentLayer] = useState(getLayer(id, layerFields, attributes));
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
         setName(null);
         setType(null);
         setError(null);
         updateLayerFields(newLayerFields);
+        setCurrentLayer(getLayer(id, layerFields));
     };
 
     const deleteField = (name) => {
         const newLayerFields = layerFields.filter(field => field.name !== name);
         updateLayerFields(newLayerFields);
+    };
+
+    const setAttributesData = (attribute, value) => {
+        const newAttributes = {
+            ...attributes
+        };
+        if (value) {
+            newAttributes.data[attribute] = value;
+        }
+        updateAttributes(newAttributes);
     };
 
     const columnSettings = [
@@ -150,6 +173,8 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], updateLayerFields 
             pagination={false}
             loading={false}
         />
+
+        <VectorLayerPresentation layer={currentLayer} updateAttributes={setAttributesData}/>
     </>;
 };
 
