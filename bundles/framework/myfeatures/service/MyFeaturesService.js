@@ -311,4 +311,13 @@ export class MyFeaturesService {
             return true;
         });
     }
-};
+
+    exportLayer (layerId) {
+        const params = {
+            layerId,
+            srs: this.srs
+        };
+
+        return Oskari.urls.getRoute('ExportMyFeaturesLayer', params);
+    }
+}

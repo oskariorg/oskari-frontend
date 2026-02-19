@@ -165,6 +165,10 @@ class MyFeaturesHandler extends StateHandler {
         }
     }
 
+    exportLayer (layerId) {
+        window.location.href = this.myFeaturesLayerService.exportLayer(layerId);
+    }
+
     async editLayer (id) {
         this.updateState({
             loading: true
@@ -367,6 +371,7 @@ class MyFeaturesHandler extends StateHandler {
 const wrapped = controllerMixin(MyFeaturesHandler, [
     'editLayer',
     'deleteLayer',
+    'exportLayer',
     'addLayerToMap',
     'showLayerDialog',
     'showFeatureEditorDialog',

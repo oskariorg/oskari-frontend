@@ -74,6 +74,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
+            "downloadTooltip": "Download dataset",
             "confirmDeleteFieldMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
