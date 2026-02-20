@@ -267,6 +267,64 @@ Oskari.registerLocalization({
             "messages": {
                 "cannot_save_all_features": "Cannot save all features"
             }
+        },
+        "VectorLayerPresentation": {
+            "attributes": {
+                "label": "Attributes",
+                "properties": "Using properties of features",
+                "presentation": "Presentation",
+                "presentationTooltip": "Presentation affects GetFeatureInfo request and feature data table.",
+                "showAll": "Show all properties",
+                "idProperty": "Use feature property as identifier",
+                "idPropertyTooltip": "Service should return unique identifier for features. Firstly ask service provider to use unique identifiers. Works only for 'Big objects' type (GeoJSON).",
+                "geometryType": {
+                    "label": "Geometry type",
+                    "sourceAttributes": "Source: layer attributes",
+                    "sourceCapabilities": "Source: layer capabilities",
+                    "unknown":"Unknown",
+                    "point": "Point",
+                    "line": "Line",
+                    "area":"Area",
+                    "collection":"Collection"
+                },
+                "featureFilter": {
+                    "title": "Filter requested features by properties",
+                    "button": "Feature filter"
+                },
+                "filter": {
+                    "title": "Display of properties",
+                    "lang": "Select properties displayed and order",
+                    "default": "for default filter",
+                    "fromDefault": "No filter added for the selected language. The default filter is used for the selected language. Edit the options to create your own filter for the language.",
+                    "button": "Select properties"
+                },
+                "locale": {
+                    "title": "Labels for properties",
+                    "button": "Labeling"
+                },
+                "format": {
+                    "title": "Formatting values of properties",
+                    "button": "Formatting",
+                    "type": {
+                        "label": "Type",
+                        "typeFormats": "Value type",
+                        "textFormats": "Text formatting",
+                        "link": "Link",
+                        "image": "Image",
+                        "number": "Number",
+                        "phone": "Phone number"
+                    },
+                    "options": {
+                        "noLabel": "Show only value",
+                        "skipEmpty": "Skip empty value"
+                    },
+                    "params": {
+                        "link": "Show as link",
+                        "fullUrl": "Show full URL",
+                        "label": "Label for link"
+                    }
+                }
+            },
         }
     }
 });
