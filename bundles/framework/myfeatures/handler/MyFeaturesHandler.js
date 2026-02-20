@@ -171,6 +171,10 @@ class MyFeaturesHandler extends StateHandler {
         });
         try {
             const layerJson = await this.myFeaturesLayerService.getLayerForEdit(id);
+            const attributes = layerJson?.attributes || {};
+            if (!attributes?.data) {
+                attributes.data = {};
+            }
             const values = {
                 id,
                 locale: {
@@ -180,7 +184,7 @@ class MyFeaturesHandler extends StateHandler {
                     ...layerJson?.options?.styles?.default?.featureStyle
                 },
                 layerFields: layerJson?.layerFields,
-                attributes: layerJson?.attributes
+                attributes: layerJson?.attributes || { data: {}}
             };
             this.showLayerDialog(values);
         } catch (err) {
