@@ -8,7 +8,7 @@ const StyledSelect = styled(Select)`
     width: 120px;
 `;
 
-const ColorSet = styled.div`
+const ColorWrapper = styled.div`
     border: 1px solid #555555;
     height: 20px;
     display: flex;
@@ -19,6 +19,14 @@ const Color = styled.div`
     width: 100%;
     background: ${props => props.color}
 `;
+const ColorSet = ({ colors }) => (
+    <ColorWrapper>
+        { colors.map(color => <Color key={color} color={color}/>) }
+    </ColorWrapper>
+);
+ColorSet.propTypes = {
+    colors: PropTypes.array.isRequired
+};
 
 export const ColorSelect = ({
     colorsets,
@@ -33,23 +41,10 @@ export const ColorSelect = ({
                 onChange={handleColorChange} />
         );
     }
-    // coloret: {name:'Blues', colors:['#deebf7','#9ecae1','#3182bd']}
+    // colorset: {name:'Blues', colors:['#deebf7','#9ecae1','#3182bd']}
     return (
-        <StyledSelect onChange={handleColorChange} disabled={disabled} value={value}>
-            { colorsets.map(({ name, colors }) => {
-                return (
-                    <Select.Option
-                        value={name}
-                        key={name}
-                    >
-                        <ColorSet>
-                            { colors.map(color => <Color key={color} color={color}/>) }
-                        </ColorSet>
-                    </Select.Option>)
-                ;
-            })
-            }
-        </StyledSelect>
+        <StyledSelect onChange={handleColorChange} disabled={disabled} value={value}
+            options={colorsets.map(cs => ({ value: cs.name, label: <ColorSet colors={cs.colors} /> }))} />
     );
 };
 

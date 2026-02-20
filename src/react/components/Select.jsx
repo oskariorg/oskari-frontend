@@ -1,13 +1,14 @@
 import React from 'react';
 import { Select as AntSelect } from 'antd';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 // Wrap to styled so components can be referred in component styling.
 
 const SelectWrapper = (props) => {
 
     const { options } = props;
-    const newOptions = options.map((option) => ({
+    const newOptions = options?.map((option) => ({
         ...option,
         'data-value': option['data-value'] ? option['data-value'] : option.value
     }));
@@ -17,7 +18,10 @@ const SelectWrapper = (props) => {
         options = { newOptions }
     />;
 
-}
+};
+SelectWrapper.propTypes = {
+    options: PropTypes.array.isRequired
+};
 
 const Select = styled(SelectWrapper)`
 `;
