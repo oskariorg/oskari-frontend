@@ -73,6 +73,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Content editor"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset \"{name}\"?",
+            "downloadTooltip": "Download dataset",
             "confirmDeleteFieldMsg": "Do you want to delete the field  \"{name}\"?",
             "buttons": {
                 "ok": "OK",

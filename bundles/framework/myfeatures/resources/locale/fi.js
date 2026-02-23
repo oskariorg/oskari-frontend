@@ -72,6 +72,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
+            "downloadTooltip": "Lataa aineisto",
             "confirmDeleteFieldMsg": "Haluatko poistaa kentän \"{name}\"?",
             "buttons": {
                 "ok": "OK",

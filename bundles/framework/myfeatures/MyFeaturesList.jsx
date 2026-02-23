@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { CompassOutlined, EditOutlined } from '@ant-design/icons';
+import { CompassOutlined, DownloadOutlined, EditOutlined } from '@ant-design/icons';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
 import { FEATURE_EDITOR_TOOLNAME } from './constants';
 
@@ -62,6 +62,11 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
                             type='icon'
                             title={<Message messageKey='tab.confirmDeleteMsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteLayer(item.key)}
+                        />
+                        <IconButton
+                            title={<Message messageKey='tab.downloadTooltip' messageArgs={{ name: item.name }} />}
+                            icon={<DownloadOutlined/>}
+                            onClick={(args) => controller.exportLayer(item.key)}
                         />
                     </ToolsContainer>
                 );
