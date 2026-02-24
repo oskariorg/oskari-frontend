@@ -206,8 +206,7 @@ const createColumnSettings = (selectedFeatureIds, showSelectedFirst, showCompres
                         }
                         return Oskari.util.naturalSort(a[key], b[key]);
                     }
-                },
-                ellipsis: true
+                }
             };
         });
 
