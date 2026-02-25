@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Button, Badge } from 'oskari-ui';
+import { Message, Button, Badge, Select } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
 import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
 import { InfoIcon } from 'oskari-ui/components/icons';
@@ -17,6 +17,8 @@ const MODAL_TYPE = {
     format: 'format',
     featureFilter: 'featureFilter'
 };
+
+const REPLACE_ID = 'replaceFeatureId';
 
 const Buttons = styled.div`
     display: inline-flex;
@@ -45,7 +47,7 @@ const clean = obj => {
     }
 };
 
-export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeatureFilter = null }) => {
+export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeatureFilter = null, allowReplaceId = false }) => {
     const { data = {}, filter: featureFilter } = layer.attributes;
     const { geomName, featureProperties = []} = layer.capabilities;
     const [modal, setModal] = useState(null);
@@ -133,6 +135,17 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
                             { getButtonForModal(MODAL_TYPE.format) }
                         </Buttons>
                     </StyledFormField>
+                    { allowReplaceId &&
+                        <>
+                            <Message messageKey='VectorLayerPresentation.attributes.idProperty'/>
+                            <InfoIcon title={<Message messageKey='VectorLayerPresentation.attributes.idPropertyTooltip'/>}/>
+                            <StyledFormField>
+                                <Select allowClear value={data[REPLACE_ID]}
+                                    onChange={value => updateAttributes(REPLACE_ID, value)}
+                                    options={propNames.map(value => ({value}))}/>
+                            </StyledFormField>
+                        </>
+                    }
                 </Border>
                 <Modal
                     mask={ false }

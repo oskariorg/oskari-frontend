@@ -73,7 +73,7 @@ export const VectorLayerAttributes = ({ layer, controller }) => {
                 />
             </StyledFormField>
 
-            <VectorLayerPresentation layer={layer} updateAttributes={updateAttributes} updateFeatureFilter={updateFeatureFilter} />
+            <VectorLayerPresentation layer={layer} updateAttributes={updateAttributes} updateFeatureFilter={updateFeatureFilter} allowReplaceId={true} />
         </Fragment>
     );
 };
