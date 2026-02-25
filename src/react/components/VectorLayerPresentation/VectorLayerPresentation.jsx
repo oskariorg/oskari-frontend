@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, Button, Badge } from 'oskari-ui';
 import { Modal } from 'oskari-ui/components/Modal';
+import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
 import { InfoIcon } from 'oskari-ui/components/icons';
 import { LocaleProvider, Messaging } from 'oskari-ui/util';
 import { PropertiesFilter } from './PropertiesFilter';
@@ -13,7 +14,8 @@ import { StyledFormField, Border } from './styled';
 const MODAL_TYPE = {
     filter: 'filter',
     locale: 'locale',
-    format: 'format'
+    format: 'format',
+    featureFilter: 'featureFilter'
 };
 
 const Buttons = styled.div`
@@ -43,15 +45,17 @@ const clean = obj => {
     }
 };
 
-export const VectorLayerPresentation = ({ layer, updateAttributes }) => {
-    const { data = {} } = layer.attributes;
+export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeatureFilter = null }) => {
+    const { data = {}, filter: featureFilter } = layer.attributes;
     const { geomName, featureProperties = []} = layer.capabilities;
     const [modal, setModal] = useState(null);
     const [state, setState] = useState({
         filter: data.filter || {},
         locale: data.locale || {},
-        format: data.format || {}
+        format: data.format || {},
+        featureFilter
     });
+
     const getButtonForModal = type => {
         const value = state[type] || {};
         const count = Object.keys(value).length;
@@ -65,6 +69,16 @@ export const VectorLayerPresentation = ({ layer, updateAttributes }) => {
     };
 
     const onModalOk = () => {
+        if (modal === 'featureFilter') {
+            const filter = cleanFilter(state.featureFilter, featureProperties);
+            updateFeatureFilter(filter);
+            // update local state
+            onModalUpdate(filter);
+            setModal(null);
+            return;
+        }
+
+
         // deep clone to not mess local state
         const value = JSON.parse(JSON.stringify(state[modal]));
         // clean twice to get rid of empty objects if last value is deleted from it
@@ -105,13 +119,18 @@ export const VectorLayerPresentation = ({ layer, updateAttributes }) => {
             <Fragment>
                 <Message messageKey='VectorLayerPresentation.attributes.properties'/>
                 <Border>
+                    { updateFeatureFilter &&
+                        <StyledFormField>
+                            { getButtonForModal(MODAL_TYPE.featureFilter) }
+                        </StyledFormField>
+                    }
                     <Message messageKey='VectorLayerPresentation.attributes.presentation' />
                     <InfoIcon title={<Message messageKey='VectorLayerPresentation.attributes.presentationTooltip'/>}/>
                     <StyledFormField>
                         <Buttons>
-                            { getButtonForModal('filter') }
-                            { getButtonForModal('locale') }
-                            { getButtonForModal('format') }
+                            { getButtonForModal(MODAL_TYPE.filter) }
+                            { getButtonForModal(MODAL_TYPE.locale) }
+                            { getButtonForModal(MODAL_TYPE.format) }
                         </Buttons>
                     </StyledFormField>
                 </Border>
@@ -123,7 +142,7 @@ export const VectorLayerPresentation = ({ layer, updateAttributes }) => {
                     onCancel={ onModalCancel }
                     cancelText={ <Message messageKey="cancel" /> }
                     okText={ <Message messageKey="save" /> }
-                    width={ 500 }
+                    width={ modal === MODAL_TYPE.featureFilter ? 800 : 500 }
                 >
                     <h3><Message messageKey={`VectorLayerPresentation.attributes.${modal}.title`} /></h3>
                     { modal === MODAL_TYPE.filter &&
@@ -137,6 +156,10 @@ export const VectorLayerPresentation = ({ layer, updateAttributes }) => {
                     { modal === MODAL_TYPE.format &&
                         <PropertiesFormat update={onModalUpdate} properties={propNames}
                             format={state.format} labels={propLabels} selected={selectedProperties}/>
+                    }
+                    { updateFeatureFilter && modal === MODAL_TYPE.featureFilter &&
+                        <FeatureFilter onChange={onModalUpdate} properties={propNames}
+                            filter={state.featureFilter} labels={propLabels} types={properties}/>
                     }
                 </Modal>
             </Fragment>
