@@ -35,6 +35,20 @@ const getTabTitle = (isValid, messageKey) => (
     </Fragment>
 );
 
+/**
+ * Helper method to create the default filter for a new layer to avoid additional
+ * metadatafields such as created, updated, __fid or fid to appear in ui
+ **/
+const getDefaultAttributes = (layerFields) => {
+    return {
+        data: {
+            filter: {
+                default: layerFields?.map(field => field.name)
+            }
+        }
+    };
+};
+
 export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFeature }) => {
     // TODO: refactor this thing as it's getting way overly complicated
     const { maxSize, unzippedMaxSize, isImport } = config;
@@ -54,7 +68,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
             locale: state.locale,
             file: state.file,
             layerFields: state.layerFields,
-            attributes: state.attributes
+            attributes: state.attributes ? state.attributes : getDefaultAttributes(state.layerFields)
         };
         if (showSrs) {
             // add sourceSrs only if field is visible
