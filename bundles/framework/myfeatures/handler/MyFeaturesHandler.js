@@ -188,7 +188,7 @@ class MyFeaturesHandler extends StateHandler {
                     ...layerJson?.options?.styles?.default?.featureStyle
                 },
                 layerFields: layerJson?.layerFields,
-                attributes: layerJson?.attributes || { data: {}}
+                attributes: attributes
             };
             this.showLayerDialog(values);
         } catch (err) {
@@ -291,7 +291,7 @@ class MyFeaturesHandler extends StateHandler {
             layerId: layerId,
             id: feature.id,
             geometry: feature.geometry,
-            properties: feature.properties
+            properties: this.cleanProperties(layer?.fieldTypes, feature)
         };
         const isNew = typeof feature.id === 'undefined';
         const url = Oskari.urls.getRoute('MyFeaturesFeature', {
@@ -347,6 +347,22 @@ class MyFeaturesHandler extends StateHandler {
             }, 500);
             return;
         }).catch((exception) => Messaging.error(this.loc('featureEditor.featureDelete.error') + exception));
+    }
+
+    cleanProperties(fieldTypes, feature) {
+        // clean up excess properties not defined in layers fieldtypes
+        // might include stuff added by openlayers (__fid) or additional attributes obtained from server
+        if (!fieldTypes || !Object.keys(fieldTypes).length) {
+            return feature?.properties || {};
+        }
+
+        const propsToSave = Object.fromEntries(
+            Object.keys(fieldTypes)
+                .filter(key => key in feature.properties)
+                .map(key => [key, feature?.properties[key]])
+        );
+
+        return propsToSave;
     }
 
     createEventHandlers () {
