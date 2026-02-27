@@ -33,7 +33,7 @@ const StyledPanel = styled('div')`
 export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading = false, onSave, onDelete, onClose, onCancel}) => {
     const helperRef = useRef(null);
     const [handlerState, setHandlerState] = useState(null);
-    const { currentLayer = null, feature = null } = handlerState || {};
+    const { currentLayer = null, feature = null, myFeaturesLayers } = handlerState || {};
     useEffect(() => {
         helperRef.current = new FeatureEditorPanelHandler();
         helperRef.current.addStateListener((newState) => {
@@ -81,10 +81,23 @@ export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading =
         startNewFeature = { startNewFeature }
         setCurrentLayer={setCurrentLayer}
         addNewLayer={addNewLayer}
+        myFeaturesLayers={myFeaturesLayers}
     />;
 };
 
-const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature, setCurrentLayer, addNewLayer}) => {
+const EditorPanel = ({
+    layer = {},
+    feature = {},
+    loading = false,
+    onSave,
+    onDelete,
+    onClose,
+    onCancel,
+    startNewFeature,
+    setCurrentLayer,
+    myFeaturesLayers,
+    addNewLayer}) => {
+
     const hasLayer = !!layer?.geometryType;
     if (hasLayer && !feature) {
         feature = {
@@ -101,7 +114,10 @@ const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDele
 
                     }
                     { !hasLayer &&
-                        <LayerSelectionPanel setCurrentLayer={setCurrentLayer} addNewLayer={addNewLayer}/>
+                        <LayerSelectionPanel
+                            myFeaturesLayers={myFeaturesLayers}
+                            setCurrentLayer={setCurrentLayer}
+                            addNewLayer={addNewLayer}/>
                     }
                     { hasLayer &&
                         <FeaturePanel

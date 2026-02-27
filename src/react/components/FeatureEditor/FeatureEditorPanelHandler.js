@@ -2,22 +2,23 @@ import { StateHandler } from 'oskari-ui/util';
 import { Helper } from './Helper';
 import { DrawingHelper } from './DrawingHelper';
 import { confirmEdit } from './EditConfirmation';
-
+import { MY_FEATURES_LAYER_TYPE } from '../../../../bundles/framework/myfeatures/constants';
 
 export class FeatureEditorPanelHandler extends StateHandler {
 
     constructor() {
         super();
-        this.state = {
-            currentLayer: null,
-            feature: null,
-            loading: false
-        };
-
         this.name = 'FeatureEditor';
         this.sandbox = Oskari.getSandbox();
         this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this.mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        this.state = {
+            currentLayer: null,
+            feature: null,
+            loading: false,
+            myFeaturesLayers: null
+        };
+
         this.eventHandlers = {
             FeatureEvent: function (event) {
                 if (event.getOperation() !== 'click') {
@@ -31,9 +32,24 @@ export class FeatureEditorPanelHandler extends StateHandler {
                 }
                 // found one -> edit it
                 this.editFeature(editLayerFeatures[0].geojson.features[0]);
+            },
+            MapLayerEvent: function(event) {
+                const operation = event.getOperation();
+                if (operation === 'add' || operation === 'update' || operation === 'remove') {
+                    this.updateState({
+                        myFeaturesLayers: this.getMyFeaturesLayers()
+                    });
+                }
             }
         };
 
+    }
+
+    // TODO: fetch layers by some other criteria, i.e. "all layers whose features we can edit"
+    // thus far it's only myfeatures layers.
+    getMyFeaturesLayers() {
+        const myFeaturesLayers = this.mapLayerService?.getLayersOfType(MY_FEATURES_LAYER_TYPE) || [];
+        return myFeaturesLayers;
     }
 
     getSandbox () {
@@ -55,6 +71,7 @@ export class FeatureEditorPanelHandler extends StateHandler {
 
     init(layerId, featureId) {
         if (!layerId) {
+            this.initLayerSelection();
             return;
         }
 
@@ -80,6 +97,23 @@ export class FeatureEditorPanelHandler extends StateHandler {
         });
     }
 
+    initLayerSelection() {
+        // no layerid -> we need to show the layer selection dialog -> fetch myFeaturesLayers
+        const myFeaturesLayers = this.getMyFeaturesLayers();
+        this.updateState({
+            myFeaturesLayers: myFeaturesLayers
+        });
+
+        // unregister eventHandlers just in case this is a re-init
+        Object.keys(this.eventHandlers).forEach(eventName => {
+            this.getSandbox().unregisterFromEventByName(this, eventName);
+        });
+
+        // register again
+        Object.keys(this.eventHandlers).forEach(eventName => {
+            this.getSandbox().registerForEventByName(this, eventName);
+        });
+    }
     /**
      * Destroys/removes this view from the screen.
      * @method @public destroy
