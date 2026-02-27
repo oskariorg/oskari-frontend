@@ -97,7 +97,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
         setType(null);
         setError(null);
         updateLayerFields(newLayerFields);
-        setCurrentLayer(getLayer(id, layerFields));
+        setCurrentLayer(getLayer(id, newLayerFields));
     };
 
     const deleteField = (name) => {
