@@ -1,41 +1,11 @@
-import React, { useState, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Message, Select, Button, Badge } from 'oskari-ui';
-import { Modal } from 'oskari-ui/components/Modal';
-import { FeatureFilter, cleanFilter } from 'oskari-ui/components/FeatureFilter';
+import { Message, Select } from 'oskari-ui';
 import { VectorLayerPresentation } from 'oskari-ui/components/VectorLayerPresentation';
 import { InfoIcon } from 'oskari-ui/components/icons';
-import { Controller, Messaging } from 'oskari-ui/util';
-import { PropertiesFilter, PropertiesLocale, PropertiesFormat } from './VectorLayerAttributes/';
-import { StyledFormField, Border } from '../styled';
+import { Controller } from 'oskari-ui/util';
+import { StyledFormField } from '../styled';
 import { GEOMETRY_TYPES, DATA, getGeometryType } from '../../LayerHelper';
-const Buttons = styled.div`
-    display: inline-flex;
-    > * {
-        margin-right: 20px;
-    }
-`;
-
-// Clean empty objects and values that doesn't need to store
-// data.format: false options
-// data.locale: empty strings
-const clean = obj => {
-    for (const key in obj) {
-        const val = obj[key];
-        if(typeof val === 'object' && !Array.isArray(val) && val !== null) {
-            if (!Object.keys(val).length) {
-                delete obj[key];
-            } else {
-                clean(val);
-            }
-        } else if (typeof val === 'string' && !val.trim().length) {
-            delete obj[key];
-        } else if (val === null || val === false) {
-            delete obj[key];
-        }
-    }
-};
 
 export const VectorLayerAttributes = ({ layer, controller }) => {
     const { data = {} } = layer.attributes;
