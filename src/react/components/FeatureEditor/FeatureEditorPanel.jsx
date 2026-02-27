@@ -66,6 +66,10 @@ export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading =
         helperRef.current.init(layerId, null);
     });
 
+    const addNewLayer = useCallback(() => {
+        helperRef.current.addNewLayer();
+    });
+
     return <EditorPanel
         layer = { currentLayer }
         feature = { feature }
@@ -76,10 +80,11 @@ export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading =
         onCancel = { onCancel }
         startNewFeature = { startNewFeature }
         setCurrentLayer={setCurrentLayer}
+        addNewLayer={addNewLayer}
     />;
 };
 
-const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature, setCurrentLayer}) => {
+const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature, setCurrentLayer, addNewLayer}) => {
     const hasLayer = !!layer?.geometryType;
     if (hasLayer && !feature) {
         feature = {
@@ -96,7 +101,7 @@ const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDele
 
                     }
                     { !hasLayer &&
-                        <LayerSelectionPanel setCurrentLayer={setCurrentLayer}/>
+                        <LayerSelectionPanel setCurrentLayer={setCurrentLayer} addNewLayer={addNewLayer}/>
                     }
                     { hasLayer &&
                         <FeaturePanel

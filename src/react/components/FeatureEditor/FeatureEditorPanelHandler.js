@@ -130,6 +130,9 @@ export class FeatureEditorPanelHandler extends StateHandler {
         },);
     }
 
+    addNewLayer() {
+        this.getSandbox().postRequestByName('myfeatures.ShowLayerDialogRequest', {isNew: true});
+    }
     /**
      * update current feature to state. Fetch from map by given featureid
      * @param {*} featureId the id we received for the feature we're modifying

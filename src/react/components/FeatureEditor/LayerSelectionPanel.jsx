@@ -12,11 +12,12 @@ const Row = styled('div')`
     display: flex;
     justify-content: flex-start;
     gap: 1em;
+    padding-bottom: 1em;
 `;
 
 const BUNDLE_KEY = 'oskariui';
 
-export const LayerSelectionPanel = ({ setCurrentLayer }) => {
+export const LayerSelectionPanel = ({ setCurrentLayer, addNewLayer = null }) => {
     const [selectedLayer, setSelectedLayer] = useState(null);
 
     const myFeaturesLayers = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService')?.getLayersOfType(MY_FEATURES_LAYER_TYPE) || [];
@@ -41,10 +42,18 @@ export const LayerSelectionPanel = ({ setCurrentLayer }) => {
             <StyledSelect options={options} value={selectedLayer} onChange={(value) => {
                 setSelectedLayer(value);
             }}/>
-
+        </Row>
+        <Row>
             <Button disabled={!selectedLayer} type='primary' onClick={() => { updateCurrentLayer(); }}>
                 <Message messageKey='FeatureEditorView.buttons.setCurrentLayer'/>
             </Button>
+            {
+                addNewLayer &&
+                <Button type='primary' onClick={() => { addNewLayer(); }}>
+                    <Message messageKey='FeatureEditorView.buttons.addNewLayer'/>
+                </Button>
+            }
+
         </Row>
     </LocaleProvider>;
 };
