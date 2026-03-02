@@ -11,13 +11,22 @@ class MyFeaturesHandler extends StateHandler {
         this.sandbox = instance.getSandbox();
         this.setState({
             data: [],
-            loading: false
+            loading: false,
+            selectedLayerId: null,
+            selectedFeatureId: null,
+            savedFeature: null
         });
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, BUNDLE_KEY);
         this.eventHandlers = this.createEventHandlers();
 
         this.refreshLayersList();
+        this.addStateListener(() => {
+            if (this.featureEditorControls) {
+                const { selectedLayerId, savedFeature, data } = this.getState();
+                this.featureEditorControls.update(selectedLayerId, null, data, this, savedFeature);
+            }
+        });
     };
 
     getSandbox() {
@@ -64,17 +73,29 @@ class MyFeaturesHandler extends StateHandler {
         this.popupControls = showLayerForm(values, conf, getOkCallback(), () => this.popupCleanup(), addNewFeature);
     }
 
+
+    setFeatureEditorLayer(layerId) {
+        this.updateState({
+            selectedLayerId: layerId
+        });
+    }
+
     /**
      * Opens the flyout to edit the features of the given layer
      * @param {String} layerId layer id
      * @param { int } featureId feature technical id
      */
     showFeatureEditorDialog (layerId, featureId) {
+        this.updateState({
+            selectedLayerId: layerId,
+            selectedFeatureId: featureId
+        });
+
         if (this.featureEditorControls) {
             this.closeFeatureEditorFlyout();
         }
 
-        this.featureEditorControls = showFeatureEditorFlyout(layerId, featureId, this);
+        this.featureEditorControls = showFeatureEditorFlyout(layerId, featureId, this?.state?.data, this, null);
     }
 
     closeFeatureEditorFlyout () {
@@ -82,6 +103,11 @@ class MyFeaturesHandler extends StateHandler {
             this.featureEditorControls.close();
         }
         this.featureEditorControls = null;
+        this.updateState({
+            selectedLayerId: null,
+            selectedFeatureId: null,
+            savedFeature: null
+        });
     }
 
     getMaxSize () {
@@ -310,10 +336,13 @@ class MyFeaturesHandler extends StateHandler {
             }
             return response.json();
         }).then((savedFeature) => {
+            this.updateState({
+                savedFeature: savedFeature
+            });
             // we need to provide the full feature instead of feature id because we don't really have a convenient way of
             // knowing our maplayerupdaterequest was succesful and the feature can now be found on the layer.
             // Elsewhere we always use featureId
-            this.featureEditorControls.update(layerId, null, this, savedFeature);
+            //this.featureEditorControls.update(layerId, null, this, savedFeature);
             setTimeout(() => {
                 this.getSandbox().postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true]);
                 Messaging.success(this.loc('featureEditor.featureUpdate.success'));
@@ -395,7 +424,8 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'addLayerToMap',
     'showLayerDialog',
     'showFeatureEditorDialog',
-    'closeFeatureEditorFlyout'
+    'closeFeatureEditorFlyout',
+    'setFeatureEditorLayer'
 ]);
 
 export { wrapped as MyFeaturesHandler };

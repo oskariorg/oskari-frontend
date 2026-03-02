@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LocaleProvider } from 'oskari-ui/util';
 import { FeaturePanel } from './FeaturePanel';
 import { ErrorPanel } from './ErrorPanel';
-
 import styled from 'styled-components';
 import { FeatureEditorPanelHandler } from './FeatureEditorPanelHandler';
-import { LayerSelectionPanel } from './LayerSelectionPanel';
 
 const StyledPanel = styled('div')`
     background: #FFF;
@@ -33,7 +31,7 @@ const StyledPanel = styled('div')`
 export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading = false, onSave, onDelete, onClose, onCancel}) => {
     const helperRef = useRef(null);
     const [handlerState, setHandlerState] = useState(null);
-    const { currentLayer = null, feature = null, myFeaturesLayers } = handlerState || {};
+    const { currentLayer = null, feature = null } = handlerState || {};
     useEffect(() => {
         helperRef.current = new FeatureEditorPanelHandler();
         helperRef.current.addStateListener((newState) => {
@@ -81,7 +79,6 @@ export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading =
         startNewFeature = { startNewFeature }
         setCurrentLayer={setCurrentLayer}
         addNewLayer={addNewLayer}
-        myFeaturesLayers={myFeaturesLayers}
     />;
 };
 
@@ -95,7 +92,6 @@ const EditorPanel = ({
     onCancel,
     startNewFeature,
     setCurrentLayer,
-    myFeaturesLayers,
     addNewLayer}) => {
 
     const hasLayer = !!layer?.geometryType;
@@ -111,13 +107,6 @@ const EditorPanel = ({
                 <div className="content">
                     {
                         loading && <ErrorPanel loading={loading} />
-
-                    }
-                    { !hasLayer &&
-                        <LayerSelectionPanel
-                            myFeaturesLayers={myFeaturesLayers}
-                            setCurrentLayer={setCurrentLayer}
-                            addNewLayer={addNewLayer}/>
                     }
                     { hasLayer &&
                         <FeaturePanel
