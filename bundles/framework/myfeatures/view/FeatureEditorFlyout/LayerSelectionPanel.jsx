@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Select, Button, Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import styled from 'styled-components';
+import { BUNDLE_KEY } from '../../constants';
 
 const LayerSelectionContainer = styled('div')`
     padding: 1em;
+    min-width: 25%;
 `;
 
 const StyledSelect = styled(Select)`
@@ -17,8 +19,6 @@ const Row = styled('div')`
     gap: 1em;
     padding-bottom: 1em;
 `;
-
-const BUNDLE_KEY = 'oskariui';
 
 export const LayerSelectionPanel = ({ layers, setCurrentLayer = null, addNewLayer = null }) => {
     const [selectedLayer, setSelectedLayer] = useState(null);
@@ -38,7 +38,7 @@ export const LayerSelectionPanel = ({ layers, setCurrentLayer = null, addNewLaye
     return <LayerSelectionContainer>
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Row>
-                <b><Message messageKey='FeatureEditorView.setCurrentLayerTitle'/></b>
+                <b><Message messageKey='featureEditor.layerSelectionPanel.setCurrentLayerTitle'/></b>
             </Row>
             <Row>
                 <StyledSelect options={options} value={selectedLayer} onChange={(value) => {
@@ -47,12 +47,12 @@ export const LayerSelectionPanel = ({ layers, setCurrentLayer = null, addNewLaye
             </Row>
             <Row>
                 <Button disabled={!selectedLayer} type='primary' onClick={() => { updateCurrentLayer(); }}>
-                    <Message messageKey='FeatureEditorView.buttons.setCurrentLayer'/>
+                    <Message messageKey='featureEditor.layerSelectionPanel.buttons.setCurrentLayer'/>
                 </Button>
                 {
                     addNewLayer &&
                     <Button type='primary' onClick={() => { addNewLayer(); }}>
-                        <Message messageKey='FeatureEditorView.buttons.addNewLayer'/>
+                        <Message messageKey='featureEditor.layerSelectionPanel.buttons.addNewLayer'/>
                     </Button>
                 }
 
