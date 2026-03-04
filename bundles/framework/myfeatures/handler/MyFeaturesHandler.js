@@ -96,6 +96,7 @@ class MyFeaturesHandler extends StateHandler {
         }
 
         this.featureEditorControls = showFeatureEditorFlyout(layerId, featureId, this?.state?.data, this, null);
+        this.featureEditorControls.bringToTop();
     }
 
     closeFeatureEditorFlyout () {
