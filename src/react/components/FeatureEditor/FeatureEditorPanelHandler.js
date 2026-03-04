@@ -3,21 +3,20 @@ import { Helper } from './Helper';
 import { DrawingHelper } from './DrawingHelper';
 import { confirmEdit } from './EditConfirmation';
 
-
 export class FeatureEditorPanelHandler extends StateHandler {
 
     constructor() {
         super();
+        this.name = 'FeatureEditor';
+        this.sandbox = Oskari.getSandbox();
+        this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+        this.mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.state = {
             currentLayer: null,
             feature: null,
             loading: false
         };
 
-        this.name = 'FeatureEditor';
-        this.sandbox = Oskari.getSandbox();
-        this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-        this.mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.eventHandlers = {
             FeatureEvent: function (event) {
                 if (event.getOperation() !== 'click') {
@@ -54,9 +53,6 @@ export class FeatureEditorPanelHandler extends StateHandler {
     }
 
     init(layerId, featureId) {
-        if (!layerId) {
-            return;
-        }
 
         // unregister eventHandlers just in case this is a re-init
         Object.keys(this.eventHandlers).forEach(eventName => {

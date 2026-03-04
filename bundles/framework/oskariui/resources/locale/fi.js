@@ -209,7 +209,6 @@ Oskari.registerLocalization({
                 "deleteFeature": "Poista kohde",
                 "yes": "Kyllä",
                 "no": "Ei",
-                "setCurrentLayer": "Valitse taso"
             },
             "tools": {
                 "point": "Lisää piste",

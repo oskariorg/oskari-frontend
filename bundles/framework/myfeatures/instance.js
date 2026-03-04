@@ -32,12 +32,12 @@ export class MyFeatureBundleInstance extends BasicBundleInstance {
             );
             this.handler = new MyFeaturesHandler(this, this.importService);
             this.addTab();
-            this.addRequestHandler('MyFeatures.ShowLayerDialogRequest', (req) => {
-                const id = req.getId();
+            this.addRequestHandler('myfeatures.ShowLayerDialogRequest', (req) => {
+                const id = req?.getId();
                 if (id) {
                     this.handler.editLayer(id);
                 } else {
-                    this.handler.showLayerDialog();
+                    this.handler.showLayerDialog({ isNew: true });
                 }
             });
 

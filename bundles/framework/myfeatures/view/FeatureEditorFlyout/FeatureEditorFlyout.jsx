@@ -4,9 +4,16 @@ import { showFlyout } from 'oskari-ui/components/window';
 import { FeatureEditorPanel } from 'oskari-ui/components/FeatureEditor';
 import { Message } from 'oskari-ui';
 import { BUNDLE_KEY } from '../../constants';
-const FeatureEditorContainer = ({ layerId, featureId, savedFeature, controller }) => {
+import { LayerSelectionPanel } from './LayerSelectionPanel';
+const FeatureEditorContainer = ({ layerId, featureId, layers = null, savedFeature, controller }) => {
     return <>
-        <FeatureEditorPanel
+        {!layerId && <LayerSelectionPanel
+            layers={ layers }
+            setCurrentLayer={(layerId) => controller.setFeatureEditorLayer(layerId)}
+            addNewLayer={() => controller.showLayerDialog({isNew: true})}
+
+        />}
+        {layerId && <FeatureEditorPanel
             layerId = { layerId }
             featureId = { featureId }
             savedFeature = { savedFeature }
@@ -23,12 +30,13 @@ const FeatureEditorContainer = ({ layerId, featureId, savedFeature, controller }
             onCancel = {() => {
                 controller.closeFeatureEditorFlyout();
             }}
-        />
+        />}
     </>;
 };
 
-export const showFeatureEditorFlyout = (layerId, featureId, controller, savedFeature) => {
+export const showFeatureEditorFlyout = (layerId, featureId, layers = null, controller, savedFeature) => {
     const content = <FeatureEditorContainer
+        layers = { layers }
         layerId = { layerId }
         featureId = { featureId }
         savedFeature = { savedFeature }
@@ -39,8 +47,14 @@ export const showFeatureEditorFlyout = (layerId, featureId, controller, savedFea
 
     return {
         ...controls,
-        update: (layerId, featureId, controller, savedFeature) => {
-            controls.update(title, <FeatureEditorContainer layerId = { layerId } featureId = { featureId } savedFeature = { savedFeature } controller = { controller } />);
+        update: (layerId, featureId, layers, controller, savedFeature) => {
+            controls.update(title,
+                <FeatureEditorContainer
+                    layers={layers}
+                    layerId={layerId}
+                    featureId={featureId}
+                    savedFeature={savedFeature}
+                    controller={controller} />);
         }
     };
 };

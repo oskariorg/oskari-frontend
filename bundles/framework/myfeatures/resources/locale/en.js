@@ -129,6 +129,13 @@ Oskari.registerLocalization(
                 "Date": "Date",
                 "Timestamp": "Timestamp",
                 "UUID": "UUID"
+            },
+            "layerSelectionPanel": {
+                "setCurrentLayerTitle": "Select dataset",
+                "buttons": {
+                    "setCurrentLayer": "Select dataset",
+                    "addNewLayer": "New dataset"
+                }
             }
         },
         "layer": {

@@ -210,7 +210,6 @@ Oskari.registerLocalization({
                 "deleteFeature": "Delete feature",
                 "yes": "Yes",
                 "no": "No",
-                "setCurrentLayer": "Select layer"
             },
             "tools": {
                 "point": "Add point geometry",

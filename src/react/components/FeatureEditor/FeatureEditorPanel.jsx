@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LocaleProvider } from 'oskari-ui/util';
 import { FeaturePanel } from './FeaturePanel';
 import { ErrorPanel } from './ErrorPanel';
-
 import styled from 'styled-components';
 import { FeatureEditorPanelHandler } from './FeatureEditorPanelHandler';
-import { LayerSelectionPanel } from './LayerSelectionPanel';
 
 const StyledPanel = styled('div')`
     background: #FFF;
@@ -66,6 +64,10 @@ export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading =
         helperRef.current.init(layerId, null);
     });
 
+    const addNewLayer = useCallback(() => {
+        helperRef.current.addNewLayer();
+    });
+
     return <EditorPanel
         layer = { currentLayer }
         feature = { feature }
@@ -76,10 +78,22 @@ export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading =
         onCancel = { onCancel }
         startNewFeature = { startNewFeature }
         setCurrentLayer={setCurrentLayer}
+        addNewLayer={addNewLayer}
     />;
 };
 
-const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDelete, onClose, onCancel, startNewFeature, setCurrentLayer}) => {
+const EditorPanel = ({
+    layer = {},
+    feature = {},
+    loading = false,
+    onSave,
+    onDelete,
+    onClose,
+    onCancel,
+    startNewFeature,
+    setCurrentLayer,
+    addNewLayer}) => {
+
     const hasLayer = !!layer?.geometryType;
     if (hasLayer && !feature) {
         feature = {
@@ -93,10 +107,6 @@ const EditorPanel = ({ layer = {}, feature = {}, loading = false, onSave, onDele
                 <div className="content">
                     {
                         loading && <ErrorPanel loading={loading} />
-
-                    }
-                    { !hasLayer &&
-                        <LayerSelectionPanel setCurrentLayer={setCurrentLayer}/>
                     }
                     { hasLayer &&
                         <FeaturePanel

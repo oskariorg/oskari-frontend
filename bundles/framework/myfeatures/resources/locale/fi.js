@@ -129,6 +129,13 @@ Oskari.registerLocalization(
                 "Date": "Päivämäärä",
                 "Timestamp": "Aikaleima",
                 "UUID": "UUID"
+            },
+            "layerSelectionPanel": {
+                "setCurrentLayerTitle": "Valitse aineisto",
+                "buttons": {
+                    "setCurrentLayer": "Valitse aineisto",
+                    "addNewLayer": "Uusi aineisto"
+                }
             }
         },
         "layer": {
