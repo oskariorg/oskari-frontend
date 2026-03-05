@@ -78,7 +78,7 @@
     "merge": "2.1.1",
     "mini-css-extract-plugin": "2.9.4",
     "mobile-detect": "1.4.5",
-    "ol": "10.6.1",
+    "ol": "10.8.0",
     "ol-mapbox-style": "13.1.0",
     "olcs": "2.22.1",
     "query-string": "6.8.3",
@@ -90,7 +90,7 @@
     "style-loader": "4.0.0",
     "styled-components": "5.3.3",
     "terser-webpack-plugin": "5.3.14",
-    "webpack": "5.104.1",
+    "webpack": "5.105.4",
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "5.2.3",
     "webpackbar": "5.0.2"
