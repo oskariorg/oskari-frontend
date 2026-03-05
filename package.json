@@ -78,7 +78,7 @@
     "merge": "2.1.1",
     "mini-css-extract-plugin": "2.9.4",
     "mobile-detect": "1.4.5",
-    "ol": "10.6.1",
+    "ol": "10.8.0",
     "ol-mapbox-style": "13.1.0",
     "olcs": "2.22.1",
     "query-string": "6.8.3",
