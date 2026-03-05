@@ -424,6 +424,7 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
             const index = this.getLayerIndex(id);
             if (index > -1) {
                 const wfs = _selectedLayers[index];
+                wfs._permissions = { ...newLayer._permissions };
                 wfs._tools = wfs._tools.concat(newLayer._tools);
                 wfs._featureTools = [].concat(newLayer._featureTools);
                 wfs._layerType = newLayer._layerType;
