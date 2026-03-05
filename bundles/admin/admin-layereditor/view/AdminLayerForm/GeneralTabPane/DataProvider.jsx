@@ -11,7 +11,7 @@ export const DataProvider = ({ layer, dataProviders, controller }) => (
         <StyledFormField>
             <Select
                 showSearch
-                optionFilterProp='children'
+                optionFilterProp='label'
                 value={layer.dataProviderId}
                 onChange={value => controller.setDataProviderId(value)}
                 options={dataProviders.map(dataProvider => (
