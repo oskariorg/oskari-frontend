@@ -17,7 +17,7 @@ Oskari.registerLocalization({
             previous: 'Föregående',
             print: 'Få utskrift',
             search: 'Sök',
-            reset: 'Återställa',
+            reset: 'Återställ',
             copy: 'Kopiera till klippbordet',
             clear: 'Rensa',
             accept: 'Acceptera',
