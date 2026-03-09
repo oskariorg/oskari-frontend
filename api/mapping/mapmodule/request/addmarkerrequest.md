@@ -51,12 +51,12 @@ Recognized keys in data-object:
   <td> msg </td><td> String </td><td> label/text for marker </td><td> '' </td>
 </tr>
 <tr>
-  <td> shape </td><td> Number/String </td><td> Visual presentation of the marker. Numeric value selects a built-in symbolizer for marker (listed below). String value can be SVG or an url for external image. 
+  <td> shape </td><td> Number/String </td><td> Visual presentation of the marker. Numeric value selects a built-in symbolizer for marker (listed below). String value can be SVG or an url for external image.
 
   Example values:
   <ul>
-    <li>`2` for built-in symbol ![wide pin](/images/markers/marker-pin2.png)</li>
-    <li>`https://www.oskari.org/images/done.png` for external image <img src="https://www.oskari.org/images/done.png" /></li>
+    <li>`2` for built-in symbol ![wide pin](images/markers/marker-pin2.png)</li>
+    <li>`https://www.oskari.org/assets/images/done.png` for external image <img src="https://www.oskari.org/assets/images/done.png" /></li>
     <li>`<svg width="32" height="32"></svg>` for SVG symbol given as string</li>
   </ul>
 
@@ -65,7 +65,7 @@ Recognized keys in data-object:
 </td><td> 2 </td>
 </tr>
 <tr>
-  <td> size </td><td> Number </td><td> size of the marker. For built-in symbols this is usually between `1` and `5` (actual size calculated with `size * 10 + 40`). 
+  <td> size </td><td> Number </td><td> size of the marker. For built-in symbols this is usually between `1` and `5` (actual size calculated with `size * 10 + 40`).
   For symbols that are NOT built-in the size is assumed to be in pixels (defaults to 32x32px, only square icons supported). Exception is when the pixel size is below 10 - Then the above formula is used for size calculation (for backwards compatibility). </td><td> 1 </td>
 </tr>
 
@@ -85,13 +85,13 @@ Recognized keys in data-object:
 
 ### Built-in marker shapes
 
-0: ![stud](/images/markers/marker-stud.png)
-1: ![square](/images/markers/marker-square.png)
-2: ![wide pin](/images/markers/marker-pin2.png)
-3: ![narrow pin](/images/markers/marker-pin.png)
-4: ![flag](/images/markers/marker-flag.png)
-5: ![dot](/images/markers/marker-dot.png)
-6: ![arrow](/images/markers/marker-arrow.png)
+0: ![stud](images/markers/marker-stud.png)
+1: ![square](images/markers/marker-square.png)
+2: ![wide pin](images/markers/marker-pin2.png)
+3: ![narrow pin](images/markers/marker-pin.png)
+4: ![flag](images/markers/marker-flag.png)
+5: ![dot](images/markers/marker-dot.png)
+6: ![arrow](images/markers/marker-arrow.png)
 
 ## Custom shapes
 
@@ -107,7 +107,8 @@ Or if you dont want to use own svg then you can also tell url to any icon file a
 size in pixels of the graphics can be controlled by the `size` parameter. The default size is 32x32 pixels. **
 
 SVG-viewport/x/y attributes don't work correctly with custom marker shapes. Don't do this:
-```
+
+```javascript
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
   x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
   <style type="text/css">
@@ -123,8 +124,10 @@ SVG-viewport/x/y attributes don't work correctly with custom marker shapes. Don'
   </g>
 </svg>
 ```
+
 Instead use width="32" height="32". This is a working version of above:
-```
+
+```javascript
 <svg width="32" height="32" style="enable-background:new 0 0 32 32;">
   <style type="text/css">
     .st0 { fill: #0557d3; }
@@ -142,7 +145,8 @@ Instead use width="32" height="32". This is a working version of above:
 
 The custom SVG is wrapped with a template having viewBox and width/height of 64x64 so the center can be anywhere in the 32x32 custom SVG.
 The provided offsetX and offsetY is used to modify the custom SVGs x/y attributes to place the custom shape inside the 64x64 box and make the marker point to correct coordinates.
-```
+
+```javascript
 <svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg"> ... your svg ... </svg>
 ```
 
@@ -156,7 +160,7 @@ If you are using your own Oskari instance you can override the built-in icons:
 
 2. Open the created SVG in a text editor. Copy all from startting `<svg>` tag to ending `</svg>`. Remove xmlns and other editor saved unneccessary infos for example `<defs`.
 
-3. In server code adjust the icons in https://github.com/oskariorg/oskari-server/blob/2.7.1/control-base/src/main/resources/fi/nls/oskari/util/svg-markers.json 
+3. In server code adjust the icons in https://github.com/oskariorg/oskari-server/blob/2.7.1/control-base/src/main/resources/fi/nls/oskari/util/svg-markers.json
 
 Array values are objects and object values are:
 - offsetX: center point x
