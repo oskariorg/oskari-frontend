@@ -296,18 +296,29 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          */
         _onMapClicked (event) {
             const me = this;
-            let clickHits = [];
-            this._mapmodule.forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
-                if (!layer) {
+            const features = this._mapmodule.getFeaturesAtPixel(event.getMouseX(), event.getMouseY(), event.isTouchEvent());
+            if (!features.length) {
+                return;
+            }
+            const layers = {};
+            // gather layer refs, TODO: can we streamline this?
+            features.forEach(hits => {
+                if (!hits.layerId || layers[hits.layerId]) {
+                    // for example the hover layer doesn't have an id
                     return;
                 }
-                if (feature.get('features')) {
-                    // Cluster source
-                    if (feature.get('features').length > 1) {
-                        return;
-                    }
-                    // Single feature
-                    feature = feature.get('features')[0];
+                const layer = this._mapmodule.getOLMapLayers(hits.layerId);
+                if (layer.length) {
+                    layers[hits.layerId] = layer[0];
+                }
+            });
+            // process features
+            const clickHits = [];
+            features.forEach(item => {
+                const { feature, layerId } = item;
+                const layer = layers[layerId];
+                if (!layer) {
+                    return;
                 }
                 const layerType = layer.get(LAYER_TYPE);
                 const isRegisteredLayerType = layerType && me.layerTypeHandlers[layerType];
@@ -319,6 +330,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                     clickHits.push({ feature, layer });
                 }
             });
+
             if (clickHits.length > 0) {
                 const clickEvent = Oskari.eventBuilder('FeatureEvent')().setOpClick();
                 clickHits.forEach(obj => {
@@ -367,6 +379,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ['Oskari.mapframework.service.Service']
+        protocol: ['Oskari.mapframework.service.Service']
     }
 );
