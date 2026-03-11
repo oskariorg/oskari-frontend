@@ -119,6 +119,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
     const deleteField = (name) => {
         const newLayerFields = layerFields.filter(field => field.name !== name);
         updateLayerFields(newLayerFields);
+        setCurrentLayer(getLayer(id, newLayerFields));
     };
 
     const setAttributesData = (attribute, value) => {
@@ -185,7 +186,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
                 />
             </AddFieldContainerColumn>
             <AddFieldContainerColumnFlexBottom>
-                <PrimaryButton type='add' onClick={setLayerFields} disabled={!!error || !(layerFields?.length)}/>
+                <PrimaryButton type='add' onClick={setLayerFields} disabled={!!error || !(name && type)}/>
             </AddFieldContainerColumnFlexBottom>
         </AddFieldContainer>}
         { error && <Error>{getErrorMessage(error)}</Error> }
