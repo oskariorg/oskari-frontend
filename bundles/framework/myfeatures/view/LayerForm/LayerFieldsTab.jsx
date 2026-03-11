@@ -6,6 +6,8 @@ import { PrimaryButton, DeleteButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { VectorLayerPresentation } from 'oskari-ui/components/VectorLayerPresentation';
 
+const DEFAULT_FIELD = 'name'
+const DEFAULT_TYPE = 'String';
 const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
 
 const options = types.map((typename) => {
@@ -86,15 +88,37 @@ const getLayer = (layerId, layerFields, attributes) => {
     return layer;
 };
 
-export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { data: {}}, updateLayerFields, updateAttributes }) => {
+const getDefaultLayerFields = () => {
+    return [{
+        name: DEFAULT_FIELD,
+        type: DEFAULT_TYPE
+    }];
+}
+
+const getDefaultLocale = () => {
+    return {
+        en: {
+            name: 'Name'
+        },
+        fi: {
+            name: 'Nimi'
+        },
+        sv: {
+            name: 'Namn'
+        }
+    };
+}
+
+export const LayerFieldsTab = ({ id = null, layerFields = getDefaultLayerFields(), attributes = { data: { locale: getDefaultLocale()}}, updateLayerFields, updateAttributes }) => {
     const [name, setName] = useState(null);
-    const [type, setType] = useState(null);
+    const [type, setType] = useState(DEFAULT_TYPE);
     const [error, setError] = useState(null);
     const [currentLayer, setCurrentLayer] = useState(getLayer(id, layerFields, attributes));
+
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
         setName(null);
-        setType(null);
+        setType(DEFAULT_TYPE);
         setError(null);
         updateLayerFields(newLayerFields);
         setCurrentLayer(getLayer(id, newLayerFields));
@@ -129,7 +153,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
             defaultSortOrder: 'ascend',
             render: (text, item) => {
                 return <TypeColumn>
-                    {text}
+                    <Message messageKey={`featureEditor.types.${text}`}/>
                     {!id && <DeleteButton
                         type='icon'
                         title={<Message messageKey='tab.confirmDeleteFieldMsg' messageArgs={{ name: item.name }} />}
@@ -149,6 +173,12 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
     });
 
     return <>
+        <Table
+            columns={columnSettings}
+            dataSource={rows}
+            pagination={false}
+            loading={false}
+        />
         {!id && <AddFieldContainer>
             <AddFieldContainerColumn>
                 <Message messageKey='featureEditor.featureLayer.fieldName'/>
@@ -163,17 +193,10 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
                 />
             </AddFieldContainerColumn>
             <AddFieldContainerColumnFlexBottom>
-                <PrimaryButton type='add' onClick={setLayerFields} disabled={!!error || !(name && type)}/>
+                <PrimaryButton type='add' onClick={setLayerFields} disabled={!!error || !(layerFields?.length)}/>
             </AddFieldContainerColumnFlexBottom>
         </AddFieldContainer>}
         { error && <Error>{getErrorMessage(error)}</Error> }
-        <Table
-            columns={columnSettings}
-            dataSource={rows}
-            pagination={false}
-            loading={false}
-        />
-
         <VectorLayerPresentation layer={currentLayer} updateAttributes={setAttributesData}/>
     </>;
 };
