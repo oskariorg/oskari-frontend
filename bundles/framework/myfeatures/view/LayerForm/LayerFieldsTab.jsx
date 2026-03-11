@@ -5,9 +5,8 @@ import { Table } from 'oskari-ui/components/Table';
 import { PrimaryButton, DeleteButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { VectorLayerPresentation } from 'oskari-ui/components/VectorLayerPresentation';
+import { DEFAULT_TYPE } from './LayerFormContent';
 
-const DEFAULT_FIELD = 'name'
-const DEFAULT_TYPE = 'String';
 const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
 
 const options = types.map((typename) => {
@@ -88,13 +87,6 @@ const getLayer = (layerId, layerFields, attributes) => {
     return layer;
 };
 
-const getDefaultLayerFields = () => {
-    return [{
-        name: DEFAULT_FIELD,
-        type: DEFAULT_TYPE
-    }];
-}
-
 const getDefaultLocale = () => {
     return {
         en: {
@@ -109,7 +101,7 @@ const getDefaultLocale = () => {
     };
 }
 
-export const LayerFieldsTab = ({ id = null, layerFields = getDefaultLayerFields(), attributes = { data: { locale: getDefaultLocale()}}, updateLayerFields, updateAttributes }) => {
+export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { data: { locale: getDefaultLocale()}}, updateLayerFields, updateAttributes }) => {
     const [name, setName] = useState(null);
     const [type, setType] = useState(DEFAULT_TYPE);
     const [error, setError] = useState(null);

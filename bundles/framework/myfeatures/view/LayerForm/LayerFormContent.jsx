@@ -49,11 +49,28 @@ const getDefaultAttributes = (layerFields) => {
     };
 };
 
+export const DEFAULT_FIELD = 'name'
+export const DEFAULT_TYPE = 'String';
+
+const getDefaultLayerFields = () => {
+    return [{
+        name: DEFAULT_FIELD,
+        type: DEFAULT_TYPE
+    }];
+}
+
 export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFeature }) => {
     // TODO: refactor this thing as it's getting way overly complicated
     const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = Oskari.custom.generateBlankStyle(), locale = {} } = values || {};
-    const [state, setState] = useState({ id: values?.id, style, locale, loading: false, tab: 'general', file: values?.file, layerFields: values?.layerFields, attributes: values?.attributes });
+    const [state, setState] = useState({
+        id: values?.id,
+        style,
+        locale,
+        loading: false,
+        tab: 'general',
+        file: values?.file,
+        layerFields: values?.layerFields || getDefaultLayerFields(), attributes: values?.attributes });
 
     const showSrs = isImport && error === ERRORS.NO_SRS;
 
