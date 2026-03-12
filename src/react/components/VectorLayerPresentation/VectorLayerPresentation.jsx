@@ -97,7 +97,7 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
     };
     const onButtonClick = mode => {
         if (!featureProperties.length) {
-            Messaging.warn(<Message messageKey='messages.noFeatureProperties' bundleKey='oskariui'/>);
+            Messaging.warn(<Message messageKey='VectorLayerPresentation.attributes.messages.noFeatureProperties' bundleKey='oskariui'/>);
             return;
         }
         setModal(mode);

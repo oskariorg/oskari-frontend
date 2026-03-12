@@ -322,6 +322,9 @@ Oskari.registerLocalization({
                         "fullUrl": "Show full URL",
                         "label": "Label for link"
                     }
+                },
+                "messages": {
+                    "noFeatureProperties": "Layer doesn't have feature properties information."
                 }
             },
         }
