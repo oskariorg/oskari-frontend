@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, Button, Badge, Select } from 'oskari-ui';
@@ -48,7 +48,9 @@ const clean = obj => {
 };
 
 export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeatureFilter = null, allowReplaceId = false }) => {
+
     const { data = {}, filter: featureFilter } = layer.attributes;
+
     const { geomName, featureProperties = []} = layer.capabilities;
     const [modal, setModal] = useState(null);
     const [state, setState] = useState({
@@ -57,6 +59,25 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
         format: data.format || {},
         featureFilter
     });
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setState(prev => {
+
+            if (JSON.stringify(prev.locale) === JSON.stringify(data.locale) &&
+                JSON.stringify(prev.filter) === JSON.stringify(data.filter) &&
+                JSON.stringify(prev.format) === JSON.stringify(data.format)) {
+                return prev;
+            }
+
+            return {
+                ...prev,
+                locale: data.locale,
+                filter: data.filter,
+                format: data.format
+            };
+        });
+    }, [data.locale, data.filter, data.format]);
 
     const getButtonForModal = type => {
         const value = state[type] || {};
