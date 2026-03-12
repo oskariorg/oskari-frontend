@@ -12,6 +12,8 @@ export class AbstractVectorLayer extends AbstractLayer {
 
     /* override */
     selectStyle (name) {
+        // reset current style in case some custom style was set and then deleted
+        this._currentStyle = null;
         // style is seleced on createMapLayer and styles are loaded async for VectorLayer
         // store selected style name to try selecting it when styles are available
         this._storedStyleName = name;
