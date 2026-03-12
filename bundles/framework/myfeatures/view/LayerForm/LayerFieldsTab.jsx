@@ -75,8 +75,7 @@ const getErrorMessage = (error) => {
     return null;
 };
 
-const getLayer = (layerId, layerFields, attributes) => {
-    const mapLayer = Oskari.getSandbox().findMapLayerFromAllAvailable(layerId);
+const getLayer = (layerFields, attributes) => {
     const layer = {
         attributes: attributes || {},
         capabilities: {
@@ -99,27 +98,62 @@ const getDefaultLocale = () => {
             name: 'Namn'
         }
     };
-}
+};
 
-export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { data: { locale: getDefaultLocale()}}, updateLayerFields, updateAttributes }) => {
+export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { data: { locale: getDefaultLocale()}}, updateParentState }) => {
     const [name, setName] = useState(null);
     const [type, setType] = useState(DEFAULT_TYPE);
     const [error, setError] = useState(null);
-    const [currentLayer, setCurrentLayer] = useState(getLayer(id, layerFields, attributes));
+    const [currentLayer, setCurrentLayer] = useState(getLayer(layerFields, attributes));
 
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
         setName(null);
         setType(DEFAULT_TYPE);
         setError(null);
-        updateLayerFields(newLayerFields);
-        setCurrentLayer(getLayer(id, newLayerFields));
+        updateParentState({ layerFields: newLayerFields });
+        setCurrentLayer(getLayer(newLayerFields));
     };
 
+    const deleteFromAttributes = (name) => {
+        const newAttributes = structuredClone(attributes);
+        if (!newAttributes || !newAttributes.data) {
+            return;
+        }
+
+        if (newAttributes.data.locale) {
+            Object.keys(newAttributes.data.locale).forEach(lang => {
+                if (newAttributes.data.locale[lang].name) {
+                    delete newAttributes.data.locale[lang].name;
+                }
+            });
+        }
+
+        if (newAttributes.data.format) {
+            if (newAttributes.data.format[name]) {
+                delete newAttributes.data.format[name];
+            }
+        }
+
+        if (newAttributes.data.filter) {
+            Object.keys(newAttributes.data.filter).forEach(filterKey => {
+                if (newAttributes.data.filter[filterKey]) {
+                    newAttributes.data.filter[filterKey] = newAttributes.data.filter[filterKey].filter(item => item !== name);
+                }
+            });
+        }
+
+        return newAttributes;
+
+    };
     const deleteField = (name) => {
         const newLayerFields = layerFields.filter(field => field.name !== name);
-        updateLayerFields(newLayerFields);
-        setCurrentLayer(getLayer(id, newLayerFields));
+        const newAttributes = deleteFromAttributes(name);
+        updateParentState({
+            attributes: newAttributes,
+            layerFields: newLayerFields
+        });
+        setCurrentLayer(getLayer(newLayerFields));
     };
 
     const setAttributesData = (attribute, value) => {
@@ -129,7 +163,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
         if (value) {
             newAttributes.data[attribute] = value;
         }
-        updateAttributes(newAttributes);
+        updateParentState({ attributes: newAttributes });
     };
 
     const columnSettings = [

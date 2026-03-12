@@ -75,10 +75,12 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
     const showSrs = isImport && error === ERRORS.NO_SRS;
 
     const updateStyle = (style) => setState({ ...state, style });
-    const updateLayerFields = (layerFields) => setState({ ...state, layerFields });
-    const updateAttributes = (attributes) => setState({ ...state, attributes });
+
     const setTab = (tab) => setState({ ...state, tab });
-    const updateState = (newState) => setState({ ...state, ...newState });
+    const updateState = (newState) => {
+        setState({ ...state, ...newState });
+    };
+
     const onOkClick = () => {
         const values = {
             style: state.style,
@@ -153,8 +155,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
                 id={state.id}
                 layerFields={state.layerFields}
                 attributes={state.attributes}
-                updateLayerFields={updateLayerFields}
-                updateAttributes={updateAttributes}/>
+                updateParentState={updateState}/>
             </Tab>
         });
     };
