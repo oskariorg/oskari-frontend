@@ -4,7 +4,7 @@ import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 import { HoverHandler } from './HoverHandler';
 import {
-    LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID, VECTOR_TYPE,
+    LAYER_TYPE, FTR_PROPERTY_ID, VECTOR_TYPE,
     SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
 } from '../domain/constants';
 
@@ -300,44 +300,31 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             if (!features.length) {
                 return;
             }
-            const layers = {};
-            // gather layer refs, TODO: can we streamline this?
-            features.forEach(hits => {
-                if (!hits.layerId || layers[hits.layerId]) {
-                    // for example the hover layer doesn't have an id
-                    return;
-                }
-                const layer = this._mapmodule.getOLMapLayers(hits.layerId);
-                if (layer.length) {
-                    layers[hits.layerId] = layer[0];
-                }
-            });
-            // process features
+            // Check if feature clicks should trigger a FeatureEvent (and possibly call another handler as well)
+            // Note! This handles everything from WFS-layers, runtime vector layers (RPC vectorlayers, statsgrid etc)
+            // Plugins register themselves as layerTypeHandlers -> if the LAYER_TYPE on the layer isn't present OR
+            //   it is on layer BUT does NOT match any registered typeHandler -> FeatureEvent is not sent
+            // On WFS-layers the type is 'wfs', on runtime vector layers it's 'vector' etc
             const clickHits = [];
             features.forEach(item => {
-                const { feature, layerId } = item;
-                const layer = layers[layerId];
-                if (!layer) {
-                    return;
-                }
-                const layerType = layer.get(LAYER_TYPE);
+                const { feature, layer, layerId } = item;
+                const layerType = layer?.get(LAYER_TYPE);
                 const isRegisteredLayerType = layerType && me.layerTypeHandlers[layerType];
                 if (isRegisteredLayerType) {
                     const handler = me._getRegisteredHandler(layerType, SERVICE_CLICK);
                     if (handler) {
                         handler(event, feature, layer);
                     }
-                    clickHits.push({ feature, layer });
+                    clickHits.push({ feature, layerId });
                 }
             });
 
             if (clickHits.length > 0) {
                 const clickEvent = Oskari.eventBuilder('FeatureEvent')().setOpClick();
                 clickHits.forEach(obj => {
-                    const { feature, layer } = obj;
-                    const geojson = me._getGeojson(feature, layer);
+                    const { feature, layerId } = obj;
+                    const geojson = me._getGeojson(feature);
                     const propertyId = feature.get(FTR_PROPERTY_ID);
-                    const layerId = layer.get(LAYER_ID);
                     clickEvent.addFeature(propertyId, geojson, layerId);
                 });
                 me.getSandbox().notifyAll(clickEvent);
