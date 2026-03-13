@@ -350,7 +350,8 @@ export class MapModule extends AbstractMapModule {
             hits.push({
                 feature: ftr,
                 featureProperties: ftr.getProperties(),
-                layerId: layer.get(LAYER_ID)
+                layerId: layer.get(LAYER_ID),
+                layer: layer
             });
         };
         const opts = {};

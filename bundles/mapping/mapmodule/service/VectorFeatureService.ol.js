@@ -300,44 +300,27 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             if (!features.length) {
                 return;
             }
-            const layers = {};
-            // gather layer refs, TODO: can we streamline this?
-            features.forEach(hits => {
-                if (!hits.layerId || layers[hits.layerId]) {
-                    // for example the hover layer doesn't have an id
-                    return;
-                }
-                const layer = this._mapmodule.getOLMapLayers(hits.layerId);
-                if (layer.length) {
-                    layers[hits.layerId] = layer[0];
-                }
-            });
             // process features
             const clickHits = [];
             features.forEach(item => {
-                const { feature, layerId } = item;
-                const layer = layers[layerId];
-                if (!layer) {
-                    return;
-                }
-                const layerType = layer.get(LAYER_TYPE);
+                const { feature, layer, layerId } = item;
+                const layerType = layer?.get(LAYER_TYPE);
                 const isRegisteredLayerType = layerType && me.layerTypeHandlers[layerType];
                 if (isRegisteredLayerType) {
                     const handler = me._getRegisteredHandler(layerType, SERVICE_CLICK);
                     if (handler) {
                         handler(event, feature, layer);
                     }
-                    clickHits.push({ feature, layer });
+                    clickHits.push({ feature, layerId });
                 }
             });
 
             if (clickHits.length > 0) {
                 const clickEvent = Oskari.eventBuilder('FeatureEvent')().setOpClick();
                 clickHits.forEach(obj => {
-                    const { feature, layer } = obj;
-                    const geojson = me._getGeojson(feature, layer);
+                    const { feature, layerId } = obj;
+                    const geojson = me._getGeojson(feature);
                     const propertyId = feature.get(FTR_PROPERTY_ID);
-                    const layerId = layer.get(LAYER_ID);
                     clickEvent.addFeature(propertyId, geojson, layerId);
                 });
                 me.getSandbox().notifyAll(clickEvent);
