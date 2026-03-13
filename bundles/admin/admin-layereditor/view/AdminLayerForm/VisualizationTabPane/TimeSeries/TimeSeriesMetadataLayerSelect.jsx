@@ -22,7 +22,7 @@ export const TimeSeriesMetadataLayerSelect = ({ layer, controller }) => {
                 <Select
                     showSearch
                     placeholder={placeholder}
-                    filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    optionFilterProp='label'
                     value={metadata.layer}
                     onChange={(value) => controller.setTimeSeriesMetadataLayer(value)}
                     options={metadataOptions.map((option) => ({
