@@ -364,7 +364,7 @@ export class MapModule extends AbstractMapModule {
         this.getMap().forEachFeatureAtPixel([x, y], (feature, layer) => {
             if (layer.get(LAYER_HOVER) === true) {
                 // we don't want to process hits for our hover layer as
-                //  it duplicates features that are under it/oin the same pixel on the _actual layer_
+                //  it duplicates features that are under it/on the same pixel on the _actual layer_
                 return;
             }
             // Cluster source
