@@ -57,10 +57,10 @@ const calcHandlePosition = (data, min, widthUnit, elemWidth, unit) => {
     return (differenceToStart * widthUnit) - (elemWidth / 2);
 };
 
-const findSnapPoint = (x, dataPoints) => {
-    const xArray = dataPoints.map(point => point.x);
+const findSnapPoint = (x, sliderPoints) => {
+    const xArray = sliderPoints.map(point => point.x);
     const closest = xArray.sort((a, b) => Math.abs(x - a) - Math.abs(x - b))[0];
-    return dataPoints.find(point => point.x === closest);
+    return sliderPoints.find(point => point.x === closest);
 };
 
 const SVG_PADDING = 35;
@@ -109,7 +109,9 @@ export const TimeSeriesSlider = ThemeConsumer(({
     const onRailClick = (e) => {
         const svgX = calculateSvgX(e.clientX, e.target);
         const snap = findSnapPoint(svgX, sliderPoints);
-        handleChange(snap.data);
+        if (snap) {
+            handleChange(snap.data);
+        }
     };
 
     const handleChange = (val, el) => {
@@ -120,14 +122,14 @@ export const TimeSeriesSlider = ThemeConsumer(({
                 if (el === 'handle1') {
                     if (val > value[1]) {
                         newValue[1] = val;
-                        newValue[0] = value[1]
+                        newValue[0] = value[1];
                     } else {
                         newValue[0] = val;
                     }
                 } else {
                     if (val < value[0]) {
                         newValue[0] = val;
-                        newValue[1] = value[0]
+                        newValue[1] = value[0];
                     } else {
                         newValue[1] = val;
                     }
@@ -141,7 +143,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
             newValue.sort((a, b) => a - b);
             onChange(newValue);
         } else {
-            onChange(val)
+            onChange(val);
         }
     };
 
