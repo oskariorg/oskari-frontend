@@ -22,7 +22,7 @@ import 'ol/ol.css';
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyles, getOlStyleForLayer, setDefaultStyle } from './oskariStyle/generator.ol';
 import { STYLE_TYPE } from './oskariStyle/constants';
-import { LAYER_ID } from '../mapmodule/domain/constants';
+import { LAYER_ID, LAYER_HOVER } from '../mapmodule/domain/constants';
 import { VectorFeatureSelectionService } from './service/VectorFeatureSelectionService';
 import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
 // import code so it's usable via Oskari global
@@ -362,6 +362,11 @@ export class MapModule extends AbstractMapModule {
             opts.hitTolerance = 10;
         }
         this.getMap().forEachFeatureAtPixel([x, y], (feature, layer) => {
+            if (layer.get(LAYER_HOVER) === true) {
+                // we don't want to process hits for our hover layer as
+                //  it duplicates features that are under it/oin the same pixel on the _actual layer_
+                return;
+            }
             // Cluster source
             if (feature && feature.get('features')) {
                 feature.get('features').forEach(cur => addHit(cur, layer));
@@ -379,8 +384,8 @@ export class MapModule extends AbstractMapModule {
     /* OL3 specific - check if this can be done in a common way
 ------------------------------------------------------------------> */
     getInteractionInstance (interactionName) {
-        var interactions = this.getMap().getInteractions().getArray();
-        var interactionInstance = interactions.filter(function (interaction) {
+        const interactions = this.getMap().getInteractions().getArray();
+        const interactionInstance = interactions.filter(function (interaction) {
             return interaction instanceof interactionName;
         })[0];
         return interactionInstance;
