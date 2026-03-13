@@ -86,21 +86,7 @@ const getLayer = (layerFields, attributes) => {
     return layer;
 };
 
-const getDefaultLocale = () => {
-    return {
-        en: {
-            name: 'Name'
-        },
-        fi: {
-            name: 'Nimi'
-        },
-        sv: {
-            name: 'Namn'
-        }
-    };
-};
-
-export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { data: { locale: getDefaultLocale()}}, updateParentState }) => {
+export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, updateParentState }) => {
     const [name, setName] = useState(null);
     const [type, setType] = useState(DEFAULT_TYPE);
     const [error, setError] = useState(null);
@@ -112,7 +98,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
         setType(DEFAULT_TYPE);
         setError(null);
         updateParentState({ layerFields: newLayerFields });
-        setCurrentLayer(getLayer(newLayerFields));
+        setCurrentLayer(getLayer(newLayerFields, attributes));
     };
 
     const deleteFromAttributes = (name) => {
@@ -121,26 +107,50 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
             return;
         }
 
+        // delete 'name' from locale
         if (newAttributes.data.locale) {
             Object.keys(newAttributes.data.locale).forEach(lang => {
                 if (newAttributes.data.locale[lang].name) {
                     delete newAttributes.data.locale[lang].name;
                 }
+
+                if (!Object.keys(newAttributes.data.locale[lang]).length) {
+                    delete newAttributes.data.locale[lang];
+                }
             });
+
+            // if locale is empty -> delete
+            if (!Object.keys(newAttributes.data.locale).length) {
+                delete newAttributes.data.locale;
+            }
         }
 
+
+        // delete 'name' from format
         if (newAttributes.data.format) {
             if (newAttributes.data.format[name]) {
                 delete newAttributes.data.format[name];
             }
+
+            // if format is empty -> delete
+            if (!Object.keys(newAttributes.data.format).length) {
+                delete newAttributes.data.format;
+            }
         }
 
+        //delete 'name' from filter
         if (newAttributes.data.filter) {
             Object.keys(newAttributes.data.filter).forEach(filterKey => {
                 if (newAttributes.data.filter[filterKey]) {
                     newAttributes.data.filter[filterKey] = newAttributes.data.filter[filterKey].filter(item => item !== name);
                 }
+
+                //
+                if (!Object.keys(newAttributes.data.filter[filterKey].length)) {
+                    delete newAttributes.data.filter[filterKey];
+                }
             });
+
         }
 
         return newAttributes;
@@ -149,11 +159,11 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
     const deleteField = (name) => {
         const newLayerFields = layerFields.filter(field => field.name !== name);
         const newAttributes = deleteFromAttributes(name);
+        setCurrentLayer(getLayer(newLayerFields, newAttributes));
         updateParentState({
             attributes: newAttributes,
             layerFields: newLayerFields
         });
-        setCurrentLayer(getLayer(newLayerFields));
     };
 
     const setAttributesData = (attribute, value) => {

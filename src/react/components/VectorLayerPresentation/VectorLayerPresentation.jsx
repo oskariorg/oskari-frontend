@@ -63,7 +63,6 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setState(prev => {
-
             if (JSON.stringify(prev.locale) === JSON.stringify(data.locale) &&
                 JSON.stringify(prev.filter) === JSON.stringify(data.filter) &&
                 JSON.stringify(prev.format) === JSON.stringify(data.format)) {
@@ -72,9 +71,9 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
 
             return {
                 ...prev,
-                locale: data.locale,
-                filter: data.filter,
-                format: data.format
+                locale: data.locale || {},
+                filter: data.filter || {},
+                format: data.format || {}
             };
         });
     }, [data.locale, data.filter, data.format]);

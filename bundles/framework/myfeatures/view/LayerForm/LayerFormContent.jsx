@@ -43,7 +43,29 @@ const getDefaultLayerFields = () => {
         name: DEFAULT_FIELD,
         type: DEFAULT_TYPE
     }];
-}
+};
+
+const getDefaultLocale = () => {
+    return {
+        en: {
+            name: 'Name'
+        },
+        fi: {
+            name: 'Nimi'
+        },
+        sv: {
+            name: 'Namn'
+        }
+    };
+};
+
+const getDefaultAttributes = () => {
+    return {
+        data: {
+            locale: getDefaultLocale()
+        }
+    };
+};
 
 export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFeature }) => {
     // TODO: refactor this thing as it's getting way overly complicated
@@ -56,7 +78,9 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
         loading: false,
         tab: 'general',
         file: values?.file,
-        layerFields: values?.layerFields || getDefaultLayerFields(), attributes: values?.attributes });
+        layerFields: values?.id ? values?.layerFields : getDefaultLayerFields(),
+        attributes: values?.id ? values?.attributes : getDefaultAttributes()
+    });
 
     const showSrs = isImport && error === ERRORS.NO_SRS;
 
