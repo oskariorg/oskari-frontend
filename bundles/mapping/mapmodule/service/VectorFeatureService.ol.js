@@ -300,7 +300,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             if (!features.length) {
                 return;
             }
-            // process features
+            // Check if feature clicks should trigger a FeatureEvent (and possibly call another handler as well)
+            // Note! This handles everything from WFS-layers, runtime vector layers (RPC vectorlayers, statsgrid etc)
+            // Plugins register themselves as layerTypeHandlers -> if the LAYER_TYPE on the layer isn't present OR
+            //   it is on layer BUT does NOT match any registered typeHandler -> FeatureEvent is not sent
+            // On WFS-layers the type is 'wfs', on runtime vector layers it's 'vector' etc
             const clickHits = [];
             features.forEach(item => {
                 const { feature, layer, layerId } = item;

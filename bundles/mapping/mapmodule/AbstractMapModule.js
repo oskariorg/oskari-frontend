@@ -2119,13 +2119,14 @@ Oskari.clazz.define(
         /**
          * @method getOLMapLayers
          * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
+         * Note!! Also returns null for layers that are NOT registered to MapLayerService (= runtime vector layers etc)
          * Internally calls getOLMapLayers() on all registered layersplugins.
          * @param {String} layerId
          * @return {OpenLayers.Layer[]}
          */
         getOLMapLayers: function (layerId) {
-            var sandbox = this.getSandbox();
-            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            const sandbox = this.getSandbox();
+            const layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 // not found
                 return null;

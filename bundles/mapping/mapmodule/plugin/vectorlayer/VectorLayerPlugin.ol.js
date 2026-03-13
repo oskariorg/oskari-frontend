@@ -197,6 +197,7 @@ Oskari.clazz.define(
         _registerToFeatureService: function () {
             var defaultHandlerDef = [SERVICE_LAYER_REQUEST];
             var vectorFeatureService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
+            // this makes FeatureEvent happen for runtime vector features
             vectorFeatureService.registerLayerType('vector', this, defaultHandlerDef);
         },
         /**
