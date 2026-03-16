@@ -170,6 +170,9 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         const newAttributes = {
             ...attributes
         };
+
+        // delete existing and replace with new value if given
+        delete newAttributes.data[attribute];
         if (value) {
             newAttributes.data[attribute] = value;
         }
