@@ -46,17 +46,18 @@ const getDefaultLayerFields = () => {
 };
 
 const getDefaultLocale = () => {
-    return {
-        en: {
-            name: 'Name'
-        },
-        fi: {
-            name: 'Nimi'
-        },
-        sv: {
-            name: 'Namn'
-        }
-    };
+    const supported = Oskari.getSupportedLanguages();
+    const localized = {};
+    supported.forEach((key) => {
+        const message = Oskari.getMsg('oskariui', `VectorLayerPresentation.attributes.locale.defaultNameProperty.${key}`, null, null);
+        if (message) {
+            localized[key] = {
+                [DEFAULT_FIELD]: message
+            };
+        };
+    });
+
+    return localized;
 };
 
 const getDefaultAttributes = () => {

@@ -299,7 +299,12 @@ Oskari.registerLocalization({
                 },
                 "locale": {
                     "title": "Labels for properties",
-                    "button": "Labeling"
+                    "button": "Labeling",
+                    "defaultNameProperty": {
+                        "en": "Name",
+                        "fi": "Nimi",
+                        "sv": "Namn"
+                    }
                 },
                 "format": {
                     "title": "Formatting values of properties",
