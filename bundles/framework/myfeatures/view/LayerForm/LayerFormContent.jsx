@@ -89,7 +89,8 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
 
     const setTab = (tab) => setState({ ...state, tab });
     const updateState = (newState) => {
-        setState({ ...state, ...newState });
+        const cloned = structuredClone(newState);
+        setState({ ...state, ...cloned });
     };
 
     const onOkClick = () => {

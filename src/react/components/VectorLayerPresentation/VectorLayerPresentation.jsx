@@ -53,33 +53,43 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
 
     const { geomName, featureProperties = []} = layer.capabilities;
     const [modal, setModal] = useState(null);
-    const [state, setState] = useState({
+
+    // realtime changes reflected here
+    const [draft, setDraft] = useState({
         filter: data.filter || {},
         locale: data.locale || {},
         format: data.format || {},
         featureFilter
     });
 
+    // the "saved state" to revert to when pressing cancel in modals
+    const [baseline, setBaseLine] = useState(() => {
+        return structuredClone(data);
+    });
+
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        setState(prev => {
+        setDraft(prev => {
             if (JSON.stringify(prev.locale) === JSON.stringify(data.locale) &&
                 JSON.stringify(prev.filter) === JSON.stringify(data.filter) &&
                 JSON.stringify(prev.format) === JSON.stringify(data.format)) {
                 return prev;
             }
 
-            return {
+            const newState = {
                 ...prev,
                 locale: data.locale || {},
                 filter: data.filter || {},
                 format: data.format || {}
             };
+
+            setBaseLine(structuredClone(newState));
+            return newState;
         });
     }, [data.locale, data.filter, data.format]);
 
     const getButtonForModal = type => {
-        const value = state[type] || {};
+        const value = draft[type] || {};
         const count = Object.keys(value).length;
         return (
             <Badge count={count} showZero={false}>
@@ -92,7 +102,7 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
 
     const onModalOk = () => {
         if (modal === 'featureFilter') {
-            const filter = cleanFilter(state.featureFilter, featureProperties);
+            const filter = cleanFilter(draft.featureFilter, featureProperties);
             updateFeatureFilter(filter);
             // update local state
             onModalUpdate(filter);
@@ -102,19 +112,29 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
 
 
         // deep clone to not mess local state
-        const value = JSON.parse(JSON.stringify(state[modal]));
+        const value = structuredClone(draft[modal]);
         // clean twice to get rid of empty objects if last value is deleted from it
         clean(value);
         clean(value);
+
         if (Object.keys(value).length) {
             updateAttributes(modal, value);
         } else {
             updateAttributes(modal);
         }
-        // update local state
-        onModalUpdate(value);
+
+        const newState = structuredClone(draft);
+        delete newState[modal];
+        if (value) {
+            newState[modal] = value;
+        }
+
+        // save -> update base line & draft.
+        setDraft(newState);
+        setBaseLine(structuredClone(newState));
         setModal(null);
     };
+
     const onButtonClick = mode => {
         if (!featureProperties.length) {
             Messaging.warn(<Message messageKey='VectorLayerPresentation.attributes.messages.noFeatureProperties' bundleKey='oskariui'/>);
@@ -122,12 +142,28 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
         }
         setModal(mode);
     };
+
     const onModalUpdate = (value) => {
-        setState({ ...state, [modal]: value });
+        const newState = structuredClone(draft);
+        delete newState[modal];
+        if (value) {
+            newState[modal] = value;
+        }
+
+        // update local draft
+        setDraft(newState);
+        // update parent state
+        updateAttributes(modal, value);
     };
+
     const onModalCancel = () => {
-        const attr = data[modal] || {};
-        setState({ ...state, [modal]: attr });
+        const attr = structuredClone(baseline[modal]) || {};
+        const newState = structuredClone(draft);
+        delete newState[modal];
+        if (attr) {
+            newState[modal] = attr;
+        }
+        setDraft(newState);
         setModal(null);
     };
 
@@ -135,7 +171,7 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
     const propNames = properties.map(prop => prop.name);
     const propLabels = Oskari.getLocalized(data.locale) || {};
     // gather selected properties from all (localized) filters
-    const selectedProperties = state.filter ? [...new Set([].concat(...Object.values(state.filter)))] : [];
+    const selectedProperties = draft.filter ? [...new Set([].concat(...Object.values(draft.filter)))] : [];
     return (
         <LocaleProvider value = {{ bundleKey: 'oskariui' }}>
             <Fragment>
@@ -180,19 +216,19 @@ export const VectorLayerPresentation = ({ layer, updateAttributes, updateFeature
                     <h3><Message messageKey={`VectorLayerPresentation.attributes.${modal}.title`} /></h3>
                     { modal === MODAL_TYPE.filter &&
                         <PropertiesFilter update={onModalUpdate} properties={propNames}
-                            filter={state.filter} labels={propLabels}/>
+                            filter={draft.filter} labels={propLabels}/>
                     }
                     { modal === MODAL_TYPE.locale &&
-                        <PropertiesLocale update={onModalUpdate} locale={state.locale}
+                        <PropertiesLocale update={onModalUpdate} locale={draft.locale}
                             properties={propNames} selected={selectedProperties}/>
                     }
                     { modal === MODAL_TYPE.format &&
                         <PropertiesFormat update={onModalUpdate} properties={propNames}
-                            format={state.format} labels={propLabels} selected={selectedProperties}/>
+                            format={draft.format} labels={propLabels} selected={selectedProperties}/>
                     }
                     { updateFeatureFilter && modal === MODAL_TYPE.featureFilter &&
                         <FeatureFilter onChange={onModalUpdate} properties={propNames}
-                            filter={state.featureFilter} labels={propLabels} types={properties}/>
+                            filter={draft.featureFilter} labels={propLabels} types={properties}/>
                     }
                 </Modal>
             </Fragment>
