@@ -44,6 +44,8 @@ const Error = styled('div')`
     font-style: italic;
 `;
 
+const ENTER_KEY = 'Enter';
+
 const validate = (name, layerFields) => {
     if (!name?.length) {
         return null;
@@ -220,7 +222,14 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         {!id && <AddFieldContainer>
             <AddFieldContainerColumn>
                 <Message messageKey='featureEditor.featureLayer.fieldName'/>
-                <TextInput value={name} onChange={(e) => { setName(e.target.value); setError(validate(e.target.value, layerFields)); }}/>
+                <TextInput
+                    value={name}
+                    onChange={(e) => {
+                        setName(e.target.value);
+                        setError(validate(e.target.value, layerFields));
+                    }}
+                    onKeyUp={(evt) => { if (evt.key === ENTER_KEY) setLayerFields(); }}
+                    />
             </AddFieldContainerColumn>
             <AddFieldContainerColumn>
                 <Message messageKey='featureEditor.featureLayer.fieldType'/>
