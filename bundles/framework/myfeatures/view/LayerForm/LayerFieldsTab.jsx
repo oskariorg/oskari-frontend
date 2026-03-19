@@ -110,8 +110,8 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         // delete 'name' from locale
         if (newAttributes.data.locale) {
             Object.keys(newAttributes.data.locale).forEach(lang => {
-                if (newAttributes.data.locale[lang].name) {
-                    delete newAttributes.data.locale[lang].name;
+                if (newAttributes.data.locale[lang][name]) {
+                    delete newAttributes.data.locale[lang][name];
                 }
 
                 if (!Object.keys(newAttributes.data.locale[lang]).length) {
@@ -167,9 +167,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     };
 
     const setAttributesData = (attribute, value) => {
-        const newAttributes = {
-            ...attributes
-        };
+        const newAttributes = structuredClone(attributes);
 
         // delete existing and replace with new value if given
         delete newAttributes.data[attribute];
