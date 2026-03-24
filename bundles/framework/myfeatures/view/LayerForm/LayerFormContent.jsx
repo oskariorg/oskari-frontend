@@ -35,16 +35,35 @@ const getTabTitle = (isValid, messageKey) => (
     </Fragment>
 );
 
-/**
- * Helper method to create the default filter for a new layer to avoid additional
- * metadatafields such as created, updated, __fid or fid to appear in ui
- **/
-const getDefaultAttributes = (layerFields) => {
+export const DEFAULT_FIELD = 'name';
+export const DEFAULT_TYPE = 'String';
+
+const getDefaultLayerFields = () => {
+    return [{
+        name: DEFAULT_FIELD,
+        type: DEFAULT_TYPE
+    }];
+};
+
+const getDefaultLocale = () => {
+    const supported = Oskari.getSupportedLanguages();
+    const localized = {};
+    supported.forEach((key) => {
+        const message = Oskari.getMsg('oskariui', `VectorLayerPresentation.attributes.locale.defaultNameProperty.${key}`, null, null);
+        if (message) {
+            localized[key] = {
+                [DEFAULT_FIELD]: message
+            };
+        };
+    });
+
+    return localized;
+};
+
+const getDefaultAttributes = () => {
     return {
         data: {
-            filter: {
-                default: layerFields?.map(field => field.name)
-            }
+            locale: getDefaultLocale()
         }
     };
 };
@@ -53,22 +72,34 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
     // TODO: refactor this thing as it's getting way overly complicated
     const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = Oskari.custom.generateBlankStyle(), locale = {} } = values || {};
-    const [state, setState] = useState({ id: values?.id, style, locale, loading: false, tab: 'general', file: values?.file, layerFields: values?.layerFields, attributes: values?.attributes });
+    const [state, setState] = useState({
+        id: values?.id,
+        style,
+        locale,
+        loading: false,
+        tab: 'general',
+        file: values?.file,
+        layerFields: values?.id ? values?.layerFields : getDefaultLayerFields(),
+        attributes: values?.id ? values?.attributes : getDefaultAttributes()
+    });
 
     const showSrs = isImport && error === ERRORS.NO_SRS;
 
     const updateStyle = (style) => setState({ ...state, style });
-    const updateLayerFields = (layerFields) => setState({ ...state, layerFields });
-    const updateAttributes = (attributes) => setState({ ...state, attributes });
+
     const setTab = (tab) => setState({ ...state, tab });
-    const updateState = (newState) => setState({ ...state, ...newState });
+    const updateState = (newState) => {
+        const cloned = structuredClone(newState);
+        setState({ ...state, ...cloned });
+    };
+
     const onOkClick = () => {
         const values = {
             style: state.style,
             locale: state.locale,
             file: state.file,
             layerFields: state.layerFields,
-            attributes: state.attributes ? state.attributes : getDefaultAttributes(state.layerFields)
+            attributes: state.attributes
         };
         if (showSrs) {
             // add sourceSrs only if field is visible
@@ -136,8 +167,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
                 id={state.id}
                 layerFields={state.layerFields}
                 attributes={state.attributes}
-                updateLayerFields={updateLayerFields}
-                updateAttributes={updateAttributes}/>
+                updateParentState={updateState}/>
             </Tab>
         });
     };

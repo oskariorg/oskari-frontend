@@ -324,6 +324,9 @@ Oskari.registerLocalization({
                         "fullUrl": "Visa hela URL",
                         "label": "Etikett för länk"
                     }
+                },
+                "messages": {
+                    "noFeatureProperties": "Layer doesn't have feature properties information."
                 }
             }
         }

@@ -5,6 +5,7 @@ import { Table } from 'oskari-ui/components/Table';
 import { PrimaryButton, DeleteButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { VectorLayerPresentation } from 'oskari-ui/components/VectorLayerPresentation';
+import { DEFAULT_TYPE } from './LayerFormContent';
 
 const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
 
@@ -43,6 +44,8 @@ const Error = styled('div')`
     font-style: italic;
 `;
 
+const ENTER_KEY = 'Enter';
+
 const validate = (name, layerFields) => {
     if (!name?.length) {
         return null;
@@ -74,8 +77,7 @@ const getErrorMessage = (error) => {
     return null;
 };
 
-const getLayer = (layerId, layerFields, attributes) => {
-    const mapLayer = Oskari.getSandbox().findMapLayerFromAllAvailable(layerId);
+const getLayer = (layerFields, attributes) => {
     const layer = {
         attributes: attributes || {},
         capabilities: {
@@ -86,33 +88,95 @@ const getLayer = (layerId, layerFields, attributes) => {
     return layer;
 };
 
-export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { data: {}}, updateLayerFields, updateAttributes }) => {
+export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, updateParentState }) => {
     const [name, setName] = useState(null);
-    const [type, setType] = useState(null);
+    const [type, setType] = useState(DEFAULT_TYPE);
     const [error, setError] = useState(null);
-    const [currentLayer, setCurrentLayer] = useState(getLayer(id, layerFields, attributes));
+    const [currentLayer, setCurrentLayer] = useState(getLayer(layerFields, attributes));
+
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
         setName(null);
-        setType(null);
+        setType(DEFAULT_TYPE);
         setError(null);
-        updateLayerFields(newLayerFields);
-        setCurrentLayer(getLayer(id, newLayerFields));
+        updateParentState({ layerFields: newLayerFields });
+        setCurrentLayer(getLayer(newLayerFields, attributes));
     };
 
+    const deleteFromAttributes = (name) => {
+        const newAttributes = structuredClone(attributes);
+        if (!newAttributes || !newAttributes.data) {
+            return;
+        }
+
+        // delete 'name' from locale
+        if (newAttributes.data.locale) {
+            Object.keys(newAttributes.data.locale).forEach(lang => {
+                if (newAttributes.data.locale[lang][name]) {
+                    delete newAttributes.data.locale[lang][name];
+                }
+
+                if (!Object.keys(newAttributes.data.locale[lang]).length) {
+                    delete newAttributes.data.locale[lang];
+                }
+            });
+
+            // if locale is empty -> delete
+            if (!Object.keys(newAttributes.data.locale).length) {
+                delete newAttributes.data.locale;
+            }
+        }
+
+
+        // delete 'name' from format
+        if (newAttributes.data.format) {
+            if (newAttributes.data.format[name]) {
+                delete newAttributes.data.format[name];
+            }
+
+            // if format is empty -> delete
+            if (!Object.keys(newAttributes.data.format).length) {
+                delete newAttributes.data.format;
+            }
+        }
+
+        //delete 'name' from filter
+        if (newAttributes.data.filter) {
+            Object.keys(newAttributes.data.filter).forEach(filterKey => {
+                if (newAttributes.data.filter[filterKey]) {
+                    newAttributes.data.filter[filterKey] = newAttributes.data.filter[filterKey].filter(item => item !== name);
+                }
+
+                //
+                if (!Object.keys(newAttributes.data.filter[filterKey].length)) {
+                    delete newAttributes.data.filter[filterKey];
+                }
+            });
+
+        }
+
+        return newAttributes;
+
+    };
     const deleteField = (name) => {
         const newLayerFields = layerFields.filter(field => field.name !== name);
-        updateLayerFields(newLayerFields);
+        const newAttributes = deleteFromAttributes(name);
+        setCurrentLayer(getLayer(newLayerFields, newAttributes));
+        updateParentState({
+            attributes: newAttributes,
+            layerFields: newLayerFields
+        });
     };
 
     const setAttributesData = (attribute, value) => {
-        const newAttributes = {
-            ...attributes
-        };
+        const newAttributes = structuredClone(attributes);
+
+        // delete existing and replace with new value if given
+        delete newAttributes.data[attribute];
         if (value) {
             newAttributes.data[attribute] = value;
         }
-        updateAttributes(newAttributes);
+        updateParentState({ attributes: newAttributes });
     };
 
     const columnSettings = [
@@ -129,7 +193,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
             defaultSortOrder: 'ascend',
             render: (text, item) => {
                 return <TypeColumn>
-                    {text}
+                    <Message messageKey={`featureEditor.types.${text}`}/>
                     {!id && <DeleteButton
                         type='icon'
                         title={<Message messageKey='tab.confirmDeleteFieldMsg' messageArgs={{ name: item.name }} />}
@@ -149,10 +213,23 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
     });
 
     return <>
+        <Table
+            columns={columnSettings}
+            dataSource={rows}
+            pagination={false}
+            loading={false}
+        />
         {!id && <AddFieldContainer>
             <AddFieldContainerColumn>
                 <Message messageKey='featureEditor.featureLayer.fieldName'/>
-                <TextInput value={name} onChange={(e) => { setName(e.target.value); setError(validate(e.target.value, layerFields)); }}/>
+                <TextInput
+                    value={name}
+                    onChange={(e) => {
+                        setName(e.target.value);
+                        setError(validate(e.target.value, layerFields));
+                    }}
+                    onKeyUp={(evt) => { if (evt.key === ENTER_KEY) setLayerFields(); }}
+                    />
             </AddFieldContainerColumn>
             <AddFieldContainerColumn>
                 <Message messageKey='featureEditor.featureLayer.fieldType'/>
@@ -167,13 +244,6 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes = { dat
             </AddFieldContainerColumnFlexBottom>
         </AddFieldContainer>}
         { error && <Error>{getErrorMessage(error)}</Error> }
-        <Table
-            columns={columnSettings}
-            dataSource={rows}
-            pagination={false}
-            loading={false}
-        />
-
         <VectorLayerPresentation layer={currentLayer} updateAttributes={setAttributesData}/>
     </>;
 };

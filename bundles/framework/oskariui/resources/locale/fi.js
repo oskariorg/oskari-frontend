@@ -321,6 +321,9 @@ Oskari.registerLocalization({
                         "fullUrl": "Näytä koko osoite",
                         "label": "Linkin label"
                     }
+                },
+                "messages": {
+                    "noFeatureProperties": "Kohteiden ominaisuustietoja ei ole saatavilla tasolle."
                 }
             }
         }
