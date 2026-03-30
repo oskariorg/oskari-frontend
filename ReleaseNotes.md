@@ -5,7 +5,47 @@
 For a full list of changes see:
 https://github.com/oskariorg/oskari-frontend/milestone/58?closed=1
 
+### Feature tools
+
+Layers can now include "feature tools". This means that additional functionalities can be injected to the user-interface that allow the user to pass a reference to that feature to another functionality without hard-coding the connections.
+`AbstractLayer` in `oskari-frontend` now includes functions: `addFeatureTool(tool)`,  `setFeatureTools(toolsList)`,  `getFeatureTool(toolName)` , `getFeatureTools()`.
+The feature tools use the same `Oskari.mapframework.domain.Tool` class as layer tools for providing a name, icon and a callback for the tool.
+
+The tools (when available) are currently listed for each feature of a layer on the:
+- infobox shown by GetInfoPlugin (triggered by clicking the feature on map)
+- on the feature data table.
+
+The functionality is flexible so the tools could also be shown in other places that list features from layers. The callback receives both the layer id and the feature id of the clicked feature.
+This allows for example the myfeatures functionality to show an edit button on the users own features when they are clicked on the map.
+The same could be done for `myplaces` or opening the `content-editor` on a feature from map clicks, but those have not been implemented at this point.
+
+### MyFeatures functionality
+
+Users can now add, remove and edit features, including geometry, on the myfeatures layers.
+
+Adding a new layer and defining properties the features on the layer should have is now possible. A default field `name` is added automatically _with_ localizations for languages `en`, `fi` and `sv` to new myfeatures layers to streamline the process of adding layers and make it more user-friendly. Localizations for other languages can be easily added for the default field when needed. Note that users _can_ delete the automatically added field, but automatically adding a field simplifies the onboarding of the new functionality, bringing it a bit closer to the preset fields that myplaces functionality had for new layers.
+
+The user can now also:
+- localize the labels shown for end-users for the properties
+- select how to format the feature property values (show URL as an image etc)
+- select which properties are shown (importing a dataset might bring in properties that the user doesn't care about)
+
+These layer property selections are now done with the same component that admins can use for vector layers. However we are looking at improving these functionalities to make them more user-friendly for myfeatures and possibly for admins as well in the future. We are removing some features from users that admins can still use so the user-interface won't be exactly the same in both like they are now on Oskari 3.3.0.
+
+Note that the functionality currently re-uses icons from `myplaces`/`userlayer` and has a "(beta)" in the tab-title on `mydata` so it's not ready to be used on production yet, but the updated version is available for testing like it was on the 3.2 version by enabling the `myfeatures` bundle on your application.
+
+### Other changes
+
+- Touch-based devices are now easier to use for selecting / clicking a vector feature on the map.
+- Allow applications using oskari-frontend as dependency to use the Jest-config located under oskari-frontend.
+- Fixed an issue with timeseries slider when there are no times in the series.
+- Fixed an issue where, after deleting the last custom style of a layer, left the name of the deleted style showing on the "current style".
+- Fixed an issue with layer administration and search on the dataprovider selection.
+- Fixed an issue when creating new users (https://github.com/oskariorg/oskari-documentation/issues/138)
+
 ### oskari-ui components
+
+There is a new component `FeatureEditor` in oskari-ui that is based on the feature editing tool from the `content-editor` bundle. This editor is used when editing features on myfeatures layers, but the end-goal is that both `content-editor` and `myfeatures` could use the same component for feature editing (and possibly other functionalities requiring feature editing as well).
 
 Due to AntD deprecations we have removed the `<Option>` component (used with `<Select>`) from `oskari-ui`. Instead of using:
 
@@ -27,6 +67,28 @@ return <Select options={ options } />
 ```
 The options will also have a `data-value` attribute attached to make it easier to detect correct elements for automated testing.
 See https://github.com/oskariorg/oskari-frontend/pull/2925 for details.
+
+### Library updates
+
+- babel-core and related libs 7.28.4 -> 7.29.x
+- antd 5.27.5 -> 5.29.3
+- ol 10.6.1 -> 10.8.0
+- ol-mapbox-style 13.1.0 -> 13.4.0
+- cesium 1.135.0 -> 1.39.1
+- core-js 3.46.0 -> 3.49.0
+- testing-library 16.3.0 -> 16.3.2
+- dompurify 3.3.0 -> 3.3.3
+- eslint 3.37.0 -> 3.39.4
+- fs-extra 10.0.1 -> 11.3.4
+- jest 30.2.0 -> 30.3.0
+- sass 1.77.8 -> 1.98.0
+- styled-components 5.3.3 -> 5.3.11
+- webpack 5.102.1 -> 5.105.4
+- numerous other plugins related to build tools (compare package.json for details)
+
+Removed libraries from oskari-frontend/libraries. If you need these, use them from npm directly or you can add them to your own application repository for local references. They are no longer used by oskari-frontend and as such the fiels have been removed from the directory. Note that the libraries themselves are used, but they are fetched from npm and referenced in package.json:
+- jsts
+- jsonpatch
 
 ## 3.2.1
 
