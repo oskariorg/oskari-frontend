@@ -7,7 +7,7 @@ https://github.com/oskariorg/oskari-frontend/milestone/58?closed=1
 
 ### Feature tools
 
-Layers can now include "feature tools". This means that additional functionalities can be injected to the user-interface that allow the user to pass a reference to that feature to another functionality without hard-coding the connections.
+Layers can now include "feature tools". This means that additional functionalities can be injected to the user-interface that allow the user to pass a reference of a feature to another functionality without hard-coding connections between functionalities.
 `AbstractLayer` in `oskari-frontend` now includes functions: `addFeatureTool(tool)`,  `setFeatureTools(toolsList)`,  `getFeatureTool(toolName)` , `getFeatureTools()`.
 The feature tools use the same `Oskari.mapframework.domain.Tool` class as layer tools for providing a name, icon and a callback for the tool.
 
