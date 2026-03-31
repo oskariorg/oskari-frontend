@@ -184,7 +184,12 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             align: 'left',
             title: <Message messageKey='featureEditor.featureLayer.fieldName'/>,
             dataIndex: 'name',
-            defaultSortOrder: 'ascend'
+            defaultSortOrder: 'ascend',
+            render: (text, item) => {
+                const locale = attributes?.data?.locale?.[Oskari.getLang()];
+                const label = locale && locale[item.name] ? locale[item.name] : text;
+                return label;
+            }
         },
         {
             align: 'left',
@@ -229,7 +234,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                         setError(validate(e.target.value, layerFields));
                     }}
                     onKeyUp={(evt) => { if (evt.key === ENTER_KEY) setLayerFields(); }}
-                    />
+                />
             </AddFieldContainerColumn>
             <AddFieldContainerColumn>
                 <Message messageKey='featureEditor.featureLayer.fieldType'/>
@@ -251,5 +256,6 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
 LayerFieldsTab.propTypes = {
     id: PropTypes.string,
     layerFields: PropTypes.array,
-    updateLayerFields: PropTypes.func
+    attributes: PropTypes.any,
+    updateParentState: PropTypes.func
 };
