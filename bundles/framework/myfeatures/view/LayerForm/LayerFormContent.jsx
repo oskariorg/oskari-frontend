@@ -60,10 +60,13 @@ const getDefaultLocale = () => {
     return localized;
 };
 
-const getDefaultAttributes = () => {
+const getDefaultAttributes = (layerFields) => {
     return {
         data: {
-            locale: getDefaultLocale()
+            locale: getDefaultLocale(),
+            filter: {
+                default: layerFields.map(item => item.name)
+            }
         }
     };
 };
@@ -72,6 +75,8 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
     // TODO: refactor this thing as it's getting way overly complicated
     const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = Oskari.custom.generateBlankStyle(), locale = {} } = values || {};
+    const layerFields = values?.id ? values?.layerFields : getDefaultLayerFields();
+    const attributes = values?.id ? values?.attributes : getDefaultAttributes(layerFields);
     const [state, setState] = useState({
         id: values?.id,
         style,
@@ -79,8 +84,8 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
         loading: false,
         tab: 'general',
         file: values?.file,
-        layerFields: values?.id ? values?.layerFields : getDefaultLayerFields(),
-        attributes: values?.id ? values?.attributes : getDefaultAttributes()
+        layerFields,
+        attributes
     });
 
     const showSrs = isImport && error === ERRORS.NO_SRS;

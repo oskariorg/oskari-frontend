@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Select, Message, TextInput } from 'oskari-ui';
 import { Table } from 'oskari-ui/components/Table';
-import { PrimaryButton, DeleteButton } from 'oskari-ui/components/buttons';
+import { PrimaryButton, DeleteButton, IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { VectorLayerPresentation } from 'oskari-ui/components/VectorLayerPresentation';
 import { DEFAULT_TYPE } from './LayerFormContent';
+import { ArrowDownOutlined, ArrowUpOutlined  } from '@ant-design/icons';
 
 const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
 
@@ -96,11 +97,19 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
 
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
+
+        // update default filter as well (visibility, sorting, ...)
+        const newAttributes = structuredClone(attributes);
+        newAttributes.data.filter.default.push(name);
+
         setName(null);
         setType(DEFAULT_TYPE);
         setError(null);
-        updateParentState({ layerFields: newLayerFields });
-        setCurrentLayer(getLayer(newLayerFields, attributes));
+        updateParentState({
+            layerFields: newLayerFields,
+            attributes: newAttributes
+        });
+        setCurrentLayer(getLayer(newLayerFields, newAttributes));
     };
 
     const deleteFromAttributes = (name) => {
@@ -179,7 +188,46 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         updateParentState({ attributes: newAttributes });
     };
 
+
+    const reorder = (item, index) => {
+        const selectedProps = attributes?.data?.filter?.default || [];
+        if (selectedProps.length === 0 || index < 0 || index > selectedProps.length - 1) {
+            return;
+        }
+
+        const selectedPropsSorted = selectedProps.filter(name => name !== item.name);
+        selectedPropsSorted.splice(index, 0, item.name);
+
+        const newAttributes = structuredClone(attributes);
+        delete newAttributes.data.filter.default;
+        newAttributes.data.filter.default = structuredClone(selectedPropsSorted);
+
+        const newLayerFields = layerFields.sort((a, b) => {
+            return selectedPropsSorted.indexOf(a.name) - selectedPropsSorted.indexOf(b.name);
+        });
+
+        updateParentState({
+            attributes: newAttributes,
+            layerFields: newLayerFields
+        });
+    };
+
     const columnSettings = [
+        {
+            align: 'left',
+            render: (text, item, index) => {
+                return <>
+                    <IconButton
+                        icon={<ArrowDownOutlined/>}
+                        onClick={() => reorder(item, index + 1)}
+                    />
+                    <IconButton
+                        icon={<ArrowUpOutlined/> }
+                        onClick={() => reorder(item, index - 1)}
+                    />
+                </>;
+            }
+        },
         {
             align: 'left',
             title: <Message messageKey='featureEditor.featureLayer.fieldName'/>,
