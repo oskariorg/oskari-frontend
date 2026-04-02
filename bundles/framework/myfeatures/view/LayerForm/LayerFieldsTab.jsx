@@ -6,7 +6,7 @@ import { PrimaryButton, DeleteButton, IconButton } from 'oskari-ui/components/bu
 import styled from 'styled-components';
 import { VectorLayerPresentation } from 'oskari-ui/components/VectorLayerPresentation';
 import { DEFAULT_TYPE } from './LayerFormContent';
-import { ArrowDownOutlined, ArrowUpOutlined  } from '@ant-design/icons';
+import { ArrowDownOutlined, ArrowUpOutlined, EyeInvisibleOutlined, EyeOutlined  } from '@ant-design/icons';
 
 const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
 
@@ -188,7 +188,6 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         updateParentState({ attributes: newAttributes });
     };
 
-
     const reorder = (item, index) => {
         const selectedProps = attributes?.data?.filter?.default || [];
         if (selectedProps.length === 0 || index < 0 || index > selectedProps.length - 1) {
@@ -198,24 +197,53 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         const selectedPropsSorted = selectedProps.filter(name => name !== item.name);
         selectedPropsSorted.splice(index, 0, item.name);
 
+        syncSelectedPropsWithLayerFields(selectedPropsSorted);
+    };
+
+    function toggleField(name) {
+        const selectedProperties = attributes?.data?.filter?.default || [];
+        let newList = structuredClone(selectedProperties);
+        if (selectedProperties.includes(name)) {
+            newList = selectedProperties.filter(item => item !== name);
+        } else {
+            newList.push(name);
+        }
+
+        syncSelectedPropsWithLayerFields(newList);
+    }
+
+    const syncSelectedPropsWithLayerFields = (selectedPropsSorted) => {
         const newAttributes = structuredClone(attributes);
         delete newAttributes.data.filter.default;
         newAttributes.data.filter.default = structuredClone(selectedPropsSorted);
 
         const newLayerFields = layerFields.sort((a, b) => {
-            return selectedPropsSorted.indexOf(a.name) - selectedPropsSorted.indexOf(b.name);
+            const aIndex = selectedPropsSorted.indexOf(a.name);
+            const bIndex = selectedPropsSorted.indexOf(b.name);
+
+            const aMissing = aIndex === -1;
+            const bMissing = bIndex === -1;
+
+            if (aMissing && bMissing) return 0;
+            if (aMissing) return 1;
+            if (bMissing) return -1;
+
+            return aIndex - bIndex;
         });
 
         updateParentState({
             attributes: newAttributes,
             layerFields: newLayerFields
         });
-    };
+    }
+
 
     const columnSettings = [
         {
             align: 'left',
             render: (text, item, index) => {
+                const selectedProps = attributes?.data?.filter?.default || [];
+                const fieldIsVisible = selectedProps.indexOf(item?.name) > -1;
                 return <>
                     <IconButton
                         icon={<ArrowDownOutlined/>}
@@ -225,7 +253,11 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                         icon={<ArrowUpOutlined/> }
                         onClick={() => reorder(item, index - 1)}
                     />
-                </>;
+                    <IconButton
+                        icon={fieldIsVisible ? <EyeOutlined/> : <EyeInvisibleOutlined/>}
+                        onClick={() => toggleField(item.name)}
+                    />
+                </>
             }
         },
         {
