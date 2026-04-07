@@ -235,8 +235,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             attributes: newAttributes,
             layerFields: newLayerFields
         });
-    }
-
+    };
 
     const columnSettings = [
         {
@@ -245,19 +244,29 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                 const selectedProps = attributes?.data?.filter?.default || [];
                 const fieldIsVisible = selectedProps.indexOf(item?.name) > -1;
                 return <>
-                    <IconButton
-                        icon={<ArrowDownOutlined/>}
-                        onClick={() => reorder(item, index + 1)}
-                    />
-                    <IconButton
-                        icon={<ArrowUpOutlined/> }
-                        onClick={() => reorder(item, index - 1)}
-                    />
-                    <IconButton
-                        icon={fieldIsVisible ? <EyeOutlined/> : <EyeInvisibleOutlined/>}
-                        onClick={() => toggleField(item.name)}
-                    />
-                </>
+                    { fieldIsVisible &&
+                        <>
+                            <IconButton
+                                icon={<ArrowDownOutlined/>}
+                                onClick={() => reorder(item, index + 1)}
+                            />
+                            <IconButton
+                                icon={<ArrowUpOutlined/> }
+                                onClick={() => reorder(item, index - 1)}
+                            />
+                            <IconButton
+                                icon={<EyeOutlined/>}
+                                onClick={() => toggleField(item.name)}
+                            />
+                        </>
+                    }
+                    { !fieldIsVisible &&
+                        <IconButton
+                            icon={<EyeInvisibleOutlined/>}
+                            onClick={() => toggleField(item.name)}
+                        />
+                    }
+                </>;
             }
         },
         {
