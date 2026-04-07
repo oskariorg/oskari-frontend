@@ -6,7 +6,8 @@ import { PrimaryButton, DeleteButton, IconButton } from 'oskari-ui/components/bu
 import styled from 'styled-components';
 import { VectorLayerPresentation } from 'oskari-ui/components/VectorLayerPresentation';
 import { DEFAULT_TYPE } from './LayerFormContent';
-import { ArrowDownOutlined, ArrowUpOutlined, EyeInvisibleOutlined, EyeOutlined  } from '@ant-design/icons';
+import { ArrowDownOutlined, ArrowUpOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined  } from '@ant-design/icons';
+import { LocaleModal } from './LocaleModal';
 
 const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
 
@@ -46,6 +47,7 @@ const Error = styled('div')`
 `;
 
 const ENTER_KEY = 'Enter';
+const ATTRIBUTE_KEY_LOCALE = 'locale';
 
 const validate = (name, layerFields) => {
     if (!name?.length) {
@@ -94,6 +96,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     const [type, setType] = useState(DEFAULT_TYPE);
     const [error, setError] = useState(null);
     const [currentLayer, setCurrentLayer] = useState(getLayer(layerFields, attributes));
+    const [localeModalVisible, setLocaleModalVisible] = useState(false);
 
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
@@ -167,6 +170,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         return newAttributes;
 
     };
+
     const deleteField = (name) => {
         const newLayerFields = layerFields.filter(field => field.name !== name);
         const newAttributes = deleteFromAttributes(name);
@@ -175,6 +179,10 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             attributes: newAttributes,
             layerFields: newLayerFields
         });
+    };
+
+    const updateLocale = (value) => {
+        setAttributesData(ATTRIBUTE_KEY_LOCALE, value);
     };
 
     const setAttributesData = (attribute, value) => {
@@ -277,7 +285,10 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             render: (text, item) => {
                 const locale = attributes?.data?.locale?.[Oskari.getLang()];
                 const label = locale && locale[item.name] ? locale[item.name] : text;
-                return label;
+                return <>
+                    {label}
+                    <EditOutlined onClick={() => { setLocaleModalVisible(!localeModalVisible)} }/>
+                </>;
             }
         },
         {
@@ -306,6 +317,8 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         };
     });
 
+    const selectedProps = attributes?.data?.filter?.default || [];
+    const propNames = layerFields.map(field => field.name);
     return <>
         <Table
             columns={columnSettings}
@@ -338,6 +351,16 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             </AddFieldContainerColumnFlexBottom>
         </AddFieldContainer>}
         { error && <Error>{getErrorMessage(error)}</Error> }
+
+        <LocaleModal
+            localeModalVisible={localeModalVisible}
+            updateLocale={updateLocale}
+            locale={attributes?.data?.locale}
+            selectedProperties={selectedProps}
+            propNames={propNames}
+            closeModal={() => { setLocaleModalVisible(false); } }
+        />
+
         <VectorLayerPresentation layer={currentLayer} updateAttributes={setAttributesData}/>
     </>;
 };
