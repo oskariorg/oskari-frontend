@@ -4,10 +4,9 @@ import { Select, Message, TextInput } from 'oskari-ui';
 import { Table } from 'oskari-ui/components/Table';
 import { PrimaryButton, DeleteButton, IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
-import { VectorLayerPresentation } from 'oskari-ui/components/VectorLayerPresentation';
 import { DEFAULT_TYPE } from './LayerFormContent';
 import { ArrowDownOutlined, ArrowUpOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined  } from '@ant-design/icons';
-import { LocaleModal } from './LocaleModal';
+import { ModalContainer } from './ModalContainer';
 
 const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
 
@@ -47,7 +46,8 @@ const Error = styled('div')`
 `;
 
 const ENTER_KEY = 'Enter';
-const ATTRIBUTE_KEY_LOCALE = 'locale';
+export const MODAL_LOCALE = 'locale';
+export const MODAL_FORMAT = 'format';
 
 const validate = (name, layerFields) => {
     if (!name?.length) {
@@ -96,7 +96,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     const [type, setType] = useState(DEFAULT_TYPE);
     const [error, setError] = useState(null);
     const [currentLayer, setCurrentLayer] = useState(getLayer(layerFields, attributes));
-    const [localeModalVisible, setLocaleModalVisible] = useState(false);
+    const [modalOpen, setModalOpen] = useState(null);
 
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
@@ -179,10 +179,6 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             attributes: newAttributes,
             layerFields: newLayerFields
         });
-    };
-
-    const updateLocale = (value) => {
-        setAttributesData(ATTRIBUTE_KEY_LOCALE, value);
     };
 
     const setAttributesData = (attribute, value) => {
@@ -287,7 +283,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                 const label = locale && locale[item.name] ? locale[item.name] : text;
                 return <>
                     {label}
-                    <EditOutlined onClick={() => { setLocaleModalVisible(!localeModalVisible)} }/>
+                    <EditOutlined onClick={() => { modalOpen !== MODAL_LOCALE ? setModalOpen(MODAL_LOCALE) : setModalOpen()}}/>
                 </>;
             }
         },
@@ -299,6 +295,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             render: (text, item) => {
                 return <TypeColumn>
                     <Message messageKey={`featureEditor.types.${text}`}/>
+                    <EditOutlined onClick={() => { modalOpen !== MODAL_FORMAT ? setModalOpen(MODAL_FORMAT) : setModalOpen(null)}}/>
                     {!id && <DeleteButton
                         type='icon'
                         title={<Message messageKey='tab.confirmDeleteFieldMsg' messageArgs={{ name: item.name }} />}
@@ -352,16 +349,15 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         </AddFieldContainer>}
         { error && <Error>{getErrorMessage(error)}</Error> }
 
-        <LocaleModal
-            localeModalVisible={localeModalVisible}
-            updateLocale={updateLocale}
+        <ModalContainer
+            modalOpen={modalOpen}
+            updateAttributes={setAttributesData}
             locale={attributes?.data?.locale}
+            format={attributes?.data?.format}
             selectedProperties={selectedProps}
             propNames={propNames}
-            closeModal={() => { setLocaleModalVisible(false); } }
+            closeModal={() => { setModalOpen(null); } }
         />
-
-        <VectorLayerPresentation layer={currentLayer} updateAttributes={setAttributesData}/>
     </>;
 };
 
