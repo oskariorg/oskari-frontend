@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { LabeledInput, Switch, Message } from 'oskari-ui';
 import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
+import { LocaleProvider } from 'oskari-ui/util';
 
 const StyledSwitch = styled(Switch)`
     margin-bottom: 24px;
@@ -13,14 +14,16 @@ export const PropertiesLocale = ({ locale = {}, update, properties, selected }) 
     const [showAll, setShowAll] = useState(allSelected);
     const propNames = showAll ? properties : selected;
     return (
-        <Fragment>
-            { !allSelected &&
-                <StyledSwitch checked={showAll} onChange={setShowAll} label={<Message messageKey='VectorLayerPresentation.attributes.showAll'/>}/>
-            }
-            <LocalizationComponent showDivider onChange={update} value={locale}>
-                { propNames.map(name => <LabeledInput minimal key={name} label={name} name={name}/>) }
-            </LocalizationComponent>
-        </Fragment>
+        <LocaleProvider value= {{ bundleKey: 'oskariui' }}>
+            <Fragment>
+                { !allSelected &&
+                    <StyledSwitch checked={showAll} onChange={setShowAll} label={<Message messageKey='VectorLayerPresentation.attributes.showAll'/>}/>
+                }
+                <LocalizationComponent showDivider onChange={update} value={locale}>
+                    { propNames.map(name => <LabeledInput minimal key={name} label={name} name={name}/>) }
+                </LocalizationComponent>
+            </Fragment>
+        </LocaleProvider>
     );
 };
 

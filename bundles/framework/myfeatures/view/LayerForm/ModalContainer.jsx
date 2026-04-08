@@ -55,7 +55,7 @@ export const ModalContainer = ({ propNames, selectedProperties, modalOpen, local
         closeModal();
     };
 
-    return <LocaleProvider value = {{ bundleKey: 'oskariui' }}>
+    return <>
         <Modal
             mask={ false }
             maskClosable= { false }
@@ -75,5 +75,5 @@ export const ModalContainer = ({ propNames, selectedProperties, modalOpen, local
                     format={draft.format} labels={propLabels} selected={selectedProperties}/>
             }
         </Modal>
-    </LocaleProvider>;
+    </>;
 };
