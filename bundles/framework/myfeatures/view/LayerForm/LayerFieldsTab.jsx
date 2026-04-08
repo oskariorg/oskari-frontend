@@ -20,7 +20,14 @@ const StyledSelect = styled(Select)`
 
 const TypeColumn = styled('div')`
     display: flex;
-    justify-content: space-between;
+    align-items: baseline;
+`;
+
+const TypeColumnActions = styled('div')`
+    display: flex;
+    align-items: baseline;
+    margin-left: auto;
+    gap: 1em;
 `;
 
 const AddFieldContainer = styled('div')`
@@ -43,6 +50,12 @@ const AddFieldContainerColumnFlexBottom = styled(AddFieldContainerColumn)`
 const Error = styled('div')`
     color: red;
     font-style: italic;
+`;
+
+const FlexContainer = styled('div')`
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
 `;
 
 const ENTER_KEY = 'Enter';
@@ -244,12 +257,19 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     const columnSettings = [
         {
             align: 'left',
+            onCell: () => ({
+                style: { verticalAlign: 'middle' }
+            }),
             render: (text, item, index) => {
                 const selectedProps = attributes?.data?.filter?.default || [];
                 const fieldIsVisible = selectedProps.indexOf(item?.name) > -1;
                 return <>
                     { fieldIsVisible &&
-                        <>
+                        <FlexContainer>
+                            <IconButton
+                                icon={<EyeOutlined/>}
+                                onClick={() => toggleField(item.name)}
+                            />
                             <IconButton
                                 icon={<ArrowDownOutlined/>}
                                 onClick={() => reorder(item, index + 1)}
@@ -258,11 +278,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                                 icon={<ArrowUpOutlined/> }
                                 onClick={() => reorder(item, index - 1)}
                             />
-                            <IconButton
-                                icon={<EyeOutlined/>}
-                                onClick={() => toggleField(item.name)}
-                            />
-                        </>
+                        </FlexContainer>
                     }
                     { !fieldIsVisible &&
                         <IconButton
@@ -278,13 +294,16 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             title: <Message messageKey='featureEditor.featureLayer.fieldName'/>,
             dataIndex: 'name',
             defaultSortOrder: 'ascend',
+            onCell: () => ({
+                style: { verticalAlign: 'middle' }
+            }),
             render: (text, item) => {
                 const locale = attributes?.data?.locale?.[Oskari.getLang()];
                 const label = locale && locale[item.name] ? locale[item.name] : text;
-                return <>
+                return <FlexContainer>
                     {label}
                     <EditOutlined onClick={() => { modalOpen !== MODAL_LOCALE ? setModalOpen(MODAL_LOCALE) : setModalOpen()}}/>
-                </>;
+                </FlexContainer>;
             }
         },
         {
@@ -292,16 +311,24 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             title: <Message messageKey='featureEditor.featureLayer.fieldType'/>,
             dataIndex: 'type',
             defaultSortOrder: 'ascend',
+            onCell: () => ({
+                style: { verticalAlign: 'middle' }
+            }),
             render: (text, item) => {
                 return <TypeColumn>
-                    <Message messageKey={`featureEditor.types.${text}`}/>
-                    <EditOutlined onClick={() => { modalOpen !== MODAL_FORMAT ? setModalOpen(MODAL_FORMAT) : setModalOpen(null)}}/>
-                    {!id && <DeleteButton
-                        type='icon'
-                        title={<Message messageKey='tab.confirmDeleteFieldMsg' messageArgs={{ name: item.name }} />}
-                        onConfirm={() => deleteField(item.name)}
-                    />
-                    }
+                    <FlexContainer>
+                        <Message messageKey={`featureEditor.types.${text}`}/>
+                        <EditOutlined onClick={() => { modalOpen !== MODAL_FORMAT ? setModalOpen(MODAL_FORMAT) : setModalOpen(null)}}/>
+                    </FlexContainer>
+                    <TypeColumnActions>
+                        {!id && <DeleteButton
+                            type='icon'
+                            title={<Message messageKey='tab.confirmDeleteFieldMsg' messageArgs={{ name: item.name }} />}
+                            onConfirm={() => deleteField(item.name)}
+                        />
+                        }
+
+                    </TypeColumnActions>
                 </TypeColumn>;
             }
         }
