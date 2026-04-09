@@ -119,6 +119,14 @@ Oskari.registerLocalization(
                 "errors": {
                     "fieldAlreadyExists": "Kenttä on jo olemassa",
                     "isValidJSONKey": "Kentän nimi sisältää kiellettyjä merkkejä."
+                },
+                "actions": {
+                    "hideField": "Piilota",
+                    "showField": "Näytä",
+                    "moveUp": "Siirrä ylös",
+                    "moveDown": "Siirrä alas",
+                    "editLocale": "Muokkaa kielistyksiä",
+                    "editFormat": "Muokkaa muotoilua",
                 }
             },
             "types": {

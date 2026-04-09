@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { DEFAULT_TYPE } from './LayerFormContent';
 import { ArrowDownOutlined, ArrowUpOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined  } from '@ant-design/icons';
 import { ModalContainer } from './ModalContainer';
+import { LocaleProvider } from 'oskari-ui/util';
 
 const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
 
@@ -24,11 +25,12 @@ const TypeColumn = styled('div')`
 `;
 
 const TypeColumnActions = styled('div')`
-    display: flex;
-    align-items: baseline;
+    display: flex-inline;
+    align-items: center;
     margin-left: auto;
-    gap: 1em;
 `;
+
+
 
 const AddFieldContainer = styled('div')`
     display: flex;
@@ -55,8 +57,21 @@ const Error = styled('div')`
 const FlexContainer = styled('div')`
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 0.5em;
 `;
+
+const Label = styled('span')`
+  display: inline-flex;
+  align-items: center;
+`;
+
+const ColumnActions = styled('div')`
+    display: inline-flex;
+    align-items: center;
+    gap: 1em;
+`;
+
 
 const ENTER_KEY = 'Enter';
 export const MODAL_LOCALE = 'locale';
@@ -109,7 +124,14 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     const [type, setType] = useState(DEFAULT_TYPE);
     const [error, setError] = useState(null);
     const [currentLayer, setCurrentLayer] = useState(getLayer(layerFields, attributes));
+
     const [modalOpen, setModalOpen] = useState(null);
+    const [editProp, setEditProp] = useState(null);
+
+    const toggleModal = (modalName, fieldName) => {
+        setModalOpen(modalName);
+        setEditProp(fieldName);
+    };
 
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
@@ -267,14 +289,17 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                     { fieldIsVisible &&
                         <FlexContainer>
                             <IconButton
+                                title={<Message messageKey={'featureEditor.featureLayer.actions.hideField'}/>}
                                 icon={<EyeOutlined/>}
                                 onClick={() => toggleField(item.name)}
                             />
                             <IconButton
+                                title={<Message messageKey={'featureEditor.featureLayer.actions.moveDown'}/>}
                                 icon={<ArrowDownOutlined/>}
                                 onClick={() => reorder(item, index + 1)}
                             />
                             <IconButton
+                                title={<Message messageKey={'featureEditor.featureLayer.actions.moveUp'}/>}
                                 icon={<ArrowUpOutlined/> }
                                 onClick={() => reorder(item, index - 1)}
                             />
@@ -282,6 +307,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                     }
                     { !fieldIsVisible &&
                         <IconButton
+                            title={<Message messageKey={'featureEditor.featureLayer.actions.showField'}/>}
                             icon={<EyeInvisibleOutlined/>}
                             onClick={() => toggleField(item.name)}
                         />
@@ -300,10 +326,18 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             render: (text, item) => {
                 const locale = attributes?.data?.locale?.[Oskari.getLang()];
                 const label = locale && locale[item.name] ? locale[item.name] : text;
-                return <FlexContainer>
-                    {label}
-                    <EditOutlined onClick={() => { modalOpen !== MODAL_LOCALE ? setModalOpen(MODAL_LOCALE) : setModalOpen()}}/>
-                </FlexContainer>;
+                return <>
+                    <FlexContainer>
+                        <Label>{label}</Label>
+                        <ColumnActions>
+                            <IconButton
+                                title={<Message messageKey='featureEditor.featureLayer.actions.editLocale'/>}
+                                icon={<EditOutlined/>}
+                                onClick={() => { modalOpen !== MODAL_LOCALE ? toggleModal(MODAL_LOCALE, item.name) : toggleModal(null, null); }}
+                            />
+                        </ColumnActions>
+                    </FlexContainer>
+                </>;
             }
         },
         {
@@ -317,8 +351,12 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             render: (text, item) => {
                 return <TypeColumn>
                     <FlexContainer>
-                        <Message messageKey={`featureEditor.types.${text}`}/>
-                        <EditOutlined onClick={() => { modalOpen !== MODAL_FORMAT ? setModalOpen(MODAL_FORMAT) : setModalOpen(null)}}/>
+                        <Label><Message messageKey={`featureEditor.types.${text}`}/></Label>
+                        <IconButton
+                            title={<Message messageKey='featureEditor.featureLayer.actions.editFormat'/>}
+                            icon={<EditOutlined/>}
+                            onClick={() => { modalOpen !== MODAL_FORMAT ? toggleModal(MODAL_FORMAT, item.name) : toggleModal(null, null); }}
+                        />
                     </FlexContainer>
                     <TypeColumnActions>
                         {!id && <DeleteButton
@@ -341,9 +379,9 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         };
     });
 
-    const selectedProps = attributes?.data?.filter?.default || [];
+    const selectedProps = editProp ? [editProp] : attributes?.data?.filter?.default || [];
     const propNames = layerFields.map(field => field.name);
-    return <>
+    return <LocaleProvider value = {{ bundleKey: 'myfeatures' }}>
         <Table
             columns={columnSettings}
             dataSource={rows}
@@ -385,7 +423,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             propNames={propNames}
             closeModal={() => { setModalOpen(null); } }
         />
-    </>;
+    </LocaleProvider>;
 };
 
 LayerFieldsTab.propTypes = {
