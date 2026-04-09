@@ -30,8 +30,6 @@ const TypeColumnActions = styled('div')`
     margin-left: auto;
 `;
 
-
-
 const AddFieldContainer = styled('div')`
     display: flex;
     flex-direction: row;
@@ -397,7 +395,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                         setName(e.target.value);
                         setError(validate(e.target.value, layerFields));
                     }}
-                    onKeyUp={(evt) => { if (evt.key === ENTER_KEY) setLayerFields(); }}
+                    onKeyUp={(evt) => { if (evt.key === ENTER_KEY && !error) setLayerFields(); }}
                 />
             </AddFieldContainerColumn>
             <AddFieldContainerColumn>
