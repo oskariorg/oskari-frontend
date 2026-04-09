@@ -127,7 +127,15 @@ Oskari.registerLocalization(
                     "moveDown": "Siirrä alas",
                     "editLocale": "Muokkaa kielistyksiä",
                     "editFormat": "Muokkaa muotoilua",
-                }
+                },
+                "modal": {
+                    "locale": {
+                        "title": "Nimet käyttöliittymässä ominaisuuksille"
+                    },
+                    "format": {
+                        "title": "Kohteiden ominaisuuksien arvojen muotoilu"
+                    }
+            }
             },
             "types": {
                 "String": "Merkkijono",

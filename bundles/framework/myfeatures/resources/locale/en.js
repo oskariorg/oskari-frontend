@@ -127,6 +127,14 @@ Oskari.registerLocalization(
                     "moveDown": "Move field down",
                     "editLocale": "Edit field locale",
                     "editFormat": "Edit field format",
+                },
+                "modal": {
+                    "locale": {
+                        "title": "Labels for properties",
+                    },
+                    "format": {
+                        "title": "Formatting values of properties",
+                    }
                 }
             },
             "types": {

@@ -3,7 +3,6 @@ import { Modal } from 'oskari-ui/components/Modal';
 import { PropertiesLocale, PropertiesFormat } from 'oskari-ui/components/VectorLayerPresentation';
 import { Message } from 'oskari-ui';
 import { MODAL_FORMAT, MODAL_LOCALE } from './LayerFieldsTab';
-import { LocaleProvider } from 'oskari-ui/util';
 
 // eslint-disable-next-line react/prop-types
 export const ModalContainer = ({ propNames, selectedProperties, modalOpen, locale, format, updateAttributes, closeModal }) => {
@@ -66,6 +65,7 @@ export const ModalContainer = ({ propNames, selectedProperties, modalOpen, local
             okText={ <Message messageKey="save" /> }
             width={ 500 }
         >
+            <h3><Message bundleKey='myfeatures' messageKey={`featureEditor.featureLayer.modal.${modalOpen}.title`} /></h3>
             { modalOpen === MODAL_LOCALE &&
                 <PropertiesLocale update={onModalUpdate} locale={draft.locale}
                     properties={propNames} selected={selectedProperties}/>

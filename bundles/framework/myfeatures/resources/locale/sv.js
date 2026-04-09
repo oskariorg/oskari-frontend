@@ -128,6 +128,14 @@ Oskari.registerLocalization(
                     "moveDown": "Move field down",
                     "editLocale": "Edit field locale",
                     "editFormat": "Edit field format",
+                },
+                "modal": {
+                    "locale": {
+                        "title": "Märkningar för attribut"
+                    },
+                    "format": {
+                        "title": "Formatera värden för attribut"
+                    }
                 }
             },
             "types": {
