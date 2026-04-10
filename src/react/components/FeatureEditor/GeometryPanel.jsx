@@ -23,7 +23,7 @@ export const StyledListItem = styled('li')`
     width: 100%;
     align-items: center;
 
-    :hover {
+    &:hover {
         background-color: #FDF8D9;
     }
 `;
@@ -110,12 +110,12 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
                                 <Message messageKey="FeatureEditorView.tools.geometryEdit" />
                             </Button>
 
-                            { geometryChanged && <Button type="default" onClick={() => { 
+                            { geometryChanged && <Button type="default" onClick={() => {
                                 updateFeatureGeometry(feature, original.geometry);
                                 stopDrawing(true);
                             }}>
                                 <Message messageKey="FeatureEditorView.restoreOriginal" />
-                            </Button> 
+                            </Button>
                             }
 
                         </Row>
