@@ -30,7 +30,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@ant-design/icons": "5.6.1",
+    "@ant-design/icons": "6.1.1",
     "@babel/core": "7.29.0",
     "@babel/preset-env": "7.29.2",
     "@babel/preset-react": "7.28.5",
@@ -40,7 +40,7 @@
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
-    "antd": "5.29.3",
+    "antd": "6.3.5",
     "async": "3.2.6",
     "babel-loader": "10.1.1",
     "babel-plugin-styled-components": "2.1.4",
