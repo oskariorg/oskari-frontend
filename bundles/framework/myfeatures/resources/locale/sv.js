@@ -120,6 +120,22 @@ Oskari.registerLocalization(
                 "errors": {
                     "fieldAlreadyExists": "Field already exists",
                     "isValidJSONKey": "Illegal characters."
+                },
+                "actions": {
+                    "hideField": "Hide field",
+                    "showField": "Show field",
+                    "moveUp": "Move field up",
+                    "moveDown": "Move field down",
+                    "editLocale": "Edit field locale",
+                    "editFormat": "Edit field format",
+                },
+                "modal": {
+                    "locale": {
+                        "title": "Märkningar för attribut"
+                    },
+                    "format": {
+                        "title": "Formatera värden för attribut"
+                    }
                 }
             },
             "types": {

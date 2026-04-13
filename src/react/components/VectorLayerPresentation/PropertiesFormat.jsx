@@ -137,12 +137,14 @@ export const PropertiesFormat = ({ format = {}, properties, selected, labels, up
     });
 
     return (
-        <Fragment>
-            { !allSelected &&
-                <StyledSwitch checked={showAll} onChange={setShowAll} label={<Message messageKey='VectorLayerPresentation.attributes.showAll'/>}/>
-            }
-            <Collapse items={items}/>
-        </Fragment>
+        <LocaleProvider value = {{ bundleKey: 'oskariui' }}>
+            <Fragment>
+                { !allSelected &&
+                    <StyledSwitch checked={showAll} onChange={setShowAll} label={<Message messageKey='VectorLayerPresentation.attributes.showAll'/>}/>
+                }
+                <Collapse items={items}/>
+            </Fragment>
+        </LocaleProvider>
     );
 };
 
