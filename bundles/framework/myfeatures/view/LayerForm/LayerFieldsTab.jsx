@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Select, Message, TextInput } from 'oskari-ui';
+import { Badge as AntBadge } from 'antd';
 import { Table } from 'oskari-ui/components/Table';
 import { PrimaryButton, DeleteButton, IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
@@ -68,6 +69,12 @@ const ColumnActions = styled('div')`
     display: inline-flex;
     align-items: center;
     gap: 1em;
+`;
+
+const StyledBadge = styled(AntBadge)`
+    && .ant-badge-dot {
+        transform: translate(90%, -50%);
+    }
 `;
 
 
@@ -330,7 +337,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                         <ColumnActions>
                             <IconButton
                                 title={<Message messageKey='featureEditor.featureLayer.actions.editLocale'/>}
-                                icon={<EditOutlined/>}
+                                icon={<StyledBadge dot={!!attributes?.data?.locale?.[Oskari.getLang()]?.[item.name]}><EditOutlined/></StyledBadge>}
                                 onClick={() => { modalOpen !== MODAL_LOCALE ? toggleModal(MODAL_LOCALE, item.name) : toggleModal(null, null); }}
                             />
                         </ColumnActions>
@@ -355,7 +362,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                         <FlexContainer>
                             <IconButton
                                 title={<Message messageKey='featureEditor.featureLayer.actions.editFormat'/>}
-                                icon={<SettingOutlined/>}
+                                icon={<StyledBadge dot={!!attributes?.data?.format?.[item.name]}><SettingOutlined/></StyledBadge>}
                                 onClick={() => { modalOpen !== MODAL_FORMAT ? toggleModal(MODAL_FORMAT, item.name) : toggleModal(null, null); }}
                             />
                             {!id && <DeleteButton
