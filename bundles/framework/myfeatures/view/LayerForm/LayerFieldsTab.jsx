@@ -5,7 +5,7 @@ import { Table } from 'oskari-ui/components/Table';
 import { PrimaryButton, DeleteButton, IconButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import { DEFAULT_TYPE } from './LayerFormContent';
-import { ArrowDownOutlined, ArrowUpOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined  } from '@ant-design/icons';
+import { ArrowDownOutlined, ArrowUpOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, SettingOutlined  } from '@ant-design/icons';
 import { ModalContainer } from './ModalContainer';
 import { LocaleProvider } from 'oskari-ui/util';
 
@@ -350,19 +350,21 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                 return <TypeColumn>
                     <FlexContainer>
                         <Label><Message messageKey={`featureEditor.types.${text}`}/></Label>
-                        <IconButton
-                            title={<Message messageKey='featureEditor.featureLayer.actions.editFormat'/>}
-                            icon={<EditOutlined/>}
-                            onClick={() => { modalOpen !== MODAL_FORMAT ? toggleModal(MODAL_FORMAT, item.name) : toggleModal(null, null); }}
-                        />
                     </FlexContainer>
                     <TypeColumnActions>
-                        {!id && <DeleteButton
-                            type='icon'
-                            title={<Message messageKey='tab.confirmDeleteFieldMsg' messageArgs={{ name: item.name }} />}
-                            onConfirm={() => deleteField(item.name)}
-                        />
-                        }
+                        <FlexContainer>
+                            <IconButton
+                                title={<Message messageKey='featureEditor.featureLayer.actions.editFormat'/>}
+                                icon={<SettingOutlined/>}
+                                onClick={() => { modalOpen !== MODAL_FORMAT ? toggleModal(MODAL_FORMAT, item.name) : toggleModal(null, null); }}
+                            />
+                            {!id && <DeleteButton
+                                type='icon'
+                                title={<Message messageKey='tab.confirmDeleteFieldMsg' messageArgs={{ name: item.name }} />}
+                                onConfirm={() => deleteField(item.name)}
+                            />
+                            }
+                        </FlexContainer>
 
                     </TypeColumnActions>
                 </TypeColumn>;
