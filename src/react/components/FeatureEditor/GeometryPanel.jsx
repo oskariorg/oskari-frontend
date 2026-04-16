@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Message, Button, Space } from 'oskari-ui';
+import { Alert, Message, Button } from 'oskari-ui';
 import { StyledSpace, StyledContainer, StyledModIndicator, Row, Column } from './styled';
 import styled from 'styled-components';
 
@@ -11,6 +11,11 @@ export const StyledList = styled('ul')`
 const StyledAlert = styled(Alert)`
     margin-top: 5px;
     margin-bottom: 5px;
+`;
+
+const WrappingRow = styled(Row)`
+    flex-wrap: wrap;
+    width: 100%;
 `;
 
 export const StyledListItem = styled('li')`
@@ -64,7 +69,7 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
                 </StyledSpace>
                 { !isRecognized && showGeometryNotRecognizedAlert &&
                     <StyledAlert message={<Message messageKey="FeatureEditorView.geometrylist.notRecognized" messageArgs={{type}}/>} /> }
-                <Space>
+                <WrappingRow>
                     { (!isRecognized || isPoint) &&
                         <Button onClick={() => startDrawing('Point')}>
                             <Message messageKey="FeatureEditorView.tools.point" />
@@ -80,7 +85,7 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
                             <Message messageKey="FeatureEditorView.tools.area" />
                         </Button>
                     }
-                </Space>
+                </WrappingRow>
             </React.Fragment>);
     }
     // has geometry
