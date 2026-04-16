@@ -12,7 +12,7 @@ const StyledPanel = styled('div')`
     left: 0;
     /* sidebar has 3, we want to open it on top of this */
     z-index: 2;
-    width: 20vw;
+    width: 100%;
     div.header {
         background-color: #FDF8D9;
         padding: 5px 10px;
