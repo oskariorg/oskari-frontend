@@ -4,7 +4,7 @@ import { Select, Message, TextInput } from 'oskari-ui';
 import { Badge as AntBadge } from 'antd';
 import { Table } from 'oskari-ui/components/Table';
 import { PrimaryButton, DeleteButton, IconButton } from 'oskari-ui/components/buttons';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { DEFAULT_TYPE } from './LayerFormContent';
 import { ArrowDownOutlined, ArrowUpOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, SettingOutlined  } from '@ant-design/icons';
 import { ModalContainer } from './ModalContainer';
@@ -113,22 +113,10 @@ const getErrorMessage = (error) => {
     return null;
 };
 
-const getLayer = (layerFields, attributes) => {
-    const layer = {
-        attributes: attributes || {},
-        capabilities: {
-            featureProperties: layerFields?.map(item => item)
-        }
-    };
-
-    return layer;
-};
-
 export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, updateParentState }) => {
     const [name, setName] = useState(null);
     const [type, setType] = useState(DEFAULT_TYPE);
     const [error, setError] = useState(null);
-    const [currentLayer, setCurrentLayer] = useState(getLayer(layerFields, attributes));
 
     const [modalOpen, setModalOpen] = useState(null);
     const [editProp, setEditProp] = useState(null);
@@ -152,7 +140,6 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             layerFields: newLayerFields,
             attributes: newAttributes
         });
-        setCurrentLayer(getLayer(newLayerFields, newAttributes));
     };
 
     const deleteFromAttributes = (name) => {
@@ -214,7 +201,6 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     const deleteField = (name) => {
         const newLayerFields = layerFields.filter(field => field.name !== name);
         const newAttributes = deleteFromAttributes(name);
-        setCurrentLayer(getLayer(newLayerFields, newAttributes));
         updateParentState({
             attributes: newAttributes,
             layerFields: newLayerFields
