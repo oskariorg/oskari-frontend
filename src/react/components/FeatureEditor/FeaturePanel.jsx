@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Confirm, Message, Button, Space } from 'oskari-ui';
+import { Confirm, Message, Button } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { Card } from 'oskari-ui/components/Card';
 import { FeatureForm } from './FeatureForm';
@@ -11,7 +11,7 @@ import { DrawingHelper } from './DrawingHelper';
 import { StyledSpace, Row } from './styled';
 import styled from 'styled-components';
 
-const DrawingActionRow = styled(Row)`
+const WrappingRow = styled(Row)`
     flex-wrap: wrap;
     width: 100%;
 `;
@@ -85,7 +85,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                     { isDrawing &&
                         <React.Fragment>
                             <Message messageKey="FeatureEditorView.geometrylist.editing" />
-                            <DrawingActionRow>
+                            <WrappingRow>
                                 <Button type="primary" onClick={() => stopDrawing(false)}>
                                     <Message messageKey="FeatureEditorView.tools.finishSketch" />
                                 </Button>
@@ -96,7 +96,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                                 }}>
                                     <Message messageKey="FeatureEditorView.restoreOriginal" />
                                 </Button>
-                            </DrawingActionRow>
+                            </WrappingRow>
                         </React.Fragment>
                     }
                     { !isDrawing &&
@@ -114,7 +114,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                     }
                 </StyledSpace>
             </Card>
-            <Space>
+            <WrappingRow>
                 {!isNew && <Button onClick={startNewCb}>
                     <Message messageKey="FeatureEditorView.buttons.addFeature" />
                 </Button>
@@ -126,7 +126,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                 <Button disabled={!canSave} type="primary" onClick={saveCb}>
                     <Message messageKey="FeatureEditorView.buttons.save" />
                 </Button>
-            </Space>
+            </WrappingRow>
         </StyledSpace>
     </React.Fragment>);
 };
