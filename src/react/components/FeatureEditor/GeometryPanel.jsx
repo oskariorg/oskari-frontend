@@ -45,7 +45,7 @@ const geometryMatch = (current = {}, original = {}) => {
     return currentList.every(item => originalList.includes(item));
 }
 
-export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDrawing, stopDrawing, updateGeometry}) => {
+export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDrawing, stopDrawing, updateGeometry, showGeometryNotRecognizedAlert = true }) => {
     const isMulti = type.includes('Multi');
     const isGeomBtnShown = (btnType) => type.includes(btnType);
     const isPoint = isGeomBtnShown('Point');
@@ -62,7 +62,7 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
                 <StyledSpace>
                     <Message messageKey="FeatureEditorView.geometrylist.empty" />
                 </StyledSpace>
-                { !isRecognized &&
+                { !isRecognized && showGeometryNotRecognizedAlert &&
                     <StyledAlert message={<Message messageKey="FeatureEditorView.geometrylist.notRecognized" messageArgs={{type}}/>} /> }
                 <Space>
                     { (!isRecognized || isPoint) &&
@@ -257,5 +257,6 @@ GeometryPanel.propTypes = {
     feature: PropTypes.object,
     original: PropTypes.object,
     startDrawing: PropTypes.func,
-    updateGeometry: PropTypes.func
+    updateGeometry: PropTypes.func,
+    showGeometryNotRecognizedAlert: PropTypes.bool
 };

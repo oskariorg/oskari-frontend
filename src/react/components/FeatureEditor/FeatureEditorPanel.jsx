@@ -28,7 +28,7 @@ const StyledPanel = styled('div')`
     }
 `;
 
-export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading = false, onSave, onDelete, onClose, onCancel}) => {
+export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading = false, onSave, onDelete, onClose, onCancel, showGeoJSONPanel = true, showGeometryNotRecognizedAlert = true }) => {
     const helperRef = useRef(null);
     const [handlerState, setHandlerState] = useState(null);
     const { currentLayer = null, feature = null } = handlerState || {};
@@ -79,6 +79,8 @@ export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading =
         startNewFeature = { startNewFeature }
         setCurrentLayer={setCurrentLayer}
         addNewLayer={addNewLayer}
+        showGeoJSONPanel={showGeoJSONPanel}
+        showGeometryNotRecognizedAlert={showGeometryNotRecognizedAlert}
     />;
 };
 
@@ -92,7 +94,9 @@ const EditorPanel = ({
     onCancel,
     startNewFeature,
     setCurrentLayer,
-    addNewLayer}) => {
+    addNewLayer,
+    showGeoJSONPanel = true,
+    showGeometryNotRecognizedAlert = true }) => {
 
     const hasLayer = !!layer?.geometryType;
     if (hasLayer && !feature) {
@@ -115,7 +119,9 @@ const EditorPanel = ({
                             onSave={onSave}
                             onDelete={onDelete}
                             startNewFeature={startNewFeature}
-                            feature={feature} />
+                            feature={feature}
+                            showGeoJSONPanel={showGeoJSONPanel}
+                            showGeometryNotRecognizedAlert={showGeometryNotRecognizedAlert} />
                     }
                 </div>
             </StyledPanel>

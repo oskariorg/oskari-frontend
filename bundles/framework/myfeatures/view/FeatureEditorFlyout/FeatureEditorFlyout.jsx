@@ -30,6 +30,8 @@ const FeatureEditorContainer = ({ layerId, featureId, layers = null, savedFeatur
             onCancel = {() => {
                 controller.closeFeatureEditorFlyout();
             }}
+            showGeoJSONPanel={false}
+            showGeometryNotRecognizedAlert={false}
         />}
     </>;
 };
