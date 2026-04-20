@@ -4,7 +4,7 @@ import { LocaleProvider } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { BUNDLE_KEY } from '../../constants';
 import { PlusOutlined } from '@ant-design/icons';
-import { Tooltip } from '../../../../../src/react';
+import { Tooltip } from 'oskari-ui';
 
 const LayerSelectionContainer = styled('div')`
     padding: 1em;
