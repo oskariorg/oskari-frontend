@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Confirm, Message, Button, Space } from 'oskari-ui';
+import { Confirm, Message, Button } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { Card } from 'oskari-ui/components/Card';
 import { FeatureForm } from './FeatureForm';
@@ -9,8 +9,14 @@ import { GeoJSONPanel } from './GeoJSONPanel';
 import { Helper } from './Helper';
 import { DrawingHelper } from './DrawingHelper';
 import { StyledSpace, Row } from './styled';
+import styled from 'styled-components';
 
-export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDelete, startNewFeature}) => {
+const WrappingRow = styled(Row)`
+    flex-wrap: wrap;
+    width: 100%;
+`;
+
+export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDelete, startNewFeature, showGeoJSONPanel = true, showGeometryNotRecognizedAlert = true }) => {
     const type = Helper.detectGeometryType(layer.geometryType);
     const isMulti = type.includes('Multi');
     const [isDrawing, setDrawingMode] = useState(false);
@@ -21,7 +27,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
         setDrawingMode(false);
         DrawingHelper.stopDrawing(clearPrevious);
     };
-    
+
     const cancelCb = () => {
         stopDrawing(true);
         onCancel();
@@ -31,7 +37,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
         stopDrawing(true);
         onSave(currentFeature);
     };
-    
+
     const startNewCb = () => {
         stopDrawing(true);
         startNewFeature();
@@ -79,18 +85,18 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                     { isDrawing &&
                         <React.Fragment>
                             <Message messageKey="FeatureEditorView.geometrylist.editing" />
-                            <Row>
+                            <WrappingRow>
                                 <Button type="primary" onClick={() => stopDrawing(false)}>
                                     <Message messageKey="FeatureEditorView.tools.finishSketch" />
                                 </Button>
-                                <Button type="default" onClick={() => { 
+                                <Button type="default" onClick={() => {
                                     // reset geometry with the original feature and clear drawing.
-                                    updateGeometry(feature); 
-                                    stopDrawing(true); 
+                                    updateGeometry(feature);
+                                    stopDrawing(true);
                                 }}>
                                     <Message messageKey="FeatureEditorView.restoreOriginal" />
                                 </Button>
-                            </Row>
+                            </WrappingRow>
                         </React.Fragment>
                     }
                     { !isDrawing &&
@@ -100,14 +106,15 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                             original={feature}
                             startDrawing={startDrawing}
                             stopDrawing={stopDrawing}
-                            updateGeometry={updateGeometry} />
+                            updateGeometry={updateGeometry}
+                            showGeometryNotRecognizedAlert={showGeometryNotRecognizedAlert} />
                     }
-                    { !isDrawing &&
+                    { !isDrawing && showGeoJSONPanel &&
                         <GeoJSONPanel feature={currentFeature} />
                     }
                 </StyledSpace>
             </Card>
-            <Space>
+            <WrappingRow>
                 {!isNew && <Button onClick={startNewCb}>
                     <Message messageKey="FeatureEditorView.buttons.addFeature" />
                 </Button>
@@ -119,7 +126,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                 <Button disabled={!canSave} type="primary" onClick={saveCb}>
                     <Message messageKey="FeatureEditorView.buttons.save" />
                 </Button>
-            </Space>
+            </WrappingRow>
         </StyledSpace>
     </React.Fragment>);
 };
@@ -143,5 +150,7 @@ FeaturePanel.propTypes = {
     editing: PropTypes.bool,
     onCancel: PropTypes.func,
     onSave: PropTypes.func,
-    onDelete: PropTypes.func
+    onDelete: PropTypes.func,
+    showGeoJSONPanel: PropTypes.bool,
+    showGeometryNotRecognizedAlert: PropTypes.bool
 };

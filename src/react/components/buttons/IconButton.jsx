@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Message, Confirm, Button, Tooltip } from 'oskari-ui';
 import { ThemeConsumer } from '../../util';
 import { EFFECT } from '../../../constants';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { PlusOutlined, EditOutlined, QuestionCircleOutlined, DeleteOutlined, CheckOutlined, StopOutlined} from '@ant-design/icons';
-import { Forward } from '../icons/Forward'
-import { Backward } from '../icons/Backward'
+import { Forward } from '../icons/Forward';
+import { Backward } from '../icons/Backward';
 
 const COLORS = {
     red: '#f5222d',
@@ -36,6 +36,17 @@ const BorderlessButton = styled(Button)`
     &&&:hover {
         color: ${props => props.$hover};
         background: none;
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
+    &&&:active,
+    &&&:focus,
+    &&&:focus-visible {
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        outline: none;
     }
     &:disabled {
         background: none;
@@ -49,6 +60,12 @@ const BorderedButton = styled(Button)`
     &:hover {
         color: ${props => props.$hover} !important;
         border-color: ${props => props.$hover} !important;
+    }
+    &:active,
+    &:focus,
+    &:focus-visible {
+        box-shadow: none !important;
+        outline: none;
     }
 `;
 
@@ -154,11 +171,11 @@ export const IconButton = ({
                 disabled={disabled}
                 placement={title ? 'bottom' : 'top'}
                 { ...getConfirmProps(type, confirm.title) }>
-                    <Tooltip title={title}>
-                        <DisabledWrapper $disabled={disabled}>
-                            <ThemeButton type={type} disabled={disabled} { ...rest }/>
-                        </DisabledWrapper>
-                    </Tooltip>
+                <Tooltip title={title}>
+                    <DisabledWrapper $disabled={disabled}>
+                        <ThemeButton type={type} disabled={disabled} { ...rest }/>
+                    </DisabledWrapper>
+                </Tooltip>
             </Confirm>
         );
     }

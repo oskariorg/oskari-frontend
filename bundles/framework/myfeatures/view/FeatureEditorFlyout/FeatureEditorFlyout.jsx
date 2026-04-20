@@ -1,12 +1,19 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
+import { styled } from 'styled-components';
 import { showFlyout } from 'oskari-ui/components/window';
 import { FeatureEditorPanel } from 'oskari-ui/components/FeatureEditor';
 import { Message } from 'oskari-ui';
 import { BUNDLE_KEY } from '../../constants';
 import { LayerSelectionPanel } from './LayerSelectionPanel';
+
+const StyledContainer = styled.div`
+    min-width: 100%;
+    width: 25vw;
+`;
+
 const FeatureEditorContainer = ({ layerId, featureId, layers = null, savedFeature, controller }) => {
-    return <>
+    return <StyledContainer>
         {!layerId && <LayerSelectionPanel
             layers={ layers }
             setCurrentLayer={(layerId) => controller.setFeatureEditorLayer(layerId)}
@@ -30,8 +37,10 @@ const FeatureEditorContainer = ({ layerId, featureId, layers = null, savedFeatur
             onCancel = {() => {
                 controller.closeFeatureEditorFlyout();
             }}
+            showGeoJSONPanel={false}
+            showGeometryNotRecognizedAlert={false}
         />}
-    </>;
+    </StyledContainer>;
 };
 
 export const showFeatureEditorFlyout = (layerId, featureId, layers = null, controller, savedFeature) => {
