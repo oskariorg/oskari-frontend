@@ -50,7 +50,7 @@ const SearchContainer = styled('div')`
     background: ${props => props.backgroundColor};
     opacity: ${props => props.opacity};
     align-items: center;
-    padding: 0px 7px 3px 3px;
+    padding: 0px 7px 0px 3px;
     border-radius: calc(${props => props.rounding || 0} * 40px);
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
 
