@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, Message } from 'oskari-ui';
 import { AutoComplete } from 'antd';
@@ -13,7 +13,6 @@ This might go away by updating ant-d. It seems a bit weird that it isn't hidden
 */
 const WideAutoComplete = styled(AutoComplete)`
     width: 100%;
-
     &&.ant-select {
         border-radius: calc(${props => props.rounding || 0} * 35px);
     }
@@ -21,14 +20,6 @@ const WideAutoComplete = styled(AutoComplete)`
     && .ant-select-content {
         border-radius: calc(${props => props.rounding || 0} * 35px);
         background: transparent;
-    }
-
-    && .ant-input-affix-wrapper {
-        border-radius: calc(${props => props.rounding || 0} * 35px) !important;
-    }
-
-    && .ant-input {
-        border-radius: calc(${props => props.rounding || 0} * 35px) !important;
     }
 
     /* clears the 'X' from Internet Explorer */
