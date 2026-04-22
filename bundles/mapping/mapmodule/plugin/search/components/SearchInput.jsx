@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, Message } from 'oskari-ui';
 import { AutoComplete } from 'antd';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 /*
 The input type="search" has a duplicated "clear" function added by the browser.
@@ -13,6 +13,14 @@ This might go away by updating ant-d. It seems a bit weird that it isn't hidden
 */
 const WideAutoComplete = styled(AutoComplete)`
     width: 100%;
+    &&.ant-select {
+        border-radius: calc(${props => props.rounding || 0} * 35px);
+    }
+
+    && .ant-select-content {
+        border-radius: calc(${props => props.rounding || 0} * 35px);
+        background: transparent;
+    }
 
     /* clears the 'X' from Internet Explorer */
     input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
@@ -59,6 +67,7 @@ export const SearchInput = ({ query = '', suggestions = [], onChange = noop, onS
     return (
         <React.Fragment>
             <WideAutoComplete
+                rounding={rounding}
                 allowClear={false}
                 options={getSuggestionOptions(suggestions)}
                 onSelect={onSelect}>
