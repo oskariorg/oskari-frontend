@@ -27,14 +27,22 @@ const StyledButton = styled(Button)`
     display: flex;
     align-items: center;
     justify-content: center;
-    &:hover {
+    &&&:hover {
         color: ${props => props.hover} !important;
-        background: ${props => props.bg}  !important;
+        background: ${props => props.bg} !important;
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
     }
-    &:focus,
-    &:active {
+    &&&:focus,
+    &&&:active,
+    &&&:focus-visible {
         color: ${props => props.$active ? props.hover : props.iconcolor} !important;
         background: ${props => props.bg} !important;
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        outline: none;
     }
 `;
 const FilledButton = styled(StyledButton)`

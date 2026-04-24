@@ -19,23 +19,26 @@ const StyledButton = styled(Button)`
     background: ${props => props.$backgroundColor};
     color: ${props => props.$iconColor};
     border: none;
-    &:hover {
+    box-shadow: none;
+    &&&:hover {
         background: ${props => props.$backgroundColor};
         color: ${props => props.$iconColor};
-        border: none;
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
         path {
             fill: ${props => props.$hoverColor};
         }
     }
-    &:focus {
+    &&&:focus,
+    &&&:active,
+    &&&:focus-visible {
         background: ${props => props.$backgroundColor};
         color: ${props => props.$iconColor};
-        border: none;
-    }
-    &:active {
-        background: ${props => props.$backgroundColor};
-        color: ${props => props.$iconColor};
-        border: none;
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        outline: none;
     }
     &.filtering {
         color:  ${props => props.$hoverColor};
