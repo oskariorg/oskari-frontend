@@ -23,9 +23,9 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
     const [currentFeature, setCurrentFeature] = useState(feature);
     // TODO: if feature === currentFeature differs -> there have been edits made
     const isNew = !currentFeature.id;
-    const stopDrawing = (clearPrevious = false) => {
+    const stopDrawing = (clearPrevious = false, finishDrawing = false) => {
         setDrawingMode(false);
-        DrawingHelper.stopDrawing(clearPrevious);
+        DrawingHelper.stopDrawing(clearPrevious, finishDrawing);
     };
 
     const cancelCb = () => {
@@ -86,7 +86,9 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                         <React.Fragment>
                             <Message messageKey="FeatureEditorView.geometrylist.editing" />
                             <WrappingRow>
-                                <Button type="primary" onClick={() => stopDrawing(false)}>
+                                <Button type="primary" onClick={() => {
+                                    stopDrawing(false, true);
+                                }}>
                                     <Message messageKey="FeatureEditorView.tools.finishSketch" />
                                 </Button>
                                 <Button type="default" onClick={() => {
