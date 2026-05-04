@@ -49,20 +49,13 @@ const startDrawing = (type, isMulti = false, currentGeometry, listener) => {
     sandbox.registerForEventByName(fakeModule, EVENT_NAME);
 
 };
+
 const stopDrawing = (clearPrevious = false, finishDrawing = false) => {
     const sandbox = Oskari.getSandbox();
-    if (finishDrawing) {
-        // Call DrawPlugin.stopDrawing() directly with suppressEvent=false.
-        // This runs forceFinishDrawing() (handles in-progress sketch, trims ghost point)
-        // and then sendDrawingEvent(true) — the same path as a double-click on the map.
-        // fakeModule.onEvent receives the isFinished=true event, updates geometry and does cleanup.
-        const drawPlugin = sandbox.findRegisteredModuleInstance('DrawTools')?.getPlugin();
-        drawPlugin?.stopDrawing(DRAW_OPERATION_ID, clearPrevious, false);
-        // Fallback: if event was not sent (e.g. geometry too short), clean up listener here.
-        cleanupDrawingListener();
-    } else {
-        sandbox.postRequestByName('DrawTools.StopDrawingRequest',
-            [DRAW_OPERATION_ID, clearPrevious, true]);
+    sandbox.postRequestByName('DrawTools.StopDrawingRequest',
+            [DRAW_OPERATION_ID, clearPrevious, !finishDrawing]);
+
+    if (!finishDrawing) {
         cleanupDrawingListener();
     }
 };
