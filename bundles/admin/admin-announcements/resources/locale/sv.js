@@ -10,6 +10,8 @@ Oskari.registerLocalization(
             },
             "fields": {
                 "date": "Datumintervall",
+                "endDate": "Sluttid",
+                "externalInfo": "Den här aviseringen har importerats från en extern källa. Du kan bara redigera sluttiden och innehållet på andra språk.",
                 "show": {
                     "label": "Visa annonsen i",
                     "popup": "Popupfönster",
