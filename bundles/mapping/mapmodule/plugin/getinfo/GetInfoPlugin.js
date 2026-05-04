@@ -554,6 +554,8 @@ Oskari.clazz.define(
             contentData.actions = layer?.getFeatureTools()?.map(tool => {
                 return {
                     name: tool.getTitle(),
+                    type: 'link',
+                    group: 'featuretools',
                     action: () => { tool.getCallback()(layerId, featureId); }
                 };
             });

@@ -3,14 +3,24 @@ const DRAW_OPERATION_ID = 'FeatureEditor';
 const EVENT_NAME = 'DrawingEvent'
 
 let drawListener = null;
+const cleanupDrawingListener = () => {
+    const sandbox = Oskari.getSandbox();
+    sandbox.unregisterFromEventByName(fakeModule, EVENT_NAME);
+    drawListener = null;
+};
+
 const fakeModule = {
     getName: () => DRAW_OPERATION_ID + 'FeaturePanel',
     onEvent: (event) => {
-        if (event.getName() !== EVENT_NAME || !event.getIsFinished()) {
+        const isFinished = event.getIsFinished();
+        if (event.getName() !== EVENT_NAME || !isFinished) {
             return;
         }
         const featureCollection = event.getGeoJson() || {};
         if (!featureCollection.features || !featureCollection.features.length) {
+            if (isFinished) {
+                cleanupDrawingListener();
+            }
             return;
         }
         if (typeof drawListener === 'function') {
@@ -39,13 +49,15 @@ const startDrawing = (type, isMulti = false, currentGeometry, listener) => {
     sandbox.registerForEventByName(fakeModule, EVENT_NAME);
 
 };
-const stopDrawing = (clearPrevious = false) => {
+
+const stopDrawing = (clearPrevious = false, finishDrawing = false) => {
     const sandbox = Oskari.getSandbox();
-    // should keep sketch until feature is saved.
     sandbox.postRequestByName('DrawTools.StopDrawingRequest',
-        [DRAW_OPERATION_ID, clearPrevious, true]);
-    sandbox.unregisterFromEventByName(fakeModule, EVENT_NAME);
-    drawListener = null;
+            [DRAW_OPERATION_ID, clearPrevious, !finishDrawing]);
+
+    if (!finishDrawing) {
+        cleanupDrawingListener();
+    }
 };
 
 export const DrawingHelper = {

@@ -26,7 +26,10 @@ export const FlyoutCollapse = ({
             <Message messageKey={'flyout.noAnnouncements'}/>
         );
     }
-    const items = announcements.map((announcement) => {
+    const sortedAnnouncements = [...announcements].sort((a, b) =>
+        new Date(b.beginDate) - new Date(a.beginDate)
+    );
+    const items = sortedAnnouncements.map((announcement) => {
         const { locale, id } = announcement;
         const { title } = Oskari.getLocalized(locale);
         const hasExternalSource = !!announcement?.options?.externalId;
