@@ -10,6 +10,8 @@ Oskari.registerLocalization(
         },
         "fields": {
             "date": "Date range",
+            "endDate": "End time",
+            "externalInfo": "This announcement has been imported from an external source. You can only edit the end time and content in other languages.",
             "show": {
                 "label": "Show announcement as",
                 "popup": "Popup-window",
