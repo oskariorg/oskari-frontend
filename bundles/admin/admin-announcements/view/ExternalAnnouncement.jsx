@@ -13,7 +13,6 @@ const PaddingTop = styled('div')`
 `;
 
 const InfoText = styled('div')`
-    padding: 0.75rem 1rem;
     margin-bottom: 1rem;
     font-style: italic;
 `;
