@@ -51,6 +51,7 @@ export const ExternalAnnouncement = ({
                 languages={languages}
                 onChange={(locale) => setState({ ...state, locale })}
                 value={state.locale}
+                disabledLanguages={[defaultLang]}
             >
                 <LabeledInput type='text' name='title' label={getMessage('fields.locale.title')} mandatory={false}/>
                 { state.type === 'link' && <LabeledInput label={getMessage('fields.locale.link')} name='link' mandatory={false}/> }
