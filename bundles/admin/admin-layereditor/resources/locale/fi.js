@@ -65,6 +65,12 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Lisätiedot",
             "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Oikeudet",
+            "roles": {
+                "type": {
+                    "system": "Järjestelmäroolit",
+                    "other": "Lisäroolit"
+                }
+            },
             "interfaceVersionDesc": "Valitse ensisijaisesti uusin rajapinnan tukema versio.",
             "attributions": "Lähdeviitteet",
             "usernameAndPassword": "Käyttäjätunnus ja salasana",

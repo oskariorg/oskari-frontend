@@ -66,6 +66,12 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Additional",
             "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Permissions",
+            "roles": {
+                "type": {
+                    "system": "System roles",
+                    "other": "Additional roles"
+                }
+            },
             "interfaceVersionDesc": "Select an appropriate version. Prioritize the newest version that is supported.",
             "attributions": "Attributions",
             "usernameAndPassword": "Username and password",
