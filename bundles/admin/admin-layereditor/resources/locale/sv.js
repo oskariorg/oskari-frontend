@@ -66,6 +66,12 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Ytterligare",
             "permissionsTabTitle": "Rättigheter",
             "jsonTabTitle": "JSON",
+            "roles": {
+                "type": {
+                    "system": "Systemroller",
+                    "other": "Övriga roller"
+                }
+            },
             "interfaceVersionDesc": "Välj primärt den nyaste versionen som stöds av gränssnittet.",
             "attributions": "Tillskrivningar",
             "usernameAndPassword": "Användarnamn och lösenord",

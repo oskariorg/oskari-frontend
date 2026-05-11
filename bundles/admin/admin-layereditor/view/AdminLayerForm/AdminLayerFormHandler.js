@@ -1077,27 +1077,35 @@ class UIHandler extends StateHandler {
 
     fetchLayerAdminMetadata () {
         this.ajaxStarted();
-        fetch(Oskari.urls.getRoute('LayerAdminMetadata'))
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    return Promise.reject(new Error('Fetching user roles and permission types failed'));
+        return fetch(Oskari.urls.getRoute('LayerAdminMetadata'))
+            .then(async metadataResponse => {
+                if (!metadataResponse.ok) {
+                    throw new Error('Fetching user roles and permission types failed');
                 }
-            }).then(data => {
-                this.loadingCount--;
+                const metadata = await metadataResponse.json();
+                const { systemRoles = {} } = metadata;
+                const systemRoleNames = Object.values(systemRoles);
+                const roles = (metadata.roles || []).map(role => ({
+                    ...role,
+                    isSystem: systemRoleNames.includes(role.name)
+                }));
+                const updatedMetadata = {
+                    ...metadata,
+                    roles
+                };
                 const currentLayer = this.getState().layer;
-                this.layerHelper.initPermissionsForLayer(currentLayer, data.roles);
+                this.layerHelper.initPermissionsForLayer(currentLayer, roles);
                 this.updateState({
                     layer: currentLayer,
-                    loading: this.isLoading(),
-                    metadata: data
+                    metadata: updatedMetadata
                 });
                 // invalidate cache if it was populated
                 Object.keys(__VALIDATOR_CACHE).forEach(key => delete __VALIDATOR_CACHE[key]);
             }).catch(error => {
                 this.log.error(error);
                 Messaging.error(getMessage('messages.errorFetchUserRolesAndPermissionTypes'));
+            }).finally(() => {
+                this.ajaxFinished();
             });
     }
 
