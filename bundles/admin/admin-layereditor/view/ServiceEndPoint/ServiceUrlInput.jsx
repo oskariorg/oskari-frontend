@@ -2,11 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message, UrlInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { cleanUrl } from './ServiceUrlInputHelper';
+import { cleanUrlAndExtractParams } from './ServiceUrlInputHelper';
 
 const { CREDENTIALS } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, credentialsCollapseOpen = false }) => {
+    const onUrlCleanup = (url) => {
+        const { cleanedUrl, params = {} } = cleanUrlAndExtractParams(url);
+        controller.setLayerParams(params);
+        return cleanedUrl;
+    };
+
     const credentialProps = {
         allowCredentials: propertyFields.includes(CREDENTIALS),
         defaultOpen: credentialsCollapseOpen,
@@ -25,7 +31,7 @@ export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, c
             disabled={disabled}
             onChange={url => controller.setLayerUrl(url)}
             onBlur={url => controller.setLayerUrl(url)}
-            urlCleanupFunction={url => cleanUrl(url)}
+            urlCleanupFunction={onUrlCleanup}
             credentials={credentialProps}/>
     );
 };

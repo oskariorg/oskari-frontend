@@ -62,6 +62,16 @@ class UIHandler extends StateHandler {
         });
     }
 
+    setLayerParams (params = {}) {
+        const layer = { ...this.getState().layer };
+        const currentParams = layer.params || {};
+        layer.params = {
+            ...currentParams,
+            ...params
+        };
+        this.updateState({ layer });
+    }
+
     versionSelected (version) {
         const layer = { ...this.getState().layer, version };
         if (typeof version === 'undefined') {
@@ -1257,6 +1267,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setHoverJSON',
     'setHover',
     'setLayerName',
+    'setLayerParams',
     'setLayerUrl',
     'setLegendUrl',
     'setLocalizedNames',
