@@ -44,7 +44,11 @@ Oskari.registerLocalization(
                     "selectedTime": "Vald tid",
                     "key": "Parameter",
                     "value": "Värde",
-                    "title": "Parametrar"
+                    "title": "Parametrar",
+                    "errors": {
+                        "keyExists": "En parameter med detta namn finns redan.",
+                        "reservedKey": "Parameternamnet är reserverat."
+                    }
                 },
                 "singleTile": "Single Tile",
                 "realtime": "Realtidslager",

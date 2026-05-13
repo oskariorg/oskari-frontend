@@ -44,7 +44,11 @@ Oskari.registerLocalization(
                     "selectedTime": "Selected time",
                     "key": "Parameter",
                     "value": "Value",
-                    "title": "Parameters"
+                    "title": "Parameters",
+                    "errors": {
+                        "keyExists": "A parameter with this name already exists.",
+                        "reservedKey": "This parameter name is reserved."
+                    }
                 },
                 "singleTile": "Single Tile",
                 "realtime": "Real time layer",
