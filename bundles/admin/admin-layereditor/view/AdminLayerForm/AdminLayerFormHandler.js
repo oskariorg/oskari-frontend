@@ -123,6 +123,14 @@ class UIHandler extends StateHandler {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
             });
+            const currentParams = layer.params || {};
+            const selectedLayerParams = updateLayer.params || {};
+            if (Object.keys(currentParams).length > 0 || Object.keys(selectedLayerParams).length > 0) {
+                updateLayer.params = {
+                    ...currentParams,
+                    ...selectedLayerParams
+                };
+            }
             this.updateState({
                 layer: updateLayer,
                 propertyFields: this.getPropertyFields(updateLayer)
