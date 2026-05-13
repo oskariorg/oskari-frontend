@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Message, UrlInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { cleanUrlAndExtractParams } from './ServiceUrlInputHelper';
+import { ServiceUrlParams } from './ServiceUrlParams';
 
 const { CREDENTIALS } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -25,14 +26,20 @@ export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, c
         passwordOnChange: controller.setPassword
     };
     return (
-        <UrlInput
-            key={`refreshOnLayerChange_${layer.id}`}
-            value={layer.url}
-            disabled={disabled}
-            onChange={url => controller.setLayerUrl(url)}
-            onBlur={url => controller.setLayerUrl(url)}
-            urlCleanupFunction={onUrlCleanup}
-            credentials={credentialProps}/>
+        <>
+            <ServiceUrlParams
+                params={layer.params}
+                disabled={disabled}
+                controller={controller} />
+            <UrlInput
+                key={`refreshOnLayerChange_${layer.id}`}
+                value={layer.url}
+                disabled={disabled}
+                onChange={url => controller.setLayerUrl(url)}
+                onBlur={url => controller.setLayerUrl(url)}
+                urlCleanupFunction={onUrlCleanup}
+                credentials={credentialProps}/>
+        </>
     );
 };
 ServiceUrlInput.propTypes = {
