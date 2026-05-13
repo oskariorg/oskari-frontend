@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { styled } from 'styled-components';
 import { Badge, Button, Message, TextInput } from 'oskari-ui';
-import { Table, ToolsContainer } from 'oskari-ui/components/Table';
+import { Table, ToolsContainer, getSorterFor } from 'oskari-ui/components/Table';
 import { Controller } from 'oskari-ui/util';
 import { IconButton } from 'oskari-ui/components/buttons';
 
@@ -10,12 +10,31 @@ const ParamsToggleContainer = styled('div')`
     margin-bottom: 0.5em;
 `;
 
+export const ParamsToggle = ({ count, open, disabled, onClick }) => (
+    <ParamsToggleContainer>
+        <Badge count={count}>
+            <Button onClick={onClick} disabled={disabled}>
+                <Message messageKey={open ? 'fields.params.hide' : 'fields.params.show'}/>
+            </Button>
+        </Badge>
+    </ParamsToggleContainer>
+);
+
+ParamsToggle.propTypes = {
+    count: PropTypes.number,
+    open: PropTypes.bool,
+    disabled: PropTypes.bool,
+    onClick: PropTypes.func
+};
+
 const ParamsTableContainer = styled('div')`
     margin-top: 0.5em;
 `;
 
-export const ServiceUrlParams = ({ params = {}, disabled, controller }) => {
-    const [showParams, setShowParams] = useState(false);
+export const ServiceUrlParams = ({ params = {}, open, disabled, controller }) => {
+    if (!open) {
+        return null;
+    }
 
     const updateParams = (nextParams) => {
         controller.setValueForLayer('params', nextParams);
@@ -39,12 +58,14 @@ export const ServiceUrlParams = ({ params = {}, disabled, controller }) => {
 
     const columns = [
         {
-            title: 'Key',
+            title: <Message messageKey='fields.params.key'/>,
             dataIndex: 'key',
-            width: '35%'
+            width: '35%',
+            sorter: getSorterFor('key'),
+            defaultSortOrder: 'ascend'
         },
         {
-            title: 'Value',
+            title: <Message messageKey='fields.params.value'/>,
             dataIndex: 'value',
             render: (value, record) => (
                 <TextInput
@@ -69,31 +90,19 @@ export const ServiceUrlParams = ({ params = {}, disabled, controller }) => {
     ];
 
     return (
-        <>
-            <ParamsToggleContainer>
-                <Badge count={paramKeys.length}>
-                    <Button
-                        onClick={() => setShowParams(!showParams)}
-                        disabled={disabled}>
-                        <Message messageKey='jsonTab.fields.params'/>
-                    </Button>
-                </Badge>
-            </ParamsToggleContainer>
-            {showParams && (
-                <ParamsTableContainer>
-                    <Table
-                        columns={columns}
-                        dataSource={dataSource}
-                        pagination={false}
-                    />
-                </ParamsTableContainer>
-            )}
-        </>
+        <ParamsTableContainer>
+            <Table
+                columns={columns}
+                dataSource={dataSource}
+                pagination={false}
+            />
+        </ParamsTableContainer>
     );
 };
 
 ServiceUrlParams.propTypes = {
     params: PropTypes.object,
+    open: PropTypes.bool,
     disabled: PropTypes.bool,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

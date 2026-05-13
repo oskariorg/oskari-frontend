@@ -40,7 +40,11 @@ Oskari.registerLocalization(
                 },
                 "opacity": "Peittävyys",
                 "params": {
-                    "selectedTime": "Valittu aika"
+                    "selectedTime": "Valittu aika",
+                    "key": "Parametri",
+                    "value": "Arvo",
+                    "show": "Näytä parametrit",
+                    "hide": "Piilota parametrit"
                 },
                 "singleTile": "Single Tile",
                 "realtime": "Reaaliaikataso",

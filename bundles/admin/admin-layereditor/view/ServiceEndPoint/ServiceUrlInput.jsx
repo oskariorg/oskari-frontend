@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Message, UrlInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { cleanUrlAndExtractParams } from './ServiceUrlInputHelper';
-import { ServiceUrlParams } from './ServiceUrlParams';
+import { ParamsToggle, ServiceUrlParams } from './ServiceUrlParams';
 
 const { CREDENTIALS } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, credentialsCollapseOpen = false }) => {
+    const [showParams, setShowParams] = useState(false);
+    const params = layer.params || {};
+    const paramCount = Object.keys(params).length;
     const onUrlCleanup = (url) => {
         const { cleanedUrl, params = {} } = cleanUrlAndExtractParams(url);
         controller.setLayerParams(params);
@@ -27,10 +30,12 @@ export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, c
     };
     return (
         <>
-            <ServiceUrlParams
-                params={layer.params}
+            <ParamsToggle
+                count={paramCount}
+                open={showParams}
                 disabled={disabled}
-                controller={controller} />
+                onClick={() => setShowParams(!showParams)}
+            />
             <UrlInput
                 key={`refreshOnLayerChange_${layer.id}`}
                 value={layer.url}
@@ -39,6 +44,11 @@ export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, c
                 onBlur={url => controller.setLayerUrl(url)}
                 urlCleanupFunction={onUrlCleanup}
                 credentials={credentialProps}/>
+            <ServiceUrlParams
+                params={params}
+                open={showParams}
+                disabled={disabled}
+                controller={controller} />
         </>
     );
 };
