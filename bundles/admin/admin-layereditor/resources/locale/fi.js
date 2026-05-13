@@ -43,8 +43,7 @@ Oskari.registerLocalization(
                     "selectedTime": "Valittu aika",
                     "key": "Parametri",
                     "value": "Arvo",
-                    "show": "Näytä parametrit",
-                    "hide": "Piilota parametrit"
+                    "title": "Parametrit"
                 },
                 "singleTile": "Single Tile",
                 "realtime": "Reaaliaikataso",

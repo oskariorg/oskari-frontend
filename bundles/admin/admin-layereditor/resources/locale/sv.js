@@ -44,8 +44,7 @@ Oskari.registerLocalization(
                     "selectedTime": "Vald tid",
                     "key": "Parameter",
                     "value": "Värde",
-                    "show": "Visa parametrar",
-                    "hide": "Dölj parametrar"
+                    "title": "Parametrar"
                 },
                 "singleTile": "Single Tile",
                 "realtime": "Realtidslager",

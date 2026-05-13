@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, UrlInput } from 'oskari-ui';
+import { styled } from 'styled-components';
+import { Badge, Collapse, Message, UrlInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { cleanUrlAndExtractParams } from './ServiceUrlInputHelper';
-import { ParamsToggle, ServiceUrlParams } from './ServiceUrlParams';
+import { ServiceUrlParams } from './ServiceUrlParams';
 
 const { CREDENTIALS } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
+const CollapseTitle = styled('div')`
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+`;
+
 export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, credentialsCollapseOpen = false }) => {
-    const [showParams, setShowParams] = useState(false);
     const params = layer.params || {};
     const paramCount = Object.keys(params).length;
     const onUrlCleanup = (url) => {
@@ -28,14 +34,21 @@ export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, c
         usernameOnChange: controller.setUsername,
         passwordOnChange: controller.setPassword
     };
+
+    const paramsItems = [{
+        key: 'params',
+        label: <CollapseTitle>
+            <Message messageKey='fields.params.title'/>
+            {paramCount > 0 && <Badge count={paramCount} />}
+        </CollapseTitle>,
+        children: <ServiceUrlParams
+            params={params}
+            disabled={disabled}
+            controller={controller} />
+    }];
+
     return (
         <>
-            <ParamsToggle
-                count={paramCount}
-                open={showParams}
-                disabled={disabled}
-                onClick={() => setShowParams(!showParams)}
-            />
             <UrlInput
                 key={`refreshOnLayerChange_${layer.id}`}
                 value={layer.url}
@@ -44,11 +57,7 @@ export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, c
                 onBlur={url => controller.setLayerUrl(url)}
                 urlCleanupFunction={onUrlCleanup}
                 credentials={credentialProps}/>
-            <ServiceUrlParams
-                params={params}
-                open={showParams}
-                disabled={disabled}
-                controller={controller} />
+            <Collapse items={paramsItems} />
         </>
     );
 };

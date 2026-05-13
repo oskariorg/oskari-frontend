@@ -44,8 +44,7 @@ Oskari.registerLocalization(
                     "selectedTime": "Selected time",
                     "key": "Parameter",
                     "value": "Value",
-                    "show": "Show parameters",
-                    "hide": "Hide parameters"
+                    "title": "Parameters"
                 },
                 "singleTile": "Single Tile",
                 "realtime": "Real time layer",
