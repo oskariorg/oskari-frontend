@@ -5,6 +5,7 @@ import { Badge, Button, Message, TextInput } from 'oskari-ui';
 import { Table, ToolsContainer, getSorterFor } from 'oskari-ui/components/Table';
 import { Controller } from 'oskari-ui/util';
 import { IconButton } from 'oskari-ui/components/buttons';
+import { ServiceUrlAddParam } from './ServiceUrlAddParam';
 
 const ParamsToggleContainer = styled('div')`
     margin-bottom: 0.5em;
@@ -53,6 +54,13 @@ export const ServiceUrlParams = ({ params = {}, open, disabled, controller }) =>
         updateParams(nextParams);
     };
 
+    const onAddParam = (key, value) => {
+        updateParams({
+            ...params,
+            [key]: value
+        });
+    };
+
     const paramKeys = Object.keys(params);
     const dataSource = paramKeys.map(key => ({ key, value: params[key] }));
 
@@ -96,6 +104,10 @@ export const ServiceUrlParams = ({ params = {}, open, disabled, controller }) =>
                 dataSource={dataSource}
                 pagination={false}
             />
+            <ServiceUrlAddParam
+                disabled={disabled}
+                params={params}
+                onAdd={onAddParam} />
         </ParamsTableContainer>
     );
 };
