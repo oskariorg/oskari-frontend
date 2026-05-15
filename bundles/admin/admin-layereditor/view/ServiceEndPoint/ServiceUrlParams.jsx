@@ -11,6 +11,16 @@ const ParamsTableContainer = styled('div')`
     margin-top: 0.5em;
 `;
 
+const BaseCell = styled('div')`
+    display: flex;
+    align-items: center;
+    width: 100%;
+`;
+
+const ActionCell = styled(BaseCell)`
+    justify-content: flex-end;
+`;
+
 export const ServiceUrlParams = ({ params = {}, disabled, controller }) => {
     const updateParams = (nextParams) => {
         controller.setValueForLayer('params', nextParams);
@@ -38,6 +48,9 @@ export const ServiceUrlParams = ({ params = {}, disabled, controller }) => {
 
     const paramKeys = Object.keys(params);
     const dataSource = paramKeys.map(key => ({ key, value: params[key] }));
+    const middleCell = () => ({
+        style: { verticalAlign: 'middle' }
+    });
 
     const columns = [
         {
@@ -45,29 +58,37 @@ export const ServiceUrlParams = ({ params = {}, disabled, controller }) => {
             dataIndex: 'key',
             width: '35%',
             sorter: getSorterFor('key'),
-            defaultSortOrder: 'ascend'
+            defaultSortOrder: 'ascend',
+            onCell: middleCell,
+            render: (key) => <BaseCell>{key}</BaseCell>
         },
         {
             title: <Message messageKey='fields.params.value'/>,
             dataIndex: 'value',
+            onCell: middleCell,
             render: (value, record) => (
-                <TextInput
-                    disabled={disabled}
-                    value={value === undefined || value === null ? '' : String(value)}
-                    onChange={(evt) => onParamValueChange(record.key, evt.target.value)}
-                />
+                <BaseCell>
+                    <TextInput
+                        disabled={disabled}
+                        value={value === undefined || value === null ? '' : String(value)}
+                        onChange={(evt) => onParamValueChange(record.key, evt.target.value)}
+                    />
+                </BaseCell>
             )
         },
         {
             dataIndex: 'key',
             width: '2.5em',
+            onCell: middleCell,
             render: (key) => (
-                <ToolsContainer>
-                    <IconButton
-                        type='delete'
-                        disabled={disabled}
-                        onClick={() => onDeleteParam(key)} />
-                </ToolsContainer>
+                <ActionCell>
+                    <ToolsContainer>
+                        <IconButton
+                            type='delete'
+                            disabled={disabled}
+                            onClick={() => onDeleteParam(key)} />
+                    </ToolsContainer>
+                </ActionCell>
             )
         }
     ];
