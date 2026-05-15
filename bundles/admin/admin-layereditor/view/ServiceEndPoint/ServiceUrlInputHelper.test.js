@@ -1,4 +1,4 @@
-import { RESERVED_LAYER_PARAMS, cleanUrlAndExtractParams } from './ServiceUrlInputHelper.js';
+import { RESERVED_LAYER_PARAMS, cleanUrlAndExtractParams, getFullServiceUrl } from './ServiceUrlInputHelper.js';
 
 describe('ServiceUrlInputHelper Tests ', () => {
     describe('clean url', () => {
@@ -72,6 +72,48 @@ describe('ServiceUrlInputHelper Tests ', () => {
 
             const url2 = 'www.com/?first=1&SECOND=2&thiRd=3';
             expect(cleanUrlAndExtractParams(url2).cleanedUrl).toBe('www.com/');
+        });
+    });
+
+    describe('get full service url', () => {
+        it('should return empty string with no url provided', () => {
+            expect(getFullServiceUrl({})).toBe('');
+            expect(getFullServiceUrl({ url: '' })).toBe('');
+        });
+
+        it('should add https protocol when missing and append params', () => {
+            const fullUrl = getFullServiceUrl({
+                url: 'www.com/path',
+                params: {
+                    first: '1',
+                    second: 'two'
+                }
+            });
+            expect(fullUrl).toBe('https://www.com/path?first=1&second=two');
+        });
+
+        it('should preserve existing protocol', () => {
+            const fullUrl = getFullServiceUrl({
+                url: 'http://www.com/path',
+                params: {
+                    first: '1'
+                }
+            });
+            expect(fullUrl).toBe('http://www.com/path?first=1');
+        });
+
+        it('should stringify param values and skip nullish values', () => {
+            const fullUrl = getFullServiceUrl({
+                url: 'https://www.com/',
+                params: {
+                    bool: false,
+                    num: 0,
+                    empty: '',
+                    nil: null,
+                    undef: undefined
+                }
+            });
+            expect(fullUrl).toBe('https://www.com/?bool=false&num=0&empty=');
         });
     });
 });
