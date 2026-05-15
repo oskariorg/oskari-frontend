@@ -76,9 +76,9 @@ describe('ServiceUrlInputHelper Tests ', () => {
     });
 
     describe('get full service url', () => {
-        it('should return empty string with no url provided', () => {
-            expect(getFullServiceUrl({})).toBe('');
-            expect(getFullServiceUrl({ url: '' })).toBe('');
+        it('should return null with no url provided', () => {
+            expect(getFullServiceUrl({})).toBe(null);
+            expect(getFullServiceUrl({ url: null })).toBe(null);
         });
 
         it('should add https protocol when missing and append params', () => {
