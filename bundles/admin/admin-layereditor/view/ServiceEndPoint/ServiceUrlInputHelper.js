@@ -27,3 +27,18 @@ export const cleanUrlAndExtractParams = (url) => {
         params
     };
 };
+
+export const getFullServiceUrl = (layer) => {
+    const { url, params = {} } = layer;
+    if (!url) {
+        return '';
+    }
+    const normalized = url.includes('://') ? url : `https://${url}`;
+    const urlObj = new URL(normalized);
+    Object.entries(params).forEach(([key, value]) => {
+        if (value != null) {
+            urlObj.searchParams.set(key, String(value));
+        }
+    });
+    return urlObj.toString();
+};
