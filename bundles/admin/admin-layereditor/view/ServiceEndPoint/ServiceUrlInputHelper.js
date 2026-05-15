@@ -31,7 +31,7 @@ export const cleanUrlAndExtractParams = (url) => {
 export const getFullServiceUrl = (layer) => {
     const { url, params = {} } = layer;
     if (!url) {
-        return '';
+        return null;
     }
     const normalized = url.includes('://') ? url : `https://${url}`;
     const urlObj = new URL(normalized);
