@@ -8,7 +8,7 @@ export const Coverage = ({ id, controller }) => {
     const [checked, setChecked] = useState(false);
     const toggle = checked => {
         if (checked) {
-            controller.showLayerCoverage(id);
+            controller.showLayerCoverage();
         } else {
             controller.clearLayerCoverage();
         }

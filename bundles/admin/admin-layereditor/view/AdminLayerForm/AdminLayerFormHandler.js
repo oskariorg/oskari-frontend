@@ -606,7 +606,8 @@ class UIHandler extends StateHandler {
         }
         this.resetLayer(keepCapabilities);
         this.ajaxStarted();
-        fetch(Oskari.urls.getRoute('LayerAdmin', { id }), {
+        const srs = Oskari.getSandbox().getMap().getSrsName();
+        fetch(Oskari.urls.getRoute('LayerAdmin', { id, srs }), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
@@ -1203,31 +1204,20 @@ class UIHandler extends StateHandler {
         Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, COVERAGE_LAYER]);
     }
 
-    showLayerCoverage (id) {
-        const srs = Oskari.getSandbox().getMap().getSrsName();
-        fetch(Oskari.urls.getRoute('DescribeLayer', { id, srs }), {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        }).then(response => response.json())
-            .then(({ coverage }) => {
-                if (!coverage) {
-                    Messaging.info(getMessage('messages.noCoverage'));
-                    this.clearLayerCoverage();
-                    return;
-                }
-                const opts = {
-                    centerTo: true,
-                    clearPrevious: true,
-                    layerId: COVERAGE_LAYER
-                };
-                Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverage, opts]);
-            }).catch((error) => {
-                Messaging.error(getMessage('messages.errorFetchCoverage'));
-                this.log.error(`Failed to get layer coverage for id: ${id}`, error);
-                this.clearLayerCoverage();
-            });
+    showLayerCoverage () {
+        const { layer = {} } = this.getState();
+        const { coverage } = layer;
+        if (!coverage) {
+            Messaging.info(getMessage('messages.noCoverage'));
+            this.clearLayerCoverage();
+            return;
+        }
+        const opts = {
+            centerTo: true,
+            clearPrevious: true,
+            layerId: COVERAGE_LAYER
+        };
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverage, opts]);
     }
 
     toggleDeclutter (checked) {
