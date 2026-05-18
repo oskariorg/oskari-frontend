@@ -1,4 +1,4 @@
-publiccodeYmlVersion: "0.5.0"
+publiccodeYmlVersion: "0"
 
 name: Oskari
 url: "https://github.com/oskariorg/oskari-frontend"
@@ -16,7 +16,9 @@ categories:
   - web-collaboration
   - data-visualization
 
-organisation: "National Land Survey of Finland"
+organisation:
+  name: "National Land Survey of Finland"
+  uri: "https://www.maanmittauslaitos.fi"
 
 roadmap: "https://oskari.org/documentation/roadmap"
 
@@ -77,7 +79,6 @@ description:
 legal:
   license: "MIT OR EUPL-1.1"
   mainCopyrightOwner: "National Land Survey of Finland"
-  repoOwner: "oskariorg"
 
 maintenance:
   type: "community"
