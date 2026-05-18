@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { LocaleConsumer } from 'oskari-ui/util';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 const Label = styled('div')`
     display: ${props => props.allowTextEllipsis ? 'inline' : 'inline-block'};
@@ -16,6 +16,9 @@ const Label = styled('div')`
  * @memberof module:oskari-ui
  * @see {@link module:oskari-ui/util.LocaleProvider|LocaleProvider}
  * @param {Object} props - { bundleKey, messageKey, messageArgs:optional, getMessage:optional, LabelComponent:optional }
+ * @param {React.ElementType} [props.LabelComponent] Wrapper used for rendering the localized content.
+ * Accepts either a React component or a dom element name as a string, for example 'div', 'span' or 'li'.
+ * The wrapper must be able to render children, so void elements such as img are not supported (=will throw a runtime error).
  *
  * @example <caption>Registering bundle localization</caption>
  * Oskari.registerLocalization({
@@ -33,6 +36,9 @@ const Label = styled('div')`
  * <LocaleProvider value={{bundleKey: 'helloworld'}}>
  *     <Message messageKey="hello" messageArgs={['Jack']}/>
  * </LocaleProvider>
+ *
+ * @example <caption>Using an intrinsic DOM element as wrapper</caption>
+ * <Message messageKey="error.required" LabelComponent='li' />
  */
 const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, fallback, children, LabelComponent = Label, allowHTML = false, allowTextEllipsis = false }) => {
     if (!messageKey) {
@@ -63,10 +69,15 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, f
         return (<LabelComponent dangerouslySetInnerHTML={{ __html: message }} { ...injectedProps }></LabelComponent>);
     }
 
+    const labelProps = { ...injectedProps };
+    // Only default Label - component will handle text ellipsis. For custom components / dom element strings we should just ignore it.
+    if (LabelComponent === Label) {
+        labelProps.allowTextEllipsis = allowTextEllipsis;
+    }
+
     return (
         <LabelComponent
-            allowTextEllipsis={allowTextEllipsis}
-            { ...injectedProps }>
+            { ...labelProps }>
             { message } { children }
         </LabelComponent>
     );
