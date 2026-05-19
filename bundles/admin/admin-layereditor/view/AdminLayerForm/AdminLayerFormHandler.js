@@ -9,6 +9,7 @@ import { TIME_SERIES_UI } from './VisualizationTabPane/TimeSeries';
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
 const COVERAGE_LAYER = 'AdminLayerEditorCoverage';
+const METADATA_COVERAGE_LAYER = 'AdminLayerEditorMetadataCoverage';
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-layereditor' />;
 
@@ -546,6 +547,7 @@ class UIHandler extends StateHandler {
 
     resetMap () {
         this.clearLayerCoverage();
+        this.clearLayerMetadataCoverage();
     }
 
     ajaxStarted () {
@@ -1204,6 +1206,10 @@ class UIHandler extends StateHandler {
         Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, COVERAGE_LAYER]);
     }
 
+    clearLayerMetadataCoverage () {
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, METADATA_COVERAGE_LAYER]);
+    }
+
     showLayerCoverage () {
         const { layer = {} } = this.getState();
         const { coverage } = layer;
@@ -1214,10 +1220,26 @@ class UIHandler extends StateHandler {
         }
         const opts = {
             centerTo: true,
-            clearPrevious: true,
+            clearPrevious: false,
             layerId: COVERAGE_LAYER
         };
         Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverage, opts]);
+    }
+
+    showLayerMetadataCoverage () {
+        const { layer = {} } = this.getState();
+        const { coverageMetadata } = layer;
+        if (!coverageMetadata) {
+            Messaging.info(getMessage('messages.noMetadataCoverage'));
+            this.clearLayerMetadataCoverage();
+            return;
+        }
+        const opts = {
+            centerTo: true,
+            clearPrevious: false,
+            layerId: METADATA_COVERAGE_LAYER
+        };
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverageMetadata, opts]);
     }
 
     toggleDeclutter (checked) {
@@ -1279,7 +1301,9 @@ const wrapped = controllerMixin(UIHandler, [
     'versionSelected',
     'showLayerMetadata',
     'clearLayerCoverage',
+    'clearLayerMetadataCoverage',
     'showLayerCoverage',
+    'showLayerMetadataCoverage',
     'toggleDeclutter'
 ]);
 export { wrapped as AdminLayerFormHandler };
