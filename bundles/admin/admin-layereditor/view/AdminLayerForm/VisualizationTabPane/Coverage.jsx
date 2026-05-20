@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Controller } from 'oskari-ui/util';
 import { Checkbox, Message, Switch } from 'oskari-ui';
@@ -8,6 +8,14 @@ export const Coverage = ({ layer, controller }) => {
     const [checked, setChecked] = useState(false);
     const [metadataChecked, setMetadataChecked] = useState(false);
     const { attributes = {} } = layer;
+    const isMetadataCoverageDisabled = attributes.ignoreCoverage || !layer.metadataid;
+
+    useEffect(() => {
+        if (isMetadataCoverageDisabled && attributes.ignoreMetadataCoverage) {
+            controller.setIgnoreMetadataCoverage(false);
+        }
+    }, [isMetadataCoverageDisabled, attributes.ignoreMetadataCoverage, controller]);
+
     const toggle = checked => {
         if (checked) {
             controller.showLayerCoverage();
@@ -46,7 +54,7 @@ export const Coverage = ({ layer, controller }) => {
                 </Checkbox>
             </StyledFormField>
             <StyledFormField>
-                <Checkbox checked={!!attributes.ignoreMetadataCoverage} onChange={evt => controller.setIgnoreMetadataCoverage(evt.target.checked)}>
+                <Checkbox disabled={isMetadataCoverageDisabled} checked={!!attributes.ignoreMetadataCoverage} onChange={evt => controller.setIgnoreMetadataCoverage(evt.target.checked)}>
                     <Message messageKey='fields.ignoreMetadataCoverage' />
                 </Checkbox>
             </StyledFormField>
@@ -55,7 +63,6 @@ export const Coverage = ({ layer, controller }) => {
 };
 
 Coverage.propTypes = {
-    id: PropTypes.number.isRequired,
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
