@@ -49,6 +49,8 @@ Oskari.registerLocalization(
                 "scale": "Skala",
                 "coverage":"Visa kartlagrets täckningsområde på kartan",
                 "metadataCoverage":"Visa kartlagrets metadatas täckningsområde på kartan",
+                "ignoreCoverage":"Ignorera kartlagrets täckningsområde",
+                "ignoreMetadataCoverage":"Ignorera kartlagrets metadatas täckningsområde",
                 "declutter": "Rita objektnamn separat (declutter).",
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",

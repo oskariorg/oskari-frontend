@@ -48,6 +48,8 @@ Oskari.registerLocalization(
                 "scale": "Mittakaava",
                 "coverage":"Näytä karttatason kattavuusalue kartalla",
                 "metadataCoverage":"Näytä karttatason metadatan kattavuusalue kartalla",
+                "ignoreCoverage":"Ohita karttatason kattavuusalue",
+                "ignoreMetadataCoverage":"Ohita karttatason metadatan kattavuusalue",
                 "declutter": "Piirrä kohteiden nimet erikseen (declutter).",
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",

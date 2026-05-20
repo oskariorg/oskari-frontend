@@ -49,6 +49,8 @@ Oskari.registerLocalization(
                 "scale": "Scale",
                 "coverage":"Show map layer coverage on the map",
                 "metadataCoverage":"Show map layer metadata coverage on the map",
+                "ignoreCoverage":"Ignore map layer coverage",
+                "ignoreMetadataCoverage":"Ignore map layer metadata coverage",
                 "declutter": "Draw object names separately (declutter).",
                 "gfiContent": "Additional GFI info",
                 "gfiType": "GFI response type",

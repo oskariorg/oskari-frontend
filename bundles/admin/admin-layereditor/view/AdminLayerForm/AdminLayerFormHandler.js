@@ -303,6 +303,28 @@ class UIHandler extends StateHandler {
         this.updateLayerAttributes(attributes, layer);
     }
 
+    setIgnoreCoverage (ignoreCoverage) {
+        const layer = { ...this.getState().layer };
+        const attributes = { ...(layer.attributes || {}) };
+        if (ignoreCoverage) {
+            attributes.ignoreCoverage = true;
+        } else {
+            delete attributes.ignoreCoverage;
+        }
+        this.updateLayerAttributes(attributes, layer);
+    }
+
+    setIgnoreMetadataCoverage (ignoreMetadataCoverage) {
+        const layer = { ...this.getState().layer };
+        const attributes = { ...(layer.attributes || {}) };
+        if (ignoreMetadataCoverage) {
+            attributes.ignoreMetadataCoverage = true;
+        } else {
+            delete attributes.ignoreMetadataCoverage;
+        }
+        this.updateLayerAttributes(attributes, layer);
+    }
+
     setAttributesData (key, value) {
         const layer = { ...this.getState().layer };
         const { data = {} } = layer.attributes || {};
@@ -1257,6 +1279,8 @@ const wrapped = controllerMixin(UIHandler, [
     'setAttributes',
     'setAttributesData',
     'setFeatureFilter',
+    'setIgnoreCoverage',
+    'setIgnoreMetadataCoverage',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
     'setClusteringDistance',
