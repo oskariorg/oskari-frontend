@@ -26,7 +26,13 @@ const hasServiceEndpoint = ({ url, options }, propertyFields) => {
 };
 
 const VersionButton = ({ version, controller, ...rest }) => (
-    <StyledButton type="primary" onClick={() => controller.versionSelected(version)} { ...rest }>
+    <StyledButton
+        type="primary"
+        onClick={() => {
+            // Allow pending blur/update cycle to complete before moving to next step.
+            window.setTimeout(() => controller.versionSelected(version), 0);
+        }}
+        { ...rest }>
         { version && version }
         { !version && <Message messageKey='ok'/> }
     </StyledButton>

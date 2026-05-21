@@ -2,11 +2,14 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
+import { styled } from 'styled-components';
 import { CesiumIon } from './CesiumIon';
 import { StyledFormField } from '../AdminLayerForm/styled';
 import { ApiKey } from './ApiKey';
 import { ServiceUrlInput } from './ServiceUrlInput';
 import { MandatoryIcon } from '../AdminLayerForm/Mandatory';
+import { CopyButton } from 'oskari-ui/components/buttons';
+import { getFullServiceUrl } from './ServiceUrlInputHelper';
 
 const {
     API_KEY,
@@ -16,7 +19,19 @@ const {
 
 const protocols = ['http://', 'https://'];
 
+const HeaderRow = styled('div')`
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+`;
+
+const HeaderActions = styled('div')`
+    margin-left: auto;
+`;
+
 export const ServiceEndPoint = ({ layer, propertyFields, disabled, credentialsCollapseOpen, controller }) => {
+    const fullServiceUrl = getFullServiceUrl(layer);
+
     let serviceUrlInput = null;
     const ionAssetSelected = propertyFields.includes(CESIUM_ION) && !!layer.options.ionAssetId;
     if (propertyFields.includes(URL) && !ionAssetSelected) {
@@ -38,7 +53,12 @@ export const ServiceEndPoint = ({ layer, propertyFields, disabled, credentialsCo
         <Fragment>
             { (serviceUrlInput || cesiumIonSettings) &&
                 <Fragment>
-                    <Message messageKey='fields.url' /> (<Message messageKey={`layertype.${layer.type}`} defaultMsg={layer.type} />) <MandatoryIcon />
+                    <HeaderRow>
+                        <Message messageKey='fields.url' /> (<Message messageKey={`layertype.${layer.type}`} defaultMsg={layer.type} />) <MandatoryIcon />
+                        <HeaderActions>
+                            <CopyButton value={fullServiceUrl} disabled={!fullServiceUrl} />
+                        </HeaderActions>
+                    </HeaderRow>
                     <StyledFormField>
                         {serviceUrlInput}
                         {cesiumIonSettings}

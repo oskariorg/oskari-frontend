@@ -9,22 +9,25 @@ const copy = (value) => {
     Messaging.success(<Message bundleKey='oskariui' messageKey='messages.copied' />);
 };
 
-export const CopyButton = ({ value, onClick }) => {
+export const CopyButton = ({ value, onClick, disabled = false, ...other }) => {
 
     return (
         <PrimaryButton
             type='copy'
+            disabled={disabled}
             onClick={() => {
                 if (typeof onClick === 'function') {
-                    onClick()
+                    onClick();
                 }
                 copy(value);
             }}
+            {...other}
         />
     );
 };
 
 CopyButton.propTypes = {
     value: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    disabled: PropTypes.bool
 };
