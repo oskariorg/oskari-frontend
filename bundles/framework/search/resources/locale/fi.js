@@ -30,7 +30,8 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Sulje",
             "title": "Hakutulokset",
-            "alternatives": "Tällä paikalla on seuraavia vaihtoehtoisia nimiä:"
+            "alternatives": "Tällä paikalla on seuraavia vaihtoehtoisia nimiä:",
+            "contentCard": "Paikan tietokortti"
         },
         "guidedTour": {
             "title": "Haku",
