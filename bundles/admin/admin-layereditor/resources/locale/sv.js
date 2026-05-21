@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "refreshRate": "Uppdateringsfrekvens (i sekunder)",
                 "scale": "Skala",
                 "coverage":"Visa kartlagrets täckningsområde på kartan",
+                "metadataCoverage":"Visa kartlagrets metadatas täckningsområde på kartan",
+                "ignoreCoverage":"Ignorera kartlagrets täckningsområde",
+                "ignoreMetadataCoverage":"Ignorera kartlagrets metadatas täckningsområde",
                 "declutter": "Rita objektnamn separat (declutter).",
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",
@@ -304,6 +307,7 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "Gruppen du försöker ta bort innehåller undergrupper. Ta bort undergrupperna först.",
                 "errorFetchCoverage": "Kan inte hämtas kartlagrets täckningsområde från tjänsten.",
                 "noCoverage": "Kartlagrets täckningsområde är inte begränsat.",
+                "noMetadataCoverage": "Metadata-täckning finns inte tillgänglig för kartlagret.",
                 "invalidScale": "Kontrollera skalbegränsningarna för kartlagret."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",

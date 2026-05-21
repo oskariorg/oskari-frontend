@@ -47,6 +47,9 @@ Oskari.registerLocalization(
                 "refreshRate": " Virkistystaajuus sekunteina",
                 "scale": "Mittakaava",
                 "coverage":"Näytä karttatason kattavuusalue kartalla",
+                "metadataCoverage":"Näytä karttatason metadatan kattavuusalue kartalla",
+                "ignoreCoverage":"Ohita karttatason kattavuusalue",
+                "ignoreMetadataCoverage":"Ohita karttatason metadatan kattavuusalue",
                 "declutter": "Piirrä kohteiden nimet erikseen (declutter).",
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
@@ -305,6 +308,7 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
                 "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
                 "noCoverage": "Karttatason kattavuutta ei ole rajoitettu.",
+                "noMetadataCoverage": "Tasolle ei ole saatavilla metadatan kattavuusaluetta.",
                 "invalidScale": "Tarkista tason mittakaavarajat.",
                 "noFeatureProperties": "Kohteiden ominaisuustietoja ei ole saatavilla tasolle."
             },
