@@ -30,7 +30,8 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Close",
             "title": "Search Results",
-            "alternatives": "This location has the following alternative place names:"
+            "alternatives": "This location has the following alternative place names:",
+            "contentCard": "Place info card"
         },
         "guidedTour": {
             "title": "Search",

@@ -30,7 +30,8 @@ Oskari.registerLocalization(
         "resultBox": {
             "close": "Stäng",
             "title": "Sökresultat",
-            "alternatives": "Den här platsen har följande alternativa namn:"
+            "alternatives": "Den här platsen har följande alternativa namn:",
+            "contentCard": "Platsens informationskort"
         },
         "guidedTour": {
             "title": "Sök",
