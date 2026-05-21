@@ -80,6 +80,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                     <FeatureForm config={layer}
                         feature={currentFeature}
                         original={feature}
+                        disabled={isDrawing}
                         onChange={onPropsChange} />
 
                     { isDrawing &&

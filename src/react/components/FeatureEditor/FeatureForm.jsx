@@ -12,9 +12,9 @@ export const StyledFormField = styled('div')`
 
 const Label = ({name, children}) => (<label>{name} {children}</label>);
 
-const getFieldForType = (name, type, value, onUpdate) => {
+const getFieldForType = (name, type, value, onUpdate, disabled) => {
     const attribs = {
-        disabled: name === 'id',
+        disabled: disabled || name === 'id',
         name,
         value
     };
@@ -31,7 +31,7 @@ const getFieldForType = (name, type, value, onUpdate) => {
                 onChange={(evt) => onUpdate(name, evt.target.value)} />);
 }
 
-const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate }) => {
+const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate, disabled }) => {
     if (type === 'geometry') {
         return null;
     }
@@ -43,11 +43,11 @@ const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate }) => 
     const noteForOriginal = (<Message messageKey="FeatureEditorView.originalValue">: {labelForOriginal}</Message>);
     return (
         <StyledFormField key={name}>
-            { getFieldForType(name, type, value, onUpdate) }
+            { getFieldForType(name, type, value, onUpdate, disabled) }
             { hasChanged && <StyledContainer>
                 <Message messageKey="FeatureEditorView.modified" LabelComponent={StyledModIndicator} />
                 <Tooltip title={noteForOriginal}>
-                    <Button type="link" onClick={() => onUpdate(name, originalValue)}>
+                    <Button type="link" disabled={disabled} onClick={() => onUpdate(name, originalValue)}>
                         <Message messageKey="FeatureEditorView.restoreOriginal" />
                     </Button>
                 </Tooltip>
@@ -56,7 +56,7 @@ const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate }) => 
     );
 };
 
-export const FeatureForm = ({config = {}, feature = {}, original = {}, onChange}) => {
+export const FeatureForm = ({config = {}, feature = {}, original = {}, onChange, disabled = false}) => {
     const fieldsTypes = config.fieldTypes || {};
     const featureProperties = feature.properties || {};
     const originalProperties = original.properties || {};
@@ -78,7 +78,9 @@ export const FeatureForm = ({config = {}, feature = {}, original = {}, onChange}
             type: fieldsTypes[field],
             value: featureProperties[field],
             originalValue: originalProperties[field],
-            onUpdate}));
+            onUpdate,
+            disabled
+        }));
     return (
         <React.Fragment>
             {fields}
@@ -89,7 +91,8 @@ FeatureForm.propTypes = {
     feature: PropTypes.object,
     original: PropTypes.object,
     config: PropTypes.object,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    disabled: PropTypes.bool
 };
 /*
 {
