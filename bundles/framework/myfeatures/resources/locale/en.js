@@ -116,6 +116,7 @@ Oskari.registerLocalization(
                 "addFeature": "Add feature",
                 "fieldName": "Name",
                 "fieldType": "Type",
+                "typeHelp": "Choosing a data type can affect how the value is formatted in the UI.",
                 "errors": {
                     "fieldAlreadyExists": "Field already exists",
                     "isValidJSONKey": "Field contains illegal characters."
@@ -138,13 +139,12 @@ Oskari.registerLocalization(
                 }
             },
             "types": {
-                "String": "String",
-                "Boolean": "Boolean",
-                "Integer": "Integer",
-                "Double": "Double",
+                "String": "Text",
+                "Integer": "Integer number",
+                "Double": "Decimal number",
                 "Date": "Date",
-                "Timestamp": "Timestamp",
-                "UUID": "UUID"
+                "Timestamp": "Date and time",
+                "Boolean": "Boolean"
             },
             "layerSelectionPanel": {
                 "setCurrentLayerTitle": "Select dataset",
