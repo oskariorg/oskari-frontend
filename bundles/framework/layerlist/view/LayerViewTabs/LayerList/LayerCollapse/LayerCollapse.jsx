@@ -15,7 +15,7 @@ const StyledCollapse = styled(Collapse)`
         }
     }
 
-    .ant-collapse-content > .ant-collapse-content-box {
+    .ant-collapse-panel > .ant-collapse-body {
         padding: 0px;
         & > .ant-list {
             width: 100%;
