@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Button, TextInput, NumberInput, Message, Tooltip } from 'oskari-ui';
 import { StyledContainer, StyledModIndicator } from './styled';
 import styled from 'styled-components';
+import { DateTimePicker } from 'oskari-ui/components/DateRange';
+import dayjs from 'dayjs';
+import { FIELD_TYPE_DATE, FIELD_TYPE_DATETIME } from './Helper';
 
 export const StyledFormField = styled('div')`
     padding-top: 5px;
@@ -23,6 +26,20 @@ const getFieldForType = (name, type, value, onUpdate, disabled) => {
                 <Label name={name}>
                     <NumberInput {...attribs}
                         onChange={(newValue) => onUpdate(name, newValue)}/>
+                </Label><br/>
+                </React.Fragment>);
+    }
+    const typeLowerCase = (type || '').toLowerCase();
+    const isTimestampField = typeLowerCase.includes(FIELD_TYPE_DATETIME);
+    const isDateTimeField = isTimestampField || typeLowerCase.endsWith(FIELD_TYPE_DATE);
+    if (isDateTimeField) {
+        return (<React.Fragment>
+                <Label name={name}>
+                    <DateTimePicker
+                        disabled={attribs.disabled}
+                        showTime={isTimestampField}
+                        value={value ? dayjs(value) : null}
+                        onChange={(val) => onUpdate(name, val ? val.toISOString() : null)}/>
                 </Label><br/>
                 </React.Fragment>);
     }
