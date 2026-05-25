@@ -10,7 +10,7 @@ import { ArrowDownOutlined, ArrowUpOutlined, EditOutlined, EyeInvisibleOutlined,
 import { ModalContainer } from './ModalContainer';
 import { LocaleProvider } from 'oskari-ui/util';
 
-const types= ['Boolean', 'Integer', 'Double', 'String', 'Date', 'Timestamp', 'UUID'];
+const types = ['String', 'Integer', 'Double', 'Date', 'Timestamp', 'Boolean'];
 
 const options = types.map((typename) => {
     return { value: typename, label: <Message messageKey={`featureEditor.types.${typename}`}/>};
@@ -405,6 +405,9 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                 <PrimaryButton type='add' onClick={setLayerFields} disabled={!!error || !(name && type)}/>
             </AddFieldContainerColumnFlexBottom>
         </AddFieldContainer>}
+        <AddFieldContainerColumn>
+            <Message messageKey='featureEditor.featureLayer.typeHelp' />
+        </AddFieldContainerColumn>
         { error && <Error>{getErrorMessage(error)}</Error> }
 
         <ModalContainer

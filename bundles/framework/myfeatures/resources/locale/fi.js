@@ -116,6 +116,7 @@ Oskari.registerLocalization(
                 "addFeature": "Lisää kohde",
                 "fieldName": "Nimi",
                 "fieldType": "Tyyppi",
+                "typeHelp": "Tietotyypin valinta voi vaikuttaa siihen, miten arvo esitetään käyttöliittymässä.",
                 "errors": {
                     "fieldAlreadyExists": "Kenttä on jo olemassa",
                     "isValidJSONKey": "Kentän nimi sisältää kiellettyjä merkkejä."
@@ -138,13 +139,12 @@ Oskari.registerLocalization(
             }
             },
             "types": {
-                "String": "Merkkijono",
-                "Boolean": "Boolean",
+                "String": "Teksti",
                 "Integer": "Kokonaisluku",
                 "Double": "Desimaaliluku",
                 "Date": "Päivämäärä",
-                "Timestamp": "Aikaleima",
-                "UUID": "UUID"
+                "Timestamp": "Päivämäärä ja kellonaika",
+                "Boolean": "Totuusarvo"
             },
             "layerSelectionPanel": {
                 "setCurrentLayerTitle": "Valitse aineisto",
