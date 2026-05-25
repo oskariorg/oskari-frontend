@@ -27,6 +27,21 @@ const imgFormatter = (value, params = {}) => {
 // TODO: add decimal precision formatting etc localized formatting
 const numberFormatter = (value) => value;
 
+const dateFormatter = (value) => {
+    if (!value) {
+        return value;
+    }
+    const locales = Oskari.getSupportedLocales()
+        .filter(loc => loc.includes(Oskari.getLang()))
+        .map(loc => loc.replace('_', '-'));
+    return new Date(value).toLocaleDateString(locales);
+};
+
+const datetimeFormatter = (value) => Oskari.util.formatDate(value);
+
+export const FIELD_TYPE_DATE = 'date';
+export const FIELD_TYPE_DATETIME = 'datetime';
+
 const phoneNumberFormatter = (value, params = {}) => `<a href="tel:${value}" title="${value}">${params.label || value}</a>`;
 
 // Creates a formatter that takes value and wraps it in the html-element that was given as param when creating the formatter.
@@ -43,7 +58,9 @@ const formatters = {
     link: linkFormatter,
     image: imgFormatter,
     number: numberFormatter,
-    phone: phoneNumberFormatter
+    phone: phoneNumberFormatter,
+    [FIELD_TYPE_DATE]: dateFormatter,
+    [FIELD_TYPE_DATETIME]: datetimeFormatter
 };
 const tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'i', 'b', 'em'];
 tags.forEach(tag => { formatters[tag] = tagWrapper(tag); });
