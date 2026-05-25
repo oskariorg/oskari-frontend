@@ -70,7 +70,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
 
     let title = <Message messageKey="FeatureEditorView.newTitle" />;
     if (!isNew) {
-        title = `${currentFeature.id}`;
+        title = layer.name || '';
     }
     const canSave = !isDrawing && !!currentFeature.geometry;
     return (<React.Fragment>
