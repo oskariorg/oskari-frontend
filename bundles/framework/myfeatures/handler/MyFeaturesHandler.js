@@ -2,6 +2,7 @@ import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showLayerForm } from '../view/LayerForm';
 import { BUNDLE_KEY, MAX_SIZE, ERRORS, MY_FEATURES_LAYER_TYPE } from '../constants';
 import { showFeatureEditorFlyout } from '../view/FeatureEditorFlyout/FeatureEditorFlyout';
+import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
 
 class MyFeaturesHandler extends StateHandler {
     constructor (instance, myFeaturesLayerService) {
@@ -345,7 +346,7 @@ class MyFeaturesHandler extends StateHandler {
             // Elsewhere we always use featureId
             //this.featureEditorControls.update(layerId, null, this, savedFeature);
             setTimeout(() => {
-                this.getSandbox().postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true]);
+                this.refreshLayerOnMap(layerId);
                 Messaging.success(this.loc('featureEditor.featureUpdate.success'));
             }, 500);
             return;
@@ -372,11 +373,19 @@ class MyFeaturesHandler extends StateHandler {
         }).then(() => {
             this.closeFeatureEditorFlyout();
             setTimeout(() => {
-                this.getSandbox().postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true]);
+                this.refreshLayerOnMap(layerId);
                 Messaging.success(this.loc('featureEditor.featureDelete.success'));
             }, 500);
             return;
         }).catch((exception) => Messaging.error(this.loc('featureEditor.featureDelete.error') + exception));
+    }
+
+    refreshLayerOnMap (layerId) {
+        const mapLayer = this.instance.getMapLayerService().findMapLayer(layerId);
+        if (mapLayer && typeof mapLayer.setDescribeLayerStatus === 'function') {
+            mapLayer.setDescribeLayerStatus(DESCRIBE_LAYER.UNDEFINED);
+        }
+        this.getSandbox().postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [layerId, true]);
     }
 
     cleanProperties(fieldTypes, feature) {
