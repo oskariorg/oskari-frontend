@@ -5,7 +5,7 @@ import { StyledContainer, StyledModIndicator } from './styled';
 import styled from 'styled-components';
 import { DateTimePicker } from 'oskari-ui/components/DateRange';
 import dayjs from 'dayjs';
-import { FIELD_TYPE_DATE, FIELD_TYPE_DATETIME } from './Helper';
+import { FIELD_TYPE_DATE, FIELD_TYPE_DATETIME, FIELD_TYPE_NUMBER_INT, FIELD_TYPE_NUMBER_DOUBLE, FIELD_NAME_ID } from './Helper';
 
 export const StyledFormField = styled('div')`
     padding-top: 5px;
@@ -15,37 +15,64 @@ export const StyledFormField = styled('div')`
 
 const Label = ({name, children}) => (<label>{name} {children}</label>);
 
+const IntegerField = ({ name, value, disabled, onUpdate }) => (
+    <React.Fragment>
+        <Label name={name}>
+            <NumberInput
+                disabled={disabled}
+                name={name}
+                value={value}
+                precision={0}
+                onChange={(newValue) => onUpdate(name, newValue)}/>
+        </Label><br/>
+    </React.Fragment>
+);
+
+const DoubleField = ({ name, value, disabled, onUpdate }) => (
+    <React.Fragment>
+        <Label name={name}>
+            <NumberInput
+                disabled={disabled}
+                name={name}
+                value={value}
+                onKeyDown={null}
+                onChange={(newValue) => onUpdate(name, newValue)}/>
+        </Label><br/>
+    </React.Fragment>
+);
+
+const DateTimeField = ({ name, value, disabled, showTime, onUpdate }) => (
+    <React.Fragment>
+        <Label name={name}>
+            <DateTimePicker
+                disabled={disabled}
+                showTime={showTime}
+                value={value ? dayjs(value) : null}
+                onChange={(val) => onUpdate(name, val ? val.toISOString() : null)}/>
+        </Label><br/>
+    </React.Fragment>
+);
+
 const getFieldForType = (name, type, value, onUpdate, disabled) => {
-    const attribs = {
-        disabled: disabled || name === 'id',
-        name,
-        value
-    };
-    if (type === 'number') {
-        return (<React.Fragment>
-                <Label name={name}>
-                    <NumberInput {...attribs}
-                        onChange={(newValue) => onUpdate(name, newValue)}/>
-                </Label><br/>
-                </React.Fragment>);
+    const isDisabled = disabled || name === FIELD_NAME_ID;
+    if (type === FIELD_TYPE_NUMBER_INT) {
+        return <IntegerField name={name} value={value} disabled={isDisabled} onUpdate={onUpdate}/>;
+    }
+    if (type === FIELD_TYPE_NUMBER_DOUBLE || type === 'number') {
+        return <DoubleField name={name} value={value} disabled={isDisabled} onUpdate={onUpdate}/>;
     }
     const typeLowerCase = (type || '').toLowerCase();
     const isTimestampField = typeLowerCase.includes(FIELD_TYPE_DATETIME);
     const isDateTimeField = isTimestampField || typeLowerCase.endsWith(FIELD_TYPE_DATE);
     if (isDateTimeField) {
-        return (<React.Fragment>
-                <Label name={name}>
-                    <DateTimePicker
-                        disabled={attribs.disabled}
-                        showTime={isTimestampField}
-                        value={value ? dayjs(value) : null}
-                        onChange={(val) => onUpdate(name, val ? val.toISOString() : null)}/>
-                </Label><br/>
-                </React.Fragment>);
+        return <DateTimeField name={name} value={value} disabled={isDisabled} showTime={isTimestampField} onUpdate={onUpdate}/>;
     }
-    return (<TextInput {...attribs}
-                addonBefore={<Label name={name} />}
-                onChange={(evt) => onUpdate(name, evt.target.value)} />);
+    return (<TextInput
+        disabled={isDisabled}
+        name={name}
+        value={value}
+        addonBefore={<Label name={name} />}
+        onChange={(evt) => onUpdate(name, evt.target.value)} />);
 }
 
 const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate, disabled }) => {
