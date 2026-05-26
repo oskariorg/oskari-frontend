@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, TextInput, NumberInput, Message, Tooltip } from 'oskari-ui';
+import { Button, TextInput, NumberInput, Select, Message, Tooltip } from 'oskari-ui';
 import { StyledContainer, StyledModIndicator } from './styled';
 import styled from 'styled-components';
 import { DateTimePicker } from 'oskari-ui/components/DateRange';
 import dayjs from 'dayjs';
-import { FIELD_TYPE_DATE, FIELD_TYPE_DATETIME, FIELD_TYPE_NUMBER_INT, FIELD_TYPE_NUMBER_DOUBLE, FIELD_NAME_ID } from './Helper';
+import { FIELD_TYPE_DATE, FIELD_TYPE_DATETIME, FIELD_TYPE_NUMBER_INT, FIELD_TYPE_NUMBER_DOUBLE, FIELD_TYPE_BOOLEAN, FIELD_NAME_ID } from './Helper';
 
 export const StyledFormField = styled('div')`
     padding-top: 5px;
@@ -41,6 +41,28 @@ const DoubleField = ({ name, value, disabled, onUpdate }) => (
     </React.Fragment>
 );
 
+const BOOLEAN_OPTIONS = [
+    { value: true, label: 'true' },
+    { value: false, label: 'false' }
+];
+
+const StyledBooleanSelect = styled(Select)`
+    min-width: fit-content;
+`;
+
+const BooleanField = ({ name, value, disabled, onUpdate }) => (
+    <React.Fragment>
+        <Label name={name}>
+            <StyledBooleanSelect
+                disabled={disabled}
+                value={value ?? null}
+                options={BOOLEAN_OPTIONS}
+                allowClear
+                onChange={(val) => onUpdate(name, val ?? null)}/>
+        </Label><br/>
+    </React.Fragment>
+);
+
 const DateTimeField = ({ name, value, disabled, showTime, onUpdate }) => (
     <React.Fragment>
         <Label name={name}>
@@ -60,6 +82,9 @@ const getFieldForType = (name, type, value, onUpdate, disabled) => {
     }
     if (type === FIELD_TYPE_NUMBER_DOUBLE || type === 'number') {
         return <DoubleField name={name} value={value} disabled={isDisabled} onUpdate={onUpdate}/>;
+    }
+    if (type === FIELD_TYPE_BOOLEAN) {
+        return <BooleanField name={name} value={value} disabled={isDisabled} onUpdate={onUpdate}/>;
     }
     const typeLowerCase = (type || '').toLowerCase();
     const isTimestampField = typeLowerCase.includes(FIELD_TYPE_DATETIME);
