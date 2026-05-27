@@ -26,10 +26,12 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         super(layerPlugin);
         this.loadingStrategies = {};
         this.maybeMoreFeaturesWarned = new Set();
+        this.lastMoveStartZoomLevel = null;
     }
 
     createEventHandlers () {
         const handlers = super.createEventHandlers();
+        handlers.MapMoveStartEvent = () => this._resetMaybeMoreFeatureWarningsOnZoomChange();
         if (this.plugin.getMapModule().getSupports3D()) {
             handlers.AfterChangeMapLayerOpacityEvent = Oskari.util.throttle(event =>
                 this._updateLayerStyle(event.getMapLayer()), OPACITY_THROTTLE_MS);
@@ -221,6 +223,19 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         Messaging.warn(Oskari.getMsg('MapModule', 'plugin.WfsVectorLayerPlugin.maybeMoreFeatures', {
             name: layer.getName()
         }));
+    }
+
+    _resetMaybeMoreFeatureWarningsOnZoomChange () {
+        const zoomLevel = this.sb.getMap().getZoom();
+        if (this.lastMoveStartZoomLevel === null) {
+            this.lastMoveStartZoomLevel = zoomLevel;
+            return;
+        }
+        if (this.lastMoveStartZoomLevel === zoomLevel) {
+            return;
+        }
+        this.lastMoveStartZoomLevel = zoomLevel;
+        this.maybeMoreFeaturesWarned.clear();
     }
 
     /**
