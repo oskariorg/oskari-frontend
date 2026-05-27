@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, TextInput, NumberInput, Select, Message, Tooltip } from 'oskari-ui';
 import { StyledContainer, StyledModIndicator } from './styled';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { DateTimePicker } from 'oskari-ui/components/DateRange';
 import dayjs from 'dayjs';
 import { FIELD_TYPE_DATE, FIELD_TYPE_DATETIME, FIELD_TYPE_NUMBER_INT, FIELD_TYPE_NUMBER_DOUBLE, FIELD_TYPE_BOOLEAN, FIELD_NAME_ID } from './Helper';
@@ -13,11 +14,18 @@ export const StyledFormField = styled('div')`
     width: 100%;
 `;
 
-const Label = ({name, children}) => (<label>{name} {children}</label>);
+const FieldNameLabel = ({ label, name }) => {
+    if (label === name) {
+        return label;
+    }
+    return <Tooltip title={name}>{label}</Tooltip>;
+};
 
-const IntegerField = ({ name, value, disabled, onUpdate }) => (
+const Label = ({ label, name, children }) => (<label><FieldNameLabel label={label} name={name} /> {children}</label>);
+
+const IntegerField = ({ label, name, value, disabled, onUpdate }) => (
     <React.Fragment>
-        <Label name={name}>
+        <Label label={label} name={name}>
             <NumberInput
                 disabled={disabled}
                 name={name}
@@ -28,9 +36,9 @@ const IntegerField = ({ name, value, disabled, onUpdate }) => (
     </React.Fragment>
 );
 
-const DoubleField = ({ name, value, disabled, onUpdate }) => (
+const DoubleField = ({ label, name, value, disabled, onUpdate }) => (
     <React.Fragment>
-        <Label name={name}>
+        <Label label={label} name={name}>
             <NumberInput
                 disabled={disabled}
                 name={name}
@@ -50,9 +58,9 @@ const StyledBooleanSelect = styled(Select)`
     min-width: fit-content;
 `;
 
-const BooleanField = ({ name, value, disabled, onUpdate }) => (
+const BooleanField = ({ label, name, value, disabled, onUpdate }) => (
     <React.Fragment>
-        <Label name={name}>
+        <Label label={label} name={name}>
             <StyledBooleanSelect
                 disabled={disabled}
                 value={value ?? null}
@@ -63,9 +71,9 @@ const BooleanField = ({ name, value, disabled, onUpdate }) => (
     </React.Fragment>
 );
 
-const DateTimeField = ({ name, value, disabled, showTime, onUpdate }) => (
+const DateTimeField = ({ label, name, value, disabled, showTime, onUpdate }) => (
     <React.Fragment>
-        <Label name={name}>
+        <Label label={label} name={name}>
             <DateTimePicker
                 disabled={disabled}
                 showTime={showTime}
@@ -75,44 +83,45 @@ const DateTimeField = ({ name, value, disabled, showTime, onUpdate }) => (
     </React.Fragment>
 );
 
-const getFieldForType = (name, type, value, onUpdate, disabled) => {
+const getFieldForType = (name, type, value, onUpdate, disabled, fieldLabels = {}) => {
     const isDisabled = disabled || name === FIELD_NAME_ID;
+    const label = fieldLabels[name] || name;
     if (type === FIELD_TYPE_NUMBER_INT) {
-        return <IntegerField name={name} value={value} disabled={isDisabled} onUpdate={onUpdate}/>;
+        return <IntegerField label={label} name={name} value={value} disabled={isDisabled} onUpdate={onUpdate}/>;
     }
     if (type === FIELD_TYPE_NUMBER_DOUBLE || type === 'number') {
-        return <DoubleField name={name} value={value} disabled={isDisabled} onUpdate={onUpdate}/>;
+        return <DoubleField label={label} name={name} value={value} disabled={isDisabled} onUpdate={onUpdate}/>;
     }
     if (type === FIELD_TYPE_BOOLEAN) {
-        return <BooleanField name={name} value={value} disabled={isDisabled} onUpdate={onUpdate}/>;
+        return <BooleanField label={label} name={name} value={value} disabled={isDisabled} onUpdate={onUpdate}/>;
     }
     const typeLowerCase = (type || '').toLowerCase();
     const isTimestampField = typeLowerCase.includes(FIELD_TYPE_DATETIME);
     const isDateTimeField = isTimestampField || typeLowerCase.endsWith(FIELD_TYPE_DATE);
     if (isDateTimeField) {
-        return <DateTimeField name={name} value={value} disabled={isDisabled} showTime={isTimestampField} onUpdate={onUpdate}/>;
+        return <DateTimeField label={label} name={name} value={value} disabled={isDisabled} showTime={isTimestampField} onUpdate={onUpdate}/>;
     }
     return (<TextInput
         disabled={isDisabled}
         name={name}
         value={value}
-        addonBefore={<Label name={name} />}
+        addonBefore={<Label label={label} name={name} />}
         onChange={(evt) => onUpdate(name, evt.target.value)} />);
-}
+};
 
-const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate, disabled }) => {
+const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate, disabled, fieldLabels }) => {
     if (type === 'geometry') {
         return null;
     }
     const hasChanged = !isNew && originalValue !== value;
     let labelForOriginal = originalValue;
     if (!labelForOriginal) {
-        labelForOriginal = (<Message messageKey="FeatureEditorView.missingValue" />)
+        labelForOriginal = (<Message messageKey="FeatureEditorView.missingValue" />);
     }
     const noteForOriginal = (<Message messageKey="FeatureEditorView.originalValue">: {labelForOriginal}</Message>);
     return (
         <StyledFormField key={name}>
-            { getFieldForType(name, type, value, onUpdate, disabled) }
+            { getFieldForType(name, type, value, onUpdate, disabled, fieldLabels) }
             { hasChanged && <StyledContainer>
                 <Message messageKey="FeatureEditorView.modified" LabelComponent={StyledModIndicator} />
                 <Tooltip title={noteForOriginal}>
@@ -127,6 +136,7 @@ const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate, disab
 
 export const FeatureForm = ({config = {}, feature = {}, original = {}, onChange, disabled = false}) => {
     const fieldsTypes = config.fieldTypes || {};
+    const fieldLabels = config.fieldLabels || {};
     const featureProperties = feature.properties || {};
     const originalProperties = original.properties || {};
 
@@ -148,7 +158,8 @@ export const FeatureForm = ({config = {}, feature = {}, original = {}, onChange,
             value: featureProperties[field],
             originalValue: originalProperties[field],
             onUpdate,
-            disabled
+            disabled,
+            fieldLabels
         }));
     return (
         <React.Fragment>
