@@ -21,32 +21,20 @@ const FieldNameLabel = ({ label, name }) => {
     return <Tooltip title={name}>{label}</Tooltip>;
 };
 
-const Label = ({ label, name, children }) => (<label><FieldNameLabel label={label} name={name} /> {children}</label>);
+const StyledFieldRow = styled('div')`
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    > *:last-child {
+        flex: 1;
+    }
+`;
 
-const IntegerField = ({ label, name, value, disabled, onUpdate }) => (
-    <React.Fragment>
-        <Label label={label} name={name}>
-            <NumberInput
-                disabled={disabled}
-                name={name}
-                value={value}
-                precision={0}
-                onChange={(newValue) => onUpdate(name, newValue)}/>
-        </Label><br/>
-    </React.Fragment>
-);
-
-const DoubleField = ({ label, name, value, disabled, onUpdate }) => (
-    <React.Fragment>
-        <Label label={label} name={name}>
-            <NumberInput
-                disabled={disabled}
-                name={name}
-                value={value}
-                onKeyDown={null}
-                onChange={(newValue) => onUpdate(name, newValue)}/>
-        </Label><br/>
-    </React.Fragment>
+const FieldWrapper = ({ label, name, children }) => (
+    <StyledFieldRow>
+        <FieldNameLabel label={label} name={name} />
+        {children}
+    </StyledFieldRow>
 );
 
 const BOOLEAN_OPTIONS = [
@@ -58,29 +46,47 @@ const StyledBooleanSelect = styled(Select)`
     min-width: fit-content;
 `;
 
+const IntegerField = ({ label, name, value, disabled, onUpdate }) => (
+    <FieldWrapper label={label} name={name}>
+        <NumberInput
+            disabled={disabled}
+            name={name}
+            value={value}
+            precision={0}
+            onChange={(newValue) => onUpdate(name, newValue)}/>
+    </FieldWrapper>
+);
+
+const DoubleField = ({ label, name, value, disabled, onUpdate }) => (
+    <FieldWrapper label={label} name={name}>
+        <NumberInput
+            disabled={disabled}
+            name={name}
+            value={value}
+            onKeyDown={null}
+            onChange={(newValue) => onUpdate(name, newValue)}/>
+    </FieldWrapper>
+);
+
 const BooleanField = ({ label, name, value, disabled, onUpdate }) => (
-    <React.Fragment>
-        <Label label={label} name={name}>
-            <StyledBooleanSelect
-                disabled={disabled}
-                value={value ?? null}
-                options={BOOLEAN_OPTIONS}
-                allowClear
-                onChange={(val) => onUpdate(name, val ?? null)}/>
-        </Label><br/>
-    </React.Fragment>
+    <FieldWrapper label={label} name={name}>
+        <StyledBooleanSelect
+            disabled={disabled}
+            value={value ?? null}
+            options={BOOLEAN_OPTIONS}
+            allowClear
+            onChange={(val) => onUpdate(name, val ?? null)}/>
+    </FieldWrapper>
 );
 
 const DateTimeField = ({ label, name, value, disabled, showTime, onUpdate }) => (
-    <React.Fragment>
-        <Label label={label} name={name}>
-            <DateTimePicker
-                disabled={disabled}
-                showTime={showTime}
-                value={value ? dayjs(value) : null}
-                onChange={(val) => onUpdate(name, val ? val.toISOString() : null)}/>
-        </Label><br/>
-    </React.Fragment>
+    <FieldWrapper label={label} name={name}>
+        <DateTimePicker
+            disabled={disabled}
+            showTime={showTime}
+            value={value ? dayjs(value) : null}
+            onChange={(val) => onUpdate(name, val ? val.toISOString() : null)}/>
+    </FieldWrapper>
 );
 
 const getFieldForType = (name, type, value, onUpdate, disabled, fieldLabels = {}) => {
@@ -101,12 +107,13 @@ const getFieldForType = (name, type, value, onUpdate, disabled, fieldLabels = {}
     if (isDateTimeField) {
         return <DateTimeField label={label} name={name} value={value} disabled={isDisabled} showTime={isTimestampField} onUpdate={onUpdate}/>;
     }
-    return (<TextInput
-        disabled={isDisabled}
-        name={name}
-        value={value}
-        addonBefore={<Label label={label} name={name} />}
-        onChange={(evt) => onUpdate(name, evt.target.value)} />);
+    return (<FieldWrapper label={label} name={name}>
+        <TextInput
+            disabled={isDisabled}
+            name={name}
+            value={value}
+            onChange={(evt) => onUpdate(name, evt.target.value)} />
+    </FieldWrapper>);
 };
 
 const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate, disabled, fieldLabels }) => {
