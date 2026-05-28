@@ -135,6 +135,7 @@ Oskari.registerLocalization(
             },
             "WfsVectorLayerPlugin": {
                 "editLayer": "Edit map layer",
+                "maybeMoreFeatures": "Layer \"{name}\" may contain more features than were loaded on the map. Zoom in to see all features.",
                 "layerFilter": {
                     "tooltip": "Show only vector layers",
                     "featuredata": "Vector layers"

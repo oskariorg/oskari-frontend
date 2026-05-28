@@ -135,6 +135,7 @@ Oskari.registerLocalization(
             },
             "WfsVectorLayerPlugin": {
                 "editLayer": "Muokkaa tasoa",
+                "maybeMoreFeatures": "Tasolla \"{name}\" saattaa olla enemmän kohteita kuin kartalle ladattiin. Lähennä karttaa nähdäksesi kaikki kohteet.",
                 "layerFilter": {
                     "tooltip": "Näytä vain vektoritasot",
                     "featuredata": "Vektoritasot"
