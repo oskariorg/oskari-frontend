@@ -41,7 +41,7 @@ export class GenericAdminFlyout {
             {
                 key: 'defaultviews',
                 label: Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.title'),
-                children: <DefaultViewsContent instance={this.instance} />
+                children: <DefaultViewsContent />
             },
             ...this.dynamicTabs.map(tab => ({
                 key: tab.id,

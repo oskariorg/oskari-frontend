@@ -5,15 +5,17 @@ import { Messaging } from 'oskari-ui/util';
 
 const BUNDLE_KEY = 'GenericAdmin';
 
-export const DefaultViewsContent = ({ instance }) => {
+export const DefaultViewsContent = () => {
     const [views, setViews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [warning, setWarning] = useState(null); // { id, layerNames }
+    const sb = Oskari.getSandbox();
 
     useEffect(() => {
-        fetch(Oskari.urls.getRoute('SystemViews'))
-            .then(r => r.json())
-            .then(data => {
+        const loadViews = async () => {
+            try {
+                const response = await fetch(Oskari.urls.getRoute('SystemViews'));
+                const data = await response.json();
                 const rows = [{ id: data.viewId, name: Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.globalViewTitle') }];
                 (data.roles || []).forEach(role => {
                     if (role.viewId) {
@@ -22,15 +24,15 @@ export const DefaultViewsContent = ({ instance }) => {
                 });
                 setViews(rows);
                 setLoading(false);
-            })
-            .catch(() => {
+            } catch (e) {
                 Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorLoadingFailed'));
                 setLoading(false);
-            });
+            }
+        };
+        loadViews();
     }, []);
 
-    const modifyView = (id, force = false) => {
-        const sb = instance.getSandbox();
+    const modifyView = async (id, force = false) => {
         const selectedLayers = sb.findAllSelectedMapLayers().map(layer => ({ id: '' + layer.getId() }));
         const params = new URLSearchParams({
             id,
@@ -41,15 +43,16 @@ export const DefaultViewsContent = ({ instance }) => {
             selectedLayers: JSON.stringify(selectedLayers),
             force: !!force
         });
-        fetch(Oskari.urls.getRoute('SystemViews'), { method: 'POST', body: params })
-            .then(async response => {
-                if (!response.ok) {
-                    handleError(await response.text(), id);
-                    return;
-                }
-                Messaging.success(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.viewUpdated').replace('${id}', id));
-            })
-            .catch(() => Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorUpdating').replace('${id}', id)));
+        try {
+            const response = await fetch(Oskari.urls.getRoute('SystemViews'), { method: 'POST', body: params });
+            if (!response.ok) {
+                handleError(await response.text(), id);
+                return;
+            }
+            Messaging.success(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.viewUpdated').replace('${id}', id));
+        } catch (e) {
+            Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorUpdating').replace('${id}', id));
+        }
     };
 
     const handleError = (responseText, id) => {
@@ -60,7 +63,6 @@ export const DefaultViewsContent = ({ instance }) => {
         try {
             const resp = JSON.parse(responseText);
             if (resp.info?.code === 'guest_not_available') {
-                const sb = instance.getSandbox();
                 const layerNames = (resp.info.selectedLayers || []).map(layerId => {
                     const layer = sb.findMapLayerFromAllAvailable(layerId);
                     return layer ? Oskari.util.sanitize(layer.getName()) : `Layer ID ${layerId}`;
