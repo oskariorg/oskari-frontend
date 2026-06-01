@@ -4,8 +4,6 @@ import { Message } from 'oskari-ui';
 import { Messaging } from 'oskari-ui/util';
 
 const BUNDLE_KEY = 'GenericAdmin';
-const PREFIX = 'flyout.defaultviews';
-const loc = (key) => Oskari.getMsg(BUNDLE_KEY, `${PREFIX}.${key}`);
 
 export const DefaultViewsContent = ({ instance }) => {
     const [views, setViews] = useState([]);
@@ -16,7 +14,7 @@ export const DefaultViewsContent = ({ instance }) => {
         fetch(Oskari.urls.getRoute('SystemViews'))
             .then(r => r.json())
             .then(data => {
-                const rows = [{ id: data.viewId, name: loc('globalViewTitle') }];
+                const rows = [{ id: data.viewId, name: Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.globalViewTitle') }];
                 (data.roles || []).forEach(role => {
                     if (role.viewId) {
                         rows.push({ id: role.viewId, name: role.name });
@@ -26,7 +24,7 @@ export const DefaultViewsContent = ({ instance }) => {
                 setLoading(false);
             })
             .catch(() => {
-                Messaging.error(loc('notifications.errorLoadingFailed'));
+                Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorLoadingFailed'));
                 setLoading(false);
             });
     }, []);
@@ -49,14 +47,14 @@ export const DefaultViewsContent = ({ instance }) => {
                     handleError(await response.text(), id);
                     return;
                 }
-                Messaging.success(loc('notifications.viewUpdated').replace('${id}', id));
+                Messaging.success(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.viewUpdated').replace('${id}', id));
             })
-            .catch(() => Messaging.error(loc('notifications.errorUpdating').replace('${id}', id)));
+            .catch(() => Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorUpdating').replace('${id}', id)));
     };
 
     const handleError = (responseText, id) => {
         if (!responseText) {
-            Messaging.error(loc('notifications.errorUpdating').replace('${id}', id));
+            Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorUpdating').replace('${id}', id));
             return;
         }
         try {
@@ -71,20 +69,20 @@ export const DefaultViewsContent = ({ instance }) => {
                 return;
             }
         } catch (e) {}
-        Messaging.error(loc('notifications.errorUpdating').replace('${id}', id));
+        Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorUpdating').replace('${id}', id));
     };
 
     const columns = [
         {
             dataIndex: 'name',
-            title: <Message messageKey={`${PREFIX}.headerName`} />
+            title: <Message messageKey='flyout.defaultviews.headerName' />
         },
         {
             dataIndex: 'id',
             width: 180,
             render: (id) => (
                 <Button onClick={() => modifyView(id)}>
-                    <Message messageKey={`${PREFIX}.setButton`} />
+                    <Message messageKey='flyout.defaultviews.setButton' />
                 </Button>
             )
         }
@@ -92,7 +90,7 @@ export const DefaultViewsContent = ({ instance }) => {
 
     return (
         <>
-            <div><Message messageKey={`${PREFIX}.desc`} /></div>
+            <div><Message messageKey='flyout.defaultviews.desc' /></div>
             <Table
                 loading={loading}
                 dataSource={views}
@@ -103,7 +101,7 @@ export const DefaultViewsContent = ({ instance }) => {
             />
             <Modal
                 open={!!warning}
-                title={<Message messageKey={`${PREFIX}.notifications.warningTitle`} />}
+                title={<Message messageKey='flyout.defaultviews.notifications.warningTitle' />}
                 onCancel={() => setWarning(null)}
                 footer={[
                     <Button key="cancel" onClick={() => setWarning(null)}>
@@ -114,11 +112,11 @@ export const DefaultViewsContent = ({ instance }) => {
                         type="primary"
                         onClick={() => { modifyView(warning.id, true); setWarning(null); }}
                     >
-                        <Message messageKey={`${PREFIX}.forceButton`} />
+                        <Message messageKey='flyout.defaultviews.forceButton' />
                     </Button>
                 ]}
             >
-                <div><Message messageKey={`${PREFIX}.notifications.listTitle`} /></div>
+                <div><Message messageKey='flyout.defaultviews.notifications.listTitle' /></div>
                 <List
                     size="small"
                     dataSource={warning?.layerNames || []}
