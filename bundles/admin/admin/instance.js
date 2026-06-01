@@ -1,5 +1,7 @@
 ﻿import { GenericAdminFlyout } from './Flyout.js';
 import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
+import { AddTabRequestHandler } from './request/AddTabRequestHandler.js';
+import { ADD_TAB_NAME } from './request/AddTabRequest.js';
 const BUNDLE_NAME = 'GenericAdmin';
 
 export class GenericAdmin extends BasicBundleInstance {
@@ -20,12 +22,8 @@ export class GenericAdmin extends BasicBundleInstance {
         });
         const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
         this.getSandbox().request(this, request);
-        this.addRequestHandler('Admin.AddTabRequest', (req) => this.getFlyout().addTab({
-            title: req.getTitle(),
-            content: req.getContent(),
-            priority: req.getPriority(),
-            id: req.getId()
-        }));
+        const addTabRequestHandler = new AddTabRequestHandler(this.getFlyout());
+        this.addRequestHandler(ADD_TAB_NAME, (req) => addTabRequestHandler.handleRequest(null, req));
     }
 
     // Called by divmanazer when AddExtensionRequest is processed

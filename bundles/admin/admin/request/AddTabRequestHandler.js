@@ -1,33 +1,24 @@
 /**
- * @class Oskari.mapframework.bundle.admin.request.AddTabRequestHandler
+ * @class AddTabRequestHandler
+ * Handles Admin.AddTabRequest by forwarding tab data to admin flyout.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.admin.request.AddTabRequestHandler',
-/**
- * @method create called automatically on construction
- * @static
- * @param {Oskari.Sandbox} sandbox
- *          reference to application sandbox
- * @param {Oskari.mapframework.bundle.search.StateHandlerBundleInstance} search
- *          reference to search
- */
-    function (sandbox, flyout) {
-        this.sandbox = sandbox;
+export class AddTabRequestHandler {
+    constructor (flyout) {
         this.flyout = flyout;
-    }, {
-    /**
-     * @method handleRequest
-     * @param {Oskari.mapframework.core.Core} core
-     *      reference to the application core (reference sandbox core.getSandbox())
-     * @param {Oskari.mapframework.bundle.admin.request.AddTabRequest} request
-     *      request to handle
-     */
-        handleRequest: function (core, request) {
-            this.flyout.addTab({ 'title': request.getTitle(), 'content': request.getContent(), 'priority': request.getPriority(), 'id': request.getId() });
-        }
-    }, {
-    /**
-     * @property {String[]} protocol array of superclasses as {String}
-     * @static
-     */
-        protocol: ['Oskari.mapframework.core.RequestHandler']
-    });
+    }
+
+    handleRequest (core, request) {
+        this.flyout.addTab({
+            title: request.getTitle(),
+            content: request.getContent(),
+            priority: request.getPriority(),
+            id: request.getId()
+        });
+    }
+}
+
+Oskari.clazz.defineES(
+    'Oskari.mapframework.bundle.admin.request.AddTabRequestHandler',
+    AddTabRequestHandler,
+    { protocol: ['Oskari.mapframework.core.RequestHandler'] }
+);
