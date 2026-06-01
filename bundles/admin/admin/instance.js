@@ -1,69 +1,63 @@
-/**
- * @class Oskari.admin.bundle.admin.GenericAdminBundleInstance
- *
- * Generic bundle for admins
- */
-Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminBundleInstance',
+﻿import { GenericAdminFlyout } from './Flyout.js';
+import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
+const BUNDLE_NAME = 'GenericAdmin';
 
-    /**
-     * @method create called automatically on construction
-     * @static
-     */
-    function () {
-        this._dialog = null;
-    }, {
-        /**
-         * Shows message dialog. Closes any previous dialog.
-         * @param  {String} title    [description]
-         * @param  {String|jQuery} content  [description]
-         * @param  {[Oskari.userinterface.component.Button]} buttons  [description]
-         * @param  {Object} location where to show dialog - should have keys 'target' for selector and 'align' for alignment around target
-         */
-        showMessage: function (title, content, buttons, location) {
-            this.closeDialog();
-            this._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            this._dialog.show(title, content, buttons);
-            if (location) {
-                this._dialog.moveTo(location.target, location.align);
+export class GenericAdmin extends BasicBundleInstance {
+    constructor () {
+        super(BUNDLE_NAME);
+        this.plugins = {};
+    }
+
+    start (sandbox) {
+        super.start(sandbox);
+        this.on('userinterface.ExtensionUpdatedEvent', (event) => {
+            if (event.getExtension().getName() !== this.getName()) {
+                return;
             }
-            if (!buttons || !buttons.length) {
-                this._dialog.fadeout();
+            if (event.getViewState() !== 'close') {
+                this.getFlyout().createUI();
             }
-        },
-        afterStart: function () {
-            // register request handler
-            this.getSandbox().requestHandler('Admin.AddTabRequest', this.getFlyout());
-        },
-        /**
-         * Closes the message dialog if one is open
-         */
-        closeDialog: function () {
-            if (this._dialog) {
-                this._dialog.close(true);
-                this._dialog = null;
-            }
-        },
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            /**
-             * @method userinterface.ExtensionUpdatedEvent
-             * Init flyout when it's opened
-             */
-            'userinterface.ExtensionUpdatedEvent': function (event) {
-                var me = this,
-                    doOpen = event.getViewState() !== 'close';
-                if (event.getExtension().getName() !== me.getName()) {
-                    // not me -> do nothing
-                    return;
-                }
-                if (doOpen) {
-                    this.getFlyout().createUI();
-                }
-            }
-        }
-    }, {
-        'extend': ['Oskari.userinterface.extension.DefaultExtension']
-    });
+        });
+        const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
+        this.getSandbox().request(this, request);
+        this.addRequestHandler('Admin.AddTabRequest', (req) => this.getFlyout().addTab({
+            title: req.getTitle(),
+            content: req.getContent(),
+            priority: req.getPriority(),
+            id: req.getId()
+        }));
+    }
+
+    // Called by divmanazer when AddExtensionRequest is processed
+    startExtension () {
+        this.locale = Oskari.getLocalization(this.getName());
+        this.plugins['Oskari.userinterface.Flyout'] = new GenericAdminFlyout(this);
+        this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create(
+            'Oskari.userinterface.extension.DefaultTile',
+            this,
+            this.locale?.tile || {}
+        );
+    }
+
+    getPlugins () {
+        return this.plugins;
+    }
+
+    getFlyout () {
+        return this.plugins['Oskari.userinterface.Flyout'];
+    }
+
+    getTitle () {
+        return this.locale?.title;
+    }
+
+    getDescription () {
+        return this.locale?.desc;
+    }
+
+    stop () {
+        const removeReq = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
+        this.getSandbox().request(this, removeReq);
+        super.stop();
+    }
+}

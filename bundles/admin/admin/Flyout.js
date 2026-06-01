@@ -1,73 +1,74 @@
-/**
- * @class Oskari.admin.bundle.admin.GenericAdminFlyout
- *
- * Renders the "admin users" flyout.
- *
- */
-Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
-    function () {
-        this.tabsContainer = null;
-        this.container = null;
-    }, {
-        tabs: [{
-            'id': 'defaultviews',
-            'clazz': 'Oskari.admin.bundle.admin.DefaultViews'
-        }],
-        setEl: function (el, flyout) {
-            this.container = jQuery(el[0]);
-            this.container.addClass('admin');
-            flyout.addClass('admin');
-        },
-        /* App specific methods */
-        createUI: function () {
-            if (this.tabsContainer) {
-                return;
-            }
-            var me = this;
-            var tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
-            this.tabsContainer = tabsContainer;
+﻿import React, { useRef, useEffect } from 'react';
+import { Tabs } from 'antd';
+import { ThemeProvider, LocaleProvider } from 'oskari-ui/util';
+import { getReactRoot } from 'oskari-ui/components/window';
+import { DefaultViewsContent } from './DefaultViews.js';
 
-            this.tabs.forEach((tabDef) => {
-                tabsContainer.addPanel(me.__createTab(tabDef));
-            });
-            tabsContainer.insertTo(this.getEl());
-        },
-        __createTab: function (tabDef) {
-            var tab = Oskari.clazz.create(tabDef.clazz, this.locale[tabDef.id] || {}, this.instance);
-            tab.setId(tabDef.id);
-            if (tabDef.title) {
-                tab.setTitle(tabDef.title, tabDef.id);
-            }
-            if (tabDef.content) {
-                tab.setContent(tabDef.content);
-            }
-            if (tabDef.priority) {
-                tab.setPriority(tabDef.priority);
-            }
-            return tab;
-        },
-        addTab: function (item) {
-            // inject the default panel clazz
-            item.clazz = 'Oskari.userinterface.component.TabPanel';
-            this.tabs.push(item);
+const BUNDLE_KEY = 'GenericAdmin';
 
-            // ui created, add the tab
-            if (this.tabsContainer) {
-                var tab = this.__createTab(item);
-                this.tabsContainer.addPanel(tab);
-            }
-        },
-
-        /**
-         * @method handleRequest
-         * @param {Oskari.mapframework.core.Core} core
-         *      reference to the application core (reference sandbox core.getSandbox())
-         * @param {Oskari.mapframework.bundle.admin.request.AddTabRequest} request
-         *      request to handle
-         */
-        handleRequest: function (core, request) {
-            this.addTab({ 'title': request.getTitle(), 'content': request.getContent(), 'priority': request.getPriority(), 'id': request.getId() });
+const LegacyTabContent = ({ content }) => {
+    const ref = useRef(null);
+    useEffect(() => {
+        if (!ref.current || !content) {
+            return;
         }
-    }, {
-        'extend': ['Oskari.userinterface.extension.DefaultFlyout']
-    });
+        const el = content instanceof Element ? content : content[0];
+        if (el) {
+            ref.current.appendChild(el);
+        }
+    }, []);
+    return <div ref={ref} />;
+};
+
+export class GenericAdminFlyout {
+    constructor (instance) {
+        this.instance = instance;
+        this.container = null;
+        this.dynamicTabs = [];
+    }
+
+    setEl (el, flyout) {
+        this.container = el[0];
+        this.container.classList.add('admin');
+        flyout[0].classList.add('admin');
+    }
+
+    getTitle () {
+        return Oskari.getMsg(BUNDLE_KEY, 'flyout.title');
+    }
+
+    startPlugin () {}
+
+    createUI () {
+        this.render();
+    }
+
+    addTab (item) {
+        this.dynamicTabs.push(item);
+        if (this.container) {
+            this.render();
+        }
+    }
+
+    render () {
+        const items = [
+            {
+                key: 'defaultviews',
+                label: Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.title'),
+                children: <DefaultViewsContent instance={this.instance} />
+            },
+            ...this.dynamicTabs.map(tab => ({
+                key: tab.id,
+                label: tab.title,
+                children: <LegacyTabContent content={tab.content} />
+            }))
+        ];
+        getReactRoot(this.container).render(
+            <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+                <ThemeProvider>
+                    <Tabs items={items} />
+                </ThemeProvider>
+            </LocaleProvider>
+        );
+    }
+}
