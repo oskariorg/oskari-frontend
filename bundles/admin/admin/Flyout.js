@@ -1,24 +1,10 @@
-﻿import React, { useRef, useEffect } from 'react';
+﻿import React from 'react';
 import { Tabs } from 'antd';
 import { ThemeProvider, LocaleProvider } from 'oskari-ui/util';
 import { getReactRoot } from 'oskari-ui/components/window';
 import { DefaultViewsContent } from './DefaultViews.js';
 
 const BUNDLE_KEY = 'GenericAdmin';
-
-const LegacyTabContent = ({ content }) => {
-    const ref = useRef(null);
-    useEffect(() => {
-        if (!ref.current || !content) {
-            return;
-        }
-        const el = content instanceof Element ? content : content[0];
-        if (el) {
-            ref.current.appendChild(el);
-        }
-    }, []);
-    return <div ref={ref} />;
-};
 
 export class GenericAdminFlyout {
     constructor (instance) {
@@ -60,7 +46,7 @@ export class GenericAdminFlyout {
             ...this.dynamicTabs.map(tab => ({
                 key: tab.id,
                 label: tab.title,
-                children: <LegacyTabContent content={tab.content} />
+                children: tab.content
             }))
         ];
         getReactRoot(this.container).render(
