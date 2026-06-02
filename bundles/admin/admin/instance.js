@@ -22,8 +22,12 @@ export class GenericAdmin extends BasicBundleInstance {
         });
         const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
         this.getSandbox().request(this, request);
-        const addTabRequestHandler = new AddTabRequestHandler(this.getFlyout());
-        this.addRequestHandler(ADD_TAB_NAME, (req) => addTabRequestHandler.handleRequest(null, req));
+        this.addRequestHandler(ADD_TAB_NAME, (req) => this.getFlyout().addTab({
+            title: req.getTitle(),
+            content: req.getContent(),
+            priority: req.getPriority(),
+            id: req.getId()
+        }));
     }
 
     // Called by divmanazer when AddExtensionRequest is processed
