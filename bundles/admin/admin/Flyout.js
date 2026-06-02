@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { Tabs } from 'antd';
+import { Tabs } from 'oskari-ui';
 import { ThemeProvider, LocaleProvider } from 'oskari-ui/util';
 import { getReactRoot } from 'oskari-ui/components/window';
 import { DefaultViewsContent } from './DefaultViews.js';

@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, List } from 'antd';
-import { Message } from 'oskari-ui';
+import { Button, List, ListItem, Message } from 'oskari-ui';
+import { Table } from 'oskari-ui/components/Table';
+import { Modal } from 'oskari-ui/components/Modal';
 import { Messaging } from 'oskari-ui/util';
 
 const BUNDLE_KEY = 'GenericAdmin';
@@ -122,7 +123,7 @@ export const DefaultViewsContent = () => {
                 <List
                     size="small"
                     dataSource={warning?.layerNames || []}
-                    renderItem={(name) => <List.Item>{name}</List.Item>}
+                    renderItem={(name) => <ListItem>{name}</ListItem>}
                 />
             </Modal>
         </>
