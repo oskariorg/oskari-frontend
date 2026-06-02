@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Message, LabeledInput, TextInput } from 'oskari-ui';
 import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { LocaleConsumer } from 'oskari-ui/util';

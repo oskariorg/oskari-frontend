@@ -9,8 +9,8 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Dataset Import",
-            "description": "Upload a dataset from your computer as a zipped file which contains all required files from one of the following file formats: <ul><li>Shapefile (.shp, .shx, .dbf and .prj, optionally .cpg)</li><li>GPX-file (.gpx)</li><li>GeoPackage-file (.gpkg)</li><li>GeoJSON-file (.json or .geojson)</li><li>MapInfo (.mif and .mid)</li><li>Google Maps (.kml)</li></ul>The zipped file can contain only one dataset and it can be at most {maxSize, number} Mb. Individual extracted files cannot exceed {unzippedMaxSize, number} Mb in size.",
-            "help": "Upload a dataset from your computer as a zipped file. Please check that all the files are in the correct file format and coordinate reference system.",
+            "description": "Upload a dataset from your computer. GPX (.gpx), KML (.kml), GeoJSON (.json or .geojson) and GeoPackage (.gpkg) can be uploaded as a single file. Multi-file formats must be uploaded as a zipped file that contains all required files from one of the following file formats: <ul><li>Shapefile (.shp, .shx, .dbf and .prj, optionally .cpg)</li><li>GPX (.gpx)</li><li>KML (.kml)</li><li>GeoPackage (.gpkg)</li><li>GeoJSON (.json or .geojson)</li><li>MapInfo (.mif and .mid)</li></ul>The uploaded file can contain only one dataset and it can be at most {maxSize, number} Mb. Files extracted from zip archives cannot exceed {unzippedMaxSize, number} Mb in size.",
+            "help": "Upload a dataset from your computer. GPX, KML, GeoJSON and GeoPackage can be uploaded as a single file. For multi-file formats, check that all required files are packaged in a zip file and that the data is in the correct file format and coordinate reference system.",
             "success": "The dataset has been imported with {count, plural, one {# feature} other {# features}}. You can now find it in the \"My data\" menu.",
             "tabs": {
                 "general": "General",
