@@ -118,7 +118,7 @@ export const DefaultViewsContent = () => {
                     </Button>
                 ]}
             >
-                <div><Message messageKey='flyout.defaultviews.notifications.listTitle' /></div>
+                <Message messageKey='flyout.defaultviews.notifications.listTitle' />
                 <List
                     size="small"
                     dataSource={warning?.layerNames || []}
