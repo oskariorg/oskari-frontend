@@ -33,7 +33,7 @@ export const AppSetupTab = () => {
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState(null);
 
-    const currentViewUrl = `${Oskari.urls.getRoute('Views')}&uuid=${Oskari.app.getUuid()}`;
+    const currentViewUrl = Oskari.urls.getRoute('Views', { uuid: Oskari.app.getUuid() });
 
     const importJSON = async () => {
         if (!json.trim()) {
