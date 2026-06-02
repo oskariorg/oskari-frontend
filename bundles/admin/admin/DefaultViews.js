@@ -92,7 +92,7 @@ export const DefaultViewsContent = () => {
 
     return (
         <>
-            <div><Message messageKey='flyout.defaultviews.desc' /></div>
+            <Message messageKey='flyout.defaultviews.desc' />
             <Table
                 loading={loading}
                 dataSource={views}
