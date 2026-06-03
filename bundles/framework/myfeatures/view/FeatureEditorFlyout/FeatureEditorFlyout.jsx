@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { styled } from 'styled-components';
-import { showFlyout } from 'oskari-ui/components/window';
+import { showPopup } from 'oskari-ui/components/window';
 import { FeatureEditorPanel } from 'oskari-ui/components/FeatureEditor';
 import { Message } from 'oskari-ui';
 import { BUNDLE_KEY } from '../../constants';
 import { LayerSelectionPanel } from './LayerSelectionPanel';
 
-const StyledContainer = styled.div`
+const StyledContainer = styled('div')`
     min-width: 100%;
     width: 25vw;
 `;
@@ -52,7 +52,7 @@ export const showFeatureEditorFlyout = (layerId, featureId, layers = null, contr
         controller = { controller }
     />;
     const title = <Message bundleKey={BUNDLE_KEY} messageKey={'featureEditor.title'}/>;
-    const controls = showFlyout(title, content, () => { controller.closeFeatureEditorFlyout(); });
+    const controls = showPopup(title, content, () => { controller.closeFeatureEditorFlyout(); }, { isDraggable: true });
 
     return {
         ...controls,
