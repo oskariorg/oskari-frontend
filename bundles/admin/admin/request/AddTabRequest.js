@@ -1,62 +1,42 @@
 /**
- * @class Oskari.mapframework.bundle.admin.request.AddTabRequest
- * Requests tab to be added
- *
- * Requests are build and sent through Oskari.Sandbox.
- * Oskari.mapframework.request.Request superclass documents how to send one.
+ * @class AddTabRequest
+ * Requests a tab to be added to admin flyout.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.admin.request.AddTabRequest',
-/**
- * @method create called automatically on construction
- * @static
- */
-    function (title, content, priority, id) {
+export const ADD_TAB_NAME = 'Admin.AddTabRequest';
+
+export class AddTabRequest {
+    constructor (title, content, priority, id) {
         this._title = title;
         this._content = content;
         this._priority = priority;
         this._id = id;
-    }, {
-    /** @static @property __name request name */
-        __name: 'Admin.AddTabRequest',
-        /**
-     * @method getName
-     * @return {String} request name
-     */
-        getName: function () {
-            return this.__name;
-        },
-        /**
-     * @method getTitle
-     * @return {String} tab title
-     */
-        getTitle: function () {
-            return this._title;
-        },
-        /**
-     * @method getContent
-     * @return {String} content for the tab to be added
-     */
-        getContent: function () {
-            return this._content;
-        },
-        /**
-     * @method isFirst
-     * @return {Integer} tab order priority
-     */
-        getPriority: function () {
-            return this._priority;
-        },
-        /**
-     * @method getId
-     * @return {String} tabheader id
-     */
-        getId: function () {
-            return this._id;
-        }
-    }, {
-    /**
-     * @property {String[]} protocol array of superclasses as {String}
-     * @static
-     */
-        'protocol': ['Oskari.mapframework.request.Request']
-    });
+    }
+
+    getName () {
+        return ADD_TAB_NAME;
+    }
+
+    getTitle () {
+        return this._title;
+    }
+
+    getContent () {
+        return this._content;
+    }
+
+    getPriority () {
+        return this._priority;
+    }
+
+    getId () {
+        return this._id;
+    }
+}
+
+AddTabRequest.NAME = ADD_TAB_NAME;
+
+Oskari.clazz.defineES(
+    'Oskari.mapframework.bundle.admin.request.AddTabRequest',
+    AddTabRequest,
+    { protocol: ['Oskari.mapframework.request.Request'] }
+);
