@@ -1,6 +1,5 @@
 ﻿import { GenericAdminFlyout } from './Flyout.js';
 import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
-import { AddTabRequestHandler } from './request/AddTabRequestHandler.js';
 import { ADD_TAB_NAME } from './request/AddTabRequest.js';
 const BUNDLE_NAME = 'GenericAdmin';
 
