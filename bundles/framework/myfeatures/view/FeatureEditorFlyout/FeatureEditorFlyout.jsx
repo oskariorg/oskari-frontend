@@ -32,10 +32,10 @@ const FeatureEditorContainer = ({ layerId, featureId, layers = null, savedFeatur
                 controller.deleteFeature(layer.id, featureId);
             }}
             onClose = {() => {
-                controller.closeFeatureEditorFlyout();
+                controller.closeFeatureEditorPopup();
             }}
             onCancel = {() => {
-                controller.closeFeatureEditorFlyout();
+                controller.closeFeatureEditorPopup();
             }}
             showGeoJSONPanel={false}
             showGeometryNotRecognizedAlert={false}
@@ -43,7 +43,7 @@ const FeatureEditorContainer = ({ layerId, featureId, layers = null, savedFeatur
     </StyledContainer>;
 };
 
-export const showFeatureEditorFlyout = (layerId, featureId, layers = null, controller, savedFeature) => {
+export const showFeatureEditorPopup = (layerId, featureId, layers = null, controller, savedFeature) => {
     const content = <FeatureEditorContainer
         layers = { layers }
         layerId = { layerId }
@@ -52,7 +52,7 @@ export const showFeatureEditorFlyout = (layerId, featureId, layers = null, contr
         controller = { controller }
     />;
     const title = <Message bundleKey={BUNDLE_KEY} messageKey={'featureEditor.title'}/>;
-    const controls = showPopup(title, content, () => { controller.closeFeatureEditorFlyout(); }, { isDraggable: true });
+    const controls = showPopup(title, content, () => { controller.closeFeatureEditorPopup(); }, { isDraggable: true });
 
     return {
         ...controls,

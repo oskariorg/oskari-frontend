@@ -1,7 +1,7 @@
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showLayerForm } from '../view/LayerForm';
 import { BUNDLE_KEY, MAX_SIZE, ERRORS, MY_FEATURES_LAYER_TYPE } from '../constants';
-import { showFeatureEditorFlyout } from '../view/FeatureEditorFlyout/FeatureEditorFlyout';
+import { showFeatureEditorPopup } from '../view/FeatureEditorFlyout/FeatureEditorFlyout';
 import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
 
 class MyFeaturesHandler extends StateHandler {
@@ -102,11 +102,11 @@ class MyFeaturesHandler extends StateHandler {
             this.closeFeatureEditorFlyout();
         }
 
-        this.featureEditorControls = showFeatureEditorFlyout(layerId, featureId, this?.state?.data, this, null);
+        this.featureEditorControls = showFeatureEditorPopup(layerId, featureId, this?.state?.data, this, null);
         this.bringFeatureEditorToTop();
     }
 
-    closeFeatureEditorFlyout () {
+    closeFeatureEditorPopup () {
         if (this.featureEditorControls) {
             this.featureEditorControls.close();
         }
@@ -446,7 +446,7 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'addLayerToMap',
     'showLayerDialog',
     'showFeatureEditorDialog',
-    'closeFeatureEditorFlyout',
+    'closeFeatureEditorPopup',
     'setFeatureEditorLayer'
 ]);
 
