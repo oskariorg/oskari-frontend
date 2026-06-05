@@ -20,6 +20,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
     const type = Helper.detectGeometryType(layer.geometryType);
     const isMulti = type.includes('Multi');
     const [isDrawing, setDrawingMode] = useState(false);
+    const [isGeometryValid, setGeometryValid] = useState(true);
     const [currentFeature, setCurrentFeature] = useState(feature);
     // TODO: if feature === currentFeature differs -> there have been edits made
     const isNew = !currentFeature.id;
@@ -58,13 +59,15 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
     });
 
     const updateGeometry = (updatedFeature) => {
+        setGeometryValid(updatedFeature.properties?.valid !== false);
         setCurrentFeature({
             ...currentFeature,
             geometry: updatedFeature.geometry
         });
     };
     const startDrawing = (type) => {
-        DrawingHelper.startDrawing(type, isMulti, currentFeature.geometry, updateGeometry);
+        setGeometryValid(true);
+        DrawingHelper.startDrawing(type, isMulti, currentFeature.geometry, updateGeometry, setGeometryValid);
         setDrawingMode(true);
     };
 
@@ -72,7 +75,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
     if (!isNew) {
         title = layer.name || '';
     }
-    const canSave = !isDrawing && !!currentFeature.geometry;
+    const canSave = !isDrawing && !!currentFeature.geometry && isGeometryValid;
     return (<React.Fragment>
         <StyledSpace direction="vertical">
             <Card title={title}>
@@ -87,7 +90,7 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                         <React.Fragment>
                             <Message messageKey="FeatureEditorView.geometrylist.editing" />
                             <WrappingRow>
-                                <Button type="primary" onClick={() => {
+                                <Button type="primary" disabled={!isGeometryValid} onClick={() => {
                                     stopDrawing(false, true);
                                 }}>
                                     <Message messageKey="FeatureEditorView.tools.finishSketch" />
