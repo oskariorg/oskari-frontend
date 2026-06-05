@@ -423,14 +423,11 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
         mergeLayer: function(id, newLayer) {
             const index = this.getLayerIndex(id);
             if (index > -1) {
-                const wfs = _selectedLayers[index];
-                wfs._permissions = { ...newLayer._permissions };
-                wfs._tools = wfs._tools.concat(newLayer._tools);
-                wfs._featureTools = [].concat(newLayer._featureTools);
-                wfs._layerType = newLayer._layerType;
-                _selectedLayers[index] = wfs;
+                // do this to preserve layer specific stuff such as getFeatureCount on myfeatures layer
+                // when cloning
+                const emptyLayer = Object.create(Object.getPrototypeOf(newLayer));
+                _selectedLayers[index] = Object.assign(emptyLayer, newLayer);
             }
-
         },
         moveLayer: function (id, newIndex, triggeredBy) {
             var list = this.getLayers();
