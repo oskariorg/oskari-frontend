@@ -1,7 +1,7 @@
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showLayerForm } from '../view/LayerForm';
 import { BUNDLE_KEY, MAX_SIZE, ERRORS, MY_FEATURES_LAYER_TYPE } from '../constants';
-import { showFeatureEditorFlyout } from '../view/FeatureEditorFlyout/FeatureEditorFlyout';
+import { showFeatureEditorPopup } from '../view/FeatureEditorFlyout/FeatureEditorFlyout';
 import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
 
 class MyFeaturesHandler extends StateHandler {
@@ -35,7 +35,9 @@ class MyFeaturesHandler extends StateHandler {
     }
 
     popupCleanup () {
-        if (this.popupControls) this.popupControls.close();
+        if (this.popupControls) {
+            this.popupControls.close();
+        }
         this.popupControls = null;
     }
 
@@ -46,8 +48,12 @@ class MyFeaturesHandler extends StateHandler {
     showLayerDialog (values) {
         const { id, isNew } = values;
         const isImport = !id && !isNew;
+        if (this.featureEditorControls) {
+            // Close feature editor first so the layer form popup can't end up on top of it.
+            this.closeFeatureEditorFlyout();
+        }
         if (this.popupControls) {
-            // already opened
+            // already opened -> bring to top.
             if (this.popupControls.id === id) {
                 this.popupControls.bringToTop();
                 return;
@@ -96,11 +102,11 @@ class MyFeaturesHandler extends StateHandler {
             this.closeFeatureEditorFlyout();
         }
 
-        this.featureEditorControls = showFeatureEditorFlyout(layerId, featureId, this?.state?.data, this, null);
-        this.featureEditorControls.bringToTop();
+        this.featureEditorControls = showFeatureEditorPopup(layerId, featureId, this?.state?.data, this, null);
+        this.bringFeatureEditorToTop();
     }
 
-    closeFeatureEditorFlyout () {
+    closeFeatureEditorPopup () {
         if (this.featureEditorControls) {
             this.featureEditorControls.close();
         }
@@ -110,6 +116,12 @@ class MyFeaturesHandler extends StateHandler {
             selectedFeatureId: null,
             savedFeature: null
         });
+    }
+
+    bringFeatureEditorToTop () {
+        if (this.featureEditorControls) {
+            this.featureEditorControls.bringToTop();
+        }
     }
 
     getMaxSize () {
@@ -334,7 +346,7 @@ class MyFeaturesHandler extends StateHandler {
             body: JSON.stringify(newMyFeature)
         }).then(response => {
             if (!response.ok) {
-                return Promise.reject(Error('Save failed'));
+                throw Error('Save failed');
             }
             return response.json();
         }).then((savedFeature) => {
@@ -365,7 +377,7 @@ class MyFeaturesHandler extends StateHandler {
             }
         }).then(response => {
             if (!response.ok) {
-                return Promise.reject(Error('Delete failed'));
+                throw Error('Delete failed');
             }
 
             // TODO: should deletefeature maybe return something useful?
@@ -434,7 +446,7 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'addLayerToMap',
     'showLayerDialog',
     'showFeatureEditorDialog',
-    'closeFeatureEditorFlyout',
+    'closeFeatureEditorPopup',
     'setFeatureEditorLayer'
 ]);
 
