@@ -23,7 +23,7 @@ const RadioIcon = styled(Radio.Button)`
 `;
 
 const ButtonVisualization = ({ content, src, data }) => {
-    if (content && content.$$typeof == Symbol.for('react.element')) {
+    if (content && React.isValidElement(content)) {
         // assume React-component
         return content;
     }
