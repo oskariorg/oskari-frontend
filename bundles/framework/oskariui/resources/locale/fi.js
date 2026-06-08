@@ -175,6 +175,7 @@ Oskari.registerLocalization({
                 "problem": "Tason tiedot puuttuvat!"
             },
             "newTitle": "Uusi kohde",
+            "editTitle": "Muokkaa kohdetta",
             "setCurrentLayerTitle": "Valitse karttataso",
             "geometrylist": {
                 "title": "Geometria",
