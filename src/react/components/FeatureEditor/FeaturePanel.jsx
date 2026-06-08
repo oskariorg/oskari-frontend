@@ -16,6 +16,13 @@ const WrappingRow = styled(Row)`
     width: 100%;
 `;
 
+const CardSubtitle = styled('div')`
+    margin-top: 0.15em;
+    font-size: 0.85em;
+    font-weight: normal;
+    color: inherit;
+`;
+
 export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDelete, startNewFeature, showGeoJSONPanel = true, showGeometryNotRecognizedAlert = true }) => {
     const type = Helper.detectGeometryType(layer.geometryType);
     const isMulti = type.includes('Multi');
@@ -71,14 +78,19 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
         setDrawingMode(true);
     };
 
-    let title = <Message messageKey="FeatureEditorView.newTitle" />;
-    if (!isNew) {
-        title = layer.name || '';
-    }
+    const subtitleKey = isNew ? 'FeatureEditorView.newTitle' : 'FeatureEditorView.editTitle';
+    const cardTitle = (
+        <>
+            {layer.name || ''}
+            <CardSubtitle>
+                <Message messageKey={subtitleKey} />
+            </CardSubtitle>
+        </>
+    );
     const canSave = !isDrawing && !!currentFeature.geometry && isGeometryValid;
     return (<React.Fragment>
         <StyledSpace direction="vertical">
-            <Card title={title}>
+            <Card title={cardTitle}>
                 <StyledSpace direction="vertical">
                     <FeatureForm config={layer}
                         feature={currentFeature}
