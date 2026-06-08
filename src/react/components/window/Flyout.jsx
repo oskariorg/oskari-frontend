@@ -50,9 +50,9 @@ const Container = styled.div`
         `
     )}
 `;
-const FlyoutContent = styled.div`
+const FlyoutContent = styled('div')`
     overflow: auto;
-    max-height: calc(100vh - 57px);
+    max-height: ${props => props.resizable ? 'calc(100% - 57px)' : 'calc(100vh - 57px)'};
 
     @media only screen and (max-width: 950px) {
         max-height: calc(100% - 57px);
@@ -138,9 +138,9 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
                     <CloseIcon onClose={onClose}/>
                 </ToolsContainer>
             </FlyoutHeader>
-                <FlyoutContent>
-                    {children}
-                </FlyoutContent>
+            <FlyoutContent resizable={options.resizable}>
+                {children}
+            </FlyoutContent>
         </Container>
     );
 });
