@@ -3,7 +3,6 @@ import { Message } from 'oskari-ui';
 import { UserGuideHandler } from './handler/UserGuideHandler';
 import { showUserGuideFlyout } from './view/UserGuideFlyout';
 import './request/ShowUserGuideRequest';
-import './request/ShowUserGuideRequestHandler';
 
 const EXTENSION_NAME = 'userinterface.UserGuide';
 const DefaultExtension = Oskari.clazz.get('Oskari.userinterface.extension.DefaultExtension');
@@ -11,7 +10,6 @@ const DefaultExtension = Oskari.clazz.get('Oskari.userinterface.extension.Defaul
 class UserGuideBundleInstance extends DefaultExtension {
     constructor () {
         super();
-        this.requestHandlers = {};
         this.flyoutControls = null;
         this.contentLoaded = false;
         this.handler = new UserGuideHandler();
@@ -68,12 +66,7 @@ class UserGuideBundleInstance extends DefaultExtension {
     }
 
     afterStart (sandbox) {
-        this.requestHandlers['userguide.ShowUserGuideRequest'] = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequestHandler',
-            sandbox,
-            this
-        );
-        sandbox.requestHandler('userguide.ShowUserGuideRequest', this.requestHandlers['userguide.ShowUserGuideRequest']);
+        sandbox.requestHandler('userguide.ShowUserGuideRequest', (request) => this.scheduleShowUserGuide(request));
 
         this.handler.addStateListener((state) => this.onStateUpdate(state));
         this.registerForGuidedTour();
@@ -114,10 +107,7 @@ class UserGuideBundleInstance extends DefaultExtension {
     stop () {
         const sandbox = this.sandbox;
         this.closeFlyout();
-        sandbox.removeRequestHandler(
-            'userguide.ShowUserGuideRequest',
-            this.requestHandlers['userguide.ShowUserGuideRequest']
-        );
+        sandbox.removeRequestHandler('userguide.ShowUserGuideRequest', null);
         super.stop();
     }
 
