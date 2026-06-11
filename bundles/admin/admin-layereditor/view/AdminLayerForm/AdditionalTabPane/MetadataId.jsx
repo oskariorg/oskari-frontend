@@ -7,6 +7,8 @@ import { InfoIcon } from 'oskari-ui/components/icons';
 import { ServiceMetadata } from './ServiceMetadata';
 import { MetadataButton } from './styled';
 
+const removeWhitespace = (value) => value.replace(/\s+/g, '');
+
 export const MetadataId = ({ layer, controller }) => {
     const hasHandler = Oskari.getSandbox().hasHandler('catalogue.ShowMetadataRequest');
     const renderButton = layer.metadataid && hasHandler;
@@ -25,7 +27,7 @@ export const MetadataId = ({ layer, controller }) => {
                     }
                     <TextInput
                         value={layer.metadataid}
-                        onChange={(evt) => controller.setMetadataIdentifier(evt.target.value)} />
+                        onChange={(evt) => controller.setMetadataIdentifier(removeWhitespace(evt.target.value))} />
                 </StyledFormField>
             </Border>
         </Fragment>
