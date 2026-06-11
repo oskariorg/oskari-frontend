@@ -2,8 +2,7 @@ import React from 'react';
 import { showFlyout } from 'oskari-ui/components/window';
 import { LocaleProvider } from 'oskari-ui/util';
 import { UserGuideView } from './UserGuideView';
-
-const BUNDLE_KEY = 'userinterface.UserGuide';
+import { BUNDLE_KEY } from '../constants';
 
 export const showUserGuideFlyout = (state, onClose) => {
     const title = Oskari.getMsg(BUNDLE_KEY, 'flyout.title');

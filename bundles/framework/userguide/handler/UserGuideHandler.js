@@ -20,6 +20,7 @@ export class UserGuideHandler extends StateHandler {
             const tabs = localeTabs.map(tab => ({
                 key: tab.tags,
                 title: tab.title,
+                url: tab.url || null,
                 content: null,
                 loading: true
             }));
@@ -29,8 +30,16 @@ export class UserGuideHandler extends StateHandler {
             });
 
             await Promise.all(tabs.map(async (tab, index) => {
-                const html = await this.fetchArticle(tab.key, helpContentPart, errorMsg);
-                tabs[index] = { ...tab, content: html, loading: false };
+                const data = await this.fetchArticle(tab.key);
+                const article = data?.articles?.[0];
+                const html = this.getArticleContent(article, helpContentPart, errorMsg);
+                const url = article?.url || tab.url || null;
+                tabs[index] = {
+                    ...tab,
+                    content: html,
+                    url,
+                    loading: false
+                };
                 this.updateState({
                     tabs: [...tabs]
                 });
@@ -49,11 +58,14 @@ export class UserGuideHandler extends StateHandler {
                 }],
                 loading: false
             });
-            const html = await this.fetchArticle(tags, helpContentPart, errorMsg);
+            const data = await this.fetchArticle(tags);
+            const article = data?.articles?.[0];
+            const html = this.getArticleContent(article, helpContentPart, errorMsg);
             this.updateState({
                 tabs: [{
                     key: tags,
                     title: null,
+                    url: article?.url || null,
                     content: html,
                     loading: false
                 }],
@@ -62,21 +74,26 @@ export class UserGuideHandler extends StateHandler {
         }
     }
 
-    async fetchArticle (tags, contentPart, errorMsg) {
+    getArticleContent (article, contentPart, errorMsg) {
+        if (!article?.content) {
+            return errorMsg;
+        }
+        if (typeof article.content === 'string') {
+            return article.content;
+        }
+        return article.content[contentPart] || errorMsg;
+    }
+
+    async fetchArticle (tags) {
         try {
             const url = Oskari.urls.getRoute('GetArticlesByTag', { tags });
             const response = await fetch(url);
             if (!response.ok) {
-                return errorMsg;
+                return null;
             }
-            const data = await response.json();
-            const article = data?.articles?.[0];
-            if (!article?.content) {
-                return errorMsg;
-            }
-            return article.content[contentPart] || article.content || errorMsg;
+            return await response.json();
         } catch (e) {
-            return errorMsg;
+            return null;
         }
     }
 }

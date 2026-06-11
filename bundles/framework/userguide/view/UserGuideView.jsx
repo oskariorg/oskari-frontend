@@ -1,6 +1,8 @@
 import React from 'react';
 import { Tabs, Spin } from 'oskari-ui';
+import { Link } from 'oskari-ui/components/Link';
 import { styled } from 'styled-components';
+import { BUNDLE_KEY } from '../constants';
 
 const Container = styled('div')`
     padding: 1em;
@@ -30,12 +32,25 @@ const TabLabel = styled('span')`
     display: inline-block;
 `;
 
+const ExternalLinkWrapper = styled('div')`
+    margin-bottom: 1em;
+`;
+
 const TabContent = ({ tab }) => {
     if (tab.loading) {
         return <Spin />;
     }
     return (
-        <div dangerouslySetInnerHTML={{ __html: tab.content || '' }} />
+        <>
+            {tab.url && (
+                <ExternalLinkWrapper>
+                    <Link url={tab.url}>
+                        {Oskari.getMsg(BUNDLE_KEY, 'flyout.openInNewWindow')}
+                    </Link>
+                </ExternalLinkWrapper>
+            )}
+            <div dangerouslySetInnerHTML={{ __html: tab.content || '' }} />
+        </>
     );
 };
 
