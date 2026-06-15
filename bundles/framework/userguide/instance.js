@@ -7,7 +7,7 @@ import './request/ShowUserGuideRequest';
 const EXTENSION_NAME = 'userinterface.UserGuide';
 const DefaultExtension = Oskari.clazz.get('Oskari.userinterface.extension.DefaultExtension');
 
-class UserGuideBundleInstance extends DefaultExtension {
+export class UserGuideBundleInstance extends DefaultExtension {
     constructor () {
         super();
         this.flyoutControls = null;
@@ -139,5 +139,3 @@ class UserGuideBundleInstance extends DefaultExtension {
         }
     }
 }
-
-Oskari.clazz.defineES('Oskari.mapframework.bundle.userguide.UserGuideBundleInstance', UserGuideBundleInstance);
