@@ -7,7 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "flyout": {
             "title": "User Guide",
-            "loadingtxt": "<p>Loading the user guide...</p>"
+            "loadingtxt": "<p>Loading the user guide...</p>",
+            "openInNewWindow": "Open in new window"
         },
         "tile": {
             "title": "User Guide"

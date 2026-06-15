@@ -1,4 +1,4 @@
-import './instance';
+import { UserGuideBundleInstance } from './instance';
 
 // register create function for bundleid
-Oskari.bundle('userguide', () => Oskari.clazz.create('Oskari.mapframework.bundle.userguide.UserGuideBundleInstance'));
+Oskari.bundle('userguide', () => new UserGuideBundleInstance());
