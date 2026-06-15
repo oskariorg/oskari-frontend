@@ -13,21 +13,31 @@ const DataSection = styled('div')`
 `;
 
 const createLink = (item) => {
-    if (typeof item === 'string') return item;
-    if (!item || !item.name) return null;
-    if (!item.url) return item.name;
-    return <a href={item.url} target='_blank'>{item.name}</a>;
+    if (typeof item === 'string') {
+        return item;
+    }
+    if (!item || !item.name) {
+        return null;
+    }
+    if (!item.url && !item.className) {
+        return item.name;
+    }
+    if (!item.url) {
+        return <span className={item.className}>{item.name}</span>;
+    }
+    return <a className={item.className} href={item.url} target='_blank'>{item.name}</a>;
 };
 
 const formatSource = (src) => {
     let source = [];
-    if (!src) return source;
-    if (Array.isArray(src)) {
-        source = src.map(s => createLink(s));
+    if (!src) {
         return source;
-    } else {
-        source.push(createLink(src));
     }
+    if (Array.isArray(src)) {
+        source = src.map((s) => createLink(s));
+        return source;
+    }
+    source.push(createLink(src));
     return source;
 };
 

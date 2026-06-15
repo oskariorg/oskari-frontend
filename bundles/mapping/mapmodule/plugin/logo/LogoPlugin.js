@@ -52,12 +52,7 @@ Oskari.clazz.define(
                     var layers = me.getSandbox().findAllSelectedMapLayers();
                     // add initial layers
                     layers.forEach(function (layer) {
-                        me._service.addItemToGroup(me.constLayerGroupId, {
-                            'id': layer.getId(),
-                            'name': layer.getName(),
-                            // AH-2182 Show source for user layers
-                            'source': layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
-                        });
+                        me._service.addItemToGroup(me.constLayerGroupId, me.getItemFromLayer(layer));
                     });
                     // if service was created, add a change listener
                     this._service.on('change', function () {
@@ -127,11 +122,18 @@ Oskari.clazz.define(
                 }
             };
         },
+        getMyFeaturesSource: function (layer) {
+            return { name: layer.getOrganizationName(), className: 'myfeatures-organisation-name' };
+        },
         getItemFromLayer: function (layer) {
+            const isMyFeatures = layer.getLayerType && layer.getLayerType() === 'myf';
+            const source = isMyFeatures
+                ? this.getMyFeaturesSource(layer)
+                : (layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName());
             return {
                 id: layer.getId(),
                 name: layer.getName(),
-                source: layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
+                source
             };
         },
 
