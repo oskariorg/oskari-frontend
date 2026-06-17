@@ -3,3 +3,4 @@ import { DatePicker } from 'antd';
 
 const { RangePicker } = DatePicker;
 export const DateRange = props => <RangePicker {...props}/>;
+export const DateTimePicker = props => <DatePicker {...props}/>;

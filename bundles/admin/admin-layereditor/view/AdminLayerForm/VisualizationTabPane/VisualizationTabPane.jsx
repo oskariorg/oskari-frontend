@@ -44,7 +44,7 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
                 <Opacity layer={layer} controller={controller} />
             }
             { propertyFields.includes(COVERAGE) &&
-                <Coverage id={layer.id} controller={controller} />
+                <Coverage layer={layer} controller={controller} />
             }
             { propertyFields.includes(DECLUTTER) &&
                 <Declutter layer={layer} controller={controller} />

@@ -16,8 +16,18 @@ const StyledListItem = styled(ListItem)`
         }
     }
 `;
+
+const GroupHeaderListItem = styled(StyledListItem)`
+    width: 100%;
+`;
+
 const StyledIcon = styled('div')`
     font-size: 18px;
+`;
+
+const GroupHeader = styled.div`
+    font-weight: bold;
+    padding: 0.25em 0.5em;
 `;
 
 // Overflow makes additional/customized permission types available by scrolling
@@ -79,6 +89,19 @@ function getHeaderPermissions (dataRows, roles) {
     }).filter(value => !!value);
 }
 
+const getRoleGroups = (roles) => {
+    const sortRoles = (roleList) => [...roleList].sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+    return [{
+        key: 'system',
+        label: <Message messageKey='roles.type.system' />,
+        roles: sortRoles(roles.filter(role => role.isSystem))
+    }, {
+        key: 'other',
+        label: <Message messageKey='roles.type.other' />,
+        roles: sortRoles(roles.filter(role => !role.isSystem))
+    }].filter(group => group.roles.length > 0);
+};
+
 const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, controller }) => {
     if (!rolesAndPermissionTypes) {
         return;
@@ -90,7 +113,7 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
         return permission;
     });
 
-    const dataRows = roles.map(role => {
+    const roleRows = roles.map(role => {
         return {
             isHeaderRow: false,
             text: role.name,
@@ -100,16 +123,40 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
         };
     });
 
+    const roleGroups = getRoleGroups(roles);
+    const permissionDataModel = roleGroups.flatMap(group => {
+        const groupRows = [{
+            isGroupHeader: true,
+            text: group.label
+        }];
+        groupRows.push(...group.roles.map(role => {
+            return {
+                isHeaderRow: false,
+                text: role.name,
+                permissions: permissions[role.name] || [],
+                permissionTypes: permissionTypes,
+                role: role
+            };
+        }));
+        return groupRows;
+    });
+
     const headerRow = {
         isHeaderRow: true,
         text: <Message messageKey='rights.role'/>,
-        permissions: getHeaderPermissions(dataRows, roles),
+        permissions: getHeaderPermissions(roleRows, roles),
         permissionTypes: localizedPermissionTypes
     };
     const headerDataModel = [headerRow];
-    const permissionDataModel = [...dataRows];
 
     const renderRow = (modelRow) => {
+        if (modelRow.isGroupHeader) {
+            return (
+                <GroupHeaderListItem>
+                    <GroupHeader>{ modelRow.text }</GroupHeader>
+                </GroupHeaderListItem>
+            );
+        }
         const checkboxes = modelRow.permissionTypes.map(permission => {
             if (modelRow.isHeaderRow) {
                 // header row with special functionality (select all/none)

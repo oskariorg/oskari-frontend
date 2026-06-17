@@ -25,7 +25,7 @@ export const MetadataId = ({ layer, controller }) => {
                     }
                     <TextInput
                         value={layer.metadataid}
-                        onChange={(evt) => controller.setMetadataIdentifier(evt.target.value)} />
+                        onChange={(evt) => controller.setMetadataIdentifier(evt?.target?.value?.trim())} />
                 </StyledFormField>
             </Border>
         </Fragment>

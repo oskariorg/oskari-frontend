@@ -20,10 +20,10 @@ const GrayRow = styled(Row)`
         display: flex;
         align-items: center;
         padding-left: 0;
-        :first-child {
+        &:first-child {
             margin-right: 10px;
         }
-        :nth-last-child(2) {
+        &:nth-last-child(2) {
             padding-right: 0;
             padding-left: 10px;
         }

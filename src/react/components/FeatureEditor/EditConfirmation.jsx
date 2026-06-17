@@ -1,22 +1,41 @@
 import React from 'react';
-import { notification } from 'antd';
+import { showModal } from 'oskari-ui/components/window';
 import { Button, Message } from 'oskari-ui';
+import { styled } from 'styled-components';
+
+const Buttons = styled('div')`
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    justify-content: flex-end;
+    margin-top: 1em;
+`;
+
+const Content = styled('div')`
+    padding: 1em;
+`;
 
 export const confirmEdit = (getMessage, onConfirm) => {
-    const key = `open${Date.now()}`;
-    const confirmBtn = (<Button
-        type="primary"
-        onClick={() => {
-            onConfirm(true);
-            notification.destroy(key);
-        }}>
-        {<Message bundleKey={'oskariui'} messageKey={'FeatureEditorView.buttons.yes'}/>}
-    </Button>);
-    notification.open({
-        message: <Message bundleKey={'oskariui'} messageKey={'FeatureEditorView.editConfirm.title'}/>,
-        description: <Message bundleKey={'oskariui'} messageKey={'FeatureEditorView.editConfirm.msg'}/>,
-        btn: confirmBtn,
-        key
-    });
+    let controls = null;
+    const close = () => {
+        if (controls) {
+            controls.close();
+        }
+    };
+    const title = <Message bundleKey={'oskariui'} messageKey={'FeatureEditorView.editConfirm.title'}/>;
+    const content = (
+        <Content>
+            <Message bundleKey={'oskariui'} messageKey={'FeatureEditorView.editConfirm.msg'}/>
+            <Buttons>
+                <Button type='primary' onClick={() => { onConfirm(true); close(); }}>
+                    <Message bundleKey={'oskariui'} messageKey={'FeatureEditorView.buttons.yes'}/>
+                </Button>
+                <Button onClick={close}>
+                    <Message bundleKey={'oskariui'} messageKey={'FeatureEditorView.buttons.cancel'}/>
+                </Button>
+            </Buttons>
+        </Content>
+    );
+    controls = showModal(title, content, close);
 };
 

@@ -10,6 +10,8 @@ Oskari.registerLocalization(
             },
             "fields": {
                 "date": "Aikaväli",
+                "endDate": "Päättymisaika",
+                "externalInfo": "Tämä ilmoitus on luettu ulkoisesta lähteestä. Voit muokata vain ilmoituksen päättymisaikaa ja muiden kielten sisältöä.",
                 "show": {
                     "label": "Näytä ilmoitus",
                     "popup": "Ponnahdusikkunassa",

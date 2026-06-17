@@ -112,12 +112,14 @@ export class FeatureEditorPanelHandler extends StateHandler {
 
     setCurrentLayer (layerId, geometryType, types) {
         const mapLayer = this.mapLayerService.findMapLayer(layerId);
+        const fieldLabels = mapLayer.getAttributes('data')?.locale?.[Oskari.getLang()] || {};
         this.getSandbox().postRequestByName('AddMapLayerRequest', [layerId]);
         this.hideOtherVectorLayers(layerId);
         const newState = {
             id: layerId,
             geometryType: geometryType,
             fieldTypes: types,
+            fieldLabels,
             name: mapLayer.getName(Oskari.getDefaultLanguage())
         };
 

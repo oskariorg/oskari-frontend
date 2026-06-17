@@ -66,12 +66,19 @@ export const FileInput = ({
     multiple = true,
     tooltip,
     allowedTypes = [],
+    allowedExtensions = [],
     maxSize = MAX_SIZE,
     mandatory,
     files = []
 }) => {
     const [currentFiles, setFiles] = useState(files);
     const maxCount = multiple ? MAX_COUNT : 1;
+
+    const getFileExtension = (filename) => {
+        const lastDot = filename.lastIndexOf('.');
+        if (lastDot === -1) return '';
+        return filename.substring(lastDot + 1).toLowerCase();
+    };
 
     const onDrop = event => {
         event.preventDefault();
@@ -106,14 +113,16 @@ export const FileInput = ({
 
     const validate = file => {
         const validType = !allowedTypes.length || allowedTypes.includes(file.type);
-        if (!validType) {
+        const validExtension = !allowedExtensions.length || allowedExtensions.includes(getFileExtension(file.name));
+        const isValid = validType || validExtension;
+        if (!isValid) {
             showError('invalidType');
         }
         const validSize = file.size < (maxSize * 1024 * 1024);
         if (!validSize) {
             showError('fileSize', { maxSize });
         }
-        return validType && validSize;
+        return isValid && validSize;
     };
 
     const onFileRemove = name => {
@@ -169,6 +178,7 @@ FileInput.propTypes = {
     onFiles: PropTypes.func.isRequired,
     multiple: PropTypes.bool,
     allowedTypes: PropTypes.array,
+    allowedExtensions: PropTypes.array,
     files: PropTypes.array,
     tooltip: PropTypes.string,
     maxSize: PropTypes.number,

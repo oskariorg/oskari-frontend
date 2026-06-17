@@ -41,13 +41,23 @@ Oskari.registerLocalization(
                 },
                 "opacity": "Opacity",
                 "params": {
-                    "selectedTime": "Selected time"
+                    "selectedTime": "Selected time",
+                    "key": "Parameter",
+                    "value": "Value",
+                    "title": "Parameters",
+                    "errors": {
+                        "keyExists": "A parameter with this name already exists.",
+                        "reservedKey": "This parameter name is reserved."
+                    }
                 },
                 "singleTile": "Single Tile",
                 "realtime": "Real time layer",
                 "refreshRate": "Refresh rate in seconds",
                 "scale": "Scale",
                 "coverage":"Show map layer coverage on the map",
+                "metadataCoverage":"Show map layer metadata coverage on the map",
+                "ignoreCoverage":"Ignore map layer coverage",
+                "ignoreMetadataCoverage":"Ignore map layer metadata coverage",
                 "declutter": "Draw object names separately (declutter).",
                 "gfiContent": "Additional GFI info",
                 "gfiType": "GFI response type",
@@ -66,6 +76,12 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Additional",
             "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Permissions",
+            "roles": {
+                "type": {
+                    "system": "System roles",
+                    "other": "Additional roles"
+                }
+            },
             "interfaceVersionDesc": "Select an appropriate version. Prioritize the newest version that is supported.",
             "attributions": "Attributions",
             "usernameAndPassword": "Username and password",
@@ -299,6 +315,7 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first.",
                 "errorFetchCoverage": "Failed to get the map layer coverage from the service.",
                 "noCoverage": "The map layer coverage isn't restricted.",
+                "noMetadataCoverage": "Metadata coverage isn't available for this layer.",
                 "invalidScale": "Check the layer scale limits.",
                 "noFeatureProperties": "Layer doesn't have feature properties information."
             },

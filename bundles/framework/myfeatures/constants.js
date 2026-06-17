@@ -16,8 +16,20 @@ export const ADD_FEATURE_TOOL = {
 
 export const FILE_INPUT_PROPS = {
     multiple: false,
-    allowedTypes: ['application/zip', 'application/octet-stream', 'application/x-zip-compressed', 'multipart/x-zip'],
-    allowedExtensions: ['zip']
+    allowedTypes: [
+        'application/zip',
+        'application/octet-stream',
+        'application/x-zip-compressed',
+        'multipart/x-zip',
+        'application/gpx+xml',
+        'application/vnd.google-earth.kml+xml',
+        'application/geo+json',
+        'application/json',
+        'application/xml',
+        'application/geopackage+sqlite3',
+        'text/xml'
+    ],
+    allowedExtensions: ['zip', 'gpx', 'kml', 'geojson', 'json', 'gpkg']
 };
 
 export const ERRORS = {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, Message } from 'oskari-ui';
 import { AutoComplete } from 'antd';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 /*
 The input type="search" has a duplicated "clear" function added by the browser.
@@ -13,6 +13,22 @@ This might go away by updating ant-d. It seems a bit weird that it isn't hidden
 */
 const WideAutoComplete = styled(AutoComplete)`
     width: 100%;
+    border: none;
+    box-shadow: none;
+
+    &&.ant-select {
+        border-radius: calc(${props => props.rounding || 0} * 35px);
+    }
+
+    && .ant-select-selector {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    && .ant-select-content {
+        border-radius: calc(${props => props.rounding || 0} * 35px);
+        background: transparent;
+    }
 
     /* clears the 'X' from Internet Explorer */
     input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
@@ -23,6 +39,33 @@ const WideAutoComplete = styled(AutoComplete)`
     input[type="search"]::-webkit-search-cancel-button,
     input[type="search"]::-webkit-search-results-button,
     input[type="search"]::-webkit-search-results-decoration { display: none; }
+
+    &&&:hover {
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
+    &&&:focus,
+    &&&:active,
+    &&&:focus-visible {
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        outline: none;
+    }
+
+    && .ant-select-selector:hover {
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    && .ant-select-selector:focus,
+    && .ant-select-selector:active,
+    && .ant-select-selector:focus-visible {
+        border-color: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
 `;
 
 // this would make the clear cross be closer to edge:
@@ -30,6 +73,21 @@ const WideAutoComplete = styled(AutoComplete)`
 const StyledInput = styled(TextInput)`
     height: 35px;
     border-radius: calc(${props => props.rounding || 0} * 35px);
+    border: none;
+    box-shadow: none;
+    &&&:hover {
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
+    &&&:focus,
+    &&&:active,
+    &&&:focus-visible {
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        outline: none;
+    }
 `;
 
 const noop = () => {};
@@ -59,6 +117,7 @@ export const SearchInput = ({ query = '', suggestions = [], onChange = noop, onS
     return (
         <React.Fragment>
             <WideAutoComplete
+                rounding={rounding}
                 allowClear={false}
                 options={getSuggestionOptions(suggestions)}
                 onSelect={onSelect}>

@@ -7,7 +7,7 @@ const styles = {
     body: {
         padding: '0 0 0.5em 0'
     },
-    content: {
+    container: {
         padding: '0'
     }
 };

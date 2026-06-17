@@ -1,5 +1,3 @@
-import './instance';
-import './resources/scss/style.scss';
+import { AppSetupBundleInstance } from './instance.js';
 
-// register create function for bundleid
-Oskari.bundle('appsetup', () => Oskari.clazz.create('Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance'));
+Oskari.bundle('appsetup', () => new AppSetupBundleInstance());

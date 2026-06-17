@@ -7,7 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "flyout": {
             "title": "Bruksanvisningar",
-            "loadingtxt": "<p>Laddar bruksanvisningar…</p>"
+            "loadingtxt": "<p>Laddar bruksanvisningar…</p>",
+            "openInNewWindow": "Öppna i nytt fönster"
         },
         "tile": {
             "title": "Bruksanvisningar"

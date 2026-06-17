@@ -1,12 +1,19 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { showFlyout } from 'oskari-ui/components/window';
+import { styled } from 'styled-components';
+import { showPopup } from 'oskari-ui/components/window';
 import { FeatureEditorPanel } from 'oskari-ui/components/FeatureEditor';
 import { Message } from 'oskari-ui';
 import { BUNDLE_KEY } from '../../constants';
 import { LayerSelectionPanel } from './LayerSelectionPanel';
+
+const StyledContainer = styled('div')`
+    min-width: 100%;
+    width: 25vw;
+`;
+
 const FeatureEditorContainer = ({ layerId, featureId, layers = null, savedFeature, controller }) => {
-    return <>
+    return <StyledContainer>
         {!layerId && <LayerSelectionPanel
             layers={ layers }
             setCurrentLayer={(layerId) => controller.setFeatureEditorLayer(layerId)}
@@ -25,16 +32,18 @@ const FeatureEditorContainer = ({ layerId, featureId, layers = null, savedFeatur
                 controller.deleteFeature(layer.id, featureId);
             }}
             onClose = {() => {
-                controller.closeFeatureEditorFlyout();
+                controller.closeFeatureEditorPopup();
             }}
             onCancel = {() => {
-                controller.closeFeatureEditorFlyout();
+                controller.closeFeatureEditorPopup();
             }}
+            showGeoJSONPanel={false}
+            showGeometryNotRecognizedAlert={false}
         />}
-    </>;
+    </StyledContainer>;
 };
 
-export const showFeatureEditorFlyout = (layerId, featureId, layers = null, controller, savedFeature) => {
+export const showFeatureEditorPopup = (layerId, featureId, layers = null, controller, savedFeature) => {
     const content = <FeatureEditorContainer
         layers = { layers }
         layerId = { layerId }
@@ -43,7 +52,7 @@ export const showFeatureEditorFlyout = (layerId, featureId, layers = null, contr
         controller = { controller }
     />;
     const title = <Message bundleKey={BUNDLE_KEY} messageKey={'featureEditor.title'}/>;
-    const controls = showFlyout(title, content, () => { controller.closeFeatureEditorFlyout(); });
+    const controls = showPopup(title, content, () => { controller.closeFeatureEditorPopup(); }, { isDraggable: true });
 
     return {
         ...controls,
