@@ -19,8 +19,22 @@ const createLink = (item) => {
     return <a href={item.url} target='_blank'>{item.name}</a>;
 };
 
-const formatSource = (src) => {
+const formatSource = (item) => {
+    console.log(item);
+    let { source: src } = item;
+    const { id = '' } = item;
+    const prefixIndex = ('' + id).indexOf('_');
+    let prefix = '';
+    if (prefixIndex !== -1) {
+        prefix = id.substring(0, prefixIndex);
+    }
     let source = [];
+    if (prefix) {
+        // TODO: search localization for prefix (myf -> My features and wrap in a span with class to be used as selector for hiding, if localization not found, just use src as is)
+        // TODO: if src is empty/null -> replace with string from localization like "Unknown"
+        // TODO: if layer type is actual MyFeatures layer == we are in the geoportal -> do something different
+        src = prefix + ' ' + src;
+    }
     if (!src) return source;
     if (Array.isArray(src)) {
         source = src.map(s => createLink(s));
@@ -40,7 +54,7 @@ export const PopupContent = ({ dataProviders, onClose }) => {
                     <div>
                         {data.items.map(item => (
                             <div key={item.id}>
-                                {item.name} {formatSource(item.source).map((src, index, arr) => {
+                                {item.name} {formatSource(item).map((src, index, arr) => {
                                     if (!src) return;
                                     if (arr.length > 1 && index < (arr.length - 1)) {
                                         return <span key={index}>{index === 0 && (' - ')}{src} - </span>
