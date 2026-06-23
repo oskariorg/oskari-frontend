@@ -98,6 +98,7 @@ Oskari.registerLocalization({
             'sex': 'Kön',
             'year': 'År',
             'Vuosi': 'År',
+            'timeperiod_y': 'År',
             'regionset': 'Områdesindelning',
             'from': 'från',
             'to': 'tills',
