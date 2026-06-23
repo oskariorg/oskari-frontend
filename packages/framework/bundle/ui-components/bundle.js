@@ -92,12 +92,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "src" : "../../../../bundles/framework/divmanazer/component/Popover.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/Grid.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/GridModel.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/ProgressSpinner.js"
         }, {
             "type" : "text/javascript",
@@ -129,9 +123,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
         }, {
             "type" : "text/css",
             "src" : "../../../../bundles/framework/divmanazer/resources/scss/forminput.scss"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../bundles/framework/divmanazer/resources/scss/grid.scss"
         }, {
             "type" : "text/css",
             "src" : "../../../../bundles/framework/divmanazer/resources/scss/popup.scss"
