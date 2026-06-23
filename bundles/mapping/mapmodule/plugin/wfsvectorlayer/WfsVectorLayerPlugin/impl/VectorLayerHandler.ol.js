@@ -7,6 +7,7 @@ import { createXYZ } from 'ol/tilegrid';
 
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
 import { RequestCounter } from './RequestCounter';
+import { Messaging } from 'oskari-ui/util';
 
 import olPoint from 'ol/geom/Point';
 import olMultiPoint from 'ol/geom/MultiPoint';
@@ -24,10 +25,13 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     constructor (layerPlugin) {
         super(layerPlugin);
         this.loadingStrategies = {};
+        this.maybeMoreFeaturesWarned = new Set();
+        this.lastMoveStartZoomLevel = null;
     }
 
     createEventHandlers () {
         const handlers = super.createEventHandlers();
+        handlers.MapMoveStartEvent = () => this._resetMaybeMoreFeatureWarningsOnZoomChange();
         if (this.plugin.getMapModule().getSupports3D()) {
             handlers.AfterChangeMapLayerOpacityEvent = Oskari.util.throttle(event =>
                 this._updateLayerStyle(event.getMapLayer()), OPACITY_THROTTLE_MS);
@@ -170,7 +174,8 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                     bbox: extent.join(',')
                 },
                 url: Oskari.urls.getRoute('GetWFSFeatures'),
-                success: (resp) => {
+                success: (resp, _textStatus, jqXHR) => {
+                    this._showMaybeMoreFeaturesWarning(layer, jqXHR);
                     resp?.features?.forEach(feature => {
                         if (feature?.properties?.geometry) {
                             // Openlayers will override feature.geometry with properties.geometry if both are present
@@ -203,6 +208,34 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                 }
             });
         };
+    }
+
+    _showMaybeMoreFeaturesWarning (layer, jqXHR) {
+        const layerId = layer.getId();
+        if (this.maybeMoreFeaturesWarned.has(layerId)) {
+            return;
+        }
+        const maybeHasMore = jqXHR?.getResponseHeader('X-Maybe-Has-More-Features');
+        if (String(maybeHasMore).toLowerCase() !== 'true') {
+            return;
+        }
+        this.maybeMoreFeaturesWarned.add(layerId);
+        Messaging.warn(Oskari.getMsg('MapModule', 'plugin.WfsVectorLayerPlugin.maybeMoreFeatures', {
+            name: layer.getName()
+        }));
+    }
+
+    _resetMaybeMoreFeatureWarningsOnZoomChange () {
+        const zoomLevel = this.sb.getMap().getZoom();
+        if (this.lastMoveStartZoomLevel === null) {
+            this.lastMoveStartZoomLevel = zoomLevel;
+            return;
+        }
+        if (this.lastMoveStartZoomLevel === zoomLevel) {
+            return;
+        }
+        this.lastMoveStartZoomLevel = zoomLevel;
+        this.maybeMoreFeaturesWarned.clear();
     }
 
     /**

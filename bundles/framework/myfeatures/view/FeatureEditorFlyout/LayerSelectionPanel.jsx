@@ -3,6 +3,8 @@ import { Select, Button, Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { BUNDLE_KEY } from '../../constants';
+import { PlusOutlined } from '@ant-design/icons';
+import { Tooltip } from 'oskari-ui';
 
 const LayerSelectionContainer = styled('div')`
     padding: 1em;
@@ -21,14 +23,14 @@ const Row = styled('div')`
 `;
 
 export const LayerSelectionPanel = ({ layers, setCurrentLayer = null, addNewLayer = null }) => {
-    const [selectedLayer, setSelectedLayer] = useState(null);
-
-    const options = layers?.map((layer) => {
+    const options = layers?.sort((a, b) => a.getName().localeCompare(b.getName())).map((layer) => {
         return {
             value: layer.getId(),
             label: layer.getName()
-        }
+        };
     });
+
+    const [selectedLayer, setSelectedLayer] = useState(options?.[0]?.value || null);
 
 
     const updateCurrentLayer = () => {
@@ -44,18 +46,17 @@ export const LayerSelectionPanel = ({ layers, setCurrentLayer = null, addNewLaye
                 <StyledSelect options={options} value={selectedLayer} onChange={(value) => {
                     setSelectedLayer(value);
                 }}/>
+                {
+                    addNewLayer &&
+                    <Tooltip title={<Message messageKey='featureEditor.layerSelectionPanel.buttons.addNewLayer'/>}>
+                        <Button onClick={() => { addNewLayer(); }}><PlusOutlined /></Button>
+                    </Tooltip>
+                }
             </Row>
             <Row>
                 <Button disabled={!selectedLayer} type='primary' onClick={() => { updateCurrentLayer(); }}>
                     <Message messageKey='featureEditor.layerSelectionPanel.buttons.setCurrentLayer'/>
                 </Button>
-                {
-                    addNewLayer &&
-                    <Button type='primary' onClick={() => { addNewLayer(); }}>
-                        <Message messageKey='featureEditor.layerSelectionPanel.buttons.addNewLayer'/>
-                    </Button>
-                }
-
             </Row>
         </LocaleProvider>
     </LayerSelectionContainer>;

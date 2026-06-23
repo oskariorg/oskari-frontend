@@ -84,7 +84,7 @@ const BABEL_LOADER_RULE = {
                     {
                         corejs: 3,
                         useBuiltIns: 'entry',
-                        targets: '> 0.25%, not dead, ie 11',
+                        targets: '> 0.25%, not dead',
                         // https://babeljs.io/blog/2020/03/16/7.9.0
                         bugfixes: true
                     }

@@ -98,6 +98,7 @@ Oskari.registerLocalization({
             'sex': 'Gender',
             'year': 'Year',
             'Vuosi': 'Year',
+            'timeperiod_y': 'Year',
             'regionset': 'Regional division',
             'from': 'from',
             'to': 'to',

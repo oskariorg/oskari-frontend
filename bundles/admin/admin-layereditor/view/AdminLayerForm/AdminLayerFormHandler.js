@@ -9,6 +9,7 @@ import { TIME_SERIES_UI } from './VisualizationTabPane/TimeSeries';
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
 const COVERAGE_LAYER = 'AdminLayerEditorCoverage';
+const METADATA_COVERAGE_LAYER = 'AdminLayerEditorMetadataCoverage';
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-layereditor' />;
 
@@ -62,6 +63,16 @@ class UIHandler extends StateHandler {
         });
     }
 
+    setLayerParams (params = {}) {
+        const layer = { ...this.getState().layer };
+        const currentParams = layer.params || {};
+        layer.params = {
+            ...currentParams,
+            ...params
+        };
+        this.updateState({ layer });
+    }
+
     versionSelected (version) {
         const layer = { ...this.getState().layer, version };
         if (typeof version === 'undefined') {
@@ -113,6 +124,14 @@ class UIHandler extends StateHandler {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
             });
+            const currentParams = layer.params || {};
+            const selectedLayerParams = updateLayer.params || {};
+            if (Object.keys(currentParams).length > 0 || Object.keys(selectedLayerParams).length > 0) {
+                updateLayer.params = {
+                    ...currentParams,
+                    ...selectedLayerParams
+                };
+            }
             this.updateState({
                 layer: updateLayer,
                 propertyFields: this.getPropertyFields(updateLayer)
@@ -298,6 +317,28 @@ class UIHandler extends StateHandler {
             delete attributes.filter;
         } else {
             attributes = { ...attributes, filter };
+        }
+        this.updateLayerAttributes(attributes, layer);
+    }
+
+    setIgnoreCoverage (ignoreCoverage) {
+        const layer = { ...this.getState().layer };
+        const attributes = { ...(layer.attributes || {}) };
+        if (ignoreCoverage) {
+            attributes.ignoreCoverage = true;
+        } else {
+            delete attributes.ignoreCoverage;
+        }
+        this.updateLayerAttributes(attributes, layer);
+    }
+
+    setIgnoreMetadataCoverage (ignoreMetadataCoverage) {
+        const layer = { ...this.getState().layer };
+        const attributes = { ...(layer.attributes || {}) };
+        if (ignoreMetadataCoverage) {
+            attributes.ignoreMetadataCoverage = true;
+        } else {
+            delete attributes.ignoreMetadataCoverage;
         }
         this.updateLayerAttributes(attributes, layer);
     }
@@ -546,6 +587,7 @@ class UIHandler extends StateHandler {
 
     resetMap () {
         this.clearLayerCoverage();
+        this.clearLayerMetadataCoverage();
     }
 
     ajaxStarted () {
@@ -606,7 +648,8 @@ class UIHandler extends StateHandler {
         }
         this.resetLayer(keepCapabilities);
         this.ajaxStarted();
-        fetch(Oskari.urls.getRoute('LayerAdmin', { id }), {
+        const srs = Oskari.getSandbox().getMap().getSrsName();
+        fetch(Oskari.urls.getRoute('LayerAdmin', { id, srs }), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
@@ -1077,27 +1120,35 @@ class UIHandler extends StateHandler {
 
     fetchLayerAdminMetadata () {
         this.ajaxStarted();
-        fetch(Oskari.urls.getRoute('LayerAdminMetadata'))
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    return Promise.reject(new Error('Fetching user roles and permission types failed'));
+        return fetch(Oskari.urls.getRoute('LayerAdminMetadata'))
+            .then(async metadataResponse => {
+                if (!metadataResponse.ok) {
+                    throw new Error('Fetching user roles and permission types failed');
                 }
-            }).then(data => {
-                this.loadingCount--;
+                const metadata = await metadataResponse.json();
+                const { systemRoles = {} } = metadata;
+                const systemRoleNames = Object.values(systemRoles);
+                const roles = (metadata.roles || []).map(role => ({
+                    ...role,
+                    isSystem: systemRoleNames.includes(role.name)
+                }));
+                const updatedMetadata = {
+                    ...metadata,
+                    roles
+                };
                 const currentLayer = this.getState().layer;
-                this.layerHelper.initPermissionsForLayer(currentLayer, data.roles);
+                this.layerHelper.initPermissionsForLayer(currentLayer, roles);
                 this.updateState({
                     layer: currentLayer,
-                    loading: this.isLoading(),
-                    metadata: data
+                    metadata: updatedMetadata
                 });
                 // invalidate cache if it was populated
                 Object.keys(__VALIDATOR_CACHE).forEach(key => delete __VALIDATOR_CACHE[key]);
             }).catch(error => {
                 this.log.error(error);
                 Messaging.error(getMessage('messages.errorFetchUserRolesAndPermissionTypes'));
+            }).finally(() => {
+                this.ajaxFinished();
             });
     }
 
@@ -1195,31 +1246,40 @@ class UIHandler extends StateHandler {
         Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, COVERAGE_LAYER]);
     }
 
-    showLayerCoverage (id) {
-        const srs = Oskari.getSandbox().getMap().getSrsName();
-        fetch(Oskari.urls.getRoute('DescribeLayer', { id, srs }), {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        }).then(response => response.json())
-            .then(({ coverage }) => {
-                if (!coverage) {
-                    Messaging.info(getMessage('messages.noCoverage'));
-                    this.clearLayerCoverage();
-                    return;
-                }
-                const opts = {
-                    centerTo: true,
-                    clearPrevious: true,
-                    layerId: COVERAGE_LAYER
-                };
-                Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverage, opts]);
-            }).catch((error) => {
-                Messaging.error(getMessage('messages.errorFetchCoverage'));
-                this.log.error(`Failed to get layer coverage for id: ${id}`, error);
-                this.clearLayerCoverage();
-            });
+    clearLayerMetadataCoverage () {
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, METADATA_COVERAGE_LAYER]);
+    }
+
+    showLayerCoverage () {
+        const { layer = {} } = this.getState();
+        const { coverage } = layer;
+        if (!coverage) {
+            Messaging.info(getMessage('messages.noCoverage'));
+            this.clearLayerCoverage();
+            return;
+        }
+        const opts = {
+            centerTo: true,
+            clearPrevious: false,
+            layerId: COVERAGE_LAYER
+        };
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverage, opts]);
+    }
+
+    showLayerMetadataCoverage () {
+        const { layer = {} } = this.getState();
+        const { coverageMetadata } = layer;
+        if (!coverageMetadata) {
+            Messaging.info(getMessage('messages.noMetadataCoverage'));
+            this.clearLayerMetadataCoverage();
+            return;
+        }
+        const opts = {
+            centerTo: true,
+            clearPrevious: false,
+            layerId: METADATA_COVERAGE_LAYER
+        };
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverageMetadata, opts]);
     }
 
     toggleDeclutter (checked) {
@@ -1237,6 +1297,8 @@ const wrapped = controllerMixin(UIHandler, [
     'setAttributes',
     'setAttributesData',
     'setFeatureFilter',
+    'setIgnoreCoverage',
+    'setIgnoreMetadataCoverage',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
     'setClusteringDistance',
@@ -1249,6 +1311,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setHoverJSON',
     'setHover',
     'setLayerName',
+    'setLayerParams',
     'setLayerUrl',
     'setLegendUrl',
     'setLocalizedNames',
@@ -1281,7 +1344,9 @@ const wrapped = controllerMixin(UIHandler, [
     'versionSelected',
     'showLayerMetadata',
     'clearLayerCoverage',
+    'clearLayerMetadataCoverage',
     'showLayerCoverage',
+    'showLayerMetadataCoverage',
     'toggleDeclutter'
 ]);
 export { wrapped as AdminLayerFormHandler };

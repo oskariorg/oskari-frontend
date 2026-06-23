@@ -135,7 +135,6 @@ export const JsonTabPane = ({ layer, propertyFields, controller }) => {
                     <ParsedCollapse skipEdit json={layer.capabilities} jsonKey='capabilities'/>
                 }
                 <ParsedCollapse json={layer.options} jsonKey='options' controller={controller}/>
-                <ParsedCollapse json={layer.params} jsonKey='params' controller={controller}/>
             </StyledFormField>
         </Fragment>
     );

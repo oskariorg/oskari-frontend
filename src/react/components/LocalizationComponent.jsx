@@ -64,6 +64,10 @@ const getElementValueChangeHandler = (values, lang, elementName, setValue, onCha
     };
 };
 
+const isLanguageDisabled = (disabledLanguages, lang, fieldDisabled) => {
+    return Boolean(fieldDisabled) || (Array.isArray(disabledLanguages) && disabledLanguages.includes(lang));
+};
+
 const renderDivider = lang => {
     return (
         <Divider orientation="left">
@@ -106,6 +110,7 @@ const getCollapseHeader = () => {
  * @param {Function} onChange Callback function to get a new "locale" value for user input. Example: (newValue) => doStuff(newValue)
  * @param {Object} value "locale" object like this { "en": { "name": "user input" }} means that there's a value for field "name" for the "en" (english) language
  * @param {String[]} mandatoryLanguages If a mandatory is required for more than default language, you can specify the languages that are required. Example: ["fi"]. Defaults to first language in languages array (optional)
+ * @param {String[]|null} disabledLanguages Languages where inputs are disabled. Example: ["fi"]. Defaults to null (optional)
  * @param {ReactElement} LabelComponent For custom label tag when not using LabeledInput (used when the input components DON'T define label prop in PropTypes). Example: const Label = ({children}) => <div>{children}</div>
  * @param {Boolean} collapse "false" to show "other languages" directly and not in a collapse element (useful when there's only one field to localize)
  * @param {Boolean} defaultOpen have "other languages" collapse open by default with true
@@ -119,6 +124,7 @@ export const LocalizationComponent = ({
     onChange,
     value,
     mandatoryLanguages = [languages[0]],
+    disabledLanguages = null,
     LabelComponent = Label,
     collapse = true,
     defaultOpen = false,
@@ -149,16 +155,18 @@ export const LocalizationComponent = ({
                 getElementValueChangeHandler(internalValue, lang, name, setInternalValue, onChange);
             let elementValue = internalValue[lang][name];
 
-            const { mandatory = false, label = name, ...restProps } = element.props; // don't pass mandatory and placeholder to element node
+            const { mandatory = false, label = name, disabled: fieldDisabled, ...restProps } = element.props; // don't pass mandatory and placeholder to element node
             const attachSuffix = !isDefaultLang || CURRENT_LANG !== DEFAULT_LANG;
             const fieldLabel = attachSuffix ? getWithLangSuffix(label, lang) : label;
             const currentMandatory = mandatory && mandatoryLanguages.includes(lang);
+            const currentDisabled = isLanguageDisabled(disabledLanguages, lang) || fieldDisabled;
             const elProps = {
                 label: fieldLabel,
                 value: elementValue,
                 onChange: onElementValueChange,
                 autoComplete: 'off',
-                ...restProps
+                ...restProps,
+                disabled: currentDisabled
             };
             // detect if the child component declares handling a "label" prop in it's propTypes
             const elementDeclaredProps = {...element.type.propTypes};
@@ -214,6 +222,7 @@ export const LocalizationComponent = ({
 LocalizationComponent.propTypes = {
     languages: PropTypes.arrayOf(PropTypes.string),
     mandatoryLanguages: PropTypes.arrayOf(PropTypes.string),
+    disabledLanguages: PropTypes.arrayOf(PropTypes.string),
     onChange: PropTypes.func,
     value: PropTypes.object,
     LabelComponent: PropTypes.elementType,

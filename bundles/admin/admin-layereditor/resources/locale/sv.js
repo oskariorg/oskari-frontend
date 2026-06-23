@@ -41,13 +41,23 @@ Oskari.registerLocalization(
                 },
                 "opacity": "Opacitet",
                 "params": {
-                    "selectedTime": "Vald tid"
+                    "selectedTime": "Vald tid",
+                    "key": "Parameter",
+                    "value": "Värde",
+                    "title": "Parametrar",
+                    "errors": {
+                        "keyExists": "En parameter med detta namn finns redan.",
+                        "reservedKey": "Parameternamnet är reserverat."
+                    }
                 },
                 "singleTile": "Single Tile",
                 "realtime": "Realtidslager",
                 "refreshRate": "Uppdateringsfrekvens (i sekunder)",
                 "scale": "Skala",
                 "coverage":"Visa kartlagrets täckningsområde på kartan",
+                "metadataCoverage":"Visa kartlagrets metadatas täckningsområde på kartan",
+                "ignoreCoverage":"Ignorera kartlagrets täckningsområde",
+                "ignoreMetadataCoverage":"Ignorera kartlagrets metadatas täckningsområde",
                 "declutter": "Rita objektnamn separat (declutter).",
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",
@@ -66,6 +76,12 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Ytterligare",
             "permissionsTabTitle": "Rättigheter",
             "jsonTabTitle": "JSON",
+            "roles": {
+                "type": {
+                    "system": "Systemroller",
+                    "other": "Övriga roller"
+                }
+            },
             "interfaceVersionDesc": "Välj primärt den nyaste versionen som stöds av gränssnittet.",
             "attributions": "Tillskrivningar",
             "usernameAndPassword": "Användarnamn och lösenord",
@@ -298,6 +314,7 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "Gruppen du försöker ta bort innehåller undergrupper. Ta bort undergrupperna först.",
                 "errorFetchCoverage": "Kan inte hämtas kartlagrets täckningsområde från tjänsten.",
                 "noCoverage": "Kartlagrets täckningsområde är inte begränsat.",
+                "noMetadataCoverage": "Metadata-täckning finns inte tillgänglig för kartlagret.",
                 "invalidScale": "Kontrollera skalbegränsningarna för kartlagret."
             },
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",

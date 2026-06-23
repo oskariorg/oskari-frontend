@@ -40,13 +40,23 @@ Oskari.registerLocalization(
                 },
                 "opacity": "Peittävyys",
                 "params": {
-                    "selectedTime": "Valittu aika"
+                    "selectedTime": "Valittu aika",
+                    "key": "Parametri",
+                    "value": "Arvo",
+                    "title": "Parametrit",
+                    "errors": {
+                        "keyExists": "Parametri tällä nimellä on jo olemassa.",
+                        "reservedKey": "Parametrin nimi on varattu."
+                    }
                 },
                 "singleTile": "Single Tile",
                 "realtime": "Reaaliaikataso",
                 "refreshRate": " Virkistystaajuus sekunteina",
                 "scale": "Mittakaava",
                 "coverage":"Näytä karttatason kattavuusalue kartalla",
+                "metadataCoverage":"Näytä karttatason metadatan kattavuusalue kartalla",
+                "ignoreCoverage":"Ohita karttatason kattavuusalue",
+                "ignoreMetadataCoverage":"Ohita karttatason metadatan kattavuusalue",
                 "declutter": "Piirrä kohteiden nimet erikseen (declutter).",
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
@@ -65,6 +75,12 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Lisätiedot",
             "jsonTabTitle": "JSON",
             "permissionsTabTitle": "Oikeudet",
+            "roles": {
+                "type": {
+                    "system": "Järjestelmäroolit",
+                    "other": "Lisäroolit"
+                }
+            },
             "interfaceVersionDesc": "Valitse ensisijaisesti uusin rajapinnan tukema versio.",
             "attributions": "Lähdeviitteet",
             "usernameAndPassword": "Käyttäjätunnus ja salasana",
@@ -299,6 +315,7 @@ Oskari.registerLocalization(
                 "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
                 "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
                 "noCoverage": "Karttatason kattavuutta ei ole rajoitettu.",
+                "noMetadataCoverage": "Tasolle ei ole saatavilla metadatan kattavuusaluetta.",
                 "invalidScale": "Tarkista tason mittakaavarajat.",
                 "noFeatureProperties": "Kohteiden ominaisuustietoja ei ole saatavilla tasolle."
             },

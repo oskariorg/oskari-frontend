@@ -1,0 +1,104 @@
+publiccodeYmlVersion: "0"
+
+name: Oskari
+url: "https://github.com/oskariorg/oskari-frontend"
+landingURL: "https://oskari.org"
+softwareVersion: "3.3.0"
+releaseDate: "2026-04-07"
+logo: "https://oskari.org/assets/images/oskari_logo_black_horizontal.svg"
+
+platforms:
+  - web
+
+categories:
+  - geographic-information-systems
+  - it-development
+  - web-collaboration
+  - data-visualization
+
+organisation:
+  name: "National Land Survey of Finland"
+  uri: "https://www.maanmittauslaitos.fi"
+
+roadmap: "https://oskari.org/documentation/roadmap"
+
+developmentStatus: stable
+
+softwareType: "standalone/web"
+
+description:
+  en:
+    localisedName: Oskari
+    shortDescription: >
+      A framework giving its users capabilities to build multipurpose web
+      mapping applications.
+    longDescription: >
+      Oskari is a framework giving its users capabilities to build multipurpose
+      web mapping applications. It utilises distributed Spatial Data
+      Infrastructures like INSPIRE. Oskari started out as the national geoportal
+      for Finland and it still serves in that capacity in addition to other
+      users. There has been significant development to enable tailoring Oskari
+      and its applications. The available tailoring options are much wider than
+      originally was envisioned by the team. The setup of the Oskari server has
+      been developed over the years to be quite an easy task regardless of
+      various web mapping services the server is intended to serve. Oskari still
+      powers the national geoportal among multiple other services in both
+      Finland and abroad.
+
+      Oskari has a large user and applications base both in the government
+      agencies and in the private sector. The Finnish municipalities and
+      non-profit organisations provide various map based apps to their residents
+      from the Oskari based services daily. There are private sector
+      organisations using Oskari and there are also a number of software
+      consultants and companies providing services related to setting and
+      developing Oskari further.
+
+      All this has resulted in Oskari becoming an ecosystem in its own right and
+      driven by an active community of users and developers. The community and
+      the ecosystem is supported via continuous development of the platform
+      together with Oskari developers in the GitHub and it is being updated
+      regularly.
+
+      Over time Oskari platform has proven to be a stable and robust platform
+      supporting applications over many years and at the same being able to
+      extend the support for increasing needs of the new applications.
+    features:
+      - Modular bundle architecture
+      - OpenLayers and Cesium map engines
+      - WMS, WFS, WMTS layer support
+      - Vector features and GeoJSON
+      - 3D map support via Cesium
+      - Time-series and animation
+      - Print and export tools
+      - Role-based access control integration
+      - Multilingual / localisation support
+      - React-based UI components
+    screenshots:
+      - "https://oskari.org/assets/images/header-hero-image.png"
+
+legal:
+  license: "MIT OR EUPL-1.1"
+  mainCopyrightOwner: "National Land Survey of Finland"
+
+maintenance:
+  type: "community"
+  contacts:
+    - name: "Oskari Community"
+      email: "info@oskari.org"
+      affiliation: "National Land Survey of Finland"
+
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - en
+    - fi
+    - sv
+
+dependsOn:
+  open:
+    - name: Node.js
+      versionMin: "16.20.0"
+    - name: Java
+      versionMin: "17"
+    - name: PostgreSQL
+    - name: PostGIS

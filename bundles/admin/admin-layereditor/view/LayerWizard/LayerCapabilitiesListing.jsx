@@ -10,7 +10,7 @@ import { CheckCircleTwoTone, QuestionCircleTwoTone, WarningTwoTone } from '@ant-
 const LOCALIZATION_BUNDLE_ID = 'admin-layereditor';
 
 export const StyledListItem = styled(ListItem)`
-    :hover {
+    &:hover {
         background-color: #ffd400;
     }
 `;
