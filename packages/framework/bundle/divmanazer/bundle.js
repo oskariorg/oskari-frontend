@@ -141,9 +141,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/component/RadioButtonGroup.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/CheckboxInput.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/ColorPickerInput.js"
             }, {
                 "type": "text/javascript",
