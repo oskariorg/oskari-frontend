@@ -26,7 +26,11 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Användarvillkor",
                 "dataSources": "Datakällor",
-                "layersHeader": "Kartlager"
+                "layersHeader": "Kartlager",
+                "unknownSource": "Unknown data source",
+                "layerPrefix": {
+                    "myf": "Egna dataset"
+                }
             },
             "DataSourcePlugin": {
                 "link": "Datakälla",
