@@ -62,9 +62,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "src" : "../../../../bundles/framework/divmanazer/component/TabPanel.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/Badge.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/Popup.js"
         }, {
             "type" : "text/javascript",
@@ -117,9 +114,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
         }, {
             "type" : "text/css",
             "src" : "../../../../bundles/framework/divmanazer/resources/scss/modal.scss"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../bundles/framework/divmanazer/resources/scss/badge.scss"
         }, {
             "type" : "text/css",
             "src" : "../../../../bundles/framework/divmanazer/resources/scss/forminput.scss"

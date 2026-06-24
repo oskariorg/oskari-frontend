@@ -86,9 +86,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/component/TabPanel.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/Badge.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/Popup.js"
             }, {
                 "type": "text/javascript",
