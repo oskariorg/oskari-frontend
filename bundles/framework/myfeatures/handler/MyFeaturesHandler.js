@@ -50,7 +50,7 @@ class MyFeaturesHandler extends StateHandler {
         const isImport = !id && !isNew;
         if (this.featureEditorControls) {
             // Close feature editor first so the layer form popup can't end up on top of it.
-            this.closeFeatureEditorFlyout();
+            this.closeFeatureEditorPopup();
         }
         if (this.popupControls) {
             // already opened -> bring to top.
@@ -99,7 +99,7 @@ class MyFeaturesHandler extends StateHandler {
         });
 
         if (this.featureEditorControls) {
-            this.closeFeatureEditorFlyout();
+            this.closeFeatureEditorPopup();
         }
 
         this.featureEditorControls = showFeatureEditorPopup(layerId, featureId, this?.state?.data, this, null);
@@ -383,7 +383,7 @@ class MyFeaturesHandler extends StateHandler {
             // TODO: should deletefeature maybe return something useful?
             return;
         }).then(() => {
-            this.closeFeatureEditorFlyout();
+            this.closeFeatureEditorPopup();
             setTimeout(() => {
                 this.refreshLayerOnMap(layerId);
                 Messaging.success(this.loc('featureEditor.featureDelete.success'));
