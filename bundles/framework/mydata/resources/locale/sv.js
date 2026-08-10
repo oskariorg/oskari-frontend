@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Mina uppgifter",
         "desc": "Mina uppgifter",
-        "notLoggedIn": "Mina uppgifter innehåller din användarprofil och alla dina sparade funktioner, kartvyer, publicerade kartor, indikatorer, analys och dataset.",
+        "notLoggedIn": "Mina uppgifter innehåller din användarprofil och alla dina sparade funktioner, kartvyer, publicerade kartor, indikatorer och datamängd.",
         "notLoggedInText": "Logga in.",
         "register": "Registrera dig",
         "projectionError": {
@@ -153,7 +153,7 @@ Oskari.registerLocalization(
         },
         "guidedTour": {
             "title": "Min data",
-            "message": "\"Min data\"-menyn innehåller alla dina sparade platser, kartvyer, publicerade kartor, indikatorer, analys och dataset. Där kan du också kontrollera din kontoinformation. Mina data visas endast för inloggade användare.",
+            "message": "\"Min data\"-menyn innehåller alla dina sparade platser, kartvyer, publicerade kartor, indikatorer och datamängd. Där kan du också kontrollera din kontoinformation. Mina data visas endast för inloggade användare.",
             "openLink": "Visa Mina data",
             "closeLink": "Göm Mina data",
             "tileText": "Min data"

@@ -3,7 +3,7 @@ Oskari.registerLocalization({
     "key": "catalogue.bundle.metadatasearch",
     "value": {
         "tabTitle": "Metadatasökning",
-        "metadataSearchDescription": "Sök metadata för dataset, dataset-serier eller tjänster.",
+        "metadataSearchDescription": "Sök metadata för datamängd, datamängd-serier eller tjänster.",
         "placeholder": "Skriv sökordet",
         "advancedSearch": {
             "showMore": "Visa sökalternativ",
@@ -32,7 +32,7 @@ Oskari.registerLocalization({
             "service-view": "Visningstjänst",
             "service-OGC:WMS": "WMS-tjänst",
             "service-OGC:WFS": "WFS-tjänst",
-            "dataset": "Dataset",
+            "dataset": "Datamängd",
             "series": "Serie",
             "service": "Tjänst",
             "discovery": "Upptäck",
@@ -48,7 +48,7 @@ Oskari.registerLocalization({
                 "service-view": "Visningstjänst",
                 "service-OGC:WMS": "WMS-tjänst",
                 "service-OGC:WFS": "WFS-tjänst",
-                "dataset": "Dataset",
+                "dataset": "Datamängd",
                 "series": "Serie",
             }
         },
@@ -57,7 +57,7 @@ Oskari.registerLocalization({
             "noSearchResults": "Inga resultat hittades.",
             "modifySearch": "Redigera sökalternativ",
             "showSearch": "Visa alla sökresultat",
-            "showDatasets": "Visa endast dataset",
+            "showDatasets": "Visa endast datamängd",
             "showServices": "Visa endast tjänster",
             "identificationCode": {
                 "creation": "skapandedatum",

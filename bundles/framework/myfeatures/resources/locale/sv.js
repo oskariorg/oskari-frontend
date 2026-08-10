@@ -3,16 +3,16 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "myfeatures",
     "value": {
-        "title": "Eget dataset",
+        "title": "Eget datamängd",
         "tool": {
-            "tooltip": "Importera ditt eget dataset"
+            "tooltip": "Importera ditt eget datamängd"
         },
         "flyout": {
-            "title": "Dataset importering",
+            "title": "Datamängd importering",
             "description": "Importera en datamängd från din dator. GPX (.gpx), KML (.kml), GeoJSON (.json eller .geojson) och GeoPackage (.gpkg) kan laddas upp som enskilda filer. Filformat som kräver flera filer ska laddas upp som en zip-fil som innehåller alla nödvändiga filer i något av följande format:<ul><li>Shapefile (.shp, .shx, .dbf och .prj, frivilligt .cpg)</li><li>GPX (.gpx)</li><li>KML (.kml)</li><li>GeoPackage (.gpkg)</li><li>GeoJSON (.json eller .geojson)</li><li>MapInfo (.mif och .mid)</li></ul>Den uppladdade filen får endast innehålla en datamängd och dess storlek får vara högst {maxSize, number} Mb. Enskilda filer som extraheras från zip-arkiv får vara högst {unzippedMaxSize, number} Mb stora.",
             "help": "Importera en datamängd från din dator. GPX-, KML-, GeoJSON- och GeoPackage-filer kan laddas upp som enskilda filer. För filformat som kräver flera filer ska du kontrollera att alla nödvändiga filer finns i zip-paketet och att data har rätt filformat och koordinatsystem.",
             "submit": "Skicka",
-            "success": "Dataset importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\".",
+            "success": "Datamängd importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\".",
             "tabs": {
                 "general" : "Allmän",
                 "visualization": "Visualisering",
@@ -58,7 +58,7 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Dataset (Beta)",
+            "title": "Datamängd (Beta)",
             "editLayer": "Redigera kartlagret",
             "deleteLayer": "Ta bort kartlagret",
             "grid": {
@@ -74,7 +74,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Sisältöeditori"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
-            "downloadTooltip": "Download dataset",
+            "downloadTooltip": "Download datamängd",
             "confirmDeleteFieldMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
@@ -84,18 +84,18 @@ Oskari.registerLocalization(
                 "close": "Stäng"
             },
             "notification": {
-                "deletedTitle": "Ta bort dataset",
-                "deletedMsg": "Datasetet har tagits bort",
-                "editedMsg": "Datasetet har uppdaterats",
+                "deletedTitle": "Ta bort datamängd",
+                "deletedMsg": "Datamängden har tagits bort",
+                "editedMsg": "Datamängden har uppdaterats",
                 "createdMsg": "The dataset has been created"
             },
             "error": {
                 "title": "Fel!",
                 "generic": "Systemfel. Försök på nytt senare.",
                 "deleteMsg": "Systemfel. Försök på nytt senare.",
-                "editMsg": "Uppdateringen av datasetet misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
-                "createMsg": "Creating the dataset failed due to an error in the system. Please try again later.",
-                "getStyle": "Sökningen av den stil som definierats för datasetet misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
+                "editMsg": "Uppdateringen av datamängden misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
+                "createMsg": "Creating the datamängden failed due to an error in the system. Please try again later.",
+                "getStyle": "Sökningen av den stil som definierats för datamängden misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
                 "styleName": "Namnge kartlagret och försök sedan på nytt."
             }
         },
@@ -156,8 +156,8 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "organization": "Egna dataset",
-            "group": "Egna dataset"
+            "organization": "Egna datamängd",
+            "group": "Egna datamängd"
         }
     }
 });
