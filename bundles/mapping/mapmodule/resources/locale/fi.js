@@ -26,7 +26,11 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
                 "dataSources": "Tietolähteet",
-                "layersHeader": "Karttatasot"
+                "layersHeader": "Karttatasot",
+                "unknownSource": "Tietolähde ei tiedossa",
+                "layerPrefix": {
+                    "myf": "Käyttäjän syöttämä"
+                }
             },
             "DataSourcePlugin": {
                 "link": "Tietolähde",
