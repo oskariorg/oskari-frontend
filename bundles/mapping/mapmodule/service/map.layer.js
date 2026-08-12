@@ -301,13 +301,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         replaceLayer: function(layerId, newLayer) {
             this.removeLayer(layerId, true, true);
             this.addLayer(newLayer, true);
-            const mapLayerEvent = Oskari.eventBuilder('MapLayerEvent');
-            this.getSandbox().notifyAll(mapLayerEvent(layerId, 'update'));
-
             const map = this.getSandbox().getMap();
             if (map.isLayerSelected(layerId)) {
                 map.mergeLayer(layerId, newLayer);
             }
+            const mapLayerEvent = Oskari.eventBuilder('MapLayerEvent');
+            this.getSandbox().notifyAll(mapLayerEvent(layerId, 'update'));
         },
 
         /**
