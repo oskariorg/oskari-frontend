@@ -2,13 +2,11 @@ const path = require('path');
 const { IgnorePlugin } = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const LocalizationPlugin = require('./localizationPluginFor5.js');
-const WebpackBar = require('webpackbar');
 const { existsSync } = require('fs');
 
 module.exports = function generateEntries (appsetupPaths, isProd, context) {
     const entries = {};
     const plugins = [
-        new WebpackBar(),
         new IgnorePlugin({
             resourceRegExp: /^\.\/locale$/,
             contextRegExp: /moment$/
