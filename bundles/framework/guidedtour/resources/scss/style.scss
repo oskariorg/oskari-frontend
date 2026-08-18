@@ -1,4 +1,6 @@
 /* Mixins */
+@use 'sass:string';
+
 @mixin border-radius($radius) {
     -webkit-border-radius: $radius;
     -moz-border-radius: $radius;
@@ -15,11 +17,11 @@
     background: -moz-linear-gradient(top,  $from,  $to);
     background: -ms-linear-gradient(top,  $from,  $to);
     /* For some reason sass didn't like this in one line... */
-    filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='")
+    filter: string.unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='")
     + $from
-    + unquote("', endColorstr='")
+    + string.unquote("', endColorstr='")
     + $to
-    + unquote("')"); 
+    + string.unquote("')");
     background: linear-gradient(top,  $from,  $to);
 }
 

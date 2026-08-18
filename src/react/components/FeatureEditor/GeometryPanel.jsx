@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Message, Button, Space } from 'oskari-ui';
+import { Alert, Message, Button } from 'oskari-ui';
 import { StyledSpace, StyledContainer, StyledModIndicator, Row, Column } from './styled';
 import styled from 'styled-components';
 
@@ -13,6 +13,11 @@ const StyledAlert = styled(Alert)`
     margin-bottom: 5px;
 `;
 
+const WrappingRow = styled(Row)`
+    flex-wrap: wrap;
+    width: 100%;
+`;
+
 export const StyledListItem = styled('li')`
     padding: 5px;
     border: 1px solid gray;
@@ -23,7 +28,7 @@ export const StyledListItem = styled('li')`
     width: 100%;
     align-items: center;
 
-    :hover {
+    &:hover {
         background-color: #FDF8D9;
     }
 `;
@@ -45,7 +50,7 @@ const geometryMatch = (current = {}, original = {}) => {
     return currentList.every(item => originalList.includes(item));
 }
 
-export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDrawing, stopDrawing, updateGeometry}) => {
+export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDrawing, stopDrawing, updateGeometry, showGeometryNotRecognizedAlert = true }) => {
     const isMulti = type.includes('Multi');
     const isGeomBtnShown = (btnType) => type.includes(btnType);
     const isPoint = isGeomBtnShown('Point');
@@ -62,9 +67,9 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
                 <StyledSpace>
                     <Message messageKey="FeatureEditorView.geometrylist.empty" />
                 </StyledSpace>
-                { !isRecognized &&
+                { !isRecognized && showGeometryNotRecognizedAlert &&
                     <StyledAlert message={<Message messageKey="FeatureEditorView.geometrylist.notRecognized" messageArgs={{type}}/>} /> }
-                <Space>
+                <WrappingRow>
                     { (!isRecognized || isPoint) &&
                         <Button onClick={() => startDrawing('Point')}>
                             <Message messageKey="FeatureEditorView.tools.point" />
@@ -80,7 +85,7 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
                             <Message messageKey="FeatureEditorView.tools.area" />
                         </Button>
                     }
-                </Space>
+                </WrappingRow>
             </React.Fragment>);
     }
     // has geometry
@@ -110,12 +115,12 @@ export const GeometryPanel = ({ type = '', feature = {}, original = {}, startDra
                                 <Message messageKey="FeatureEditorView.tools.geometryEdit" />
                             </Button>
 
-                            { geometryChanged && <Button type="default" onClick={() => { 
+                            { geometryChanged && <Button type="default" onClick={() => {
                                 updateFeatureGeometry(feature, original.geometry);
                                 stopDrawing(true);
                             }}>
                                 <Message messageKey="FeatureEditorView.restoreOriginal" />
-                            </Button> 
+                            </Button>
                             }
 
                         </Row>
@@ -257,5 +262,6 @@ GeometryPanel.propTypes = {
     feature: PropTypes.object,
     original: PropTypes.object,
     startDrawing: PropTypes.func,
-    updateGeometry: PropTypes.func
+    updateGeometry: PropTypes.func,
+    showGeometryNotRecognizedAlert: PropTypes.bool
 };

@@ -19,23 +19,26 @@ const StyledButton = styled(Button)`
     background: ${props => props.$backgroundColor};
     color: ${props => props.$iconColor};
     border: none;
-    &:hover {
+    box-shadow: none;
+    &&&:hover {
         background: ${props => props.$backgroundColor};
         color: ${props => props.$iconColor};
-        border: none;
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
         path {
             fill: ${props => props.$hoverColor};
         }
     }
-    &:focus {
+    &&&:focus,
+    &&&:active,
+    &&&:focus-visible {
         background: ${props => props.$backgroundColor};
         color: ${props => props.$iconColor};
-        border: none;
-    }
-    &:active {
-        background: ${props => props.$backgroundColor};
-        color: ${props => props.$iconColor};
-        border: none;
+        border: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        outline: none;
     }
     &.filtering {
         color:  ${props => props.$hoverColor};
@@ -50,7 +53,7 @@ const SearchContainer = styled('div')`
     background: ${props => props.backgroundColor};
     opacity: ${props => props.opacity};
     align-items: center;
-    padding: 0px 7px 3px 3px;
+    padding: 0px 7px 0px 3px;
     border-radius: calc(${props => props.rounding || 0} * 40px);
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
 

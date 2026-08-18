@@ -423,14 +423,16 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
         mergeLayer: function(id, newLayer) {
             const index = this.getLayerIndex(id);
             if (index > -1) {
-                const wfs = _selectedLayers[index];
-                wfs._permissions = { ...newLayer._permissions };
-                wfs._tools = wfs._tools.concat(newLayer._tools);
-                wfs._featureTools = [].concat(newLayer._featureTools);
-                wfs._layerType = newLayer._layerType;
-                _selectedLayers[index] = wfs;
+                const current = _selectedLayers[index];
+                const opacity = current.getOpacity();
+                const visibilityInfo = current.getVisibilityInfo();
+                const emptyLayer = Object.create(Object.getPrototypeOf(newLayer));
+                const merged = Object.assign(emptyLayer, newLayer);
+                // TODO: we should move to a direction where maplayer and selectedlayer are in fact the same instance so there would be no need for this hacky and error prone copying props one by one
+                merged._opacity = opacity;
+                merged._visibilityInfo = { ...merged._visibilityInfo, ...visibilityInfo };
+                _selectedLayers[index] = merged;
             }
-
         },
         moveLayer: function (id, newIndex, triggeredBy) {
             var list = this.getLayers();

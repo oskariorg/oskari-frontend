@@ -26,7 +26,11 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Användarvillkor",
                 "dataSources": "Datakällor",
-                "layersHeader": "Kartlager"
+                "layersHeader": "Kartlager",
+                "unknownSource": "Unknown data source",
+                "layerPrefix": {
+                    "myf": "Egna dataset"
+                }
             },
             "DataSourcePlugin": {
                 "link": "Datakälla",
@@ -130,6 +134,7 @@ Oskari.registerLocalization(
             },
             "WfsVectorLayerPlugin": {
                 "editLayer": "Editera kartlager",
+                "maybeMoreFeatures": "Kartlagret \"{name}\" kan innehålla fler objekt än de som laddades till kartan. Zooma in för att se alla objekt.",
                 "layerFilter": {
                     "tooltip": "Visa endast kartlager med vektorgrafik",
                     "featuredata": "Vektorlager"

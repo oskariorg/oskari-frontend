@@ -16,7 +16,7 @@ export const showMetadataFlyout = (state, conf, controller, onClose) => {
         </LocaleProvider>
     );
     const title = Oskari.getMsg(BUNDLE_ID, 'title');
-    const controls = showFlyout(title, content, onClose, { theme, id: BUNDLE_ID });
+    const controls = showFlyout(title, content, onClose, { theme, id: BUNDLE_ID, resizable: true });
     return {
         ...controls,
         update: (state) => {

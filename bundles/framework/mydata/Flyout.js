@@ -1,6 +1,6 @@
 import React from 'react';
 import { AccountTab } from './view/Account/AccountTab';
-import { Tabs } from 'antd';
+import { Tabs } from 'oskari-ui';
 import { MyDataHandler } from './handler/MyDataHandler';
 import { MyViewsTab } from './view/MyViews/MyViewsTab';
 import { FlyoutContent } from './FlyoutContent';
@@ -208,5 +208,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.userinterface.Flyout']
+        protocol: ['Oskari.userinterface.Flyout']
     });

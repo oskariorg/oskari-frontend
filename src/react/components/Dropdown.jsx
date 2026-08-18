@@ -1,22 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown as AntDropdown, Menu } from 'antd';
+import { Dropdown as AntDropdown } from 'antd';
 
 export const Dropdown = ({ children, items, placement, click = true }) => {
-    const menu = (
-        <Menu
-            items={items.map(item => (
-                {
-                    key: item.title,
-                    label: item.title,
-                    onClick: item.action
-                }
-            ))}
-        />
-    );
+    const menu = {
+        items: items.map((item, index) => ({
+            key: `${index}-${item.title}`,
+            label: item.title,
+            onClick: item.action
+        }))
+    };
+
     return (
-        <AntDropdown popupRender={() => menu} placement={placement} trigger={click ? ['click'] : ['hover']}>
-            {children}
+        <AntDropdown menu={menu} placement={placement} trigger={click ? ['click'] : ['hover']}>
+            <span>{children}</span>
         </AntDropdown>
     );
 };

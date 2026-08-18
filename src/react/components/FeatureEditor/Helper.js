@@ -22,6 +22,13 @@ const GEOM_TYPE_MAPPING = {
 };
 
 const GEOM_TYPE_GEOMETRY = 'geometry';
+export const FIELD_TYPE_DATE = 'date';
+export const FIELD_TYPE_DATETIME = 'datetime';
+export const FIELD_TYPE_NUMBER_INT = 'int';
+export const FIELD_TYPE_NUMBER_LONG = 'long';
+export const FIELD_TYPE_NUMBER_DOUBLE = 'double';
+export const FIELD_TYPE_BOOLEAN = 'boolean';
+export const FIELD_NAME_ID = 'id';
 
 const detectGeometryType= (type) => GEOM_TYPE_MAPPING[type] || GEOM_TYPE_MAPPING['gml:' + type];
 
@@ -57,7 +64,20 @@ const describeLayer = (id) => {
         json.properties
             .filter(prop => prop.type !== GEOM_TYPE_GEOMETRY)
             .forEach((prop) => {
-                types[prop.name] = prop.type;
+                const rawType = (prop.rawType || '').toLowerCase();
+                const isDateTime = rawType.includes(FIELD_TYPE_DATETIME);
+                const isDate = !isDateTime && rawType.endsWith(FIELD_TYPE_DATE);
+                if (isDateTime) {
+                    types[prop.name] = FIELD_TYPE_DATETIME;
+                } else if (isDate) {
+                    types[prop.name] = FIELD_TYPE_DATE;
+                } else if (prop.type === 'number') {
+                    types[prop.name] = rawType.includes(FIELD_TYPE_NUMBER_LONG) || rawType.includes(FIELD_TYPE_NUMBER_INT) ? FIELD_TYPE_NUMBER_INT : FIELD_TYPE_NUMBER_DOUBLE;
+                } else if (prop.type === 'boolean') {
+                    types[prop.name] = FIELD_TYPE_BOOLEAN;
+                } else {
+                    types[prop.name] = prop.type;
+                }
             });
 
         return {

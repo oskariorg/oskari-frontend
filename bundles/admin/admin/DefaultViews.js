@@ -1,215 +1,131 @@
-/**
- * TabPanel that lists default views in the system and can be used to modify them.
- * @param  {Object} locale [description]
- * @param  {Oskari.admin.bundle.admin.GenericAdminBundleInstance} parent reference to instance to get sandbox etc
- */
-Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, parent) {
-    this.instance = parent;
-    this.locale = locale;
-    this.setTitle(locale.title);
-    this.setContent(this.createUI());
-}, {
-    templates: {
-        'main': ({ msg }) => `<div>${msg}<div class="grid-placeholder"></div></div>`,
-        'link': ({ msg }) => `<a href="javascript:void(0);" onClick="return false;">${msg}</a>`,
-        'errorGuest': ({ listTitle, list }) => `<div>${listTitle}<ul>${list}</ul></div>`,
-        'listItem': ({ msg }) => `<li>${msg}</li>`
-    },
-    /**
-     * Create the UI for this tab panel
-     * @return {jQuery} returns the created DOM
-     */
-    createUI: function () {
-        var me = this,
-            grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
-        grid.setVisibleFields(['name', 'action']);
-        grid.setColumnUIName('name', me.locale.headerName);
-        grid.setColumnUIName('action', ' ');
-        grid.setColumnValueRenderer('action', function (value, rowData) {
-            var link = jQuery(me.templates.link({
-                msg: value
-            }));
-            link.on('click', function () {
-                me.__modifyView(rowData.id);
-            });
-            return link;
-        });
+﻿import React, { useState, useEffect } from 'react';
+import { Button, List, ListItem, Message } from 'oskari-ui';
+import { Table } from 'oskari-ui/components/Table';
+import { Modal } from 'oskari-ui/components/Modal';
+import { Messaging } from 'oskari-ui/util';
 
-        var content = jQuery(this.templates.main({
-            msg: me.locale.desc
-        }));
-        // action_route=SystemViews
-        this.getDefaultViews(function (data) {
-            var model = me.__getGridModel(data);
-            model.setIdField('id');
-            grid.setDataModel(model);
-            grid.renderTo(content.find('div.grid-placeholder'));
-        });
-        return content;
-    },
-    /**
-     * Loads list of default views defined for Oskari instance and
-     * calls the given callback when finished.
-     * @param  {Function} callback [description]
-     */
-    getDefaultViews: function (callback) {
-        var me = this;
+const BUNDLE_KEY = 'GenericAdmin';
 
-        jQuery.ajax({
-            type: 'GET',
-            dataType: 'json',
-            url: Oskari.urls.getRoute('SystemViews'),
-            success: function (data) {
-                callback(data);
-            },
-            error: function () {
-                me.instance.showMessage(
-                    me.locale.notifications.errorTitle,
-                    me.locale.notifications.errorLoadingFailed);
+export const DefaultViewsContent = () => {
+    const [views, setViews] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [warning, setWarning] = useState(null); // { id, layerNames }
+    const sb = Oskari.getSandbox();
+
+    useEffect(() => {
+        const loadViews = async () => {
+            try {
+                const response = await fetch(Oskari.urls.getRoute('SystemViews'));
+                const data = await response.json();
+                const rows = [{ id: data.viewId, name: Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.globalViewTitle') }];
+                (data.roles || []).forEach(role => {
+                    if (role.viewId) {
+                        rows.push({ id: role.viewId, name: role.name });
+                    }
+                });
+                setViews(rows);
+                setLoading(false);
+            } catch (e) {
+                Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorLoadingFailed'));
+                setLoading(false);
             }
-        });
-    },
-    /**
-     * Collects current map state and calls backend to update the given view
-     * with new location and default layers
-     * @param  {String}  id     view id to update
-     * @param  {Boolean} force  true to update even if server warns about layers
-     */
-    __modifyView: function (id, force) {
-        var me = this,
-            sb = me.instance.getSandbox();
-        // setup route and location
-        var data = {
-            id: id,
+        };
+        loadViews();
+    }, []);
+
+    const modifyView = async (id, force = false) => {
+        const selectedLayers = sb.findAllSelectedMapLayers().map(layer => ({ id: '' + layer.getId() }));
+        const params = new URLSearchParams({
+            id,
             north: sb.getMap().getY(),
             east: sb.getMap().getX(),
             zoom: sb.getMap().getZoom(),
             srs: sb.getMap().getSrsName(),
-            selectedLayers: '[]',
+            selectedLayers: JSON.stringify(selectedLayers),
             force: !!force
-        };
-        // setup layers
-        const selectedLayers = sb.findAllSelectedMapLayers().map((layer) => {
-            return {
-                // backend assumes id is in string format
-                id: '' + layer.getId()
-            };
         });
-        // backend assumes selectedLayers is stringified JSON
-        data.selectedLayers = JSON.stringify(selectedLayers);
-
-        jQuery.ajax({
-            type: 'POST',
-            dataType: 'json',
-            data: data,
-            url: Oskari.urls.getRoute('SystemViews'),
-            success: function (response) {
-                me.__viewSaved(id, response);
-            },
-            error: function (xhr) {
-                me.__parseError(xhr, id);
+        try {
+            const response = await fetch(Oskari.urls.getRoute('SystemViews'), { method: 'POST', body: params });
+            if (!response.ok) {
+                handleError(await response.text(), id);
+                return;
             }
-        });
-    },
-    __parseError: function (xhr, id) {
-        var sb = this.instance.getSandbox();
-        if (!xhr || !xhr.responseText) {
-            this.__showGenericErrorSave(id);
+            Messaging.success(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.viewUpdated').replace('${id}', id));
+        } catch (e) {
+            Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorUpdating').replace('${id}', id));
+        }
+    };
+
+    const handleError = (responseText, id) => {
+        if (!responseText) {
+            Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorUpdating').replace('${id}', id));
             return;
         }
         try {
-            var resp = JSON.parse(xhr.responseText);
-            if (resp.error) {
-                sb.printWarn(resp.error);
-            }
-            if (resp.info) {
-                var code = resp.info.code;
-                var handler = this.errorHandlers[code];
-                if (handler) {
-                    handler.apply(this, [resp.info, id]);
-                    return;
-                }
-            }
-        } catch (err) { }
-        this.__showGenericErrorSave(id);
-    },
-    errorHandlers: {
-        'guest_not_available': function (data, id) {
-            var me = this,
-                sb = me.instance.getSandbox(),
-                problemLayers = data.selectedLayers;
-            if (!problemLayers || problemLayers.length === 0) {
+            const resp = JSON.parse(responseText);
+            if (resp.info?.code === 'guest_not_available') {
+                const layerNames = (resp.info.selectedLayers || []).map(layerId => {
+                    const layer = sb.findMapLayerFromAllAvailable(layerId);
+                    return layer ? Oskari.util.sanitize(layer.getName()) : `Layer ID ${layerId}`;
+                });
+                setWarning({ id, layerNames });
                 return;
             }
-            // construct a list of problematic layers to show
-            var list = problemLayers.map((layerId) => {
-                const layer = sb.findMapLayerFromAllAvailable(layerId);
-                let msg = 'Layer ID ' + layerId;
-                if (layer) {
-                    msg = Oskari.util.sanitize(layer.getName());
-                }
-                return me.templates.listItem({ msg: msg });
-            });
+        } catch (e) {}
+        Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'flyout.defaultviews.notifications.errorUpdating').replace('${id}', id));
+    };
 
-            var msg = this.templates.errorGuest({
-                listTitle: this.locale.notifications.listTitle,
-                list: list.join(' ')
-            });
-            // buttons
-            var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-            okButton.setPrimary(true);
-            okButton.setHandler(function () {
-                me.instance.closeDialog();
-            });
-            var forceButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            forceButton.setTitle(this.locale.forceButton);
-            forceButton.setHandler(function () {
-                me.__modifyView(id, true);
-                me.instance.closeDialog();
-            });
-            this.instance.showMessage(this.locale.notifications.warningTitle, msg, [okButton, forceButton]);
+    const columns = [
+        {
+            dataIndex: 'name',
+            title: <Message messageKey='flyout.defaultviews.headerName' />
+        },
+        {
+            dataIndex: 'id',
+            width: 180,
+            render: (id) => (
+                <Button onClick={() => modifyView(id)}>
+                    <Message messageKey='flyout.defaultviews.setButton' />
+                </Button>
+            )
         }
-    },
+    ];
 
-    __showGenericErrorSave: function (id) {
-        this.instance.showMessage(
-            this.locale.notifications.errorTitle,
-            this.locale.notifications.errorUpdating.replace('${id}', id));
-    },
-
-    __viewSaved: function (id, data) {
-        this.instance.showMessage(
-            this.locale.notifications.successTitle,
-            this.locale.notifications.viewUpdated.replace('${id}', id));
-    },
-
-    /**
-     * Wraps the default views listing json in a GridModel
-     * @param  {Object} data json
-     * @return {Oskari.userinterface.component.GridModel}      model
-     */
-    __getGridModel: function (data) {
-        const model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
-        model.addData({
-            id: data.viewId,
-            name: this.locale.globalViewTitle,
-            action: this.locale.setButton
-        });
-
-        data.roles.forEach((role) => {
-            if (!role.viewId) {
-                return;
-            }
-            model.addData({
-                id: role.viewId,
-                roleid: role.id,
-                name: role.name,
-                action: this.locale.setButton
-            });
-        });
-        return model;
-    }
-
-}, {
-    extend: ['Oskari.userinterface.component.TabPanel']
-});
+    return (
+        <>
+            <Message messageKey='flyout.defaultviews.desc' />
+            <Table
+                loading={loading}
+                dataSource={views}
+                columns={columns}
+                rowKey="id"
+                pagination={false}
+                size="small"
+            />
+            <Modal
+                open={!!warning}
+                title={<Message messageKey='flyout.defaultviews.notifications.warningTitle' />}
+                onCancel={() => setWarning(null)}
+                footer={[
+                    <Button key="cancel" onClick={() => setWarning(null)}>
+                        <Message messageKey="cancel" bundleKey="oskariui" />
+                    </Button>,
+                    <Button
+                        key="force"
+                        type="primary"
+                        onClick={() => { modifyView(warning.id, true); setWarning(null); }}
+                    >
+                        <Message messageKey='flyout.defaultviews.forceButton' />
+                    </Button>
+                ]}
+            >
+                <Message messageKey='flyout.defaultviews.notifications.listTitle' />
+                <List
+                    size="small"
+                    dataSource={warning?.layerNames || []}
+                    renderItem={(name) => <ListItem>{name}</ListItem>}
+                />
+            </Modal>
+        </>
+    );
+};

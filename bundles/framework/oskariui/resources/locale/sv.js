@@ -175,6 +175,7 @@ Oskari.registerLocalization({
                 "problem": "Insufficient metadata for layer!"
             },
             "newTitle": "New feature",
+            "editTitle": "Redigera objekt",
             "setCurrentLayerTitle": "Select map layer",
             "geometrylist": {
                 "title": "Geometry",

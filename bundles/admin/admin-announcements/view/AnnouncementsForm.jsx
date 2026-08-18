@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { RichEditor } from 'oskari-ui/components/RichEditor';
 import { DATE_FORMAT, TIME_FORMAT, TYPE, OPTIONS } from './constants';
+import { ExternalAnnouncement } from './ExternalAnnouncement';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import weekday from "dayjs/plugin/weekday"
 import localeData from "dayjs/plugin/localeData"
@@ -49,6 +50,9 @@ const getFields = type => {
 };
 const getMandatoryFields = () => {
     return ['title'];
+};
+const isExternalAnnouncement = (announcement) => {
+    return announcement?.options?.externalId;
 };
 const getLocaleForSubmit = (state) => {
     const { type, locale } = state;
@@ -104,6 +108,7 @@ export const AnnouncementsForm = LocaleConsumer(({
     const defaultLang = languages[0];
 
     const isEdit = !!state.id;
+    const isExternal = isExternalAnnouncement(state);
     const errorKeys = validateLocale(state, defaultLang);
     const tooltip = errorKeys.length ? errorKeys.map(key => <div key={`validate-${key}`}><Message messageKey={`fields.validate.${key}`} /></div>) : null;
 
@@ -123,6 +128,19 @@ export const AnnouncementsForm = LocaleConsumer(({
         options[key] = value;
         setState({ ...state, options });
     };
+
+    if (isExternal) {
+        return (
+            <ExternalAnnouncement
+                state={state}
+                setState={setState}
+                languages={languages}
+                getMessage={getMessage}
+                onSubmitClick={onSubmitClick}
+                onClose={onClose}
+            />
+        );
+    }
 
     return (
         <Fragment>
@@ -189,8 +207,7 @@ export const AnnouncementsForm = LocaleConsumer(({
                     <PrimaryButton disabled={errorKeys.length > 0} type="save" onClick={onSubmitClick}/>
                 </Tooltip>
             </ButtonContainer>
-        </Fragment>
-    );
+        </Fragment>);
 });
 
 AnnouncementsForm.propTypes = {

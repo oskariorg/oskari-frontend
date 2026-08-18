@@ -93,6 +93,7 @@ const SelectionRowGroup = styled('div')`
 const FlexRow = styled('div')`
     display: flex;
     flex-direction: row;
+    gap: 1em;
 `;
 
 const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, showCompressed, sorting, visibleColumnsSettings, showExportButton, layer, controller) => {

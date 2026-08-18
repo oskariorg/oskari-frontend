@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "oskari-ui": ["./src/react/index.js"],
+      "oskari-ui/*": ["./src/react/*"]
+    }
+  }
+}

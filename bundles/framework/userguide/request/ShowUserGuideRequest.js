@@ -3,53 +3,58 @@
  *
  *
  */
-Oskari.clazz
-    .define(
-        'Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequest',
-        function (conf) {
-            var config = conf || {};
-            this._creator = null;
-            this._el = config.el;
-            this._context = config.context;
-            this._extension = config.extension;
-            this._toggle = config.toggle;
-            this._placement = config.placement;
-            this._content = config.content;
-        }, {
-            __name: 'userguide.ShowUserGuideRequest',
-            getName: function () {
-                return this.__name;
-            },
+const NAME = 'userguide.ShowUserGuideRequest';
 
-            getUuid: function () {
-                return this._uuid;
-            },
+class ShowUserGuideRequest {
+    constructor (conf) {
+        const config = conf || {};
+        this.creator = null;
+        this.el = config.el;
+        this.context = config.context;
+        this.extension = config.extension;
+        this.toggle = config.toggle;
+        this.placement = config.placement;
+        this.content = config.content;
+        this.uuid = config.uuid;
+    }
 
-            getContext: function () {
-                return this._context;
-            },
+    getName () {
+        return NAME;
+    }
 
-            getExtension: function () {
-                return this._extension;
-            },
+    getUuid () {
+        return this.uuid;
+    }
 
-            getEl: function () {
-                return this._el;
-            },
-            isToggle: function () {
-                return this._toggle;
-            },
-            getPlacement: function () {
-                return this._placement;
-            },
-            getContent: function () {
-                return this._content;
-            }
+    getContext () {
+        return this.context;
+    }
 
-        },
+    getExtension () {
+        return this.extension;
+    }
 
-        {
-            'protocol': ['Oskari.mapframework.request.Request']
-        });
+    getEl () {
+        return this.el;
+    }
 
-/* Inheritance */
+    isToggle () {
+        return this.toggle;
+    }
+
+    getPlacement () {
+        return this.placement;
+    }
+
+    getContent () {
+        return this.content;
+    }
+}
+
+ShowUserGuideRequest.NAME = NAME;
+
+Oskari.clazz.defineES(
+    'Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequest',
+    ShowUserGuideRequest,
+    { protocol: ['Oskari.mapframework.request.Request'] }
+);

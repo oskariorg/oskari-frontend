@@ -1,4 +1,5 @@
 import { AbstractVectorLayer } from '../../domain/AbstractVectorLayer';
+import { FIELD_TYPE_DATE, FIELD_TYPE_DATETIME } from '../getinfo/formatter/ValueFormatters';
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer
  *
@@ -72,7 +73,21 @@ export class WFSLayer extends AbstractVectorLayer {
         if (typeof field !== 'string') {
             return {};
         }
-        return this.getProperties().find(prop => prop.name === field)?.format || {};
+        const prop = this.getProperties().find(prop => prop.name === field);
+        if (!prop) {
+            return {};
+        }
+        if (prop.format) {
+            return prop.format;
+        }
+        const rawType = (prop.rawType || '').toLowerCase();
+        if (rawType.includes(FIELD_TYPE_DATETIME)) {
+            return { type: FIELD_TYPE_DATETIME };
+        }
+        if (rawType.endsWith(FIELD_TYPE_DATE)) {
+            return { type: FIELD_TYPE_DATE };
+        }
+        return {};
     }
 
     /**
