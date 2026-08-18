@@ -18,8 +18,8 @@
   "license": "(MIT OR EUPL-1.1)",
   "main": "grunt.js",
   "engines": {
-    "node": ">=16.20.0",
-    "npm": ">=6.0.0"
+    "node": ">=22.11.0",
+    "npm": ">=10.8.1"
   },
   "scripts": {
     "lintfix": "eslint . --quiet --fix",
