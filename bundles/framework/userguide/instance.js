@@ -16,6 +16,8 @@ export class UserGuideBundleInstance extends DefaultExtension {
 
         const conf = this.getConfiguration();
         conf.name = EXTENSION_NAME;
+        // prevent the default flyout from opening (use built-in react-flyout instead)
+        conf.flyoutClazz = null;
         this.defaultConf = conf;
 
         this.eventHandlers = {

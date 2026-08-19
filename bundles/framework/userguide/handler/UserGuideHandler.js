@@ -11,6 +11,14 @@ export class UserGuideHandler extends StateHandler {
         });
     }
 
+    /*
+    Locale (overrides) can include config like this that is used even before checking config!
+        "tabs": [
+            {
+                "title": "Map Window",
+                "tags": "guide_welcome"
+            },
+    */
     async loadContent (conf, locale) {
         const localeTabs = locale.tabs || [];
         const helpContentPart = locale.help?.contentPart || HELP_CONTENT_PART;
