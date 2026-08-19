@@ -15,9 +15,6 @@ Oskari.registerLocalization(
         "error": {
             "title": "Hiba!",
             "generic": "Használati útmutató betöltése sikertelen. Kérem próbálja később."
-        },
-        "help": {
-            "tags": ""
         }
     }
 });
