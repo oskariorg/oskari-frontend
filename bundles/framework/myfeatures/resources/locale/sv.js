@@ -14,12 +14,12 @@ Oskari.registerLocalization(
             "submit": "Skicka",
             "success": "Dataset importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\".",
             "tabs": {
-                "general" : "Allmän",
+                "general" : "Basuppgifter",
                 "visualization": "Visualisering",
-                "layerFields": "Layer fields"
+                "layerFields": "Attributer"
             },
             "layer": {
-                "name": "Namnge kartlagret",
+                "name": "Datamängdens namn",
                 "desc": "Beskrivning",
                 "source": "Datakälla",
                 "srs": "EPSG-kod"
@@ -101,7 +101,7 @@ Oskari.registerLocalization(
         },
         "featureEditor": {
             "title": "Feature editor",
-            "addFeatureTool": "Add feature",
+            "addFeatureTool": "Lägg till objekt",
             "deleteFeatureTool": "Delete feature",
             "confirmDelete": "Do you want to delete the feature?",
             "featureUpdate": {
@@ -113,22 +113,23 @@ Oskari.registerLocalization(
                 "error": "Error occured during feature delete"
             },
             "featureLayer": {
-                "new": "New feature layer",
-                "addFeature": "Add feature",
-                "fieldName": "Name",
-                "fieldType": "Type",
-                "typeHelp": "Val av datatyp kan påverka hur värdet formateras i användargränssnittet.",
+                "new": "Ny datamängd",
+                "addFeature": "Lägg till objekt",
+                "fieldName": "Namn",
+                "fieldType": "Typ",
+                "typeHelp": "Typen påverkar hur attribut visas i användargränssnittet.",
+                "typeHelpNew": "Du kan lägga till attribut endast innan du har sparat datamängden.",
                 "errors": {
                     "fieldAlreadyExists": "Field already exists",
                     "isValidJSONKey": "Illegal characters."
                 },
                 "actions": {
-                    "hideField": "Hide field",
-                    "showField": "Show field",
-                    "moveUp": "Move field up",
-                    "moveDown": "Move field down",
-                    "editLocale": "Edit field locale",
-                    "editFormat": "Edit field format",
+                    "hideField": "Dölj för användaren",
+                    "showField": "Visa för användaren",
+                    "moveUp": "Flytta upp",
+                    "moveDown": "Flytta ned",
+                    "editLocale": "Redigera attributnamn på olika språk.",
+                    "editFormat": "Välj attributtyp och hur informationen ska visas i  användargränssnittet.",
                 },
                 "modal": {
                     "locale": {
@@ -148,10 +149,10 @@ Oskari.registerLocalization(
                 "Boolean": "Boolean"
             },
             "layerSelectionPanel": {
-                "setCurrentLayerTitle": "Select dataset",
+                "setCurrentLayerTitle": "Välj en datamängd eller lägg till en ny datamängd",
                 "buttons": {
-                    "setCurrentLayer": "Select dataset",
-                    "addNewLayer": "New dataset"
+                    "setCurrentLayer": "Välj datamängd",
+                    "addNewLayer": "Ny datamängd"
                 }
             }
         },

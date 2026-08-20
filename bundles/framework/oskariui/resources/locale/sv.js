@@ -63,29 +63,29 @@ Oskari.registerLocalization({
                 thick_horizontal: 'Tjock horisontal linje'
             },
             fill: {
-                color: 'Ifyllnadsfärg för område',
+                color: 'Fyllnadsfärg',
                 area: {
-                    pattern: 'Ifyllnandsmönster för område'
+                    pattern: 'Fyllningsmönster'
                 }
             },
             image: {
                 shape: 'Ikon',
                 size: 'Storlek',
                 fill: {
-                    color: 'Ifyllnadsfärg för ikon'
+                    color: 'Färg'
                 }
             },
             stroke: {
-                color: 'Linjens färg',
-                lineCap: 'Linjens ändpunkter',
-                lineDash: 'Linjens stil',
+                color: 'Färg',
+                lineCap: 'Ändpunkter',
+                lineDash: 'Stil',
                 lineJoin: 'Hörn',
                 width: 'Bredd',
                 area: {
-                    color: 'Linjens färg',
-                    lineDash: 'Linjens stil',
+                    color: 'Kantlinjens färg',
+                    lineDash: 'Kantlinjens stil',
                     lineJoin: 'Hörn',
-                    width: 'Linjens bredd'
+                    width: 'Kantlinjens bredd'
                 }
             }
         },
@@ -179,7 +179,7 @@ Oskari.registerLocalization({
             "setCurrentLayerTitle": "Select map layer",
             "geometrylist": {
                 "title": "Geometry",
-                "empty": "Draw a geometry on the map",
+                "empty": "Rita objekt på kartan",
                 "notRecognized": "Geometry type ({type}) not recognized. Allowing all types to be added. Make sure the interface is ok with this.",
                 "editing": "Draw on the map",
                 "Point": "Point",
@@ -215,9 +215,9 @@ Oskari.registerLocalization({
                 "addNewLayer": "New dataset"
             },
             "tools": {
-                "point": "Add point geometry",
-                "line": "Add line geometry",
-                "area": "Add area geometry",
+                "point": "Punkt",
+                "line": "Linje",
+                "area": "Område",
                 "geometryEdit": "Edit geometry on the map",
                 "finishSketch": "Finish drawing on map",
                 "remove": "Remove one geometry"
