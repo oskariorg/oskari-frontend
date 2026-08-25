@@ -15,15 +15,6 @@ Oskari.registerLocalization(
         "error": {
             "title": "Kļūda!",
             "generic": "Lietotāja rokasgrāmatu atvērt neizdevās. Lūdzu mēģiniet vēlāk."
-        },
-        "tabs": [
-            {
-                "title": "Map window",
-                "tags": "map window,user guide"
-            }
-        ],
-        "help": {
-            "tags": "map window,user guide"
         }
     }
 });

@@ -15,9 +15,6 @@ Oskari.registerLocalization(
         "error": {
             "title": "Gabim!",
             "generic": "Dështoi ngarkimi i udhëzuesit të përdoruesit. Ju lutem provoni më vonë."
-        },
-        "help": {
-            "tags": ""
         }
     }
 });

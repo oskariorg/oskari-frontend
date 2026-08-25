@@ -15,9 +15,6 @@ Oskari.registerLocalization(
         "error": {
             "title": "Eroare!",
             "generic": "Încărcare ghid utilizator eşuată. Vă rugăm încercaţi mai târziu."
-        },
-        "help": {
-            "tags": ""
         }
     }
 });

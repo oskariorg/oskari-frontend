@@ -16,6 +16,8 @@ export class UserGuideBundleInstance extends DefaultExtension {
 
         const conf = this.getConfiguration();
         conf.name = EXTENSION_NAME;
+        // prevent the default flyout from opening (use built-in react-flyout instead)
+        conf.flyoutClazz = null;
         this.defaultConf = conf;
 
         this.eventHandlers = {
@@ -91,6 +93,7 @@ export class UserGuideBundleInstance extends DefaultExtension {
 
     closeFlyout () {
         if (this.flyoutControls) {
+            this.scheduleCloseUserGuide();
             this.flyoutControls.close();
             this.flyoutControls = null;
         }
@@ -100,7 +103,13 @@ export class UserGuideBundleInstance extends DefaultExtension {
         this.flyoutControls?.update(state);
     }
 
+    scheduleCloseUserGuide () {
+        // to sync tile state with div manazer
+        this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', EXTENSION_NAME]);
+    }
+
     scheduleShowUserGuide () {
+        // to sync tile state with div manazer
         this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', EXTENSION_NAME]);
     }
 
