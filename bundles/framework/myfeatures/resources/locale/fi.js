@@ -13,12 +13,12 @@ Oskari.registerLocalization(
             "help": "Lataa aineisto tietokoneeltasi. GPX-, KML-, GeoJSON- ja GeoPackage-tiedoston voi lähettää yksittäisenä tiedostona. Useita tiedostoja vaativissa muodoissa tarkista, että kaikki tarvittavat tiedostot ovat zip-paketissa ja että aineisto on oikeassa tiedostomuodossa ja koordinaattijärjestelmässä.",
             "success": "Aineistosta tuotiin {count, plural, one {# kohde} other {# kohdetta}} onnistuneesti. Voit tarkastella aineistoa Omat tiedot -valikon Omat aineistot -välilehden kautta.",
             "tabs" : {
-                "general": "Yleiset",
-                "visualization": "Visualisointi",
-                "layerFields": "Kentät"
+                "general": "Perustiedot",
+                "visualization": "Esitystapa",
+                "layerFields": "Attribuutit"
             },
             "layer": {
-                "name": "Karttatason nimi",
+                "name": "Aineiston nimi",
                 "desc": "Kuvaus",
                 "source": "Tietolähde",
                 "srs": "EPSG-koodi"
@@ -116,18 +116,19 @@ Oskari.registerLocalization(
                 "addFeature": "Lisää kohde",
                 "fieldName": "Nimi",
                 "fieldType": "Tyyppi",
-                "typeHelp": "Tietotyypin valinta voi vaikuttaa siihen, miten arvo esitetään käyttöliittymässä.",
+                "typeHelp": "Tyyppi vaikuttaa siihen, miten ominaisuustieto esitetään käyttöliittymässä.",
+                "typeHelpNew": "Voit lisätä attribuutteja vain tallentamattomalle karttatasolle.",
                 "errors": {
                     "fieldAlreadyExists": "Kenttä on jo olemassa",
                     "isValidJSONKey": "Kentän nimi sisältää kiellettyjä merkkejä."
                 },
                 "actions": {
-                    "hideField": "Piilota",
-                    "showField": "Näytä",
-                    "moveUp": "Siirrä ylös",
-                    "moveDown": "Siirrä alas",
-                    "editLocale": "Muokkaa kielistyksiä",
-                    "editFormat": "Muokkaa muotoilua",
+                    "hideField": "Piilota käyttäjältä",
+                    "showField": "Näytä käyttäjälle",
+                    "moveUp": "Siirrä ylöspäin",
+                    "moveDown": "Siirrä alaspäin",
+                    "editLocale": "Muokkaa attribuutin nimeä eri kielillä.",
+                    "editFormat": "Valitse attribuutin tyyppi ja tapa, jolla tiedot esitetään käyttöliittymässä.",
                 },
                 "modal": {
                     "locale": {
@@ -147,7 +148,7 @@ Oskari.registerLocalization(
                 "Boolean": "Totuusarvo"
             },
             "layerSelectionPanel": {
-                "setCurrentLayerTitle": "Valitse aineisto",
+                "setCurrentLayerTitle": "Valitse aineisto tai lisää uusi aineisto",
                 "buttons": {
                     "setCurrentLayer": "Valitse aineisto",
                     "addNewLayer": "Uusi aineisto"

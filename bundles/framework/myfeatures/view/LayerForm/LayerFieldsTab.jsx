@@ -53,6 +53,14 @@ const Error = styled('div')`
     font-style: italic;
 `;
 
+const Warning = styled('div')`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5em;
+    color: red;
+    font-style: italic;
+`;
+
 const FlexContainer = styled('div')`
     display: flex;
     flex-direction: row;
@@ -408,6 +416,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         <AddFieldContainerColumn>
             <Message messageKey='featureEditor.featureLayer.typeHelp' />
         </AddFieldContainerColumn>
+        {!id && <Warning><Message messageKey='featureEditor.featureLayer.typeHelpNew' /></Warning>}
         { error && <Error>{getErrorMessage(error)}</Error> }
 
         <ModalContainer

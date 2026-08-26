@@ -13,12 +13,12 @@ Oskari.registerLocalization(
             "help": "Upload a dataset from your computer. GPX, KML, GeoJSON and GeoPackage can be uploaded as a single file. For multi-file formats, check that all required files are packaged in a zip file and that the data is in the correct file format and coordinate reference system.",
             "success": "The dataset has been imported with {count, plural, one {# feature} other {# features}}. You can now find it in the \"My data\" menu.",
             "tabs": {
-                "general": "General",
+                "general": "Basic information",
                 "visualization": "Visualization",
-                "layerFields": "Layer fields"
+                "layerFields": "Attributes"
             },
             "layer": {
-                "name": "Map layer name",
+                "name": "Dataset name",
                 "desc": "Description",
                 "source": "Data source",
                 "srs": "EPSG code"
@@ -112,22 +112,23 @@ Oskari.registerLocalization(
                 "error": "Error occured during feature delete"
             },
             "featureLayer": {
-                "new": "New feature layer",
+                "new": "New dataset",
                 "addFeature": "Add feature",
                 "fieldName": "Name",
                 "fieldType": "Type",
-                "typeHelp": "Choosing a data type can affect how the value is formatted in the UI.",
+                "typeHelp": "The type affects how data in the attribute will be dispalyed in the user interface.",
+                "typeHelpNew": "You can add attributes to the dataset only before saving it.",
                 "errors": {
                     "fieldAlreadyExists": "Field already exists",
                     "isValidJSONKey": "Field contains illegal characters."
                 },
                 "actions": {
-                    "hideField": "Hide field",
-                    "showField": "Show field",
-                    "moveUp": "Move field up",
-                    "moveDown": "Move field down",
-                    "editLocale": "Edit field locale",
-                    "editFormat": "Edit field format",
+                    "hideField": "Hide from user",
+                    "showField": "Show to user",
+                    "moveUp": "Move up",
+                    "moveDown": "Move down",
+                    "editLocale": "Edit attribute name in different languages.",
+                    "editFormat": "Select the attribute type and edit how the data will be displayed in the user interface.",
                 },
                 "modal": {
                     "locale": {
@@ -147,7 +148,7 @@ Oskari.registerLocalization(
                 "Boolean": "Boolean"
             },
             "layerSelectionPanel": {
-                "setCurrentLayerTitle": "Select dataset",
+                "setCurrentLayerTitle": "Select dataset or add new dataset",
                 "buttons": {
                     "setCurrentLayer": "Select dataset",
                     "addNewLayer": "New dataset"

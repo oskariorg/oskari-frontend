@@ -179,7 +179,7 @@ Oskari.registerLocalization({
             "setCurrentLayerTitle": "Valitse karttataso",
             "geometrylist": {
                 "title": "Geometria",
-                "empty": "Merkitse geometria kartalle",
+                "empty": "Piirrä kohde kartalle",
                 "notRecognized": "Geometrian tyyppiä ({type}) ei tunnistettu. Kaikki piirtomuodot sallitaan, mutta varmista rajapinnan tukevan näitä ennen tallennusta.",
                 "editing": "Tee merkintä kartalle",
                 "Point": "Piste",
@@ -212,11 +212,11 @@ Oskari.registerLocalization({
                 "no": "Ei",
             },
             "tools": {
-                "point": "Lisää piste",
-                "line": "Lisää viiva",
-                "area": "Lisää alue",
+                "point": "Piste",
+                "line": "Viiva",
+                "area": "Alue",
                 "geometryEdit": "Muokkaa kartalla",
-                "finishSketch": "Lukitse karttamerkintä",
+                "finishSketch": "Lopeta piirtäminen",
                 "remove": "Poista yksittäinen geometria"
             },
             "featureUpdate": {
