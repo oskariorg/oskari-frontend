@@ -10,7 +10,7 @@ const handler = 12;
 const hover = DEFAULT_COLORS.SLIDER_HOVER;
 
 const StyledAntSlider = styled(AntSlider)`
-    ${props => props.noMargin ? 'margin: 0;' : ''}
+    ${props => props.$noMargin ? 'margin: 0;' : ''}
     .ant-slider-mark-text {
         white-space: nowrap;
         font-size: 11px;
@@ -25,7 +25,7 @@ const StyledAntSlider = styled(AntSlider)`
 
 const ThemedAntSlider = styled(AntSlider)`
     &&& {
-        ${props => props.noMargin ? 'margin: 0;' : ''}
+        ${props => props.$noMargin ? 'margin: 0;' : ''}
     }
     .ant-slider-mark {
         ${props => props.vertical ? '' : 'top: -18px;'}
@@ -75,12 +75,12 @@ const getThemedStyle = (theme, vertical, useThick) => {
     };
 };
 
-export const Slider = ({ theme, useThick, vertical, ...rest }) => {
-    return <StyledAntSlider vertical= {vertical} {...rest} />
+export const Slider = ({ theme, useThick, vertical, noMargin, ...rest }) => {
+    return <StyledAntSlider vertical={vertical} $noMargin={noMargin} {...rest} />;
 };
 
-export const ThemedSlider = ThemeConsumer(({ theme, useThick, vertical, ...rest }) => {
+export const ThemedSlider = ThemeConsumer(({ theme, useThick, vertical, noMargin, ...rest }) => {
     const helper = getNavigationTheme(theme);
     const style = getThemedStyle(helper, vertical, useThick);
-    return <ThemedAntSlider styles={style} theme={helper} useThick={useThick} vertical={vertical} {...rest} />
+    return <ThemedAntSlider styles={style} theme={helper} useThick={useThick} vertical={vertical} $noMargin={noMargin} {...rest} />;
 });
