@@ -28,7 +28,7 @@ export const TimeSlider = ({ isMobile, changeHandler, sliderTimeValue, playing, 
             <StyledPlayButton onClick={clickPlayButton}>
                 <PlayButton initial={playing} />
             </StyledPlayButton>
-            <TimeBorder isMobile={isMobile}>
+            <TimeBorder $isMobile={isMobile}>
                 <ThemedSlider
                     noMargin
                     useThick={isMobile}

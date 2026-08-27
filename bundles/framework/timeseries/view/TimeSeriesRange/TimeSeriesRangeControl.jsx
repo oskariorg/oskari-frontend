@@ -32,7 +32,7 @@ export const TimeSeriesRangeControl = ThemeConsumer(({
     const backgroundColor = navigationTheme.getNavigationBackgroundColor();
 
     return (
-        <Background textColor={textColor} backgroundColor={backgroundColor} isMobile={isMobile}>
+        <Background $textColor={textColor} $backgroundColor={backgroundColor} $isMobile={isMobile}>
             <TimeSeriesHeader
                 iconColor={textColor}
                 toggleMode={() => toggleMode()}
