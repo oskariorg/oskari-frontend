@@ -13,7 +13,7 @@ const Container = styled('div')`
     color:  ${props => props.theme.getTextColor()};
     padding: 8px 10px;
     margin: 0px;
-    cursor: ${props => props.isDraggable ? 'grab' : undefined};
+    cursor: ${props => props.$isDraggable ? 'grab' : undefined};
 `;
 const ToolsContainer = styled('div')`
     display: flex;
@@ -42,7 +42,7 @@ export const Header = ThemeConsumer(({ title, isDraggable = false, onClose, them
     const headerTheme = getHeaderTheme(theme);
     return (
         <Container
-            isDraggable={isDraggable}
+            $isDraggable={isDraggable}
             theme={headerTheme}
             {...rest}
         >

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { ThemeConsumer } from 'oskari-ui/util';
-import styled, { css, keyframes } from 'styled-components';
+import { styled, css, keyframes } from 'styled-components';
 import { getTextColor, getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 
 const animation = keyframes`
@@ -28,15 +28,15 @@ const StyledBadge = styled.div`
     line-height: 20px;
     margin-left: 8px;
     font-weight: 700;
-    ${props => props.blink && css`
+    ${props => props.$blink && css`
         animation: ${animation} ${BLINK_DURATION_IN_SECONDS}s;
         animation-iteration-count: ${BLINK_COUNT};`}
 `;
 const NumberBadge = ThemeConsumer(({theme, isBlinking, count}) => {
     const helper = getHeaderTheme(theme);
-    return (<StyledBadge color={helper.getAccentColor()} blink={isBlinking}>
-                {count}
-            </StyledBadge>);
+    return (<StyledBadge color={helper.getAccentColor()} $blink={isBlinking}>
+        {count}
+    </StyledBadge>);
 });
 
 export const SelectedTab = ({ num, messageKey }) => {

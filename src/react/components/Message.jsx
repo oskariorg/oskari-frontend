@@ -4,10 +4,10 @@ import { LocaleConsumer } from 'oskari-ui/util';
 import { styled } from 'styled-components';
 
 const Label = styled('div')`
-    display: ${props => props.allowTextEllipsis ? 'inline' : 'inline-block'};
-    overflow: ${props => props.allowTextEllipsis ? 'hidden' : ''};
-    white-space: ${props => props.allowTextEllipsis ? 'nowrap' : ''};
-    text-overflow: ${props => props.allowTextEllipsis ? 'ellipsis' : ''};
+    display: ${props => props.$allowTextEllipsis ? 'inline' : 'inline-block'};
+    overflow: ${props => props.$allowTextEllipsis ? 'hidden' : ''};
+    white-space: ${props => props.$allowTextEllipsis ? 'nowrap' : ''};
+    text-overflow: ${props => props.$allowTextEllipsis ? 'ellipsis' : ''};
 `;
 
 /**
@@ -72,7 +72,7 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, f
     const labelProps = { ...injectedProps };
     // Only default Label - component will handle text ellipsis. For custom components / dom element strings we should just ignore it.
     if (LabelComponent === Label) {
-        labelProps.allowTextEllipsis = allowTextEllipsis;
+        labelProps.$allowTextEllipsis = allowTextEllipsis;
     }
 
     return (
