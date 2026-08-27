@@ -7,7 +7,7 @@ import { BasicInfoTabPane, InspireTabPane, JHSTabPane, QualityTabPane, ActionsTa
 const ContainerDiv = styled.div`
     margin: 1em;
     min-width: 20vw;
-    max-width: ${props => props.isMobile ? '100' : 75}vw;
+    max-width: ${props => props.$isMobile ? '100' : 75}vw;
 `;
 const Spinner = styled(Spin)`
     margin: 100px 200px;
@@ -62,7 +62,7 @@ export const MetadataContainer = ({
         }
     ];
     return (
-        <ContainerDiv isMobile={Oskari.util.isMobile()}>
+        <ContainerDiv $isMobile={Oskari.util.isMobile()}>
             <Tabs
                 activeKey = { activeTab }
                 onChange={key => controller.setActiveTab(key) }

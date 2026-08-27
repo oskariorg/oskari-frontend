@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 const bgColor = '#3c3c3c';
 
-export const Background = styled.div(({ isMobile, textColor, backgroundColor }) => ({
-    'minHeight': isMobile ? '120px !important' : '90px !important',
-    'width': isMobile ? '260px !important' : '720px !important',
-    'color': textColor || '#ffffff',
-    'background-color': backgroundColor || bgColor
+export const Background = styled.div(({ $isMobile, $textColor, $backgroundColor }) => ({
+    'minHeight': $isMobile ? '120px !important' : '90px !important',
+    'width': $isMobile ? '260px !important' : '720px !important',
+    'color': $textColor || '#ffffff',
+    'background-color': $backgroundColor || bgColor
 }));
 
 export const Header = styled.h3`

@@ -6,7 +6,7 @@ import { Message } from 'oskari-ui';
 export const Spin = ({ children, showTip = false, ...other }) => {
     const tip = showTip ? <Message messageKey='Spin.loading' bundleKey='oskariui'/> : null;
     return (
-        <AntSpin tip={tip} {...other}>{children}</AntSpin>
+        <AntSpin description={tip} {...other}>{children}</AntSpin>
     );
 };
 

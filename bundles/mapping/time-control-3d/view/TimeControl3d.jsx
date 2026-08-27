@@ -50,7 +50,7 @@ function useInterval (callback, delay) {
 
 const Background = styled.div`
     cursor: grab;
-    width: ${props => props.isMobile ? '260px' : '720px'} !important;
+    width: ${props => props.$isMobile ? '260px' : '720px'} !important;
     background-color: ${props => props.theme.getNavigationBackgroundColor()};
     padding: 10px 20px 20px;
 `;
@@ -137,7 +137,7 @@ export const TimeControl3d = ThemeConsumer(({ theme, controller, date, time, isM
     };
 
     return (
-        <Background isMobile={isMobile} theme={navigationTheme}>
+        <Background $isMobile={isMobile} theme={navigationTheme}>
             <Header theme={navigationTheme}>
                 <h3><Message messageKey='title'/></h3>
                 <CloseIcon onClose={onClose}/>

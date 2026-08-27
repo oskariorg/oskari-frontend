@@ -250,7 +250,7 @@ const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSele
 const ContainerDiv = styled('div')`
     margin: 1em;
     min-width: 20vw;
-    max-width: ${props => props.isMobile ? '100' : 75}vw;
+    max-width: ${props => props.$isMobile ? '100' : 75}vw;
     .ant-table-selection-col, .ant-table-selection-column {
         display: none;
     }
@@ -278,7 +278,7 @@ export const FeatureDataContainer = ({ state, controller }) => {
         controller);
 
     return (
-        <ContainerDiv isMobile={Oskari.util.isMobile()}>
+        <ContainerDiv $isMobile={Oskari.util.isMobile()}>
             <Tabs
                 activeKey = { activeLayerId }
                 items={ tabs }
