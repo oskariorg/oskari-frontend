@@ -43,7 +43,7 @@ const Container = styled.div`
         }
     }
 
-    ${props => props.resizable && (
+    ${props => props.$resizable && (
         `
             resize: both;
             overflow: auto;
@@ -52,7 +52,7 @@ const Container = styled.div`
 `;
 const FlyoutContent = styled('div')`
     overflow: auto;
-    max-height: ${props => props.resizable ? 'calc(100% - 57px)' : 'calc(100vh - 57px)'};
+    max-height: ${props => props.$resizable ? 'calc(100% - 57px)' : 'calc(100vh - 57px)'};
 
     @media only screen and (max-width: 950px) {
         max-height: calc(100% - 57px);
@@ -96,10 +96,10 @@ const ToolsContainer = styled.div`
     font-size: ${ICON_SIZE}px;
     > button {
         margin-top: -5px;
-        color: ${props => props.iconColor};
+        color: ${props => props.$iconColor};
     }
     > button:hover {
-        color: ${props => props.hoverColor};
+        color: ${props => props.$hoverColor};
     }
 `;
 
@@ -129,16 +129,16 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
             className={containerClass}
             ref={elementRef}
             style={{transform: `translate(${position.x}px, ${position.y}px)`}}
-            resizable={options.resizable}
+            $resizable={options.resizable}
         >
             <FlyoutHeader theme={headerTheme} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
                 <HeaderBand theme={headerTheme}/>
                 <Title className='flyout-title' theme={headerTheme}>{title}</Title>
-                <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>
+                <ToolsContainer $iconColor={headerTheme.getToolColor()} $hoverColor={headerTheme.getToolHoverColor()}>
                     <CloseIcon onClose={onClose}/>
                 </ToolsContainer>
             </FlyoutHeader>
-            <FlyoutContent resizable={options.resizable}>
+            <FlyoutContent $resizable={options.resizable}>
                 {children}
             </FlyoutContent>
         </Container>
