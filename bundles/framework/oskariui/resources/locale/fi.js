@@ -82,10 +82,10 @@ Oskari.registerLocalization({
                 lineJoin: 'Kulmat',
                 width: 'Leveys',
                 area: {
-                    color: 'Väri',
-                    lineDash: 'Tyyli',
+                    color: 'Reunaviivan väri',
+                    lineDash: 'Reunaviivan tyyli',
                     lineJoin: 'Kulmat',
-                    width: 'Viivan paksuus'
+                    width: 'Reunaviivan leveys'
                 }
             }
         },
@@ -176,7 +176,6 @@ Oskari.registerLocalization({
             },
             "newTitle": "Uusi kohde",
             "editTitle": "Muokkaa kohdetta",
-            "setCurrentLayerTitle": "Valitse karttataso",
             "geometrylist": {
                 "title": "Geometria",
                 "empty": "Piirrä kohde kartalle",

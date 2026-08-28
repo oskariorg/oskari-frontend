@@ -176,7 +176,6 @@ Oskari.registerLocalization({
             },
             "newTitle": "New feature",
             "editTitle": "Edit feature",
-            "setCurrentLayerTitle": "Select map layer",
             "geometrylist": {
                 "title": "Geometry",
                 "empty": "Draw feature on the map",
