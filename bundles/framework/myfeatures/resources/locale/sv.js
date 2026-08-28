@@ -28,7 +28,7 @@ Oskari.registerLocalization(
                 "name": "Namnet på kartlagret saknas",
                 "file": "Filen har inte valts",
                 "epsg": "EPSG code has to be number",
-                "layerFields": "At least one attribute field is required for layer"
+                "layerFields": "Minst ett attributfält krävs för datamängden"
             },
             "error":{
                 "title": "Importerningen av datamängden misslyckades.",
@@ -71,10 +71,10 @@ Oskari.registerLocalization(
                 "removeButton": "Ta bort",
                 "actions": "Handlingar",
                 "createDate": "Skapad",
-                "contentEditor": "Sisältöeditori"
+                "contentEditor": "Redigera"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
-            "downloadTooltip": "Download dataset",
+            "downloadTooltip": "Ladda datamängden",
             "confirmDeleteFieldMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
@@ -94,7 +94,7 @@ Oskari.registerLocalization(
                 "generic": "Systemfel. Försök på nytt senare.",
                 "deleteMsg": "Systemfel. Försök på nytt senare.",
                 "editMsg": "Uppdateringen av datasetet misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
-                "createMsg": "Creating the dataset failed due to an error in the system. Please try again later.",
+                "createMsg": "Ett systemfel inträffade när datamängen skulle skapas. Försök igen senare.",
                 "getStyle": "Sökningen av den stil som definierats för datasetet misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
                 "styleName": "Namnge kartlagret och försök sedan på nytt."
             }
@@ -102,15 +102,15 @@ Oskari.registerLocalization(
         "featureEditor": {
             "title": "Feature editor",
             "addFeatureTool": "Lägg till objekt",
-            "deleteFeatureTool": "Delete feature",
-            "confirmDelete": "Do you want to delete the feature?",
+            "deleteFeatureTool": "Ta bort objekt",
+            "confirmDelete": "Vill du ta bort objektet?",
             "featureUpdate": {
-                "success": "Feature properties updated successfully",
-                "error": "Error occured during feature properties update"
+                "success": "Objektuppgifter har uppdaterats",
+                "error": "Det gick inte att uppdatera objektuppgiferna"
             },
             "featureDelete": {
-                "success": "Feature deleted successfully",
-                "error": "Error occured during feature delete"
+                "success": "Objektet har tagits bort",
+                "error": "Det gick inte att ta bort objektet"
             },
             "featureLayer": {
                 "new": "Ny datamängd",
@@ -120,8 +120,8 @@ Oskari.registerLocalization(
                 "typeHelp": "Typen påverkar hur attribut visas i användargränssnittet.",
                 "typeHelpNew": "Du kan lägga till attribut endast innan du har sparat datamängden.",
                 "errors": {
-                    "fieldAlreadyExists": "Field already exists",
-                    "isValidJSONKey": "Illegal characters."
+                    "fieldAlreadyExists": "Attributen finns redan",
+                    "isValidJSONKey": "Attributen innehåller ogiltiga tecken"
                 },
                 "actions": {
                     "hideField": "Dölj för användaren",
