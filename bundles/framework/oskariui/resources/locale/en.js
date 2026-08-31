@@ -199,17 +199,9 @@ Oskari.registerLocalization({
             "geometryModifyInfo": "With geometry editing tool you can edit feature geometry.",
             "geometryDeleteInfo": "With geometry delete tool you can remove one geometry from feature with multiple geometries.",
             "buttons": {
-                "save": "Save",
-                "cancel": "Cancel",
-                "close": "Close",
-                "ok": "Ok",
                 "delete": "Delete",
                 "addFeature": "Add feature",
-                "editFeature": "Edit feature",
-                "editMultipleFeatures": "Edit multiple features",
                 "deleteFeature": "Delete feature",
-                "yes": "Yes",
-                "no": "No",
             },
             "tools": {
                 "point": "Point",
