@@ -198,17 +198,9 @@ Oskari.registerLocalization({
             "geometryModifyInfo": "Geometrian muokkautyökalulla voit muokata kohteen geometriaa.",
             "geometryDeleteInfo": "Geometrian poistotyökalulla voit poistaa yhden geometrian monipalstaisesta kohteesta.",
             "buttons": {
-                "save": "Tallenna",
-                "cancel": "Peruuta",
-                "close": "Sulje",
-                "ok": "Ok",
                 "delete": "Poista",
                 "addFeature": "Lisää kohde",
-                "editFeature": "Muokkaa kohdetta",
-                "editMultipleFeatures": "Muokkaa useita kohteita",
                 "deleteFeature": "Poista kohde",
-                "yes": "Kyllä",
-                "no": "Ei",
             },
             "tools": {
                 "point": "Piste",
