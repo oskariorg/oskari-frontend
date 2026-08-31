@@ -54,7 +54,7 @@ export class MapModule extends AbstractMapModule {
      * @return {OpenLayers.Map}
      */
     _initImpl (sandbox, options, map) {
-        // css references use olMap as selectors so we need to add it
+        // css references have used olMap as selectors so we might need to add it
         this.getMapEl().addClass('olMap');
         return map;
     }
