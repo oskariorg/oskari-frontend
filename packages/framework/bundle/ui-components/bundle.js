@@ -48,9 +48,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "src" : "../../../../bundles/framework/divmanazer/component/TabContainer.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/TabDropdownContainer.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/TabPanel.js"
         }, {
             "type" : "text/javascript",
@@ -73,9 +70,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/FormInput.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/Popover.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/ProgressSpinner.js"
@@ -112,9 +106,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
         }, {
             "type" : "text/css",
             "src" : "../../../../bundles/framework/divmanazer/resources/scss/overlay.scss"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../bundles/framework/divmanazer/resources/scss/popover.scss"
         }],
         "locales" : [{
             "lang" : "fi",

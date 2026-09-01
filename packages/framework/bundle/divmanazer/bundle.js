@@ -80,9 +80,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/component/TabContainer.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/TabDropdownContainer.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/TabPanel.js"
             }, {
                 "type": "text/javascript",
@@ -102,9 +99,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/FormInput.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/Popover.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/ProgressSpinner.js"
@@ -135,9 +129,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/UrlInput.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/TextAreaInput.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/buttons/AddButton.js"
@@ -219,9 +210,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/scss/overlay.scss"
-            }, {
-                "type": "text/css",
-                "src": "../../../../bundles/framework/divmanazer/resources/scss/popover.scss"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../libraries/jquery/plugins/jquery-placeholder/jquery.placeholder.js"
