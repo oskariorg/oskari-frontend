@@ -126,22 +126,13 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/component/SelectList.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/MultiLevelSelect.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/RadioButtonGroup.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/ColorPickerInput.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/FileInput.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/TextInput.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/EmailInput.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/NumberInput.js"
@@ -233,9 +224,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/scss/forminput.scss"
-            },{
-                "type": "text/css",
-                "src": "../../../../bundles/framework/divmanazer/resources/css/fileinput.css"
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/scss/grid.scss"
