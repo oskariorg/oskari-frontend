@@ -19,7 +19,7 @@ const Container = styled('div')`
 
 const StyledSlider = styled(Slider)`
     height: 150px;
-    opacity: ${props => props.opacity};
+    opacity: ${props => props.$opacity};
     margin: 6px 0;
     left: -1px;
 
@@ -33,7 +33,7 @@ const StyledSlider = styled(Slider)`
 
     .ant-slider-dot {
         height: 1px;
-        background: ${props => props.dotColor};
+        background: ${props => props.$dotColor};
         border: none;
         width: ${width};
         left: 0;
@@ -68,8 +68,8 @@ const ThemedSlider = ThemeConsumer(({ theme = {}, ...rest }) => {
     return (
         <StyledSlider
             styles={styles}
-            dotColor={helper.getTextColor()}
-            opacity={helper.getButtonOpacity()}
+            $dotColor={helper.getTextColor()}
+            $opacity={helper.getButtonOpacity()}
             {...rest}
         />
     );

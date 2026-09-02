@@ -15,9 +15,6 @@ Oskari.registerLocalization(
         "error": {
             "title": "Greška!",
             "generic": "Greška u učitavanju vodiča za upotrebu. Pokušajte kasnije."
-        },
-        "help": {
-            "tags": "map window,user guide"
         }
     }
 });

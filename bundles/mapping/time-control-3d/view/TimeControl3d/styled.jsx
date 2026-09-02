@@ -82,9 +82,9 @@ export const ColFixed = styled.div`
 export const Divider = styled.div`
     margin-bottom: 30px;
 `;
-export const TimeBorder = styled.div(({ isMobile }) => ({
+export const TimeBorder = styled.div(({ $isMobile }) => ({
     borderRadius: '4px',
     border: '1px solid #949494',
-    width: isMobile ? '72%' : '80%',
-    padding: isMobile ? '12px 15px 8px 15px' : '20px 15px 4px 15px'
+    width: $isMobile ? '72%' : '80%',
+    padding: $isMobile ? '12px 15px 8px 15px' : '20px 15px 4px 15px'
 }));

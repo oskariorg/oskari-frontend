@@ -46,8 +46,19 @@ $pluginMargin: 10px;
     margin-right: 15px;
 }
 
-div.olMap {
+.oskari-map-impl-el {
     position : relative;
+
+    .ol-viewport {
+        &.ol-touch {
+            /*
+            Prevent device gestures for example page zooming from map.
+            Note that the ol-touch element is only created on devices with touch screen
+            (or is not present on desktop mode, but is on DOM when using browser with mobile simulator mode).
+            */
+            touch-action: none;
+        }
+    }
 
     .ol-overlaycontainer-stopevent {
         z-index: 16000 !important;

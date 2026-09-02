@@ -15,9 +15,6 @@ Oskari.registerLocalization(
         "error": {
             "title": "Սխալ",
             "generic": "Օգտագործողի ուղեցույցի ներբեռնման ձախողում.կրկին փորձել"
-        },
-        "help": {
-            "tags": ""
         }
     }
 });

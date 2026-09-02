@@ -64,6 +64,9 @@ module.exports = (env, argv) => {
 
     // Common config for both prod & dev
     const config = {
+        infrastructureLogging: {
+            progress: 'auto'
+        },
         node: {
         },
         amd: {

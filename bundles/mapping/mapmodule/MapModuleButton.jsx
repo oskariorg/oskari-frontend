@@ -7,8 +7,8 @@ const Container = styled('div')`
     width: 32px;
     height: 32px;
     position: relative;
-    ${props => props.noMargin ? 'margin: 0' : 'margin: 10px 10px 0 10px'};
-    ${props => props.withToolbar && props.toolbarOpen && props.toolbarMargin};
+    ${props => props.$noMargin ? 'margin: 0' : 'margin: 10px 10px 0 10px'};
+    ${props => props.$withToolbar && props.$toolbarOpen && props.$toolbarMargin};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -43,7 +43,7 @@ export const MapModuleButton = ({ visible = true, title, icon, onClick, size = '
     const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
     return (
         <ThemeProvider value={mapModule.getMapTheme()}>
-            <Container size={size} noMargin={noMargin} withToolbar={withToolbar} toolbarOpen={toolbarOpen} toolbarMargin={toolbarMargin}>
+            <Container size={size} $noMargin={noMargin} $withToolbar={withToolbar} $toolbarOpen={toolbarOpen} $toolbarMargin={toolbarMargin}>
                 {withToolbar && children?.length === 1 ? (
                     <StyledButton
                         onClick={children[0].props.onClick}

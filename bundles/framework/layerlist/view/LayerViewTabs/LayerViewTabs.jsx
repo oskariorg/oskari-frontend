@@ -50,7 +50,7 @@ const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, opts, 
     };
     return (
         <ControlledTabs
-            tabPosition='top' tab={tab}
+            tabPlacement='top' tab={tab}
             onChange={onChange}
             items={[
                 {

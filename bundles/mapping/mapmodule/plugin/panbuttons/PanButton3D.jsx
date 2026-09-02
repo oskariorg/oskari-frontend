@@ -15,7 +15,7 @@ const StyledButton = styled('div')`
     height: 84px;
     position: relative;
     width: 25px;
-    background: ${(props) => props.backgroundV};
+    background: ${(props) => props.$backgroundV};
     border-radius: 5px;
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
     display: flex;
@@ -33,7 +33,7 @@ const StyledButton = styled('div')`
         box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
     }
     ::after {
-        background: ${(props) => props.backgroundH};
+        background: ${(props) => props.$backgroundH};
         content: "";
         height: 25px;
         left: -29.5px;
@@ -112,7 +112,7 @@ export const PanButton3D = ({ colors, resetClicked, panClicked, isMobile = false
 
     return (
         <StyledButtonContainer>
-            <StyledButton backgroundV={backgroundV} backgroundH={backgroundH} >
+            <StyledButton $backgroundV={backgroundV} $backgroundH={backgroundH} >
                 <ArrowButton colors={colors} onClick={() => panClicked(0, -1)} right='2.5px' top='0' className='t_pan_up'>
                     <CaretUpOutlined />
                 </ArrowButton>

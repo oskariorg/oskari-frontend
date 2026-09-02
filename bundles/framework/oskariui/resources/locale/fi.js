@@ -82,10 +82,10 @@ Oskari.registerLocalization({
                 lineJoin: 'Kulmat',
                 width: 'Leveys',
                 area: {
-                    color: 'Väri',
-                    lineDash: 'Tyyli',
+                    color: 'Reunaviivan väri',
+                    lineDash: 'Reunaviivan tyyli',
                     lineJoin: 'Kulmat',
-                    width: 'Viivan paksuus'
+                    width: 'Reunaviivan leveys'
                 }
             }
         },
@@ -176,10 +176,9 @@ Oskari.registerLocalization({
             },
             "newTitle": "Uusi kohde",
             "editTitle": "Muokkaa kohdetta",
-            "setCurrentLayerTitle": "Valitse karttataso",
             "geometrylist": {
                 "title": "Geometria",
-                "empty": "Merkitse geometria kartalle",
+                "empty": "Piirrä kohde kartalle",
                 "notRecognized": "Geometrian tyyppiä ({type}) ei tunnistettu. Kaikki piirtomuodot sallitaan, mutta varmista rajapinnan tukevan näitä ennen tallennusta.",
                 "editing": "Tee merkintä kartalle",
                 "Point": "Piste",
@@ -199,24 +198,16 @@ Oskari.registerLocalization({
             "geometryModifyInfo": "Geometrian muokkautyökalulla voit muokata kohteen geometriaa.",
             "geometryDeleteInfo": "Geometrian poistotyökalulla voit poistaa yhden geometrian monipalstaisesta kohteesta.",
             "buttons": {
-                "save": "Tallenna",
-                "cancel": "Peruuta",
-                "close": "Sulje",
-                "ok": "Ok",
                 "delete": "Poista",
                 "addFeature": "Lisää kohde",
-                "editFeature": "Muokkaa kohdetta",
-                "editMultipleFeatures": "Muokkaa useita kohteita",
                 "deleteFeature": "Poista kohde",
-                "yes": "Kyllä",
-                "no": "Ei",
             },
             "tools": {
-                "point": "Lisää piste",
-                "line": "Lisää viiva",
-                "area": "Lisää alue",
+                "point": "Piste",
+                "line": "Viiva",
+                "area": "Alue",
                 "geometryEdit": "Muokkaa kartalla",
-                "finishSketch": "Lukitse karttamerkintä",
+                "finishSketch": "Lopeta piirtäminen",
                 "remove": "Poista yksittäinen geometria"
             },
             "featureUpdate": {

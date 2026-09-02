@@ -30,6 +30,11 @@ export const getAntdTheme = (theme) => {
                 // colorFillContentHover: accentColor
                 // fixes an issue where close icon has white bg while hovering
                 colorBgContainer: 'inherit'
+                /*
+                // Could be used to configure dropshadow, but couldn't make them work with mapbuttons
+                boxShadow: 'none',
+                boxShadowSecondary: 'none'
+                */
             },
             Slider: {
                 handleColor: DEFAULT_COLORS.SLIDER_BG,

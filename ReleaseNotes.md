@@ -1,5 +1,15 @@
 # Release Notes
 
+## 3.4.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/60?closed=1
+
+### Tooling changes
+
+Minimum node-version updated to 22 as some dependencies require it.
+Initial testing shows that Node 24 and 26 should work as well.
+
 ## 3.3.0
 
 For a full list of changes see:

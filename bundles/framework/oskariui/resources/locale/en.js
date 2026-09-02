@@ -82,9 +82,9 @@ Oskari.registerLocalization({
                 lineJoin: 'Corners',
                 width: 'Width',
                 area: {
-                    color: 'Colour',
-                    lineDash: 'Dash',
-                    lineJoin: 'Corners',
+                    color: 'Line colour',
+                    lineDash: 'Line dash',
+                    lineJoin: 'Line corners',
                     width: 'Line width'
                 }
             }
@@ -176,10 +176,9 @@ Oskari.registerLocalization({
             },
             "newTitle": "New feature",
             "editTitle": "Edit feature",
-            "setCurrentLayerTitle": "Select map layer",
             "geometrylist": {
                 "title": "Geometry",
-                "empty": "Draw a geometry on the map",
+                "empty": "Draw feature on the map",
                 "notRecognized": "Geometry type ({type}) not recognized. Allowing all types to be added. Make sure the interface is ok with this.",
                 "editing": "Draw on the map",
                 "Point": "Point",
@@ -200,24 +199,16 @@ Oskari.registerLocalization({
             "geometryModifyInfo": "With geometry editing tool you can edit feature geometry.",
             "geometryDeleteInfo": "With geometry delete tool you can remove one geometry from feature with multiple geometries.",
             "buttons": {
-                "save": "Save",
-                "cancel": "Cancel",
-                "close": "Close",
-                "ok": "Ok",
                 "delete": "Delete",
                 "addFeature": "Add feature",
-                "editFeature": "Edit feature",
-                "editMultipleFeatures": "Edit multiple features",
                 "deleteFeature": "Delete feature",
-                "yes": "Yes",
-                "no": "No",
             },
             "tools": {
-                "point": "Add point geometry",
-                "line": "Add line geometry",
-                "area": "Add area geometry",
+                "point": "Point",
+                "line": "Line",
+                "area": "Area",
                 "geometryEdit": "Edit geometry on the map",
-                "finishSketch": "Finish drawing on map",
+                "finishSketch": "Finish drawing",
                 "remove": "Remove one geometry"
             },
             "featureUpdate": {

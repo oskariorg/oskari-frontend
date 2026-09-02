@@ -14,12 +14,12 @@ Oskari.registerLocalization(
             "submit": "Skicka",
             "success": "Datamängd importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\".",
             "tabs": {
-                "general" : "Allmän",
+                "general" : "Basuppgifter",
                 "visualization": "Visualisering",
-                "layerFields": "Layer fields"
+                "layerFields": "Attributer"
             },
             "layer": {
-                "name": "Namnge kartlagret",
+                "name": "Datamängdens namn",
                 "desc": "Beskrivning",
                 "source": "Datakälla",
                 "srs": "EPSG-kod"
@@ -28,7 +28,7 @@ Oskari.registerLocalization(
                 "name": "Namnet på kartlagret saknas",
                 "file": "Filen har inte valts",
                 "epsg": "EPSG code has to be number",
-                "layerFields": "At least one attribute field is required for layer"
+                "layerFields": "Minst ett attributfält krävs för datamängden"
             },
             "error":{
                 "title": "Importerningen av datamängden misslyckades.",
@@ -71,10 +71,10 @@ Oskari.registerLocalization(
                 "removeButton": "Ta bort",
                 "actions": "Handlingar",
                 "createDate": "Skapad",
-                "contentEditor": "Sisältöeditori"
+                "contentEditor": "Redigera"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
-            "downloadTooltip": "Download datamängd",
+            "downloadTooltip": "Ladda datamängden",
             "confirmDeleteFieldMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
@@ -93,42 +93,43 @@ Oskari.registerLocalization(
                 "title": "Fel!",
                 "generic": "Systemfel. Försök på nytt senare.",
                 "deleteMsg": "Systemfel. Försök på nytt senare.",
-                "editMsg": "Uppdateringen av datamängden misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
-                "createMsg": "Creating the datamängden failed due to an error in the system. Please try again later.",
-                "getStyle": "Sökningen av den stil som definierats för datamängden misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
+                "editMsg": "Uppdateringen av datasetet misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
+                "createMsg": "Ett systemfel inträffade när datamängen skulle skapas. Försök igen senare.",
+                "getStyle": "Sökningen av den stil som definierats för datasetet misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
                 "styleName": "Namnge kartlagret och försök sedan på nytt."
             }
         },
         "featureEditor": {
             "title": "Feature editor",
-            "addFeatureTool": "Add feature",
-            "deleteFeatureTool": "Delete feature",
-            "confirmDelete": "Do you want to delete the feature?",
+            "addFeatureTool": "Lägg till objekt",
+            "deleteFeatureTool": "Ta bort objekt",
+            "confirmDelete": "Vill du ta bort objektet?",
             "featureUpdate": {
-                "success": "Feature properties updated successfully",
-                "error": "Error occured during feature properties update"
+                "success": "Objektuppgifter har uppdaterats",
+                "error": "Det gick inte att uppdatera objektuppgiferna"
             },
             "featureDelete": {
-                "success": "Feature deleted successfully",
-                "error": "Error occured during feature delete"
+                "success": "Objektet har tagits bort",
+                "error": "Det gick inte att ta bort objektet"
             },
             "featureLayer": {
-                "new": "New feature layer",
-                "addFeature": "Add feature",
-                "fieldName": "Name",
-                "fieldType": "Type",
-                "typeHelp": "Val av datatyp kan påverka hur värdet formateras i användargränssnittet.",
+                "new": "Ny datamängd",
+                "addFeature": "Lägg till objekt",
+                "fieldName": "Namn",
+                "fieldType": "Typ",
+                "typeHelp": "Typen påverkar hur attribut visas i användargränssnittet.",
+                "typeHelpNew": "Du kan lägga till attribut endast innan du har sparat datamängden.",
                 "errors": {
-                    "fieldAlreadyExists": "Field already exists",
-                    "isValidJSONKey": "Illegal characters."
+                    "fieldAlreadyExists": "Attributen finns redan",
+                    "isValidJSONKey": "Attributen innehåller ogiltiga tecken"
                 },
                 "actions": {
-                    "hideField": "Hide field",
-                    "showField": "Show field",
-                    "moveUp": "Move field up",
-                    "moveDown": "Move field down",
-                    "editLocale": "Edit field locale",
-                    "editFormat": "Edit field format",
+                    "hideField": "Dölj för användaren",
+                    "showField": "Visa för användaren",
+                    "moveUp": "Flytta upp",
+                    "moveDown": "Flytta ned",
+                    "editLocale": "Redigera attributnamn på olika språk.",
+                    "editFormat": "Välj attributtyp och hur informationen ska visas i  användargränssnittet.",
                 },
                 "modal": {
                     "locale": {
@@ -148,10 +149,10 @@ Oskari.registerLocalization(
                 "Boolean": "Boolean"
             },
             "layerSelectionPanel": {
-                "setCurrentLayerTitle": "Select dataset",
+                "setCurrentLayerTitle": "Välj en datamängd eller lägg till en ny datamängd",
                 "buttons": {
-                    "setCurrentLayer": "Select dataset",
-                    "addNewLayer": "New dataset"
+                    "setCurrentLayer": "Välj datamängd",
+                    "addNewLayer": "Ny datamängd"
                 }
             }
         },

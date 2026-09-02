@@ -28,7 +28,7 @@ const Splitter = styled.div`
     width: ${SPLITTER_WIDTH}px;
     background-color: ${props => props.$color};
     height: 100%;
-    margin-left: ${props => props.isMobile ? MARGIN.mobile : MARGIN.desktop}px;
+    margin-left: ${props => props.$isMobile ? MARGIN.mobile : MARGIN.desktop}px;
 `;
 
 const createDraggable = (elementRef, position, limits, setPosition, setDragging) => {
@@ -107,7 +107,7 @@ export const LayerSwipe = ThemeConsumer(({ theme, position, mapSize, isMobile, c
             $width={width}
             onMouseDown={() => onEvent()}
             onTouchStart={() => onEvent()} >
-            <Splitter $color={helper.getAccentColor()} isMobile={isMobile}/>
+            <Splitter $color={helper.getAccentColor()} $isMobile={isMobile}/>
         </DragWrapper>
     );
     if (dragging) {
