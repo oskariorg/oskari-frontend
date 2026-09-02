@@ -35,7 +35,7 @@ Oskari.registerLocalization(
         },
         "guidedTour": {
             "title": "Sök",
-            "message": "Sök-menyn har delats i två sökfunktioner: \"Ortnamnssökning\" och \"Metadatasökning\". Genom Ortnamnssökning kan du söka platser med platsnamn, adresser och fastighetsenhetsbeteckningar och fokusera din karta till den platsen. Genom Metadata Sök kan du söka rumsliga datamängd från många olika sökalternativ. Sökresultaten inkluderar även de datamängd som inte finns i Paikkatietoikkuna.",
+            "message": "Sök-menyn har delats i två sökfunktioner: \"Ortnamnssökning\" och \"Metadatasökning\". Genom Ortnamnssökning kan du söka platser med platsnamn och adresser och fokusera din karta till den platsen. Genom Metadata Sök kan du söka rumsliga datamängd från många olika sökalternativ. Sökresultaten inkluderar även de datamängd som inte finns i service.",
             "openLink": "Visa sök",
             "closeLink": "Göm sök",
             "tileText": "Sök"

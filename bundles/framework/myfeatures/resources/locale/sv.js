@@ -3,16 +3,16 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "myfeatures",
     "value": {
-        "title": "Eget datamängd",
+        "title": "Egen datamängd",
         "tool": {
-            "tooltip": "Importera ditt eget datamängd"
+            "tooltip": "Importera din egen datamängd"
         },
         "flyout": {
             "title": "Datamängd importering",
             "description": "Importera en datamängd från din dator. GPX (.gpx), KML (.kml), GeoJSON (.json eller .geojson) och GeoPackage (.gpkg) kan laddas upp som enskilda filer. Filformat som kräver flera filer ska laddas upp som en zip-fil som innehåller alla nödvändiga filer i något av följande format:<ul><li>Shapefile (.shp, .shx, .dbf och .prj, frivilligt .cpg)</li><li>GPX (.gpx)</li><li>KML (.kml)</li><li>GeoPackage (.gpkg)</li><li>GeoJSON (.json eller .geojson)</li><li>MapInfo (.mif och .mid)</li></ul>Den uppladdade filen får endast innehålla en datamängd och dess storlek får vara högst {maxSize, number} Mb. Enskilda filer som extraheras från zip-arkiv får vara högst {unzippedMaxSize, number} Mb stora.",
             "help": "Importera en datamängd från din dator. GPX-, KML-, GeoJSON- och GeoPackage-filer kan laddas upp som enskilda filer. För filformat som kräver flera filer ska du kontrollera att alla nödvändiga filer finns i zip-paketet och att data har rätt filformat och koordinatsystem.",
             "submit": "Skicka",
-            "success": "Datamängd importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\".",
+            "success": "Datamängd importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta datamängden i menyn \"Mina uppgifter\".",
             "tabs": {
                 "general" : "Basuppgifter",
                 "visualization": "Visualisering",
@@ -58,7 +58,7 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Datamängd (Beta)",
+            "title": "Datamängder (Beta)",
             "editLayer": "Redigera kartlagret",
             "deleteLayer": "Ta bort kartlagret",
             "grid": {
@@ -74,7 +74,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Redigera"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
-            "downloadTooltip": "Ladda datamängden",
+            "downloadTooltip": "Ladda datamängd",
             "confirmDeleteFieldMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
@@ -93,10 +93,10 @@ Oskari.registerLocalization(
                 "title": "Fel!",
                 "generic": "Systemfel. Försök på nytt senare.",
                 "deleteMsg": "Systemfel. Försök på nytt senare.",
-                "editMsg": "Uppdateringen av datasetet misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
-                "createMsg": "Ett systemfel inträffade när datamängen skulle skapas. Försök igen senare.",
-                "getStyle": "Sökningen av den stil som definierats för datasetet misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
-                "styleName": "Namnge kartlagret och försök sedan på nytt."
+                "editMsg": "Datamängden uppdaterats inte på grund av fel i systemet. Försök på nytt senare.",
+                "createMsg": "Datamängden skapats inte på grund av fel i systemet. Försök på nytt senare.",
+                "getStyle": "Sökningen av den stil som definierats för datamängden misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
+                "styleName": "Namnge datamängd och försök sedan på nytt."
             }
         },
         "featureEditor": {
@@ -157,8 +157,8 @@ Oskari.registerLocalization(
             }
         },
         "layer": {
-            "organization": "Egna datamängd",
-            "group": "Egna datamängd"
+            "organization": "Egna datamängder",
+            "group": "Egna datamängder"
         }
     }
 });

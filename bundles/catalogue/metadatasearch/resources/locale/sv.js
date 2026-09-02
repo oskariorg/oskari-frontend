@@ -3,7 +3,7 @@ Oskari.registerLocalization({
     "key": "catalogue.bundle.metadatasearch",
     "value": {
         "tabTitle": "Metadatasökning",
-        "metadataSearchDescription": "Sök metadata för datamängd, datamängd-serier eller tjänster.",
+        "metadataSearchDescription": "Sök metadata för datamängder, datamängdserier eller tjänster.",
         "placeholder": "Skriv sökordet",
         "advancedSearch": {
             "showMore": "Visa sökalternativ",
@@ -57,7 +57,7 @@ Oskari.registerLocalization({
             "noSearchResults": "Inga resultat hittades.",
             "modifySearch": "Redigera sökalternativ",
             "showSearch": "Visa alla sökresultat",
-            "showDatasets": "Visa endast datamängd",
+            "showDatasets": "Visa endast datamängder",
             "showServices": "Visa endast tjänster",
             "identificationCode": {
                 "creation": "skapandedatum",

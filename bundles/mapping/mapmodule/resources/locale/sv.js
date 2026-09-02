@@ -29,7 +29,7 @@ Oskari.registerLocalization(
                 "layersHeader": "Kartlager",
                 "unknownSource": "Unknown data source",
                 "layerPrefix": {
-                    "myf": "Egna datamängd"
+                    "myf": "Egna datamängder"
                 }
             },
             "DataSourcePlugin": {
