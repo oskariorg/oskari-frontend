@@ -31,7 +31,7 @@ Oskari.registerLocalization({
             copied: 'Kopieras'
         },
         error: {
-            generic: 'Something went wrong'
+            generic: 'Ett oväntat fel inträffade. Försök igen.'
         },
         table: {
             sort: {
@@ -48,11 +48,11 @@ Oskari.registerLocalization({
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Typ av geometri',
-                name: 'Stilets namn',
-                style: 'Stilet',
-                pointTab: 'Punkten',
+                name: 'Stilnamn',
+                style: 'Stil',
+                pointTab: 'Punkt',
                 lineTab: 'Linje',
-                areaTab: 'Området'
+                areaTab: 'Område'
             },
             tooltips: {
                 transparent: 'Ingen fyllning',
@@ -65,7 +65,7 @@ Oskari.registerLocalization({
             fill: {
                 color: 'Fyllnadsfärg',
                 area: {
-                    pattern: 'Fyllningsmönster'
+                    pattern: 'Fyllnadssmönster'
                 }
             },
             image: {
@@ -167,14 +167,14 @@ Oskari.registerLocalization({
             'tiles3d': '3D kartlager'
         },
         "FeatureEditorView": {
-            "title": "Feature editor",
+            "title": "Objektredigerare",
             "info": {
-                "layerLabel": "Modifying layer",
-                "featureModifyInfo": "Choose a feature to modify by clicking it on the map.",
-                "loading": "Loading layer metadata...",
-                "problem": "Insufficient metadata for layer!"
+                "layerLabel": "Redigerar datamängden",
+                "featureModifyInfo": "Klicka på ett objekt på kartan för att ändra det.",
+                "loading": "Laddar metadata...",
+                "problem": "Datamängden saknar nödvändiga metadata."
             },
-            "newTitle": "New feature",
+            "newTitle": "Ny objekt",
             "editTitle": "Redigera objekt",
             "geometrylist": {
                 "title": "Redigera på kartan",
@@ -187,17 +187,17 @@ Oskari.registerLocalization({
             },
             "editConfirm": {
                 "title": "The feature to edit is being switched",
-                "msg": "Unsaved changes will be lost. Do you want to switch?"
+                "msg": "Osparade ändringar går förlorade. Vill du byta objekt?"
             },
-            "exitConfirm": "Unsaved changes will be lost. Do you want to exit?",
-            "originalValue": "Original value",
-            "missingValue": "Value missing",
-            "modified": "Modified",
-            "restoreOriginal": "Restore original value",
-            "multipleFeatureModifyInfo": "You can also choose multiple features from the map by pressing the ctrl-button on your keyboard.",
-            "toolInfo": "Choose point, line or polygon tool to draw new geometries.",
-            "geometryModifyInfo": "With geometry editing tool you can edit feature geometry.",
-            "geometryDeleteInfo": "With geometry delete tool you can remove one geometry from feature with multiple geometries.",
+            "exitConfirm": "Osparade ändringar går förlorade. Vill du avsluta?",
+            "originalValue": "Ursprungligt värde",
+            "missingValue": "Värdet fattas",
+            "modified": "Redigerad",
+            "restoreOriginal": "Återställ ursprungligt värde",
+            "multipleFeatureModifyInfo": "Du kan också välja flera objekt på kartan genom att hålla ned Ctrl-tangenten och klicka på objekten.",
+            "toolInfo": "Välj punkt, linje eller område för att rita en ny geometri.",
+            "geometryModifyInfo": "Med geometriredigeringsverktyget kan du redigera objektets geometri.",
+            "geometryDeleteInfo": "Med verktyget för att ta bort geometri kan du ta bort en geometri från ett objekt med flera geometrier.",
             "buttons": {
                 "delete": "Ta bort",
                 "addFeature": "Lägg till objekt",
@@ -212,51 +212,51 @@ Oskari.registerLocalization({
                 "remove": "Ta bort en geometri"
             },
             "featureUpdate": {
-                "header": "Feature update",
-                "success": "Feature properties updated successfully",
-                "error": "Error occured during feature properties update"
+                "header": "Uppdatera objekt",
+                "success": "Objektegenskaperna har uppdaterats",
+                "error": "Ett fel uppstod vid uppdatering av objektegenskaperna"
             },
             "multipleFeaturesUpdate": {
-                "header": "Feature update",
-                "success": "Features properties updated successfully",
-                "error": "Error occured during features properties update"
+                "header": "Uppdatera flera objekten",
+                "success": "Objektegenskaperna har uppdaterats",
+                "error": "Ett fel uppstod vid uppdatering av objektegenskaperna"
             },
             "featureDelete": {
-                "header": "Feature delete",
-                "success": "Feature deleted successfully",
-                "error": "Error occured during feature delete"
+                "header": "Ta bort objekt",
+                "success": "Objektet har tagits bort",
+                "error": "Ett fel uppstod när objektet skulle tas bort"
             },
             "geometryDelete": {
-                "header": "Geometry delete",
-                "success": "Geometry deleted successfully",
-                "error": "Error occured during geometry delete"
+                "header": "Ta bort geometri",
+                "success": "Geometrin har tagits bort",
+                "error": "Ett fel uppstod när geometrin skulle tas bort"
             },
             "unsavedChanges": {
-                "title": "Unsaved changes",
-                "text": "There are some unsaved changes. Please select below action to perform."
+                "title": "Osparade ändringar",
+                "text": "Du har osparade ändringar. Välj hur du vill fortsätta."
             },
             "deleteGeometryDialog": {
-                "title": "Delete geometry",
-                "text": "Are you sure you want to delete geometry?"
+                "title": "Ta bort geometri",
+                "text": "Är du säker på att du vill ta bort geometrin?"
             },
             "deleteFeature": {
-                "title": "Delete feature",
-                "text": "Are you sure you want to delete feature?"
+                "title": "Ta bort objekt",
+                "text": "Är du säker på att du vill ta bort objektet?"
             },
             "formValidationError": {
-                "title": "Form validation error",
-                "text": "Please correct selected field values"
+                "title": "Valideringsfel i formuläret",
+                "text": "Korrigera värdena i de markerade fälten"
             },
             "formValidationNumberError": {
-                "title": "Number validation error",
-                "text": "Please put correct number value"
+                "title": "Felaktigt numeriskt värde",
+                "text": "Korrigera numeriskt värde"
              },
             "modifyMultipleFeaturesConfirmation": {
-                "title": "Confirm",
-                "text": "Are you sure you want to set the given value for all the selected features?"
+                "title": "Bekräfta",
+                "text": "Är du säker på att du vill ange det här värdet för alla markerade objekt?"
             },
             "messages": {
-                "cannot_save_all_features": "Cannot save all features"
+                "cannot_save_all_features": "Alla objekten kan inte sparas"
             }
         },
         "VectorLayerPresentation": {
@@ -273,10 +273,10 @@ Oskari.registerLocalization({
                     "sourceAttributes": "Källa: kartlagrets attribut",
                     "sourceCapabilities": "Källa: kartlagrets capabilities",
                     "unknown":"Okänd",
-                    "point": "Punkten",
+                    "point": "Punkt",
                     "line": "Linje",
-                    "area":"Området",
-                    "collection":"All"
+                    "area": "Område",
+                    "collection": "Alla"
                 },
                 "featureFilter": {
                     "title": "Filtrera begärda objekt baserat på attribut",
@@ -316,7 +316,7 @@ Oskari.registerLocalization({
                     }
                 },
                 "messages": {
-                    "noFeatureProperties": "Layer doesn't have feature properties information."
+                    "noFeatureProperties": "Datamängden saknar information om objektsegenskaper."
                 }
             }
         }
