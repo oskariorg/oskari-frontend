@@ -15,7 +15,13 @@ const getBroker = (options = {}) => {
     if (type === NOTIFICATION) {
         return [notification, toNotificationOptions(options)];
     }
-    return [message, toMessageOptions(options)];
+    const key = `open${Date.now()}`;
+    const opts = {
+        ...toMessageOptions(options),
+        key,
+        onClick: () => message.destroy(key)
+    };
+    return [message, opts];
 };
 const notificationOptions = ['title', 'placement', 'closeIcon', 'onClick', 'style'];
 const getType = options => {
