@@ -384,16 +384,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             const layerSource = this.getMarkersLayer().getSource();
             const olStyle = this.getMapModule().getStyle(style, GEOMETRY_TYPE);
 
-            const feature = new olFeature(new olGeom.Point(coord));
-            feature.setId(id);
-            feature.setStyle(olStyle);
-
-            if (layerSource.hasFeature(feature)) {
-                // ol doesn't add features with same id, update existing
-                const existing = layerSource.getFeatureById(id);
-                existing.setGeometry(new olGeom.Point(coord));
-                existing.setStyle(olStyle);
+            // ol doesn't add features with duplicate id, so update existing feature instead of adding a new one
+            let feature = layerSource.getFeatureById(id);
+            if (feature) {
+                feature.setGeometry(new olGeom.Point(coord));
+                feature.setStyle(olStyle);
             } else {
+                feature = new olFeature(new olGeom.Point(coord));
+                feature.setId(id);
+                feature.setStyle(olStyle);
                 layerSource.addFeature(feature);
             }
             const data = this._featureToMarkerData(feature);
