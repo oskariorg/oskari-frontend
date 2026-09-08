@@ -45,7 +45,7 @@
     "babel-loader": "10.1.1",
     "babel-plugin-styled-components": "2.1.4",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
-    "cesium": "1.139.1",
+    "cesium": "1.145.0",
     "copy-webpack-plugin": "14.0.0",
     "core-js": "3.50.0",
     "css-loader": "7.1.4",
