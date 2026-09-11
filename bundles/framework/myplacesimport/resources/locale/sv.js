@@ -3,16 +3,16 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "MyPlacesImport",
     "value": {
-        "title": "Eget dataset",
+        "title": "Egen datamängd",
         "tool": {
-            "tooltip": "Importera ditt eget dataset"
+            "tooltip": "Importera din egen datamängd"
         },
         "flyout": {
-            "title": "Dataset importering",
+            "title": "Datamängd importering",
             "description": "Importera en datamängd från din dator som en zip-fil, vilken innehåller alla erforderliga filer utav ett av de följande filformatsalternativen:<ul><li>Shapefile (.shp, .shx, .dbf och .prj, frivilligt .cpg)</li><li>GPX (.gpx)</li><li>GeoPackage (.gpkg)</li><li>GeoJSON (.json eller .geojson)</li><li>MapInfo (.mif och .mid)</li><li>Google Maps (.kml)</li></ul>Zip-filen kan innehålla endast en datamängd och dess storlek kan vara högst {maxSize, number} Mb. Enskilda extraherade filer bör vara maximalt {unzippedMaxSize, number} Mb i storlek.",
             "help": "Importera en datamängd från din dator som ett zip-paket. Var vänlig och kontrollera, att alla filerna är i ett lämpligt filformat och koordinatsystem.",
             "submit": "Skicka",
-            "success": "Dataset importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\".",
+            "success": "Datamängd importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta datamängden i menyn \"Mina uppgifter\".",
             "tabs": {
                 "general" : "Allmän",
                 "visualization": "Visualisering"
@@ -55,9 +55,9 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Dataset",
-            "editLayer": "Redigera kartlagret",
-            "deleteLayer": "Ta bort kartlagret",
+            "title": "Datamängd",
+            "editLayer": "Redigera datamängd",
+            "deleteLayer": "Ta bort datamängd",
             "grid": {
                 "name": "Namn",
                 "desc": "Beskrivning",
@@ -78,22 +78,22 @@ Oskari.registerLocalization(
                 "close": "Stäng"
             },
             "notification": {
-                "deletedTitle": "Ta bort dataset",
-                "deletedMsg": "Datasetet har tagits bort",
-                "editedMsg": "Datasetet har uppdaterats"
+                "deletedTitle": "Ta bort datamängd",
+                "deletedMsg": "Datamängden har tagits bort",
+                "editedMsg": "Datamängden har uppdaterats"
             },
             "error": {
                 "title": "Fel!",
                 "generic": "Systemfel. Försök på nytt senare.",
                 "deleteMsg": "Systemfel. Försök på nytt senare.",
-                "editMsg": "Uppdateringen av datasetet misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
-                "getStyle": "Sökningen av den stil som definierats för datasetet misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datasetet innan du lagrar ändringarna.",
-                "styleName": "Namnge kartlagret och försök sedan på nytt."
+                "editMsg": "Uppdateringen av datamängden misslyckades på grund av ett fel i systemet. Försök på nytt senare.",
+                "getStyle": "Sökningen av den stil som definierats för datamängden misslyckades. På blanketten visas utgångsvärdena. Byt värdena för stilen som definierats för datamängden innan du lagrar ändringarna.",
+                "styleName": "Namnge datamängden och försök sedan på nytt."
             }
         },
         "layer": {
-            "organization": "Egna dataset",
-            "inspire": "Egna dataset"
+            "organization": "Egna datamängder",
+            "inspire": "Egna datamängder"
         }
     }
 });

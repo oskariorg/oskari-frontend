@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Confirm, Message, Button } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { Card } from 'oskari-ui/components/Card';
+import { PrimaryButton, SecondaryButton } from '../buttons';
 import { FeatureForm } from './FeatureForm';
 import { GeometryPanel } from './GeometryPanel';
 import { GeoJSONPanel } from './GeoJSONPanel';
@@ -137,13 +138,9 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
                     <Message messageKey="FeatureEditorView.buttons.addFeature" />
                 </Button>
                 }
-                <Button onClick={cancelCb}>
-                    <Message messageKey="FeatureEditorView.buttons.cancel" />
-                </Button>
+                <SecondaryButton type='cancel' onClick={cancelCb}/>
                 {!isNew && <DeleteButton disabled={!canSave} onDelete={() => onDelete(currentFeature.id)} />}
-                <Button disabled={!canSave} type="primary" onClick={saveCb}>
-                    <Message messageKey="FeatureEditorView.buttons.save" />
-                </Button>
+                <PrimaryButton type='save' disabled={!canSave} onClick={saveCb}/>
             </WrappingRow>
         </StyledSpace>
     </React.Fragment>);
@@ -154,8 +151,8 @@ const DeleteButton = LocaleConsumer(({ getMessage, onDelete, disabled }) => {
         <Confirm
             title={getMessage('FeatureEditorView.deleteFeature.text')}
             onConfirm={onDelete}
-            okText={getMessage('FeatureEditorView.buttons.yes')}
-            cancelText={getMessage('FeatureEditorView.buttons.no')}>
+            okText={getMessage('buttons.yes')}
+            cancelText={getMessage('buttons.no')}>
             <Button type="danger" disabled={disabled}>
                 <Message messageKey="FeatureEditorView.buttons.deleteFeature" />
             </Button>

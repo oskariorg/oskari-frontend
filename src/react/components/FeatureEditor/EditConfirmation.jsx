@@ -1,6 +1,7 @@
 import React from 'react';
 import { showModal } from 'oskari-ui/components/window';
-import { Button, Message } from 'oskari-ui';
+import { Message } from 'oskari-ui';
+import { PrimaryButton, SecondaryButton } from '../buttons';
 import { styled } from 'styled-components';
 
 const Buttons = styled('div')`
@@ -27,12 +28,8 @@ export const confirmEdit = (getMessage, onConfirm) => {
         <Content>
             <Message bundleKey={'oskariui'} messageKey={'FeatureEditorView.editConfirm.msg'}/>
             <Buttons>
-                <Button type='primary' onClick={() => { onConfirm(true); close(); }}>
-                    <Message bundleKey={'oskariui'} messageKey={'FeatureEditorView.buttons.yes'}/>
-                </Button>
-                <Button onClick={close}>
-                    <Message bundleKey={'oskariui'} messageKey={'FeatureEditorView.buttons.cancel'}/>
-                </Button>
+                <PrimaryButton type='yes' onClick={() => { onConfirm(true); close(); }}/>
+                <SecondaryButton type='cancel' onClick={close}/>
             </Buttons>
         </Content>
     );
