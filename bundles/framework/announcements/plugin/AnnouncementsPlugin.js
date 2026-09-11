@@ -2,6 +2,8 @@ import { Messaging } from 'oskari-ui/util';
 import { getDateRange } from '../service/util';
 import '../resources/scss/announcementsplugin.ol.scss';
 
+const BUNDLE_KEY = 'announcements';
+
 /**
  * @class Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin
  * Provides selected announcements on the map
@@ -15,7 +17,6 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
     function (config) {
         var me = this;
         me.sandbox = Oskari.getSandbox();
-        me._loc = Oskari.getLocalization('announcements');
         me._clazz = 'Oskari.framework.announcements.plugin.AnnouncementsPlugin';
         me._defaultLocation = 'top left';
         me._config = config || {};
@@ -56,7 +57,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 '       </label>' +
                 '       <div class="announcement-content">' +
                 '           <div class="announcement-description"></div>' +
-                '           <h4>' + me._loc.plugin.valid + ':</h4>' +
+                '           <h4>' + Oskari.getMsg(BUNDLE_KEY, 'plugin.valid') + 'jööti' + ':</h4>' +
                 '           <div class="announcement-time"></div>' +
                 '       </div>' +
                 '   </div>' +
@@ -65,7 +66,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
 
             service.fetchAnnouncements((err, data) => {
                 if (err) {
-                    Messaging.error(me._loc.messages.getFailed);
+                    Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'messages.getFailed'));
                     return;
                 }
                 me.allAnnouncements = data;
@@ -156,7 +157,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 return null;
             }
 
-            header.append(me._loc.plugin.title);
+            header.append(Oskari.getMsg(BUNDLE_KEY, 'plugin.title') + 'jööti');
             me._bindHeader(header);
             return el;
         },
@@ -226,7 +227,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 const { title, content, link } = Oskari.getLocalized(announcement.locale);
                 let desc = content;
                 if (link) {
-                    desc = jQuery('<a>').attr('href', link).attr('target', '_blank').text(me._loc.externalLink);
+                    desc = jQuery('<a>').attr('href', link).attr('target', '_blank').text(Oskari.getMsg(BUNDLE_KEY, 'externalLink'));
                 }
                 div.find('button').append(title);
                 div.find('div.announcement-description').append(desc);
