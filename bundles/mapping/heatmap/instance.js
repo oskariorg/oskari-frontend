@@ -86,18 +86,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
             if (!layerModel || !layerModel.getAttributes().heatmap) {
                 return;
             }
-            var loc = Oskari.getLocalization(this.getName());
 
             // add heatmap tool for layer
-            var label = loc.tool_label,
+            var label = Oskari.getMsg(this.getName(), 'tool_label'),
                 tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             if (layerModel.isLayerOfType('HEATMAP')) {
-                label = loc.tool_label_settings;
+                label = Oskari.getMsg(this.getName(), 'tool_label_settings');
             }
             tool.setName('heatmap');
             tool.setTitle(label);
             tool.setTooltip(label);
-            var dialog = Oskari.clazz.create('Oskari.mapframework.bundle.heatmap.HeatmapDialog', loc.dialog);
+            var dialogConfig = Oskari.getMsg(this.getName(), 'dialog');
+            var dialog = Oskari.clazz.create('Oskari.mapframework.bundle.heatmap.HeatmapDialog', dialogConfig);
             tool.setCallback(function () {
                 if (layerModel.isLayerOfType('HEATMAP')) {
                     dialog.showDialog(layerModel, function (values) {
