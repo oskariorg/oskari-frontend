@@ -32,6 +32,7 @@ Oskari.clazz.define(
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
+        this._localization = null;
         this.service = null;
         this.tabPriority = 1.0;
         this.disableDefault = false;
@@ -293,7 +294,7 @@ Oskari.clazz.define(
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('title');
+            return Oskari.getMsg(this.getName(), 'title');
         },
 
         /**
@@ -302,7 +303,7 @@ Oskari.clazz.define(
          * component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return Oskari.getMsg(this.getName(), 'desc');
         },
 
         /**

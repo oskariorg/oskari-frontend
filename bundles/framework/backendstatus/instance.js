@@ -260,7 +260,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          *
          */
         showFeedbackDialog: function (context) {
-            var feedBackTextx = this.getLocalization('feedback')[context],
+            var feedBackTextx = Oskari.getMsg(this.getName(), 'feedback.' + context, null, {}),
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.show(feedBackTextx.title, feedBackTextx.message);
             dialog.fadeout();

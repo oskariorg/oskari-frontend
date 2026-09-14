@@ -2274,7 +2274,7 @@ Oskari.clazz.define(
         __guidedTourDelegateTemplates: [{
             priority: 90,
             getTitle: function () {
-                return this.getLocalization().guidedTour.help1.title;
+                return Oskari.getMsg('MapModule', 'guidedTour.help1.title');
             },
             getContent: function () {
                 return <Message bundleKey='MapModule' messageKey='guidedTour.help1.message' allowHTML />;
@@ -2287,7 +2287,7 @@ Oskari.clazz.define(
         {
             priority: 110,
             getTitle: function () {
-                return this.getLocalization().guidedTour.help2.title;
+                return Oskari.getMsg('MapModule', 'guidedTour.help2.title');
             },
             getContent: function () {
                 return <Message bundleKey='MapModule' messageKey='guidedTour.help2.message' allowHTML />;

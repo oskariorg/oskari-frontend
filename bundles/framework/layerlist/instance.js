@@ -242,14 +242,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('title');
+            return Oskari.getMsg(this.getName(), 'title');
         },
         /**
          * @method getDescription
          * @return {String} localized text for the description of the component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return Oskari.getMsg(this.getName(), 'desc');
         },
         /**
          * @method createUi
@@ -274,22 +274,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', this.getName()]);
             },
             getTitle: function () {
-                return this.getLocalization('guidedTour').title;
+                return Oskari.getMsg(this.getName(), 'guidedTour.title');
             },
             getContent: function () {
                 return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getLinks: function () {
                 const me = this;
-                const loc = this.getLocalization('guidedTour');
                 return [
                     {
-                        title: loc.openLink,
+                        title: Oskari.getMsg(this.getName(), 'guidedTour.openLink'),
                         onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', me.getName()]),
                         visible: false
                     },
                     {
-                        title: loc.closeLink,
+                        title: Oskari.getMsg(this.getName(), 'guidedTour.closeLink'),
                         onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', me.getName()]),
                         visible: true
                     }
@@ -298,16 +297,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         },
         _registerFilterButtons: function (service) {
             // Add newest layers filter
-            const loc = this.getLocalization('filter');
+            const newestTitle = Oskari.getMsg(this.getName(), 'filter.newest.title');
+            const newestTooltip = Oskari.getMsg(this.getName(), 'filter.newest.tooltip').replace('##', FILTER_NEWEST_COUNT);
             service.registerLayerlistFilterButton(
-                loc.newest.title,
-                loc.newest.tooltip.replace('##', FILTER_NEWEST_COUNT),
+                newestTitle,
+                newestTooltip,
                 {},
                 'newest');
             // Add raster layers filter
+            const rasterTitle = Oskari.getMsg(this.getName(), 'filter.raster.title');
+            const rasterTooltip = Oskari.getMsg(this.getName(), 'filter.raster.tooltip');
             service.registerLayerlistFilterButton(
-                loc.raster.title,
-                loc.raster.tooltip,
+                rasterTitle,
+                rasterTooltip,
                 {},
                 'raster');
         },
