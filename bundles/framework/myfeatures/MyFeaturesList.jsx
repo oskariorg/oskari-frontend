@@ -82,7 +82,7 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
                 created: item.getCreated(),
                 name: item.getName(),
                 desc: item.getDescription(),
-                source: item.getOrganizationName(),
+                source: item.getDataSource(),
                 hasFeatureEditorTool: !!item.getFeatureTool(FEATURE_EDITOR_TOOLNAME)
             }))}
             pagination={false}
