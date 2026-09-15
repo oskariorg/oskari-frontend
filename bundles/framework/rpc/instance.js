@@ -216,6 +216,7 @@ Oskari.clazz.define(
                     available.push(allowedRequests[i]);
                 }
             }
+            Oskari.log('RPC').warn('Following requests are not available with current configuration: ', allowedRequests.filter(req => !available.includes(req)).join(', '));
             this._allowedRequests = arrayToObject(available);
         },
 
