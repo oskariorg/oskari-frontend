@@ -191,7 +191,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
                 }
             },
             'RouteResultEvent': function (event) {
-                var me = this,
+                var me = this;
                 if (!me.__isPopupVisible()) {
                     return;
                 }
