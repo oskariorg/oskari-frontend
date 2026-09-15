@@ -9,6 +9,7 @@ export class MyFeaturesLayer extends WFSLayer {
         super(...arguments);
         this._layerType = 'myf';
         this._featureCount = -1;
+        this._dataSource = '';
     }
 
     setFeatureCount (count) {
@@ -17,6 +18,14 @@ export class MyFeaturesLayer extends WFSLayer {
 
     getFeatureCount () {
         return this._featureCount;
+    }
+
+    setDataSource (dataSource = '') {
+        this._dataSource = dataSource;
+    }
+
+    getDataSource () {
+        return this._dataSource;
     }
 
     /**

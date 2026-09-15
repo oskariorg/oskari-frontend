@@ -28,7 +28,7 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
             align: 'left',
             title: <Message messageKey='tab.grid.desc' />,
             dataIndex: 'desc',
-            sorter: getSorterFor('description')
+            sorter: getSorterFor('desc')
         },
         {
             align: 'left',
@@ -82,6 +82,7 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
                 created: item.getCreated(),
                 name: item.getName(),
                 desc: item.getDescription(),
+                source: item.getDataSource(),
                 hasFeatureEditorTool: !!item.getFeatureTool(FEATURE_EDITOR_TOOLNAME)
             }))}
             pagination={false}

@@ -44,4 +44,14 @@ export const handleMyFeaturesLayers = (sandbox, mapLayerService, getMsg) => {
 
 export const parseLayerData = (layer, mapLayerJson) => {
     layer.setFeatureCount(mapLayerJson.featureCount);
+    // Layer listing returns a flat "orgName", but create/update responses only return the raw
+    // "locale" map (per language), so fall back to the locale's "source" field in that case.
+    const dataSource = mapLayerJson.orgName || Oskari.getLocalized(mapLayerJson.locale)?.source || '';
+    layer.setDataSource(dataSource);
+    // "created" is an epoch timestamp in seconds (with fractional sub-second precision), but
+    // MapLayerService only accepts it via Date.parse() (which fails for epoch numbers) and Date()
+    // expects milliseconds, so convert and set it explicitly here instead.
+    if (mapLayerJson.created) {
+        layer.setCreated(new Date(mapLayerJson.created * 1000));
+    }
 };
