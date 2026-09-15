@@ -9,9 +9,36 @@ import dayjs from 'dayjs';
 import { FIELD_TYPE_DATE, FIELD_TYPE_DATETIME, FIELD_TYPE_NUMBER_INT, FIELD_TYPE_NUMBER_DOUBLE, FIELD_TYPE_BOOLEAN, FIELD_NAME_ID } from './Helper';
 
 export const StyledFormField = styled('div')`
-    padding-top: 5px;
-    padding-bottom: 10px;
+    display: contents;
+`;
+
+const StyledFields = styled('div')`
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: 0.5em;
+    row-gap: 0.75em;
+    align-items: center;
     width: 100%;
+`;
+
+const StyledFieldLabel = styled('div')`
+    justify-self: start;
+    text-align: left;
+    white-space: nowrap;
+`;
+
+const StyledFieldControl = styled('div')`
+    justify-self: stretch;
+    min-width: 0;
+    width: 100%;
+
+    > * {
+        width: 100%;
+    }
+`;
+
+const StyledFieldNote = styled('div')`
+    grid-column: 1 / -1;
 `;
 
 const FieldNameLabel = ({ label, name }) => {
@@ -30,9 +57,8 @@ const StyledFieldRow = styled('div')`
     }
 `;
 
-const FieldWrapper = ({ label, name, children }) => (
+const FieldWrapper = ({ children }) => (
     <StyledFieldRow>
-        <FieldNameLabel label={label} name={name} />
         {children}
     </StyledFieldRow>
 );
@@ -47,7 +73,7 @@ const StyledBooleanSelect = styled(Select)`
 `;
 
 const IntegerField = ({ label, name, value, disabled, onUpdate }) => (
-    <FieldWrapper label={label} name={name}>
+    <FieldWrapper>
         <NumberInput
             disabled={disabled}
             name={name}
@@ -58,7 +84,7 @@ const IntegerField = ({ label, name, value, disabled, onUpdate }) => (
 );
 
 const DoubleField = ({ label, name, value, disabled, onUpdate }) => (
-    <FieldWrapper label={label} name={name}>
+    <FieldWrapper>
         <NumberInput
             disabled={disabled}
             name={name}
@@ -69,7 +95,7 @@ const DoubleField = ({ label, name, value, disabled, onUpdate }) => (
 );
 
 const BooleanField = ({ label, name, value, disabled, onUpdate }) => (
-    <FieldWrapper label={label} name={name}>
+    <FieldWrapper>
         <StyledBooleanSelect
             disabled={disabled}
             value={value ?? null}
@@ -80,7 +106,7 @@ const BooleanField = ({ label, name, value, disabled, onUpdate }) => (
 );
 
 const DateTimeField = ({ label, name, value, disabled, showTime, onUpdate }) => (
-    <FieldWrapper label={label} name={name}>
+    <FieldWrapper>
         <DateTimePicker
             disabled={disabled}
             showTime={showTime}
@@ -107,7 +133,7 @@ const getFieldForType = (name, type, value, onUpdate, disabled, fieldLabels = {}
     if (isDateTimeField) {
         return <DateTimeField label={label} name={name} value={value} disabled={isDisabled} showTime={isTimestampField} onUpdate={onUpdate}/>;
     }
-    return (<FieldWrapper label={label} name={name}>
+    return (<FieldWrapper>
         <TextInput
             disabled={isDisabled}
             name={name}
@@ -121,6 +147,7 @@ const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate, disab
         return null;
     }
     const hasChanged = !isNew && originalValue !== value;
+    const label = fieldLabels[name] || name;
     let labelForOriginal = originalValue;
     if (!labelForOriginal) {
         labelForOriginal = (<Message messageKey="FeatureEditorView.missingValue" />);
@@ -128,15 +155,22 @@ const getDecorated = ({ name, type, value, originalValue, isNew, onUpdate, disab
     const noteForOriginal = (<Message messageKey="FeatureEditorView.originalValue">: {labelForOriginal}</Message>);
     return (
         <StyledFormField key={name}>
-            { getFieldForType(name, type, value, onUpdate, disabled, fieldLabels) }
-            { hasChanged && <StyledContainer>
-                <Message messageKey="FeatureEditorView.modified" LabelComponent={StyledModIndicator} />
-                <Tooltip title={noteForOriginal}>
-                    <Button type="link" disabled={disabled} onClick={() => onUpdate(name, originalValue)}>
-                        <Message messageKey="FeatureEditorView.restoreOriginal" />
-                    </Button>
-                </Tooltip>
-            </StyledContainer> }
+            <StyledFieldLabel>
+                <FieldNameLabel label={label} name={name} />
+            </StyledFieldLabel>
+            <StyledFieldControl>
+                { getFieldForType(name, type, value, onUpdate, disabled, fieldLabels) }
+            </StyledFieldControl>
+            { hasChanged && <StyledFieldNote>
+                <StyledContainer>
+                    <Message messageKey="FeatureEditorView.modified" LabelComponent={StyledModIndicator} />
+                    <Tooltip title={noteForOriginal}>
+                        <Button type="link" disabled={disabled} onClick={() => onUpdate(name, originalValue)}>
+                            <Message messageKey="FeatureEditorView.restoreOriginal" />
+                        </Button>
+                    </Tooltip>
+                </StyledContainer>
+            </StyledFieldNote> }
         </StyledFormField>
     );
 };
@@ -169,9 +203,9 @@ export const FeatureForm = ({config = {}, feature = {}, original = {}, onChange,
             fieldLabels
         }));
     return (
-        <React.Fragment>
+        <StyledFields>
             {fields}
-        </React.Fragment>);
+        </StyledFields>);
 };
 
 FeatureForm.propTypes = {
