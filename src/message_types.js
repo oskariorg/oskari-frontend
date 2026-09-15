@@ -34,19 +34,23 @@
         return typeNames[name];
     }
 
-    o.requestBuilder = function (name) {
+    o.requestBuilder = function (name, suppressWarnings = false) {
         var qname = getClazzByNameAndType(name, 'Oskari.mapframework.request.Request');
         if (!qname) {
-            log.warn('No builder found for', name);
+            if (!suppressWarnings) {
+                log.warn('No builder found for', name);
+            }
             return undefined;
         }
         return Oskari.clazz.builder(qname);
     };
 
-    o.eventBuilder = function (name) {
+    o.eventBuilder = function (name, suppressWarnings = true) {
         var qname = getClazzByNameAndType(name, 'Oskari.mapframework.event.Event');
         if (!qname) {
-            log.warn('No builder found for', name);
+            if (!suppressWarnings) {
+                log.warn('No builder found for', name);
+            }
             return undefined;
         }
         return Oskari.clazz.builder(qname);
