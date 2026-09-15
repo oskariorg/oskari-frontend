@@ -216,7 +216,7 @@ Oskari.clazz.define(
                     available.push(allowedRequests[i]);
                 }
             }
-            Oskari.log('Messages').warn('RPC missing builder for following requests: ', allowedRequests.filter(req => !available.includes(req)).join(', '));
+            Oskari.log('RPC').warn('Following requests are not available with current configuration: ', allowedRequests.filter(req => !available.includes(req)).join(', '));
             this._allowedRequests = arrayToObject(available);
         },
 
