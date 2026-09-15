@@ -31,7 +31,6 @@ Oskari.clazz.define(
             )
         },
         _initImpl: function () {
-            this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
         },
         /**
          * While this plugin DOES have a UI we don't want publisher stopping it on startup so
@@ -48,7 +47,7 @@ Oskari.clazz.define(
                 if (this._service) {
                     var me = this;
                     // init group for layers
-                    this._service.addGroup(me.constLayerGroupId, me._loc.layersHeader);
+                    this._service.addGroup(me.constLayerGroupId, Oskari.getMsg('MapModule', 'plugin.LogoPlugin.layersHeader'));
                     var layers = me.getSandbox().findAllSelectedMapLayers();
                     // add initial layers
                     layers.forEach(function (layer) {
@@ -75,7 +74,8 @@ Oskari.clazz.define(
         },
         openDataProvidersPopup: function (data) {
             if (!this._popupControls) {
-                this._popupControls = showDataProviderPopup(this._loc.dataSources, data, () => this.clearPopup());
+                const dataSourcesLabel = Oskari.getMsg('MapModule', 'plugin.LogoPlugin.dataSources');
+                this._popupControls = showDataProviderPopup(dataSourcesLabel, data, () => this.clearPopup());
             }
         },
         registerForUpdateLabels: function (el) {
@@ -212,7 +212,8 @@ Oskari.clazz.define(
                 }
             };
 
-            me._extendService.addLabel(me._loc.terms, options);
+            const termsLabel = Oskari.getMsg('MapModule', 'plugin.LogoPlugin.terms');
+            me._extendService.addLabel(termsLabel, options);
         },
 
         _createDataSourcesLink: function (el) {
@@ -234,7 +235,8 @@ Oskari.clazz.define(
                 }
             };
 
-            me._extendService.addLabel(me._loc.dataSources, options);
+            const dataSourcesLabel = Oskari.getMsg('MapModule', 'plugin.LogoPlugin.dataSources');
+            me._extendService.addLabel(dataSourcesLabel, options);
         },
 
         updateDialog: function () {

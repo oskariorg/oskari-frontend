@@ -388,7 +388,6 @@ Oskari.clazz.define(
             // render coordinates to gfi header
             if (showCoordinates) {
                 let mapModule = this.getMapModule();
-                let loc = Oskari.getLocalization('oskariui');
                 let crs = mapModule.getProjection();
 
                 let coordinateWrapper = jQuery('<div class="coordinateWrapper"></div>');
@@ -402,20 +401,24 @@ Oskari.clazz.define(
                 if (mapModule.getProjectionUnits() === 'degrees' && !isNaN(lat) && !isNaN(lon)) {
                     // Hard code restrict to 6 decimals
                     const degreePoint = Oskari.util.coordinateMetricToDegrees([lon, lat], 6);
+                    const latLabel = Oskari.getMsg('oskariui', 'coordinates.lat');
+                    const lonLabel = Oskari.getMsg('oskariui', 'coordinates.lon');
                     lon = degreePoint[0];
                     lat = degreePoint[1];
-                    lonlatString = loc.coordinates.lat + ': ' + lat + ' ' + loc.coordinates.lon + ': ' + lon;
+                    lonlatString = latLabel + ': ' + lat + ' ' + lonLabel + ': ' + lon;
                 }
                 // Otherwise show meter units
                 else if (!isNaN(lat) && !isNaN(lon)) {
+                    const northLabel = Oskari.getMsg('oskariui', 'coordinates.n');
+                    const eastLabel = Oskari.getMsg('oskariui', 'coordinates.e');
                     lat = lat.toFixed();
                     lon = lon.toFixed();
                     lat = me._formatNumber(lat, me.decimalSeparator);
                     lon = me._formatNumber(lon, me.decimalSeparator);
-                    lonlatString = loc.coordinates.n + ': ' + lat + ' ' + loc.coordinates.e + ': ' + lon;
+                    lonlatString = northLabel + ': ' + lat + ' ' + eastLabel + ': ' + lon;
                 }
 
-                let crsText = loc.coordinates.crs[crs] || crs;
+                let crsText = Oskari.getMsg('oskariui', 'coordinates.crs.' + crs, null, crs);
                 let crsDiv = crsText.length > 0 ? jQuery('<div>' + crsText + '</div>') : null;
 
                 if (crsDiv && lonlatString.length > 0) {

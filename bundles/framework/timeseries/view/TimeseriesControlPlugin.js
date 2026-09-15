@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me._name = 'TimeseriesControlPlugin';
         me._timelineWidth = 600;
         me.loc = Oskari.getMsg.bind(null, 'timeseries');
-        me._d3TimeDef = Oskari.getLocalization('timeseries').d3TimeDef;
+        me._d3TimeDef = me.loc('d3TimeDef');
         me._widthMargin = conf.widthMargin || 130;
         me._topMargin = conf.topMargin || 0;
         me._waitingForFrame = false;

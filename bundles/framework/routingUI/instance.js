@@ -90,8 +90,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
                 }
             }
 
-            this.localization = me.getLocalization();
-
             // stateful
             if (conf && conf.stateful) {
                 sandbox.registerAsStateful(this.mediator.bundleId, this);
@@ -117,7 +115,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
             me.toolName = 'routing';
             me.tool = {
                 iconCls: 'tool-feature-selection',
-                tooltip: me.localization.tool.tooltip,
+                tooltip: Oskari.getMsg(me.getName(), 'tool.tooltip'),
                 sticky: false,
                 callback: function () {
                     me.popup.showRoutingPopup();
@@ -193,8 +191,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
                 }
             },
             'RouteResultEvent': function (event) {
-                var me = this,
-                    loc = me.localization;
+                var me = this;
                 if (!me.__isPopupVisible()) {
                     return;
                 }
@@ -203,7 +200,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
                 if (event.getSuccess()) {
                     me.__renderPlan(event.getPlan());
                 } else {
-                    me.__showMessage(loc.error.title, loc.error.message);
+                    const title = Oskari.getMsg(me.getName(), 'error.title');
+                    const message = Oskari.getMsg(me.getName(), 'error.message');
+                    me.__showMessage(title, message);
                 }
             }
         },
@@ -231,7 +230,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
      */
         __renderPlan: function (plan) {
             var me = this,
-                loc = me.localization,
                 accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 panel = null,
                 routeDiv = me.popup.popupContent.find('.route-instructions'),
@@ -241,41 +239,51 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
             titleDiv.empty();
             instructionsDiv.empty();
 
-            var title = loc.routeInstructions.titleOne;
+            var title = Oskari.getMsg(me.getName(), 'routeInstructions.titleOne');
             if (plan.itineraries.length > 1) {
-                title = loc.routeInstructions.titleMulti.replace('{count}', plan.itineraries.length);
+                const multipleTitle = Oskari.getMsg(me.getName(), 'routeInstructions.titleMulti');
+                title = multipleTitle.replace('{count}', plan.itineraries.length);
             }
             titleDiv.html('<h4>' + title + '</h4>');
 
             plan.itineraries.forEach(function (itinerary, index) {
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                var panelTitle = loc.routeInstructions.route + ' ' + (index + 1);
+                const routeLabel = Oskari.getMsg(me.getName(), 'routeInstructions.route');
+                var panelTitle = routeLabel + ' ' + (index + 1);
                 panel.setTitle(panelTitle);
 
                 var content = me.__templates.itinerary.clone();
-                content.find('div.duration div.itinerary__title').html(loc.routeInstructions.duration + ':');
+                const durationLabel = Oskari.getMsg(me.getName(), 'routeInstructions.duration');
+                content.find('div.duration div.itinerary__title').html(durationLabel + ':');
                 content.find('div.duration div.itinerary__content').html(me._formatTime(itinerary.duration));
 
-                content.find('div.start-time div.itinerary__title').html(loc.routeInstructions.startTime + ':');
+                const startTimeLabel = Oskari.getMsg(me.getName(), 'routeInstructions.startTime');
+                content.find('div.start-time div.itinerary__title').html(startTimeLabel + ':');
                 content.find('div.start-time div.itinerary__content').html(me._formatDate(itinerary.startTime));
 
-                content.find('div.end-time div.itinerary__title').html(loc.routeInstructions.endTime + ':');
+                const endTimeLabel = Oskari.getMsg(me.getName(), 'routeInstructions.endTime');
+                content.find('div.end-time div.itinerary__title').html(endTimeLabel + ':');
                 content.find('div.end-time div.itinerary__content').html(me._formatDate(itinerary.endTime));
 
-                content.find('div.waiting-time div.itinerary__title').html(loc.routeInstructions.waitingTime + ':');
+                const waitingTimeLabel = Oskari.getMsg(me.getName(), 'routeInstructions.waitingTime');
+                content.find('div.waiting-time div.itinerary__title').html(waitingTimeLabel + ':');
                 content.find('div.waiting-time div.itinerary__content').html(me._formatTime(itinerary.waitingTime));
 
-                content.find('div.walking-time div.itinerary__title').html(loc.routeInstructions.walkingTime + ':');
+                const walkingTimeLabel = Oskari.getMsg(me.getName(), 'routeInstructions.walkingTime');
+                content.find('div.walking-time div.itinerary__title').html(walkingTimeLabel + ':');
                 content.find('div.walking-time div.itinerary__content').html(me._formatTime(itinerary.walkTime));
 
-                content.find('div.transit-time div.itinerary__title').html(loc.routeInstructions.transitTime + ':');
+                const transitTimeLabel = Oskari.getMsg(me.getName(), 'routeInstructions.transitTime');
+                content.find('div.transit-time div.itinerary__title').html(transitTimeLabel + ':');
                 content.find('div.transit-time div.itinerary__content').html(me._formatTime(itinerary.transitTime));
 
-                content.find('div.walk-distance div.itinerary__title').html(loc.routeInstructions.walkDistance + ':');
+                const walkDistanceLabel = Oskari.getMsg(me.getName(), 'routeInstructions.walkDistance');
+                content.find('div.walk-distance div.itinerary__title').html(walkDistanceLabel + ':');
                 content.find('div.walk-distance div.itinerary__content').html(me._formatLength(itinerary.walkDistance));
 
                 var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                btn.setTitle(loc.routeInstructions.showRoute);
+                const showRouteLabel = Oskari.getMsg(me.getName(), 'routeInstructions.showRoute');
+                btn.setTitle(showRouteLabel);
                 btn.setHandler(function () {
                     var routeColorIndex = index;
                     if (index > me.routeColors.length - 1) {

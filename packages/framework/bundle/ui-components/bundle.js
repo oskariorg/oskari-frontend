@@ -33,14 +33,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
         "scripts" : [
         {
             "type" : "text/javascript",
-            "src" : "../../../../libraries/chosen/1.5.1/chosen.jquery.js"
-        },
-        {
-            "type" : "text/css",
-            "src" : "../../../../libraries/chosen/1.5.1/chosen.css"
-        },
-        {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/Component.js"
         }, {
             "type" : "text/javascript",
@@ -56,13 +48,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "src" : "../../../../bundles/framework/divmanazer/component/TabContainer.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/TabDropdownContainer.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/TabPanel.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/Badge.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/Popup.js"
@@ -80,31 +66,13 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "src": "../../../../bundles/framework/divmanazer/component/buttons/CloseButton.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/Form.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/UIHelper.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/FormInput.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/Popover.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/Grid.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/GridModel.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/ProgressSpinner.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/Select.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/SelectList.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/divmanazer/component/ProgressBar.js"
@@ -125,13 +93,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "src" : "../../../../bundles/framework/divmanazer/resources/scss/modal.scss"
         }, {
             "type" : "text/css",
-            "src" : "../../../../bundles/framework/divmanazer/resources/scss/badge.scss"
-        }, {
-            "type" : "text/css",
             "src" : "../../../../bundles/framework/divmanazer/resources/scss/forminput.scss"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../bundles/framework/divmanazer/resources/scss/grid.scss"
         }, {
             "type" : "text/css",
             "src" : "../../../../bundles/framework/divmanazer/resources/scss/popup.scss"
@@ -141,9 +103,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
         }, {
             "type" : "text/css",
             "src" : "../../../../bundles/framework/divmanazer/resources/scss/overlay.scss"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../bundles/framework/divmanazer/resources/scss/popover.scss"
         }],
         "locales" : [{
             "lang" : "fi",
