@@ -9,26 +9,26 @@ import dayjs from 'dayjs';
 import { FIELD_TYPE_DATE, FIELD_TYPE_DATETIME, FIELD_TYPE_NUMBER_INT, FIELD_TYPE_NUMBER_DOUBLE, FIELD_TYPE_BOOLEAN, FIELD_NAME_ID } from './Helper';
 
 export const StyledFormField = styled('div')`
-    display: contents;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    width: 100%;
 `;
 
 const StyledFields = styled('div')`
-    display: grid;
-    grid-template-columns: max-content minmax(0, 1fr);
-    column-gap: 0.5em;
-    row-gap: 0.75em;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
     width: 100%;
 `;
 
 const StyledFieldLabel = styled('div')`
-    justify-self: start;
     text-align: left;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
 `;
 
 const StyledFieldControl = styled('div')`
-    justify-self: stretch;
     min-width: 0;
     width: 100%;
 
@@ -38,7 +38,7 @@ const StyledFieldControl = styled('div')`
 `;
 
 const StyledFieldNote = styled('div')`
-    grid-column: 1 / -1;
+    width: 100%;
 `;
 
 const FieldNameLabel = ({ label, name }) => {
