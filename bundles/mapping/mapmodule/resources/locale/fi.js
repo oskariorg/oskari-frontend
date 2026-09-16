@@ -102,7 +102,7 @@ Oskari.registerLocalization(
             },
             "MarkersPlugin": {
                 "title": "Karttamerkintä",
-                "tooltip": "Tee karttamerkintä",
+                "tooltip": "Karttamerkintä",
                 "form": {
                     "style": "Karttamerkinnän esitystapa",
                     "message": {
