@@ -24,13 +24,12 @@ const CardSubtitle = styled('div')`
     color: inherit;
 `;
 
-export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDelete, startNewFeature, showGeoJSONPanel = true, showGeometryNotRecognizedAlert = true }) => {
+export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDelete, startNewFeature, onDirtyChange, showGeoJSONPanel = true, showGeometryNotRecognizedAlert = true }) => {
     const type = Helper.detectGeometryType(layer.geometryType);
     const isMulti = type.includes('Multi');
     const [isDrawing, setDrawingMode] = useState(false);
     const [isGeometryValid, setGeometryValid] = useState(true);
     const [currentFeature, setCurrentFeature] = useState(feature);
-    // TODO: if feature === currentFeature differs -> there have been edits made
     const isNew = !currentFeature.id;
     const stopDrawing = (clearPrevious = false, finishDrawing = false) => {
         setDrawingMode(false);
@@ -65,6 +64,10 @@ export const FeaturePanel = ({ layer = {}, feature = {}, onCancel, onSave, onDel
             setCurrentFeature(feature);
         }
     });
+
+    useEffect(() => {
+        onDirtyChange?.(JSON.stringify(feature) !== JSON.stringify(currentFeature));
+    }, [feature, currentFeature, onDirtyChange]);
 
     const updateGeometry = (updatedFeature) => {
         setGeometryValid(updatedFeature.properties?.valid !== false);
@@ -166,6 +169,7 @@ FeaturePanel.propTypes = {
     onCancel: PropTypes.func,
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
+    onDirtyChange: PropTypes.func,
     showGeoJSONPanel: PropTypes.bool,
     showGeometryNotRecognizedAlert: PropTypes.bool
 };

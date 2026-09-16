@@ -14,7 +14,8 @@ export class FeatureEditorPanelHandler extends StateHandler {
         this.state = {
             currentLayer: null,
             feature: null,
-            loading: false
+            loading: false,
+            hasPendingChanges: false
         };
 
         this.eventHandlers = {
@@ -165,6 +166,11 @@ export class FeatureEditorPanelHandler extends StateHandler {
     getLoading() {
         return this.getState().loading;
     }
+
+    setHasPendingChanges (hasPendingChanges) {
+        this.updateState({ hasPendingChanges });
+    }
+
     /**
      * Temporarily hides layers from map that the user isn't editing
      * @method hideOtherVectorLayers
@@ -199,7 +205,8 @@ export class FeatureEditorPanelHandler extends StateHandler {
             return;
         }
 
-        if (!confirmed && this.getFeature()?.id !== geojson.id) {
+        const { hasPendingChanges } = this.getState();
+        if (!confirmed && this.getFeature()?.id !== geojson.id && hasPendingChanges) {
             confirmEdit(this.loc, () => this.editFeature(geojson, true));
         } else {
             // remove _oid (internal normalized id by Oskari) from properties
@@ -212,7 +219,8 @@ export class FeatureEditorPanelHandler extends StateHandler {
                 }
             };
             this.updateState({
-                feature
+                feature,
+                hasPendingChanges: false
             });
         }
     }
