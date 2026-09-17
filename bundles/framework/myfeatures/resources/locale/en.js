@@ -70,7 +70,8 @@ Oskari.registerLocalization(
                 "removeButton": "Delete",
                 "actions": "Actions",
                 "createDate": "Created",
-                "contentEditor": "Content editor"
+                "contentEditor": "Content editor",
+                "featuredata": "Open featuredata"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset \"{name}\"?",
             "downloadTooltip": "Download dataset",
