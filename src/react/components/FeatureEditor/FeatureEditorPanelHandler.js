@@ -23,14 +23,20 @@ export class FeatureEditorPanelHandler extends StateHandler {
                 if (event.getOperation() !== 'click') {
                     return;
                 }
-                const currentLayerId = this.getCurrentLayer().id;
+                const currentLayer = this.getCurrentLayer();
+                if (!currentLayer) {
+                    return;
+                }
+                const currentLayerId = currentLayer.id;
                 const editLayerFeatures = event.getFeatures().filter(f => f.layerId === currentLayerId);
                 if (!editLayerFeatures.length) {
                     // no features hit on layer that we are currently editing
                     return;
                 }
+                const clickedFeature = editLayerFeatures[0].geojson.features[0];
+                this.selectFeatureOnMap(currentLayerId, clickedFeature?.id);
                 // found one -> edit it
-                this.editFeature(editLayerFeatures[0].geojson.features[0]);
+                this.editFeature(clickedFeature);
             }
         };
 
@@ -145,8 +151,20 @@ export class FeatureEditorPanelHandler extends StateHandler {
             const featuresMap = this.mapModule.getVectorFeatures(null, { layers: [layerId] });
             const features = featuresMap[layerId] ? featuresMap[layerId].features : null;
             const feature = features?.filter((feature) => feature.id === featureId)?.[0] ?? null;
-            this.setFeature(feature)
+            this.setFeature(feature);
+            this.selectFeatureOnMap(layerId, featureId);
         }
+    }
+
+    selectFeatureOnMap (layerId, featureId) {
+        if (!layerId || !featureId) {
+            return;
+        }
+        const selectionService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureSelectionService');
+        if (!selectionService) {
+            return;
+        }
+        selectionService.setSelectedFeatureIds(layerId, [featureId]);
     }
 
     setFeature(feature) {
