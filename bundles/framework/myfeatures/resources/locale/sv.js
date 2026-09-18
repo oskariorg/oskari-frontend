@@ -71,7 +71,8 @@ Oskari.registerLocalization(
                 "removeButton": "Ta bort",
                 "actions": "Handlingar",
                 "createDate": "Skapad",
-                "contentEditor": "Redigera"
+                "contentEditor": "Redigera",
+                "featuredata": "Öppna objekttabellen"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
             "downloadTooltip": "Ladda datamängd",

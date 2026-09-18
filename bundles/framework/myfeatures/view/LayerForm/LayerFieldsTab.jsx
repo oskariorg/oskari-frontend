@@ -227,7 +227,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     };
 
     const reorder = (item, index) => {
-        const selectedProps = attributes?.data?.filter?.default || [];
+        const selectedProps = attributes?.data?.filter?.default || layerFields.map((field) => field.name);
         if (selectedProps.length === 0 || index < 0 || index > selectedProps.length - 1) {
             return;
         }
@@ -239,7 +239,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     };
 
     function toggleField(name) {
-        const selectedProperties = attributes?.data?.filter?.default || [];
+        const selectedProperties = attributes?.data?.filter?.default || layerFields.map((field) => field.name);
         let newList = structuredClone(selectedProperties);
         if (selectedProperties.includes(name)) {
             newList = selectedProperties.filter(item => item !== name);
@@ -282,7 +282,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                 style: { verticalAlign: 'middle' }
             }),
             render: (text, item, index) => {
-                const selectedProps = attributes?.data?.filter?.default || [];
+                const selectedProps = attributes?.data?.filter?.default || layerFields.map((field) => field.name);
                 const fieldIsVisible = selectedProps.indexOf(item?.name) > -1;
                 return <>
                     { fieldIsVisible &&
@@ -380,8 +380,8 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         };
     });
 
-    const selectedProps = editProp ? [editProp] : attributes?.data?.filter?.default || [];
-    const propNames = layerFields.map(field => field.name);
+    const propNames = layerFields.map((field) => field.name);
+    const selectedProps = editProp ? [editProp] : attributes?.data?.filter?.default || propNames;
     return <LocaleProvider value = {{ bundleKey: 'myfeatures' }}>
         <Table
             columns={columnSettings}

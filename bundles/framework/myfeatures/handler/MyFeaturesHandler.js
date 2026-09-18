@@ -392,6 +392,35 @@ class MyFeaturesHandler extends StateHandler {
         }).catch((exception) => Messaging.error(this.loc('featureEditor.featureDelete.error') + exception));
     }
 
+    layerPropertiesLoaded (layer) {
+        if (!layer) {
+            return false;
+        }
+
+        const hasLoadedProperties = typeof layer.getProperties === 'function' && layer.getProperties().length > 0;
+        const hasLoadedDescribeInfo = typeof layer.getDescribeLayerStatus === 'function' && layer.getDescribeLayerStatus() === DESCRIBE_LAYER.LOADED;
+
+        return hasLoadedProperties || hasLoadedDescribeInfo;
+    }
+
+    async openFeatureData (layerId) {
+        const layer = this.instance.getMapLayerService().findMapLayer(layerId);
+
+        if (!this.sandbox.isLayerAlreadySelected(layerId)) {
+            this.addLayerToMap(layerId);
+        }
+
+        if (!this.layerPropertiesLoaded(layer)) {
+            this.refreshLayerOnMap(layerId);
+            setTimeout(() => {
+                this.sandbox.postRequestByName('ShowFeatureDataRequest', [layerId]);
+            }, 500);
+            return;
+        }
+
+        this.sandbox.postRequestByName('ShowFeatureDataRequest', [layerId]);
+    }
+
     refreshLayerOnMap (layerId) {
         const mapLayer = this.instance.getMapLayerService().findMapLayer(layerId);
         if (mapLayer && typeof mapLayer.setDescribeLayerStatus === 'function') {
@@ -447,7 +476,8 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'showLayerDialog',
     'showFeatureEditorDialog',
     'closeFeatureEditorPopup',
-    'setFeatureEditorLayer'
+    'setFeatureEditorLayer',
+    'openFeatureData'
 ]);
 
 export { wrapped as MyFeaturesHandler };
