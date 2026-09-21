@@ -70,7 +70,7 @@ Oskari.registerLocalization(
                 "actions": "Toiminnot",
                 "createDate": "Luontiaika",
                 "contentEditor": "Muokkaa",
-                "featuredata": "Avaa kohdetietotaulukko"
+                "featuredata": "Avaa kohdetiedot"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
             "downloadTooltip": "Lataa aineisto",
@@ -102,6 +102,7 @@ Oskari.registerLocalization(
             "title": "Sisältöeditori",
             "addFeatureTool": "Lisää kohde",
             "deleteFeatureTool": "Poista kohde",
+            "featureToolTooltip": "Muokkaa kohdetta",
             "confirmDelete": "Haluatko varmasti poistaa kohteen?",
             "featureUpdate": {
                 "header": "Kohde päivitetty",

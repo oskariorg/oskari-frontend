@@ -4,6 +4,7 @@ Oskari.registerLocalization(
         "key": "FeatureData",
         "value": {
             "title": "Feature Data",
+            "tooltip": "Open feature data for visible map layers",
             "layer": {
                 "outOfContentArea": "The map layer has no features at the map view area.",
                 "featureData": "Feature data",

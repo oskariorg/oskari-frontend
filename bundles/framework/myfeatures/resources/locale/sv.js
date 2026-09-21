@@ -72,7 +72,7 @@ Oskari.registerLocalization(
                 "actions": "Handlingar",
                 "createDate": "Skapad",
                 "contentEditor": "Redigera",
-                "featuredata": "Öppna objekttabellen"
+                "featuredata": "Öppna objektuppgifterna"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
             "downloadTooltip": "Ladda datamängd",
@@ -104,6 +104,7 @@ Oskari.registerLocalization(
             "title": "Feature editor",
             "addFeatureTool": "Lägg till objekt",
             "deleteFeatureTool": "Ta bort objekt",
+            "featureToolTooltip": "Redigera objekt",
             "confirmDelete": "Vill du ta bort objektet?",
             "featureUpdate": {
                 "success": "Objektuppgifter har uppdaterats",

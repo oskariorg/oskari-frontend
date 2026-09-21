@@ -8,6 +8,7 @@ import { MapModuleTextButton } from '../../../mapping/mapmodule/MapModuleTextBut
 import '../../../mapping/mapmodule/plugin/BasicMapModulePlugin';
 import { getReactRoot } from 'oskari-ui/components/window';
 
+const BUNDLE_KEY = 'FeatureData';
 
 /**
  * @class Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin
@@ -98,11 +99,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                         active={flyoutOpen}
                         loading={loadingStatus.loading}
                         position={this.getLocation()}
+                        title={Oskari.getMsg(BUNDLE_KEY, 'tooltip')}
                         $marginRight={marginRight}
                         $marginLeft={marginLeft}
                         $marginTop={'10'}
                     >
-                        <Message messageKey='title' bundleKey='FeatureData'/>
+                        <Message messageKey='title' bundleKey={BUNDLE_KEY}/>
                     </MapModuleTextButton>
                 </ThemeProvider>
             );
