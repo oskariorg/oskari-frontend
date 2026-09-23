@@ -404,21 +404,12 @@ class MyFeaturesHandler extends StateHandler {
     }
 
     async openFeatureData (layerId) {
-        const layer = this.instance.getMapLayerService().findMapLayer(layerId);
-
         if (!this.sandbox.isLayerAlreadySelected(layerId)) {
             this.addLayerToMap(layerId);
         }
-
-        if (!this.layerPropertiesLoaded(layer)) {
-            this.refreshLayerOnMap(layerId);
-            setTimeout(() => {
-                this.sandbox.postRequestByName('ShowFeatureDataRequest', [layerId]);
-            }, 500);
-            return;
-        }
-
-        this.sandbox.postRequestByName('ShowFeatureDataRequest', [layerId]);
+        setTimeout(() => {
+            this.sandbox.postRequestByName('ShowFeatureDataRequest', [layerId]);
+        }, 500);
     }
 
     refreshLayerOnMap (layerId) {
