@@ -98,7 +98,7 @@ export class MyFeaturesService {
 
         const featureEditorTool =  Oskari.clazz.create('Oskari.mapframework.domain.Tool');
         featureEditorTool.setName(FEATURE_EDITOR_TOOLNAME);
-        featureEditorTool.setTitle(Oskari.getMsg('myfeatures', 'featureEditor.tooltip'));
+        featureEditorTool.setTitle(Oskari.getMsg('myfeatures', 'featureEditor.featureToolTooltip'));
         featureEditorTool.setIconComponent(<EditOutlined/>);
         featureEditorTool.setTypes([]);
         featureEditorTool.setCallback((layerId, featureId) => {
