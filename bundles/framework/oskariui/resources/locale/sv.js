@@ -101,7 +101,7 @@ Oskari.registerLocalization({
         },
         LocalizationComponent: {
             otherLanguages: 'Andra språk',
-            othersTip: 'Översättningar kommer att visas när tjänsten används på olika språk',
+            othersTip: 'Översättningar visas på på språk som används på användargränssnittet.',
             locale: {
                 generic: 'på ({0})',
                 fi: 'på finska',
@@ -208,7 +208,7 @@ Oskari.registerLocalization({
                 "line": "Linje",
                 "area": "Område",
                 "geometryEdit": "Rita objektet på kartan",
-                "finishSketch": "Avsluta ritningen på kartan",
+                "finishSketch": "Avsluta ritning",
                 "remove": "Ta bort en geometri"
             },
             "featureUpdate": {
@@ -290,29 +290,29 @@ Oskari.registerLocalization({
                     "button": "Välj attribut"
                 },
                 "locale": {
-                    "title": "Märkningar för attribut",
+                    "title": "Attributnamn på olika språk",
                     "button": "Märkning"
                 },
                 "format": {
-                    "title": "Formatera värden för attribut",
+                    "title": "Visningssätt för attributvärde",
                     "button": "Formatering",
                     "type": {
                         "label": "Typ",
-                        "typeFormats": "Värde typ",
-                        "textFormats": "Textformatering",
+                        "typeFormats": "Typ",
+                        "textFormats": "Visningssätt",
                         "link": "Länk",
                         "image": "Bild",
                         "number": "Nummer",
                         "phone": "Telefonnummer"
                     },
                     "options": {
-                        "noLabel": "Visa endast värde",
-                        "skipEmpty": "Skippa tomt värde"
+                        "noLabel": "Visa endast värdet",
+                        "skipEmpty": "Visa inte tomma värden"
                     },
                     "params": {
                         "link": "Visa som länk",
-                        "fullUrl": "Visa hela URL",
-                        "label": "Etikett för länk"
+                        "fullUrl": "Visa hela webbadressen",
+                        "label": "Länktext"
                     }
                 },
                 "messages": {

@@ -56,9 +56,9 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Aineistot (Beta)",
-            "editLayer": "Muokkaa karttatasoa",
-            "deleteLayer": "Poista karttataso",
+            "title": "Aineistot",
+            "editLayer": "Muokkaa aineistoa",
+            "deleteLayer": "Poista aineisto",
             "grid": {
                 "name": "Nimi",
                 "desc": "Kuvaus",
@@ -72,7 +72,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Muokkaa"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
-            "downloadTooltip": "Lataa aineisto",
+            "downloadTooltip": "Lataa aineisto omalle koneellesi GeoJSON-formaatissa.",
             "confirmDeleteFieldMsg": "Haluatko poistaa kentän \"{name}\"?",
             "buttons": {
                 "ok": "OK",
@@ -98,7 +98,7 @@ Oskari.registerLocalization(
             }
         },
         "featureEditor": {
-            "title": "Sisältöeditori",
+            "title": "Yksittäisen kohteen tiedot",
             "addFeatureTool": "Lisää kohde",
             "deleteFeatureTool": "Poista kohde",
             "confirmDelete": "Haluatko varmasti poistaa kohteen?",

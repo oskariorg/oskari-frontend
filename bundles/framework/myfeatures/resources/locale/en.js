@@ -57,9 +57,9 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Datasets (Beta)",
-            "editLayer": "Edit map layer",
-            "deleteLayer": "Delete map layer",
+            "title": "Datasets",
+            "editLayer": "Edit dataset",
+            "deleteLayer": "Delete dataset",
             "grid": {
                 "name": "Name",
                 "desc": "Description",
@@ -73,7 +73,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Content editor"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset \"{name}\"?",
-            "downloadTooltip": "Download dataset",
+            "downloadTooltip": "Download the dataset to your computer in the GeoJSON format.",
             "confirmDeleteFieldMsg": "Do you want to delete the field  \"{name}\"?",
             "buttons": {
                 "ok": "OK",
@@ -99,7 +99,7 @@ Oskari.registerLocalization(
             }
         },
         "featureEditor": {
-            "title": "Feature editor",
+            "title": "Individual feature details",
             "addFeatureTool": "Add feature",
             "deleteFeatureTool": "Delete feature",
             "confirmDelete": "Do you want to delete the feature?",
