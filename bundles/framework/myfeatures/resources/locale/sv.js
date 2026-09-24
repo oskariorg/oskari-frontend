@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "tabs": {
                 "general" : "Basuppgifter",
                 "visualization": "Visualisering",
-                "layerFields": "Attributer"
+                "layerFields": "Attribut"
             },
             "layer": {
                 "name": "Datamängdens namn",
@@ -58,9 +58,9 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Datamängder (Beta)",
-            "editLayer": "Redigera kartlagret",
-            "deleteLayer": "Ta bort kartlagret",
+            "title": "Datamängder",
+            "editLayer": "Redigera datamängden",
+            "deleteLayer": "Ta bort datamängden",
             "grid": {
                 "name": "Namn",
                 "desc": "Beskrivning",
@@ -74,7 +74,7 @@ Oskari.registerLocalization(
                 "contentEditor": "Redigera"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
-            "downloadTooltip": "Ladda datamängd",
+            "downloadTooltip": "Ladda ner datamängden till din dator i GeoJSON format.",
             "confirmDeleteFieldMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
@@ -100,7 +100,7 @@ Oskari.registerLocalization(
             }
         },
         "featureEditor": {
-            "title": "Feature editor",
+            "title": "Information om ett enskilt objekt",
             "addFeatureTool": "Lägg till objekt",
             "deleteFeatureTool": "Ta bort objekt",
             "confirmDelete": "Vill du ta bort objektet?",

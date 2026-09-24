@@ -101,7 +101,7 @@ Oskari.registerLocalization({
         },
         LocalizationComponent: {
             otherLanguages: 'Muut kielet',
-            othersTip: 'Käännökset näytetään käytettäessä palvelua eri kielillä',
+            othersTip: 'Käännökset näytetään käyttöliittymässä käytössä olevalla kielellä.',
             locale: {
                 generic: 'kielellä ({0})',
                 fi: 'suomeksi',
@@ -193,7 +193,7 @@ Oskari.registerLocalization({
             "originalValue": "Alkuperäinen arvo",
             "missingValue": "Arvo puuttuu",
             "modified": "Muokattu",
-            "restoreOriginal": "Palauta alkuperäinen arvo",
+            "restoreOriginal": "Palauta alkuperäinen merkintä",
             "multipleFeatureModifyInfo": "Voit myös valita useita kohteita kartalta ctrl-nappi pohjassa ja muokata niitä.",
             "geometryModifyInfo": "Geometrian muokkautyökalulla voit muokata kohteen geometriaa.",
             "geometryDeleteInfo": "Geometrian poistotyökalulla voit poistaa yhden geometrian monipalstaisesta kohteesta.",
@@ -289,16 +289,16 @@ Oskari.registerLocalization({
                     "button": "Valitse kentät"
                 },
                 "locale": {
-                    "title": "Nimet käyttöliittymässä ominaisuuksille",
+                    "title": "Attribuuttien nimet eri kielillä",
                     "button": "Nimeäminen"
                 },
                 "format": {
-                    "title": "Kohteiden ominaisuuksien arvojen muotoilu",
+                    "title": "Attribuutin arvon esitystapa",
                     "button": "Muotoilu",
                     "type": {
                         "label": "Tyyppi",
-                        "typeFormats": "Arvon tyyppi",
-                        "textFormats": "Tekstin muotoilu",
+                        "typeFormats": "Tyyppi",
+                        "textFormats": "Muotoilu",
                         "link": "Linkki",
                         "image": "Kuva",
                         "number": "Numero",
@@ -306,12 +306,12 @@ Oskari.registerLocalization({
                     },
                     "options": {
                         "noLabel": "Näytä vain arvo",
-                        "skipEmpty": "Älä näytä tyhjää"
+                        "skipEmpty": "Älä näytä tyhjää arvoa"
                     },
                     "params": {
                         "link": "Näytä linkkinä",
-                        "fullUrl": "Näytä koko osoite",
-                        "label": "Linkin label"
+                        "fullUrl": "Näytä verkko-osoite",
+                        "label": "Linkissä näytettävä teksti"
                     }
                 },
                 "messages": {

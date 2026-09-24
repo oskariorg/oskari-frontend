@@ -35,8 +35,8 @@ Oskari.registerLocalization({
         },
         table: {
             sort: {
-                desc: 'Click to sort descending',
-                asc: 'Click to sort ascending',
+                desc: 'Sort descending',
+                asc: 'Sort ascending',
                 cancel: 'Click to cancel sorting'
             },
             emptyText: 'No data.'
@@ -78,7 +78,7 @@ Oskari.registerLocalization({
             stroke: {
                 color: 'Colour',
                 lineCap: 'Endings',
-                lineDash: 'Dash',
+                lineDash: 'Dash line',
                 lineJoin: 'Corners',
                 width: 'Width',
                 area: {
@@ -101,7 +101,7 @@ Oskari.registerLocalization({
         },
         LocalizationComponent: {
             otherLanguages: 'Other languages',
-            othersTip: 'Translations will be shown when using the service in different languages',
+            othersTip: 'Translations will be displayed to the user in the language of the user interface.',
             locale: {
                 generic: 'in ({0})',
                 fi: 'in Finnish',
@@ -207,7 +207,7 @@ Oskari.registerLocalization({
                 "point": "Point",
                 "line": "Line",
                 "area": "Area",
-                "geometryEdit": "Edit geometry on the map",
+                "geometryEdit": "Draw feature on the map",
                 "finishSketch": "Finish drawing",
                 "remove": "Remove one geometry"
             },
@@ -290,7 +290,7 @@ Oskari.registerLocalization({
                     "button": "Select properties"
                 },
                 "locale": {
-                    "title": "Labels for properties",
+                    "title": "Attribute names in different languages",
                     "button": "Labeling",
                     "defaultNameProperty": {
                         "en": "Name",
@@ -299,25 +299,25 @@ Oskari.registerLocalization({
                     }
                 },
                 "format": {
-                    "title": "Formatting values of properties",
+                    "title": "Attribute value presentation",
                     "button": "Formatting",
                     "type": {
                         "label": "Type",
-                        "typeFormats": "Value type",
-                        "textFormats": "Text formatting",
+                        "typeFormats": "Type",
+                        "textFormats": "Formatting",
                         "link": "Link",
                         "image": "Image",
                         "number": "Number",
                         "phone": "Phone number"
                     },
                     "options": {
-                        "noLabel": "Show only value",
+                        "noLabel": "Show value only",
                         "skipEmpty": "Skip empty value"
                     },
                     "params": {
                         "link": "Show as link",
-                        "fullUrl": "Show full URL",
-                        "label": "Label for link"
+                        "fullUrl": "Show URL address",
+                        "label": "Text to be shown in the link"
                     }
                 },
                 "messages": {
