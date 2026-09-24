@@ -69,7 +69,8 @@ Oskari.registerLocalization(
                 "removeButton": "Poista",
                 "actions": "Toiminnot",
                 "createDate": "Luontiaika",
-                "contentEditor": "Muokkaa"
+                "contentEditor": "Muokkaa",
+                "featuredata": "Avaa kohdetiedot"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
             "downloadTooltip": "Lataa aineisto omalle koneellesi GeoJSON-formaatissa.",
@@ -101,6 +102,7 @@ Oskari.registerLocalization(
             "title": "Yksittäisen kohteen tiedot",
             "addFeatureTool": "Lisää kohde",
             "deleteFeatureTool": "Poista kohde",
+            "featureToolTooltip": "Muokkaa kohdetta",
             "confirmDelete": "Haluatko varmasti poistaa kohteen?",
             "featureUpdate": {
                 "header": "Kohde päivitetty",

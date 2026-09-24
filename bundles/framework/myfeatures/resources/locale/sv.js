@@ -71,7 +71,8 @@ Oskari.registerLocalization(
                 "removeButton": "Ta bort",
                 "actions": "Handlingar",
                 "createDate": "Skapad",
-                "contentEditor": "Redigera"
+                "contentEditor": "Redigera",
+                "featuredata": "Öppna objektuppgifterna"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
             "downloadTooltip": "Ladda ner datamängden till din dator i GeoJSON format.",
@@ -103,6 +104,7 @@ Oskari.registerLocalization(
             "title": "Information om ett enskilt objekt",
             "addFeatureTool": "Lägg till objekt",
             "deleteFeatureTool": "Ta bort objekt",
+            "featureToolTooltip": "Redigera objekt",
             "confirmDelete": "Vill du ta bort objektet?",
             "featureUpdate": {
                 "success": "Objektuppgifter har uppdaterats",

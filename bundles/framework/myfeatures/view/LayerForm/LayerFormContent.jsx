@@ -6,6 +6,7 @@ import { GeneralTab, LayerFieldsTab, VisualizationTab } from './';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { ERRORS } from '../../constants';
 import { MandatoryIcon } from 'oskari-ui/components/icons';
+import { ensureDefaultFilter } from './layerAttributesHelper';
 
 const Content = styled.div`
     margin: 12px 24px 24px;
@@ -60,13 +61,10 @@ const getDefaultLocale = () => {
     return localized;
 };
 
-const getDefaultAttributes = (layerFields) => {
+const getDefaultAttributes = () => {
     return {
         data: {
-            locale: getDefaultLocale(),
-            filter: {
-                default: layerFields.map(item => item.name)
-            }
+            locale: getDefaultLocale()
         }
     };
 };
@@ -76,7 +74,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
     const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = Oskari.custom.generateBlankStyle(), locale = {} } = values || {};
     const layerFields = values?.id ? values?.layerFields : getDefaultLayerFields();
-    const attributes = values?.id ? values?.attributes : getDefaultAttributes(layerFields);
+    const attributes = ensureDefaultFilter(values?.id ? values?.attributes : getDefaultAttributes(), layerFields);
     const [state, setState] = useState({
         id: values?.id,
         style,
@@ -99,12 +97,13 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
     };
 
     const onOkClick = () => {
+        const attributes = ensureDefaultFilter(state.attributes, state.layerFields);
         const values = {
             style: state.style,
             locale: state.locale,
             file: state.file,
             layerFields: state.layerFields,
-            attributes: state.attributes
+            attributes
         };
         if (showSrs) {
             // add sourceSrs only if field is visible

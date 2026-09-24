@@ -2,13 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { DownloadOutlined, EditOutlined } from '@ant-design/icons';
+import { DownloadOutlined, EditOutlined, TableOutlined } from '@ant-design/icons';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
 import { FEATURE_EDITOR_TOOLNAME } from './constants';
 
-const EDIT_ICON_STYLE = {
+const ICON_STYLE = {
     fontSize: '16px'
 };
+
+const FEATUREDATA_HANDLER_NAME = 'ShowFeatureDataRequest';
+
+function isFeatureDataAvailable() {
+    return Oskari.getSandbox().hasHandler(FEATUREDATA_HANDLER_NAME);
+}
 
 export const MyFeaturesList = ({ data = [], controller, loading }) => {
     const columnSettings = [
@@ -52,10 +58,19 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
+                        { isFeatureDataAvailable() &&
+                            <IconButton
+                                className='t_edit'
+                                title={<Message messageKey='tab.grid.featuredata' />}
+                                icon={<TableOutlined style={ICON_STYLE} />}
+                                onClick={() => controller.openFeatureData(item.key)}
+                            />
+
+                        }
                         <IconButton
                             className='t_edit'
                             title={<Message messageKey='tab.grid.edit' />}
-                            icon={<EditOutlined style={EDIT_ICON_STYLE} />}
+                            icon={<EditOutlined style={ICON_STYLE} />}
                             onClick={() => controller.editLayer(item.key)}
                         />
                         <DeleteButton

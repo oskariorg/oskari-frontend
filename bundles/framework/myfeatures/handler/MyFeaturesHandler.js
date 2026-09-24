@@ -1,5 +1,6 @@
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showLayerForm } from '../view/LayerForm';
+import { ensureDefaultFilter } from '../view/LayerForm/layerAttributesHelper';
 import { BUNDLE_KEY, MAX_SIZE, ERRORS, MY_FEATURES_LAYER_TYPE } from '../constants';
 import { showFeatureEditorPopup } from '../view/FeatureEditorFlyout/FeatureEditorFlyout';
 import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
@@ -215,10 +216,7 @@ class MyFeaturesHandler extends StateHandler {
         });
         try {
             const layerJson = await this.myFeaturesLayerService.getLayerForEdit(id);
-            const attributes = layerJson?.attributes || {};
-            if (!attributes?.data) {
-                attributes.data = {};
-            }
+            const attributes = ensureDefaultFilter(layerJson?.attributes, layerJson?.layerFields);
             const values = {
                 id,
                 locale: {
@@ -392,6 +390,26 @@ class MyFeaturesHandler extends StateHandler {
         }).catch((exception) => Messaging.error(this.loc('featureEditor.featureDelete.error') + exception));
     }
 
+    layerPropertiesLoaded (layer) {
+        if (!layer) {
+            return false;
+        }
+
+        const hasLoadedProperties = typeof layer.getProperties === 'function' && layer.getProperties().length > 0;
+        const hasLoadedDescribeInfo = typeof layer.getDescribeLayerStatus === 'function' && layer.getDescribeLayerStatus() === DESCRIBE_LAYER.LOADED;
+
+        return hasLoadedProperties || hasLoadedDescribeInfo;
+    }
+
+    async openFeatureData (layerId) {
+        if (!this.sandbox.isLayerAlreadySelected(layerId)) {
+            this.addLayerToMap(layerId);
+        }
+        setTimeout(() => {
+            this.sandbox.postRequestByName('ShowFeatureDataRequest', [layerId]);
+        }, 500);
+    }
+
     refreshLayerOnMap (layerId) {
         const mapLayer = this.instance.getMapLayerService().findMapLayer(layerId);
         if (mapLayer && typeof mapLayer.setDescribeLayerStatus === 'function') {
@@ -447,7 +465,8 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'showLayerDialog',
     'showFeatureEditorDialog',
     'closeFeatureEditorPopup',
-    'setFeatureEditorLayer'
+    'setFeatureEditorLayer',
+    'openFeatureData'
 ]);
 
 export { wrapped as MyFeaturesHandler };

@@ -70,7 +70,8 @@ Oskari.registerLocalization(
                 "removeButton": "Delete",
                 "actions": "Actions",
                 "createDate": "Created",
-                "contentEditor": "Content editor"
+                "contentEditor": "Content editor",
+                "featuredata": "Open featuredata"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset \"{name}\"?",
             "downloadTooltip": "Download the dataset to your computer in the GeoJSON format.",
@@ -102,6 +103,7 @@ Oskari.registerLocalization(
             "title": "Individual feature details",
             "addFeatureTool": "Add feature",
             "deleteFeatureTool": "Delete feature",
+            "featureToolTooltip": "Edit feature",
             "confirmDelete": "Do you want to delete the feature?",
             "featureUpdate": {
                 "success": "Feature properties updated successfully",
