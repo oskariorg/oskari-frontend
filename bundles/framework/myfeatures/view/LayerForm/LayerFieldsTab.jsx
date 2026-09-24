@@ -6,6 +6,7 @@ import { Table } from 'oskari-ui/components/Table';
 import { PrimaryButton, DeleteButton, IconButton } from 'oskari-ui/components/buttons';
 import { styled } from 'styled-components';
 import { DEFAULT_TYPE } from './LayerFormContent';
+import { ensureDefaultFilter } from './layerAttributesHelper';
 import { ArrowDownOutlined, ArrowUpOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, SettingOutlined  } from '@ant-design/icons';
 import { ModalContainer } from './ModalContainer';
 import { LocaleProvider } from 'oskari-ui/util';
@@ -128,6 +129,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
 
     const [modalOpen, setModalOpen] = useState(null);
     const [editProp, setEditProp] = useState(null);
+    const defaultFilter = ensureDefaultFilter(attributes, layerFields).data.filter.default;
 
     const toggleModal = (modalName, fieldName) => {
         setModalOpen(modalName);
@@ -138,8 +140,10 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         const newLayerFields = layerFields.concat({ name, type });
 
         // update default filter as well (visibility, sorting, ...)
-        const newAttributes = structuredClone(attributes);
-        newAttributes.data.filter.default.push(name);
+        const newAttributes = ensureDefaultFilter(attributes, newLayerFields);
+        if (!newAttributes.data.filter.default.includes(name)) {
+            newAttributes.data.filter.default.push(name);
+        }
 
         setName(null);
         setType(DEFAULT_TYPE);
@@ -227,7 +231,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     };
 
     const reorder = (item, index) => {
-        const selectedProps = attributes?.data?.filter?.default || layerFields.map((field) => field.name);
+        const selectedProps = defaultFilter;
         if (selectedProps.length === 0 || index < 0 || index > selectedProps.length - 1) {
             return;
         }
@@ -239,7 +243,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     };
 
     function toggleField(name) {
-        const selectedProperties = attributes?.data?.filter?.default || layerFields.map((field) => field.name);
+        const selectedProperties = defaultFilter;
         let newList = structuredClone(selectedProperties);
         if (selectedProperties.includes(name)) {
             newList = selectedProperties.filter(item => item !== name);
@@ -251,8 +255,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     }
 
     const syncSelectedPropsWithLayerFields = (selectedPropsSorted) => {
-        const newAttributes = structuredClone(attributes);
-        delete newAttributes.data.filter.default;
+        const newAttributes = ensureDefaultFilter(attributes, layerFields);
         newAttributes.data.filter.default = structuredClone(selectedPropsSorted);
 
         const newLayerFields = layerFields.sort((a, b) => {
@@ -282,8 +285,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                 style: { verticalAlign: 'middle' }
             }),
             render: (text, item, index) => {
-                const selectedProps = attributes?.data?.filter?.default || layerFields.map((field) => field.name);
-                const fieldIsVisible = selectedProps.indexOf(item?.name) > -1;
+                const fieldIsVisible = defaultFilter.indexOf(item?.name) > -1;
                 return <>
                     { fieldIsVisible &&
                         <FlexContainer>
@@ -381,7 +383,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     });
 
     const propNames = layerFields.map((field) => field.name);
-    const selectedProps = editProp ? [editProp] : attributes?.data?.filter?.default || propNames;
+    const selectedProps = editProp ? [editProp] : defaultFilter;
     return <LocaleProvider value = {{ bundleKey: 'myfeatures' }}>
         <Table
             columns={columnSettings}

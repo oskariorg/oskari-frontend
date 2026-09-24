@@ -1,5 +1,6 @@
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showLayerForm } from '../view/LayerForm';
+import { ensureDefaultFilter } from '../view/LayerForm/layerAttributesHelper';
 import { BUNDLE_KEY, MAX_SIZE, ERRORS, MY_FEATURES_LAYER_TYPE } from '../constants';
 import { showFeatureEditorPopup } from '../view/FeatureEditorFlyout/FeatureEditorFlyout';
 import { DESCRIBE_LAYER } from '../../../mapping/mapmodule/domain/constants';
@@ -215,10 +216,7 @@ class MyFeaturesHandler extends StateHandler {
         });
         try {
             const layerJson = await this.myFeaturesLayerService.getLayerForEdit(id);
-            const attributes = layerJson?.attributes || {};
-            if (!attributes?.data) {
-                attributes.data = {};
-            }
+            const attributes = ensureDefaultFilter(layerJson?.attributes, layerJson?.layerFields);
             const values = {
                 id,
                 locale: {
