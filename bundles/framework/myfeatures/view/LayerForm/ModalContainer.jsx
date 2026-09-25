@@ -61,8 +61,8 @@ export const ModalContainer = ({ propNames, selectedProperties, modalOpen, local
             open={ !!modalOpen }
             onOk={ onModalOk}
             onCancel={ onModalCancel }
-            cancelText={ <Message messageKey="cancel" /> }
-            okText={ <Message messageKey="save" /> }
+            cancelText={ <Message bundleKey='oskariui' messageKey="buttons.cancel" /> }
+            okText={ <Message bundleKey='oskariui' messageKey="buttons.save" /> }
             width={ 500 }
         >
             <h3><Message bundleKey='myfeatures' messageKey={`featureEditor.featureLayer.modal.${modalOpen}.title`} /></h3>
