@@ -102,6 +102,7 @@ Oskari.registerLocalization(
         },
         "featureEditor": {
             "title": "Information om ett enskilt objekt",
+            "titleNew": "Lägg till nytt objekt",
             "addFeatureTool": "Lägg till objekt",
             "deleteFeatureTool": "Ta bort objekt",
             "featureToolTooltip": "Redigera objekt",
@@ -135,10 +136,10 @@ Oskari.registerLocalization(
                 },
                 "modal": {
                     "locale": {
-                        "title": "Märkningar för attribut"
+                        "title": "Attributnamn på olika språk"
                     },
                     "format": {
-                        "title": "Formatera värden för attribut"
+                        "title": "Visningssätt för attributvärde"
                     }
                 }
             },

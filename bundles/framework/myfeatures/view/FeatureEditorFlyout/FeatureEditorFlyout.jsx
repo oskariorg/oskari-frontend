@@ -51,7 +51,7 @@ export const showFeatureEditorPopup = (layerId, featureId, layers = null, contro
         savedFeature = { savedFeature }
         controller = { controller }
     />;
-    const title = <Message bundleKey={BUNDLE_KEY} messageKey={'featureEditor.title'}/>;
+    const title = layerId ? <Message bundleKey={BUNDLE_KEY} messageKey={'featureEditor.title'}/> : <Message bundleKey={BUNDLE_KEY} messageKey={'featureEditor.titleNew'}/>;
     const controls = showPopup(title, content, () => { controller.closeFeatureEditorPopup(); }, { isDraggable: true });
 
     return {

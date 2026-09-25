@@ -193,7 +193,7 @@ Oskari.registerLocalization({
             "originalValue": "Alkuperäinen arvo",
             "missingValue": "Arvo puuttuu",
             "modified": "Muokattu",
-            "restoreOriginal": "Palauta alkuperäinen merkintä",
+            "restoreOriginal": "Palauta alkuperäinen arvo",
             "multipleFeatureModifyInfo": "Voit myös valita useita kohteita kartalta ctrl-nappi pohjassa ja muokata niitä.",
             "geometryModifyInfo": "Geometrian muokkautyökalulla voit muokata kohteen geometriaa.",
             "geometryDeleteInfo": "Geometrian poistotyökalulla voit poistaa yhden geometrian monipalstaisesta kohteesta.",
@@ -289,11 +289,11 @@ Oskari.registerLocalization({
                     "button": "Valitse kentät"
                 },
                 "locale": {
-                    "title": "Attribuuttien nimet eri kielillä",
+                    "title": "Nimet käyttöliittymässä ominaisuuksille",
                     "button": "Nimeäminen"
                 },
                 "format": {
-                    "title": "Attribuutin arvon esitystapa",
+                    "title": "Kohteiden ominaisuuksien arvojen muotoilu",
                     "button": "Muotoilu",
                     "type": {
                         "label": "Tyyppi",
@@ -302,11 +302,21 @@ Oskari.registerLocalization({
                         "link": "Linkki",
                         "image": "Kuva",
                         "number": "Numero",
-                        "phone": "Puhelinnumero"
+                        "phone": "Puhelinnumero",
+                        "h1": "Otsikko 1",
+                        "h2": "Otsikko 2",
+                        "h3": "Otsikko 3",
+                        "h4": "Otsikko 4",
+                        "h5": "Otsikko 5",
+                        "h6": "Otsikko 6",
+                        "p": "Kappale",
+                        "i": "Kursivoitu",
+                        "b": "Lihavoitu",
+                        "em": "Korostettu"
                     },
                     "options": {
                         "noLabel": "Näytä vain arvo",
-                        "skipEmpty": "Älä näytä tyhjää arvoa"
+                        "skipEmpty": "Piilota tyhjät arvot"
                     },
                     "params": {
                         "link": "Näytä linkkinä",

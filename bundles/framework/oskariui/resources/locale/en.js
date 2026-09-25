@@ -78,7 +78,7 @@ Oskari.registerLocalization({
             stroke: {
                 color: 'Colour',
                 lineCap: 'Endings',
-                lineDash: 'Dash line',
+                lineDash: 'Line dash',
                 lineJoin: 'Corners',
                 width: 'Width',
                 area: {
@@ -290,7 +290,7 @@ Oskari.registerLocalization({
                     "button": "Select properties"
                 },
                 "locale": {
-                    "title": "Attribute names in different languages",
+                    "title": "Property names in different languages",
                     "button": "Labeling",
                     "defaultNameProperty": {
                         "en": "Name",
@@ -299,7 +299,7 @@ Oskari.registerLocalization({
                     }
                 },
                 "format": {
-                    "title": "Attribute value presentation",
+                    "title": "Formatting values of properties",
                     "button": "Formatting",
                     "type": {
                         "label": "Type",
@@ -308,11 +308,21 @@ Oskari.registerLocalization({
                         "link": "Link",
                         "image": "Image",
                         "number": "Number",
-                        "phone": "Phone number"
+                        "phone": "Phone number",
+                        "h1": "Heading 1",
+                        "h2": "Heading 2",
+                        "h3": "Heading 3",
+                        "h4": "Heading 4",
+                        "h5": "Heading 5",
+                        "h6": "Heading 6",
+                        "p": "Paragraph",
+                        "i": "Italic",
+                        "b": "Bold",
+                        "em": "Emphasized"
                     },
                     "options": {
                         "noLabel": "Show value only",
-                        "skipEmpty": "Skip empty value"
+                        "skipEmpty": "Hide empty values"
                     },
                     "params": {
                         "link": "Show as link",

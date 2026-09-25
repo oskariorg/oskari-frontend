@@ -290,11 +290,11 @@ Oskari.registerLocalization({
                     "button": "Välj attribut"
                 },
                 "locale": {
-                    "title": "Attributnamn på olika språk",
+                    "title": "Märkningar för attribut",
                     "button": "Märkning"
                 },
                 "format": {
-                    "title": "Visningssätt för attributvärde",
+                    "title": "Formatera värden för attribut",
                     "button": "Formatering",
                     "type": {
                         "label": "Typ",
@@ -303,11 +303,21 @@ Oskari.registerLocalization({
                         "link": "Länk",
                         "image": "Bild",
                         "number": "Nummer",
-                        "phone": "Telefonnummer"
+                        "phone": "Telefonnummer",
+                        "h1": "Rubrik 1",
+                        "h2": "Rubrik 2",
+                        "h3": "Rubrik 3",
+                        "h4": "Rubrik 4",
+                        "h5": "Rubrik 5",
+                        "h6": "Rubrik 6",
+                        "p": "Stycke",
+                        "i": "Kursiv",
+                        "b": "Fetstil",
+                        "em": "Förstärkt"
                     },
                     "options": {
                         "noLabel": "Visa endast värdet",
-                        "skipEmpty": "Visa inte tomma värden"
+                        "skipEmpty": "Dölj tömma värden"
                     },
                     "params": {
                         "link": "Visa som länk",

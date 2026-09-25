@@ -101,6 +101,7 @@ Oskari.registerLocalization(
         },
         "featureEditor": {
             "title": "Individual feature details",
+            "titleNew": "Add new feature",
             "addFeatureTool": "Add feature",
             "deleteFeatureTool": "Delete feature",
             "featureToolTooltip": "Edit feature",
@@ -134,10 +135,10 @@ Oskari.registerLocalization(
                 },
                 "modal": {
                     "locale": {
-                        "title": "Labels for properties",
+                        "title": "Attribute name in different languages",
                     },
                     "format": {
-                        "title": "Formatting values of properties",
+                        "title": "Attribute value presentation",
                     }
                 }
             },

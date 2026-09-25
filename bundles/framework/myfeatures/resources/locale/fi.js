@@ -100,6 +100,7 @@ Oskari.registerLocalization(
         },
         "featureEditor": {
             "title": "Yksittäisen kohteen tiedot",
+            "titleNew": "Lisää uusi kohde",
             "addFeatureTool": "Lisää kohde",
             "deleteFeatureTool": "Poista kohde",
             "featureToolTooltip": "Muokkaa kohdetta",
@@ -134,10 +135,10 @@ Oskari.registerLocalization(
                 },
                 "modal": {
                     "locale": {
-                        "title": "Nimet käyttöliittymässä ominaisuuksille"
+                        "title": "Attribuutin nimi eri kielillä"
                     },
                     "format": {
-                        "title": "Kohteiden ominaisuuksien arvojen muotoilu"
+                        "title": "Attribuutin arvon esitystapa"
                     }
             }
             },
