@@ -426,11 +426,13 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
                 const current = _selectedLayers[index];
                 const opacity = current.getOpacity();
                 const visibilityInfo = current.getVisibilityInfo();
+                const properties = current.getProperties();
                 const emptyLayer = Object.create(Object.getPrototypeOf(newLayer));
                 const merged = Object.assign(emptyLayer, newLayer);
                 // TODO: we should move to a direction where maplayer and selectedlayer are in fact the same instance so there would be no need for this hacky and error prone copying props one by one
                 merged._opacity = opacity;
                 merged._visibilityInfo = { ...merged._visibilityInfo, ...visibilityInfo };
+                merged._properties = structuredClone(properties);
                 _selectedLayers[index] = merged;
             }
         },

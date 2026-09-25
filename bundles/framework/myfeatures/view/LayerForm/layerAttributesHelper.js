@@ -1,9 +1,21 @@
-export const ensureDefaultFilter = (attributes = {}, layerFields = []) => {
+export const setDefaultFilter = (attributes = {}, layerFields = [], visibleFields = []) => {
     const normalizedAttributes = structuredClone(attributes || {});
     normalizedAttributes.data = normalizedAttributes.data || {};
     normalizedAttributes.data.filter = normalizedAttributes.data.filter || {};
-    if (!Array.isArray(normalizedAttributes.data.filter.default)) {
-        normalizedAttributes.data.filter.default = layerFields.map(field => field.name).filter(Boolean);
+    const allFieldsVisible = layerFields.length === visibleFields.length &&
+        layerFields.every(field => visibleFields.includes(field.name));
+
+    if (allFieldsVisible) {
+        delete normalizedAttributes.data.filter.default;
+        if (!Object.keys(normalizedAttributes.data.filter).length) {
+            delete normalizedAttributes.data.filter;
+        }
+        if (!Object.keys(normalizedAttributes.data).length) {
+            delete normalizedAttributes.data;
+        }
+        return normalizedAttributes;
     }
+
+    normalizedAttributes.data.filter.default = structuredClone(visibleFields);
     return normalizedAttributes;
 };
