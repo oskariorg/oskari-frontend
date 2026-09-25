@@ -10,6 +10,9 @@ export const setDefaultFilter = (attributes = {}, layerFields = [], visibleField
         if (!Object.keys(normalizedAttributes.data.filter).length) {
             delete normalizedAttributes.data.filter;
         }
+        if (!Object.keys(normalizedAttributes.data).length) {
+            delete normalizedAttributes.data;
+        }
         return normalizedAttributes;
     }
 
