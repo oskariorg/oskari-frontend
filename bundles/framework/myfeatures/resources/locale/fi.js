@@ -100,6 +100,7 @@ Oskari.registerLocalization(
         },
         "featureEditor": {
             "title": "Yksittäisen kohteen tiedot",
+            "titleNew": "Lisää uusi kohde",
             "addFeatureTool": "Lisää kohde",
             "deleteFeatureTool": "Poista kohde",
             "featureToolTooltip": "Muokkaa kohdetta",

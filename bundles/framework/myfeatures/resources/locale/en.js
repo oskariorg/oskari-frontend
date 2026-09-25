@@ -101,6 +101,7 @@ Oskari.registerLocalization(
         },
         "featureEditor": {
             "title": "Individual feature details",
+            "titleNew": "Add new feature",
             "addFeatureTool": "Add feature",
             "deleteFeatureTool": "Delete feature",
             "featureToolTooltip": "Edit feature",

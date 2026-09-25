@@ -102,6 +102,7 @@ Oskari.registerLocalization(
         },
         "featureEditor": {
             "title": "Information om ett enskilt objekt",
+            "titleNew": "Lägg till nytt objekt",
             "addFeatureTool": "Lägg till objekt",
             "deleteFeatureTool": "Ta bort objekt",
             "featureToolTooltip": "Redigera objekt",
