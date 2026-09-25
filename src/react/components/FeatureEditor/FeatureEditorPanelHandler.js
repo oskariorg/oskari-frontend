@@ -93,6 +93,8 @@ export class FeatureEditorPanelHandler extends StateHandler {
         });
 
         this.stateListeners = [];
+        // remove selection
+        this.selectFeatureOnMap();
         this.updateState({
             currentLayer: null,
             feature: null
@@ -157,14 +159,19 @@ export class FeatureEditorPanelHandler extends StateHandler {
     }
 
     selectFeatureOnMap (layerId, featureId) {
-        if (!layerId || !featureId) {
-            return;
+        if (!layerId) {
+            const { currentLayer } = this.getState();
+            layerId = currentLayer.id;
         }
         const selectionService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureSelectionService');
         if (!selectionService) {
             return;
         }
-        selectionService.setSelectedFeatureIds(layerId, [featureId]);
+        if (!featureId) {
+            selectionService.setSelectedFeatureIds(layerId, []);
+        } else {
+            selectionService.setSelectedFeatureIds(layerId, [featureId]);
+        }
     }
 
     setFeature(feature) {
