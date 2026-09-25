@@ -521,6 +521,7 @@ Oskari.clazz.define(
          */
         setGeometryWKT: function (value) {
             this._geometryWKT = value;
+            this.setGeometry();
         },
         /**
          * @method getGeometryWKT
@@ -535,7 +536,7 @@ Oskari.clazz.define(
          * @param {OpenLayers.Geometry.Geometry[]} value
          *          array of WKT geometries or actual OpenLayer geometries
          */
-        setGeometry: function (value) {
+        setGeometry: function (value = []) {
             this._geometry = value;
         },
         /**
