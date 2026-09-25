@@ -78,7 +78,7 @@ Oskari.registerLocalization({
             stroke: {
                 color: 'Colour',
                 lineCap: 'Endings',
-                lineDash: 'Dash line',
+                lineDash: 'Line dash',
                 lineJoin: 'Corners',
                 width: 'Width',
                 area: {
