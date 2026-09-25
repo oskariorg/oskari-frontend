@@ -316,7 +316,7 @@ Oskari.registerLocalization({
                     },
                     "options": {
                         "noLabel": "Näytä vain arvo",
-                        "skipEmpty": "Älä näytä tyhjää arvoa"
+                        "skipEmpty": "Piilota tyhjät arvot"
                     },
                     "params": {
                         "link": "Näytä linkkinä",

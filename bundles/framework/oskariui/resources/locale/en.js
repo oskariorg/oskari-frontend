@@ -322,7 +322,7 @@ Oskari.registerLocalization({
                     },
                     "options": {
                         "noLabel": "Show value only",
-                        "skipEmpty": "Skip empty value"
+                        "skipEmpty": "Hide empty values"
                     },
                     "params": {
                         "link": "Show as link",

@@ -317,7 +317,7 @@ Oskari.registerLocalization({
                     },
                     "options": {
                         "noLabel": "Visa endast värdet",
-                        "skipEmpty": "Visa inte tomma värden"
+                        "skipEmpty": "Dölj tömma värden"
                     },
                     "params": {
                         "link": "Visa som länk",
