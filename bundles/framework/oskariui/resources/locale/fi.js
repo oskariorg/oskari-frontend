@@ -302,7 +302,17 @@ Oskari.registerLocalization({
                         "link": "Linkki",
                         "image": "Kuva",
                         "number": "Numero",
-                        "phone": "Puhelinnumero"
+                        "phone": "Puhelinnumero",
+                        "h1": "Otsikko 1",
+                        "h2": "Otsikko 2",
+                        "h3": "Otsikko 3",
+                        "h4": "Otsikko 4",
+                        "h5": "Otsikko 5",
+                        "h6": "Otsikko 6",
+                        "p": "Kappale",
+                        "i": "Kursivoitu",
+                        "b": "Lihavoitu",
+                        "em": "Korostettu"
                     },
                     "options": {
                         "noLabel": "Näytä vain arvo",

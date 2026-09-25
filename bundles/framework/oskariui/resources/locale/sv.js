@@ -303,7 +303,17 @@ Oskari.registerLocalization({
                         "link": "Länk",
                         "image": "Bild",
                         "number": "Nummer",
-                        "phone": "Telefonnummer"
+                        "phone": "Telefonnummer",
+                        "h1": "Rubrik 1",
+                        "h2": "Rubrik 2",
+                        "h3": "Rubrik 3",
+                        "h4": "Rubrik 4",
+                        "h5": "Rubrik 5",
+                        "h6": "Rubrik 6",
+                        "p": "Stycke",
+                        "i": "Kursiv",
+                        "b": "Fetstil",
+                        "em": "Förstärkt"
                     },
                     "options": {
                         "noLabel": "Visa endast värdet",
