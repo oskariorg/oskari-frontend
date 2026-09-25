@@ -106,9 +106,8 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      */
     handleDescribeLayer (layer, info) {
         const { coverage } = info;
-        // already parsed
-        const hasGeometry = layer.getGeometry().length > 0;
-        if (!hasGeometry && coverage) {
+
+        if (coverage) {
             const geometry = WKT_READER.readGeometry(coverage);
             if (geometry) {
                 layer.setGeometryWKT(coverage);
