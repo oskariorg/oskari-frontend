@@ -193,7 +193,7 @@ Oskari.registerLocalization({
             "originalValue": "Alkuperäinen arvo",
             "missingValue": "Arvo puuttuu",
             "modified": "Muokattu",
-            "restoreOriginal": "Palauta alkuperäinen merkintä",
+            "restoreOriginal": "Palauta alkuperäinen arvo",
             "multipleFeatureModifyInfo": "Voit myös valita useita kohteita kartalta ctrl-nappi pohjassa ja muokata niitä.",
             "geometryModifyInfo": "Geometrian muokkautyökalulla voit muokata kohteen geometriaa.",
             "geometryDeleteInfo": "Geometrian poistotyökalulla voit poistaa yhden geometrian monipalstaisesta kohteesta.",
