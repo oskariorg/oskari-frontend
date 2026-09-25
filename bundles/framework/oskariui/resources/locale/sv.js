@@ -290,11 +290,11 @@ Oskari.registerLocalization({
                     "button": "Välj attribut"
                 },
                 "locale": {
-                    "title": "Attributnamn på olika språk",
+                    "title": "Märkningar för attribut",
                     "button": "Märkning"
                 },
                 "format": {
-                    "title": "Visningssätt för attributvärde",
+                    "title": "Formatera värden för attribut",
                     "button": "Formatering",
                     "type": {
                         "label": "Typ",

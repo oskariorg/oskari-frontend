@@ -290,7 +290,7 @@ Oskari.registerLocalization({
                     "button": "Select properties"
                 },
                 "locale": {
-                    "title": "Attribute names in different languages",
+                    "title": "Property names in different languages",
                     "button": "Labeling",
                     "defaultNameProperty": {
                         "en": "Name",
@@ -299,7 +299,7 @@ Oskari.registerLocalization({
                     }
                 },
                 "format": {
-                    "title": "Attribute value presentation",
+                    "title": "Formatting values of properties",
                     "button": "Formatting",
                     "type": {
                         "label": "Type",

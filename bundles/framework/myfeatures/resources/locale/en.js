@@ -134,10 +134,10 @@ Oskari.registerLocalization(
                 },
                 "modal": {
                     "locale": {
-                        "title": "Labels for properties",
+                        "title": "Attribute name in different languages",
                     },
                     "format": {
-                        "title": "Formatting values of properties",
+                        "title": "Attribute value presentation",
                     }
                 }
             },

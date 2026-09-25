@@ -289,11 +289,11 @@ Oskari.registerLocalization({
                     "button": "Valitse kentät"
                 },
                 "locale": {
-                    "title": "Attribuuttien nimet eri kielillä",
+                    "title": "Nimet käyttöliittymässä ominaisuuksille",
                     "button": "Nimeäminen"
                 },
                 "format": {
-                    "title": "Attribuutin arvon esitystapa",
+                    "title": "Kohteiden ominaisuuksien arvojen muotoilu",
                     "button": "Muotoilu",
                     "type": {
                         "label": "Tyyppi",

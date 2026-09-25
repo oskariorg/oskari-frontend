@@ -134,10 +134,10 @@ Oskari.registerLocalization(
                 },
                 "modal": {
                     "locale": {
-                        "title": "Nimet käyttöliittymässä ominaisuuksille"
+                        "title": "Attribuutin nimi eri kielillä"
                     },
                     "format": {
-                        "title": "Kohteiden ominaisuuksien arvojen muotoilu"
+                        "title": "Attribuutin arvon esitystapa"
                     }
             }
             },
