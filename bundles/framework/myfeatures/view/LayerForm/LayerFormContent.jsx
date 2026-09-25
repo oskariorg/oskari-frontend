@@ -6,7 +6,7 @@ import { GeneralTab, LayerFieldsTab, VisualizationTab } from './';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { ERRORS } from '../../constants';
 import { MandatoryIcon } from 'oskari-ui/components/icons';
-import { ensureDefaultFilter } from './layerAttributesHelper';
+import { setDefaultFilter } from './layerAttributesHelper';
 
 const Content = styled.div`
     margin: 12px 24px 24px;
@@ -73,8 +73,14 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
     // TODO: refactor this thing as it's getting way overly complicated
     const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = Oskari.custom.generateBlankStyle(), locale = {} } = values || {};
-    const layerFields = values?.id ? values?.layerFields : getDefaultLayerFields();
-    const attributes = ensureDefaultFilter(values?.id ? values?.attributes : getDefaultAttributes(), layerFields);
+    const layerFields = values?.id ? values?.layerFields || [] : getDefaultLayerFields();
+    const initialAttributes = structuredClone(values?.id ? values?.attributes || {} : getDefaultAttributes());
+    initialAttributes.data = initialAttributes.data || {};
+    const storedVisibleFields = initialAttributes.data.filter?.default;
+    const visibleFields = Array.isArray(storedVisibleFields)
+        ? storedVisibleFields
+        : layerFields.map(field => field.name);
+    const attributes = setDefaultFilter(initialAttributes, layerFields, visibleFields);
     const [state, setState] = useState({
         id: values?.id,
         style,
@@ -97,13 +103,12 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
     };
 
     const onOkClick = () => {
-        const attributes = ensureDefaultFilter(state.attributes, state.layerFields);
         const values = {
             style: state.style,
             locale: state.locale,
             file: state.file,
             layerFields: state.layerFields,
-            attributes
+            attributes: state.attributes
         };
         if (showSrs) {
             // add sourceSrs only if field is visible
