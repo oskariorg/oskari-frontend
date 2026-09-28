@@ -10,10 +10,11 @@ const ICON_STYLE = {
     fontSize: '16px'
 };
 
-const FEATUREDATA_HANDLER_NAME = 'ShowFeatureDataRequest';
-
+// const FEATUREDATA_HANDLER_NAME = 'ShowFeatureDataRequest';
 function isFeatureDataAvailable() {
-    return Oskari.getSandbox().hasHandler(FEATUREDATA_HANDLER_NAME);
+    // hide tool for now
+    return false;
+//    return Oskari.getSandbox().hasHandler(FEATUREDATA_HANDLER_NAME);
 }
 
 export const MyFeaturesList = ({ data = [], controller, loading }) => {
