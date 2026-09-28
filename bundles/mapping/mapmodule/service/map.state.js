@@ -433,6 +433,7 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
                 merged._opacity = opacity;
                 merged._visibilityInfo = { ...merged._visibilityInfo, ...visibilityInfo };
                 merged._properties = structuredClone(properties);
+                merged._currentStyle = Object.assign(current.getCurrentStyle());
                 _selectedLayers[index] = merged;
             }
         },
