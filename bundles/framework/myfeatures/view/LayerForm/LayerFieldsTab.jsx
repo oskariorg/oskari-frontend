@@ -143,6 +143,8 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
         const newAttributes = setDefaultFilter(attributes, newLayerFields, getSelectedProps().concat(name));
+        newAttributes.data = newAttributes.data || {};
+        newAttributes.data.locale = newAttributes.data.locale || {};
 
         setName(null);
         setType(DEFAULT_TYPE);
@@ -219,7 +221,8 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     };
 
     const setAttributesData = (attribute, value) => {
-        const newAttributes = structuredClone(attributes);
+        const newAttributes = structuredClone(attributes || {});
+        newAttributes.data = newAttributes.data || {};
 
         // delete existing and replace with new value if given
         delete newAttributes.data[attribute];
