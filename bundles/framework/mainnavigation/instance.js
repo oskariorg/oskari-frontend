@@ -1,6 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
+import { MainNavigationService } from './service/MainNavigationService';
+import { MenuItem } from './component/MenuItem';
 
 export class MainNavigationBundleIstance extends BasicBundleInstance {
     constructor () {
@@ -9,15 +11,23 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.containerClass = 'oskari-mainnavigation-container';
         this.parentSelector = '#maptools';
         this.insertAfterSelector = '#pti_disclaimer';
-        this.mockContent = '<div><h3>The new main navigation</h1></div>';
+        this.mockContent = '<div><h3>Navigationbar</h1></div>';
         this.container = null;
         this.root = null;
+        this.mainNavigationService = null;
     }
 
     start (sandbox) {
         // registers to sandbox and saves the sandbox for getSandbox()
         super.start(sandbox);
+        sandbox.registerService(new MainNavigationService());
+        this.mainNavigationService = sandbox.getService('Oskari.mapframework.bundle.mainnavigation.service.MainNavigationService');
+        this.mainNavigationService.addListener(this);
         this.attachToExistingDom();
+        this.render();
+        Oskari.app.playBundle({
+            bundlename: 'mainnavigation-testbundle'
+        }, {});
     }
 
     getTargetParent (parentSelector = this.parentSelector) {
@@ -71,7 +81,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         return container;
     }
 
-    render (content) {
+    render () {
         const container = this.getContainer();
         if (!container) {
             return null;
@@ -79,8 +89,18 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         if (!this.root) {
             this.root = createRoot(container);
         }
-        this.root.render(<>{content}</>);
+        this.root.render(<nav className={this.containerClass}>
+            <ul>
+                {this.mainNavigationService.getMenuItems().map((menuItem) => <li key={menuItem.id}>
+                    <MenuItem {...menuItem} />
+                </li>)}
+            </ul>
+        </nav>);
         return container;
+    }
+
+    handleMenuItemsChanged () {
+        this.render();
     }
 
     getContainer () {
@@ -91,6 +111,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
     }
 
     stop () {
+        this.mainNavigationService.removeListener(this);
         if (this.root) {
             this.root.unmount();
             this.root = null;
@@ -99,6 +120,8 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
             this.container.parentElement.removeChild(this.container);
         }
         this.container = null;
+        this.getSandbox().unregisterService(this.mainNavigationService.getQName());
+        this.mainNavigationService = null;
         super.stop();
     }
 }
