@@ -119,8 +119,8 @@ Oskari.registerLocalization(
                 "addFeature": "Lisää kohde",
                 "fieldName": "Nimi",
                 "fieldType": "Tyyppi",
-                "typeHelp": "Tyyppi vaikuttaa siihen, miten ominaisuustieto esitetään käyttöliittymässä.",
-                "typeHelpNew": "Voit lisätä attribuutteja vain tallentamattomalle karttatasolle.",
+                "typeHelp": "Tyyppi vaikuttaa siihen, miten attribuutin arvo esitetään käyttöliittymässä.",
+                "typeHelpNew": "Voit lisätä attribuutteja vain tallentamattomalle aineistolle.",
                 "errors": {
                     "fieldAlreadyExists": "Kenttä on jo olemassa",
                     "isValidJSONKey": "Kentän nimi sisältää kiellettyjä merkkejä."
