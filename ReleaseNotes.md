@@ -5,10 +5,63 @@
 For a full list of changes see:
 https://github.com/oskariorg/oskari-frontend/milestone/60?closed=1
 
+### MyFeatures functionality 1.0
+
+The `myfeatures` functionality is now considered production ready and can be used as a replacement for `myplaces` and `userlayer` functionalities, enabling end-users to maintain their own geographic data on the service. The functionality has been tuned to make the functionality more user-friendly such as:
+
+- Improved feature editor functionality with support for:
+  - Additional field types
+  - Number and boolean fields
+  - Localized field labels
+  - Fixes to hidden fields
+  - Localization and help text improvements
+- Added geometry validation to prevent saving self-intersecting geometries
+- Disabled input fields while drawing features
+- Improved feature editor usability and layout
+- Feature being edited is now highlighted
+- Fixed issues when adding feature outside the layers original coverage area
+- Data source field is now shown to other users (embedded maps) as "user provided", but enabled ways for applications to control the override the message or style the message (even hide it): https://github.com/oskariorg/oskari-frontend/pull/3018
+- Added support for GeoJSON and files without ZIP packaging as an import options https://github.com/oskariorg/oskari-frontend/pull/3003
+
+### Administration improvements
+
+- Layer coverage information is now better presented with user-interface for selecting between coverage from metadata or the layer capabilities (https://github.com/oskariorg/oskari-frontend/pull/2992) and the metadata coverage area is immediately updated hen saving when metadata id is available.
+- Layer URL-field improvements (https://github.com/oskariorg/oskari-frontend/pull/2990):
+    - copy to clipboard button added
+    - parameters moved from the JSON-tab to URL-field with a nicer user-interface
+    - automatic removal with notification for reserved parameters (service, version, request that admins regularly paste to URL, but are also added by the code/values are selected with different fields/based on the operation requested from the service)
+- Improved layer permission management by grouping system and other roles (https://github.com/oskariorg/oskari-frontend/pull/2986)
+- Announcements admin user-interface now incidates announcements imported from RSS-feeds and disables fields that are not controllable by the admin due to importing announcements.
+- Metadata id is now trimmed to prevent accidental white spaces
+
+### Other changes
+
+- Added warning messages when feature limits may affect results/service has more vector features that are shown on the map/results limited by max features configuration etc (https://github.com/oskariorg/oskari-frontend/pull/3000)
+- Metadata flyout is now resizeable by end-users
+- Search results can now include an url related to that result. The link is now shown to the user when the search result is clicked (https://github.com/oskariorg/oskari-frontend/pull/2993). The localization can be overridden in an application.
+- Added localizations for reverse geocoding results for TerrainElevationSearchChannel (https://github.com/oskariorg/oskari-frontend/pull/3004)
+- Added localization for "Year" variable identifier for statistical data to match the parameter used some statistical data providers
+- Added `publiccode.yml` (https://github.com/oskariorg/oskari-frontend/pull/2985, https://github.com/oskariorg/oskari-frontend/pull/2989)
+- Made an effort for preventing device zoom when pinching with 3 fingers on map (https://github.com/oskariorg/oskari-frontend/pull/3036, https://github.com/oskariorg/oskari-frontend/pull/3037)
+- Reduced noise in developer console when an embedded maps starts with not all the bells and whistles included (https://github.com/oskariorg/oskari-frontend/pull/3045, https://github.com/oskariorg/oskari-frontend/pull/3046)
+- Generic admin-bundle for managing appsetups rewritten from jQuery to React-based implementation (https://github.com/oskariorg/oskari-frontend/pull/3002)
+- User Guide functionality migrated to React (https://github.com/oskariorg/oskari-frontend/pull/3012)
+
 ### Tooling changes
 
 Minimum node-version updated to 22 as some dependencies require it.
 Initial testing shows that Node 24 and 26 should work as well.
+
+### Library updates
+
+- Migrated from styled-components 5 to 6
+- Upgraded Ant Design from v5 to v6
+- Upgraded to React 19
+- openlayers 10.8 -> 10.10
+- ol-mapbox-style 13.4.0 -> 13.4.3
+- cesium 1.139.1 -> 1.450.0
+- olcs 2.22.1 -> 2.23.1
+- babel/core-js/eslint etc updates
 
 ## 3.3.0
 
