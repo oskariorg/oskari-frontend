@@ -193,6 +193,9 @@ export class FeatureEditorPanelHandler extends StateHandler {
     }
 
     setHasPendingChanges (hasPendingChanges) {
+        if (this.getState().hasPendingChanges === hasPendingChanges) {
+            return;
+        }
         this.updateState({ hasPendingChanges });
     }
 
