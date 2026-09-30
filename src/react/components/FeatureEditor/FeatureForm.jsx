@@ -90,6 +90,7 @@ const DoubleField = ({ label, name, value, disabled, onUpdate }) => (
             name={name}
             value={value}
             onKeyDown={null}
+            parser={(input) => input.replace(',', '.')}
             onChange={(newValue) => onUpdate(name, newValue)}/>
     </FieldWrapper>
 );
