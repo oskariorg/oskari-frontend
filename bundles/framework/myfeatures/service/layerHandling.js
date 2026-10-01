@@ -5,16 +5,6 @@ export const handleMyFeaturesLayers = (sandbox, mapLayerService, getMsg) => {
     if (!mapLayerService) {
         throw new Error(`Can't register layer support without MapLayerService`);
     }
-    // register handling through wfsvectorplugin
-    /*
-    const options = {
-        type,
-        editRequest: 'MyFeatures.ShowLayerDialogRequest',
-        ...this.loc('layer')
-    };
-    this.getMapLayerService()?.registerLayerForUserDataModelBuilder(options);
-    */
-
     const dataProviderId = -10 * Oskari.getSeq('usergeneratedDataProvider').nextVal();
     const provider = {
         id: dataProviderId,

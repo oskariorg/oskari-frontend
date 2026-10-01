@@ -12,9 +12,11 @@ const StyledDeleteOutlined = styled(DeleteOutlined)`
     color: ${TYPE_COLORS.delete}
 `;
 export class MyFeaturesService {
-    constructor (sandbox, mapLayerService, getMsg, deleteFeatureCallback) {
+    constructor (sandbox, mapLayerService, getMsg, deleteFeatureCallback, showFeatureEditorCallback, editLayerCallback) {
         this.mapLayerService = mapLayerService;
         this.sandbox = sandbox;
+        this.showFeatureEditorCallback = showFeatureEditorCallback;
+        this.editLayerCallback = editLayerCallback;
         this.srs = this.sandbox.getMap().getSrsName();
         this.log = Oskari.log('MyFeaturesService');
         this.deleteFeatureCallback = (layerId, featureId) => {
@@ -92,7 +94,7 @@ export class MyFeaturesService {
         editLayerTool.setName('editStyle');
         editLayerTool.setTooltip(toolName);
         editLayerTool.setTitle(toolName);
-        editLayerTool.setCallback(() => this.sandbox.postRequestByName('myfeatures.ShowLayerDialogRequest', [mapLayer.getId()]));
+        editLayerTool.setCallback(() => this.editLayerCallback(mapLayer.getId()));
         mapLayer.addTool(editLayerTool);
 
 
@@ -102,7 +104,7 @@ export class MyFeaturesService {
         featureEditorTool.setIconComponent(<EditOutlined/>);
         featureEditorTool.setTypes([]);
         featureEditorTool.setCallback((layerId, featureId) => {
-            this.sandbox.postRequestByName('ShowFeatureEditorRequest', [layerId, featureId]);
+            this.showFeatureEditorCallback(layerId, featureId);
         });
         mapLayer.addFeatureTool(featureEditorTool);
 
