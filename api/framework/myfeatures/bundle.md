@@ -4,7 +4,9 @@ Provides tools for managing a user's feature layers and their features.
 
 ## Description
 
-![MyFeatures list](myfeatures.png)
+![New dataset](new_dataset.png)
+
+![Modify attributes](new_dataset_attributes.png)
 
 The bundle loads the logged-in user's MyFeatures layers and makes them available as map layers.
 Users can create layers, import data, edit layer metadata and styles, export layers, and add or
@@ -13,31 +15,6 @@ list the user's layers.
 
 The bundle's layer and feature operations use the Oskari-server routes `MyFeaturesLayer`,
 `ImportMyFeatures`, `ExportMyFeaturesLayer`, and `MyFeaturesFeature`.
-
-## Usage from other bundles
-
-The bundle registers requests for opening the layer form and feature editor. For example, another
-bundle can request the layer form through the sandbox:
-
-```javascript
-sandbox.postRequestByName('myfeatures.ShowLayerDialogRequest');
-```
-
-Passing a layer id opens that layer for editing:
-
-```javascript
-sandbox.postRequestByName('myfeatures.ShowLayerDialogRequest', [layerId]);
-```
-
-The feature editor request accepts a layer id and an optional feature id. Without a feature id it
-opens the editor for a new feature:
-
-```javascript
-sandbox.postRequestByName('ShowFeatureEditorRequest', [layerId, featureId]);
-```
-
-`MyFeaturesService` is an internal bundle implementation and is not registered as a sandbox
-service.
 
 ## Bundle configuration
 
@@ -70,10 +47,6 @@ The bundle loads the user's layers and enables its toolbar tools only when the u
   <td> Adds an imported layer or a layer selected from the MyFeatures list to the map. </td>
 </tr>
 <tr>
-  <td> `ShowFeatureDataRequest` </td>
-  <td> Opens feature data for a layer when requested by the MyFeatures list controller. </td>
-</tr>
-<tr>
   <td> `MapModulePlugin.MapLayerUpdateRequest` </td>
   <td> Refreshes a layer on the map after its features or layer settings change. </td>
 </tr>
@@ -88,23 +61,6 @@ The bundle loads the user's layers and enables its toolbar tools only when the u
 <tr>
   <td> `InfoBox.HideInfoBoxRequest` </td>
   <td> Closes the feature deletion confirmation from the infobox when deletion is confirmed. </td>
-</tr>
-</table>
-
-## Requests the bundle handles
-
-<table class="table">
-<tr>
-  <th> Request </th>
-  <th> Where/why it's used </th>
-</tr>
-<tr>
-  <td> `myfeatures.ShowLayerDialogRequest` </td>
-  <td> Opens the layer form to create a new layer (no id) or edit the layer with the given id. </td>
-</tr>
-<tr>
-  <td> `ShowFeatureEditorRequest` </td>
-  <td> Opens the feature editor for the given layer and optional feature id. </td>
 </tr>
 </table>
 
