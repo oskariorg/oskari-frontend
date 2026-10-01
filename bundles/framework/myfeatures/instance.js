@@ -4,8 +4,6 @@ import { MyFeaturesTab } from './MyFeaturesTab';
 import { MyFeaturesHandler } from './handler/MyFeaturesHandler';
 import { ADD_FEATURE_TOOL, BUNDLE_KEY, TOOL } from './constants';
 import { MyFeaturesService } from './service/MyFeaturesService';
-import './request/ShowLayerDialogRequest';
-import './request/ShowFeatureEditorRequest';
 
 const loadLayers = async (service, getMsg) => {
     try {
@@ -28,22 +26,13 @@ export class MyFeatureBundleInstance extends BasicBundleInstance {
             this.importService = new MyFeaturesService(sandbox,
                 this.getMapLayerService(),
                 getMsg,
-                (layerId, featureId) => this.handler.deleteFeature(layerId, featureId)
+                (layerId, featureId) => this.handler.deleteFeature(layerId, featureId),
+                (layerId, featureId) => this.handler.showFeatureEditorDialog(layerId, featureId),
+                (layerId) => this.handler.editLayer(layerId)
             );
             this.handler = new MyFeaturesHandler(this, this.importService);
             this.addTab();
-            this.addRequestHandler('myfeatures.ShowLayerDialogRequest', (req) => {
-                const id = req?.getId();
-                if (id) {
-                    this.handler.editLayer(id);
-                } else {
-                    this.handler.showLayerDialog({ isNew: true });
-                }
-            });
 
-            this.addRequestHandler('ShowFeatureEditorRequest', (req) => {
-                this.handler.showFeatureEditorDialog(req.getLayerId(), req.getFeatureId());
-            });
             // need to wrap to a function because async
             loadLayers(this.importService, getMsg);
         }
