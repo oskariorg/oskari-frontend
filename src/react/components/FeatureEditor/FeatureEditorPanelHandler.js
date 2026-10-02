@@ -176,8 +176,26 @@ export class FeatureEditorPanelHandler extends StateHandler {
 
     setFeature(feature) {
         this.updateState({
-            feature
+            feature: this.applyTemporaryGeometryCollectionWorkaround(feature)
         });
+    }
+
+    /**
+     * TEMPORARY WORKAROUND ONLY: DrawTools cannot draw GeometryCollection.
+     * Unwrap collections containing exactly one geometry for editing.
+     * Saving the feature will also save the unwrapped geometry.
+     * TODO: Remove this method and its two call sites when the editor properly
+     * supports GeometryCollection. Do not discard parts of multi-part collections.
+     */
+    applyTemporaryGeometryCollectionWorkaround (feature) {
+        if (feature?.geometry?.type !== 'GeometryCollection' ||
+            feature.geometry.geometries?.length !== 1) {
+            return feature;
+        }
+        return {
+            ...feature,
+            geometry: feature.geometry.geometries[0]
+        };
     }
 
     getFeature () {
@@ -247,7 +265,7 @@ export class FeatureEditorPanelHandler extends StateHandler {
                 }
             };
             this.updateState({
-                feature,
+                feature: this.applyTemporaryGeometryCollectionWorkaround(feature),
                 hasPendingChanges: false
             });
         }
