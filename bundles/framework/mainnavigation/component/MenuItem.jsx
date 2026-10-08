@@ -69,10 +69,10 @@ const Badge = styled('span')`
     text-shadow: 0 -0.090909em 0 rgba(0, 0, 0, 0.25);
 `;
 
-export const MenuItem = ({ id, name, tooltip, active, isActive = false, badge }) => {
+export const MenuItem = ({ name, tooltip, setActive, isActive = false, badge }) => {
     const handleClick = () => {
-        if (typeof active === 'function') {
-            active(id);
+        if (typeof setActive === 'function') {
+            setActive(!isActive);
         }
     };
 
@@ -107,7 +107,7 @@ MenuItem.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     tooltip: PropTypes.string,
-    active: PropTypes.func,
+    setActive: PropTypes.func,
     isActive: PropTypes.bool,
     badge: PropTypes.number
 };

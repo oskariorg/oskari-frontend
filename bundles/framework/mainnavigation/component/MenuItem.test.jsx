@@ -22,11 +22,11 @@ describe('MenuItem', () => {
         expect(getComputedStyle(menuItem).backgroundColor).toBe('rgb(255, 255, 255)');
     });
 
-    test('preserves the click callback and renders a zero badge', () => {
-        const active = jest.fn();
-        render(<MenuItem id={MENU_ITEM_ID} name={MENU_ITEM_NAME} active={active} badge={0} />);
+    test('requests activation and renders a zero badge', () => {
+        const setActive = jest.fn();
+        render(<MenuItem id={MENU_ITEM_ID} name={MENU_ITEM_NAME} setActive={setActive} badge={0} />);
         fireEvent.click(screen.getByRole('button'));
-        expect(active).toHaveBeenCalledWith(MENU_ITEM_ID);
+        expect(setActive).toHaveBeenCalledWith(true);
         const badge = screen.getByText('0');
         expect(badge).toBeInTheDocument();
         expect(getComputedStyle(badge).backgroundColor).toBe('rgb(153, 153, 153)');
@@ -35,10 +35,17 @@ describe('MenuItem', () => {
     });
 
     test.each(['Enter', ' '])('activates the menu item with %p', (key) => {
-        const active = jest.fn();
-        render(<MenuItem id={MENU_ITEM_ID} name={MENU_ITEM_NAME} active={active} />);
+        const setActive = jest.fn();
+        render(<MenuItem id={MENU_ITEM_ID} name={MENU_ITEM_NAME} setActive={setActive} />);
         fireEvent.keyDown(screen.getByRole('button'), { key });
-        expect(active).toHaveBeenCalledWith(MENU_ITEM_ID);
-        expect(active).toHaveBeenCalledTimes(1);
+        expect(setActive).toHaveBeenCalledWith(true);
+        expect(setActive).toHaveBeenCalledTimes(1);
+    });
+
+    test('requests deactivation when the active menu item is clicked', () => {
+        const setActive = jest.fn();
+        render(<MenuItem id={MENU_ITEM_ID} name={MENU_ITEM_NAME} setActive={setActive} isActive />);
+        fireEvent.click(screen.getByRole('button'));
+        expect(setActive).toHaveBeenCalledWith(false);
     });
 });

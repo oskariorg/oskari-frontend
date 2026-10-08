@@ -25,21 +25,22 @@ export class TestBundle3Instance extends BasicBundleInstance {
             name: TITLE,
             tooltip: `${TITLE} menu item`,
             badge: 3,
-            isActive: Boolean(this.flyoutControls),
-            active: () => this.toggleFlyout()
+            setActive: (isActive) => this.setActive(isActive)
         });
     }
 
-    toggleFlyout () {
+    setActive (isActive) {
+        if (!isActive) {
+            this.flyoutControls?.close();
+            return;
+        }
         if (this.flyoutControls) {
-            this.flyoutControls.close();
             return;
         }
         this.flyoutControls = showFlyout(TITLE, `${TITLE} flyout`, () => {
             this.flyoutControls = null;
-            this.updateMenuItem();
+            this.mainNavigationService?.setActive(this.menuItemId, false);
         });
-        this.updateMenuItem();
     }
 
     stop () {

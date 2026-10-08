@@ -102,9 +102,15 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         }
         this.root.render(<nav className={this.containerClass}>
             <ul>
-                {this.mainNavigationService.getMenuItems().map((menuItem) => <li key={menuItem.id}>
-                    <MenuItem {...menuItem} />
-                </li>)}
+                {this.mainNavigationService.getMenuItems()
+                    .map((menuItem) => (
+                        <li key={menuItem.id}>
+                            <MenuItem
+                                {...menuItem}
+                                setActive={(isActive) => this.mainNavigationService.setActive(menuItem.id, isActive)}
+                            />
+                        </li>
+                    ))}
             </ul>
         </nav>);
         return container;
