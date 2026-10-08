@@ -4,6 +4,15 @@ import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
 import { MainNavigationService } from './service/MainNavigationService';
 import { MenuItem } from './component/MenuItem';
 
+const DEMO_BUNDLE_IDS = [
+    'mainnavigation-testbundle',
+    'testbundle1',
+    'testbundle2',
+    'testbundle3',
+    'testbundle4',
+    'testbundle5'
+];
+
 export class MainNavigationBundleIstance extends BasicBundleInstance {
     constructor () {
         super();
@@ -25,9 +34,11 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.mainNavigationService.addListener(this);
         this.attachToExistingDom();
         this.render();
-        Oskari.app.playBundle({
-            bundlename: 'mainnavigation-testbundle'
-        }, {});
+        DEMO_BUNDLE_IDS.forEach((bundlename) => {
+            Oskari.app.playBundle({
+                bundlename
+            }, {});
+        });
     }
 
     getTargetParent (parentSelector = this.parentSelector) {
