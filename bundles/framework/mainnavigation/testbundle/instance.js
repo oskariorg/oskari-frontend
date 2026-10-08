@@ -1,11 +1,15 @@
 import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
 import { showFlyout } from 'oskari-ui/components/window';
 
-const MENU_ITEM_ID = 'mainnavigation-testbundle-item';
+const BUNDLE_ID = 'mainnavigation-testbundle';
+const TITLE = 'Test bundle';
 
 export class MainNavigationTestBundleInstance extends BasicBundleInstance {
     constructor () {
-        super('mainnavigation-testbundle');
+        super(BUNDLE_ID);
+        this.menuItemId = `${BUNDLE_ID}-item`;
+        this.title = TITLE;
+        this.badge = 7;
         this.mainNavigationService = null;
         this.flyoutControls = null;
     }
@@ -13,11 +17,16 @@ export class MainNavigationTestBundleInstance extends BasicBundleInstance {
     start (sandbox) {
         super.start(sandbox);
         this.mainNavigationService = sandbox.getService('Oskari.mapframework.bundle.mainnavigation.service.MainNavigationService');
+        this.updateMenuItem();
+    }
+
+    updateMenuItem () {
         this.mainNavigationService.addMenuItem({
-            id: MENU_ITEM_ID,
-            name: 'Test bundle',
-            tooltip: 'Test bundle menu item',
-            badge: 7,
+            id: this.menuItemId,
+            name: this.title,
+            tooltip: `${this.title} menu item`,
+            badge: this.badge,
+            isActive: Boolean(this.flyoutControls),
             active: () => this.toggleFlyout()
         });
     }
@@ -27,14 +36,16 @@ export class MainNavigationTestBundleInstance extends BasicBundleInstance {
             this.flyoutControls.close();
             return;
         }
-        this.flyoutControls = showFlyout('Test bundle', 'Test bundle flyout', () => {
+        this.flyoutControls = showFlyout(this.title, `${this.title} flyout`, () => {
             this.flyoutControls = null;
+            this.updateMenuItem();
         });
+        this.updateMenuItem();
     }
 
     stop () {
         this.flyoutControls?.close();
-        this.mainNavigationService?.removeMenuItem(MENU_ITEM_ID);
+        this.mainNavigationService?.removeMenuItem(this.menuItemId);
         this.mainNavigationService = null;
         super.stop();
     }
