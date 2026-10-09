@@ -6,7 +6,7 @@ import { MenuItem } from './component/MenuItem';
 
 const DEMO_BUNDLE_IDS = [
     'mainnavigation-testbundle',
-    'testbundle1',
+    'maplayers',
     'testbundle2',
     'testbundle3',
     'testbundle4',

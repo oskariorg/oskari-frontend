@@ -1,11 +1,16 @@
 import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
 import { showFlyout } from 'oskari-ui/components/window';
 
-const BUNDLE_ID = 'testbundle1';
-const TITLE = 'Test bundle 1';
+const BUNDLE_ID = 'maplayers';
+const TITLE = 'Map layers';
 const MAIN_NAVIGATION_SERVICE = 'Oskari.mapframework.bundle.mainnavigation.service.MainNavigationService';
+const MAP_LAYER_EVENTS = [
+    'MapLayerEvent',
+    'AfterMapLayerAddEvent',
+    'AfterMapLayerRemoveEvent'
+];
 
-export class TestBundle1Instance extends BasicBundleInstance {
+export class MapLayersBundleInstance extends BasicBundleInstance {
     constructor () {
         super(BUNDLE_ID);
         this.menuItemId = `${BUNDLE_ID}-item`;
@@ -17,6 +22,10 @@ export class TestBundle1Instance extends BasicBundleInstance {
         super.start(sandbox);
         this.mainNavigationService = sandbox.getService(MAIN_NAVIGATION_SERVICE);
         this.updateMenuItem();
+        this.updateBadge();
+        MAP_LAYER_EVENTS.forEach((eventName) => {
+            this.on(eventName, () => this.updateBadge());
+        });
     }
 
     updateMenuItem () {
@@ -24,9 +33,14 @@ export class TestBundle1Instance extends BasicBundleInstance {
             id: this.menuItemId,
             name: TITLE,
             tooltip: `${TITLE} menu item`,
-            badge: 1,
             setActive: (isActive) => this.setActive(isActive)
         });
+    }
+
+    updateBadge () {
+        const layers = this.getSandbox()
+            .findAllSelectedMapLayers();
+        this.mainNavigationService.setBadge(this.menuItemId, layers.length);
     }
 
     setActive (isActive) {
