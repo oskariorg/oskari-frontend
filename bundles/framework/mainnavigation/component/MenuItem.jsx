@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Badge } from 'oskari-ui';
 import { styled } from 'styled-components';
 
 const ACTIVATION_KEYS = ['Enter', ' '];
@@ -41,7 +42,7 @@ const Title = styled('span')`
     user-select: none;
 `;
 
-const Status = styled('span')`
+const StyledBadge = styled(Badge)`
     float: right;
     display: inline-flex;
     align-items: center;
@@ -55,18 +56,6 @@ const Status = styled('span')`
     font-weight: bold;
     line-height: 1.7273em;
     text-align: center;
-`;
-
-const Badge = styled('span')`
-    display: inline-block;
-    padding: 0.090909em 0.636364em 0.181818em;
-    border-radius: 0.818182em;
-    background-color: #999;
-    color: #fff;
-    font-weight: bold;
-    line-height: 1;
-    white-space: nowrap;
-    text-shadow: 0 -0.090909em 0 rgba(0, 0, 0, 0.25);
 `;
 
 export const MenuItem = ({ name, tooltip, setActive, isActive = false, badge }) => {
@@ -95,9 +84,7 @@ export const MenuItem = ({ name, tooltip, setActive, isActive = false, badge }) 
         >
             <Title>{name}</Title>
             {typeof badge === 'number' && (
-                <Status>
-                    <Badge>{badge}</Badge>
-                </Status>
+                <StyledBadge count={badge} />
             )}
         </MenuItemContainer>
     );
