@@ -30,6 +30,11 @@ export class MainNavigationTestBundleInstance extends BasicBundleInstance {
         });
     }
 
+    setBadge (badge) {
+        this.badge = badge;
+        this.mainNavigationService?.setBadge(this.menuItemId, badge);
+    }
+
     setActive (isActive) {
         if (!isActive) {
             this.flyoutControls?.close();

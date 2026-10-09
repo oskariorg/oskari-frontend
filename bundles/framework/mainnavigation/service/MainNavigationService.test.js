@@ -5,7 +5,7 @@ const FIRST_ID = 'first-item';
 const SECOND_ID = 'second-item';
 const UNKNOWN_ID = 'unknown-item';
 
-describe('MainNavigationService active menu item', () => {
+describe('MainNavigationService', () => {
     let service;
     let firstChanged;
     let secondChanged;
@@ -92,5 +92,44 @@ describe('MainNavigationService active menu item', () => {
 
         expect(service.getMenuItems()
             .map((item) => item.isActive)).toEqual([true, false]);
+    });
+
+    test('updates only the requested badge and notifies listeners without changing activation', () => {
+        service.setActive(FIRST_ID);
+        firstChanged.mockClear();
+        const handleMenuItemsChanged = jest.fn();
+        service.addListener({ handleMenuItemsChanged });
+
+        expect(service.setBadge(FIRST_ID, 0)).toBe(true);
+        expect(service.getMenuItems()[0]).toMatchObject({
+            id: FIRST_ID,
+            badge: 0,
+            isActive: true,
+            setActive: firstChanged
+        });
+        expect(service.getMenuItems()[1].badge).toBeUndefined();
+        expect(service.getActiveMenuItemId()).toBe(FIRST_ID);
+        expect(firstChanged).not.toHaveBeenCalled();
+        expect(secondChanged).not.toHaveBeenCalled();
+        expect(handleMenuItemsChanged).toHaveBeenCalledTimes(1);
+        expect(handleMenuItemsChanged).toHaveBeenCalledWith(service.getMenuItems());
+    });
+
+    test('does not notify listeners for unknown items or unchanged badge values', () => {
+        service.setBadge(FIRST_ID, 7);
+        const handleMenuItemsChanged = jest.fn();
+        service.addListener({ handleMenuItemsChanged });
+
+        expect(service.setBadge(UNKNOWN_ID, 3)).toBe(false);
+        expect(service.setBadge(FIRST_ID, 7)).toBe(false);
+        expect(handleMenuItemsChanged).not.toHaveBeenCalled();
+        expect(service.getMenuItems()[0].badge).toBe(7);
+    });
+
+    test.each([null, undefined])('clears the badge with %p', (badge) => {
+        service.setBadge(FIRST_ID, 7);
+
+        expect(service.setBadge(FIRST_ID, badge)).toBe(true);
+        expect(service.getMenuItems()[0].badge).toBe(badge);
     });
 });
