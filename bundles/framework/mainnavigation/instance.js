@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
+import { ThemeProvider } from 'oskari-ui/util';
 import { MainNavigationService } from './service/MainNavigationService';
 import { MenuItem } from './component/MenuItem';
 
@@ -100,19 +101,21 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         if (!this.root) {
             this.root = createRoot(container);
         }
-        this.root.render(<nav className={this.containerClass}>
-            <ul>
-                {this.mainNavigationService.getMenuItems()
-                    .map((menuItem) => (
-                        <li key={menuItem.id}>
-                            <MenuItem
-                                {...menuItem}
-                                setActive={(isActive) => this.mainNavigationService.setActive(menuItem.id, isActive)}
-                            />
-                        </li>
-                    ))}
-            </ul>
-        </nav>);
+        this.root.render(<ThemeProvider>
+            <nav className={this.containerClass}>
+                <ul>
+                    {this.mainNavigationService.getMenuItems()
+                        .map((menuItem) => (
+                            <li key={menuItem.id}>
+                                <MenuItem
+                                    {...menuItem}
+                                    setActive={(isActive) => this.mainNavigationService.setActive(menuItem.id, isActive)}
+                                />
+                            </li>
+                        ))}
+                </ul>
+            </nav>
+        </ThemeProvider>);
         return container;
     }
 
