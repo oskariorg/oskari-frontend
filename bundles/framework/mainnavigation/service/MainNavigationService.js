@@ -38,6 +38,17 @@ export class MainNavigationService {
         return this.activeMenuItemId;
     }
 
+    setBadge (id, badge) {
+        const item = this.menuItems.find((menuItem) => menuItem.id === id);
+        if (!item || item.badge === badge) {
+            return false;
+        }
+
+        item.badge = badge;
+        this.notifyListeners();
+        return true;
+    }
+
     setActive (id, isActive = true) {
         const nextItem = this.menuItems.find((item) => item.id === id);
         if (!nextItem || (!isActive && this.activeMenuItemId !== id)) {
