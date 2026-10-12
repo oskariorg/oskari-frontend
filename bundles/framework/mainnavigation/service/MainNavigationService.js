@@ -1,3 +1,5 @@
+const MENU_ITEM_METHODS = ['connect', 'render', 'setActive', 'setBadge', 'dispose'];
+
 export class MainNavigationService {
     constructor () {
         this.menuItems = [];
@@ -10,20 +12,39 @@ export class MainNavigationService {
     }
 
     addMenuItem (menuItem) {
-        if (!menuItem || typeof menuItem !== 'object' || !menuItem.id) {
+        if (!menuItem || typeof menuItem !== 'object' || !menuItem.id ||
+            !MENU_ITEM_METHODS.every((method) => typeof menuItem[method] === 'function')) {
             return null;
         }
 
         const existingIndex = this.menuItems.findIndex((item) => item.id === menuItem.id);
-        const item = {
-            ...menuItem,
-            isActive: menuItem.id === this.activeMenuItemId
-        };
-
+        const existingItem = this.menuItems[existingIndex];
+        const item = menuItem;
+        const replacing = existingItem && existingItem !== item;
+        if (replacing) {
+            existingItem.setActive(false);
+            existingItem.dispose();
+        }
+        item.isActive = menuItem.id === this.activeMenuItemId;
+        item.connect(
+            () => {
+                if (this.menuItems.includes(item)) {
+                    this.notifyListeners();
+                }
+            },
+            (id) => {
+                if (this.menuItems.includes(item)) {
+                    this.setActive(id, false);
+                }
+            }
+        );
         if (existingIndex === -1) {
             this.menuItems.push(item);
         } else {
             this.menuItems[existingIndex] = item;
+        }
+        if (replacing && item.isActive) {
+            item.setActive(true);
         }
 
         this.notifyListeners();
@@ -31,7 +52,7 @@ export class MainNavigationService {
     }
 
     getMenuItems () {
-        return this.menuItems.map((item) => ({ ...item }));
+        return [...this.menuItems];
     }
 
     getActiveMenuItemId () {
@@ -40,13 +61,7 @@ export class MainNavigationService {
 
     setBadge (id, badge) {
         const item = this.menuItems.find((menuItem) => menuItem.id === id);
-        if (!item || item.badge === badge) {
-            return false;
-        }
-
-        item.badge = badge;
-        this.notifyListeners();
-        return true;
+        return item ? item.setBadge(badge) : false;
     }
 
     setActive (id, isActive = true) {
@@ -80,6 +95,7 @@ export class MainNavigationService {
         if (this.activeMenuItemId === id) {
             this.setActive(id, false);
         }
+        this.menuItems.find((item) => item.id === id)?.dispose();
         this.menuItems = this.menuItems.filter((item) => item.id !== id);
         this.notifyListeners();
     }

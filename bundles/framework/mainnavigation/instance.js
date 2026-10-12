@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
 import { ThemeProvider } from 'oskari-ui/util';
 import { MainNavigationService } from './service/MainNavigationService';
-import { MenuItem } from './component/MenuItem';
 
 const DEMO_BUNDLE_IDS = [
     'mainnavigation-testbundle',
@@ -25,6 +24,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.container = null;
         this.root = null;
         this.mainNavigationService = null;
+        this.onMenuItemActiveChange = (id, isActive) => this.mainNavigationService.setActive(id, isActive);
     }
 
     start (sandbox) {
@@ -107,10 +107,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
                     {this.mainNavigationService.getMenuItems()
                         .map((menuItem) => (
                             <li key={menuItem.id}>
-                                <MenuItem
-                                    {...menuItem}
-                                    setActive={(isActive) => this.mainNavigationService.setActive(menuItem.id, isActive)}
-                                />
+                                {menuItem.render(this.onMenuItemActiveChange)}
                             </li>
                         ))}
                 </ul>
@@ -132,6 +129,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
 
     stop () {
         this.mainNavigationService.removeListener(this);
+        this.mainNavigationService.getMenuItems().forEach((item) => this.mainNavigationService.removeMenuItem(item.id));
         if (this.root) {
             this.root.unmount();
             this.root = null;

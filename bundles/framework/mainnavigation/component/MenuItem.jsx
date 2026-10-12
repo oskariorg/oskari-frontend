@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Badge } from 'oskari-ui';
+import { showFlyout } from 'oskari-ui/components/window';
 import { styled } from 'styled-components';
 
 const ACTIVATION_KEYS = ['Enter', ' '];
@@ -58,11 +59,96 @@ const StyledBadge = styled(Badge)`
     text-align: center;
 `;
 
-export const MenuItem = ({ name, tooltip, setActive, isActive = false, badge }) => {
-    const handleClick = () => {
-        if (typeof setActive === 'function') {
-            setActive(!isActive);
+/**
+ * Default menu item behavior, independent of whether the React view is mounted.
+ * Custom setActive and setBadge callbacks replace the default methods entirely.
+ */
+export class MenuItem {
+    constructor (options) {
+        this.flyoutControls = null;
+        this.isActive = false;
+        this.onChange = null;
+        this.onClose = null;
+        this.update(options);
+        if (typeof options.setActive === 'function') {
+            this.setActive = options.setActive;
         }
+        if (typeof options.setBadge === 'function') {
+            this.setBadge = options.setBadge;
+        }
+        if (typeof options.render === 'function') {
+            this.render = options.render;
+        }
+    }
+
+    connect (onChange, onClose) {
+        this.onChange = onChange;
+        this.onClose = onClose;
+    }
+
+    update (options) {
+        this.options = { ...options };
+        this.id = options.id;
+        this.name = options.name;
+        if (Object.hasOwn(options, 'badge')) {
+            this.badge = options.badge;
+        }
+    }
+
+    setActive (isActive) {
+        this.isActive = isActive;
+        if (!isActive) {
+            const controls = this.flyoutControls;
+            this.flyoutControls = null;
+            controls?.close();
+            return;
+        }
+        if (this.flyoutControls) {
+            return;
+        }
+        const controls = showFlyout(this.name, `${this.name} flyout`, () => {
+            if (this.flyoutControls !== controls) {
+                return;
+            }
+            this.flyoutControls = null;
+            this.onClose?.(this.id);
+        });
+        this.flyoutControls = controls;
+    }
+
+    setBadge (badge) {
+        if (this.badge === badge) {
+            return false;
+        }
+        this.badge = badge;
+        this.onChange?.();
+        return true;
+    }
+
+    getState () {
+        return {
+            ...this.options,
+            isActive: this.isActive,
+            badge: this.badge
+        };
+    }
+
+    render (onActiveChange) {
+        return <MenuItemView key={this.id} {...this.getState()} onActiveChange={onActiveChange} />;
+    }
+
+    dispose () {
+        const controls = this.flyoutControls;
+        this.flyoutControls = null;
+        controls?.close();
+        this.onChange = null;
+        this.onClose = null;
+    }
+}
+
+const MenuItemView = ({ id, name, tooltip, onActiveChange, isActive = false, badge, style }) => {
+    const handleClick = () => {
+        onActiveChange(id, !isActive);
     };
 
     const handleKeyDown = (event) => {
@@ -77,6 +163,7 @@ export const MenuItem = ({ name, tooltip, setActive, isActive = false, badge }) 
             role="button"
             tabIndex={0}
             title={tooltip}
+            style={style}
             onClick={handleClick}
             onKeyDown={handleKeyDown}
             $isActive={isActive}
@@ -90,11 +177,12 @@ export const MenuItem = ({ name, tooltip, setActive, isActive = false, badge }) 
     );
 };
 
-MenuItem.propTypes = {
+MenuItemView.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     tooltip: PropTypes.string,
-    setActive: PropTypes.func,
+    onActiveChange: PropTypes.func.isRequired,
     isActive: PropTypes.bool,
-    badge: PropTypes.number
+    badge: PropTypes.number,
+    style: PropTypes.object
 };
