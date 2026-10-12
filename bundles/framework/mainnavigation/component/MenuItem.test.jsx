@@ -62,12 +62,7 @@ describe('MenuItem activation', () => {
 
     test('uses the item callback instead of the default flyout', () => {
         const setActive = jest.fn();
-        class CustomMenuItem extends MenuItem {
-            setActive (isActive) {
-                setActive(isActive);
-            }
-        }
-        service.addMenuItem(new CustomMenuItem({ id: 'custom', name: 'Custom' }));
+        service.addMenuItem(new MenuItem({ id: 'custom', name: 'Custom', setActive }));
         render(<Navigation />);
         const button = screen.getByRole('button', { name: 'Custom' });
         fireEvent.keyDown(button, { key: 'Enter' });
@@ -102,12 +97,7 @@ describe('MenuItem activation', () => {
 
     test('allows replacing badge behavior without running its default setter', () => {
         const setBadge = jest.fn();
-        class CustomMenuItem extends MenuItem {
-            setBadge (badge) {
-                setBadge(badge);
-            }
-        }
-        service.addMenuItem(new CustomMenuItem({ id: 'custom', name: 'Custom', badge: 2 }));
+        service.addMenuItem(new MenuItem({ id: 'custom', name: 'Custom', badge: 2, setBadge }));
         render(<Navigation />);
         act(() => service.setBadge('custom', 9));
         expect(setBadge).toHaveBeenCalledWith(9);

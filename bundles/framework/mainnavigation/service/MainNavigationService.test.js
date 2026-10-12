@@ -9,17 +9,6 @@ const FIRST_ID = 'first-item';
 const SECOND_ID = 'second-item';
 const UNKNOWN_ID = 'unknown-item';
 
-class CustomMenuItem extends MenuItem {
-    constructor (options, handleActiveChange) {
-        super(options);
-        this.handleActiveChange = handleActiveChange;
-    }
-
-    setActive (isActive) {
-        this.handleActiveChange(isActive);
-    }
-}
-
 describe('MainNavigationService', () => {
     let service;
     let firstChanged;
@@ -29,8 +18,8 @@ describe('MainNavigationService', () => {
         service = new MainNavigationService();
         firstChanged = jest.fn();
         secondChanged = jest.fn();
-        service.addMenuItem(new CustomMenuItem({ id: FIRST_ID }, firstChanged));
-        service.addMenuItem(new CustomMenuItem({ id: SECOND_ID }, secondChanged));
+        service.addMenuItem(new MenuItem({ id: FIRST_ID, setActive: firstChanged }));
+        service.addMenuItem(new MenuItem({ id: SECOND_ID, setActive: secondChanged }));
     });
 
     test('activates only one item and notifies the previous bundle first', () => {
@@ -40,8 +29,8 @@ describe('MainNavigationService', () => {
         expect(service.getActiveMenuItemId()).toBe(SECOND_ID);
         expect(service.getMenuItems()
             .map((item) => item.isActive)).toEqual([false, true]);
-        expect(firstChanged.mock.calls.map(([value]) => [value])).toEqual([[true], [false]]);
-        expect(secondChanged.mock.calls.map(([value]) => [value])).toEqual([[true]]);
+        expect(firstChanged.mock.calls).toEqual([[true], [false]]);
+        expect(secondChanged.mock.calls).toEqual([[true]]);
         expect(firstChanged.mock.invocationCallOrder[1]).toBeLessThan(secondChanged.mock.invocationCallOrder[0]);
     });
 
@@ -138,9 +127,11 @@ describe('MainNavigationService', () => {
         expect(service.setBadge(FIRST_ID, badge)).toBe(true);
         expect(service.getMenuItems()[0].badge).toBe(badge);
     });
-    test('lets a badge override delegate unchanged-value handling to the default setter', () => {
+    test('lets a badge override handle unchanged values and notify listeners', () => {
         const setBadge = jest.fn();
-        class BadgeMenuItem extends CustomMenuItem {
+        service.addMenuItem(new MenuItem({
+            id: FIRST_ID,
+            setActive: firstChanged,
             setBadge (badge) {
                 setBadge(badge);
                 if (this.badge === badge) {
@@ -150,8 +141,7 @@ describe('MainNavigationService', () => {
                 this.onChange?.();
                 return true;
             }
-        }
-        service.addMenuItem(new BadgeMenuItem({ id: FIRST_ID }, firstChanged));
+        }));
         service.setActive(FIRST_ID);
         firstChanged.mockClear();
         const handleMenuItemsChanged = jest.fn();
@@ -169,15 +159,16 @@ describe('MainNavigationService', () => {
         expect(service.getActiveMenuItemId()).toBe(FIRST_ID);
     });
 
-    test('registers the original subclass instance and keeps its methods on metadata updates', () => {
-        class BadgeMenuItem extends MenuItem {
+    test('registers the original item and keeps its overrides on metadata updates', () => {
+        const item = new MenuItem({
+            id: UNKNOWN_ID,
+            name: 'Custom',
             setBadge (badge) {
                 this.badge = badge * 2;
                 this.onChange?.();
                 return true;
             }
-        }
-        const item = new BadgeMenuItem({ id: UNKNOWN_ID, name: 'Custom' });
+        });
         expect(service.addMenuItem(item)).toBe(item);
         item.update({ id: UNKNOWN_ID, name: 'Updated' });
         service.addMenuItem(item);
