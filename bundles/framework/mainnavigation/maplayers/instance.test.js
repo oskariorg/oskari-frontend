@@ -17,11 +17,13 @@ const MAP_LAYER_EVENTS = [
 
 describe('MapLayersBundleInstance', () => {
     let instance;
+    let menuItem;
     let service;
     let sandbox;
     let layers;
 
     beforeEach(() => {
+        showFlyout.mockReset();
         showFlyout.mockImplementation((title, content, onClose) => ({
             close: jest.fn(onClose)
         }));
@@ -37,6 +39,7 @@ describe('MapLayersBundleInstance', () => {
         };
         instance = new MapLayersBundleInstance();
         instance.start(sandbox);
+        menuItem = service.getMenuItems().find(item => item.id === MENU_ITEM_ID);
     });
 
     test('initializes the badge from layers already on the map', () => {
@@ -65,15 +68,17 @@ describe('MapLayersBundleInstance', () => {
         expect(service.getMenuItems()[0].badge).toBe(0);
     });
 
-    test('ignores redundant deactivation reported when the service closes the flyout', () => {
+    test('does not report redundant deactivation when the service closes the flyout', () => {
         service.setActive(MENU_ITEM_ID);
         const setActive = jest.spyOn(service, 'setActive');
+        const controls = menuItem.flyoutControls;
 
         service.setActive(MENU_ITEM_ID, false);
 
-        expect(setActive).toHaveBeenCalledTimes(2);
-        expect(setActive.mock.results[1].value).toBe(false);
-        expect(instance.flyoutControls).toBeNull();
+        expect(setActive).toHaveBeenCalledTimes(1);
+        expect(setActive.mock.results[0].value).toBe(true);
+        expect(controls.close).toHaveBeenCalledTimes(1);
+        expect(menuItem.flyoutControls).toBeNull();
         expect(service.getActiveMenuItemId()).toBeNull();
     });
 
@@ -81,16 +86,23 @@ describe('MapLayersBundleInstance', () => {
         service.setActive(MENU_ITEM_ID);
         const setActive = jest.spyOn(service, 'setActive');
 
-        instance.flyoutControls.close();
+        menuItem.flyoutControls.close();
 
         expect(setActive).toHaveBeenCalledTimes(1);
         expect(setActive).toHaveBeenCalledWith(MENU_ITEM_ID, false);
-        expect(instance.flyoutControls).toBeNull();
+        expect(menuItem.flyoutControls).toBeNull();
         expect(service.getActiveMenuItemId()).toBeNull();
     });
 
     test('removes the menu item and unregisters all event listeners on stop', () => {
+        service.setActive(MENU_ITEM_ID);
+        const controls = menuItem.flyoutControls;
+
         instance.stop();
+
+        expect(controls.close).toHaveBeenCalledTimes(1);
+        expect(menuItem.flyoutControls).toBeNull();
+        expect(service.getActiveMenuItemId()).toBeNull();
 
         expect(service.getMenuItems()).toEqual([]);
         MAP_LAYER_EVENTS.forEach((eventName) => {

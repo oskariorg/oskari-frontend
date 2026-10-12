@@ -79,13 +79,16 @@ export class BasicBundleInstance extends BaseModule {
     }
 
     removeRequestHandler (requestName) {
+        if (!this._requestHandlers) {
+            return;
+        }
         if (requestName) {
             // remove single request handler
             this.getSandbox().requestHandler(requestName, null);
-            this._listeners.request.reset(requestName);
+            this._requestHandlers.reset(requestName);
         } else {
             // remove all request handlers
-            this._listeners.request.handler().forEach(reqName => this.removeRequestHandler(reqName));
+            this._requestHandlers.handler().forEach(reqName => this.removeRequestHandler(reqName));
         }
     }
 };
