@@ -1,3 +1,4 @@
+import { MenuItemActivationResult } from './MenuItemActivationResult';
 import React, { useEffect, useState } from 'react';
 import { beforeEach, afterEach } from '@jest/globals';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
@@ -38,10 +39,10 @@ describe('MenuItem activation', () => {
         render(<Navigation />);
         fireEvent.click(screen.getByRole('button', { name: 'First' }));
         expect(showFlyout).toHaveBeenCalledWith('First', 'First flyout', expect.any(Function));
-        expect(service.getActiveMenuItemId()).toBe('first');
+        expect(service.getActiveMenuItemIds()).toEqual(['first']);
         const onClose = showFlyout.mock.calls[0][2];
         act(() => onClose());
-        expect(service.getActiveMenuItemId()).toBeNull();
+        expect(service.getActiveMenuItemIds()).toEqual([]);
         expect(screen.getByRole('button').getAttribute('aria-pressed')).toBe('false');
     });
 
@@ -57,11 +58,11 @@ describe('MenuItem activation', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Second' }));
         expect(firstControls.close).toHaveBeenCalledTimes(1);
         expect(showFlyout).toHaveBeenCalledTimes(2);
-        expect(service.getActiveMenuItemId()).toBe('second');
+        expect(service.getActiveMenuItemIds()).toEqual(['second']);
     });
 
     test('uses the item callback instead of the default flyout', () => {
-        const setActive = jest.fn();
+        const setActive = jest.fn(() => MenuItemActivationResult.OK);
         service.addMenuItem(new MenuItem({ id: 'custom', name: 'Custom', setActive }));
         render(<Navigation />);
         const button = screen.getByRole('button', { name: 'Custom' });
@@ -80,7 +81,7 @@ describe('MenuItem activation', () => {
         const controls = showFlyout.mock.results[0].value;
         act(() => service.removeMenuItem('first'));
         expect(controls.close).toHaveBeenCalledTimes(1);
-        expect(service.getActiveMenuItemId()).toBeNull();
+        expect(service.getActiveMenuItemIds()).toEqual([]);
         expect(screen.queryByRole('button')).toBeNull();
     });
     test('renders badge changes from the service and removes a cleared badge', () => {
@@ -127,7 +128,7 @@ describe('MenuItem activation', () => {
         act(() => service.setActive('first', false));
         act(() => service.setActive('first'));
         act(() => oldClose());
-        expect(service.getActiveMenuItemId()).toBe('first');
+        expect(service.getActiveMenuItemIds()).toEqual(['first']);
         expect(service.getMenuItems()[0].isActive).toBe(true);
     });
 
@@ -141,7 +142,7 @@ describe('MenuItem activation', () => {
         act(() => service.addMenuItem(replacement));
         expect(controls.close).toHaveBeenCalledTimes(1);
         expect(showFlyout).toHaveBeenCalledTimes(2);
-        expect(service.getActiveMenuItemId()).toBe('first');
+        expect(service.getActiveMenuItemIds()).toEqual(['first']);
         act(() => service.addMenuItem(replacement));
         expect(showFlyout).toHaveBeenCalledTimes(2);
         act(() => service.removeMenuItem('first'));
@@ -200,6 +201,7 @@ describe('MenuItem activation', () => {
             setActive (isActive) {
                 this.isActive = isActive;
                 customActive(isActive);
+                return MenuItemActivationResult.OK;
             },
             setBadge (badge) {
                 const nextBadge = badge * 2;
@@ -231,5 +233,27 @@ describe('MenuItem activation', () => {
         expect(screen.getByRole('button', { name: 'Inline' }).querySelector('[count]').getAttribute('count')).toBe('6');
         fireEvent.click(screen.getByRole('button', { name: 'Other' }));
         expect(customActive).toHaveBeenLastCalledWith(false);
+    });
+
+    test('returns enum results for default opening, keep-open and explicit closing', () => {
+        const item = new MenuItem({ id: 'pinned', name: 'Pinned', keepActive: true });
+        expect(item.setActive(true)).toBe(MenuItemActivationResult.OK);
+        expect(item.setActive(false, { switching: true })).toBe(MenuItemActivationResult.KEEP_OPEN);
+        expect(item.isActive).toBe(true);
+        expect(item.setActive(false)).toBe(MenuItemActivationResult.OK);
+        expect(item.isActive).toBe(false);
+    });
+
+    test('returns failed without committing state when default opening or closing throws', () => {
+        const item = new MenuItem({ id: 'first', name: 'First' });
+        showFlyout.mockImplementationOnce(() => { throw new Error('Cannot open'); });
+        expect(item.setActive(true)).toBe(MenuItemActivationResult.FAILED);
+        expect(item.isActive).toBe(false);
+        expect(item.setActive(true)).toBe(MenuItemActivationResult.OK);
+        const controls = item.flyoutControls;
+        controls.close.mockImplementationOnce(() => { throw new Error('Cannot close'); });
+        expect(item.setActive(false)).toBe(MenuItemActivationResult.FAILED);
+        expect(item.isActive).toBe(true);
+        expect(item.flyoutControls).toBe(controls);
     });
 });

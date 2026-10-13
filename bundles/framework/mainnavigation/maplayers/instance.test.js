@@ -1,3 +1,4 @@
+import { MenuItemActivationResult } from '../component/MenuItemActivationResult';
 import { beforeEach } from '@jest/globals';
 import { showFlyout } from 'oskari-ui/components/window';
 import { MapLayersBundleInstance } from './instance';
@@ -76,10 +77,10 @@ describe('MapLayersBundleInstance', () => {
         service.setActive(MENU_ITEM_ID, false);
 
         expect(setActive).toHaveBeenCalledTimes(1);
-        expect(setActive.mock.results[0].value).toBe(true);
+        expect(setActive.mock.results[0].value).toBe(MenuItemActivationResult.OK);
         expect(controls.close).toHaveBeenCalledTimes(1);
         expect(menuItem.flyoutControls).toBeNull();
-        expect(service.getActiveMenuItemId()).toBeNull();
+        expect(service.getActiveMenuItemIds()).toEqual([]);
     });
 
     test('notifies the service when the user closes the active flyout', () => {
@@ -91,7 +92,7 @@ describe('MapLayersBundleInstance', () => {
         expect(setActive).toHaveBeenCalledTimes(1);
         expect(setActive).toHaveBeenCalledWith(MENU_ITEM_ID, false);
         expect(menuItem.flyoutControls).toBeNull();
-        expect(service.getActiveMenuItemId()).toBeNull();
+        expect(service.getActiveMenuItemIds()).toEqual([]);
     });
 
     test('removes the menu item and unregisters all event listeners on stop', () => {
@@ -102,7 +103,7 @@ describe('MapLayersBundleInstance', () => {
 
         expect(controls.close).toHaveBeenCalledTimes(1);
         expect(menuItem.flyoutControls).toBeNull();
-        expect(service.getActiveMenuItemId()).toBeNull();
+        expect(service.getActiveMenuItemIds()).toEqual([]);
 
         expect(service.getMenuItems()).toEqual([]);
         MAP_LAYER_EVENTS.forEach((eventName) => {
