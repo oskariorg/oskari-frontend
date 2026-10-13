@@ -322,4 +322,26 @@ describe('MainNavigationService', () => {
         expect(service.getActiveMenuItems()).toEqual([replacement]);
         expect(service.getActiveMenuItems()).not.toContain(original);
     });
+
+    test('opening a keepActive item leaves other active items untouched', () => {
+        service.addMenuItem(new MenuItem({ id: SECOND_ID, keepActive: true, setActive: secondChanged }));
+        service.setActive(FIRST_ID);
+        firstChanged.mockClear();
+        expect(service.setActive(SECOND_ID)).toBe(MenuItemActivationResult.OK);
+        expect(firstChanged).not.toHaveBeenCalled();
+        expect(service.getActiveMenuItemIds()).toEqual([FIRST_ID, SECOND_ID]);
+        expect(service.setActive(SECOND_ID, false)).toBe(MenuItemActivationResult.OK);
+        expect(firstChanged).not.toHaveBeenCalled();
+        expect(service.getActiveMenuItemIds()).toEqual([FIRST_ID]);
+    });
+
+    test.each([MenuItemActivationResult.FAILED, MenuItemActivationResult.ACTION_REQUIRED])('keeps existing items active when opening a keepActive item returns %s', (result) => {
+        service.addMenuItem(new MenuItem({ id: SECOND_ID, keepActive: true, setActive: secondChanged }));
+        service.setActive(FIRST_ID);
+        firstChanged.mockClear();
+        secondChanged.mockReturnValue(result);
+        expect(service.setActive(SECOND_ID)).toBe(result);
+        expect(firstChanged).not.toHaveBeenCalled();
+        expect(service.getActiveMenuItemIds()).toEqual([FIRST_ID]);
+    });
 });

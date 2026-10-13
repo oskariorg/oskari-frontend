@@ -10,7 +10,7 @@ const DEMO_BUNDLE_IDS = [
     'testbundle2',
     'testbundle3',
     'testbundle4',
-    'testbundle5'
+    'explicit-close-testbundle'
 ];
 
 export class MainNavigationBundleIstance extends BasicBundleInstance {

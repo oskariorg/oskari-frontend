@@ -1,5 +1,5 @@
-import { TestBundle5Instance } from './instance.js';
+import { ExplicitCloseTestBundleInstance } from './instance.js';
 
-const BUNDLE_ID = 'testbundle5';
+const BUNDLE_ID = 'explicit-close-testbundle';
 
-Oskari.bundle(BUNDLE_ID, () => new TestBundle5Instance());
+Oskari.bundle(BUNDLE_ID, () => new ExplicitCloseTestBundleInstance());

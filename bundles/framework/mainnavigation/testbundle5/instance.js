@@ -1,11 +1,12 @@
 import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
 import { MenuItem } from '../component/MenuItem';
 
-const BUNDLE_ID = 'testbundle5';
-const TITLE = 'Test bundle 5';
+const BUNDLE_ID = 'explicit-close-testbundle';
+const TITLE = 'Explicit close';
+const TOOLTIP = 'Stays active until explicitly closed';
 const MAIN_NAVIGATION_SERVICE = 'Oskari.mapframework.bundle.mainnavigation.service.MainNavigationService';
 
-export class TestBundle5Instance extends BasicBundleInstance {
+export class ExplicitCloseTestBundleInstance extends BasicBundleInstance {
     constructor () {
         super(BUNDLE_ID);
         this.menuItemId = `${BUNDLE_ID}-item`;
@@ -23,8 +24,9 @@ export class TestBundle5Instance extends BasicBundleInstance {
         this.mainNavigationService.addMenuItem(new MenuItem({
             id: this.menuItemId,
             name: this.title,
-            tooltip: `${this.title} menu item`,
-            badge: 5
+            tooltip: TOOLTIP,
+            badge: 5,
+            keepActive: true
         }));
     }
 
