@@ -1,10 +1,13 @@
+import { MenuItemActivationResult } from '../component/MenuItemActivationResult';
+
 const MENU_ITEM_METHODS = ['connect', 'render', 'setActive', 'setBadge', 'dispose'];
 
 export class MainNavigationService {
     constructor () {
         this.menuItems = [];
         this.listeners = [];
-        this.activeMenuItemId = null;
+        this.activeMenuItems = [];
+        this.activationInProgress = false;
     }
 
     getQName () {
@@ -21,11 +24,14 @@ export class MainNavigationService {
         const existingItem = this.menuItems[existingIndex];
         const item = menuItem;
         const replacing = existingItem && existingItem !== item;
+        const wasActive = this.activeMenuItems.includes(existingItem);
         if (replacing) {
-            existingItem.setActive(false);
+            if (wasActive && this.setActive(existingItem.id, false) !== MenuItemActivationResult.OK) {
+                return null;
+            }
             existingItem.dispose();
         }
-        item.isActive = menuItem.id === this.activeMenuItemId;
+        item.isActive = this.activeMenuItems.includes(item);
         item.connect(
             () => {
                 if (this.menuItems.includes(item)) {
@@ -43,8 +49,8 @@ export class MainNavigationService {
         } else {
             this.menuItems[existingIndex] = item;
         }
-        if (replacing && item.isActive) {
-            item.setActive(true);
+        if (replacing && wasActive) {
+            this.setActive(item.id, true);
         }
 
         this.notifyListeners();
@@ -52,11 +58,18 @@ export class MainNavigationService {
     }
 
     getMenuItems () {
+        this.menuItems.forEach(item => {
+            item.isActive = this.activeMenuItems.includes(item);
+        });
         return [...this.menuItems];
     }
 
-    getActiveMenuItemId () {
-        return this.activeMenuItemId;
+    getActiveMenuItems () {
+        return [...this.activeMenuItems];
+    }
+
+    getActiveMenuItemIds () {
+        return this.activeMenuItems.map(item => item.id);
     }
 
     setBadge (id, badge) {
@@ -66,38 +79,75 @@ export class MainNavigationService {
 
     setActive (id, isActive = true) {
         const nextItem = this.menuItems.find((item) => item.id === id);
-        if (!nextItem || (!isActive && this.activeMenuItemId !== id)) {
-            return false;
+        if (!nextItem || this.activationInProgress) {
+            return MenuItemActivationResult.FAILED;
         }
+        const wasActive = this.activeMenuItems.includes(nextItem);
+        nextItem.isActive = wasActive;
+        if (wasActive === isActive) {
+            return MenuItemActivationResult.OK;
+        }
+        const previousActiveItems = [...this.activeMenuItems];
+        this.activationInProgress = true;
+        try {
+            if (isActive) {
+                for (const item of [...this.activeMenuItems]) {
+                    if (item === nextItem) {
+                        continue;
+                    }
+                    const result = this.applyActive(item, false, { switching: true });
+                    if (result !== MenuItemActivationResult.OK && result !== MenuItemActivationResult.KEEP_OPEN) {
+                        return result;
+                    }
+                }
+            }
+            return this.applyActive(nextItem, isActive);
+        } finally {
+            this.activationInProgress = false;
+            if (previousActiveItems.length !== this.activeMenuItems.length ||
+                previousActiveItems.some((item, index) => item !== this.activeMenuItems[index])) {
+                this.notifyListeners();
+            }
+        }
+    }
 
-        const nextId = isActive ? id : null;
-        if (this.activeMenuItemId === nextId) {
-            return false;
+    applyActive (item, isActive, context) {
+        const wasActive = this.activeMenuItems.includes(item);
+        item.isActive = wasActive;
+        let result;
+        try {
+            result = context ? item.setActive(isActive, context) : item.setActive(isActive);
+        } catch (error) {
+            result = MenuItemActivationResult.FAILED;
         }
-
-        const previousItem = this.menuItems.find((item) => item.id === this.activeMenuItemId);
-        this.activeMenuItemId = nextId;
-        this.menuItems.forEach((item) => {
-            item.isActive = item.id === nextId;
-        });
-
-        if (typeof previousItem?.setActive === 'function') {
-            previousItem.setActive(false);
+        if (result === MenuItemActivationResult.OK) {
+            if (isActive && !wasActive) {
+                this.activeMenuItems.push(item);
+            } else if (!isActive) {
+                this.activeMenuItems = this.activeMenuItems.filter(activeItem => activeItem !== item);
+            }
+            item.isActive = isActive;
+        } else {
+            item.isActive = wasActive;
+            if (result === MenuItemActivationResult.KEEP_OPEN && (!context?.switching || isActive || !wasActive)) {
+                return MenuItemActivationResult.FAILED;
+            }
         }
-        if (isActive && this.activeMenuItemId === id && typeof nextItem.setActive === 'function') {
-            nextItem.setActive(true);
-        }
-        this.notifyListeners();
-        return true;
+        return Object.values(MenuItemActivationResult).includes(result) ? result : MenuItemActivationResult.FAILED;
     }
 
     removeMenuItem (id) {
-        if (this.activeMenuItemId === id) {
-            this.setActive(id, false);
+        const item = this.menuItems.find(item => item.id === id);
+        if (this.activeMenuItems.includes(item)) {
+            const result = this.setActive(id, false);
+            if (result !== MenuItemActivationResult.OK) {
+                return result;
+            }
         }
         this.menuItems.find((item) => item.id === id)?.dispose();
         this.menuItems = this.menuItems.filter((item) => item.id !== id);
         this.notifyListeners();
+        return MenuItemActivationResult.OK;
     }
 
     addListener (listener) {

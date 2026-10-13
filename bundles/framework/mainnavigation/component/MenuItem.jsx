@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Badge } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
 import { styled } from 'styled-components';
+import { MenuItemActivationResult } from './MenuItemActivationResult';
 
 const ACTIVATION_KEYS = ['Enter', ' '];
 
@@ -95,25 +96,43 @@ export class MenuItem {
         }
     }
 
-    setActive (isActive) {
-        this.isActive = isActive;
+    setActive (isActive, { switching = false } = {}) {
+        if (!isActive && switching && this.options.keepActive && this.isActive) {
+            return MenuItemActivationResult.KEEP_OPEN;
+        }
         if (!isActive) {
             const controls = this.flyoutControls;
             this.flyoutControls = null;
-            controls?.close();
-            return;
+            try {
+                controls?.close();
+            } catch (error) {
+                this.flyoutControls = controls;
+                return MenuItemActivationResult.FAILED;
+            }
+            this.isActive = false;
+            return MenuItemActivationResult.OK;
         }
         if (this.flyoutControls) {
-            return;
+            this.isActive = true;
+            return MenuItemActivationResult.OK;
         }
-        const controls = showFlyout(this.name, `${this.name} flyout`, () => {
-            if (this.flyoutControls !== controls) {
-                return;
+        try {
+            const controls = showFlyout(this.name, `${this.name} flyout`, () => {
+                if (this.flyoutControls !== controls) {
+                    return;
+                }
+                this.flyoutControls = null;
+                this.onClose?.(this.id);
+            });
+            if (!controls) {
+                return MenuItemActivationResult.FAILED;
             }
-            this.flyoutControls = null;
-            this.onClose?.(this.id);
-        });
-        this.flyoutControls = controls;
+            this.flyoutControls = controls;
+            this.isActive = true;
+            return MenuItemActivationResult.OK;
+        } catch (error) {
+            return MenuItemActivationResult.FAILED;
+        }
     }
 
     setBadge (badge) {
