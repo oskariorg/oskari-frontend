@@ -90,7 +90,7 @@ export class MainNavigationService {
         const previousActiveItems = [...this.activeMenuItems];
         this.activationInProgress = true;
         try {
-            if (isActive) {
+            if (isActive && !nextItem.options?.keepActive) {
                 for (const item of [...this.activeMenuItems]) {
                     if (item === nextItem) {
                         continue;
