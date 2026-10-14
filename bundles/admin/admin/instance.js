@@ -31,12 +31,12 @@ export class GenericAdmin extends BasicBundleInstance {
 
     // Called by divmanazer when AddExtensionRequest is processed
     startExtension () {
-        this.locale = Oskari.getLocalization(this.getName());
+        const tileConfig = Oskari.getMsg(this.getName(), 'tile', null, {});
         this.plugins['Oskari.userinterface.Flyout'] = new GenericAdminFlyout(this);
         this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create(
             'Oskari.userinterface.extension.DefaultTile',
             this,
-            this.locale?.tile || {}
+            tileConfig
         );
     }
 
@@ -49,11 +49,11 @@ export class GenericAdmin extends BasicBundleInstance {
     }
 
     getTitle () {
-        return this.locale?.title;
+        return Oskari.getMsg(this.getName(), 'title');
     }
 
     getDescription () {
-        return this.locale?.desc;
+        return Oskari.getMsg(this.getName(), 'desc');
     }
 
     stop () {

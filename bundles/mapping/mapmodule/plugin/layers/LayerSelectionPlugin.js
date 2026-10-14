@@ -87,7 +87,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _initImpl: function () {
             var me = this;
-            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage(), true).plugin.LayerSelectionPlugin;
             me.templates.main = jQuery(
                 '<div class="mapplugin layerselection"></div>');
             this.updateLayers();
@@ -362,7 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 <MapModuleButton
                     className='t_layerselect'
                     icon={<LayersIcon />}
-                    title={this._loc.title}
+                    title={Oskari.getMsg('MapModule', 'plugin.LayerSelectionPlugin.title')}
                     onClick={(e) => this._togglePopup()}
                     iconActive={this.popupControls ? true : false}
                     position={this.getLocation()}

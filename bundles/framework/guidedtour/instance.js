@@ -47,7 +47,10 @@ Oskari.clazz.define(
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this._localization.title;
+            if (this._localization) {
+                return this._localization.title;
+            }
+            return Oskari.getMsg(this.getName(), 'title');
         },
 
         /**
@@ -56,7 +59,10 @@ Oskari.clazz.define(
          * @return {String} localized text for the description of the component
          */
         getDescription: function () {
-            return this._localization.desc;
+            if (this._localization) {
+                return this._localization.desc;
+            }
+            return Oskari.getMsg(this.getName(), 'desc');
         },
 
         /**
@@ -79,9 +85,6 @@ Oskari.clazz.define(
          * BundleInstance protocol method
          */
         start: function () {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
             var state = this.state || {};
             // Check cookie 'pti_tour_seen'. Value '1' means that tour
             // is not to be started

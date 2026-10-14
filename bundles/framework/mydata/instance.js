@@ -203,14 +203,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('title');
+            return Oskari.getMsg(this.getName(), 'title');
         },
         /**
          * @method getDescription
          * @return {String} localized text for the description of the component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return Oskari.getMsg(this.getName(), 'desc');
         },
         /**
          * @method createUi
@@ -235,22 +235,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'MyData']);
             },
             getTitle: function () {
-                return this.getLocalization().guidedTour.title;
+                return Oskari.getMsg(this.getName(), 'guidedTour.title');
             },
             getContent: function () {
                 return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getLinks: function () {
                 var me = this;
-                var loc = this.getLocalization().guidedTour;
                 return [
                     {
-                        title: loc.openLink,
+                        title: Oskari.getMsg(this.getName(), 'guidedTour.openLink'),
                         onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'MyData']),
                         visible: false
                     },
                     {
-                        title: loc.closeLink,
+                        title: Oskari.getMsg(this.getName(), 'guidedTour.closeLink'),
                         onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'MyData']),
                         visible: true
                     }

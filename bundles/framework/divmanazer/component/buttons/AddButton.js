@@ -10,8 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.AddButton',
      *
      */
     function () {
-        var loc = Oskari.getLocalization('DivManazer');
-        this.setTitle(loc ? loc.buttons.add : 'Add');
+        this.setTitle(Oskari.getMsg('DivManazer', 'buttons.add', null, 'Add'));
         this.setPrimary(true);
     },
     {},

@@ -12,7 +12,6 @@ class AnnouncementsTool extends AbstractPublisherTool {
 
         this.sandbox = Oskari.getSandbox();
         this.lang = Oskari.getLang();
-        this.localization = Oskari.getLocalization('admin-announcements');
         this.allowedLocations = ['top left', 'top center', 'top right'];
         this.lefthanded = 'top right';
         this.righthanded = 'top left';
@@ -37,7 +36,7 @@ class AnnouncementsTool extends AbstractPublisherTool {
 
         service.fetchAnnouncements((err, data) => {
             if (err) {
-                Messaging.error(this.localization.messages.getAdminAnnouncementsFailed);
+                Messaging.error(Oskari.getMsg('admin-announcements', 'messages.getAdminAnnouncementsFailed'));
                 return;
             }
             const announcements = data;

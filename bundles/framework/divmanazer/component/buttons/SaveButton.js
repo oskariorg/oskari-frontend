@@ -10,8 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.SaveButton',
      *
      */
     function () {
-        var loc = Oskari.getLocalization('DivManazer');
-        this.setTitle(loc ? loc.buttons.save : 'Save');
+        this.setTitle(Oskari.getMsg('DivManazer', 'buttons.save', null, 'Save'));
     },
     {},
     {
