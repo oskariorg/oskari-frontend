@@ -121,6 +121,7 @@ Oskari.registerLocalization(
                 "fieldType": "Type",
                 "typeHelp": "The type affects how data in the attribute will be dispalyed in the user interface.",
                 "typeHelpNew": "You can add attributes to the dataset only before saving it.",
+                "tableInfoText": "Open the dataset by clicking its name. View the details of an individual feature by clicking the feature on the map.",
                 "errors": {
                     "fieldAlreadyExists": "Field already exists",
                     "isValidJSONKey": "Field contains illegal characters."

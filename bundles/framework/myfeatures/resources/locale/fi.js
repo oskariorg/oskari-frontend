@@ -121,6 +121,7 @@ Oskari.registerLocalization(
                 "fieldType": "Tyyppi",
                 "typeHelp": "Tyyppi vaikuttaa siihen, miten attribuutin arvo esitetään käyttöliittymässä.",
                 "typeHelpNew": "Voit lisätä attribuutteja vain tallentamattomalle aineistolle.",
+                "tableInfoText": "Avaa aineisto klikkaamalla aineiston nimeä. Näet yksittäisen kohteen tiedot klikkaamalla kohdetta kartalla.",
                 "errors": {
                     "fieldAlreadyExists": "Kenttä on jo olemassa",
                     "isValidJSONKey": "Kentän nimi sisältää kiellettyjä merkkejä."

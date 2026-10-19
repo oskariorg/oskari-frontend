@@ -122,6 +122,7 @@ Oskari.registerLocalization(
                 "fieldType": "Typ",
                 "typeHelp": "Typen påverkar hur attribut visas i användargränssnittet.",
                 "typeHelpNew": "Du kan lägga till attribut endast innan du har sparat datamängden.",
+                "tableInfoText": "Öppna datamängden genom att klicka på datamängdens namn. Du ser information om ett enskilt objekt genom att klicka på objektet på kartan.",
                 "errors": {
                     "fieldAlreadyExists": "Attributen finns redan",
                     "isValidJSONKey": "Attributen innehåller ogiltiga tecken"
