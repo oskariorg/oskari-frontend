@@ -9,6 +9,7 @@ import { ButtonContainer } from 'oskari-ui/components/buttons';
 export const MyFeaturesTab = ({ controller, state }) => {
     return (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+            <Message messageKey='featureEditor.featureLayer.tableInfoText'/>
             <ButtonContainer>
                 <Button type='primary' onClick={() => controller.showLayerDialog({ isNew: true})}>
                     <Message messageKey='featureEditor.featureLayer.new'/>
