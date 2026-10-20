@@ -41,6 +41,55 @@ Oskari.registerLocalization({
             },
             emptyText: 'Ingen data.'
         },
+        DateRange: {
+            dayjs: {
+                name: 'sv',
+                weekdays: ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'],
+                weekdaysShort: ['sön', 'mån', 'tis', 'ons', 'tor', 'fre', 'lör'],
+                weekdaysMin: ['sö', 'må', 'ti', 'on', 'to', 'fr', 'lö'],
+                months: ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'],
+                monthsShort: ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+                weekStart: 1,
+                yearStart: 4,
+                formats: {
+                    LT: 'HH:mm',
+                    LTS: 'HH:mm:ss',
+                    L: 'YYYY-MM-DD',
+                    LL: 'D MMMM YYYY',
+                    LLL: 'D MMMM YYYY [kl.] HH:mm',
+                    LLLL: 'dddd D MMMM YYYY [kl.] HH:mm'
+                }
+            },
+            lang: {
+                locale: 'sv_SE',
+                placeholder: 'Välj datum',
+                rangePlaceholder: ['Startdatum', 'Slutdatum'],
+                yearPlaceholder: 'Välj år',
+                quarterPlaceholder: 'Välj kvartal',
+                monthPlaceholder: 'Välj månad',
+                weekPlaceholder: 'Välj vecka',
+                rangeYearPlaceholder: ['Startår', 'Slutår'],
+                rangeQuarterPlaceholder: ['Startkvartal', 'Slutkvartal'],
+                rangeMonthPlaceholder: ['Startmånad', 'Slutmånad'],
+                rangeWeekPlaceholder: ['Startvecka', 'Slutvecka'],
+                today: 'I dag',
+                now: 'Nu',
+                ok: 'OK',
+                clear: 'Rensa',
+                week: 'Vecka',
+                monthSelect: 'Välj månad',
+                yearSelect: 'Välj år',
+                decadeSelect: 'Välj årtionde',
+                previousMonth: 'Förra månaden',
+                nextMonth: 'Nästa månad',
+                previousYear: 'Föregående år',
+                nextYear: 'Nästa år'
+            },
+            timePickerLocale: {
+                placeholder: 'Välj tid',
+                rangePlaceholder: ['Starttid', 'Sluttid']
+            }
+        },
         ColorPicker: {
             tooltip: 'Välj färg',
             moreColors: 'Mera färger'

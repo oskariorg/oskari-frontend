@@ -41,6 +41,55 @@ Oskari.registerLocalization({
             },
             emptyText: 'Ei tietoja.'
         },
+        DateRange: {
+            dayjs: {
+                name: 'fi',
+                weekdays: ['sunnuntai', 'maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai'],
+                weekdaysShort: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
+                weekdaysMin: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
+                months: ['tammikuu', 'helmikuu', 'maaliskuu', 'huhtikuu', 'toukokuu', 'kesäkuu', 'heinäkuu', 'elokuu', 'syyskuu', 'lokakuu', 'marraskuu', 'joulukuu'],
+                monthsShort: ['tammi', 'helmi', 'maalis', 'huhti', 'touko', 'kesä', 'heinä', 'elo', 'syys', 'loka', 'marras', 'joulu'],
+                weekStart: 1,
+                yearStart: 4,
+                formats: {
+                    LT: 'HH.mm',
+                    LTS: 'HH.mm.ss',
+                    L: 'DD.MM.YYYY',
+                    LL: 'D. MMMM[ta] YYYY',
+                    LLL: 'D. MMMM[ta] YYYY, [klo] HH.mm',
+                    LLLL: 'dddd, D. MMMM[ta] YYYY, [klo] HH.mm'
+                }
+            },
+            lang: {
+                locale: 'fi_FI',
+                placeholder: 'Valitse päivä',
+                rangePlaceholder: ['Alkamispäivä', 'Päättymispäivä'],
+                yearPlaceholder: 'Valitse vuosi',
+                quarterPlaceholder: 'Valitse vuosineljännes',
+                monthPlaceholder: 'Valitse kuukausi',
+                weekPlaceholder: 'Valitse viikko',
+                rangeYearPlaceholder: ['Alkuvuosi', 'Loppuvuosi'],
+                rangeQuarterPlaceholder: ['Alkuvuosineljännes', 'Loppuvuosineljännes'],
+                rangeMonthPlaceholder: ['Alkukuukausi', 'Loppukuukausi'],
+                rangeWeekPlaceholder: ['Alkuviikko', 'Loppuviikko'],
+                today: 'Tänään',
+                now: 'Nyt',
+                ok: 'OK',
+                clear: 'Tyhjennä',
+                week: 'Viikko',
+                monthSelect: 'Valitse kuukausi',
+                yearSelect: 'Valitse vuosi',
+                decadeSelect: 'Valitse vuosikymmen',
+                previousMonth: 'Edellinen kuukausi',
+                nextMonth: 'Seuraava kuukausi',
+                previousYear: 'Edellinen vuosi',
+                nextYear: 'Seuraava vuosi'
+            },
+            timePickerLocale: {
+                placeholder: 'Valitse aika',
+                rangePlaceholder: ['Alkuaika', 'Loppuaika']
+            }
+        },
         ColorPicker: {
             tooltip: 'Valitse väri',
             moreColors: 'Enemmän värejä'

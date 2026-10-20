@@ -41,6 +41,55 @@ Oskari.registerLocalization({
             },
             emptyText: 'No data.'
         },
+        DateRange: {
+            dayjs: {
+                name: 'en',
+                weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                weekdaysMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                weekStart: 0,
+                yearStart: 1,
+                formats: {
+                    LT: 'h:mm A',
+                    LTS: 'h:mm:ss A',
+                    L: 'MM/DD/YYYY',
+                    LL: 'MMMM D, YYYY',
+                    LLL: 'MMMM D, YYYY h:mm A',
+                    LLLL: 'dddd, MMMM D, YYYY h:mm A'
+                }
+            },
+            lang: {
+                locale: 'en_US',
+                placeholder: 'Select date',
+                rangePlaceholder: ['Start date', 'End date'],
+                yearPlaceholder: 'Select year',
+                quarterPlaceholder: 'Select quarter',
+                monthPlaceholder: 'Select month',
+                weekPlaceholder: 'Select week',
+                rangeYearPlaceholder: ['Start year', 'End year'],
+                rangeQuarterPlaceholder: ['Start quarter', 'End quarter'],
+                rangeMonthPlaceholder: ['Start month', 'End month'],
+                rangeWeekPlaceholder: ['Start week', 'End week'],
+                today: 'Today',
+                now: 'Now',
+                ok: 'OK',
+                clear: 'Clear',
+                week: 'Week',
+                monthSelect: 'Choose a month',
+                yearSelect: 'Choose a year',
+                decadeSelect: 'Choose a decade',
+                previousMonth: 'Previous month',
+                nextMonth: 'Next month',
+                previousYear: 'Previous year',
+                nextYear: 'Next year'
+            },
+            timePickerLocale: {
+                placeholder: 'Select time',
+                rangePlaceholder: ['Start time', 'End time']
+            }
+        },
         ColorPicker: {
             tooltip: 'Choose color',
             moreColors: 'More colors'
