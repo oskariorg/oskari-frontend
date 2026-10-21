@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message } from 'oskari-ui';
+import { styled } from 'styled-components';
+import { Message, Switch } from 'oskari-ui';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
 import { DownloadOutlined, EditOutlined, TableOutlined } from '@ant-design/icons';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
@@ -10,6 +11,11 @@ const ICON_STYLE = {
     fontSize: '16px'
 };
 
+const LayerName = styled('div')`
+    display: inline-block;
+    padding-left: 0.5em;
+`;
+
 // const FEATUREDATA_HANDLER_NAME = 'ShowFeatureDataRequest';
 function isFeatureDataAvailable() {
     // hide tool for now
@@ -17,7 +23,7 @@ function isFeatureDataAvailable() {
 //    return Oskari.getSandbox().hasHandler(FEATUREDATA_HANDLER_NAME);
 }
 
-export const MyFeaturesList = ({ data = [], controller, loading }) => {
+export const MyFeaturesList = ({ data = [], selectedLayerIds = [], controller, loading }) => {
     const columnSettings = [
         {
             align: 'left',
@@ -26,9 +32,17 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
             sorter: getSorterFor('name'),
             defaultSortOrder: 'ascend',
             render: (title, item) => {
-                return (
-                    <a onClick={() => controller.addLayerToMap(item.key)}>{title}</a>
-                );
+                return <>
+                    <Switch
+                        size='small'
+                        aria-label={title}
+                        checked={selectedLayerIds.some(id => String(id) === String(item.key))}
+                        onChange={checked => checked
+                            ? controller.addLayerToMap(item.key)
+                            : controller.removeLayerFromMap(item.key)}
+                    />
+                    <LayerName>{title}</LayerName>
+                </>;
             }
         },
         {
@@ -109,6 +123,7 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
 
 MyFeaturesList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
+    selectedLayerIds: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     controller: PropTypes.object.isRequired,
     loading: PropTypes.bool
 };
