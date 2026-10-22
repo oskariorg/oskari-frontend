@@ -59,7 +59,9 @@ Oskari.registerLocalization(
             "title": "Aineistot",
             "editLayer": "Muokkaa aineistoa",
             "deleteLayer": "Poista aineisto",
-            "grid": {
+            "grid": {                "removeFromMap": "Poista kartalta",
+                "focusLayer": "Keskitä kohteisiin",
+                "addAndFocusLayer": "Lisää kartalle ja keskitä kohteisiin",
                 "name": "Nimi",
                 "desc": "Kuvaus",
                 "source": "Tietolähde",
