@@ -5,13 +5,13 @@ import { Message, Switch } from 'oskari-ui';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
 import { DownloadOutlined, EditOutlined, TableOutlined } from '@ant-design/icons';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
-import { FEATURE_EDITOR_TOOLNAME } from './constants';
+import { BUNDLE_KEY, FEATURE_EDITOR_TOOLNAME } from './constants';
 
 const ICON_STYLE = {
     fontSize: '16px'
 };
 
-const LayerName = styled('div')`
+const LayerName = styled('a')`
     display: inline-block;
     padding-left: 0.5em;
 `;
@@ -32,16 +32,21 @@ export const MyFeaturesList = ({ data = [], selectedLayerIds = [], controller, l
             sorter: getSorterFor('name'),
             defaultSortOrder: 'ascend',
             render: (title, item) => {
+                const isSelected = selectedLayerIds.some(id => String(id) === String(item.key));
                 return <>
                     <Switch
                         size='small'
                         aria-label={title}
-                        checked={selectedLayerIds.some(id => String(id) === String(item.key))}
+                        title={Oskari.getMsg(BUNDLE_KEY, isSelected ? 'tab.grid.removeFromMap' : 'tab.grid.addAndFocusLayer')}
+                        checked={isSelected}
                         onChange={checked => checked
                             ? controller.addLayerToMap(item.key)
                             : controller.removeLayerFromMap(item.key)}
                     />
-                    <LayerName>{title}</LayerName>
+                    <LayerName
+                        title={Oskari.getMsg(BUNDLE_KEY, isSelected ? 'tab.grid.focusLayer' : 'tab.grid.addAndFocusLayer')}
+                        onClick={() => controller.focusLayer(item.key)}
+                    >{title}</LayerName>
                 </>;
             }
         },

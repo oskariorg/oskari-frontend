@@ -138,6 +138,14 @@ class MyFeaturesHandler extends StateHandler {
         this.sandbox.request(this.instance, addMlRequest);
     }
 
+    focusLayer (id) {
+        if (!this.sandbox.isLayerAlreadySelected(id)) {
+            this.addLayerToMap(id);
+            return;
+        }
+        this.sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [id, true]);
+    }
+
     removeLayerFromMap (id) {
         this.sandbox.postRequestByName('RemoveMapLayerRequest', [id]);
     }
@@ -477,6 +485,7 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'deleteLayer',
     'exportLayer',
     'addLayerToMap',
+    'focusLayer',
     'removeLayerFromMap',
     'showLayerDialog',
     'showFeatureEditorDialog',

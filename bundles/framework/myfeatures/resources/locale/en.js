@@ -60,7 +60,9 @@ Oskari.registerLocalization(
             "title": "Datasets",
             "editLayer": "Edit dataset",
             "deleteLayer": "Delete dataset",
-            "grid": {
+            "grid": {                "removeFromMap": "Remove from map",
+                "focusLayer": "Center on features",
+                "addAndFocusLayer": "Add to map and center on features",
                 "name": "Name",
                 "desc": "Description",
                 "source": "Data source",
