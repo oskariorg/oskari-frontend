@@ -1,7 +1,6 @@
 import { StateHandler } from 'oskari-ui/util';
 
-const MYFEATURES_TAB_ID = 'myfeatures';
-const STATIC_TAB_IDS = ['account', 'myviews', 'publishedmaps'];
+const UNSORTED = Number.MAX_SAFE_INTEGER;
 
 class UIHandler extends StateHandler {
     constructor (consumer) {
@@ -14,20 +13,19 @@ class UIHandler extends StateHandler {
     }
 
     addTab (id, title, component, handler) {
-        const tabs = [...this.state.tabs];
-        const tab = {
-            id,
-            title,
-            component,
-            handler
-        };
-        if (id === MYFEATURES_TAB_ID) {
-            // myfeatures goes right after the static tabs, others are appended in the order they are added
-            const staticCount = tabs.filter((existing) => STATIC_TAB_IDS.includes(existing.id)).length;
-            tabs.splice(staticCount, 0, tab);
-        } else {
-            tabs.push(tab);
-        }
+        // tab component may declare static tabSortOrder, tabs without it go last
+        const sortOrder = component.tabSortOrder ?? UNSORTED;
+        const tabs = [
+            ...this.state.tabs,
+            {
+                id,
+                title,
+                component,
+                handler,
+                sortOrder
+            }
+        ];
+        tabs.sort((a, b) => a.sortOrder - b.sortOrder);
         this.updateState({
             tabs
         });

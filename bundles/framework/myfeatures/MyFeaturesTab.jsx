@@ -25,6 +25,8 @@ export const MyFeaturesTab = ({ controller, state }) => {
     );
 };
 
+MyFeaturesTab.tabSortOrder = 40;
+
 MyFeaturesTab.propTypes = {
     controller: PropTypes.object.isRequired,
     state: PropTypes.object.isRequired

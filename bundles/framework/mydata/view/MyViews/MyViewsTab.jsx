@@ -28,6 +28,8 @@ export const MyViewsTab = ({ controller, state }) => {
     )
 };
 
+MyViewsTab.tabSortOrder = 20;
+
 MyViewsTab.propTypes = {
     controller: PropTypes.object.isRequired,
     state: PropTypes.object.isRequired
