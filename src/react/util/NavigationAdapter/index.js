@@ -1,0 +1,1 @@
+export { NavigationAdapter } from './NavigationAdapter';

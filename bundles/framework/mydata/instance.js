@@ -3,12 +3,20 @@ import './Flyout';
 import './service/ViewService';
 import React from 'react';
 import { Message } from 'oskari-ui';
-import { MenuItem } from '../mainnavigation/component/MenuItem';
-import { MenuItemActivationResult } from '../mainnavigation/component/MenuItemActivationResult';
+import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
+import { showFlyout } from 'oskari-ui/components/window';
+import { styled } from 'styled-components';
 
-const MAIN_NAVIGATION_SERVICE = 'Oskari.mapframework.bundle.mainnavigation.service.MainNavigationService';
 const MENU_ITEM_ID = 'mydata-item';
+const FLYOUT_PLUGIN = 'Oskari.userinterface.Flyout';
 const UPDATE_EXTENSION_REQUEST = 'userinterface.UpdateExtensionRequest';
+const ATTACH = 'attach';
+const CLOSE = 'close';
+const FLYOUT_ID = 'MyData';
+const FlyoutPadding = styled('div')`
+    margin: 0;
+    padding: 1.5em 1.5em 1.5em 1.75em;
+`;
 
 /**
  * @class Oskari.mapframework.bundle.mydata.MyDataBundleInstance
@@ -30,7 +38,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         this.started = false;
         this.plugins = {};
         this.viewService = null;
-        this.mainNavigationService = null;
+        this.mainNavigationControls = null;
+        this.navigation = new NavigationAdapter(this, {
+            createMenuItem: (navigation) => this.createMenuItem(navigation),
+            onStart: () => {
+                this.startExtension();
+                this.plugins[FLYOUT_PLUGIN].startPlugin();
+            },
+            onStop: () => {
+                this.closeMainNavigationFlyout();
+                this.plugins[FLYOUT_PLUGIN].stopPlugin();
+                this.stopExtension();
+            }
+        });
     }, {
         /**
          * @static
@@ -115,16 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
             }
 
             // Let's extend UI
-            this.mainNavigationService = sandbox.getService(MAIN_NAVIGATION_SERVICE);
-            if (this.mainNavigationService) {
-                // no divmanazer extension: flyout is opened from the main navigation menu item
-                this.startExtension();
-                this.plugins['Oskari.userinterface.Flyout'].startPlugin();
-                this.addMenuItem();
-            } else {
-                const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
-                sandbox.request(this, request);
-            }
+            this.navigation.start();
 
             // draw ui
             me.createUi();
@@ -177,63 +188,78 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
                 }
             }
 
-            if (this.mainNavigationService) {
-                this.mainNavigationService.removeMenuItem(MENU_ITEM_ID);
-                this.mainNavigationService = null;
-                this.stopExtension();
-            } else {
-                const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
-                sandbox.request(this, request);
-            }
+            this.navigation.stop();
 
             this.sandbox.unregister(this);
             this.started = false;
         },
-        /**
-         * @method getMainNavigationService
-         * @return {Object} main navigation service or null if main navigation is not in use
-         */
         getMainNavigationService: function () {
-            return this.mainNavigationService;
+            return this.navigation.service;
         },
-        addMenuItem: function () {
-            const flyout = this.plugins['Oskari.userinterface.Flyout'];
+        createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const menuItem = new MenuItem({
                 id: MENU_ITEM_ID,
                 name: this.getTitle(),
                 tooltip: this.getDescription(),
                 setActive: (isActive) => {
                     if (isActive) {
-                        flyout.openFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
-                    } else {
-                        flyout.closeFlyout();
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                        return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
                     }
+                    this.closeMainNavigationFlyout();
                     return MenuItemActivationResult.OK;
                 }
             });
-            this.mainNavigationService.addMenuItem(menuItem);
+            return menuItem;
         },
-        /**
-         * @method openFlyout
-         * Opens the personal data flyout using main navigation or divmanazer
-         */
+        showMainNavigationFlyout: function (onClose) {
+            if (this.mainNavigationControls) {
+                return true;
+            }
+            const controls = showFlyout(this.plugins[FLYOUT_PLUGIN].getTitle(), this.getPaddedFlyoutContent(), () => {
+                if (this.mainNavigationControls !== controls) {
+                    return;
+                }
+                this.mainNavigationControls = null;
+                onClose();
+            }, { id: FLYOUT_ID });
+            if (!controls) {
+                return false;
+            }
+            this.mainNavigationControls = controls;
+            return true;
+        },
+        closeMainNavigationFlyout: function () {
+            const controls = this.mainNavigationControls;
+            this.mainNavigationControls = null;
+            try {
+                controls?.close();
+            } catch (error) {
+                this.mainNavigationControls = controls;
+                throw error;
+            }
+        },
+        // Divmanazer supplies its own padding; the modern window needs a wrapper.
+        getPaddedFlyoutContent: function () {
+            return <FlyoutPadding>{this.plugins[FLYOUT_PLUGIN].getContent()}</FlyoutPadding>;
+        },
+        updateMainNavigationFlyout: function () {
+            this.mainNavigationControls?.update(this.plugins[FLYOUT_PLUGIN].getTitle(), this.getPaddedFlyoutContent());
+        },
+        /** Opens the personal data flyout in the configured navigation. */
         openFlyout: function () {
-            if (this.mainNavigationService) {
-                this.mainNavigationService.setActive(MENU_ITEM_ID, true);
-                return;
+            const service = this.getMainNavigationService();
+            if (service) {
+                return service.setActive(MENU_ITEM_ID, true);
             }
-            this.sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [this, 'attach']);
+            this.sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [this, ATTACH]);
         },
-        /**
-         * @method closeFlyout
-         * Closes the personal data flyout using main navigation or divmanazer
-         */
         closeFlyout: function () {
-            if (this.mainNavigationService) {
-                this.mainNavigationService.setActive(MENU_ITEM_ID, false);
-                return;
+            const service = this.getMainNavigationService();
+            if (service) {
+                return service.setActive(MENU_ITEM_ID, false);
             }
-            this.sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [this, 'close']);
+            this.sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [this, CLOSE]);
         },
         /**
          * @method startExtension
