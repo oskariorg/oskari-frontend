@@ -12,6 +12,8 @@ export const UserStylesTab = ({ state, controller }) => {
     );
 };
 
+UserStylesTab.tabSortOrder = 50;
+
 UserStylesTab.propTypes = {
     state: PropTypes.object.isRequired,
     controller: PropTypes.object.isRequired
