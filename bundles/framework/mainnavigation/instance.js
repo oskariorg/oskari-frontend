@@ -4,6 +4,13 @@ import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
 import { ThemeProvider } from 'oskari-ui/util';
 import { MainNavigationService } from './service/MainNavigationService';
 
+const MAIN_NAVIGATION_SERVICE = 'Oskari.mapframework.bundle.mainnavigation.service.MainNavigationService';
+const EXTENSION_UPDATED_EVENT = 'userinterface.ExtensionUpdatedEvent';
+const DIVMANAZER_MODULE = 'userinterface.DivManazer';
+const UPDATE_EXTENSION_REQUEST = 'userinterface.UpdateExtensionRequest';
+const ATTACHED_EXTENSION_STATES = ['attach', 'hide'];
+const ATTACH = 'attach';
+const CLOSE = 'close';
 const DEMO_BUNDLE_IDS = [
     'mainnavigation-testbundle',
     'maplayers',
@@ -24,6 +31,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.container = null;
         this.root = null;
         this.mainNavigationService = null;
+        this.activeMenuItemIds = new Set();
         this.onMenuItemActiveChange = (id, isActive) => this.mainNavigationService.setActive(id, isActive);
     }
 
@@ -31,8 +39,9 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         // registers to sandbox and saves the sandbox for getSandbox()
         super.start(sandbox);
         sandbox.registerService(new MainNavigationService());
-        this.mainNavigationService = sandbox.getService('Oskari.mapframework.bundle.mainnavigation.service.MainNavigationService');
+        this.mainNavigationService = sandbox.getService(MAIN_NAVIGATION_SERVICE);
         this.mainNavigationService.addListener(this);
+        this.on(EXTENSION_UPDATED_EVENT, this.handleExtensionUpdated.bind(this));
         this.attachToExistingDom();
         this.render();
         DEMO_BUNDLE_IDS.forEach((bundlename) => {
@@ -40,6 +49,12 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
                 bundlename
             }, {});
         });
+    }
+
+    handleExtensionUpdated (event) {
+        if (event.getViewState() === ATTACH) {
+            this.mainNavigationService.deactivateForSwitch();
+        }
     }
 
     getTargetParent (parentSelector = this.parentSelector) {
@@ -117,7 +132,24 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
     }
 
     handleMenuItemsChanged () {
+        const activeIds = this.mainNavigationService.getActiveMenuItemIds();
+        const activated = activeIds.some(id => !this.activeMenuItemIds.has(id));
+        this.activeMenuItemIds = new Set(activeIds);
+        if (activated) {
+            this.closeAttachedExtensions();
+        }
         this.render();
+    }
+
+    closeAttachedExtensions () {
+        const sandbox = this.getSandbox();
+        const divmanazer = sandbox.findRegisteredModuleInstance(DIVMANAZER_MODULE);
+        const states = divmanazer?.getState().extensionStatesByName || {};
+        Object.entries(states).forEach(([name, { state }]) => {
+            if (ATTACHED_EXTENSION_STATES.includes(state)) {
+                sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [null, CLOSE, name]);
+            }
+        });
     }
 
     getContainer () {
@@ -128,6 +160,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
     }
 
     stop () {
+        this.off(EXTENSION_UPDATED_EVENT);
         this.mainNavigationService.removeListener(this);
         this.mainNavigationService.getMenuItems().forEach((item) => this.mainNavigationService.removeMenuItem(item.id));
         if (this.root) {
@@ -140,6 +173,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.container = null;
         this.getSandbox().unregisterService(this.mainNavigationService.getQName());
         this.mainNavigationService = null;
+        this.activeMenuItemIds.clear();
         super.stop();
     }
 }

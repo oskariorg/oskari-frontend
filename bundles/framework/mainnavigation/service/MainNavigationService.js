@@ -111,6 +111,30 @@ export class MainNavigationService {
         }
     }
 
+    /** Switching to a legacy tile uses the same close policy as switching menu items. */
+    deactivateForSwitch () {
+        if (this.activationInProgress) {
+            return MenuItemActivationResult.FAILED;
+        }
+        const previousActiveItems = [...this.activeMenuItems];
+        this.activationInProgress = true;
+        try {
+            for (const item of [...this.activeMenuItems]) {
+                const result = this.applyActive(item, false, { switching: true });
+                if (result !== MenuItemActivationResult.OK && result !== MenuItemActivationResult.KEEP_OPEN) {
+                    return result;
+                }
+            }
+            return MenuItemActivationResult.OK;
+        } finally {
+            this.activationInProgress = false;
+            if (previousActiveItems.length !== this.activeMenuItems.length ||
+                previousActiveItems.some((item, index) => item !== this.activeMenuItems[index])) {
+                this.notifyListeners();
+            }
+        }
+    }
+
     applyActive (item, isActive, context) {
         const wasActive = this.activeMenuItems.includes(item);
         item.isActive = wasActive;
