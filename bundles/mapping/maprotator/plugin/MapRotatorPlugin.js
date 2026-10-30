@@ -88,7 +88,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this.addToPluginContainer(this._element);
         },
         _createControlElement: function () {
-            this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
             return this._templates.maprotatortool.clone();
         },
         refresh: function () {
@@ -104,7 +103,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                 <MapModuleButton
                     className='t_maprotator'
                     visible={this.hasUI()}
-                    title={this._locale.tooltip.tool}
+                    title={Oskari.getMsg('maprotator', 'display.tooltip.tool')}
                     icon={<StyledIcon degrees={degrees || 0}><NorthIcon /></StyledIcon>}
                     onClick={() => this.setRotation(0)}
                     iconActive={degrees !== 0}

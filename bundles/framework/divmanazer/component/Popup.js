@@ -1,3 +1,5 @@
+const UI_BUNDLE_KEY = 'oskariui';
+
 /**
  * @class Oskari.userinterface.component.Popup
  * Provides a popup window to replace alert
@@ -218,15 +220,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          */
         createCloseButton: function (label) {
             const okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
-            label = label || Oskari.getMsg('DivManazer', 'buttons.close');
+            label = label || Oskari.getMsg(UI_BUNDLE_KEY, 'buttons.close');
             okBtn.setTitle(label);
             okBtn.setHandler(() => this.close(true));
             return okBtn;
         },
         createConfirmButtons: function (callback) {
-            const cancelBtn = this.createCloseButton(Oskari.getMsg('DivManazer', 'buttons.no'));
+            const cancelBtn = this.createCloseButton(Oskari.getMsg(UI_BUNDLE_KEY, 'buttons.no'));
             const okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(Oskari.getMsg('DivManazer', 'buttons.yes'));
+            okBtn.setTitle(Oskari.getMsg(UI_BUNDLE_KEY, 'buttons.yes'));
             okBtn.setPrimary(true);
             if (typeof callback === 'function') {
                 okBtn.setHandler(() => {

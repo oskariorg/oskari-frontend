@@ -32,7 +32,7 @@ Oskari.clazz.define(
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
-        this.localization = null;
+        this._localization = null;
         this.service = null;
         this.tabPriority = 1.0;
         this.disableDefault = false;
@@ -88,7 +88,7 @@ Oskari.clazz.define(
             if (key && this._localization[key]) {
                 return this._localization[key];
             }
-            if (!this.localization) {
+            if (!this._localization) {
                 return {};
             }
             return this._localization;
@@ -112,8 +112,6 @@ Oskari.clazz.define(
                 sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
-
-            this.localization = Oskari.getLocalization(this.getName());
 
             // Default tab priority
             if (this.conf && typeof this.conf.priority === 'number') {
@@ -296,7 +294,7 @@ Oskari.clazz.define(
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('title');
+            return Oskari.getMsg(this.getName(), 'title');
         },
 
         /**
@@ -305,7 +303,7 @@ Oskari.clazz.define(
          * component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return Oskari.getMsg(this.getName(), 'desc');
         },
 
         /**
@@ -348,22 +346,21 @@ Oskari.clazz.define(
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Search']);
             },
             getTitle: function () {
-                return this.localization.guidedTour.title;
+                return Oskari.getMsg(this.getName(), 'guidedTour.title');
             },
             getContent: function () {
                 return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getLinks: function () {
                 var me = this;
-                var loc = this.localization.guidedTour;
                 return [
                     {
-                        title: loc.openLink,
+                        title: Oskari.getMsg(this.getName(), 'guidedTour.openLink'),
                         onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Search']),
                         visible: false
                     },
                     {
-                        title: loc.closeLink,
+                        title: Oskari.getMsg(this.getName(), 'guidedTour.closeLink'),
                         onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Search']),
                         visible: true
                     }

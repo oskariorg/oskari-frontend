@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
          * @return {String} Localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('title');
+            return Oskari.getMsg(this.getName(), 'title');
         },
 
         /**
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
          * @return {String} Localized text for the description of the component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return Oskari.getMsg(this.getName(), 'desc');
         },
 
         /**
@@ -170,19 +170,19 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
                 }
             }
 
-            locFlyout = me.getLocalization('flyout');
+            locFlyout = Oskari.getMsg(me.getName(), 'flyout', null, null);
             if (locFlyout && me.conf.flyoutClazz) {
                 me.plugins['Oskari.userinterface.Flyout'] =
                     Oskari.clazz.create(me.conf.flyoutClazz, me, locFlyout);
             }
 
-            locTile = me.getLocalization('tile');
+            locTile = Oskari.getMsg(me.getName(), 'tile', null, null);
             if (locTile && me.conf.tileClazz) {
                 me.plugins['Oskari.userinterface.Tile'] =
                     Oskari.clazz.create(me.conf.tileClazz, me, locTile);
             }
 
-            locView = me.getLocalization('view');
+            locView = Oskari.getMsg(me.getName(), 'view', null, null);
             if (locView && me.conf.viewClazz) {
                 me.plugins['Oskari.userinterface.View'] =
                     Oskari.clazz.create(me.conf.viewClazz, me, locView);

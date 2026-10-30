@@ -13,6 +13,7 @@ Oskari.registerLocalization({
             import: 'Tuo',
             yes: 'Kyllä',
             no: 'Ei',
+            ok: 'OK',
             next: 'Seuraava',
             previous: 'Edellinen',
             print: 'Tulosta',

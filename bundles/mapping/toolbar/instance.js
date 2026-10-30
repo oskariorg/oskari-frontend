@@ -336,7 +336,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                     return;
                 }
                 me.currentMeasureTool = event.getToolId();
-                var msg = me.getLocalization('measure').guidance[event.getToolId()];
+                var msg = Oskari.getMsg(me.getName(), 'measure.guidance.' + event.getToolId(), null, '');
                 sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || '', false, null, null));
             },
             'UIChangeEvent': function (evt) {
@@ -556,7 +556,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
         __guidedTourDelegateTemplate: {
             priority: 80,
             getTitle: function () {
-                return this.getLocalization().guidedTour.title;
+                return Oskari.getMsg(this.getName(), 'guidedTour.title');
             },
             getContent: function () {
                 return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;

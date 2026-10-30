@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
                 this.plugin.handler.showPopup();
             },
             getTitle: function () {
-                return this.getLocalization().guidedTour.title;
+                return Oskari.getMsg(this.getName(), 'guidedTour.title');
             },
             getContent: function () {
                 return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
@@ -160,10 +160,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             },
             positionAlign: 'left',
             getLinks: function () {
-                var loc = this.getLocalization().guidedTour;
                 return [
                     {
-                        title: loc.openLink,
+                        title: Oskari.getMsg(this.getName(), 'guidedTour.openLink'),
                         onClick: () => {
                             if (!this.plugin.popupOpen) {
                                 this.plugin.handler.showPopup();
@@ -172,7 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
                         visible: false
                     },
                     {
-                        title: loc.closeLink,
+                        title: Oskari.getMsg(this.getName(), 'guidedTour.closeLink'),
                         onClick: () => {
                             if (this.plugin.popupOpen) {
                                 this.plugin.handler.showPopup();
