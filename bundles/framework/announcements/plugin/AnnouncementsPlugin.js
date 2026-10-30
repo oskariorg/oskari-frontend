@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 '       </label>' +
                 '       <div class="announcement-content">' +
                 '           <div class="announcement-description"></div>' +
-                '           <h4>' + Oskari.getMsg(BUNDLE_KEY, 'plugin.valid') + 'jööti' + ':</h4>' +
+                '           <h4>' + Oskari.getMsg(BUNDLE_KEY, 'plugin.valid') + ':</h4>' +
                 '           <div class="announcement-time"></div>' +
                 '       </div>' +
                 '   </div>' +
@@ -157,7 +157,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 return null;
             }
 
-            header.append(Oskari.getMsg(BUNDLE_KEY, 'plugin.title') + 'jööti');
+            header.append(Oskari.getMsg(BUNDLE_KEY, 'plugin.title'));
             me._bindHeader(header);
             return el;
         },
