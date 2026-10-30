@@ -61,7 +61,8 @@ Oskari.registerLocalization(
             "title": "Datamängder",
             "editLayer": "Redigera datamängden",
             "deleteLayer": "Ta bort datamängden",
-            "grid": {                "removeFromMap": "Ta bort från kartan",
+            "grid": {
+                "removeFromMap": "Ta bort från kartan",
                 "focusLayer": "Centrera på objekten",
                 "addAndFocusLayer": "Lägg till på kartan och centrera på objekten",
                 "name": "Namn",
