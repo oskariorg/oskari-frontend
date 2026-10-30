@@ -203,7 +203,7 @@ Oskari.clazz.define(
         __setupAvailableEvents: function (allowedEvents) {
             var available = [];
             for (var i = 0; i < allowedEvents.length; ++i) {
-                if (typeof Oskari.eventBuilder(allowedEvents[i]) === 'function') {
+                if (typeof Oskari.eventBuilder(allowedEvents[i], true) === 'function') {
                     available.push(allowedEvents[i]);
                 }
             }
@@ -212,10 +212,11 @@ Oskari.clazz.define(
         __setupAvailableRequests: function (allowedRequests) {
             var available = [];
             for (var i = 0; i < allowedRequests.length; ++i) {
-                if (typeof Oskari.requestBuilder(allowedRequests[i]) === 'function') {
+                if (typeof Oskari.requestBuilder(allowedRequests[i], true) === 'function') {
                     available.push(allowedRequests[i]);
                 }
             }
+            Oskari.log('RPC').warn('Following requests are not available with current configuration: ', allowedRequests.filter(req => !available.includes(req)).join(', '));
             this._allowedRequests = arrayToObject(available);
         },
 

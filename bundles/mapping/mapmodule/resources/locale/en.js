@@ -102,7 +102,7 @@ Oskari.registerLocalization(
             },
             "MarkersPlugin": {
                 "title": "Map Marker",
-                "tooltip": "Add map marker",
+                "tooltip": "Map marker",
                 "form": {
                     "style": "Map Marker Style",
                     "message": {

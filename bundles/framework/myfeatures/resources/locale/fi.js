@@ -56,10 +56,13 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Aineistot (Beta)",
-            "editLayer": "Muokkaa karttatasoa",
-            "deleteLayer": "Poista karttataso",
+            "title": "Aineistot",
+            "editLayer": "Muokkaa aineistoa",
+            "deleteLayer": "Poista aineisto",
             "grid": {
+                "removeFromMap": "Poista kartalta",
+                "focusLayer": "Keskitä kohteisiin",
+                "addAndFocusLayer": "Lisää kartalle ja keskitä kohteisiin",
                 "name": "Nimi",
                 "desc": "Kuvaus",
                 "source": "Tietolähde",
@@ -69,10 +72,11 @@ Oskari.registerLocalization(
                 "removeButton": "Poista",
                 "actions": "Toiminnot",
                 "createDate": "Luontiaika",
-                "contentEditor": "Muokkaa"
+                "contentEditor": "Muokkaa",
+                "featuredata": "Avaa kohdetiedot"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston \"{name}\"?",
-            "downloadTooltip": "Lataa aineisto",
+            "downloadTooltip": "Lataa aineisto omalle koneellesi GeoJSON-formaatissa.",
             "confirmDeleteFieldMsg": "Haluatko poistaa kentän \"{name}\"?",
             "buttons": {
                 "ok": "OK",
@@ -98,9 +102,11 @@ Oskari.registerLocalization(
             }
         },
         "featureEditor": {
-            "title": "Sisältöeditori",
+            "title": "Yksittäisen kohteen tiedot",
+            "titleNew": "Lisää uusi kohde",
             "addFeatureTool": "Lisää kohde",
             "deleteFeatureTool": "Poista kohde",
+            "featureToolTooltip": "Muokkaa kohdetta",
             "confirmDelete": "Haluatko varmasti poistaa kohteen?",
             "featureUpdate": {
                 "header": "Kohde päivitetty",
@@ -116,8 +122,9 @@ Oskari.registerLocalization(
                 "addFeature": "Lisää kohde",
                 "fieldName": "Nimi",
                 "fieldType": "Tyyppi",
-                "typeHelp": "Tyyppi vaikuttaa siihen, miten ominaisuustieto esitetään käyttöliittymässä.",
-                "typeHelpNew": "Voit lisätä attribuutteja vain tallentamattomalle karttatasolle.",
+                "typeHelp": "Tyyppi vaikuttaa siihen, miten attribuutin arvo esitetään käyttöliittymässä.",
+                "typeHelpNew": "Voit lisätä attribuutteja vain tallentamattomalle aineistolle.",
+                "tableInfoText": "Avaa aineisto klikkaamalla aineiston nimeä. Näet yksittäisen kohteen tiedot klikkaamalla kohdetta kartalla.",
                 "errors": {
                     "fieldAlreadyExists": "Kenttä on jo olemassa",
                     "isValidJSONKey": "Kentän nimi sisältää kiellettyjä merkkejä."
@@ -132,10 +139,10 @@ Oskari.registerLocalization(
                 },
                 "modal": {
                     "locale": {
-                        "title": "Nimet käyttöliittymässä ominaisuuksille"
+                        "title": "Attribuutin nimi eri kielillä"
                     },
                     "format": {
-                        "title": "Kohteiden ominaisuuksien arvojen muotoilu"
+                        "title": "Attribuutin arvon esitystapa"
                     }
             }
             },

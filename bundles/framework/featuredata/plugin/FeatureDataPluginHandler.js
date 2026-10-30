@@ -246,18 +246,18 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     createVisibleColumnsSettings (newActiveLayerId) {
         const { activeLayerId, visibleColumnsSettings } = this.getState();
-        const activeLayerChanged = activeLayerId && newActiveLayerId && activeLayerId !== newActiveLayerId;
+        const activeLayerChanged = !!activeLayerId && !!newActiveLayerId && activeLayerId !== newActiveLayerId;
 
-        if (!activeLayerChanged && visibleColumnsSettings) {
+        if (!activeLayerChanged && activeLayerId && visibleColumnsSettings?.allColumns?.length) {
             return visibleColumnsSettings;
         }
 
         const activeLayer = this.mapModule.getSandbox().findMapLayerFromSelectedMapLayers(newActiveLayerId) || null;
         const activeLayerProperties = activeLayer?.getProperties() || null;
-        let allColumns = activeLayerProperties?.map((property) => property.name);
+        let allColumns = activeLayerProperties?.map((property) => property.name) || [];
 
         // for some reason no properties for layer -> resort to features as last fallback.
-        if (!allColumns?.length) {
+        if (!allColumns.length) {
             const features = this.getFeaturesByLayerId(newActiveLayerId);
             if (features?.length) {
                 allColumns = Object.keys(features[0]?.properties) || [];
@@ -266,10 +266,16 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
         const activeLayerPropertyLabels = activeLayer?.getPropertyLabels() || null;
         const activeLayerPropertyTypes = activeLayer?.getPropertyTypes() || null;
-        const newVisibleColumns = activeLayerChanged ? [].concat(allColumns) : visibleColumnsSettings?.visibleColumns ? visibleColumnsSettings.visibleColumns : [].concat(allColumns);
+
         if (!allColumns.includes(ID_FIELD)) {
             allColumns = [ID_FIELD].concat(allColumns);
         }
+
+        const newVisibleColumns = activeLayerChanged
+            ? [].concat(allColumns)
+            : visibleColumnsSettings?.visibleColumns?.length
+                ? visibleColumnsSettings.visibleColumns
+                : [].concat(allColumns);
 
         if (activeLayerPropertyLabels && !activeLayerPropertyLabels[ID_FIELD]) {
             activeLayerPropertyLabels[ID_FIELD] = ID_FIELD_LABEL;
@@ -374,7 +380,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     resetSortingColumn (newActiveLayerId) {
         const newVisibleColumnsSettings = this.createVisibleColumnsSettings(newActiveLayerId);
-        const defaultSortingColumn = newVisibleColumnsSettings?.visibleColumns[0] || null;
+        const defaultSortingColumn = newVisibleColumnsSettings?.visibleColumns?.[0] || null;
         const sortedInfo = { order: 'ascend', columnKey: defaultSortingColumn };
         return sortedInfo;
     }

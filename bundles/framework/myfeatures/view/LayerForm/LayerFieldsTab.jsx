@@ -6,6 +6,7 @@ import { Table } from 'oskari-ui/components/Table';
 import { PrimaryButton, DeleteButton, IconButton } from 'oskari-ui/components/buttons';
 import { styled } from 'styled-components';
 import { DEFAULT_TYPE } from './LayerFormContent';
+import { setDefaultFilter } from './layerAttributesHelper';
 import { ArrowDownOutlined, ArrowUpOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, SettingOutlined  } from '@ant-design/icons';
 import { ModalContainer } from './ModalContainer';
 import { LocaleProvider } from 'oskari-ui/util';
@@ -129,6 +130,11 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     const [modalOpen, setModalOpen] = useState(null);
     const [editProp, setEditProp] = useState(null);
 
+    const getSelectedProps = () => {
+        const defaultProps = attributes?.data?.filter?.default;
+        return Array.isArray(defaultProps) ? defaultProps : layerFields.map((field) => field.name);
+    };
+
     const toggleModal = (modalName, fieldName) => {
         setModalOpen(modalName);
         setEditProp(fieldName);
@@ -136,10 +142,9 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
 
     const setLayerFields = () => {
         const newLayerFields = layerFields.concat({ name, type });
-
-        // update default filter as well (visibility, sorting, ...)
-        const newAttributes = structuredClone(attributes);
-        newAttributes.data.filter.default.push(name);
+        const newAttributes = setDefaultFilter(attributes, newLayerFields, getSelectedProps().concat(name));
+        newAttributes.data = newAttributes.data || {};
+        newAttributes.data.locale = newAttributes.data.locale || {};
 
         setName(null);
         setType(DEFAULT_TYPE);
@@ -216,7 +221,8 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     };
 
     const setAttributesData = (attribute, value) => {
-        const newAttributes = structuredClone(attributes);
+        const newAttributes = structuredClone(attributes || {});
+        newAttributes.data = newAttributes.data || {};
 
         // delete existing and replace with new value if given
         delete newAttributes.data[attribute];
@@ -227,7 +233,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     };
 
     const reorder = (item, index) => {
-        const selectedProps = attributes?.data?.filter?.default || [];
+        const selectedProps = getSelectedProps();
         if (selectedProps.length === 0 || index < 0 || index > selectedProps.length - 1) {
             return;
         }
@@ -239,7 +245,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     };
 
     function toggleField(name) {
-        const selectedProperties = attributes?.data?.filter?.default || [];
+        const selectedProperties = getSelectedProps();
         let newList = structuredClone(selectedProperties);
         if (selectedProperties.includes(name)) {
             newList = selectedProperties.filter(item => item !== name);
@@ -251,9 +257,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
     }
 
     const syncSelectedPropsWithLayerFields = (selectedPropsSorted) => {
-        const newAttributes = structuredClone(attributes);
-        delete newAttributes.data.filter.default;
-        newAttributes.data.filter.default = structuredClone(selectedPropsSorted);
+        const newAttributes = setDefaultFilter(attributes, layerFields, selectedPropsSorted);
 
         const newLayerFields = layerFields.sort((a, b) => {
             const aIndex = selectedPropsSorted.indexOf(a.name);
@@ -282,7 +286,7 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
                 style: { verticalAlign: 'middle' }
             }),
             render: (text, item, index) => {
-                const selectedProps = attributes?.data?.filter?.default || [];
+                const selectedProps = getSelectedProps();
                 const fieldIsVisible = selectedProps.indexOf(item?.name) > -1;
                 return <>
                     { fieldIsVisible &&
@@ -380,8 +384,8 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
         };
     });
 
-    const selectedProps = editProp ? [editProp] : attributes?.data?.filter?.default || [];
-    const propNames = layerFields.map(field => field.name);
+    const propNames = layerFields.map((field) => field.name);
+    const selectedProps = editProp ? [editProp] : getSelectedProps();
     return <LocaleProvider value = {{ bundleKey: 'myfeatures' }}>
         <Table
             columns={columnSettings}

@@ -41,6 +41,55 @@ Oskari.registerLocalization({
             },
             emptyText: 'Ingen data.'
         },
+        DateRange: {
+            dayjs: {
+                name: 'sv',
+                weekdays: ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'],
+                weekdaysShort: ['sön', 'mån', 'tis', 'ons', 'tor', 'fre', 'lör'],
+                weekdaysMin: ['sö', 'må', 'ti', 'on', 'to', 'fr', 'lö'],
+                months: ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'],
+                monthsShort: ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+                weekStart: 1,
+                yearStart: 4,
+                formats: {
+                    LT: 'HH:mm',
+                    LTS: 'HH:mm:ss',
+                    L: 'YYYY-MM-DD',
+                    LL: 'D MMMM YYYY',
+                    LLL: 'D MMMM YYYY [kl.] HH:mm',
+                    LLLL: 'dddd D MMMM YYYY [kl.] HH:mm'
+                }
+            },
+            lang: {
+                locale: 'sv_SE',
+                placeholder: 'Välj datum',
+                rangePlaceholder: ['Startdatum', 'Slutdatum'],
+                yearPlaceholder: 'Välj år',
+                quarterPlaceholder: 'Välj kvartal',
+                monthPlaceholder: 'Välj månad',
+                weekPlaceholder: 'Välj vecka',
+                rangeYearPlaceholder: ['Startår', 'Slutår'],
+                rangeQuarterPlaceholder: ['Startkvartal', 'Slutkvartal'],
+                rangeMonthPlaceholder: ['Startmånad', 'Slutmånad'],
+                rangeWeekPlaceholder: ['Startvecka', 'Slutvecka'],
+                today: 'I dag',
+                now: 'Nu',
+                ok: 'OK',
+                clear: 'Rensa',
+                week: 'Vecka',
+                monthSelect: 'Välj månad',
+                yearSelect: 'Välj år',
+                decadeSelect: 'Välj årtionde',
+                previousMonth: 'Förra månaden',
+                nextMonth: 'Nästa månad',
+                previousYear: 'Föregående år',
+                nextYear: 'Nästa år'
+            },
+            timePickerLocale: {
+                placeholder: 'Välj tid',
+                rangePlaceholder: ['Starttid', 'Sluttid']
+            }
+        },
         ColorPicker: {
             tooltip: 'Välj färg',
             moreColors: 'Mera färger'
@@ -101,7 +150,7 @@ Oskari.registerLocalization({
         },
         LocalizationComponent: {
             otherLanguages: 'Andra språk',
-            othersTip: 'Översättningar kommer att visas när tjänsten används på olika språk',
+            othersTip: 'Översättningar visas på på språk som används på användargränssnittet.',
             locale: {
                 generic: 'på ({0})',
                 fi: 'på finska',
@@ -208,7 +257,7 @@ Oskari.registerLocalization({
                 "line": "Linje",
                 "area": "Område",
                 "geometryEdit": "Rita objektet på kartan",
-                "finishSketch": "Avsluta ritningen på kartan",
+                "finishSketch": "Avsluta ritning",
                 "remove": "Ta bort en geometri"
             },
             "featureUpdate": {
@@ -298,21 +347,31 @@ Oskari.registerLocalization({
                     "button": "Formatering",
                     "type": {
                         "label": "Typ",
-                        "typeFormats": "Värde typ",
-                        "textFormats": "Textformatering",
+                        "typeFormats": "Typ",
+                        "textFormats": "Visningssätt",
                         "link": "Länk",
                         "image": "Bild",
                         "number": "Nummer",
-                        "phone": "Telefonnummer"
+                        "phone": "Telefonnummer",
+                        "h1": "Rubrik 1",
+                        "h2": "Rubrik 2",
+                        "h3": "Rubrik 3",
+                        "h4": "Rubrik 4",
+                        "h5": "Rubrik 5",
+                        "h6": "Rubrik 6",
+                        "p": "Stycke",
+                        "i": "Kursiv",
+                        "b": "Fetstil",
+                        "em": "Förstärkt"
                     },
                     "options": {
-                        "noLabel": "Visa endast värde",
-                        "skipEmpty": "Skippa tomt värde"
+                        "noLabel": "Visa endast värdet",
+                        "skipEmpty": "Dölj tömma värden"
                     },
                     "params": {
                         "link": "Visa som länk",
-                        "fullUrl": "Visa hela URL",
-                        "label": "Etikett för länk"
+                        "fullUrl": "Visa hela webbadressen",
+                        "label": "Länktext"
                     }
                 },
                 "messages": {

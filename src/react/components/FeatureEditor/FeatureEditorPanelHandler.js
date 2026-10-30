@@ -14,7 +14,8 @@ export class FeatureEditorPanelHandler extends StateHandler {
         this.state = {
             currentLayer: null,
             feature: null,
-            loading: false
+            loading: false,
+            hasPendingChanges: false
         };
 
         this.eventHandlers = {
@@ -22,14 +23,20 @@ export class FeatureEditorPanelHandler extends StateHandler {
                 if (event.getOperation() !== 'click') {
                     return;
                 }
-                const currentLayerId = this.getCurrentLayer().id;
+                const currentLayer = this.getCurrentLayer();
+                if (!currentLayer) {
+                    return;
+                }
+                const currentLayerId = currentLayer.id;
                 const editLayerFeatures = event.getFeatures().filter(f => f.layerId === currentLayerId);
                 if (!editLayerFeatures.length) {
                     // no features hit on layer that we are currently editing
                     return;
                 }
+                const clickedFeature = editLayerFeatures[0].geojson.features[0];
+                this.selectFeatureOnMap(currentLayerId, clickedFeature?.id);
                 // found one -> edit it
-                this.editFeature(editLayerFeatures[0].geojson.features[0]);
+                this.editFeature(clickedFeature);
             }
         };
 
@@ -86,6 +93,8 @@ export class FeatureEditorPanelHandler extends StateHandler {
         });
 
         this.stateListeners = [];
+        // remove selection
+        this.selectFeatureOnMap();
         this.updateState({
             currentLayer: null,
             feature: null
@@ -144,7 +153,24 @@ export class FeatureEditorPanelHandler extends StateHandler {
             const featuresMap = this.mapModule.getVectorFeatures(null, { layers: [layerId] });
             const features = featuresMap[layerId] ? featuresMap[layerId].features : null;
             const feature = features?.filter((feature) => feature.id === featureId)?.[0] ?? null;
-            this.setFeature(feature)
+            this.setFeature(feature);
+            this.selectFeatureOnMap(layerId, featureId);
+        }
+    }
+
+    selectFeatureOnMap (layerId, featureId) {
+        if (!layerId) {
+            const { currentLayer } = this.getState();
+            layerId = currentLayer.id;
+        }
+        const selectionService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureSelectionService');
+        if (!selectionService) {
+            return;
+        }
+        if (!featureId) {
+            selectionService.setSelectedFeatureIds(layerId, []);
+        } else {
+            selectionService.setSelectedFeatureIds(layerId, [featureId]);
         }
     }
 
@@ -165,6 +191,14 @@ export class FeatureEditorPanelHandler extends StateHandler {
     getLoading() {
         return this.getState().loading;
     }
+
+    setHasPendingChanges (hasPendingChanges) {
+        if (this.getState().hasPendingChanges === hasPendingChanges) {
+            return;
+        }
+        this.updateState({ hasPendingChanges });
+    }
+
     /**
      * Temporarily hides layers from map that the user isn't editing
      * @method hideOtherVectorLayers
@@ -199,7 +233,8 @@ export class FeatureEditorPanelHandler extends StateHandler {
             return;
         }
 
-        if (!confirmed && this.getFeature()?.id !== geojson.id) {
+        const { hasPendingChanges } = this.getState();
+        if (!confirmed && this.getFeature()?.id !== geojson.id && hasPendingChanges) {
             confirmEdit(this.loc, () => this.editFeature(geojson, true));
         } else {
             // remove _oid (internal normalized id by Oskari) from properties
@@ -212,7 +247,8 @@ export class FeatureEditorPanelHandler extends StateHandler {
                 }
             };
             this.updateState({
-                feature
+                feature,
+                hasPendingChanges: false
             });
         }
     }

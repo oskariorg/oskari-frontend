@@ -4,6 +4,7 @@ Oskari.registerLocalization(
         "key": "FeatureData",
         "value": {
             "title": "Kohdetiedot",
+            "tooltip": "Avaa kartalla näkyvien karttatasojen kohdetiedot",
             "layer": {
                 "outOfContentArea": "Karttatasolla ei ole kohteita karttanäkymän alueella.",
                 "featureData": "Kohdetiedot",

@@ -17,6 +17,8 @@ export const MyIndicatorsTab = ({ state, controller }) => {
     );
 };
 
+MyIndicatorsTab.tabSortOrder = 60;
+
 MyIndicatorsTab.propTypes = {
     state: PropTypes.object.isRequired,
     controller: PropTypes.object.isRequired

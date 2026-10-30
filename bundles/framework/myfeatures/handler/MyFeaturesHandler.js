@@ -12,6 +12,7 @@ class MyFeaturesHandler extends StateHandler {
         this.sandbox = instance.getSandbox();
         this.setState({
             data: [],
+            selectedLayerIds: this.sandbox.getMap().getLayers().map(layer => layer.getId()),
             loading: false,
             selectedLayerId: null,
             selectedFeatureId: null,
@@ -137,6 +138,18 @@ class MyFeaturesHandler extends StateHandler {
         this.sandbox.request(this.instance, addMlRequest);
     }
 
+    focusLayer (id) {
+        if (!this.sandbox.isLayerAlreadySelected(id)) {
+            this.addLayerToMap(id);
+            return;
+        }
+        this.sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [id, true]);
+    }
+
+    removeLayerFromMap (id) {
+        this.sandbox.postRequestByName('RemoveMapLayerRequest', [id]);
+    }
+
     refreshLayersList () {
         this.updateState({
             loading: true
@@ -145,6 +158,7 @@ class MyFeaturesHandler extends StateHandler {
             .getAllLayers().filter(layer => layer.isLayerOfType(MY_FEATURES_LAYER_TYPE));
         this.updateState({
             data: layers,
+            selectedLayerIds: this.sandbox.getMap().getLayers().map(layer => layer.getId()),
             loading: false
         });
     }
@@ -215,10 +229,6 @@ class MyFeaturesHandler extends StateHandler {
         });
         try {
             const layerJson = await this.myFeaturesLayerService.getLayerForEdit(id);
-            const attributes = layerJson?.attributes || {};
-            if (!attributes?.data) {
-                attributes.data = {};
-            }
             const values = {
                 id,
                 locale: {
@@ -228,7 +238,7 @@ class MyFeaturesHandler extends StateHandler {
                     ...layerJson?.options?.styles?.default?.featureStyle
                 },
                 layerFields: layerJson?.layerFields,
-                attributes: attributes
+                attributes: layerJson?.attributes
             };
             this.showLayerDialog(values);
         } catch (err) {
@@ -392,6 +402,26 @@ class MyFeaturesHandler extends StateHandler {
         }).catch((exception) => Messaging.error(this.loc('featureEditor.featureDelete.error') + exception));
     }
 
+    layerPropertiesLoaded (layer) {
+        if (!layer) {
+            return false;
+        }
+
+        const hasLoadedProperties = typeof layer.getProperties === 'function' && layer.getProperties().length > 0;
+        const hasLoadedDescribeInfo = typeof layer.getDescribeLayerStatus === 'function' && layer.getDescribeLayerStatus() === DESCRIBE_LAYER.LOADED;
+
+        return hasLoadedProperties || hasLoadedDescribeInfo;
+    }
+
+    async openFeatureData (layerId) {
+        if (!this.sandbox.isLayerAlreadySelected(layerId)) {
+            this.addLayerToMap(layerId);
+        }
+        setTimeout(() => {
+            this.sandbox.postRequestByName('ShowFeatureDataRequest', [layerId]);
+        }, 500);
+    }
+
     refreshLayerOnMap (layerId) {
         const mapLayer = this.instance.getMapLayerService().findMapLayer(layerId);
         if (mapLayer && typeof mapLayer.setDescribeLayerStatus === 'function') {
@@ -417,10 +447,21 @@ class MyFeaturesHandler extends StateHandler {
     }
 
     createEventHandlers () {
+        const updateSelectedLayers = event => {
+            const layerId = event.getMapLayer().getId();
+            if (!this.state.data.some(layer => String(layer.getId()) === String(layerId))) {
+                return;
+            }
+            this.updateState({
+                selectedLayerIds: this.sandbox.getMap().getLayers().map(layer => layer.getId())
+            });
+        };
         const handlers = {
+            AfterMapLayerAddEvent: updateSelectedLayers,
+            AfterMapLayerRemoveEvent: updateSelectedLayers,
             MapLayerEvent: (event) => {
                 const operation = event.getOperation();
-                if (operation === 'add' || operation === 'update' || operation === 'remove') {
+                if (['add', 'update', 'remove'].includes(operation)) {
                     this.refreshLayersList();
                 }
             }
@@ -444,10 +485,13 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'deleteLayer',
     'exportLayer',
     'addLayerToMap',
+    'focusLayer',
+    'removeLayerFromMap',
     'showLayerDialog',
     'showFeatureEditorDialog',
     'closeFeatureEditorPopup',
-    'setFeatureEditorLayer'
+    'setFeatureEditorLayer',
+    'openFeatureData'
 ]);
 
 export { wrapped as MyFeaturesHandler };

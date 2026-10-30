@@ -4,6 +4,7 @@ Oskari.registerLocalization(
         "key": "FeatureData",
         "value": {
             "title": "Objektuppgifter",
+            "tooltip": "Öppna objektuppgifter för synliga kartlager",
             "layer": {
                 "outOfContentArea": "Detta kartlager saknar innehåll vid dessa koordinater.",
                 "featureData": "Objektdata",

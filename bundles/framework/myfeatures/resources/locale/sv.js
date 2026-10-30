@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             "tabs": {
                 "general" : "Basuppgifter",
                 "visualization": "Visualisering",
-                "layerFields": "Attributer"
+                "layerFields": "Attribut"
             },
             "layer": {
                 "name": "Datamängdens namn",
@@ -58,10 +58,13 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Datamängder (Beta)",
-            "editLayer": "Redigera kartlagret",
-            "deleteLayer": "Ta bort kartlagret",
+            "title": "Datamängder",
+            "editLayer": "Redigera datamängden",
+            "deleteLayer": "Ta bort datamängden",
             "grid": {
+                "removeFromMap": "Ta bort från kartan",
+                "focusLayer": "Centrera på objekten",
+                "addAndFocusLayer": "Lägg till på kartan och centrera på objekten",
                 "name": "Namn",
                 "desc": "Beskrivning",
                 "source": "Datakälla",
@@ -71,10 +74,11 @@ Oskari.registerLocalization(
                 "removeButton": "Ta bort",
                 "actions": "Handlingar",
                 "createDate": "Skapad",
-                "contentEditor": "Redigera"
+                "contentEditor": "Redigera",
+                "featuredata": "Öppna objektuppgifterna"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
-            "downloadTooltip": "Ladda datamängd",
+            "downloadTooltip": "Ladda ner datamängden till din dator i GeoJSON format.",
             "confirmDeleteFieldMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
@@ -100,9 +104,11 @@ Oskari.registerLocalization(
             }
         },
         "featureEditor": {
-            "title": "Feature editor",
+            "title": "Information om ett enskilt objekt",
+            "titleNew": "Lägg till nytt objekt",
             "addFeatureTool": "Lägg till objekt",
             "deleteFeatureTool": "Ta bort objekt",
+            "featureToolTooltip": "Redigera objekt",
             "confirmDelete": "Vill du ta bort objektet?",
             "featureUpdate": {
                 "success": "Objektuppgifter har uppdaterats",
@@ -119,6 +125,7 @@ Oskari.registerLocalization(
                 "fieldType": "Typ",
                 "typeHelp": "Typen påverkar hur attribut visas i användargränssnittet.",
                 "typeHelpNew": "Du kan lägga till attribut endast innan du har sparat datamängden.",
+                "tableInfoText": "Öppna datamängden genom att klicka på datamängdens namn. Du ser information om ett enskilt objekt genom att klicka på objektet på kartan.",
                 "errors": {
                     "fieldAlreadyExists": "Attributen finns redan",
                     "isValidJSONKey": "Attributen innehåller ogiltiga tecken"
@@ -133,10 +140,10 @@ Oskari.registerLocalization(
                 },
                 "modal": {
                     "locale": {
-                        "title": "Märkningar för attribut"
+                        "title": "Attributnamn på olika språk"
                     },
                     "format": {
-                        "title": "Formatera värden för attribut"
+                        "title": "Visningssätt för attributvärde"
                     }
                 }
             },

@@ -1,16 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message } from 'oskari-ui';
+import { styled } from 'styled-components';
+import { Message, Switch } from 'oskari-ui';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { DownloadOutlined, EditOutlined } from '@ant-design/icons';
+import { DownloadOutlined, EditOutlined, TableOutlined } from '@ant-design/icons';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
-import { FEATURE_EDITOR_TOOLNAME } from './constants';
+import { BUNDLE_KEY, FEATURE_EDITOR_TOOLNAME } from './constants';
 
-const EDIT_ICON_STYLE = {
+const ICON_STYLE = {
     fontSize: '16px'
 };
 
-export const MyFeaturesList = ({ data = [], controller, loading }) => {
+const LayerName = styled('a')`
+    display: inline-block;
+    padding-left: 0.5em;
+`;
+
+// const FEATUREDATA_HANDLER_NAME = 'ShowFeatureDataRequest';
+function isFeatureDataAvailable() {
+    // hide tool for now
+    return false;
+//    return Oskari.getSandbox().hasHandler(FEATUREDATA_HANDLER_NAME);
+}
+
+export const MyFeaturesList = ({ data = [], selectedLayerIds = [], controller, loading }) => {
     const columnSettings = [
         {
             align: 'left',
@@ -19,16 +32,29 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
             sorter: getSorterFor('name'),
             defaultSortOrder: 'ascend',
             render: (title, item) => {
-                return (
-                    <a onClick={() => controller.addLayerToMap(item.key)}>{title}</a>
-                );
+                const isSelected = selectedLayerIds.some(id => String(id) === String(item.key));
+                return <>
+                    <Switch
+                        size='small'
+                        aria-label={title}
+                        title={Oskari.getMsg(BUNDLE_KEY, isSelected ? 'tab.grid.removeFromMap' : 'tab.grid.addAndFocusLayer')}
+                        checked={isSelected}
+                        onChange={checked => checked
+                            ? controller.addLayerToMap(item.key)
+                            : controller.removeLayerFromMap(item.key)}
+                    />
+                    <LayerName
+                        title={Oskari.getMsg(BUNDLE_KEY, isSelected ? 'tab.grid.focusLayer' : 'tab.grid.addAndFocusLayer')}
+                        onClick={() => controller.focusLayer(item.key)}
+                    >{title}</LayerName>
+                </>;
             }
         },
         {
             align: 'left',
             title: <Message messageKey='tab.grid.desc' />,
             dataIndex: 'desc',
-            sorter: getSorterFor('description')
+            sorter: getSorterFor('desc')
         },
         {
             align: 'left',
@@ -52,10 +78,19 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
+                        { isFeatureDataAvailable() &&
+                            <IconButton
+                                className='t_edit'
+                                title={<Message messageKey='tab.grid.featuredata' />}
+                                icon={<TableOutlined style={ICON_STYLE} />}
+                                onClick={() => controller.openFeatureData(item.key)}
+                            />
+
+                        }
                         <IconButton
                             className='t_edit'
                             title={<Message messageKey='tab.grid.edit' />}
-                            icon={<EditOutlined style={EDIT_ICON_STYLE} />}
+                            icon={<EditOutlined style={ICON_STYLE} />}
                             onClick={() => controller.editLayer(item.key)}
                         />
                         <DeleteButton
@@ -82,6 +117,7 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
                 created: item.getCreated(),
                 name: item.getName(),
                 desc: item.getDescription(),
+                source: item.getDataSource(),
                 hasFeatureEditorTool: !!item.getFeatureTool(FEATURE_EDITOR_TOOLNAME)
             }))}
             pagination={false}
@@ -92,6 +128,7 @@ export const MyFeaturesList = ({ data = [], controller, loading }) => {
 
 MyFeaturesList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
+    selectedLayerIds: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     controller: PropTypes.object.isRequired,
     loading: PropTypes.bool
 };

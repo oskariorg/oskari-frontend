@@ -13,6 +13,8 @@ export const PublishedMapsTab = ({ controller, state }) => {
     )
 };
 
+PublishedMapsTab.tabSortOrder = 30;
+
 PublishedMapsTab.propTypes = {
     controller: PropTypes.object.isRequired,
     state: PropTypes.object.isRequired

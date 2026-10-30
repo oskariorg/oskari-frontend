@@ -68,6 +68,10 @@ export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading =
         helperRef.current.addNewLayer();
     });
 
+    const onDirtyChange = useCallback((dirty) => {
+        helperRef.current.setHasPendingChanges(dirty);
+    }, []);
+
     return <EditorPanel
         layer = { currentLayer }
         feature = { feature }
@@ -79,6 +83,7 @@ export const FeatureEditorPanel = ({ layerId, featureId, savedFeature, loading =
         startNewFeature = { startNewFeature }
         setCurrentLayer={setCurrentLayer}
         addNewLayer={addNewLayer}
+        onDirtyChange={onDirtyChange}
         showGeoJSONPanel={showGeoJSONPanel}
         showGeometryNotRecognizedAlert={showGeometryNotRecognizedAlert}
     />;
@@ -95,6 +100,7 @@ const EditorPanel = ({
     startNewFeature,
     setCurrentLayer,
     addNewLayer,
+    onDirtyChange,
     showGeoJSONPanel = true,
     showGeometryNotRecognizedAlert = true }) => {
 
@@ -119,6 +125,7 @@ const EditorPanel = ({
                             onSave={onSave}
                             onDelete={onDelete}
                             startNewFeature={startNewFeature}
+                            onDirtyChange={onDirtyChange}
                             feature={feature}
                             showGeoJSONPanel={showGeoJSONPanel}
                             showGeometryNotRecognizedAlert={showGeometryNotRecognizedAlert} />

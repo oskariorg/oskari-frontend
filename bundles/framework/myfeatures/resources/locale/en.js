@@ -57,10 +57,13 @@ Oskari.registerLocalization(
             }
         },
         "tab": {
-            "title": "Datasets (Beta)",
-            "editLayer": "Edit map layer",
-            "deleteLayer": "Delete map layer",
+            "title": "Datasets",
+            "editLayer": "Edit dataset",
+            "deleteLayer": "Delete dataset",
             "grid": {
+                "removeFromMap": "Remove from map",
+                "focusLayer": "Center on features",
+                "addAndFocusLayer": "Add to map and center on features",
                 "name": "Name",
                 "desc": "Description",
                 "source": "Data source",
@@ -70,10 +73,11 @@ Oskari.registerLocalization(
                 "removeButton": "Delete",
                 "actions": "Actions",
                 "createDate": "Created",
-                "contentEditor": "Content editor"
+                "contentEditor": "Content editor",
+                "featuredata": "Open featuredata"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset \"{name}\"?",
-            "downloadTooltip": "Download dataset",
+            "downloadTooltip": "Download the dataset to your computer in the GeoJSON format.",
             "confirmDeleteFieldMsg": "Do you want to delete the field  \"{name}\"?",
             "buttons": {
                 "ok": "OK",
@@ -99,9 +103,11 @@ Oskari.registerLocalization(
             }
         },
         "featureEditor": {
-            "title": "Feature editor",
+            "title": "Individual feature details",
+            "titleNew": "Add new feature",
             "addFeatureTool": "Add feature",
             "deleteFeatureTool": "Delete feature",
+            "featureToolTooltip": "Edit feature",
             "confirmDelete": "Do you want to delete the feature?",
             "featureUpdate": {
                 "success": "Feature properties updated successfully",
@@ -118,6 +124,7 @@ Oskari.registerLocalization(
                 "fieldType": "Type",
                 "typeHelp": "The type affects how data in the attribute will be dispalyed in the user interface.",
                 "typeHelpNew": "You can add attributes to the dataset only before saving it.",
+                "tableInfoText": "Open the dataset by clicking its name. View the details of an individual feature by clicking the feature on the map.",
                 "errors": {
                     "fieldAlreadyExists": "Field already exists",
                     "isValidJSONKey": "Field contains illegal characters."
@@ -132,10 +139,10 @@ Oskari.registerLocalization(
                 },
                 "modal": {
                     "locale": {
-                        "title": "Labels for properties",
+                        "title": "Attribute name in different languages",
                     },
                     "format": {
-                        "title": "Formatting values of properties",
+                        "title": "Attribute value presentation",
                     }
                 }
             },

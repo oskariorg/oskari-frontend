@@ -38,7 +38,7 @@ const localize = key => Oskari.getMsg(BUNDLE_NAME, `VectorLayerPresentation.attr
 const getTypeOptions = () => {
     const opts = [];
     opts.push({ label: localize('typeFormats'), options: FORMATTERS.map(f => ({label: localize(f), value: f}))});
-    opts.push({ label: localize('textFormats'), options: TAGS.map(f => ({label: f, value: f}))});
+    opts.push({ label: localize('textFormats'), options: TAGS.map(f => ({label: localize(f), value: f}))});
     return opts;
 };
 

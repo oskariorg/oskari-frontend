@@ -61,6 +61,8 @@ export const AccountTab = ({ state }) => {
     );
 };
 
+AccountTab.tabSortOrder = 10;
+
 AccountTab.propTypes = {
     state: PropTypes.object.isRequired
 };
