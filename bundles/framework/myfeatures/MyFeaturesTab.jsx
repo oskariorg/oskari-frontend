@@ -19,6 +19,7 @@ export const MyFeaturesTab = ({ controller, state }) => {
             <MyFeaturesList
                 controller={controller}
                 data={state.data}
+                selectedLayerIds={state.selectedLayerIds}
                 loading={state.loading}
             />
         </LocaleProvider>

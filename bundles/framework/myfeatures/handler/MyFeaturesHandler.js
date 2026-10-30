@@ -12,6 +12,7 @@ class MyFeaturesHandler extends StateHandler {
         this.sandbox = instance.getSandbox();
         this.setState({
             data: [],
+            selectedLayerIds: this.sandbox.getMap().getLayers().map(layer => layer.getId()),
             loading: false,
             selectedLayerId: null,
             selectedFeatureId: null,
@@ -137,6 +138,18 @@ class MyFeaturesHandler extends StateHandler {
         this.sandbox.request(this.instance, addMlRequest);
     }
 
+    focusLayer (id) {
+        if (!this.sandbox.isLayerAlreadySelected(id)) {
+            this.addLayerToMap(id);
+            return;
+        }
+        this.sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [id, true]);
+    }
+
+    removeLayerFromMap (id) {
+        this.sandbox.postRequestByName('RemoveMapLayerRequest', [id]);
+    }
+
     refreshLayersList () {
         this.updateState({
             loading: true
@@ -145,6 +158,7 @@ class MyFeaturesHandler extends StateHandler {
             .getAllLayers().filter(layer => layer.isLayerOfType(MY_FEATURES_LAYER_TYPE));
         this.updateState({
             data: layers,
+            selectedLayerIds: this.sandbox.getMap().getLayers().map(layer => layer.getId()),
             loading: false
         });
     }
@@ -433,10 +447,21 @@ class MyFeaturesHandler extends StateHandler {
     }
 
     createEventHandlers () {
+        const updateSelectedLayers = event => {
+            const layerId = event.getMapLayer().getId();
+            if (!this.state.data.some(layer => String(layer.getId()) === String(layerId))) {
+                return;
+            }
+            this.updateState({
+                selectedLayerIds: this.sandbox.getMap().getLayers().map(layer => layer.getId())
+            });
+        };
         const handlers = {
+            AfterMapLayerAddEvent: updateSelectedLayers,
+            AfterMapLayerRemoveEvent: updateSelectedLayers,
             MapLayerEvent: (event) => {
                 const operation = event.getOperation();
-                if (operation === 'add' || operation === 'update' || operation === 'remove') {
+                if (['add', 'update', 'remove'].includes(operation)) {
                     this.refreshLayersList();
                 }
             }
@@ -460,6 +485,8 @@ const wrapped = controllerMixin(MyFeaturesHandler, [
     'deleteLayer',
     'exportLayer',
     'addLayerToMap',
+    'focusLayer',
+    'removeLayerFromMap',
     'showLayerDialog',
     'showFeatureEditorDialog',
     'closeFeatureEditorPopup',
