@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.DeleteButton',
      *
      */
     function () {
-        this.setTitle(Oskari.getMsg('DivManazer', 'buttons.delete', null, 'Delete'));
+        this.setTitle(Oskari.getMsg('oskariui', 'buttons.delete', null, 'Delete'));
     },
     {},
     {

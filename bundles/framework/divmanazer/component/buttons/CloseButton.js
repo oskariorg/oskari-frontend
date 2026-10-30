@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.CloseButton',
      *
      */
     function () {
-        this.setTitle(Oskari.getMsg('DivManazer', 'buttons.close', null, 'Close'));
+        this.setTitle(Oskari.getMsg('oskariui', 'buttons.close', null, 'Close'));
     },
     {},
     {

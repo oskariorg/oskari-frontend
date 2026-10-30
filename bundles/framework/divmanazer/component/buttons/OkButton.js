@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.OkButton',
      *
      */
     function () {
-        this.setTitle(Oskari.getMsg('DivManazer', 'buttons.ok', null, 'OK'));
+        this.setTitle(Oskari.getMsg('oskariui', 'buttons.ok', null, 'OK'));
         this.setPrimary(true);
     },
     {},

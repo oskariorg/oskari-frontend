@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.CancelButton',
      *
      */
     function () {
-        this.setTitle(Oskari.getMsg('DivManazer', 'buttons.cancel', null, 'Cancel'));
+        this.setTitle(Oskari.getMsg('oskariui', 'buttons.cancel', null, 'Cancel'));
     },
     {},
     {

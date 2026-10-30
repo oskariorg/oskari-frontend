@@ -13,6 +13,7 @@ Oskari.registerLocalization({
             import: 'Importera',
             yes: 'Ja',
             no: 'Nej',
+            ok: 'OK',
             next: 'Nästa',
             previous: 'Föregående',
             print: 'Få utskrift',
