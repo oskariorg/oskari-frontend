@@ -94,6 +94,9 @@ export class MenuItem {
         if (Object.hasOwn(options, 'badge')) {
             this.badge = options.badge;
         }
+        if (Object.hasOwn(options, 'subItems')) {
+            this.subItems = options.subItems;
+        }
     }
 
     setActive (isActive, { switching = false } = {}) {
@@ -144,11 +147,22 @@ export class MenuItem {
         return true;
     }
 
+    /** Replace bundle-owned JSX without managing its state, callbacks or styles. */
+    setSubItems (subItems) {
+        if (this.subItems === subItems) {
+            return false;
+        }
+        this.subItems = subItems;
+        this.onChange?.();
+        return true;
+    }
+
     getState () {
         return {
             ...this.options,
             isActive: this.isActive,
-            badge: this.badge
+            badge: this.badge,
+            subItems: this.subItems
         };
     }
 
@@ -165,7 +179,7 @@ export class MenuItem {
     }
 }
 
-const MenuItemView = ({ id, name, tooltip, onActiveChange, isActive = false, badge, style }) => {
+const MenuItemView = ({ id, name, tooltip, onActiveChange, isActive = false, badge, style, subItems }) => {
     const handleClick = () => {
         onActiveChange(id, !isActive);
     };
@@ -178,21 +192,24 @@ const MenuItemView = ({ id, name, tooltip, onActiveChange, isActive = false, bad
     };
 
     return (
-        <MenuItemContainer
-            role="button"
-            tabIndex={0}
-            title={tooltip}
-            style={style}
-            onClick={handleClick}
-            onKeyDown={handleKeyDown}
-            $isActive={isActive}
-            aria-pressed={isActive}
-        >
-            <Title>{name}</Title>
-            {typeof badge === 'number' && (
-                <StyledBadge count={badge} />
-            )}
-        </MenuItemContainer>
+        <div>
+            <MenuItemContainer
+                role="button"
+                tabIndex={0}
+                title={tooltip}
+                style={style}
+                onClick={handleClick}
+                onKeyDown={handleKeyDown}
+                $isActive={isActive}
+                aria-pressed={isActive}
+            >
+                <Title>{name}</Title>
+                {typeof badge === 'number' && (
+                    <StyledBadge count={badge} />
+                )}
+            </MenuItemContainer>
+            {subItems}
+        </div>
     );
 };
 
@@ -203,5 +220,6 @@ MenuItemView.propTypes = {
     onActiveChange: PropTypes.func.isRequired,
     isActive: PropTypes.bool,
     badge: PropTypes.number,
-    style: PropTypes.object
+    style: PropTypes.object,
+    subItems: PropTypes.node
 };

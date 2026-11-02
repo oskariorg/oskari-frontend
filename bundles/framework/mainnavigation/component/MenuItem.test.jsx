@@ -7,6 +7,11 @@ import { MainNavigationService } from '../service/MainNavigationService';
 import { MapLayersBundleInstance } from '../maplayers/instance';
 import { showFlyout } from 'oskari-ui/components/window';
 
+const SUB_ITEMS_MENU_ID = 'sub-items-menu';
+const SUB_ITEMS_MENU_TITLE = 'Sub items menu';
+const SUB_ITEM_TITLE = 'Bundle action';
+const UPDATED_SUB_ITEM_TITLE = 'Updated bundle action';
+
 jest.mock('oskari-ui/BasicBundleInstance', () => ({ BasicBundleInstance: class {} }));
 jest.mock('oskari-ui', () => ({ Badge: 'span' }));
 jest.mock('oskari-ui/components/window', () => ({ showFlyout: jest.fn() }));
@@ -94,6 +99,63 @@ describe('MenuItem activation', () => {
         expect(button.querySelector('[count]').getAttribute('count')).toBe('9');
         act(() => service.setBadge('first', null));
         expect(button.querySelector('[count]')).toBeNull();
+    });
+
+    test('renders bundle-owned subitems with independent state, styles and callbacks', () => {
+        const onClick = jest.fn();
+        const onKeyDown = jest.fn();
+        const SubItems = () => {
+            const [count, setCount] = useState(0);
+            return (
+                <button style={{ color: 'red' }} onKeyDown={onKeyDown} onClick={() => {
+                    setCount(count + 1);
+                    onClick();
+                }}>{SUB_ITEM_TITLE} {count}</button>
+            );
+        };
+        const item = new MenuItem({ id: SUB_ITEMS_MENU_ID, name: SUB_ITEMS_MENU_TITLE, subItems: <SubItems /> });
+        service.addMenuItem(item);
+        render(<Navigation />);
+        const menuButton = screen.getByRole('button', { name: SUB_ITEMS_MENU_TITLE });
+        const subButton = screen.getByRole('button', { name: `${SUB_ITEM_TITLE} 0` });
+        expect(subButton.parentElement).toBe(menuButton.parentElement);
+        expect(menuButton.nextElementSibling).toBe(subButton);
+        expect(subButton.style.color).toBe('red');
+        fireEvent.click(subButton);
+        fireEvent.keyDown(subButton, { key: 'Enter' });
+        fireEvent.keyDown(subButton, { key: ' ' });
+        expect(onClick).toHaveBeenCalledTimes(1);
+        expect(onKeyDown).toHaveBeenCalledTimes(2);
+        expect(screen.getByRole('button', { name: `${SUB_ITEM_TITLE} 1` })).toBe(subButton);
+        expect(service.getActiveMenuItemIds()).toEqual([]);
+        expect(showFlyout).not.toHaveBeenCalled();
+        act(() => service.setBadge(SUB_ITEMS_MENU_ID, 3));
+        expect(screen.getByRole('button', { name: `${SUB_ITEM_TITLE} 1` })).toBe(subButton);
+    });
+
+    test('replaces and clears subitems without changing activation or the flyout', () => {
+        const item = new MenuItem({ id: SUB_ITEMS_MENU_ID, name: SUB_ITEMS_MENU_TITLE });
+        item.setSubItems(<span>{SUB_ITEM_TITLE}</span>);
+        service.addMenuItem(item);
+        render(<Navigation />);
+        expect(screen.getByText(SUB_ITEM_TITLE)).toBeTruthy();
+        act(() => service.setActive(SUB_ITEMS_MENU_ID));
+        const controls = item.flyoutControls;
+        const updated = <span>{UPDATED_SUB_ITEM_TITLE}</span>;
+        act(() => item.setSubItems(updated));
+        expect(screen.queryByText(SUB_ITEM_TITLE)).toBeNull();
+        expect(screen.getByText(UPDATED_SUB_ITEM_TITLE)).toBeTruthy();
+        expect(item.setSubItems(updated)).toBe(false);
+        act(() => {
+            item.update({ id: SUB_ITEMS_MENU_ID, name: SUB_ITEMS_MENU_TITLE });
+            service.addMenuItem(item);
+        });
+        expect(screen.getByText(UPDATED_SUB_ITEM_TITLE)).toBeTruthy();
+        act(() => item.setSubItems(null));
+        expect(screen.queryByText(UPDATED_SUB_ITEM_TITLE)).toBeNull();
+        expect(service.getActiveMenuItemIds()).toEqual([SUB_ITEMS_MENU_ID]);
+        expect(showFlyout).toHaveBeenCalledTimes(1);
+        expect(controls.close).not.toHaveBeenCalled();
     });
 
     test('allows replacing badge behavior without running its default setter', () => {
