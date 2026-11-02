@@ -3,6 +3,12 @@ import './Flyout';
 import './service/ViewService';
 import React from 'react';
 import { Message } from 'oskari-ui';
+import { MenuItem } from '../mainnavigation/component/MenuItem';
+import { MenuItemActivationResult } from '../mainnavigation/component/MenuItemActivationResult';
+
+const MAIN_NAVIGATION_SERVICE = 'Oskari.mapframework.bundle.mainnavigation.service.MainNavigationService';
+const MENU_ITEM_ID = 'mydata-item';
+const UPDATE_EXTENSION_REQUEST = 'userinterface.UpdateExtensionRequest';
 
 /**
  * @class Oskari.mapframework.bundle.mydata.MyDataBundleInstance
@@ -24,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         this.started = false;
         this.plugins = {};
         this.viewService = null;
+        this.mainNavigationService = null;
     }, {
         /**
          * @static
@@ -82,7 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        'start': function () {
+        start: function () {
             var me = this;
 
             if (me.started) {
@@ -91,11 +98,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
 
             me.started = true;
 
-            var conf = this.conf || {};
+            const conf = this.conf || {};
             this.conf = conf;
-            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
-            var sandbox = Oskari.getSandbox(sandboxName),
-                p;
+            const sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
+            const sandbox = Oskari.getSandbox(sandboxName);
+            let p;
 
             me.sandbox = sandbox;
             this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.service.ViewService');
@@ -108,9 +115,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
             }
 
             // Let's extend UI
-            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
-
-            sandbox.request(this, request);
+            this.mainNavigationService = sandbox.getService(MAIN_NAVIGATION_SERVICE);
+            if (this.mainNavigationService) {
+                // no divmanazer extension: flyout is opened from the main navigation menu item
+                this.startExtension();
+                this.plugins['Oskari.userinterface.Flyout'].startPlugin();
+                this.addMenuItem();
+            } else {
+                const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
+                sandbox.request(this, request);
+            }
 
             // draw ui
             me.createUi();
@@ -154,21 +168,72 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        'stop': function () {
-            var sandbox = this.sandbox(),
-                p;
+        stop: function () {
+            const sandbox = this.sandbox;
+            let p;
             for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
+                if (Object.prototype.hasOwnProperty.call(this.eventHandlers, p)) {
                     sandbox.unregisterFromEventByName(this, p);
                 }
             }
 
-            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
-
-            sandbox.request(this, request);
+            if (this.mainNavigationService) {
+                this.mainNavigationService.removeMenuItem(MENU_ITEM_ID);
+                this.mainNavigationService = null;
+                this.stopExtension();
+            } else {
+                const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
+                sandbox.request(this, request);
+            }
 
             this.sandbox.unregister(this);
             this.started = false;
+        },
+        /**
+         * @method getMainNavigationService
+         * @return {Object} main navigation service or null if main navigation is not in use
+         */
+        getMainNavigationService: function () {
+            return this.mainNavigationService;
+        },
+        addMenuItem: function () {
+            const flyout = this.plugins['Oskari.userinterface.Flyout'];
+            const menuItem = new MenuItem({
+                id: MENU_ITEM_ID,
+                name: this.getTitle(),
+                tooltip: this.getDescription(),
+                setActive: (isActive) => {
+                    if (isActive) {
+                        flyout.openFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                    } else {
+                        flyout.closeFlyout();
+                    }
+                    return MenuItemActivationResult.OK;
+                }
+            });
+            this.mainNavigationService.addMenuItem(menuItem);
+        },
+        /**
+         * @method openFlyout
+         * Opens the personal data flyout using main navigation or divmanazer
+         */
+        openFlyout: function () {
+            if (this.mainNavigationService) {
+                this.mainNavigationService.setActive(MENU_ITEM_ID, true);
+                return;
+            }
+            this.sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [this, 'attach']);
+        },
+        /**
+         * @method closeFlyout
+         * Closes the personal data flyout using main navigation or divmanazer
+         */
+        closeFlyout: function () {
+            if (this.mainNavigationService) {
+                this.mainNavigationService.setActive(MENU_ITEM_ID, false);
+                return;
+            }
+            this.sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [this, 'close']);
         },
         /**
          * @method startExtension
@@ -229,10 +294,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         __guidedTourDelegateTemplate: {
             priority: 40,
             show: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'MyData']);
+                this.openFlyout();
             },
             hide: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'MyData']);
+                this.closeFlyout();
             },
             getTitle: function () {
                 return Oskari.getMsg(this.getName(), 'guidedTour.title');
@@ -245,12 +310,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
                 return [
                     {
                         title: Oskari.getMsg(this.getName(), 'guidedTour.openLink'),
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'MyData']),
+                        onClick: () => me.openFlyout(),
                         visible: false
                     },
                     {
                         title: Oskari.getMsg(this.getName(), 'guidedTour.closeLink'),
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'MyData']),
+                        onClick: () => me.closeFlyout(),
                         visible: true
                     }
                 ];

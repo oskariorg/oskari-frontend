@@ -9,7 +9,13 @@ import { MyViewsHandler } from './handler/MyViewsHandler';
 import { PublishedMapsTab } from './view/PublishedMaps/PublishedMapsTab';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import './service/MyDataService';
-import { getReactRoot } from 'oskari-ui/components/window';
+import { getReactRoot, showFlyout } from 'oskari-ui/components/window';
+import { styled } from 'styled-components';
+
+const FlyoutPadding = styled('div')`
+    margin: 0;
+    padding: 1.5em 1.5em 1.5em 1.75em;
+`;
 
 
 /**
@@ -31,6 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
 
         this.uiHandler = new MyDataHandler(() => this.update());
         this.myDataService = null;
+        this.mainNavigationControls = null;
     }, {
         /**
          * @method getName
@@ -140,14 +147,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
         setState: function (state) {
             this.state = state;
         },
+        /**
+         * Opens the content as a flyout (when main navigation is in use)
+         * @param {Function} onClose called when the user closes the flyout
+         */
+        openFlyout: function (onClose) {
+            if (this.mainNavigationControls) {
+                return;
+            }
+            const controls = showFlyout(this.getTitle(), this.getPaddedContent(), () => {
+                if (this.mainNavigationControls !== controls) {
+                    return;
+                }
+                this.mainNavigationControls = null;
+                onClose();
+            }, { id: 'MyData' });
+            this.mainNavigationControls = controls;
+        },
+        closeFlyout: function () {
+            const controls = this.mainNavigationControls;
+            this.mainNavigationControls = null;
+            controls?.close();
+        },
+        /**
+         * Wraps the content with padding that matches the divmanazer flyout content.
+         * Only needed for showFlyout (main navigation), divmanazer adds the padding itself.
+         */
+        getPaddedContent: function () {
+            return (
+                <FlyoutPadding>
+                    {this.getContent()}
+                </FlyoutPadding>
+            );
+        },
         update: function () {
+            if (this.instance.getMainNavigationService()) {
+                this.mainNavigationControls?.update(this.getTitle(), this.getPaddedContent());
+                return;
+            }
             const flyout = jQuery(this.container);
-
+            getReactRoot(flyout[0]).render(this.getContent());
+        },
+        getContent: function () {
             const {
                 tabs,
                 activeTab
             } = this.uiHandler.getState();
-            getReactRoot(flyout[0]).render(
+            return (
                 <LocaleProvider value={{ bundleKey: 'MyData' }}>
                     <ThemeProvider>
                         <FlyoutContent loginStatus={this.getLoginStatus()}>
@@ -172,7 +218,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
                 </LocaleProvider>
             );
         },
-
         /**
          * @method createUi
          * Creates the UI for a fresh start
@@ -188,7 +233,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
             });
         },
         openProfileTab: function () {
-            Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'attach']);
+            this.instance.openFlyout();
             this.uiHandler.setActiveTab('account');
         },
         /**
