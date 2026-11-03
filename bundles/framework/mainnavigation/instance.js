@@ -120,6 +120,11 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
             <nav className={this.containerClass}>
                 <ul>
                     {this.mainNavigationService.getMenuItems()
+                        .sort((first, second) => {
+                            const firstOrder = first.sortOrder ?? Infinity;
+                            const secondOrder = second.sortOrder ?? Infinity;
+                            return firstOrder === secondOrder ? 0 : firstOrder - secondOrder;
+                        })
                         .map((menuItem) => (
                             <li key={menuItem.id}>
                                 {menuItem.render(this.onMenuItemActiveChange)}

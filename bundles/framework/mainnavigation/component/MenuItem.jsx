@@ -91,6 +91,7 @@ export class MenuItem {
         this.options = { ...options };
         this.id = options.id;
         this.name = options.name;
+        this.sortOrder = options.sortOrder;
         if (Object.hasOwn(options, 'badge')) {
             this.badge = options.badge;
         }

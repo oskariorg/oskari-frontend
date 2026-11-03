@@ -210,6 +210,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const menuItem = new MenuItem({
                 id: MENU_ITEM_ID,
+                sortOrder: 10,
                 name: this.getTitle(),
                 tooltip: this.getDescription(),
                 setActive: (isActive) => {

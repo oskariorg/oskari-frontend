@@ -1,3 +1,4 @@
+import React from 'react';
 import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
 import { ViewHandler } from './handler/ViewHandler';
 import { SearchHandler } from './handler/SearchHandler';
@@ -7,6 +8,8 @@ import { MyIndicatorsTab } from './MyIndicatorsTab';
 import { initConfig, getDatasources } from './helper/ConfigHelper';
 import { getDataProviderKey } from './helper/StatisticsHelper';
 import { LAYER_ID, DATA_PROVIDER } from './constants';
+import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
+import { MenuSubItems } from './MenuSubItems';
 
 import './Tile.js';
 import './components/SeriesControl.js';
@@ -24,6 +27,13 @@ import './publisher/SeriesToggleTool.js';
 import './publisher/StatisticsTool.js';
 import './publisher/StatsgridPanel.js';
 
+const MENU_ITEM_ID = 'statsgrid-item';
+const DEFAULT_SANDBOX = 'sandbox';
+const SEARCH_VIEW = 'search';
+const UPDATE_EXTENSION_REQUEST = 'userinterface.UpdateExtensionRequest';
+const ATTACH = 'attach';
+const CLOSE = 'close';
+
 /**
  * @class Oskari.statistics.statsgrid.StatsGridBundleInstance
  *
@@ -39,7 +49,7 @@ Oskari.clazz.define(
         // these will be used for this.conf if nothing else is specified (handled by DefaultExtension)
         this.defaultConf = {
             name: 'StatsGrid',
-            sandbox: 'sandbox',
+            sandbox: DEFAULT_SANDBOX,
             stateful: true,
             tileClazz: 'Oskari.statistics.statsgrid.Tile'
         };
@@ -49,7 +59,73 @@ Oskari.clazz.define(
         this.stateHandler = null;
         this.searchHandler = null;
         this.regionsetViewer = null;
+        this.activeNavigationViews = new Set();
+        this.navigation = new NavigationAdapter(this, {
+            createMenuItem: (navigation) => this.createMenuItem(navigation),
+            onStart: () => {
+                this.startExtension();
+            },
+            onStop: () => {
+                this.getViewHandler()?.closeAll();
+                this.activeNavigationViews.clear();
+                this.stopExtension();
+            }
+        });
     }, {
+        start: function () {
+            const conf = this.getConfiguration();
+            const sandbox = Oskari.getSandbox(conf?.sandbox || DEFAULT_SANDBOX);
+            this.sandbox = sandbox;
+            sandbox.register(this);
+            if (conf?.stateful === true) {
+                sandbox.registerAsStateful(this.mediator.bundleId, this);
+            }
+            this.navigation.start();
+            this.afterStart(sandbox);
+        },
+        stop: function () {
+            const result = this.navigation.stop();
+            if (this.navigation.service) {
+                return result;
+            }
+            const sandbox = this.getSandbox();
+            sandbox.unregisterStateful(this.mediator.bundleId);
+            sandbox.unregister(this);
+            this.sandbox = null;
+            this.started = false;
+        },
+        createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
+            return new MenuItem({
+                id: MENU_ITEM_ID,
+                sortOrder: 20,
+                name: this.loc('flyout.title'),
+                tooltip: this.getDescription(),
+                setActive: (isActive) => {
+                    if (!isActive) {
+                        this.getViewHandler()?.close(SEARCH_VIEW);
+                    }
+                    this.updateMainNavigationSubItems(isActive);
+                    return MenuItemActivationResult.OK;
+                }
+            });
+        },
+        updateMainNavigationSubItems: function (isActive = this.navigation.menuItem?.isActive) {
+            this.navigation.menuItem?.setSubItems(isActive
+                ? <MenuSubItems
+                    activeViews={[...this.activeNavigationViews]}
+                    onToggle={id => this.getViewHandler().toggle(id)}
+                    loc={this.loc}
+                />
+                : null);
+        },
+        setNavigationViewActive: function (viewId, isOpen) {
+            if (isOpen) {
+                this.activeNavigationViews.add(viewId);
+            } else {
+                this.activeNavigationViews.delete(viewId);
+            }
+            this.updateMainNavigationSubItems();
+        },
         afterStart: function (sandbox) {
             const conf = this.getConfiguration() || {};
             initConfig(conf);
@@ -169,14 +245,18 @@ Oskari.clazz.define(
         },
         eventHandlers: {
             'UIChangeEvent': function (evt) {
-                this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
+                if (this.navigation.service) {
+                    this.navigation.service.setActive(MENU_ITEM_ID, false);
+                } else {
+                    this.getSandbox().postRequestByName(UPDATE_EXTENSION_REQUEST, [this, CLOSE]);
+                }
             },
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 // Not handle other extension update events
-                if (event.getExtension().getName() !== this.getName()) {
+                if (this.navigation.service || event.getExtension().getName() !== this.getName()) {
                     return;
                 }
-                if (event.getViewState() === 'close') {
+                if (event.getViewState() === CLOSE) {
                     this.getTile().hideExtensions();
                 } else {
                     this.getTile().showExtensions();
@@ -201,7 +281,8 @@ Oskari.clazz.define(
                     return;
                 }
                 this.getViewHandler().updateLayer('onMap', true);
-                if (!this.getTile().isAttached() && this.stateHandler.getState().indicators.length < 1) {
+                const isAttached = this.navigation.service ? this.navigation.menuItem.isActive : this.getTile().isAttached();
+                if (!isAttached && this.stateHandler.getState().indicators.length < 1) {
                     // layer has added from layerlist and doesn't have indicators
                     this.showSearchFlyout();
                 }
@@ -234,8 +315,13 @@ Oskari.clazz.define(
             }
         },
         showSearchFlyout: function () {
-            this.getViewHandler()?.show('search');
-            this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
+            if (this.navigation.service) {
+                this.navigation.service.setActive(MENU_ITEM_ID, true);
+                this.getViewHandler()?.show(SEARCH_VIEW);
+            } else {
+                this.getViewHandler()?.show(SEARCH_VIEW);
+                this.getSandbox().postRequestByName(UPDATE_EXTENSION_REQUEST, [this, ATTACH]);
+            }
         },
 
         __addTool: function () {
