@@ -95,11 +95,12 @@ Oskari.clazz.define(
             this.started = false;
         },
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
+            const title = this.loc('flyout.title');
             return new MenuItem({
                 id: MENU_ITEM_ID,
                 sortOrder: 20,
-                name: this.loc('flyout.title'),
-                tooltip: this.getDescription(),
+                name: title,
+                tooltip: title,
                 setActive: (isActive) => {
                     if (!isActive) {
                         this.getViewHandler()?.close(SEARCH_VIEW);
