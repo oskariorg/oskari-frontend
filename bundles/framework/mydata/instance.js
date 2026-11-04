@@ -3,6 +3,23 @@ import './Flyout';
 import './service/ViewService';
 import React from 'react';
 import { Message } from 'oskari-ui';
+import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
+import { showFlyout } from 'oskari-ui/components/window';
+import { styled } from 'styled-components';
+import { MyDataView } from './view/MyDataView';
+
+const MENU_ITEM_ID = 'mydata-item';
+const FLYOUT_PLUGIN = 'Oskari.userinterface.Flyout';
+const TILE_PLUGIN = 'Oskari.userinterface.Tile';
+const PROFILE_LINK_ID = 'oskari-profile-link';
+const UPDATE_EXTENSION_REQUEST = 'userinterface.UpdateExtensionRequest';
+const ATTACH = 'attach';
+const CLOSE = 'close';
+const FLYOUT_ID = 'MyData';
+const FlyoutPadding = styled('div')`
+    margin: 0;
+    padding: 1.5em 1.5em 1.5em 1.75em;
+`;
 
 /**
  * @class Oskari.mapframework.bundle.mydata.MyDataBundleInstance
@@ -24,6 +41,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         this.started = false;
         this.plugins = {};
         this.viewService = null;
+        this.mainNavigationControls = null;
+        this.myDataView = null;
+        this.profileLink = null;
+        this.onProfileLinkClick = (event) => {
+            event.preventDefault();
+            this.openProfileTab();
+        };
+        this.navigation = new NavigationAdapter(this, {
+            createMenuItem: (navigation) => this.createMenuItem(navigation),
+            onStart: () => {
+                this.myDataView = new MyDataView(this, () => this.updateMainNavigationFlyout());
+                this.myDataView.start();
+            },
+            onStop: () => {
+                this.closeMainNavigationFlyout();
+                this.myDataView.stop();
+                this.myDataView = null;
+            }
+        });
     }, {
         /**
          * @static
@@ -82,7 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        'start': function () {
+        start: function () {
             var me = this;
 
             if (me.started) {
@@ -91,11 +127,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
 
             me.started = true;
 
-            var conf = this.conf || {};
+            const conf = this.conf || {};
             this.conf = conf;
-            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
-            var sandbox = Oskari.getSandbox(sandboxName),
-                p;
+            const sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
+            const sandbox = Oskari.getSandbox(sandboxName);
+            let p;
 
             me.sandbox = sandbox;
             this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.service.ViewService');
@@ -108,9 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
             }
 
             // Let's extend UI
-            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
-
-            sandbox.request(this, request);
+            this.navigation.start();
 
             // draw ui
             me.createUi();
@@ -154,21 +188,89 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        'stop': function () {
-            var sandbox = this.sandbox(),
-                p;
+        stop: function () {
+            const sandbox = this.sandbox;
+            let p;
             for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
+                if (Object.prototype.hasOwnProperty.call(this.eventHandlers, p)) {
                     sandbox.unregisterFromEventByName(this, p);
                 }
             }
 
-            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
-
-            sandbox.request(this, request);
+            this.navigation.stop();
+            this.profileLink?.removeEventListener('click', this.onProfileLinkClick);
+            this.profileLink = null;
 
             this.sandbox.unregister(this);
             this.started = false;
+        },
+        getMainNavigationService: function () {
+            return this.navigation.service;
+        },
+        createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
+            const menuItem = new MenuItem({
+                id: MENU_ITEM_ID,
+                name: this.getTitle(),
+                tooltip: this.getDescription(),
+                setActive: (isActive) => {
+                    if (isActive) {
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                        return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
+                    }
+                    this.closeMainNavigationFlyout();
+                    return MenuItemActivationResult.OK;
+                }
+            });
+            return menuItem;
+        },
+        showMainNavigationFlyout: function (onClose) {
+            if (this.mainNavigationControls) {
+                return true;
+            }
+            const controls = showFlyout(this.getTitle(), this.getPaddedFlyoutContent(), () => {
+                if (this.mainNavigationControls !== controls) {
+                    return;
+                }
+                this.mainNavigationControls = null;
+                onClose();
+            }, { id: FLYOUT_ID });
+            if (!controls) {
+                return false;
+            }
+            this.mainNavigationControls = controls;
+            return true;
+        },
+        closeMainNavigationFlyout: function () {
+            const controls = this.mainNavigationControls;
+            this.mainNavigationControls = null;
+            try {
+                controls?.close();
+            } catch (error) {
+                this.mainNavigationControls = controls;
+                throw error;
+            }
+        },
+        // Divmanazer supplies its own padding; the modern window needs a wrapper.
+        getPaddedFlyoutContent: function () {
+            return <FlyoutPadding>{this.myDataView.getContent()}</FlyoutPadding>;
+        },
+        updateMainNavigationFlyout: function () {
+            this.mainNavigationControls?.update(this.getTitle(), this.getPaddedFlyoutContent());
+        },
+        /** Opens the personal data flyout in the configured navigation. */
+        openFlyout: function () {
+            const service = this.getMainNavigationService();
+            if (service) {
+                return service.setActive(MENU_ITEM_ID, true);
+            }
+            this.sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [this, ATTACH]);
+        },
+        closeFlyout: function () {
+            const service = this.getMainNavigationService();
+            if (service) {
+                return service.setActive(MENU_ITEM_ID, false);
+            }
+            this.sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [this, CLOSE]);
         },
         /**
          * @method startExtension
@@ -178,8 +280,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * Oskari.mapframework.bundle.mydata.Tile
          */
         startExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.Flyout', this);
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.Tile', this);
+            this.plugins[FLYOUT_PLUGIN] = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.Flyout', this);
+            this.plugins[TILE_PLUGIN] = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.Tile', this);
         },
         /**
          * @method stopExtension
@@ -187,8 +289,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * Clears references to flyout and tile
          */
         stopExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = null;
-            this.plugins['Oskari.userinterface.Tile'] = null;
+            this.plugins[FLYOUT_PLUGIN].stopPlugin();
+            this.plugins[FLYOUT_PLUGIN] = null;
+            this.plugins[TILE_PLUGIN] = null;
         },
         /**
          * @method getPlugins
@@ -217,8 +320,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * (re)creates the UI for "personal data" functionality
          */
         createUi: function () {
-            this.plugins['Oskari.userinterface.Flyout'].createUi();
-            this.plugins['Oskari.userinterface.Tile'].refresh();
+            if (!this.getMainNavigationService()) {
+                this.plugins[FLYOUT_PLUGIN].createUi();
+                this.plugins[TILE_PLUGIN].refresh();
+            }
+            this.profileLink?.removeEventListener('click', this.onProfileLinkClick);
+            this.profileLink = document.getElementById(PROFILE_LINK_ID);
+            this.profileLink?.addEventListener('click', this.onProfileLinkClick);
+        },
+        openProfileTab: function () {
+            this.openFlyout();
+            const view = this.myDataView || this.plugins[FLYOUT_PLUGIN].myDataView;
+            view.selectAccountTab();
         },
         /**
          * @static
@@ -229,10 +342,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         __guidedTourDelegateTemplate: {
             priority: 40,
             show: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'MyData']);
+                this.openFlyout();
             },
             hide: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'MyData']);
+                this.closeFlyout();
             },
             getTitle: function () {
                 return Oskari.getMsg(this.getName(), 'guidedTour.title');
@@ -245,12 +358,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
                 return [
                     {
                         title: Oskari.getMsg(this.getName(), 'guidedTour.openLink'),
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'MyData']),
+                        onClick: () => me.openFlyout(),
                         visible: false
                     },
                     {
                         title: Oskari.getMsg(this.getName(), 'guidedTour.closeLink'),
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'MyData']),
+                        onClick: () => me.closeFlyout(),
                         visible: true
                     }
                 ];
