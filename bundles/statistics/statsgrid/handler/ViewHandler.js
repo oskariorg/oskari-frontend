@@ -23,7 +23,7 @@ class UIHandler extends AsyncStateHandler {
     constructor (instance, stateHandler, searchHandler) {
         super();
         this.instance = instance;
-        this.tile = instance.getTile();
+        this.tile = instance.navigation.service ? null : instance.getTile();
         this.stateHandler = stateHandler;
         this.searchHandler = searchHandler;
         this.formHandler = null;

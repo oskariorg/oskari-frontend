@@ -62,14 +62,8 @@ Oskari.clazz.define(
         this.activeNavigationViews = new Set();
         this.navigation = new NavigationAdapter(this, {
             createMenuItem: (navigation) => this.createMenuItem(navigation),
-            onStart: () => {
-                this.startExtension();
-            },
-            onStop: () => {
-                this.getViewHandler()?.closeAll();
-                this.activeNavigationViews.clear();
-                this.stopExtension();
-            }
+            onStart: () => this.startMainNavigation(),
+            onStop: () => this.stopMainNavigation()
         });
     }, {
         start: function () {
@@ -93,6 +87,18 @@ Oskari.clazz.define(
             sandbox.unregister(this);
             this.sandbox = null;
             this.started = false;
+        },
+        startMainNavigation: function () {
+            const sandbox = this.getSandbox();
+            Object.keys(this.requestHandlers).forEach(name => sandbox.requestHandler(name, this));
+            Object.keys(this.eventHandlers).forEach(name => sandbox.registerForEventByName(this, name));
+        },
+        stopMainNavigation: function () {
+            this.getViewHandler()?.closeAll();
+            this.activeNavigationViews.clear();
+            const sandbox = this.getSandbox();
+            Object.keys(this.eventHandlers).forEach(name => sandbox.unregisterFromEventByName(this, name));
+            Object.keys(this.requestHandlers).forEach(name => sandbox.removeRequestHandler(name, this));
         },
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const title = this.loc('flyout.title');
