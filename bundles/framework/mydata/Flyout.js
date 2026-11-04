@@ -1,14 +1,4 @@
-import React from 'react';
-import { AccountTab } from './view/Account/AccountTab';
-import { Tabs } from 'oskari-ui';
-import { MyDataHandler } from './handler/MyDataHandler';
-import { MyViewsTab } from './view/MyViews/MyViewsTab';
-import { FlyoutContent } from './FlyoutContent';
-import { PublishedMapsHandler } from './handler/PublishedMapsHandler';
-import { MyViewsHandler } from './handler/MyViewsHandler';
-import { PublishedMapsTab } from './view/PublishedMaps/PublishedMapsTab';
-import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
-import './service/MyDataService';
+import { MyDataView } from './view/MyDataView';
 import { getReactRoot } from 'oskari-ui/components/window';
 
 /**
@@ -28,8 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
         this.container = null;
         this.state = null;
 
-        this.uiHandler = new MyDataHandler(() => this.update());
-        this.myDataService = null;
+        this.myDataView = new MyDataView(instance, () => this.update());
     }, {
         /**
          * @method getName
@@ -64,50 +53,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
         startPlugin: function () {
-            if (Oskari.user().isLoggedIn()) {
-                this.myDataService = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.service.MyDataService', this.uiHandler);
-                Oskari.getSandbox().registerService(this.myDataService);
-
-                if (this.instance.conf && this.instance.conf.showUser) {
-                    this.myDataService.addTab(
-                        'account',
-                        Oskari.getMsg('MyData', 'tabs.account.title'),
-                        AccountTab,
-                        {
-                            getState: () => ({
-                                user: Oskari.user(),
-                                changeInfoUrl: Oskari.urls.getLocation('profile')
-                            }),
-                            getController: () => null,
-                            addStateListener: () => null
-                        }
-                    );
-                }
-                if (this.instance.conf && this.instance.conf.showViews) {
-                    this.myDataService.addTab(
-                        'myviews',
-                        Oskari.getMsg('MyData', 'tabs.myviews.title'),
-                        MyViewsTab,
-                        new MyViewsHandler(this.instance)
-                    );
-                }
-                this.myDataService.addTab(
-                    'publishedmaps',
-                    Oskari.getMsg('MyData', 'tabs.publishedmaps.title'),
-                    PublishedMapsTab,
-                    new PublishedMapsHandler(this.instance)
-                );
-            }
-
+            this.myDataView.start();
             this.update();
         },
         /**
          * @method stopPlugin
          *
-         * Interface method implementation, does nothing atm
+         * Releases the shared view when the legacy extension is removed.
          */
         stopPlugin: function () {
-
+            this.myDataView.stop();
         },
         /**
          * @method getTitle
@@ -140,41 +95,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
             this.state = state;
         },
         update: function () {
-            if (this.instance.getMainNavigationService()) {
-                this.instance.updateMainNavigationFlyout();
-                return;
-            }
             getReactRoot(this.container).render(this.getContent());
         },
         getContent: function () {
-            const {
-                tabs,
-                activeTab
-            } = this.uiHandler.getState();
-            return (
-                <LocaleProvider value={{ bundleKey: 'MyData' }}>
-                    <ThemeProvider>
-                        <FlyoutContent loginStatus={this.getLoginStatus()}>
-                            <Tabs
-                                activeKey={activeTab}
-                                onChange={(tab) => this.uiHandler.setActiveTab(tab)}
-                                items={tabs.map(t => (
-                                    {
-                                        key: t.id,
-                                        label: <span className={ 't_tab t_' + t.id }>{t.title}</span>,
-                                        children: (
-                                            <t.component
-                                                state={t.handler.getState()}
-                                                controller={t.handler.getController()}
-                                            />
-                                        )
-                                    }
-                                ))}
-                            />
-                        </FlyoutContent>
-                    </ThemeProvider>
-                </LocaleProvider>
-            );
+            return this.myDataView.getContent();
         },
         /**
          * @method createUi
@@ -182,29 +106,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
          */
         createUi: function () {
             this.update();
-            this.addProfileLink();
-        },
-        addProfileLink: function () {
-            jQuery('#oskari-profile-link').on('click', () => {
-                this.openProfileTab();
-                return false;
-            });
         },
         openProfileTab: function () {
-            this.instance.openFlyout();
-            this.uiHandler.setActiveTab('account');
-        },
-        /**
-         * @method getLoginUrl
-         * @returns {String}
-         */
-        getLoginStatus: function () {
-            const conf = this.instance.conf || {};
-            return {
-                loggedIn: Oskari.user().isLoggedIn(),
-                loginUrl: Oskari.getLocalized(conf.logInUrl) || Oskari.urls.getLocation('login'),
-                registerUrl: Oskari.urls.getLocation('register')
-            };
+            this.instance.openProfileTab();
         }
     }, {
         /**

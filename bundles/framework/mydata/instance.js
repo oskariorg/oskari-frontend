@@ -6,9 +6,12 @@ import { Message } from 'oskari-ui';
 import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
 import { showFlyout } from 'oskari-ui/components/window';
 import { styled } from 'styled-components';
+import { MyDataView } from './view/MyDataView';
 
 const MENU_ITEM_ID = 'mydata-item';
 const FLYOUT_PLUGIN = 'Oskari.userinterface.Flyout';
+const TILE_PLUGIN = 'Oskari.userinterface.Tile';
+const PROFILE_LINK_ID = 'oskari-profile-link';
 const UPDATE_EXTENSION_REQUEST = 'userinterface.UpdateExtensionRequest';
 const ATTACH = 'attach';
 const CLOSE = 'close';
@@ -39,16 +42,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         this.plugins = {};
         this.viewService = null;
         this.mainNavigationControls = null;
+        this.myDataView = null;
+        this.profileLink = null;
+        this.onProfileLinkClick = (event) => {
+            event.preventDefault();
+            this.openProfileTab();
+        };
         this.navigation = new NavigationAdapter(this, {
             createMenuItem: (navigation) => this.createMenuItem(navigation),
             onStart: () => {
-                this.startExtension();
-                this.plugins[FLYOUT_PLUGIN].startPlugin();
+                this.myDataView = new MyDataView(this, () => this.updateMainNavigationFlyout());
+                this.myDataView.start();
             },
             onStop: () => {
                 this.closeMainNavigationFlyout();
-                this.plugins[FLYOUT_PLUGIN].stopPlugin();
-                this.stopExtension();
+                this.myDataView.stop();
+                this.myDataView = null;
             }
         });
     }, {
@@ -189,6 +198,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
             }
 
             this.navigation.stop();
+            this.profileLink?.removeEventListener('click', this.onProfileLinkClick);
+            this.profileLink = null;
 
             this.sandbox.unregister(this);
             this.started = false;
@@ -216,7 +227,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
             if (this.mainNavigationControls) {
                 return true;
             }
-            const controls = showFlyout(this.plugins[FLYOUT_PLUGIN].getTitle(), this.getPaddedFlyoutContent(), () => {
+            const controls = showFlyout(this.getTitle(), this.getPaddedFlyoutContent(), () => {
                 if (this.mainNavigationControls !== controls) {
                     return;
                 }
@@ -241,10 +252,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         },
         // Divmanazer supplies its own padding; the modern window needs a wrapper.
         getPaddedFlyoutContent: function () {
-            return <FlyoutPadding>{this.plugins[FLYOUT_PLUGIN].getContent()}</FlyoutPadding>;
+            return <FlyoutPadding>{this.myDataView.getContent()}</FlyoutPadding>;
         },
         updateMainNavigationFlyout: function () {
-            this.mainNavigationControls?.update(this.plugins[FLYOUT_PLUGIN].getTitle(), this.getPaddedFlyoutContent());
+            this.mainNavigationControls?.update(this.getTitle(), this.getPaddedFlyoutContent());
         },
         /** Opens the personal data flyout in the configured navigation. */
         openFlyout: function () {
@@ -269,8 +280,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * Oskari.mapframework.bundle.mydata.Tile
          */
         startExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.Flyout', this);
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.Tile', this);
+            this.plugins[FLYOUT_PLUGIN] = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.Flyout', this);
+            this.plugins[TILE_PLUGIN] = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.Tile', this);
         },
         /**
          * @method stopExtension
@@ -278,8 +289,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * Clears references to flyout and tile
          */
         stopExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = null;
-            this.plugins['Oskari.userinterface.Tile'] = null;
+            this.plugins[FLYOUT_PLUGIN].stopPlugin();
+            this.plugins[FLYOUT_PLUGIN] = null;
+            this.plugins[TILE_PLUGIN] = null;
         },
         /**
          * @method getPlugins
@@ -308,8 +320,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
          * (re)creates the UI for "personal data" functionality
          */
         createUi: function () {
-            this.plugins['Oskari.userinterface.Flyout'].createUi();
-            this.plugins['Oskari.userinterface.Tile'].refresh();
+            if (!this.getMainNavigationService()) {
+                this.plugins[FLYOUT_PLUGIN].createUi();
+                this.plugins[TILE_PLUGIN].refresh();
+            }
+            this.profileLink?.removeEventListener('click', this.onProfileLinkClick);
+            this.profileLink = document.getElementById(PROFILE_LINK_ID);
+            this.profileLink?.addEventListener('click', this.onProfileLinkClick);
+        },
+        openProfileTab: function () {
+            this.openFlyout();
+            const view = this.myDataView || this.plugins[FLYOUT_PLUGIN].myDataView;
+            view.selectAccountTab();
         },
         /**
          * @static
