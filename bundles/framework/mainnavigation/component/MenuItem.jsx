@@ -2,10 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Badge } from 'oskari-ui';
 import { showFlyout } from 'oskari-ui/components/window';
-import { styled } from 'styled-components';
+import { keyframes, styled } from 'styled-components';
 import { MenuItemActivationResult } from './MenuItemActivationResult';
 
 const ACTIVATION_KEYS = ['Enter', ' '];
+const ACTIVE_BADGE_BORDER_COLOR = '#fff';
+
+const BadgeBlink = keyframes`
+    0% { opacity: 1; }
+    50% { opacity: 0.25; }
+    100% { opacity: 1; }
+`;
 
 const MenuItemContainer = styled('div')`
     display: block;
@@ -52,12 +59,23 @@ const StyledBadge = styled(Badge)`
     box-sizing: content-box;
     min-width: 1.8182em;
     height: 1.7273em;
-    margin: 0.5455em 0.0909em 0.0909em;
+    margin: 0.5455em 0.5em 0.0909em 0.0909em;
     padding: 0.0909em;
     font-size: 0.785714em;
     font-weight: bold;
     line-height: 1.7273em;
     text-align: center;
+    animation-name: ${BadgeBlink};
+    animation-duration: 1s;
+    animation-iteration-count: 2;
+
+    .ant-badge-count {
+        transition-property: background-color;
+    }
+
+    ${MenuItemContainer}[aria-pressed='true'] & .ant-badge-count {
+        outline: 0.0909em solid ${ACTIVE_BADGE_BORDER_COLOR};
+    }
 `;
 
 /**
@@ -206,7 +224,10 @@ const MenuItemView = ({ id, name, tooltip, onActiveChange, isActive = false, bad
             >
                 <Title>{name}</Title>
                 {typeof badge === 'number' && (
-                    <StyledBadge count={badge} />
+                    <StyledBadge
+                        key={badge}
+                        count={badge}
+                    />
                 )}
             </MenuItemContainer>
             {subItems}
