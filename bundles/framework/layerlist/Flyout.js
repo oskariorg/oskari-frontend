@@ -1,7 +1,4 @@
-import React from 'react';
-import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
-import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS, TABS_SELECTED_LAYERS } from './view/LayerViewTabs/';
-import { LAYER_GROUP_TOGGLE_LIMIT, LAYER_GROUP_TOGGLE_DEFAULTS, BACKEND_STATUS_AVAILABLE } from './constants';
+import { LayerListView } from './view/LayerListView';
 import { getReactRoot } from 'oskari-ui/components/window';
 
 
@@ -20,21 +17,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
      */
     function (instance) {
         this.instance = instance;
-        // the show "add all layers to map" control for groups is disabled by default. Use instance conf to enable it.
-        // view/bundle modifier adds backend status available conf if bundle is present
-        const defaultOpts = {
-            [LAYER_GROUP_TOGGLE_LIMIT]: LAYER_GROUP_TOGGLE_DEFAULTS.DISABLE_TOGGLE,
-            [BACKEND_STATUS_AVAILABLE]: false
-        };
-        const instanceConf = this.instance.conf || {};
-        this.optsForUI = {
-            ...defaultOpts,
-            ...instanceConf
-        };
         this.container = null;
-        this.tabsHandler = new LayerViewTabsHandler(this.instance);
-        this.tabsHandler.getLayerListHandler().loadLayers();
-        this.tabsHandler.addStateListener(() => this.render());
+        this.layerListView = new LayerListView(this.instance, () => this.render());
     }, {
 
         /**
@@ -101,14 +85,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * @param {string} activeFilterId
          */
         setActiveFilter: function (activeFilterId, showSelectedLayers) {
-            const filterHandler = this.tabsHandler.getLayerListHandler().getFilterHandler();
-            filterHandler.stashCurrentState();
-            filterHandler.updateState({
-                activeFilterId,
-                searchText: null
-            });
-            const activeTab = showSelectedLayers ? TABS_SELECTED_LAYERS : TABS_ALL_LAYERS;
-            this.tabsHandler.setTab(activeTab);
+            this.layerListView.setActiveFilter(activeFilterId, showSelectedLayers);
         },
         /**
          * @method render
@@ -118,17 +95,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             if (!this.container) {
                 return;
             }
-            const content = (
-                <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
-                    <ThemeProvider>
-                        <LayerViewTabs
-                            {...this.tabsHandler.getState()}
-                            opts={this.optsForUI}
-                            controller={this.tabsHandler.getController()}/>
-                    </ThemeProvider>
-                </LocaleProvider>
-            );
-            getReactRoot(this.container).render(content);
+            getReactRoot(this.container).render(this.layerListView.getContent());
         }
     }, {
 
