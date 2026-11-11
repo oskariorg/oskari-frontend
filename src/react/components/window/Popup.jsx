@@ -12,7 +12,7 @@ const Container = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    max-width: 800px;
+    max-width: min(800px, 95vw);
     min-width: 200px;
     background-color: white;
     background-clip: border-box;
