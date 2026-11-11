@@ -8,7 +8,7 @@ import { createDefaultStyle } from 'ol/style/Style';
 
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
 // eslint-disable-next-line import/no-unresolved
-import { stylefunction as mapboxStyleFunction } from 'ol-mapbox-style';
+import { applyStyle as applyMapboxStyle, stylefunction as mapboxStyleFunction } from 'ol-mapbox-style';
 import { LAYER_ID, LAYER_TYPE, FEATURE_QUERY_ERRORS, VECTOR_STYLE } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
 import { getFeatureAsGeojson } from '../../util/vectorfeatures/jsonHelper';
@@ -93,7 +93,9 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
         const olLayers = this.getOLMapLayers(oskariLayer);
 
         if (olLayers && olLayers.length > 0) {
+            // Set an immediate fallback; applyStyle replaces it after sprite assets load.
             olLayers[0].setStyle(this._getLayerCurrentStyleFunction(oskariLayer));
+            this._applyMapboxStyle(oskariLayer, olLayers[0]);
         }
     }
 
@@ -113,6 +115,20 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
             return mapboxStyleFunction(olLayers[0], styleDef, sourceLayerIds, resolutions);
         }
         return style.hasDefinitions() ? this.mapModule.getStyleForLayer(layer) : this._createDefaultStyle();
+    }
+
+    _applyMapboxStyle (layer, olLayer) {
+        const style = layer.getCurrentStyle();
+        if (style.getType() === VECTOR_STYLE.MAPBOX) {
+            const styleDef = style.getFeatureStyle();
+            const sourceLayerIds = styleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
+            const resolutions = [...this.getMapModule().getResolutionArray()];
+            applyMapboxStyle(olLayer, styleDef, {
+                layers: sourceLayerIds,
+                resolutions,
+                updateSource: false
+            }).catch(error => this._log.error(error));
+        }
     }
 
     /**
@@ -295,7 +311,9 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
             this.mapModule.addLayer(olLayer, !keepLayerOnTop);
         });
         this.setOLMapLayers(layer.getId(), olLayers);
+        // Set an immediate fallback; applyStyle replaces it after sprite assets load.
         vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
+        this._applyMapboxStyle(layer, vectorTileLayer);
     }
 
     createSource (layer, options) {
