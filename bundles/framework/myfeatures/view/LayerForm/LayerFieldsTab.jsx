@@ -35,6 +35,7 @@ const TypeColumnActions = styled('div')`
 const AddFieldContainer = styled('div')`
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     column-gap: 1em;
     margin-top: 0.25em;
 `;
@@ -392,6 +393,9 @@ export const LayerFieldsTab = ({ id = null, layerFields = [], attributes, update
             dataSource={rows}
             pagination={false}
             loading={false}
+            scroll={{
+                x: true
+            }}
         />
         {!id && <AddFieldContainer>
             <AddFieldContainerColumn>
