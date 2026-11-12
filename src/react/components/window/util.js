@@ -166,6 +166,8 @@ const getPlacementXY = (width, height, placement) => {
             x = availableWidth - width - BORDER_MARGIN;
             break;
     }
+    // keep the bottom of the element (and the buttons on it) on screen
+    y = Math.max(Math.min(y, availableHeight - height), 0);
     return { x, y }
 };
 
