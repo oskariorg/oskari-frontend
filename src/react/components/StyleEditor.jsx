@@ -14,11 +14,13 @@ const TabSelector = styled(Radio.Group)`
         display: flex;
         flex-basis: 0;
         flex-grow: 1;
+        flex-wrap: wrap;
     }
 
     .ant-radio-button-wrapper {
         text-align: center;
-        width: 100%;
+        flex: 1 1 0;
+        min-width: max-content;
     }
 `;
 
