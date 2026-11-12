@@ -7,18 +7,18 @@ import { LocaleConsumer } from 'oskari-ui/util';
 import { FileInput } from 'oskari-ui/components/FileInput';
 import { FILE_INPUT_PROPS } from '../../constants';
 
-const Description = styled.div`
-    padding-bottom: 20px;
+const Description = styled('div')`
+    padding-bottom: 1.5em;
     ul {
         list-style: disc inside none;
-        margin-left: 12px
+        margin-left: 0.75em;
     }
 `;
-const PaddingTop = styled.div`
-    padding-top: 10px;
+const PaddingTop = styled('div')`
+    padding-top: 0.75em;
 `;
 const ProjectionInput = styled(TextInput)`
-    margin-bottom: 10px;
+    margin-bottom: 0.75em;
 `;
 
 const renderImport = (file, maxSize, unzippedMaxSize, updateFile) => {
