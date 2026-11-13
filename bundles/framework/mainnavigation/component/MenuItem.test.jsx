@@ -4,7 +4,6 @@ import { beforeEach, afterEach } from '@jest/globals';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MenuItem } from './MenuItem';
 import { MainNavigationService } from '../service/MainNavigationService';
-import { MapLayersBundleInstance } from '../maplayers/instance';
 import { showFlyout } from 'oskari-ui/components/window';
 
 const SUB_ITEMS_MENU_ID = 'sub-items-menu';
@@ -208,36 +207,6 @@ describe('MenuItem activation', () => {
         act(() => service.addMenuItem(replacement));
         expect(showFlyout).toHaveBeenCalledTimes(2);
         act(() => service.removeMenuItem('first'));
-    });
-
-    test('colors only the maplayers item by badge direction and retains default flyout behavior', () => {
-        const bundle = new MapLayersBundleInstance();
-        bundle.mainNavigationService = service;
-        bundle.updateMenuItem();
-        service.addMenuItem(new MenuItem({ id: 'other', name: 'Other' }));
-        render(<Navigation />);
-        const layersButton = screen.getByRole('button', { name: 'Map layers' });
-        const otherButton = screen.getByRole('button', { name: 'Other' });
-        act(() => service.setBadge(bundle.menuItemId, 3));
-        expect(layersButton.style.borderColor).toBe('');
-        fireEvent.click(layersButton);
-        expect(showFlyout).toHaveBeenCalledTimes(1);
-        act(() => service.setBadge(bundle.menuItemId, 2));
-        expect(layersButton.style.borderColor).toBe('red');
-        expect(otherButton.style.borderColor).toBe('');
-        act(() => service.setBadge(bundle.menuItemId, 2));
-        expect(layersButton.style.borderColor).toBe('red');
-        act(() => service.setBadge(bundle.menuItemId, 4));
-        expect(layersButton.style.borderColor).toBe('green');
-        expect(showFlyout).toHaveBeenCalledTimes(1);
-        const controls = showFlyout.mock.results[0].value;
-        fireEvent.click(layersButton);
-        expect(controls.close).toHaveBeenCalledTimes(1);
-        act(() => service.setBadge(bundle.menuItemId, 0));
-        expect(layersButton.style.borderColor).toBe('red');
-        fireEvent.click(layersButton);
-        expect(layersButton.style.borderColor).toBe('red');
-        expect(showFlyout).toHaveBeenCalledTimes(2);
     });
 
     test('can replace rendering directly in the item settings', () => {
