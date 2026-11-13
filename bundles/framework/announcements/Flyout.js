@@ -1,6 +1,4 @@
-import React from 'react';
-import { FlyoutContent } from './view/';
-import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
+import { AnnouncementsView } from './view/AnnouncementsView';
 import { getReactRoot } from 'oskari-ui/components/window';
 
 
@@ -22,6 +20,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
         this.sandbox = instance.getSandbox();
         this.announcementsHandler = null;
         this.container = null;
+        this.announcementsView = new AnnouncementsView(this.instance);
     }, {
         /**
          * @method setEl
@@ -60,18 +59,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
             if (!this.container) {
                 return;
             }
-            const content = (
-                <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
-                    <ThemeProvider>
-                        <FlyoutContent
-                            { ...state }
-                            toolController = {this.announcementsHandler.getToolController()}
-                            controller={this.announcementsHandler.getController()}
-                        />
-                    </ThemeProvider>
-                </LocaleProvider>
-            );
-            getReactRoot(this.container).render(content);
+            getReactRoot(this.container).render(this.announcementsView.getContent(state));
         }
     }, {
         extend: ['Oskari.userinterface.extension.DefaultFlyout']

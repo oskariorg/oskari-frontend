@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.request.ShowFilteredLa
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
+            var layerSelectorFlyout = this.instance.layerListView || this.instance.plugins['Oskari.userinterface.Flyout'];
 
             this.instance.filteredLayerListOpenedByRequest = true;
 
@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.request.ShowFilteredLa
             }
 
             if (request.getOpenLayerList() && request.getOpenLayerList() === true) {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'attach']);
+                this.instance.openFlyout();
             }
         }
     }, {

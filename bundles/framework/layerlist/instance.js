@@ -8,8 +8,19 @@ import './request/AddLayerListFilterRequest';
 import './request/AddLayerListFilterRequestHandler';
 import React from 'react';
 import { Message } from 'oskari-ui';
+import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
+import { showFlyout } from 'oskari-ui/components/window';
+import { styled } from 'styled-components';
+import { LayerListView } from './view/LayerListView';
 
 const FILTER_NEWEST_COUNT = 20;
+const MENU_ITEM_ID = 'layerlist-item';
+const FLYOUT_ID = 'LayerList';
+const EXTENSION_UPDATED_EVENT = 'userinterface.ExtensionUpdatedEvent';
+const FlyoutPadding = styled('div')`
+    margin: 0;
+    padding: 0em 1.5em 1.5em 1.75em;
+`;
 
 /**
  * @class Oskari.mapframework.bundle.layerlist.LayerListBundleInstance
@@ -31,6 +42,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         this.started = false;
         this.plugins = {};
         this.localization = null;
+        this.layerListView = null;
+        this.mainNavigationControls = null;
+        this.navigation = new NavigationAdapter(this, {
+            createMenuItem: (navigation) => this.createMenuItem(navigation),
+            onStart: () => {
+                this.layerListView = this.createLayerListView();
+            },
+            onStop: () => {
+                this.closeMainNavigationFlyout();
+                this.layerListView.stop();
+                this.layerListView = null;
+            }
+        });
     }, {
         /**
          * @static
@@ -110,8 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             this._registerFilterButtons(layerlistService);
 
             // Let's extend UI
-            const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
-            sandbox.request(this, request);
+            this.navigation.start();
 
             // create and register request handlers
             const reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerlist.request.ShowFilteredLayerListRequestHandler', sandbox, this);
@@ -134,7 +157,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
 
             // Skip events, if internally linked layer
             if (typeof event.getMapLayer === 'function' && event.getMapLayer().isLinkedLayer()) {
-                this.plugins['Oskari.userinterface.Tile'].refresh();
+                this.refreshLayerCount();
                 return;
             }
 
@@ -152,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             AfterMapLayerRemoveEvent: function (event) {
-                this.plugins['Oskari.userinterface.Tile'].refresh();
+                this.refreshLayerCount();
             },
             /**
              * @method AfterMapLayerAddEvent
@@ -161,7 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             AfterMapLayerAddEvent: function (event) {
-                this.plugins['Oskari.userinterface.Tile'].refresh();
+                this.refreshLayerCount();
             },
             /**
              * @method AfterRearrangeSelectedMapLayerEvent
@@ -172,11 +195,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             AfterRearrangeSelectedMapLayerEvent: function (event) {
                 if (event._creator !== this.getName()) {
                     // Layer order has been changed by someone else, resort layers
-                    this.plugins['Oskari.userinterface.Tile'].refresh();
+                    this.refreshLayerCount();
                 }
             },
             UIChangeEvent: function () {
-                this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
+                this.closeFlyout();
             }
         },
         /**
@@ -199,13 +222,97 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            const sandbox = this.sandbox();
-
-            const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
-            sandbox.request(this, request);
+            const result = this.navigation.stop();
+            if (this.navigation.service) {
+                return result;
+            }
 
             this.sandbox.unregister(this);
             this.started = false;
+        },
+        createLayerListView: function () {
+            return new LayerListView(this, () => this.updateMainNavigationFlyout());
+        },
+        createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
+            const menuItem = new MenuItem({
+                id: MENU_ITEM_ID,
+                sortOrder: 5,
+                name: this.getTitle(),
+                tooltip: this.getDescription(),
+                badge: this.sandbox.findAllSelectedMapLayers().length,
+                setActive: (isActive) => {
+                    if (isActive) {
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                        return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
+                    }
+                    this.closeMainNavigationFlyout();
+                    return MenuItemActivationResult.OK;
+                }
+            });
+            return menuItem;
+        },
+        showMainNavigationFlyout: function (onClose) {
+            if (this.mainNavigationControls) {
+                return true;
+            }
+            const controls = showFlyout(this.getTitle(), this.getPaddedFlyoutContent(), () => {
+                if (this.mainNavigationControls !== controls) {
+                    return;
+                }
+                this.mainNavigationControls = null;
+                onClose();
+                this.notifyFlyoutState('close');
+            }, { id: FLYOUT_ID });
+            if (!controls) {
+                return false;
+            }
+            this.mainNavigationControls = controls;
+            this.notifyFlyoutState('attach');
+            return true;
+        },
+        closeMainNavigationFlyout: function () {
+            const controls = this.mainNavigationControls;
+            this.mainNavigationControls = null;
+            try {
+                controls?.close();
+            } catch (error) {
+                this.mainNavigationControls = controls;
+                throw error;
+            }
+            if (controls) {
+                this.notifyFlyoutState('close');
+            }
+        },
+        notifyFlyoutState: function (state) {
+            const eventBuilder = Oskari.eventBuilder(EXTENSION_UPDATED_EVENT);
+            if (eventBuilder) {
+                this.sandbox.notifyAll(eventBuilder(this, state));
+            }
+        },
+        getPaddedFlyoutContent: function () {
+            return <FlyoutPadding>{this.layerListView.getContent()}</FlyoutPadding>;
+        },
+        updateMainNavigationFlyout: function () {
+            this.mainNavigationControls?.update(this.getTitle(), this.getPaddedFlyoutContent());
+        },
+        openFlyout: function () {
+            if (this.navigation.service) {
+                return this.navigation.service.setActive(MENU_ITEM_ID, true);
+            }
+            this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
+        },
+        closeFlyout: function () {
+            if (this.navigation.service) {
+                return this.navigation.service.setActive(MENU_ITEM_ID, false);
+            }
+            this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
+        },
+        refreshLayerCount: function () {
+            if (this.navigation.service) {
+                this.navigation.service.setBadge(MENU_ITEM_ID, this.sandbox.findAllSelectedMapLayers().length);
+                return;
+            }
+            this.plugins['Oskari.userinterface.Tile'].refresh();
         },
         /**
          * @method startExtension
@@ -256,7 +363,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          * (re)creates the UI for "all layers" functionality
          */
         createUi: function () {
-            this.plugins['Oskari.userinterface.Tile'].refresh();
+            this.refreshLayerCount();
         },
 
         /**
@@ -268,10 +375,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         __guidedTourDelegateTemplate: {
             priority: 20,
             show: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', this.getName()]);
+                this.openFlyout();
             },
             hide: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', this.getName()]);
+                this.closeFlyout();
             },
             getTitle: function () {
                 return Oskari.getMsg(this.getName(), 'guidedTour.title');
@@ -284,12 +391,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 return [
                     {
                         title: Oskari.getMsg(this.getName(), 'guidedTour.openLink'),
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', me.getName()]),
+                        onClick: () => me.openFlyout(),
                         visible: false
                     },
                     {
                         title: Oskari.getMsg(this.getName(), 'guidedTour.closeLink'),
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', me.getName()]),
+                        onClick: () => me.closeFlyout(),
                         visible: true
                     }
                 ];

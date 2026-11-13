@@ -1,11 +1,22 @@
 import React from 'react';
 import { Message } from 'oskari-ui';
+import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
+import { showFlyout } from 'oskari-ui/components/window';
+import { styled } from 'styled-components';
+import { MapLegendView } from './view/MapLegendView';
 
 import './Flyout';
 import './Tile';
 import './plugin/MapLegendPlugin';
 import './publisher/MapLegendTool';
 import './resources/scss/style.scss';
+
+const MENU_ITEM_ID = 'maplegend-item';
+const FLYOUT_ID = 'MapLegend';
+const FlyoutPadding = styled('div')`
+    margin: 0;
+    padding: 1.5em 1.5em 1.5em 1.75em;
+`;
 
 /**
  * @class Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance
@@ -29,6 +40,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         this.plugins = {};
         this.plugin = null;
         this.loc = Oskari.getMsg.bind(null, this.getName());
+        this.mapLegendView = null;
+        this.mainNavigationControls = null;
+        this.navigation = new NavigationAdapter(this, {
+            createMenuItem: (navigation) => this.createMenuItem(navigation),
+            onStart: () => {
+                this.mapLegendView = new MapLegendView(this);
+            },
+            onStop: () => {
+                this.closeMainNavigationFlyout();
+                this.mapLegendView = null;
+            }
+        });
     }, {
         /**
          * @static
@@ -66,10 +89,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
                 this.createPlugin();
             } else {
                 // Let's extend UI
-                const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
-                sandbox.request(this, request);
-                // draw ui
-                this.createUi();
+                this.navigation.start();
+                if (!this.navigation.service) {
+                    // draw ui
+                    this.createUi();
+                }
             }
             this._setupLayerTools();
             this._registerForGuidedTour();
@@ -141,15 +165,61 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * implements BundleInstance protocol stop method
          */
         stop: function () {
+            const result = this.navigation.stop();
+            if (this.navigation.service) {
+                return result;
+            }
             const sandbox = this.sandbox;
             Object.keys(this.eventHandlers).forEach(event => sandbox.unregisterFromEventByName(this, event));
-
-            const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
-            sandbox.request(this, request);
 
             this.stopPlugin();
             sandbox.unregister(this);
             this.started = false;
+        },
+        createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
+            const menuItem = new MenuItem({
+                id: MENU_ITEM_ID,
+                sortOrder: 40,
+                name: this.getTitle(),
+                tooltip: this.getDescription(),
+                setActive: (isActive) => {
+                    if (isActive) {
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                        return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
+                    }
+                    this.closeMainNavigationFlyout();
+                    return MenuItemActivationResult.OK;
+                }
+            });
+            return menuItem;
+        },
+        showMainNavigationFlyout: function (onClose) {
+            if (this.mainNavigationControls) {
+                return true;
+            }
+            const controls = showFlyout(this.getTitle(), this.getPaddedFlyoutContent(), () => {
+                if (this.mainNavigationControls !== controls) {
+                    return;
+                }
+                this.mainNavigationControls = null;
+                onClose();
+            }, { id: FLYOUT_ID });
+            if (!controls) {
+                return false;
+            }
+            this.mainNavigationControls = controls;
+            return true;
+        },
+        closeMainNavigationFlyout: function () {
+            const controls = this.mainNavigationControls;
+            this.mainNavigationControls = null;
+            controls?.close();
+        },
+        getPaddedFlyoutContent: function () {
+            return <FlyoutPadding>{this.mapLegendView.getContent()}</FlyoutPadding>;
+        },
+        updateMainNavigationFlyout: function () {
+            this.mainNavigationControls?.update(this.getTitle(), this.getPaddedFlyoutContent());
         },
         /**
          * @method startExtension
@@ -200,6 +270,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             return Oskari.dom.isEmbedded();
         },
         refreshUI: function () {
+            if (this.navigation.service) {
+                this.updateMainNavigationFlyout();
+                return;
+            }
             const uicomponent = this.isEmbedded() ? this.plugin : this.plugins['Oskari.userinterface.Flyout'];
             if (uicomponent) {
                 uicomponent.refresh();
@@ -276,6 +350,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         },
 
         toggleFlyout: function (show) {
+            if (this.navigation.service) {
+                return this.navigation.service.setActive(MENU_ITEM_ID, show);
+            }
             const request = show ? 'attach' : 'close';
             this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, request, this.getName()]);
         },
