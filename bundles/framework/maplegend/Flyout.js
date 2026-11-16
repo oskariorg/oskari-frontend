@@ -1,7 +1,4 @@
-import React from 'react';
-import { Message } from 'oskari-ui';
-import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
-import { MapLegendList } from './components/MapLegendList';
+import { MapLegendView } from './view/MapLegendView';
 import { getReactRoot } from 'oskari-ui/components/window';
 
 
@@ -28,6 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         this.container = null;
         this.state = null;
         this._legendImagesNotLoaded = {};
+        this.mapLegendView = new MapLegendView(this.instance);
     }, {
         /**
          * @method getName
@@ -102,10 +100,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         refresh: function () {
             this._populateLayerList();
         },
-        showMetadataFlyout: function (event, layerId) {
-            event.stopPropagation();
-            this.instance.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{ layerId: layerId }]);
-        },
         /**
          * @method _populateLayerList
          * @private
@@ -113,36 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          * Renders legend images as an accordion for the selected layers.
          */
         _populateLayerList: function () {
-            const layers = this.instance.getSandbox().findAllSelectedMapLayers();
-
-            // populate selected layer list
-            const showMetadata = (event, layerId) => this.showMetadataFlyout(event, layerId);
-            const legends = layers
-                .filter(layer => typeof layer.getLegendImage === 'function' && !!layer.getLegendImage())
-                .map(layer => {
-                    const uuid = layer.getMetadataIdentifier();
-                    const layerId = layer.getId();
-                    return {
-                        title: layer.getName(),
-                        uuid,
-                        layerId,
-                        legendImageURL: layer.getLegendImage(),
-                        metadataUrl: layer.getAttributes().metadataUrl,
-                        loadError: false,
-                        showMetadataCallback: layerId ? showMetadata : null
-                    };
-                }).reverse();
-
-            getReactRoot(this.container).render(
-                <ThemeProvider>
-                    <LocaleProvider value={{ bundleKey: 'maplegend' }}>
-                        { legends.length === 0
-                            ? <Message messageKey='noLegendsText' />
-                            : <MapLegendList legendList={ legends } />
-                        }
-                    </LocaleProvider>
-                </ThemeProvider>
-            );
+            getReactRoot(this.container).render(this.mapLegendView.getContent());
         }
     }, {
         /**

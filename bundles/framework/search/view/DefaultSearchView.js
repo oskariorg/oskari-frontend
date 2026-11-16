@@ -3,10 +3,14 @@ import { SearchInput } from './SearchInput';
 import { SearchHandler } from './SearchHandler';
 import { SearchResultInfo } from './SearchResultInfo';
 import { SearchResultTable } from './SearchResultTable';
-import { Message } from 'oskari-ui';
+import { Message, Tabs } from 'oskari-ui';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { getReactRoot } from 'oskari-ui/components/window';
+
+const BUNDLE_NAME = 'Search';
+const DEFAULT_TAB_ID = 'oskari_search_tabpanel_header';
+const TAB_CHANGED_EVENT = `${BUNDLE_NAME}.TabChangedEvent`;
 
 const Description = styled('div')`
     margin-bottom: 8px;
@@ -38,6 +42,8 @@ Oskari.clazz.define(
         this.sandbox = this.instance.getSandbox();
         this.searchservice = instance.service;
         this.state = null;
+        this.tabs = [];
+        this.activeTab = null;
         // Actions that get added to the search result popup
         this.resultActions = {};
         this._searchContainer = null;
@@ -46,7 +52,73 @@ Oskari.clazz.define(
         this.loc = Oskari.getMsg.bind(null, this.instance.getName());
     }, {
         __refresh: function () {
+            if (this.instance.navigation.service) {
+                this.instance.updateMainNavigationFlyout();
+                return;
+            }
             const el = this.getContainer();
+            getReactRoot(el[0]).render(this.getContent());
+        },
+        getContent: function () {
+            if (!this.tabs.length) {
+                return !this.instance.disableDefault && this.getSearchContent();
+            }
+            return <Tabs
+                activeKey={this.activeTab}
+                onChange={id => this.selectTab(id)}
+                items={this.tabs.map(tab => ({
+                    key: tab.id,
+                    label: tab.title,
+                    children: tab.id === DEFAULT_TAB_ID
+                        ? this.getSearchContent()
+                        : <div ref={element => {
+                            // Legacy AddTabRequest callers (e.g. metadatasearch) provide DOM nodes,
+                            // HTML or jQuery content, so attach the retained nodes to the React tab.
+                            // Remove this ref after callers provide React content and addTab stores it
+                            // unchanged; Tabs can then render tab.content directly.
+                            if (element && !element.firstChild) {
+                                element.replaceChildren(...tab.content);
+                            }
+                        }} />
+                }))}
+            />;
+        },
+        addTab: function (item) {
+            if (!this.tabs.length && !this.instance.disableDefault) {
+                this.tabs.push({
+                    id: DEFAULT_TAB_ID,
+                    title: this.instance.getLocalization('tabTitle'),
+                    priority: this.instance.tabPriority
+                });
+                this.selectTab(DEFAULT_TAB_ID);
+            }
+            // AddTabRequest accepts HTML, DOM nodes and jQuery collections.
+            let content = item.content;
+            if (typeof content === 'string') {
+                const template = document.createElement('template');
+                template.innerHTML = content;
+                content = [...template.content.childNodes];
+            } else {
+                content = content?.nodeType ? [content] : Array.from(content || []);
+            }
+            const priority = typeof item.priority === 'number'
+                ? item.priority
+                : (this.tabs[this.tabs.length - 1]?.priority ?? 0) + 1;
+            this.tabs.push({ ...item, content, priority });
+            this.tabs.sort((a, b) => a.priority - b.priority);
+            if (this.tabs[0].id === item.id) {
+                this.selectTab(item.id);
+            } else {
+                this.__refresh();
+            }
+        },
+        selectTab: function (id) {
+            const previousTab = this.activeTab;
+            this.activeTab = id;
+            this.sandbox.notifyAll(Oskari.eventBuilder(TAB_CHANGED_EVENT)(previousTab, id));
+            this.__refresh();
+        },
+        getSearchContent: function () {
             const {
                 query = '',
                 loading = false,
@@ -56,8 +128,8 @@ Oskari.clazz.define(
             const controller = this.handler.getController();
             const searchPerformed = result && Array.isArray(result.locations);
 
-            getReactRoot(el[0]).render(
-                <LocaleProvider value={{ bundleKey: 'Search' }}>
+            return (
+                <LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
                     <ThemeProvider>
                         <SearchContainer>
                             <Message messageKey="searchDescription" LabelComponent={Description}/>
@@ -181,7 +253,7 @@ Oskari.clazz.define(
 
             sandbox.request(this.instance.getName(), request);
             if (Oskari.util.isMobile()) {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Search']);
+                this.instance.closeFlyout();
             }
         },
 

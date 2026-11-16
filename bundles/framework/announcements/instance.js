@@ -1,9 +1,23 @@
 import './service/AnnouncementsService';
 import './Flyout';
 import './plugin//AnnouncementsPlugin';
+import React from 'react';
+import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
+import { showFlyout } from 'oskari-ui/components/window';
+import { styled } from 'styled-components';
 import { AnnouncementsHandler, showAnnouncementsPopup, showAnnouncementsBanner, showBannerDescriptionPopup } from './view/';
+import { AnnouncementsView } from './view/AnnouncementsView';
 
 const NOT_DISPLAYED = 'display-none';
+const MENU_ITEM_ID = 'announcements-item';
+const FLYOUT_ID = 'Announcements';
+const HIDDEN_MENU_ITEM_STYLE = {
+    display: 'none'
+};
+const FlyoutPadding = styled('div')`
+    margin: 0;
+    padding: 1.5em 1.5em 1.5em 1.75em;
+`;
 /**
  * @class Oskari.framework.bundle.announcements.AnnouncementsBundleInstance
  *
@@ -26,10 +40,33 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         this.popupControls = null;
         this.bannerControls = null;
         this.descriptionPopupControls = null;
+        this.announcementsView = null;
+        this.mainNavigationControls = null;
+        this.navigation = new NavigationAdapter(this, {
+            createMenuItem: (navigation) => this.createMenuItem(navigation),
+            onStart: () => {
+                this.announcementsView = new AnnouncementsView(this);
+            },
+            onStop: () => {
+                this.closeMainNavigationFlyout();
+                this.announcementsView = null;
+            }
+        });
     }, {
         __name: 'announcements',
         getName: function () {
             return this.__name;
+        },
+        start: function () {
+            const conf = this.getConfiguration();
+            const sandbox = Oskari.getSandbox(conf.sandbox || 'sandbox');
+            this.sandbox = sandbox;
+            sandbox.register(this);
+            if (conf.stateful === true) {
+                sandbox.registerAsStateful(this.mediator.bundleId, this);
+            }
+            this.navigation.start();
+            this.afterStart(sandbox);
         },
         afterStart: function () {
             const me = this;
@@ -46,10 +83,14 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             } else {
                 const flyout = me.plugins['Oskari.userinterface.Flyout'];
                 // It looks like plugin (embedded map) handles announcements differently so render popups only if flyout is present
-                if (flyout) {
+                if (flyout || this.navigation.service) {
                     this.handler = new AnnouncementsHandler(this.service);
                     this.handler.addStateListener(state => this.stateChanged(state));
-                    flyout.initHandler(this.handler);
+                    if (this.navigation.service) {
+                        this.handler.addStateListener(() => this.updateMainNavigationFlyout());
+                    } else {
+                        flyout.initHandler(this.handler);
+                    }
                 }
             }
 
@@ -75,7 +116,72 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             const isMobile = Oskari.util.isMobile();
             // mobile mode and no active announcements
             const shouldHide = isMobile && !(state?.active?.length);
+            if (this.navigation.service) {
+                this.setMenuItemVisibility(shouldHide);
+                return;
+            }
             this.getTile()?.container?.toggleClass(NOT_DISPLAYED, shouldHide);
+        },
+        setMenuItemVisibility: function (shouldHide) {
+            const menuItem = this.navigation.menuItem;
+            const style = shouldHide ? HIDDEN_MENU_ITEM_STYLE : undefined;
+            if (!menuItem || menuItem.options.style === style) {
+                return;
+            }
+            menuItem.update({
+                ...menuItem.options,
+                style
+            });
+            menuItem.onChange?.();
+        },
+        createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
+            const menuItem = new MenuItem({
+                id: MENU_ITEM_ID,
+                sortOrder: 50,
+                name: this.getTitle(),
+                tooltip: this.getDescription(),
+                setActive: (isActive) => {
+                    if (isActive) {
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                        return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
+                    }
+                    this.closeMainNavigationFlyout();
+                    return MenuItemActivationResult.OK;
+                }
+            });
+            return menuItem;
+        },
+        showMainNavigationFlyout: function (onClose) {
+            if (this.mainNavigationControls) {
+                return true;
+            }
+            const controls = showFlyout(this.getTitle(), this.getPaddedFlyoutContent(), () => {
+                if (this.mainNavigationControls !== controls) {
+                    return;
+                }
+                this.mainNavigationControls = null;
+                onClose();
+            }, { id: FLYOUT_ID });
+            if (!controls) {
+                return false;
+            }
+            this.mainNavigationControls = controls;
+            return true;
+        },
+        closeMainNavigationFlyout: function () {
+            const controls = this.mainNavigationControls;
+            this.mainNavigationControls = null;
+            controls?.close();
+        },
+        getPaddedFlyoutContent: function () {
+            return (
+                <FlyoutPadding>
+                    {this.announcementsView.getContent(this.handler?.getState())}
+                </FlyoutPadding>
+            );
+        },
+        updateMainNavigationFlyout: function () {
+            this.mainNavigationControls?.update(this.getTitle(), this.getPaddedFlyoutContent());
         },
         renderPopup: function (state) {
             if (!state.popupAnnouncements || !state.popupAnnouncements.length) {
@@ -142,6 +248,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
          * implements BundleInstance protocol update method - does nothing atm
          */
         stop: function () {
+            return this.navigation.stop();
         },
         onEvent: function (event) {
             const handler = this.eventHandlers[event.getName()];

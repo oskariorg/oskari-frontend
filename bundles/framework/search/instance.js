@@ -10,6 +10,17 @@ import './request/SearchResultActionRequestHandler';
 import '../../service/search/searchservice';
 import React from 'react';
 import { Message } from 'oskari-ui';
+import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
+import { showFlyout } from 'oskari-ui/components/window';
+import { styled } from 'styled-components';
+
+const MENU_ITEM_ID = 'search-item';
+const FLYOUT_ID = 'Search';
+const DEFAULT_VIEW_CLASS = 'Oskari.mapframework.bundle.search.DefaultView';
+const FlyoutPadding = styled('div')`
+    margin: 0;
+    padding: 0em 1.5em 1.5em 1.75em;
+`;
 
 /**
  * @class Oskari.mapframework.bundle.search.SearchBundleInstance
@@ -37,6 +48,20 @@ Oskari.clazz.define(
         this.tabPriority = 1.0;
         this.disableDefault = false;
         this.safeChars = false;
+        this.searchView = null;
+        this.mainNavigationControls = null;
+        this.navigation = new NavigationAdapter(this, {
+            createMenuItem: (navigation) => this.createMenuItem(navigation),
+            onStart: () => {
+                this.searchView = this.createSearchView();
+            },
+            onStop: () => {
+                this.closeMainNavigationFlyout();
+                const handler = this.searchView.handler;
+                Object.keys(handler.eventHandlers).forEach(name => this.sandbox.unregisterFromEventByName(handler, name));
+                this.searchView = null;
+            }
+        });
     }, {
         /**
          * @static
@@ -140,10 +165,7 @@ Oskari.clazz.define(
             }
 
             // Let's extend UI
-            var reqName = 'userinterface.AddExtensionRequest',
-                reqBuilder = Oskari.requestBuilder(reqName),
-                request = reqBuilder(this);
-            sandbox.request(this, request);
+            this.navigation.start();
 
             sandbox.registerAsStateful(this.mediator.bundleId, this);
 
@@ -154,10 +176,10 @@ Oskari.clazz.define(
             this.requestHandlers = {
                 addTabRequestHandler: Oskari.clazz.create(
                     'Oskari.mapframework.bundle.search.request.AddTabRequestHandler',
-                    sandbox, this.plugins['Oskari.userinterface.Flyout']),
+                    sandbox, this.searchView || this.plugins['Oskari.userinterface.Flyout']),
                 addSearchResultActionRequestHandler: Oskari.clazz.create(
                     'Oskari.mapframework.bundle.search.request.SearchResultActionRequestHandler',
-                    sandbox, this.plugins['Oskari.userinterface.Flyout'])
+                    sandbox, this.searchView || this.plugins['Oskari.userinterface.Flyout'])
             };
             sandbox.requestHandler(
                 'Search.AddTabRequest',
@@ -214,6 +236,9 @@ Oskari.clazz.define(
              * @method ExtensionUpdatedEvent
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
+                if (this.navigation.service) {
+                    return;
+                }
                 var plugin = this.plugins['Oskari.userinterface.Flyout'];
 
                 // ExtensionUpdateEvents are fired a lot, only let search extension event to be handled when enabled
@@ -232,7 +257,11 @@ Oskari.clazz.define(
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var sandbox = this.sandbox(),
+            const result = this.navigation.stop();
+            if (this.navigation.service) {
+                return result;
+            }
+            var sandbox = this.sandbox,
                 p;
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
@@ -240,15 +269,86 @@ Oskari.clazz.define(
                 }
             }
 
-            var reqName = 'userinterface.RemoveExtensionRequest',
-                reqBuilder = Oskari.requestBuilder(reqName),
-                request = reqBuilder(this);
-
-            sandbox.request(this, request);
-
             this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
+        },
+
+        createSearchView: function () {
+            return Oskari.clazz.create(DEFAULT_VIEW_CLASS, this);
+        },
+        createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
+            const menuItem = new MenuItem({
+                id: MENU_ITEM_ID,
+                sortOrder: 0,
+                name: this.getTitle(),
+                tooltip: this.getDescription(),
+                setActive: (isActive) => {
+                    if (isActive) {
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                        return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
+                    }
+                    this.closeMainNavigationFlyout();
+                    return MenuItemActivationResult.OK;
+                }
+            });
+            return menuItem;
+        },
+        showMainNavigationFlyout: function (onClose) {
+            if (this.mainNavigationControls) {
+                return true;
+            }
+            const controls = showFlyout(this.getTitle(), this.getPaddedFlyoutContent(), () => {
+                if (this.mainNavigationControls !== controls) {
+                    return;
+                }
+                this.mainNavigationControls = null;
+                onClose();
+                this.notifyFlyoutState('close');
+            }, { id: FLYOUT_ID });
+            if (!controls) {
+                return false;
+            }
+            this.mainNavigationControls = controls;
+            this.notifyFlyoutState('attach');
+            return true;
+        },
+        closeMainNavigationFlyout: function () {
+            const controls = this.mainNavigationControls;
+            this.mainNavigationControls = null;
+            try {
+                controls?.close();
+            } catch (error) {
+                this.mainNavigationControls = controls;
+                throw error;
+            }
+            if (controls) {
+                this.notifyFlyoutState('close');
+            }
+        },
+        notifyFlyoutState: function (state) {
+            const eventBuilder = Oskari.eventBuilder('userinterface.ExtensionUpdatedEvent');
+            if (eventBuilder) {
+                this.sandbox.notifyAll(eventBuilder(this, state));
+            }
+        },
+        getPaddedFlyoutContent: function () {
+            return <FlyoutPadding>{this.searchView.getContent()}</FlyoutPadding>;
+        },
+        updateMainNavigationFlyout: function () {
+            this.mainNavigationControls?.update(this.getTitle(), this.getPaddedFlyoutContent());
+        },
+        openFlyout: function () {
+            if (this.navigation.service) {
+                return this.navigation.service.setActive(MENU_ITEM_ID, true);
+            }
+            this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
+        },
+        closeFlyout: function () {
+            if (this.navigation.service) {
+                return this.navigation.service.setActive(MENU_ITEM_ID, false);
+            }
+            this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
         },
 
         /**
@@ -311,6 +411,9 @@ Oskari.clazz.define(
          * (re)creates the UI for "selected layers" functionality
          */
         createUi: function () {
+            if (this.navigation.service) {
+                return;
+            }
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
         },
@@ -320,7 +423,7 @@ Oskari.clazz.define(
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
-            this.plugins['Oskari.userinterface.Flyout'].setState(state);
+            (this.searchView || this.plugins['Oskari.userinterface.Flyout']).setState(state);
         },
 
         /**
@@ -328,7 +431,7 @@ Oskari.clazz.define(
          * @return {Object} bundle state as JSON
          */
         getState: function () {
-            return this.plugins['Oskari.userinterface.Flyout'].getState();
+            return (this.searchView || this.plugins['Oskari.userinterface.Flyout']).getState();
         },
 
         /**
@@ -340,10 +443,10 @@ Oskari.clazz.define(
         __guidedTourDelegateTemplate: {
             priority: 10,
             show: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Search']);
+                this.openFlyout();
             },
             hide: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Search']);
+                this.closeFlyout();
             },
             getTitle: function () {
                 return Oskari.getMsg(this.getName(), 'guidedTour.title');
@@ -356,12 +459,12 @@ Oskari.clazz.define(
                 return [
                     {
                         title: Oskari.getMsg(this.getName(), 'guidedTour.openLink'),
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Search']),
+                        onClick: () => me.openFlyout(),
                         visible: false
                     },
                     {
                         title: Oskari.getMsg(this.getName(), 'guidedTour.closeLink'),
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Search']),
+                        onClick: () => me.closeFlyout(),
                         visible: true
                     }
                 ];
