@@ -11,6 +11,7 @@ const UPDATE_EXTENSION_REQUEST = 'userinterface.UpdateExtensionRequest';
 const ATTACHED_EXTENSION_STATES = ['attach', 'hide'];
 const ATTACH = 'attach';
 const CLOSE = 'close';
+const MENUBAR_CONTAINER_ID = '#menubar';
 const DEMO_BUNDLE_IDS = [
     'mainnavigation-testbundle',
     'maplayers',
@@ -25,8 +26,6 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         super();
         this.containerId = 'mainnavigation';
         this.containerClass = 'oskari-mainnavigation-container';
-        this.parentSelector = '#maptools';
-        this.insertAfterSelector = '#pti_disclaimer';
         this.mockContent = '<div><h3>Navigationbar</h1></div>';
         this.container = null;
         this.root = null;
@@ -57,23 +56,18 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         }
     }
 
-    getTargetParent (parentSelector = this.parentSelector) {
-        if (parentSelector) {
-            const element = document.querySelector(parentSelector);
-            if (element) {
-                return element;
-            }
-        }
-        return Oskari.dom?.getRootEl?.() || document.body;
+    getTargetParent () {
+        return document.querySelector(MENUBAR_CONTAINER_ID);
     }
 
     attachToExistingDom ({
-        parentSelector = this.parentSelector,
-        insertAfterSelector = this.insertAfterSelector,
         containerId = this.containerId,
         className = this.containerClass
     } = {}) {
-        const parent = this.getTargetParent(parentSelector);
+        const parent = this.getTargetParent();
+        if (!parent) {
+            return null;
+        }
         let container = document.getElementById(containerId);
 
         if (!container) {
@@ -84,17 +78,8 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
 
         container.classList.add(className);
 
-        if (!container.parentElement) {
-            const referenceElement = insertAfterSelector ? parent.querySelector(insertAfterSelector) : null;
-            if (referenceElement && referenceElement.nextElementSibling) {
-                parent.insertBefore(container, referenceElement.nextElementSibling);
-            } else if (referenceElement) {
-                parent.appendChild(container);
-            } else if (parent.firstChild) {
-                parent.insertBefore(container, parent.firstChild);
-            } else {
-                parent.appendChild(container);
-            }
+        if (parent.firstChild !== container) {
+            parent.prepend(container);
         }
 
         this.container = container;
