@@ -3,14 +3,9 @@ import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
 import { getReactRoot, unmountReactRoot } from 'oskari-ui/components/window';
 import { ThemeProvider } from 'oskari-ui/util';
 import { MainNavigationService } from './service/MainNavigationService';
+import { LegacyExtensionSwitchCoordinator } from './LegacyExtensionSwitchCoordinator';
 
 const MAIN_NAVIGATION_SERVICE = 'Oskari.mapframework.bundle.mainnavigation.service.MainNavigationService';
-const EXTENSION_UPDATED_EVENT = 'userinterface.ExtensionUpdatedEvent';
-const DIVMANAZER_MODULE = 'userinterface.DivManazer';
-const UPDATE_EXTENSION_REQUEST = 'userinterface.UpdateExtensionRequest';
-const ATTACHED_EXTENSION_STATES = ['attach', 'hide'];
-const ATTACH = 'attach';
-const CLOSE = 'close';
 const MENUBAR_CONTAINER_ID = '#menubar';
 
 export class MainNavigationBundleIstance extends BasicBundleInstance {
@@ -21,7 +16,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.mockContent = '<div><h3>Navigationbar</h1></div>';
         this.container = null;
         this.mainNavigationService = null;
-        this.activeMenuItemIds = new Set();
+        this.legacyExtensionSwitchCoordinator = null;
         this.onMenuItemActiveChange = (id, isActive) => this.mainNavigationService.setActive(id, isActive);
     }
 
@@ -30,16 +25,11 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         super.start(sandbox);
         sandbox.registerService(new MainNavigationService());
         this.mainNavigationService = sandbox.getService(MAIN_NAVIGATION_SERVICE);
+        this.legacyExtensionSwitchCoordinator = new LegacyExtensionSwitchCoordinator(this, this.mainNavigationService);
+        this.legacyExtensionSwitchCoordinator.start();
         this.mainNavigationService.addListener(this);
-        this.on(EXTENSION_UPDATED_EVENT, this.handleExtensionUpdated.bind(this));
         this.attachToExistingDom();
         this.render();
-    }
-
-    handleExtensionUpdated (event) {
-        if (event.getViewState() === ATTACH) {
-            this.mainNavigationService.deactivateForSwitch();
-        }
     }
 
     getTargetParent () {
@@ -101,24 +91,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
     }
 
     handleMenuItemsChanged () {
-        const activeIds = this.mainNavigationService.getActiveMenuItemIds();
-        const activated = activeIds.some(id => !this.activeMenuItemIds.has(id));
-        this.activeMenuItemIds = new Set(activeIds);
-        if (activated) {
-            this.closeAttachedExtensions();
-        }
         this.render();
-    }
-
-    closeAttachedExtensions () {
-        const sandbox = this.getSandbox();
-        const divmanazer = sandbox.findRegisteredModuleInstance(DIVMANAZER_MODULE);
-        const states = divmanazer?.getState().extensionStatesByName || {};
-        Object.entries(states).forEach(([name, { state }]) => {
-            if (ATTACHED_EXTENSION_STATES.includes(state)) {
-                sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [null, CLOSE, name]);
-            }
-        });
     }
 
     getContainer () {
@@ -129,7 +102,8 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
     }
 
     stop () {
-        this.off(EXTENSION_UPDATED_EVENT);
+        this.legacyExtensionSwitchCoordinator.stop();
+        this.legacyExtensionSwitchCoordinator = null;
         this.mainNavigationService.removeListener(this);
         this.mainNavigationService.getMenuItems().forEach((item) => this.mainNavigationService.removeMenuItem(item.id));
         unmountReactRoot(this.container);
@@ -139,7 +113,6 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.container = null;
         this.getSandbox().unregisterService(this.mainNavigationService.getQName());
         this.mainNavigationService = null;
-        this.activeMenuItemIds.clear();
         super.stop();
     }
 }
