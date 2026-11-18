@@ -12,14 +12,6 @@ const ATTACHED_EXTENSION_STATES = ['attach', 'hide'];
 const ATTACH = 'attach';
 const CLOSE = 'close';
 const MENUBAR_CONTAINER_ID = '#menubar';
-const DEMO_BUNDLE_IDS = [
-    'mainnavigation-testbundle',
-    'maplayers',
-    'testbundle2',
-    'testbundle3',
-    'testbundle4',
-    'explicit-close-testbundle'
-];
 
 export class MainNavigationBundleIstance extends BasicBundleInstance {
     constructor () {
@@ -43,11 +35,6 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.on(EXTENSION_UPDATED_EVENT, this.handleExtensionUpdated.bind(this));
         this.attachToExistingDom();
         this.render();
-        DEMO_BUNDLE_IDS.forEach((bundlename) => {
-            Oskari.app.playBundle({
-                bundlename
-            }, {});
-        });
     }
 
     handleExtensionUpdated (event) {
