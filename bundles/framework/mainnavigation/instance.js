@@ -1,6 +1,6 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 import { BasicBundleInstance } from 'oskari-ui/BasicBundleInstance';
+import { getReactRoot, unmountReactRoot } from 'oskari-ui/components/window';
 import { ThemeProvider } from 'oskari-ui/util';
 import { MainNavigationService } from './service/MainNavigationService';
 
@@ -20,7 +20,6 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.containerClass = 'oskari-mainnavigation-container';
         this.mockContent = '<div><h3>Navigationbar</h1></div>';
         this.container = null;
-        this.root = null;
         this.mainNavigationService = null;
         this.activeMenuItemIds = new Set();
         this.onMenuItemActiveChange = (id, isActive) => this.mainNavigationService.setActive(id, isActive);
@@ -73,10 +72,6 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.containerId = containerId;
         this.containerClass = className;
 
-        if (!this.root) {
-            this.root = createRoot(container);
-        }
-
         return container;
     }
 
@@ -85,10 +80,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         if (!container) {
             return null;
         }
-        if (!this.root) {
-            this.root = createRoot(container);
-        }
-        this.root.render(<ThemeProvider>
+        getReactRoot(container).render(<ThemeProvider>
             <nav className={this.containerClass}>
                 <ul>
                     {this.mainNavigationService.getMenuItems()
@@ -140,10 +132,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
         this.off(EXTENSION_UPDATED_EVENT);
         this.mainNavigationService.removeListener(this);
         this.mainNavigationService.getMenuItems().forEach((item) => this.mainNavigationService.removeMenuItem(item.id));
-        if (this.root) {
-            this.root.unmount();
-            this.root = null;
-        }
+        unmountReactRoot(this.container);
         if (this.container && this.container.parentElement) {
             this.container.parentElement.removeChild(this.container);
         }
