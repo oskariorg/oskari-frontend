@@ -23,8 +23,8 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
     start (sandbox) {
         // registers to sandbox and saves the sandbox for getSandbox()
         super.start(sandbox);
-        sandbox.registerService(new MainNavigationService());
-        this.mainNavigationService = sandbox.getService(MAIN_NAVIGATION_SERVICE);
+        this.mainNavigationService = new MainNavigationService();
+        sandbox.registerService(this.mainNavigationService);
         this.legacyExtensionSwitchCoordinator = new LegacyExtensionSwitchCoordinator(this, this.mainNavigationService);
         this.legacyExtensionSwitchCoordinator.start();
         this.mainNavigationService.addListener(this);
@@ -111,7 +111,7 @@ export class MainNavigationBundleIstance extends BasicBundleInstance {
             this.container.parentElement.removeChild(this.container);
         }
         this.container = null;
-        this.getSandbox().unregisterService(this.mainNavigationService.getQName());
+        this.getSandbox().unregisterService(MAIN_NAVIGATION_SERVICE);
         this.mainNavigationService = null;
         super.stop();
     }
