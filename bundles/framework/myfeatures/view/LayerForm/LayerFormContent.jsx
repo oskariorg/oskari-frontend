@@ -8,11 +8,16 @@ import { ERRORS } from '../../constants';
 import { MandatoryIcon } from 'oskari-ui/components/icons';
 import { setDefaultFilter } from './layerAttributesHelper';
 
-const Content = styled.div`
-    margin: 12px 24px 24px;
+const Content = styled('div')`
+    margin: 0.75em 1.75em 1.75em;
 `;
 const Tab = styled('div')`
-    width: 500px;
+    width: 36em;
+    max-width: 100%;
+`;
+const Buttons = styled(ButtonContainer)`
+    flex-wrap: wrap;
+    row-gap: 0.5em;
 `;
 
 const getValidationMessage = keys => {
@@ -188,7 +193,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
                 onChange={tabKey => setTab(tabKey)}
                 items={tabItems}
             />
-            <ButtonContainer>
+            <Buttons>
                 <Button onClick={() => addFeature()} disabled = {!state.id}>
                     <Message messageKey='featureEditor.featureLayer.addFeature'/>
                 </Button>
@@ -196,7 +201,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error, addFea
                 <Tooltip key="okButtonTooltip" title={ getValidationMessage(validationKeys) }>
                     <PrimaryButton disabled={!isValid} type={okBtnType} onClick={onOkClick}/>
                 </Tooltip>
-            </ButtonContainer>
+            </Buttons>
         </Content>
     );
     if (!error && state.loading) {

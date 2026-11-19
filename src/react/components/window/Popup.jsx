@@ -12,8 +12,12 @@ const Container = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    max-width: 800px;
+    max-width: min(800px, 95vw);
     min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    max-height: 90svh;
     background-color: white;
     background-clip: border-box;
     background-clip: padding-box;
@@ -41,9 +45,9 @@ const Container = styled.div`
         }
     }
 `;
-// Note! use vh with max-height so it can handle window size changes
-const PopupBody = styled.div`
-    max-height: 90vh;
+// Note! Container max-height uses svh so the whole popup fits above mobile browser and system bars
+const PopupBody = styled('div')`
+    min-height: 0;
     overflow: auto;
 `;
 
