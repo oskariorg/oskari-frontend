@@ -19,7 +19,7 @@ import './request/PublishMapEditorRequest';
 import './request/PublishMapEditorRequestHandler';
 import '../../mapping/mapmodule/publisher/tools';
 
-const MENU_ITEM_ID = 'publisher2-item';
+const MENU_ITEM_ID_SUFFIX = '-menuitem';
 const MENU_ITEM_TITLE_KEY = 'tile.title';
 const FLYOUT_ID = BUNDLE_KEY;
 const FLYOUT_TITLE_KEY = 'flyout.title';
@@ -131,15 +131,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             this.sandbox = null;
             this.started = false;
         },
+        getMenuItemId: function () {
+            return this.mediator.bundleId + MENU_ITEM_ID_SUFFIX;
+        },
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const menuItem = new MenuItem({
-                id: MENU_ITEM_ID,
+                id: this.getMenuItemId(),
                 sortOrder: 60,
                 name: Oskari.getMsg(BUNDLE_KEY, MENU_ITEM_TITLE_KEY),
                 tooltip: Oskari.getMsg(BUNDLE_KEY, FLYOUT_TITLE_KEY),
                 setActive: (isActive) => {
                     if (isActive) {
-                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(this.getMenuItemId()));
                         return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
                     }
                     this.closeMainNavigationFlyout();
@@ -185,7 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         toggleFlyout: function (show) {
             if (this.navigation.service) {
                 const isActive = show === undefined ? !this.navigation.menuItem.isActive : show;
-                return this.navigation.service.setActive(MENU_ITEM_ID, isActive);
+                return this.navigation.service.setActive(this.getMenuItemId(), isActive);
             }
             const state = show === undefined ? 'toggle' : show ? 'attach' : 'close';
             this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, state]);

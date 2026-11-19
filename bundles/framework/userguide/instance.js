@@ -6,7 +6,7 @@ import { showUserGuideFlyout } from './view/UserGuideFlyout';
 import './request/ShowUserGuideRequest';
 
 const EXTENSION_NAME = 'userinterface.UserGuide';
-const MENU_ITEM_ID = 'userguide-item';
+const MENU_ITEM_ID_SUFFIX = '-menuitem';
 const DefaultExtension = Oskari.clazz.get('Oskari.userinterface.extension.DefaultExtension');
 
 export class UserGuideBundleInstance extends DefaultExtension {
@@ -92,16 +92,20 @@ export class UserGuideBundleInstance extends DefaultExtension {
         this.registerForGuidedTour();
     }
 
+    getMenuItemId () {
+        return this.mediator.bundleId + MENU_ITEM_ID_SUFFIX;
+    }
+
     createMenuItem ({ MenuItem, MenuItemActivationResult }) {
         const menuItem = new MenuItem({
-            id: MENU_ITEM_ID,
+            id: this.getMenuItemId(),
             sortOrder: 30,
             name: this.getTitle(),
             tooltip: this.getDescription(),
             keepActive: true,
             setActive: (isActive, { switching = false } = {}) => {
                 if (isActive) {
-                    this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                    this.showMainNavigationFlyout(() => menuItem.onClose?.(this.getMenuItemId()));
                     return MenuItemActivationResult.OK;
                 }
                 if (switching && menuItem.isActive) {
@@ -148,7 +152,7 @@ export class UserGuideBundleInstance extends DefaultExtension {
 
     openFlyout () {
         if (this.navigation.service) {
-            return this.navigation.service.setActive(MENU_ITEM_ID, true);
+            return this.navigation.service.setActive(this.getMenuItemId(), true);
         }
         if (this.flyoutControls) {
             return;
@@ -162,7 +166,7 @@ export class UserGuideBundleInstance extends DefaultExtension {
 
     closeFlyout () {
         if (this.navigation.service) {
-            return this.navigation.service.setActive(MENU_ITEM_ID, false);
+            return this.navigation.service.setActive(this.getMenuItemId(), false);
         }
         if (this.flyoutControls) {
             this.scheduleCloseUserGuide();

@@ -27,7 +27,7 @@ import './publisher/SeriesToggleTool.js';
 import './publisher/StatisticsTool.js';
 import './publisher/StatsgridPanel.js';
 
-const MENU_ITEM_ID = 'statsgrid-item';
+const MENU_ITEM_ID_SUFFIX = '-menuitem';
 const DEFAULT_SANDBOX = 'sandbox';
 const SEARCH_VIEW = 'search';
 const UPDATE_EXTENSION_REQUEST = 'userinterface.UpdateExtensionRequest';
@@ -100,10 +100,13 @@ Oskari.clazz.define(
             Object.keys(this.eventHandlers).forEach(name => sandbox.unregisterFromEventByName(this, name));
             Object.keys(this.requestHandlers).forEach(name => sandbox.removeRequestHandler(name, this));
         },
+        getMenuItemId: function () {
+            return this.mediator.bundleId + MENU_ITEM_ID_SUFFIX;
+        },
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const title = this.loc('flyout.title');
             return new MenuItem({
-                id: MENU_ITEM_ID,
+                id: this.getMenuItemId(),
                 sortOrder: 20,
                 name: title,
                 tooltip: title,
@@ -253,7 +256,7 @@ Oskari.clazz.define(
         eventHandlers: {
             'UIChangeEvent': function (evt) {
                 if (this.navigation.service) {
-                    this.navigation.service.setActive(MENU_ITEM_ID, false);
+                    this.navigation.service.setActive(this.getMenuItemId(), false);
                 } else {
                     this.getSandbox().postRequestByName(UPDATE_EXTENSION_REQUEST, [this, CLOSE]);
                 }
@@ -323,7 +326,7 @@ Oskari.clazz.define(
         },
         showSearchFlyout: function () {
             if (this.navigation.service) {
-                this.navigation.service.setActive(MENU_ITEM_ID, true);
+                this.navigation.service.setActive(this.getMenuItemId(), true);
                 this.getViewHandler()?.show(SEARCH_VIEW);
             } else {
                 this.getViewHandler()?.show(SEARCH_VIEW);

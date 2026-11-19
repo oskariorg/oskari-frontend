@@ -14,7 +14,7 @@ import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
 import { showFlyout } from 'oskari-ui/components/window';
 import { styled } from 'styled-components';
 
-const MENU_ITEM_ID = 'search-item';
+const MENU_ITEM_ID_SUFFIX = '-menuitem';
 const FLYOUT_ID = 'Search';
 const DEFAULT_VIEW_CLASS = 'Oskari.mapframework.bundle.search.DefaultView';
 const FlyoutPadding = styled('div')`
@@ -277,15 +277,18 @@ Oskari.clazz.define(
         createSearchView: function () {
             return Oskari.clazz.create(DEFAULT_VIEW_CLASS, this);
         },
+        getMenuItemId: function () {
+            return this.mediator.bundleId + MENU_ITEM_ID_SUFFIX;
+        },
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const menuItem = new MenuItem({
-                id: MENU_ITEM_ID,
+                id: this.getMenuItemId(),
                 sortOrder: 0,
                 name: this.getTitle(),
                 tooltip: this.getDescription(),
                 setActive: (isActive) => {
                     if (isActive) {
-                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(this.getMenuItemId()));
                         return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
                     }
                     this.closeMainNavigationFlyout();
@@ -340,13 +343,13 @@ Oskari.clazz.define(
         },
         openFlyout: function () {
             if (this.navigation.service) {
-                return this.navigation.service.setActive(MENU_ITEM_ID, true);
+                return this.navigation.service.setActive(this.getMenuItemId(), true);
             }
             this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
         },
         closeFlyout: function () {
             if (this.navigation.service) {
-                return this.navigation.service.setActive(MENU_ITEM_ID, false);
+                return this.navigation.service.setActive(this.getMenuItemId(), false);
             }
             this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
         },
