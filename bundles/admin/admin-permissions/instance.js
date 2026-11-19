@@ -1,5 +1,19 @@
+import React from 'react';
+import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
+import { showFlyout } from 'oskari-ui/components/window';
+import { styled } from 'styled-components';
+import { AdminPermissionsView } from './view/AdminPermissionsView';
 import './Flyout';
 import './Tile';
+
+const BUNDLE_ID = 'admin-permissions';
+const MENU_ITEM_ID = `${BUNDLE_ID}-item`;
+const FLYOUT_ID = 'AdminPermissions';
+const FLYOUT_TITLE_KEY = 'flyout.title';
+const FlyoutPadding = styled('div')`
+    margin: 0;
+    padding: 1.5em 1.5em 1.5em 1.75em;
+`;
 
 /**
  * @class Oskari.admin.bundle.admin-layerrights.AdminLayerRightsBundleInstance
@@ -21,6 +35,18 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
         this.started = false;
         this.plugins = {};
         this.loc = Oskari.getMsg.bind(null, this.getName());
+        this.adminPermissionsView = null;
+        this.mainNavigationControls = null;
+        this.navigation = new NavigationAdapter(this, {
+            createMenuItem: (navigation) => this.createMenuItem(navigation),
+            onStart: () => {
+                this.adminPermissionsView = new AdminPermissionsView(this, () => this.updateMainNavigationFlyout());
+            },
+            onStop: () => {
+                this.closeMainNavigationFlyout();
+                this.adminPermissionsView = null;
+            }
+        });
     }, {
 
         /**
@@ -70,11 +96,12 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
             this.sandbox.register(this);
             Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.registerForEventByName(this, p));
             // Let's extend UI
-            const reqBuilder = Oskari.requestBuilder('userinterface.AddExtensionRequest');
-            this.sandbox.request(this, reqBuilder(this));
+            this.navigation.start();
 
             // draw ui
-            this.createUi();
+            if (!this.navigation.service) {
+                this.createUi();
+            }
         },
 
         /**
@@ -99,12 +126,68 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            const reqBuilder = Oskari.requestBuilder('userinterface.RemoveExtensionRequest');
-            this.sandbox.request(this, reqBuilder(this));
+            const result = this.navigation.stop();
+            if (this.navigation.service) {
+                return result;
+            }
             Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.unregisterFromEventByName(this, p));
 
             this.sandbox.unregister(this);
             this.started = false;
+        },
+        createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
+            const menuItem = new MenuItem({
+                id: MENU_ITEM_ID,
+                sortOrder: 70,
+                name: this.getTitle(),
+                setActive: (isActive) => {
+                    if (isActive) {
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                        return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
+                    }
+                    this.closeMainNavigationFlyout();
+                    return MenuItemActivationResult.OK;
+                }
+            });
+            return menuItem;
+        },
+        showMainNavigationFlyout: function (onClose) {
+            if (this.mainNavigationControls) {
+                return true;
+            }
+            const controls = showFlyout(this.loc(FLYOUT_TITLE_KEY), this.getPaddedFlyoutContent(), () => {
+                if (this.mainNavigationControls !== controls) {
+                    return;
+                }
+                this.mainNavigationControls = null;
+                this.adminPermissionsView.reset();
+                onClose();
+            }, {
+                id: FLYOUT_ID
+            });
+            if (!controls) {
+                return false;
+            }
+            this.mainNavigationControls = controls;
+            return true;
+        },
+        closeMainNavigationFlyout: function () {
+            const controls = this.mainNavigationControls;
+            this.mainNavigationControls = null;
+            controls?.close();
+            if (controls) {
+                this.adminPermissionsView.reset();
+            }
+        },
+        getPaddedFlyoutContent: function () {
+            return (
+                <FlyoutPadding>
+                    {this.adminPermissionsView.getContent()}
+                </FlyoutPadding>
+            );
+        },
+        updateMainNavigationFlyout: function () {
+            this.mainNavigationControls?.update(this.loc(FLYOUT_TITLE_KEY), this.getPaddedFlyoutContent());
         },
 
         /**
@@ -159,6 +242,9 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
             this.plugins['Oskari.userinterface.Flyout'].renderContent();
         },
         closeFlyout: function () {
+            if (this.navigation.service) {
+                return this.navigation.service.setActive(MENU_ITEM_ID, false);
+            }
             this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
         },
         /**
@@ -186,7 +272,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
              * Reset flyout when closed
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-                if (event.getExtension().getName() !== this.getName()) {
+                if (this.navigation.service || event.getExtension().getName() !== this.getName()) {
                     // not me -> do nothing
                     return;
                 }
