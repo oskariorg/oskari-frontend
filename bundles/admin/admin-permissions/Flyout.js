@@ -1,7 +1,4 @@
-import React from 'react';
-import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
-import { LayerRightsHandler } from './handler/layerRightsHandler';
-import { LayerRights } from './view/LayerRights';
+import { AdminPermissionsView } from './view/AdminPermissionsView';
 import { getReactRoot } from 'oskari-ui/components/window';
 
 /**
@@ -56,7 +53,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          * Plugin start
          */
         startPlugin: function () {
-            this.handler = new LayerRightsHandler(this.instance, () => this.renderContent());
+            this.adminPermissionsView = new AdminPermissionsView(this.instance, () => this.renderContent());
+            this.handler = this.adminPermissionsView.handler;
         },
 
         /**
@@ -89,16 +87,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.Flyout',
          * Renders flyout content
          */
         renderContent: function () {
-            getReactRoot(this.container[0]).render(
-                <LocaleProvider value={{ bundleKey: 'admin-permissions' }}>
-                    <ThemeProvider>
-                        <LayerRights
-                            controller={this.handler.getController()}
-                            state={this.handler.getState()}
-                        />
-                    </ThemeProvider>
-                </LocaleProvider>
-            );
+            getReactRoot(this.container[0]).render(this.adminPermissionsView.getContent());
         }
     }, {
         /**

@@ -23,7 +23,7 @@ class UIHandler extends AsyncStateHandler {
     constructor (instance, stateHandler, searchHandler) {
         super();
         this.instance = instance;
-        this.tile = instance.getTile();
+        this.tile = instance.navigation.service ? null : instance.getTile();
         this.stateHandler = stateHandler;
         this.searchHandler = searchHandler;
         this.formHandler = null;
@@ -43,7 +43,9 @@ class UIHandler extends AsyncStateHandler {
         this.seriesControlPlugin = null; // doesn't use React movable container yet
         this.togglePlugin = null;
 
-        this.tile.setupTools(this);
+        if (!instance.navigation.service) {
+            this.tile.setupTools(this);
+        }
         this.addStateListener(state => this.onViewChange(state));
         this.stateHandler.addStateListener(state => this.onStateChange(state));
         this.searchHandler.addStateListener(state => this.onSearchChange(state));
@@ -307,7 +309,11 @@ class UIHandler extends AsyncStateHandler {
 
     notifyExtensions (viewId, isOpen) {
         if (FLYOUTS.includes(viewId)) {
-            this.tile.toggleExtension(viewId, isOpen);
+            if (this.instance.navigation.service) {
+                this.instance.setNavigationViewActive(viewId, isOpen);
+            } else {
+                this.tile.toggleExtension(viewId, isOpen);
+            }
         }
         if (this.togglePlugin && embeddedTools.includes(viewId)) {
             const activeMapButtons = embeddedTools.filter(viewId => this.controls[viewId]);

@@ -5,6 +5,11 @@ import { showSnippetPopup } from './view/dialog/SnippetPopup';
 import { PublisherService } from './service/PublisherService';
 import { PublisherSidebar } from './view/PublisherSidebar';
 import { hasPublishRight } from './util/util';
+import { NavigationAdapter } from 'oskari-ui/util/NavigationAdapter';
+import { showFlyout } from 'oskari-ui/components/window';
+import { styled } from 'styled-components';
+import { PublisherView } from './view/PublisherView';
+import { BUNDLE_KEY } from './constants';
 
 import './Flyout';
 import './event/MapPublishedEvent';
@@ -13,6 +18,15 @@ import './event/LayerToolsEditModeEvent';
 import './request/PublishMapEditorRequest';
 import './request/PublishMapEditorRequestHandler';
 import '../../mapping/mapmodule/publisher/tools';
+
+const MENU_ITEM_TITLE_KEY = 'tile.title';
+const FLYOUT_ID = BUNDLE_KEY;
+const FLYOUT_TITLE_KEY = 'flyout.title';
+const EVENT_NAMES = ['Publisher.MapPublishedEvent'];
+const FlyoutPadding = styled('div')`
+    margin: 0;
+    padding: 1.5em 1.5em 1.5em 1.75em;
+`;
 
 /**
  * @class Oskari.mapframework.bundle.publisher2.PublisherBundleInstance
@@ -41,6 +55,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         this.service = null;
         this.customTileRef = null;
         this.loc = Oskari.getMsg.bind(null, 'Publisher2');
+        this.publisherView = null;
+        this.mainNavigationControls = null;
+        this.navigation = new NavigationAdapter(this, {
+            createMenuItem: (navigation) => this.createMenuItem(navigation),
+            onStart: () => {
+                this.publisherView = new PublisherView(this);
+                EVENT_NAMES.forEach((eventName) => this.sandbox.registerForEventByName(this, eventName));
+            },
+            onStop: () => {
+                this.closeMainNavigationFlyout();
+                this.publisherView = null;
+                EVENT_NAMES.forEach((eventName) => this.sandbox.unregisterFromEventByName(this, eventName));
+            }
+        });
     }, {
         /**
          * @static
@@ -75,10 +103,91 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             if (!tileRef) {
                 return;
             }
-            tileRef.addEventListener('click', () => this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'toggle']));
+            tileRef.addEventListener('click', () => this.toggleFlyout());
             // remove default tile
             this.conf.tileClazz = null;
             this.customTileRef = tileRef;
+        },
+
+        start: function () {
+            const conf = this.getConfiguration();
+            const sandbox = Oskari.getSandbox(conf.sandbox || 'sandbox');
+            this.sandbox = sandbox;
+            sandbox.register(this);
+            if (conf.stateful === true) {
+                sandbox.registerAsStateful(this.mediator.bundleId, this);
+            }
+            this.navigation.start();
+            this.afterStart(sandbox);
+        },
+        stop: function () {
+            const result = this.navigation.stop();
+            if (this.navigation.service) {
+                return result;
+            }
+            this.sandbox.unregisterStateful(this.mediator.bundleId);
+            this.sandbox.unregister(this);
+            this.sandbox = null;
+            this.started = false;
+        },
+        createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
+            const menuItem = new MenuItem({
+                bundleId: this.mediator.bundleId,
+                sortOrder: 60,
+                name: Oskari.getMsg(BUNDLE_KEY, MENU_ITEM_TITLE_KEY),
+                tooltip: Oskari.getMsg(BUNDLE_KEY, FLYOUT_TITLE_KEY),
+                setActive: (isActive) => {
+                    if (isActive) {
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(menuItem.getMenuItemId()));
+                        return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
+                    }
+                    this.closeMainNavigationFlyout();
+                    return MenuItemActivationResult.OK;
+                }
+            });
+            return menuItem;
+        },
+        showMainNavigationFlyout: function (onClose) {
+            if (this.mainNavigationControls) {
+                return true;
+            }
+            const controls = showFlyout(Oskari.getMsg(BUNDLE_KEY, FLYOUT_TITLE_KEY), this.getPaddedFlyoutContent(), () => {
+                if (this.mainNavigationControls !== controls) {
+                    return;
+                }
+                this.mainNavigationControls = null;
+                onClose();
+            }, { id: FLYOUT_ID });
+            if (!controls) {
+                return false;
+            }
+            this.mainNavigationControls = controls;
+            return true;
+        },
+        closeMainNavigationFlyout: function () {
+            const controls = this.mainNavigationControls;
+            this.mainNavigationControls = null;
+            controls?.close();
+        },
+        getPaddedFlyoutContent: function () {
+            return (
+                <FlyoutPadding>
+                    {this.publisherView.getContent()}
+                </FlyoutPadding>
+            );
+        },
+        updateMainNavigationFlyout: function () {
+            if (this.mainNavigationControls) {
+                this.mainNavigationControls.update(Oskari.getMsg(BUNDLE_KEY, FLYOUT_TITLE_KEY), this.getPaddedFlyoutContent());
+            }
+        },
+        toggleFlyout: function (show) {
+            if (this.navigation.service) {
+                const isActive = show === undefined ? !this.navigation.menuItem.isActive : show;
+                return this.navigation.service.setActive(this.navigation.menuItem.getMenuItemId(), isActive);
+            }
+            const state = show === undefined ? 'toggle' : show ? 'attach' : 'close';
+            this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, state]);
         },
 
         /**
@@ -249,7 +358,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 this.getService().setPublishModeImpl(false);
             }
             this.toggleClasses(blnEnabled);
-            this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
+            this.toggleFlyout(false);
         },
 
         // own function for editing classes because it looks little hacky
@@ -338,10 +447,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         __guidedTourDelegateTemplate: {
             priority: 50,
             show: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']);
+                this.toggleFlyout(true);
             },
             hide: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']);
+                this.toggleFlyout(false);
             },
             getTitle: function () {
                 return this.loc('guidedTour.title');
@@ -354,12 +463,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 return [
                     {
                         title: this.loc('guidedTour.openLink'),
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']),
+                        onClick: () => me.toggleFlyout(true),
                         visible: false
                     },
                     {
                         title: this.loc('guidedTour.closeLink'),
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']),
+                        onClick: () => me.toggleFlyout(false),
                         visible: true
                     }
                 ];
