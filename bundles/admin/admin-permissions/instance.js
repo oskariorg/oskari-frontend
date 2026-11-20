@@ -6,8 +6,7 @@ import { AdminPermissionsView } from './view/AdminPermissionsView';
 import './Flyout';
 import './Tile';
 
-const BUNDLE_ID = 'admin-permissions';
-const MENU_ITEM_ID = `${BUNDLE_ID}-item`;
+const MENU_ITEM_ID_SUFFIX = '-menuitem';
 const FLYOUT_ID = 'AdminPermissions';
 const FLYOUT_TITLE_KEY = 'flyout.title';
 const FlyoutPadding = styled('div')`
@@ -135,14 +134,17 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
             this.sandbox.unregister(this);
             this.started = false;
         },
+        getMenuItemId: function () {
+            return this.mediator.bundleId + MENU_ITEM_ID_SUFFIX;
+        },
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const menuItem = new MenuItem({
-                id: MENU_ITEM_ID,
+                id: this.getMenuItemId(),
                 sortOrder: 70,
                 name: this.getTitle(),
                 setActive: (isActive) => {
                     if (isActive) {
-                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(MENU_ITEM_ID));
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(this.getMenuItemId()));
                         return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
                     }
                     this.closeMainNavigationFlyout();
@@ -243,7 +245,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-permissions.AdminPermissionsBundl
         },
         closeFlyout: function () {
             if (this.navigation.service) {
-                return this.navigation.service.setActive(MENU_ITEM_ID, false);
+                return this.navigation.service.setActive(this.getMenuItemId(), false);
             }
             this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
         },
