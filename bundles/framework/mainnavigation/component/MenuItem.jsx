@@ -6,6 +6,7 @@ import { keyframes, styled } from 'styled-components';
 import { MenuItemActivationResult } from './MenuItemActivationResult';
 
 const ACTIVATION_KEYS = ['Enter', ' '];
+const MENU_ITEM_ID_SUFFIX = '-menuitem';
 const ACTIVE_BADGE_BORDER_COLOR = '#fff';
 
 const BadgeBlink = keyframes`
@@ -80,6 +81,7 @@ const StyledBadge = styled(Badge)`
 
 /**
  * Default menu item behavior, independent of whether the React view is mounted.
+ * Id is given as `id` or derived from `bundleId` (bundleId + '-menuitem').
  * Custom setActive and setBadge callbacks replace the default methods entirely.
  */
 export class MenuItem {
@@ -100,6 +102,10 @@ export class MenuItem {
         }
     }
 
+    getMenuItemId () {
+        return this.id;
+    }
+
     connect (onChange, onClose) {
         this.onChange = onChange;
         this.onClose = onClose;
@@ -107,7 +113,7 @@ export class MenuItem {
 
     update (options) {
         this.options = { ...options };
-        this.id = options.id;
+        this.id = options.id || options.bundleId + MENU_ITEM_ID_SUFFIX;
         this.name = options.name;
         this.sortOrder = options.sortOrder;
         if (Object.hasOwn(options, 'badge')) {
@@ -179,6 +185,7 @@ export class MenuItem {
     getState () {
         return {
             ...this.options,
+            id: this.id,
             isActive: this.isActive,
             badge: this.badge,
             subItems: this.subItems

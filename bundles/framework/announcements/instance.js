@@ -9,7 +9,6 @@ import { AnnouncementsHandler, showAnnouncementsPopup, showAnnouncementsBanner, 
 import { AnnouncementsView } from './view/AnnouncementsView';
 
 const NOT_DISPLAYED = 'display-none';
-const MENU_ITEM_ID_SUFFIX = '-menuitem';
 const FLYOUT_ID = 'Announcements';
 const HIDDEN_MENU_ITEM_STYLE = {
     display: 'none'
@@ -134,18 +133,15 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             });
             menuItem.onChange?.();
         },
-        getMenuItemId: function () {
-            return this.mediator.bundleId + MENU_ITEM_ID_SUFFIX;
-        },
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const menuItem = new MenuItem({
-                id: this.getMenuItemId(),
+                bundleId: this.mediator.bundleId,
                 sortOrder: 50,
                 name: this.getTitle(),
                 tooltip: this.getDescription(),
                 setActive: (isActive) => {
                     if (isActive) {
-                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(this.getMenuItemId()));
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(menuItem.getMenuItemId()));
                         return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
                     }
                     this.closeMainNavigationFlyout();

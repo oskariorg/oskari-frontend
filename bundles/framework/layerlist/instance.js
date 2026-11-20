@@ -14,7 +14,6 @@ import { styled } from 'styled-components';
 import { LayerListView } from './view/LayerListView';
 
 const FILTER_NEWEST_COUNT = 20;
-const MENU_ITEM_ID_SUFFIX = '-menuitem';
 const FLYOUT_ID = 'LayerList';
 const EXTENSION_UPDATED_EVENT = 'userinterface.ExtensionUpdatedEvent';
 const FlyoutPadding = styled('div')`
@@ -233,19 +232,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         createLayerListView: function () {
             return new LayerListView(this, () => this.updateMainNavigationFlyout());
         },
-        getMenuItemId: function () {
-            return this.mediator.bundleId + MENU_ITEM_ID_SUFFIX;
-        },
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const menuItem = new MenuItem({
-                id: this.getMenuItemId(),
+                bundleId: this.mediator.bundleId,
                 sortOrder: 5,
                 name: this.getTitle(),
                 tooltip: this.getDescription(),
                 badge: this.sandbox.findAllSelectedMapLayers().length,
                 setActive: (isActive) => {
                     if (isActive) {
-                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(this.getMenuItemId()));
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(menuItem.getMenuItemId()));
                         return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
                     }
                     this.closeMainNavigationFlyout();
@@ -300,19 +296,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         },
         openFlyout: function () {
             if (this.navigation.service) {
-                return this.navigation.service.setActive(this.getMenuItemId(), true);
+                return this.navigation.service.setActive(this.navigation.menuItem.getMenuItemId(), true);
             }
             this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
         },
         closeFlyout: function () {
             if (this.navigation.service) {
-                return this.navigation.service.setActive(this.getMenuItemId(), false);
+                return this.navigation.service.setActive(this.navigation.menuItem.getMenuItemId(), false);
             }
             this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
         },
         refreshLayerCount: function () {
             if (this.navigation.service) {
-                this.navigation.service.setBadge(this.getMenuItemId(), this.sandbox.findAllSelectedMapLayers().length);
+                this.navigation.service.setBadge(this.navigation.menuItem.getMenuItemId(), this.sandbox.findAllSelectedMapLayers().length);
                 return;
             }
             this.plugins['Oskari.userinterface.Tile'].refresh();

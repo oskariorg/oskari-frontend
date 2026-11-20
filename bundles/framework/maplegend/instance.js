@@ -11,7 +11,6 @@ import './plugin/MapLegendPlugin';
 import './publisher/MapLegendTool';
 import './resources/scss/style.scss';
 
-const MENU_ITEM_ID_SUFFIX = '-menuitem';
 const FLYOUT_ID = 'MapLegend';
 const FlyoutPadding = styled('div')`
     margin: 0;
@@ -176,18 +175,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             sandbox.unregister(this);
             this.started = false;
         },
-        getMenuItemId: function () {
-            return this.mediator.bundleId + MENU_ITEM_ID_SUFFIX;
-        },
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const menuItem = new MenuItem({
-                id: this.getMenuItemId(),
+                bundleId: this.mediator.bundleId,
                 sortOrder: 40,
                 name: this.getTitle(),
                 tooltip: this.getDescription(),
                 setActive: (isActive) => {
                     if (isActive) {
-                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(this.getMenuItemId()));
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(menuItem.getMenuItemId()));
                         return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
                     }
                     this.closeMainNavigationFlyout();
@@ -354,7 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
 
         toggleFlyout: function (show) {
             if (this.navigation.service) {
-                return this.navigation.service.setActive(this.getMenuItemId(), show);
+                return this.navigation.service.setActive(this.navigation.menuItem.getMenuItemId(), show);
             }
             const request = show ? 'attach' : 'close';
             this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, request, this.getName()]);

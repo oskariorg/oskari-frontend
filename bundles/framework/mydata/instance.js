@@ -8,7 +8,6 @@ import { showFlyout } from 'oskari-ui/components/window';
 import { styled } from 'styled-components';
 import { MyDataView } from './view/MyDataView';
 
-const MENU_ITEM_ID_SUFFIX = '-menuitem';
 const FLYOUT_PLUGIN = 'Oskari.userinterface.Flyout';
 const TILE_PLUGIN = 'Oskari.userinterface.Tile';
 const PROFILE_LINK_ID = 'oskari-profile-link';
@@ -207,18 +206,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         getMainNavigationService: function () {
             return this.navigation.service;
         },
-        getMenuItemId: function () {
-            return this.mediator.bundleId + MENU_ITEM_ID_SUFFIX;
-        },
         createMenuItem: function ({ MenuItem, MenuItemActivationResult }) {
             const menuItem = new MenuItem({
-                id: this.getMenuItemId(),
+                bundleId: this.mediator.bundleId,
                 sortOrder: 10,
                 name: this.getTitle(),
                 tooltip: this.getDescription(),
                 setActive: (isActive) => {
                     if (isActive) {
-                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(this.getMenuItemId()));
+                        const opened = this.showMainNavigationFlyout(() => menuItem.onClose?.(menuItem.getMenuItemId()));
                         return opened ? MenuItemActivationResult.OK : MenuItemActivationResult.FAILED;
                     }
                     this.closeMainNavigationFlyout();
@@ -265,14 +261,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         openFlyout: function () {
             const service = this.getMainNavigationService();
             if (service) {
-                return service.setActive(this.getMenuItemId(), true);
+                return service.setActive(this.navigation.menuItem.getMenuItemId(), true);
             }
             this.sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [this, ATTACH]);
         },
         closeFlyout: function () {
             const service = this.getMainNavigationService();
             if (service) {
-                return service.setActive(this.getMenuItemId(), false);
+                return service.setActive(this.navigation.menuItem.getMenuItemId(), false);
             }
             this.sandbox.postRequestByName(UPDATE_EXTENSION_REQUEST, [this, CLOSE]);
         },
